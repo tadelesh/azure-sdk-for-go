@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## `v58.1.1`
+
+### Updated Packages
+
+| Package Path | Changelog |
+| :--- | :---: |
+| `github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2021-07-01/compute` | [details](https://github.com/Azure/azure-sdk-for-go/tree/main/services/compute/mgmt/2021-07-01/compute/CHANGELOG.md) |
+
 ## `v58.1.0`
 
 ### New Packages
@@ -12,7 +20,7 @@
 
 | Package Path | Changelog |
 | :--- | :---: |
-| `github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2021-07-01/compute` | [details](https://github.com/Azure/azure-sdk-for-go/tree/main/services/compute/mgmt/2021-07-01/compute/CHANGELOG.md) |
+| `github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2021-07-01/compute` | [details](https://github.com/Azure/azure-sdk-for-go/blob/v58.1.0/services/compute/mgmt/2021-07-01/compute/CHANGELOG.md) |
 
 ## `v58.0.0`
 
