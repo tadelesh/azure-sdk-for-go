@@ -600,10 +600,18 @@ const (
 	RollingUpgradeStatusCodeRollingForward RollingUpgradeStatusCode = original.RollingUpgradeStatusCodeRollingForward
 )
 
+type SecurityEncryptionTypes = original.SecurityEncryptionTypes
+
+const (
+	SecurityEncryptionTypesDiskWithVMGuestState SecurityEncryptionTypes = original.SecurityEncryptionTypesDiskWithVMGuestState
+	SecurityEncryptionTypesVMGuestStateOnly     SecurityEncryptionTypes = original.SecurityEncryptionTypesVMGuestStateOnly
+)
+
 type SecurityTypes = original.SecurityTypes
 
 const (
-	SecurityTypesTrustedLaunch SecurityTypes = original.SecurityTypesTrustedLaunch
+	SecurityTypesConfidentialVM SecurityTypes = original.SecurityTypesConfidentialVM
+	SecurityTypesTrustedLaunch  SecurityTypes = original.SecurityTypesTrustedLaunch
 )
 
 type SelectPermissions = original.SelectPermissions
@@ -1137,6 +1145,7 @@ type DiskRestorePointListPage = original.DiskRestorePointListPage
 type DiskRestorePointProperties = original.DiskRestorePointProperties
 type DiskRestorePointRevokeAccessFuture = original.DiskRestorePointRevokeAccessFuture
 type DiskSecurityProfile = original.DiskSecurityProfile
+type DiskSecurityProfileProperties = original.DiskSecurityProfileProperties
 type DiskSku = original.DiskSku
 type DiskUpdate = original.DiskUpdate
 type DiskUpdateProperties = original.DiskUpdateProperties
@@ -2442,6 +2451,9 @@ func PossibleRollingUpgradeActionTypeValues() []RollingUpgradeActionType {
 }
 func PossibleRollingUpgradeStatusCodeValues() []RollingUpgradeStatusCode {
 	return original.PossibleRollingUpgradeStatusCodeValues()
+}
+func PossibleSecurityEncryptionTypesValues() []SecurityEncryptionTypes {
+	return original.PossibleSecurityEncryptionTypesValues()
 }
 func PossibleSecurityTypesValues() []SecurityTypes {
 	return original.PossibleSecurityTypesValues()

@@ -1271,17 +1271,34 @@ func PossibleRollingUpgradeStatusCodeValues() []RollingUpgradeStatusCode {
 	return []RollingUpgradeStatusCode{RollingUpgradeStatusCodeCancelled, RollingUpgradeStatusCodeCompleted, RollingUpgradeStatusCodeFaulted, RollingUpgradeStatusCodeRollingForward}
 }
 
+// SecurityEncryptionTypes enumerates the values for security encryption types.
+type SecurityEncryptionTypes string
+
+const (
+	// SecurityEncryptionTypesDiskWithVMGuestState ...
+	SecurityEncryptionTypesDiskWithVMGuestState SecurityEncryptionTypes = "DiskWithVMGuestState"
+	// SecurityEncryptionTypesVMGuestStateOnly ...
+	SecurityEncryptionTypesVMGuestStateOnly SecurityEncryptionTypes = "VMGuestStateOnly"
+)
+
+// PossibleSecurityEncryptionTypesValues returns an array of possible values for the SecurityEncryptionTypes const type.
+func PossibleSecurityEncryptionTypesValues() []SecurityEncryptionTypes {
+	return []SecurityEncryptionTypes{SecurityEncryptionTypesDiskWithVMGuestState, SecurityEncryptionTypesVMGuestStateOnly}
+}
+
 // SecurityTypes enumerates the values for security types.
 type SecurityTypes string
 
 const (
+	// SecurityTypesConfidentialVM ...
+	SecurityTypesConfidentialVM SecurityTypes = "ConfidentialVM"
 	// SecurityTypesTrustedLaunch ...
 	SecurityTypesTrustedLaunch SecurityTypes = "TrustedLaunch"
 )
 
 // PossibleSecurityTypesValues returns an array of possible values for the SecurityTypes const type.
 func PossibleSecurityTypesValues() []SecurityTypes {
-	return []SecurityTypes{SecurityTypesTrustedLaunch}
+	return []SecurityTypes{SecurityTypesConfidentialVM, SecurityTypesTrustedLaunch}
 }
 
 // SelectPermissions enumerates the values for select permissions.

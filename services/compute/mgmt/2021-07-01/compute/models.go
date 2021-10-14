@@ -5898,6 +5898,14 @@ type DiskSecurityProfile struct {
 	SecurityType DiskSecurityTypes `json:"securityType,omitempty"`
 }
 
+// DiskSecurityProfileProperties specifies the Security profile settings for the managed disk.
+type DiskSecurityProfileProperties struct {
+	// SecurityEncryptionType - Specifies the EncryptionType of the managed disk. It is set to DiskWithVMGuestState for encryption of the managed disk along with VMGuestState blob, and VMGuestStateOnly for encryption of just the VMGuestState blob. <br><br> Default: It can be set for only Confidential VMs. Possible values include: 'SecurityEncryptionTypesVMGuestStateOnly', 'SecurityEncryptionTypesDiskWithVMGuestState'
+	SecurityEncryptionType SecurityEncryptionTypes `json:"securityEncryptionType,omitempty"`
+	// DiskEncryptionSet - Specifies the customer managed disk encryption set resource id for the managed disk that is used for Customer Managed Key encrypted ConfidentialVM OS Disk and VMGuest blob.
+	DiskEncryptionSet *DiskEncryptionSetParameters `json:"diskEncryptionSet,omitempty"`
+}
+
 // DisksGrantAccessFuture an abstraction for monitoring and retrieving the results of a long-running
 // operation.
 type DisksGrantAccessFuture struct {
@@ -10249,6 +10257,8 @@ type ManagedDiskParameters struct {
 	StorageAccountType StorageAccountTypes `json:"storageAccountType,omitempty"`
 	// DiskEncryptionSet - Specifies the customer managed disk encryption set resource id for the managed disk.
 	DiskEncryptionSet *DiskEncryptionSetParameters `json:"diskEncryptionSet,omitempty"`
+	// SecurityProfile - Specifies the security profile for the managed disk.
+	SecurityProfile *DiskSecurityProfileProperties `json:"securityProfile,omitempty"`
 	// ID - Resource Id
 	ID *string `json:"id,omitempty"`
 }
@@ -13774,7 +13784,7 @@ type SecurityProfile struct {
 	UefiSettings *UefiSettings `json:"uefiSettings,omitempty"`
 	// EncryptionAtHost - This property can be used by user in the request to enable or disable the Host Encryption for the virtual machine or virtual machine scale set. This will enable the encryption for all the disks including Resource/Temp disk at host itself. <br><br> Default: The Encryption at host will be disabled unless this property is set to true for the resource.
 	EncryptionAtHost *bool `json:"encryptionAtHost,omitempty"`
-	// SecurityType - Specifies the SecurityType of the virtual machine. It is set as TrustedLaunch to enable UefiSettings. <br><br> Default: UefiSettings will not be enabled unless this property is set as TrustedLaunch. Possible values include: 'SecurityTypesTrustedLaunch'
+	// SecurityType - Specifies the SecurityType of the virtual machine. It has to be set to any specified value to enable UefiSettings. <br><br> Default: UefiSettings will not be enabled unless this property is set. Possible values include: 'SecurityTypesTrustedLaunch', 'SecurityTypesConfidentialVM'
 	SecurityType SecurityTypes `json:"securityType,omitempty"`
 }
 
