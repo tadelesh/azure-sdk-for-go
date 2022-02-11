@@ -18,11 +18,11 @@ import (
 
 // ClientListByResourceGroupPager provides operations for iterating over paged responses.
 type ClientListByResourceGroupPager struct {
-	client    *Client
-	current   ClientListByResourceGroupResponse
-	err       error
+	client *Client
+	current ClientListByResourceGroupResponse
+	err error
 	requester func(context.Context) (*policy.Request, error)
-	advancer  func(context.Context, ClientListByResourceGroupResponse) (*policy.Request, error)
+	advancer func(context.Context, ClientListByResourceGroupResponse) (*policy.Request, error)
 }
 
 // Err returns the last error encountered while paging.
@@ -72,11 +72,11 @@ func (p *ClientListByResourceGroupPager) PageResponse() ClientListByResourceGrou
 
 // ClientListBySubscriptionPager provides operations for iterating over paged responses.
 type ClientListBySubscriptionPager struct {
-	client    *Client
-	current   ClientListBySubscriptionResponse
-	err       error
+	client *Client
+	current ClientListBySubscriptionResponse
+	err error
 	requester func(context.Context) (*policy.Request, error)
-	advancer  func(context.Context, ClientListBySubscriptionResponse) (*policy.Request, error)
+	advancer func(context.Context, ClientListBySubscriptionResponse) (*policy.Request, error)
 }
 
 // Err returns the last error encountered while paging.
@@ -126,11 +126,11 @@ func (p *ClientListBySubscriptionPager) PageResponse() ClientListBySubscriptionR
 
 // OperationsClientListPager provides operations for iterating over paged responses.
 type OperationsClientListPager struct {
-	client    *OperationsClient
-	current   OperationsClientListResponse
-	err       error
+	client *OperationsClient
+	current OperationsClientListResponse
+	err error
 	requester func(context.Context) (*policy.Request, error)
-	advancer  func(context.Context, OperationsClientListResponse) (*policy.Request, error)
+	advancer func(context.Context, OperationsClientListResponse) (*policy.Request, error)
 }
 
 // Err returns the last error encountered while paging.
@@ -180,11 +180,11 @@ func (p *OperationsClientListPager) PageResponse() OperationsClientListResponse 
 
 // PrivateEndpointConnectionsClientListPager provides operations for iterating over paged responses.
 type PrivateEndpointConnectionsClientListPager struct {
-	client    *PrivateEndpointConnectionsClient
-	current   PrivateEndpointConnectionsClientListResponse
-	err       error
+	client *PrivateEndpointConnectionsClient
+	current PrivateEndpointConnectionsClientListResponse
+	err error
 	requester func(context.Context) (*policy.Request, error)
-	advancer  func(context.Context, PrivateEndpointConnectionsClientListResponse) (*policy.Request, error)
+	advancer func(context.Context, PrivateEndpointConnectionsClientListResponse) (*policy.Request, error)
 }
 
 // Err returns the last error encountered while paging.
@@ -234,11 +234,11 @@ func (p *PrivateEndpointConnectionsClientListPager) PageResponse() PrivateEndpoi
 
 // PrivateLinkResourcesClientListPager provides operations for iterating over paged responses.
 type PrivateLinkResourcesClientListPager struct {
-	client    *PrivateLinkResourcesClient
-	current   PrivateLinkResourcesClientListResponse
-	err       error
+	client *PrivateLinkResourcesClient
+	current PrivateLinkResourcesClientListResponse
+	err error
 	requester func(context.Context) (*policy.Request, error)
-	advancer  func(context.Context, PrivateLinkResourcesClientListResponse) (*policy.Request, error)
+	advancer func(context.Context, PrivateLinkResourcesClientListResponse) (*policy.Request, error)
 }
 
 // Err returns the last error encountered while paging.
@@ -288,11 +288,11 @@ func (p *PrivateLinkResourcesClientListPager) PageResponse() PrivateLinkResource
 
 // SharedPrivateLinkResourcesClientListPager provides operations for iterating over paged responses.
 type SharedPrivateLinkResourcesClientListPager struct {
-	client    *SharedPrivateLinkResourcesClient
-	current   SharedPrivateLinkResourcesClientListResponse
-	err       error
+	client *SharedPrivateLinkResourcesClient
+	current SharedPrivateLinkResourcesClientListResponse
+	err error
 	requester func(context.Context) (*policy.Request, error)
-	advancer  func(context.Context, SharedPrivateLinkResourcesClientListResponse) (*policy.Request, error)
+	advancer func(context.Context, SharedPrivateLinkResourcesClientListResponse) (*policy.Request, error)
 }
 
 // Err returns the last error encountered while paging.
@@ -342,11 +342,11 @@ func (p *SharedPrivateLinkResourcesClientListPager) PageResponse() SharedPrivate
 
 // UsagesClientListPager provides operations for iterating over paged responses.
 type UsagesClientListPager struct {
-	client    *UsagesClient
-	current   UsagesClientListResponse
-	err       error
+	client *UsagesClient
+	current UsagesClientListResponse
+	err error
 	requester func(context.Context) (*policy.Request, error)
-	advancer  func(context.Context, UsagesClientListResponse) (*policy.Request, error)
+	advancer func(context.Context, UsagesClientListResponse) (*policy.Request, error)
 }
 
 // Err returns the last error encountered while paging.
@@ -393,3 +393,4 @@ func (p *UsagesClientListPager) NextPage(ctx context.Context) bool {
 func (p *UsagesClientListPager) PageResponse() UsagesClientListResponse {
 	return p.current
 }
+

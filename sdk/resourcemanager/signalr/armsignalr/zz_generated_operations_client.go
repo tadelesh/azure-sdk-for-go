@@ -22,7 +22,7 @@ import (
 // Don't use this type directly, use NewOperationsClient() instead.
 type OperationsClient struct {
 	host string
-	pl   runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewOperationsClient creates a new instance of OperationsClient with the specified values.
@@ -38,7 +38,7 @@ func NewOperationsClient(credential azcore.TokenCredential, options *arm.ClientO
 	}
 	client := &OperationsClient{
 		host: string(ep),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
+		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -46,7 +46,7 @@ func NewOperationsClient(credential azcore.TokenCredential, options *arm.ClientO
 // List - Lists all of the available REST API operations of the Microsoft.SignalRService provider.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - OperationsClientListOptions contains the optional parameters for the OperationsClient.List method.
-func (client *OperationsClient) List(options *OperationsClientListOptions) *OperationsClientListPager {
+func (client *OperationsClient) List(options *OperationsClientListOptions) (*OperationsClientListPager) {
 	return &OperationsClientListPager{
 		client: client,
 		requester: func(ctx context.Context) (*policy.Request, error) {
@@ -66,7 +66,7 @@ func (client *OperationsClient) listCreateRequest(ctx context.Context, options *
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-10-01")
+	reqQP.Set("api-version", "2021-06-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -80,3 +80,4 @@ func (client *OperationsClient) listHandleResponse(resp *http.Response) (Operati
 	}
 	return result, nil
 }
+

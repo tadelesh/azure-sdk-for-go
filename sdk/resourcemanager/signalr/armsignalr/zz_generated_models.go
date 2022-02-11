@@ -65,15 +65,10 @@ type ClientListKeysOptions struct {
 	// placeholder for future optional parameters
 }
 
-// ClientListSKUsOptions contains the optional parameters for the Client.ListSKUs method.
-type ClientListSKUsOptions struct {
-	// placeholder for future optional parameters
-}
-
 // CorsSettings - Cross-Origin Resource Sharing (CORS) settings.
 type CorsSettings struct {
 	// Gets or sets the list of origins that should be allowed to make cross-origin calls (for example: http://example.com:12345).
-	// Use "*" to allow all. If omitted, allow all by default.
+// Use "*" to allow all. If omitted, allow all by default.
 	AllowedOrigins []*string `json:"allowedOrigins,omitempty"`
 }
 
@@ -102,20 +97,20 @@ type Dimension struct {
 // Feature of a resource, which controls the runtime behavior.
 type Feature struct {
 	// REQUIRED; FeatureFlags is the supported features of Azure SignalR service.
-	// * ServiceMode: Flag for backend server for SignalR service. Values allowed: "Default": have your own backend server; "Serverless":
-	// your application doesn't have a backend server; "Classic": for
-	// backward compatibility. Support both Default and Serverless mode but not recommended; "PredefinedOnly": for future use.
-	// * EnableConnectivityLogs: "true"/"false", to enable/disable the connectivity log category respectively.
-	// * EnableMessagingLogs: "true"/"false", to enable/disable the connectivity log category respectively.
-	// * EnableLiveTrace: Live Trace allows you to know what's happening inside Azure SignalR service, it will give you live traces
-	// in real time, it will be helpful when you developing your own Azure
-	// SignalR based web application or self-troubleshooting some issues. Please note that live traces are counted as outbound
-	// messages that will be charged. Values allowed: "true"/"false", to
-	// enable/disable live trace feature.
+// * ServiceMode: Flag for backend server for SignalR service. Values allowed: "Default": have your own backend server; "Serverless":
+// your application doesn't have a backend server; "Classic": for
+// backward compatibility. Support both Default and Serverless mode but not recommended; "PredefinedOnly": for future use.
+// * EnableConnectivityLogs: "true"/"false", to enable/disable the connectivity log category respectively.
+// * EnableMessagingLogs: "true"/"false", to enable/disable the connectivity log category respectively.
+// * EnableLiveTrace: Live Trace allows you to know what's happening inside Azure SignalR service, it will give you live traces
+// in real time, it will be helpful when you developing your own Azure
+// SignalR based web application or self-troubleshooting some issues. Please note that live traces are counted as outbound
+// messages that will be charged. Values allowed: "true"/"false", to
+// enable/disable live trace feature.
 	Flag *FeatureFlags `json:"flag,omitempty"`
 
 	// REQUIRED; Value of the feature flag. See Azure SignalR service document https://docs.microsoft.com/azure/azure-signalr/
-	// for allowed values.
+// for allowed values.
 	Value *string `json:"value,omitempty"`
 
 	// Optional properties related to this feature.
@@ -157,7 +152,7 @@ type LogSpecification struct {
 
 // ManagedIdentity - A class represent managed identities used for request and response
 type ManagedIdentity struct {
-	// Represents the identity type: systemAssigned, userAssigned, None
+	// Represent the identity type: systemAssigned, userAssigned, None
 	Type *ManagedIdentityType `json:"type,omitempty"`
 
 	// Get or set the user assigned identities
@@ -183,7 +178,7 @@ func (m ManagedIdentity) MarshalJSON() ([]byte, error) {
 // ManagedIdentitySettings - Managed identity settings for upstream.
 type ManagedIdentitySettings struct {
 	// The Resource indicating the App ID URI of the target resource. It also appears in the aud (audience) claim of the issued
-	// token.
+// token.
 	Resource *string `json:"resource,omitempty"`
 }
 
@@ -205,9 +200,9 @@ type MetricSpecification struct {
 	DisplayName *string `json:"displayName,omitempty"`
 
 	// Optional. If set to true, then zero will be returned for time duration where no metric is emitted/published. Ex. a metric
-	// that returns the number of times a particular error code was emitted. The
-	// error code may not appear often, instead of the RP publishing 0, Shoebox can auto fill in 0s for time periods where nothing
-	// was emitted.
+// that returns the number of times a particular error code was emitted. The
+// error code may not appear often, instead of the RP publishing 0, Shoebox can auto fill in 0s for time periods where nothing
+// was emitted.
 	FillGapWithZero *string `json:"fillGapWithZero,omitempty"`
 
 	// Name of the metric.
@@ -271,13 +266,13 @@ func (n NetworkACL) MarshalJSON() ([]byte, error) {
 
 // NetworkACLs - Network ACLs for the resource
 type NetworkACLs struct {
-	// Azure Networking ACL Action.
+	// Default action when no other rule matches
 	DefaultAction *ACLAction `json:"defaultAction,omitempty"`
 
 	// ACLs for requests from private endpoints
 	PrivateEndpoints []*PrivateEndpointACL `json:"privateEndpoints,omitempty"`
 
-	// Network ACL
+	// ACL for requests from public network
 	PublicNetwork *NetworkACL `json:"publicNetwork,omitempty"`
 }
 
@@ -292,7 +287,7 @@ func (n NetworkACLs) MarshalJSON() ([]byte, error) {
 
 // Operation - REST API operation supported by resource provider.
 type Operation struct {
-	// The object that describes a operation.
+	// The object that describes the operation.
 	Display *OperationDisplay `json:"display,omitempty"`
 
 	// If the operation is a data action. (for data plane rbac)
@@ -302,10 +297,10 @@ type Operation struct {
 	Name *string `json:"name,omitempty"`
 
 	// Optional. The intended executor of the operation; governs the display of the operation in the RBAC UX and the audit logs
-	// UX.
+// UX.
 	Origin *string `json:"origin,omitempty"`
 
-	// Extra Operation properties.
+	// Extra properties for the operation.
 	Properties *OperationProperties `json:"properties,omitempty"`
 }
 
@@ -343,7 +338,7 @@ func (o OperationList) MarshalJSON() ([]byte, error) {
 
 // OperationProperties - Extra Operation properties.
 type OperationProperties struct {
-	// An object that describes a specification.
+	// The service specifications.
 	ServiceSpecification *ServiceSpecification `json:"serviceSpecification,omitempty"`
 }
 
@@ -381,7 +376,7 @@ func (p PrivateEndpointACL) MarshalJSON() ([]byte, error) {
 
 // PrivateEndpointConnection - A private endpoint connection to an azure resource
 type PrivateEndpointConnection struct {
-	// Private endpoint connection properties
+	// Properties of the private endpoint connection
 	Properties *PrivateEndpointConnectionProperties `json:"properties,omitempty"`
 
 	// READ-ONLY; Fully qualified resource Id for the resource.
@@ -400,7 +395,7 @@ type PrivateEndpointConnection struct {
 // PrivateEndpointConnectionList - A list of private endpoint connections
 type PrivateEndpointConnectionList struct {
 	// Request URL that can be used to query next page of private endpoint connections. Returned when the total number of requested
-	// private endpoint connections exceed maximum page size.
+// private endpoint connections exceed maximum page size.
 	NextLink *string `json:"nextLink,omitempty"`
 
 	// The list of the private endpoint connections
@@ -417,27 +412,14 @@ func (p PrivateEndpointConnectionList) MarshalJSON() ([]byte, error) {
 
 // PrivateEndpointConnectionProperties - Private endpoint connection properties
 type PrivateEndpointConnectionProperties struct {
-	// Private endpoint
+	// Private endpoint associated with the private endpoint connection
 	PrivateEndpoint *PrivateEndpoint `json:"privateEndpoint,omitempty"`
 
-	// Connection state of the private endpoint connection
+	// Connection state
 	PrivateLinkServiceConnectionState *PrivateLinkServiceConnectionState `json:"privateLinkServiceConnectionState,omitempty"`
 
-	// READ-ONLY; Group IDs
-	GroupIDs []*string `json:"groupIds,omitempty" azure:"ro"`
-
-	// READ-ONLY; Provisioning state of the resource.
+	// READ-ONLY; Provisioning state of the private endpoint connection
 	ProvisioningState *ProvisioningState `json:"provisioningState,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type PrivateEndpointConnectionProperties.
-func (p PrivateEndpointConnectionProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "groupIds", p.GroupIDs)
-	populate(objectMap, "privateEndpoint", p.PrivateEndpoint)
-	populate(objectMap, "privateLinkServiceConnectionState", p.PrivateLinkServiceConnectionState)
-	populate(objectMap, "provisioningState", p.ProvisioningState)
-	return json.Marshal(objectMap)
 }
 
 // PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
@@ -466,7 +448,7 @@ type PrivateEndpointConnectionsClientUpdateOptions struct {
 
 // PrivateLinkResource - Private link resource
 type PrivateLinkResource struct {
-	// Private link resource properties
+	// Properties of a private link resource
 	Properties *PrivateLinkResourceProperties `json:"properties,omitempty"`
 
 	// READ-ONLY; Fully qualified resource Id for the resource.
@@ -550,27 +532,24 @@ type Properties struct {
 	DisableLocalAuth *bool `json:"disableLocalAuth,omitempty"`
 
 	// List of the featureFlags.
-	// FeatureFlags that are not included in the parameters for the update operation will not be modified. And the response will
-	// only include featureFlags that are explicitly set. When a featureFlag is not
-	// explicitly set, its globally default value will be used But keep in mind, the default value doesn't mean "false". It varies
-	// in terms of different FeatureFlags.
+// FeatureFlags that are not included in the parameters for the update operation will not be modified. And the response will
+// only include featureFlags that are explicitly set. When a featureFlag is not
+// explicitly set, its globally default value will be used But keep in mind, the default value doesn't mean "false". It varies
+// in terms of different FeatureFlags.
 	Features []*Feature `json:"features,omitempty"`
 
-	// Network ACLs for the resource
+	// Network ACLs
 	NetworkACLs *NetworkACLs `json:"networkACLs,omitempty"`
 
 	// Enable or disable public network access. Default to "Enabled". When it's Enabled, network ACLs still apply. When it's Disabled,
-	// public network access is always disabled no matter what you set in
-	// network ACLs.
+// public network access is always disabled no matter what you set in
+// network ACLs.
 	PublicNetworkAccess *string `json:"publicNetworkAccess,omitempty"`
 
-	// Resource log configuration of a Microsoft.SignalRService resource.
-	ResourceLogConfiguration *ResourceLogConfiguration `json:"resourceLogConfiguration,omitempty"`
-
-	// TLS settings for the resource
+	// TLS settings.
 	TLS *TLSSettings `json:"tls,omitempty"`
 
-	// The settings for the Upstream when the service is in server-less mode.
+	// Upstream settings when the service is in server-less mode.
 	Upstream *ServerlessUpstreamSettings `json:"upstream,omitempty"`
 
 	// READ-ONLY; The publicly accessible IP of the resource.
@@ -578,9 +557,6 @@ type Properties struct {
 
 	// READ-ONLY; FQDN of the service instance.
 	HostName *string `json:"hostName,omitempty" azure:"ro"`
-
-	// READ-ONLY; Deprecated.
-	HostNamePrefix *string `json:"hostNamePrefix,omitempty" azure:"ro"`
 
 	// READ-ONLY; Private endpoint connections to the resource.
 	PrivateEndpointConnections []*PrivateEndpointConnection `json:"privateEndpointConnections,omitempty" azure:"ro"`
@@ -610,13 +586,11 @@ func (p Properties) MarshalJSON() ([]byte, error) {
 	populate(objectMap, "externalIP", p.ExternalIP)
 	populate(objectMap, "features", p.Features)
 	populate(objectMap, "hostName", p.HostName)
-	populate(objectMap, "hostNamePrefix", p.HostNamePrefix)
 	populate(objectMap, "networkACLs", p.NetworkACLs)
 	populate(objectMap, "privateEndpointConnections", p.PrivateEndpointConnections)
 	populate(objectMap, "provisioningState", p.ProvisioningState)
 	populate(objectMap, "publicNetworkAccess", p.PublicNetworkAccess)
 	populate(objectMap, "publicPort", p.PublicPort)
-	populate(objectMap, "resourceLogConfiguration", p.ResourceLogConfiguration)
 	populate(objectMap, "serverPort", p.ServerPort)
 	populate(objectMap, "sharedPrivateLinkResources", p.SharedPrivateLinkResources)
 	populate(objectMap, "tls", p.TLS)
@@ -640,7 +614,7 @@ type ProxyResource struct {
 
 // RegenerateKeyParameters - Parameters describes the request to regenerate access keys
 type RegenerateKeyParameters struct {
-	// The type of access key.
+	// The keyType to regenerate. Must be either 'primary' or 'secondary'(case-insensitive).
 	KeyType *KeyType `json:"keyType,omitempty"`
 }
 
@@ -658,19 +632,19 @@ type Resource struct {
 
 // ResourceInfo - A class represent a resource.
 type ResourceInfo struct {
-	// A class represent managed identities used for request and response
+	// The managed identity response
 	Identity *ManagedIdentity `json:"identity,omitempty"`
 
-	// The kind of the service, it can be SignalR or RawWebSockets
+	// The kind of the service - e.g. "SignalR" for "Microsoft.SignalRService/SignalR"
 	Kind *ServiceKind `json:"kind,omitempty"`
 
 	// The GEO location of the resource. e.g. West US | East US | North Central US | South Central US.
 	Location *string `json:"location,omitempty"`
 
-	// A class that describes the properties of the resource
+	// Settings used to provision or configure the resource
 	Properties *Properties `json:"properties,omitempty"`
 
-	// The billing information of the resource.
+	// The billing information of the resource.(e.g. Free, Standard)
 	SKU *ResourceSKU `json:"sku,omitempty"`
 
 	// Tags of the service which is a list of key value pairs that describe the resource.
@@ -722,40 +696,18 @@ func (r ResourceInfoList) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// ResourceLogCategory - Resource log category configuration of a Microsoft.SignalRService resource.
-type ResourceLogCategory struct {
-	// Indicates whether or the resource log category is enabled. Available values: true, false. Case insensitive.
-	Enabled *string `json:"enabled,omitempty"`
-
-	// Gets or sets the resource log category's name. Available values: ConnectivityLogs, MessagingLogs. Case insensitive.
-	Name *string `json:"name,omitempty"`
-}
-
-// ResourceLogConfiguration - Resource log configuration of a Microsoft.SignalRService resource.
-type ResourceLogConfiguration struct {
-	// Gets or sets the list of category configurations.
-	Categories []*ResourceLogCategory `json:"categories,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type ResourceLogConfiguration.
-func (r ResourceLogConfiguration) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "categories", r.Categories)
-	return json.Marshal(objectMap)
-}
-
 // ResourceSKU - The billing information of the resource.
 type ResourceSKU struct {
 	// REQUIRED; The name of the SKU. Required.
-	// Allowed values: StandardS1, FreeF1
+// Allowed values: StandardS1, FreeF1
 	Name *string `json:"name,omitempty"`
 
 	// Optional, integer. The unit count of the resource. 1 by default.
-	// If present, following values are allowed: Free: 1 Standard: 1,2,5,10,20,50,100
+// If present, following values are allowed: Free: 1 Standard: 1,2,5,10,20,50,100
 	Capacity *int32 `json:"capacity,omitempty"`
 
 	// Optional tier of this particular SKU. 'Standard' or 'Free'.
-	// Basic is deprecated, use Standard instead.
+// Basic is deprecated, use Standard instead.
 	Tier *SignalRSKUTier `json:"tier,omitempty"`
 
 	// READ-ONLY; Not used. Retained for future use.
@@ -763,65 +715,6 @@ type ResourceSKU struct {
 
 	// READ-ONLY; Not used. Retained for future use.
 	Size *string `json:"size,omitempty" azure:"ro"`
-}
-
-// SKU - Describes an available sku."
-type SKU struct {
-	// READ-ONLY; Describes scaling information of a sku.
-	Capacity *SKUCapacity `json:"capacity,omitempty" azure:"ro"`
-
-	// READ-ONLY; The resource type that this object applies to
-	ResourceType *string `json:"resourceType,omitempty" azure:"ro"`
-
-	// READ-ONLY; The billing information of the resource.
-	SKU *ResourceSKU `json:"sku,omitempty" azure:"ro"`
-}
-
-// SKUCapacity - Describes scaling information of a sku.
-type SKUCapacity struct {
-	// READ-ONLY; Allows capacity value list.
-	AllowedValues []*int32 `json:"allowedValues,omitempty" azure:"ro"`
-
-	// READ-ONLY; The default capacity.
-	Default *int32 `json:"default,omitempty" azure:"ro"`
-
-	// READ-ONLY; The highest permitted capacity for this resource
-	Maximum *int32 `json:"maximum,omitempty" azure:"ro"`
-
-	// READ-ONLY; The lowest permitted capacity for this resource
-	Minimum *int32 `json:"minimum,omitempty" azure:"ro"`
-
-	// READ-ONLY; The scale type applicable to the sku.
-	ScaleType *ScaleType `json:"scaleType,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type SKUCapacity.
-func (s SKUCapacity) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "allowedValues", s.AllowedValues)
-	populate(objectMap, "default", s.Default)
-	populate(objectMap, "maximum", s.Maximum)
-	populate(objectMap, "minimum", s.Minimum)
-	populate(objectMap, "scaleType", s.ScaleType)
-	return json.Marshal(objectMap)
-}
-
-// SKUList - The list skus operation response
-type SKUList struct {
-	// READ-ONLY; The URL the client should use to fetch the next page (per server side paging). It's null for now, added for
-	// future use.
-	NextLink *string `json:"nextLink,omitempty" azure:"ro"`
-
-	// READ-ONLY; The list of skus available for the resource.
-	Value []*SKU `json:"value,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type SKUList.
-func (s SKUList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", s.NextLink)
-	populate(objectMap, "value", s.Value)
-	return json.Marshal(objectMap)
 }
 
 // ServerlessUpstreamSettings - The settings for the Upstream when the service is in server-less mode.
@@ -878,7 +771,7 @@ type ShareablePrivateLinkResourceType struct {
 
 // SharedPrivateLinkResource - Describes a Shared Private Link Resource
 type SharedPrivateLinkResource struct {
-	// Describes the properties of an existing Shared Private Link Resource
+	// Describes the properties of a Shared Private Link Resource
 	Properties *SharedPrivateLinkResourceProperties `json:"properties,omitempty"`
 
 	// READ-ONLY; Fully qualified resource Id for the resource.
@@ -897,7 +790,7 @@ type SharedPrivateLinkResource struct {
 // SharedPrivateLinkResourceList - A list of shared private link resources
 type SharedPrivateLinkResourceList struct {
 	// Request URL that can be used to query next page of private endpoint connections. Returned when the total number of requested
-	// private endpoint connections exceed maximum page size.
+// private endpoint connections exceed maximum page size.
 	NextLink *string `json:"nextLink,omitempty"`
 
 	// The list of the shared private link resources
@@ -923,7 +816,7 @@ type SharedPrivateLinkResourceProperties struct {
 	// The request message for requesting approval of the shared private link resource
 	RequestMessage *string `json:"requestMessage,omitempty"`
 
-	// READ-ONLY; Provisioning state of the resource.
+	// READ-ONLY; Provisioning state of the shared private link resource
 	ProvisioningState *ProvisioningState `json:"provisioningState,omitempty" azure:"ro"`
 
 	// READ-ONLY; Status of the shared private link resource
@@ -997,23 +890,23 @@ func (s *SystemData) UnmarshalJSON(data []byte) error {
 		var err error
 		switch key {
 		case "createdAt":
-			err = unpopulateTimeRFC3339(val, &s.CreatedAt)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &s.CreatedAt)
+				delete(rawMsg, key)
 		case "createdBy":
-			err = unpopulate(val, &s.CreatedBy)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.CreatedBy)
+				delete(rawMsg, key)
 		case "createdByType":
-			err = unpopulate(val, &s.CreatedByType)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.CreatedByType)
+				delete(rawMsg, key)
 		case "lastModifiedAt":
-			err = unpopulateTimeRFC3339(val, &s.LastModifiedAt)
-			delete(rawMsg, key)
+				err = unpopulateTimeRFC3339(val, &s.LastModifiedAt)
+				delete(rawMsg, key)
 		case "lastModifiedBy":
-			err = unpopulate(val, &s.LastModifiedBy)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.LastModifiedBy)
+				delete(rawMsg, key)
 		case "lastModifiedByType":
-			err = unpopulate(val, &s.LastModifiedByType)
-			delete(rawMsg, key)
+				err = unpopulate(val, &s.LastModifiedByType)
+				delete(rawMsg, key)
 		}
 		if err != nil {
 			return err
@@ -1057,12 +950,12 @@ func (t TrackedResource) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// UpstreamAuthSettings - Upstream auth settings. If not set, no auth is used for upstream messages.
+// UpstreamAuthSettings - Upstream auth settings.
 type UpstreamAuthSettings struct {
-	// Managed identity settings for upstream.
+	// Gets or sets the managed identity settings. It's required if the auth type is set to ManagedIdentity.
 	ManagedIdentity *ManagedIdentitySettings `json:"managedIdentity,omitempty"`
 
-	// Upstream auth type enum.
+	// Gets or sets the type of auth. None or ManagedIdentity is supported now.
 	Type *UpstreamAuthType `json:"type,omitempty"`
 }
 
@@ -1071,30 +964,30 @@ type UpstreamAuthSettings struct {
 // current URL template.
 type UpstreamTemplate struct {
 	// REQUIRED; Gets or sets the Upstream URL template. You can use 3 predefined parameters {hub}, {category} {event} inside
-	// the template, the value of the Upstream URL is dynamically calculated when the client
-	// request comes in. For example, if the urlTemplate is http://example.com/{hub}/api/{event}, with a client request from hub
-	// chat connects, it will first POST to this URL:
-	// http://example.com/chat/api/connect.
+// the template, the value of the Upstream URL is dynamically calculated when the client
+// request comes in. For example, if the urlTemplate is http://example.com/{hub}/api/{event}, with a client request from hub
+// chat connects, it will first POST to this URL:
+// http://example.com/chat/api/connect.
 	URLTemplate *string `json:"urlTemplate,omitempty"`
 
-	// Upstream auth settings. If not set, no auth is used for upstream messages.
+	// Gets or sets the auth settings for an upstream. If not set, no auth is used for upstream messages.
 	Auth *UpstreamAuthSettings `json:"auth,omitempty"`
 
 	// Gets or sets the matching pattern for category names. If not set, it matches any category. There are 3 kind of patterns
-	// supported: 1. "*", it to matches any category name 2. Combine multiple
-	// categories with ",", for example "connections,messages", it matches category "connections" and "messages" 3. The single
-	// category name, for example, "connections", it matches the category "connections"
+// supported: 1. "*", it to matches any category name 2. Combine multiple
+// categories with ",", for example "connections,messages", it matches category "connections" and "messages" 3. The single
+// category name, for example, "connections", it matches the category "connections"
 	CategoryPattern *string `json:"categoryPattern,omitempty"`
 
 	// Gets or sets the matching pattern for event names. If not set, it matches any event. There are 3 kind of patterns supported:
-	// 1. "*", it to matches any event name 2. Combine multiple events with ",",
-	// for example "connect,disconnect", it matches event "connect" and "disconnect" 3. The single event name, for example, "connect",
-	// it matches "connect"
+// 1. "*", it to matches any event name 2. Combine multiple events with ",",
+// for example "connect,disconnect", it matches event "connect" and "disconnect" 3. The single event name, for example, "connect",
+// it matches "connect"
 	EventPattern *string `json:"eventPattern,omitempty"`
 
 	// Gets or sets the matching pattern for hub names. If not set, it matches any hub. There are 3 kind of patterns supported:
-	// 1. "*", it to matches any hub name 2. Combine multiple hubs with ",", for
-	// example "hub1,hub2", it matches "hub1" and "hub2" 3. The single hub name, for example, "hub1", it matches "hub1"
+// 1. "*", it to matches any hub name 2. Combine multiple hubs with ",", for
+// example "hub1,hub2", it matches "hub1" and "hub2" 3. The single hub name, for example, "hub1", it matches "hub1"
 	HubPattern *string `json:"hubPattern,omitempty"`
 }
 
@@ -1172,3 +1065,4 @@ func unpopulate(data json.RawMessage, v interface{}) error {
 	}
 	return json.Unmarshal(data, v)
 }
+

@@ -19,7 +19,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/signalr/armsignalr"
 )
 
-// x-ms-original-file: specification/signalr/resource-manager/Microsoft.SignalRService/stable/2021-10-01/examples/SignalRPrivateEndpointConnections_List.json
+// x-ms-original-file: specification/signalr/resource-manager/Microsoft.SignalRService/preview/2021-06-01-preview/examples/SignalRPrivateEndpointConnections_List.json
 func ExamplePrivateEndpointConnectionsClient_List() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -44,7 +44,7 @@ func ExamplePrivateEndpointConnectionsClient_List() {
 	}
 }
 
-// x-ms-original-file: specification/signalr/resource-manager/Microsoft.SignalRService/stable/2021-10-01/examples/SignalRPrivateEndpointConnections_Get.json
+// x-ms-original-file: specification/signalr/resource-manager/Microsoft.SignalRService/preview/2021-06-01-preview/examples/SignalRPrivateEndpointConnections_Get.json
 func ExamplePrivateEndpointConnectionsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -63,7 +63,7 @@ func ExamplePrivateEndpointConnectionsClient_Get() {
 	log.Printf("Response result: %#v\n", res.PrivateEndpointConnectionsClientGetResult)
 }
 
-// x-ms-original-file: specification/signalr/resource-manager/Microsoft.SignalRService/stable/2021-10-01/examples/SignalRPrivateEndpointConnections_Update.json
+// x-ms-original-file: specification/signalr/resource-manager/Microsoft.SignalRService/preview/2021-06-01-preview/examples/SignalRPrivateEndpointConnections_Update.json
 func ExamplePrivateEndpointConnectionsClient_Update() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -82,7 +82,7 @@ func ExamplePrivateEndpointConnectionsClient_Update() {
 				},
 				PrivateLinkServiceConnectionState: &armsignalr.PrivateLinkServiceConnectionState{
 					ActionsRequired: to.StringPtr("<actions-required>"),
-					Status:          armsignalr.PrivateLinkServiceConnectionStatus("Approved").ToPtr(),
+					Status:          armsignalr.PrivateLinkServiceConnectionStatusApproved.ToPtr(),
 				},
 			},
 		},
@@ -93,7 +93,7 @@ func ExamplePrivateEndpointConnectionsClient_Update() {
 	log.Printf("Response result: %#v\n", res.PrivateEndpointConnectionsClientUpdateResult)
 }
 
-// x-ms-original-file: specification/signalr/resource-manager/Microsoft.SignalRService/stable/2021-10-01/examples/SignalRPrivateEndpointConnections_Delete.json
+// x-ms-original-file: specification/signalr/resource-manager/Microsoft.SignalRService/preview/2021-06-01-preview/examples/SignalRPrivateEndpointConnections_Delete.json
 func ExamplePrivateEndpointConnectionsClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {

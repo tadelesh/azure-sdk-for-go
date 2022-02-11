@@ -55,7 +55,7 @@ func (l *ClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client 
 	if err != nil {
 		return err
 	}
-	poller := &ClientCreateOrUpdatePoller{
+	poller := &ClientCreateOrUpdatePoller {
 		pt: pt,
 	}
 	resp, err := poller.Poll(ctx)
@@ -107,7 +107,7 @@ func (l *ClientDeletePollerResponse) Resume(ctx context.Context, client *Client,
 	if err != nil {
 		return err
 	}
-	poller := &ClientDeletePoller{
+	poller := &ClientDeletePoller {
 		pt: pt,
 	}
 	resp, err := poller.Poll(ctx)
@@ -173,18 +173,6 @@ type ClientListKeysResult struct {
 	Keys
 }
 
-// ClientListSKUsResponse contains the response from method Client.ListSKUs.
-type ClientListSKUsResponse struct {
-	ClientListSKUsResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ClientListSKUsResult contains the result from method Client.ListSKUs.
-type ClientListSKUsResult struct {
-	SKUList
-}
-
 // ClientRegenerateKeyPollerResponse contains the response from method Client.RegenerateKey.
 type ClientRegenerateKeyPollerResponse struct {
 	// Poller contains an initialized poller.
@@ -213,7 +201,7 @@ func (l *ClientRegenerateKeyPollerResponse) Resume(ctx context.Context, client *
 	if err != nil {
 		return err
 	}
-	poller := &ClientRegenerateKeyPoller{
+	poller := &ClientRegenerateKeyPoller {
 		pt: pt,
 	}
 	resp, err := poller.Poll(ctx)
@@ -265,7 +253,7 @@ func (l *ClientRestartPollerResponse) Resume(ctx context.Context, client *Client
 	if err != nil {
 		return err
 	}
-	poller := &ClientRestartPoller{
+	poller := &ClientRestartPoller {
 		pt: pt,
 	}
 	resp, err := poller.Poll(ctx)
@@ -311,7 +299,7 @@ func (l *ClientUpdatePollerResponse) Resume(ctx context.Context, client *Client,
 	if err != nil {
 		return err
 	}
-	poller := &ClientUpdatePoller{
+	poller := &ClientUpdatePoller {
 		pt: pt,
 	}
 	resp, err := poller.Poll(ctx)
@@ -375,7 +363,7 @@ func (l *PrivateEndpointConnectionsClientDeletePollerResponse) Resume(ctx contex
 	if err != nil {
 		return err
 	}
-	poller := &PrivateEndpointConnectionsClientDeletePoller{
+	poller := &PrivateEndpointConnectionsClientDeletePoller {
 		pt: pt,
 	}
 	resp, err := poller.Poll(ctx)
@@ -469,7 +457,7 @@ func (l *SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse) Resume(ct
 	if err != nil {
 		return err
 	}
-	poller := &SharedPrivateLinkResourcesClientCreateOrUpdatePoller{
+	poller := &SharedPrivateLinkResourcesClientCreateOrUpdatePoller {
 		pt: pt,
 	}
 	resp, err := poller.Poll(ctx)
@@ -521,7 +509,7 @@ func (l *SharedPrivateLinkResourcesClientDeletePollerResponse) Resume(ctx contex
 	if err != nil {
 		return err
 	}
-	poller := &SharedPrivateLinkResourcesClientDeletePoller{
+	poller := &SharedPrivateLinkResourcesClientDeletePoller {
 		pt: pt,
 	}
 	resp, err := poller.Poll(ctx)
@@ -574,3 +562,4 @@ type UsagesClientListResponse struct {
 type UsagesClientListResult struct {
 	UsageList
 }
+

@@ -24,9 +24,9 @@ import (
 // PrivateEndpointConnectionsClient contains the methods for the SignalRPrivateEndpointConnections group.
 // Don't use this type directly, use NewPrivateEndpointConnectionsClient() instead.
 type PrivateEndpointConnectionsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewPrivateEndpointConnectionsClient creates a new instance of PrivateEndpointConnectionsClient with the specified values.
@@ -44,8 +44,8 @@ func NewPrivateEndpointConnectionsClient(subscriptionID string, credential azcor
 	}
 	client := &PrivateEndpointConnectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(ep),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
+		host: string(ep),
+		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -70,7 +70,7 @@ func (client *PrivateEndpointConnectionsClient) BeginDelete(ctx context.Context,
 	if err != nil {
 		return PrivateEndpointConnectionsClientDeletePollerResponse{}, err
 	}
-	result.Poller = &PrivateEndpointConnectionsClientDeletePoller{
+	result.Poller = &PrivateEndpointConnectionsClientDeletePoller {
 		pt: pt,
 	}
 	return result, nil
@@ -90,7 +90,7 @@ func (client *PrivateEndpointConnectionsClient) deleteOperation(ctx context.Cont
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -117,7 +117,7 @@ func (client *PrivateEndpointConnectionsClient) deleteCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-10-01")
+	reqQP.Set("api-version", "2021-06-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -170,7 +170,7 @@ func (client *PrivateEndpointConnectionsClient) getCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-10-01")
+	reqQP.Set("api-version", "2021-06-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -192,7 +192,7 @@ func (client *PrivateEndpointConnectionsClient) getHandleResponse(resp *http.Res
 // resourceName - The name of the resource.
 // options - PrivateEndpointConnectionsClientListOptions contains the optional parameters for the PrivateEndpointConnectionsClient.List
 // method.
-func (client *PrivateEndpointConnectionsClient) List(resourceGroupName string, resourceName string, options *PrivateEndpointConnectionsClientListOptions) *PrivateEndpointConnectionsClientListPager {
+func (client *PrivateEndpointConnectionsClient) List(resourceGroupName string, resourceName string, options *PrivateEndpointConnectionsClientListOptions) (*PrivateEndpointConnectionsClientListPager) {
 	return &PrivateEndpointConnectionsClientListPager{
 		client: client,
 		requester: func(ctx context.Context) (*policy.Request, error) {
@@ -224,7 +224,7 @@ func (client *PrivateEndpointConnectionsClient) listCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-10-01")
+	reqQP.Set("api-version", "2021-06-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -287,7 +287,7 @@ func (client *PrivateEndpointConnectionsClient) updateCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-10-01")
+	reqQP.Set("api-version", "2021-06-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -301,3 +301,4 @@ func (client *PrivateEndpointConnectionsClient) updateHandleResponse(resp *http.
 	}
 	return result, nil
 }
+
