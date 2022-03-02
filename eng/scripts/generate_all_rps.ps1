@@ -2,12 +2,12 @@ Param(
     [string] $sdkPath,
     [string] $specPath,
     [bool] $generateSDK = $false,
-    [bool] $generateTest = $true,
+    [bool] $generateTest = $false,
     [bool] $executeMockTest = $true
 )
 
 $AUTOREST_TEST_PACKAGE_URL = "D:\Workspace\Azure\azure-sdk-tools\tools\sdk-testgen\packages\autorest.gotest"
-$AUTOREST_GO_VERSION = "D:\Workspace\jhendrixMSFT\autorest.go"
+$AUTOREST_GO_VERSION = "D:\Workspace\tadelesh\autorest.go"
 $AUTOREST_CONFIG_FILE = "autorest.md"
 $AUTOREST_CORE_VERSION = "3.6.2"
 
@@ -17,6 +17,8 @@ function executeSingleGenerate($readmePath, $sepcRPName)
     $content = Get-Content $readmePath -Raw
     if ($content -notmatch "\`$\(track2\)")
     {
+        Write-Host "No GO track2 config, skip ..."
+        return
         $rpName = $sepcRPName -replace "-", ""
         $content = $content.Replace("`````` yaml `$(go)", "`````` yaml `$(go) && !`$(track2)")
         $content += "

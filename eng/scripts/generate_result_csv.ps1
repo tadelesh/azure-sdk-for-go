@@ -20,7 +20,7 @@ function getLogResults($sdkPath, $specPath, $logPath)
                 $resultArray += $resultObject
             }
             $specRPName = $matches["specRPName"]
-            Write-Host "Start to process log for RP: $rpName"
+            Write-Host "Start to process log for RP: $specRPName"
             $resultObject = [PSCustomObject]@{
                 specRPName          = $specRPName
                 rpName              = ""
@@ -276,7 +276,7 @@ function getLogResults($sdkPath, $specPath, $logPath)
                     {
                         $listOfFailCaseType += "N/A"
                     }
-                    if ($errorDetail -match "for example (?<exampleFile>specification/.+):")
+                    if ($errorDetail -match "for example (?<exampleFile>specification/[^:]+):")
                     {
                         $listOfFailExample += $matches["exampleFile"]
                     }
