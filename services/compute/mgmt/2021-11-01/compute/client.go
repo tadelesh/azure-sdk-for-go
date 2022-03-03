@@ -1,5 +1,6 @@
+// Deprecated: deprecated test
 // Package compute implements the Azure ARM Compute service API version .
-//
+// 
 // Compute Client
 package compute
 
