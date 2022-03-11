@@ -34,17 +34,17 @@ type VendorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVendorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VendorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VendorsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -59,9 +59,7 @@ func (client *VendorsClient) BeginCreateOrUpdate(ctx context.Context, vendorName
 	if err != nil {
 		return VendorsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VendorsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VendorsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VendorsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VendorsClientCreateOrUpdatePollerResponse{}, err
@@ -123,9 +121,7 @@ func (client *VendorsClient) BeginDelete(ctx context.Context, vendorName string,
 	if err != nil {
 		return VendorsClientDeletePollerResponse{}, err
 	}
-	result := VendorsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VendorsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VendorsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return VendorsClientDeletePollerResponse{}, err
@@ -218,7 +214,7 @@ func (client *VendorsClient) getCreateRequest(ctx context.Context, vendorName st
 
 // getHandleResponse handles the Get response.
 func (client *VendorsClient) getHandleResponse(resp *http.Response) (VendorsClientGetResponse, error) {
-	result := VendorsClientGetResponse{RawResponse: resp}
+	result := VendorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Vendor); err != nil {
 		return VendorsClientGetResponse{}, err
 	}
@@ -261,7 +257,7 @@ func (client *VendorsClient) listBySubscriptionCreateRequest(ctx context.Context
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *VendorsClient) listBySubscriptionHandleResponse(resp *http.Response) (VendorsClientListBySubscriptionResponse, error) {
-	result := VendorsClientListBySubscriptionResponse{RawResponse: resp}
+	result := VendorsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VendorListResult); err != nil {
 		return VendorsClientListBySubscriptionResponse{}, err
 	}

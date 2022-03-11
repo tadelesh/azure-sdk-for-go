@@ -34,17 +34,17 @@ type JobsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewJobsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *JobsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &JobsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *JobsClient) BeginCancel(ctx context.Context, dataServiceName strin
 	if err != nil {
 		return JobsClientCancelPollerResponse{}, err
 	}
-	result := JobsClientCancelPollerResponse{
-		RawResponse: resp,
-	}
+	result := JobsClientCancelPollerResponse{}
 	pt, err := armruntime.NewPoller("JobsClient.Cancel", "", resp, client.pl)
 	if err != nil {
 		return JobsClientCancelPollerResponse{}, err
@@ -197,7 +195,7 @@ func (client *JobsClient) getCreateRequest(ctx context.Context, dataServiceName 
 
 // getHandleResponse handles the Get response.
 func (client *JobsClient) getHandleResponse(resp *http.Response) (JobsClientGetResponse, error) {
-	result := JobsClientGetResponse{RawResponse: resp}
+	result := JobsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Job); err != nil {
 		return JobsClientGetResponse{}, err
 	}
@@ -253,7 +251,7 @@ func (client *JobsClient) listByDataManagerCreateRequest(ctx context.Context, re
 
 // listByDataManagerHandleResponse handles the ListByDataManager response.
 func (client *JobsClient) listByDataManagerHandleResponse(resp *http.Response) (JobsClientListByDataManagerResponse, error) {
-	result := JobsClientListByDataManagerResponse{RawResponse: resp}
+	result := JobsClientListByDataManagerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobList); err != nil {
 		return JobsClientListByDataManagerResponse{}, err
 	}
@@ -314,7 +312,7 @@ func (client *JobsClient) listByDataServiceCreateRequest(ctx context.Context, da
 
 // listByDataServiceHandleResponse handles the ListByDataService response.
 func (client *JobsClient) listByDataServiceHandleResponse(resp *http.Response) (JobsClientListByDataServiceResponse, error) {
-	result := JobsClientListByDataServiceResponse{RawResponse: resp}
+	result := JobsClientListByDataServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobList); err != nil {
 		return JobsClientListByDataServiceResponse{}, err
 	}
@@ -381,7 +379,7 @@ func (client *JobsClient) listByJobDefinitionCreateRequest(ctx context.Context, 
 
 // listByJobDefinitionHandleResponse handles the ListByJobDefinition response.
 func (client *JobsClient) listByJobDefinitionHandleResponse(resp *http.Response) (JobsClientListByJobDefinitionResponse, error) {
-	result := JobsClientListByJobDefinitionResponse{RawResponse: resp}
+	result := JobsClientListByJobDefinitionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobList); err != nil {
 		return JobsClientListByJobDefinitionResponse{}, err
 	}
@@ -402,9 +400,7 @@ func (client *JobsClient) BeginResume(ctx context.Context, dataServiceName strin
 	if err != nil {
 		return JobsClientResumePollerResponse{}, err
 	}
-	result := JobsClientResumePollerResponse{
-		RawResponse: resp,
-	}
+	result := JobsClientResumePollerResponse{}
 	pt, err := armruntime.NewPoller("JobsClient.Resume", "", resp, client.pl)
 	if err != nil {
 		return JobsClientResumePollerResponse{}, err

@@ -35,17 +35,17 @@ type SharedGalleriesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSharedGalleriesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SharedGalleriesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SharedGalleriesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *SharedGalleriesClient) getCreateRequest(ctx context.Context, locat
 
 // getHandleResponse handles the Get response.
 func (client *SharedGalleriesClient) getHandleResponse(resp *http.Response) (SharedGalleriesClientGetResponse, error) {
-	result := SharedGalleriesClientGetResponse{RawResponse: resp}
+	result := SharedGalleriesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedGallery); err != nil {
 		return SharedGalleriesClientGetResponse{}, err
 	}
@@ -148,7 +148,7 @@ func (client *SharedGalleriesClient) listCreateRequest(ctx context.Context, loca
 
 // listHandleResponse handles the List response.
 func (client *SharedGalleriesClient) listHandleResponse(resp *http.Response) (SharedGalleriesClientListResponse, error) {
-	result := SharedGalleriesClientListResponse{RawResponse: resp}
+	result := SharedGalleriesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedGalleryList); err != nil {
 		return SharedGalleriesClientListResponse{}, err
 	}

@@ -32,16 +32,16 @@ type PrivateStoreClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateStoreClient(credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateStoreClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateStoreClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,7 +64,7 @@ func (client *PrivateStoreClient) AcknowledgeOfferNotification(ctx context.Conte
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return PrivateStoreClientAcknowledgeOfferNotificationResponse{}, runtime.NewResponseError(resp)
 	}
-	return PrivateStoreClientAcknowledgeOfferNotificationResponse{RawResponse: resp}, nil
+	return PrivateStoreClientAcknowledgeOfferNotificationResponse{}, nil
 }
 
 // acknowledgeOfferNotificationCreateRequest creates the AcknowledgeOfferNotification request.
@@ -132,7 +132,7 @@ func (client *PrivateStoreClient) adminRequestApprovalsListCreateRequest(ctx con
 
 // adminRequestApprovalsListHandleResponse handles the AdminRequestApprovalsList response.
 func (client *PrivateStoreClient) adminRequestApprovalsListHandleResponse(resp *http.Response) (PrivateStoreClientAdminRequestApprovalsListResponse, error) {
-	result := PrivateStoreClientAdminRequestApprovalsListResponse{RawResponse: resp}
+	result := PrivateStoreClientAdminRequestApprovalsListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdminRequestApprovalsList); err != nil {
 		return PrivateStoreClientAdminRequestApprovalsListResponse{}, err
 	}
@@ -179,7 +179,7 @@ func (client *PrivateStoreClient) billingAccountsCreateRequest(ctx context.Conte
 
 // billingAccountsHandleResponse handles the BillingAccounts response.
 func (client *PrivateStoreClient) billingAccountsHandleResponse(resp *http.Response) (PrivateStoreClientBillingAccountsResponse, error) {
-	result := PrivateStoreClientBillingAccountsResponse{RawResponse: resp}
+	result := PrivateStoreClientBillingAccountsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BillingAccountsResponse); err != nil {
 		return PrivateStoreClientBillingAccountsResponse{}, err
 	}
@@ -229,7 +229,7 @@ func (client *PrivateStoreClient) bulkCollectionsActionCreateRequest(ctx context
 
 // bulkCollectionsActionHandleResponse handles the BulkCollectionsAction response.
 func (client *PrivateStoreClient) bulkCollectionsActionHandleResponse(resp *http.Response) (PrivateStoreClientBulkCollectionsActionResponse, error) {
-	result := PrivateStoreClientBulkCollectionsActionResponse{RawResponse: resp}
+	result := PrivateStoreClientBulkCollectionsActionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BulkCollectionsResponse); err != nil {
 		return PrivateStoreClientBulkCollectionsActionResponse{}, err
 	}
@@ -280,7 +280,7 @@ func (client *PrivateStoreClient) collectionsToSubscriptionsMappingCreateRequest
 
 // collectionsToSubscriptionsMappingHandleResponse handles the CollectionsToSubscriptionsMapping response.
 func (client *PrivateStoreClient) collectionsToSubscriptionsMappingHandleResponse(resp *http.Response) (PrivateStoreClientCollectionsToSubscriptionsMappingResponse, error) {
-	result := PrivateStoreClientCollectionsToSubscriptionsMappingResponse{RawResponse: resp}
+	result := PrivateStoreClientCollectionsToSubscriptionsMappingResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CollectionsToSubscriptionsMappingResponse); err != nil {
 		return PrivateStoreClientCollectionsToSubscriptionsMappingResponse{}, err
 	}
@@ -335,7 +335,7 @@ func (client *PrivateStoreClient) createApprovalRequestCreateRequest(ctx context
 
 // createApprovalRequestHandleResponse handles the CreateApprovalRequest response.
 func (client *PrivateStoreClient) createApprovalRequestHandleResponse(resp *http.Response) (PrivateStoreClientCreateApprovalRequestResponse, error) {
-	result := PrivateStoreClientCreateApprovalRequestResponse{RawResponse: resp}
+	result := PrivateStoreClientCreateApprovalRequestResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RequestApprovalResource); err != nil {
 		return PrivateStoreClientCreateApprovalRequestResponse{}, err
 	}
@@ -359,7 +359,7 @@ func (client *PrivateStoreClient) CreateOrUpdate(ctx context.Context, privateSto
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return PrivateStoreClientCreateOrUpdateResponse{}, runtime.NewResponseError(resp)
 	}
-	return PrivateStoreClientCreateOrUpdateResponse{RawResponse: resp}, nil
+	return PrivateStoreClientCreateOrUpdateResponse{}, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -399,7 +399,7 @@ func (client *PrivateStoreClient) Delete(ctx context.Context, privateStoreID str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return PrivateStoreClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return PrivateStoreClientDeleteResponse{RawResponse: resp}, nil
+	return PrivateStoreClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -459,7 +459,7 @@ func (client *PrivateStoreClient) getCreateRequest(ctx context.Context, privateS
 
 // getHandleResponse handles the Get response.
 func (client *PrivateStoreClient) getHandleResponse(resp *http.Response) (PrivateStoreClientGetResponse, error) {
-	result := PrivateStoreClientGetResponse{RawResponse: resp}
+	result := PrivateStoreClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateStore); err != nil {
 		return PrivateStoreClientGetResponse{}, err
 	}
@@ -513,7 +513,7 @@ func (client *PrivateStoreClient) getAdminRequestApprovalCreateRequest(ctx conte
 
 // getAdminRequestApprovalHandleResponse handles the GetAdminRequestApproval response.
 func (client *PrivateStoreClient) getAdminRequestApprovalHandleResponse(resp *http.Response) (PrivateStoreClientGetAdminRequestApprovalResponse, error) {
-	result := PrivateStoreClientGetAdminRequestApprovalResponse{RawResponse: resp}
+	result := PrivateStoreClientGetAdminRequestApprovalResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdminRequestApprovalsResource); err != nil {
 		return PrivateStoreClientGetAdminRequestApprovalResponse{}, err
 	}
@@ -560,7 +560,7 @@ func (client *PrivateStoreClient) getApprovalRequestsListCreateRequest(ctx conte
 
 // getApprovalRequestsListHandleResponse handles the GetApprovalRequestsList response.
 func (client *PrivateStoreClient) getApprovalRequestsListHandleResponse(resp *http.Response) (PrivateStoreClientGetApprovalRequestsListResponse, error) {
-	result := PrivateStoreClientGetApprovalRequestsListResponse{RawResponse: resp}
+	result := PrivateStoreClientGetApprovalRequestsListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RequestApprovalsList); err != nil {
 		return PrivateStoreClientGetApprovalRequestsListResponse{}, err
 	}
@@ -612,7 +612,7 @@ func (client *PrivateStoreClient) getRequestApprovalCreateRequest(ctx context.Co
 
 // getRequestApprovalHandleResponse handles the GetRequestApproval response.
 func (client *PrivateStoreClient) getRequestApprovalHandleResponse(resp *http.Response) (PrivateStoreClientGetRequestApprovalResponse, error) {
-	result := PrivateStoreClientGetRequestApprovalResponse{RawResponse: resp}
+	result := PrivateStoreClientGetRequestApprovalResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RequestApprovalResource); err != nil {
 		return PrivateStoreClientGetRequestApprovalResponse{}, err
 	}
@@ -653,7 +653,7 @@ func (client *PrivateStoreClient) listCreateRequest(ctx context.Context, options
 
 // listHandleResponse handles the List response.
 func (client *PrivateStoreClient) listHandleResponse(resp *http.Response) (PrivateStoreClientListResponse, error) {
-	result := PrivateStoreClientListResponse{RawResponse: resp}
+	result := PrivateStoreClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateStoreList); err != nil {
 		return PrivateStoreClientListResponse{}, err
 	}
@@ -703,7 +703,7 @@ func (client *PrivateStoreClient) queryApprovedPlansCreateRequest(ctx context.Co
 
 // queryApprovedPlansHandleResponse handles the QueryApprovedPlans response.
 func (client *PrivateStoreClient) queryApprovedPlansHandleResponse(resp *http.Response) (PrivateStoreClientQueryApprovedPlansResponse, error) {
-	result := PrivateStoreClientQueryApprovedPlansResponse{RawResponse: resp}
+	result := PrivateStoreClientQueryApprovedPlansResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QueryApprovedPlansResponse); err != nil {
 		return PrivateStoreClientQueryApprovedPlansResponse{}, err
 	}
@@ -750,7 +750,7 @@ func (client *PrivateStoreClient) queryNotificationsStateCreateRequest(ctx conte
 
 // queryNotificationsStateHandleResponse handles the QueryNotificationsState response.
 func (client *PrivateStoreClient) queryNotificationsStateHandleResponse(resp *http.Response) (PrivateStoreClientQueryNotificationsStateResponse, error) {
-	result := PrivateStoreClientQueryNotificationsStateResponse{RawResponse: resp}
+	result := PrivateStoreClientQueryNotificationsStateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateStoreNotificationsState); err != nil {
 		return PrivateStoreClientQueryNotificationsStateResponse{}, err
 	}
@@ -797,7 +797,7 @@ func (client *PrivateStoreClient) queryOffersCreateRequest(ctx context.Context, 
 
 // queryOffersHandleResponse handles the QueryOffers response.
 func (client *PrivateStoreClient) queryOffersHandleResponse(resp *http.Response) (PrivateStoreClientQueryOffersResponse, error) {
-	result := PrivateStoreClientQueryOffersResponse{RawResponse: resp}
+	result := PrivateStoreClientQueryOffersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QueryOffers); err != nil {
 		return PrivateStoreClientQueryOffersResponse{}, err
 	}
@@ -852,7 +852,7 @@ func (client *PrivateStoreClient) queryRequestApprovalCreateRequest(ctx context.
 
 // queryRequestApprovalHandleResponse handles the QueryRequestApproval response.
 func (client *PrivateStoreClient) queryRequestApprovalHandleResponse(resp *http.Response) (PrivateStoreClientQueryRequestApprovalResponse, error) {
-	result := PrivateStoreClientQueryRequestApprovalResponse{RawResponse: resp}
+	result := PrivateStoreClientQueryRequestApprovalResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QueryRequestApproval); err != nil {
 		return PrivateStoreClientQueryRequestApprovalResponse{}, err
 	}
@@ -907,7 +907,7 @@ func (client *PrivateStoreClient) updateAdminRequestApprovalCreateRequest(ctx co
 
 // updateAdminRequestApprovalHandleResponse handles the UpdateAdminRequestApproval response.
 func (client *PrivateStoreClient) updateAdminRequestApprovalHandleResponse(resp *http.Response) (PrivateStoreClientUpdateAdminRequestApprovalResponse, error) {
-	result := PrivateStoreClientUpdateAdminRequestApprovalResponse{RawResponse: resp}
+	result := PrivateStoreClientUpdateAdminRequestApprovalResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdminRequestApprovalsResource); err != nil {
 		return PrivateStoreClientUpdateAdminRequestApprovalResponse{}, err
 	}
@@ -932,7 +932,7 @@ func (client *PrivateStoreClient) WithdrawPlan(ctx context.Context, privateStore
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return PrivateStoreClientWithdrawPlanResponse{}, runtime.NewResponseError(resp)
 	}
-	return PrivateStoreClientWithdrawPlanResponse{RawResponse: resp}, nil
+	return PrivateStoreClientWithdrawPlanResponse{}, nil
 }
 
 // withdrawPlanCreateRequest creates the WithdrawPlan request.

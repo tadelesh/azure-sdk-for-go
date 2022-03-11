@@ -84,7 +84,7 @@ func (client *ManagedRuleSetsClient) listCreateRequest(ctx context.Context, opti
 
 // listHandleResponse handles the List response.
 func (client *ManagedRuleSetsClient) listHandleResponse(resp *http.Response) (ManagedRuleSetsClientListResponse, error) {
-	result := ManagedRuleSetsClientListResponse{RawResponse: resp}
+	result := ManagedRuleSetsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedRuleSetDefinitionList); err != nil {
 		return ManagedRuleSetsClientListResponse{}, err
 	}

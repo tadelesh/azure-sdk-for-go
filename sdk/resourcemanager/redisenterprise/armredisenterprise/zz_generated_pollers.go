@@ -43,11 +43,10 @@ func (p *ClientCreatePoller) Poll(ctx context.Context) (*http.Response, error) {
 // If the final GET succeeded then the final ClientCreateResponse will be returned.
 func (p *ClientCreatePoller) FinalResponse(ctx context.Context) (ClientCreateResponse, error) {
 	respType := ClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Cluster)
+	_, err := p.pt.FinalResponse(ctx, &respType.Cluster)
 	if err != nil {
 		return ClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ClientDeletePoller) Poll(ctx context.Context) (*http.Response, error) {
 // If the final GET succeeded then the final ClientDeleteResponse will be returned.
 func (p *ClientDeletePoller) FinalResponse(ctx context.Context) (ClientDeleteResponse, error) {
 	respType := ClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ClientUpdatePoller) Poll(ctx context.Context) (*http.Response, error) {
 // If the final GET succeeded then the final ClientUpdateResponse will be returned.
 func (p *ClientUpdatePoller) FinalResponse(ctx context.Context) (ClientUpdateResponse, error) {
 	respType := ClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Cluster)
+	_, err := p.pt.FinalResponse(ctx, &respType.Cluster)
 	if err != nil {
 		return ClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *DatabasesClientCreatePoller) Poll(ctx context.Context) (*http.Response,
 // If the final GET succeeded then the final DatabasesClientCreateResponse will be returned.
 func (p *DatabasesClientCreatePoller) FinalResponse(ctx context.Context) (DatabasesClientCreateResponse, error) {
 	respType := DatabasesClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Database)
+	_, err := p.pt.FinalResponse(ctx, &respType.Database)
 	if err != nil {
 		return DatabasesClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *DatabasesClientDeletePoller) Poll(ctx context.Context) (*http.Response,
 // If the final GET succeeded then the final DatabasesClientDeleteResponse will be returned.
 func (p *DatabasesClientDeletePoller) FinalResponse(ctx context.Context) (DatabasesClientDeleteResponse, error) {
 	respType := DatabasesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DatabasesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,17 +253,58 @@ func (p *DatabasesClientExportPoller) Poll(ctx context.Context) (*http.Response,
 // If the final GET succeeded then the final DatabasesClientExportResponse will be returned.
 func (p *DatabasesClientExportPoller) FinalResponse(ctx context.Context) (DatabasesClientExportResponse, error) {
 	respType := DatabasesClientExportResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DatabasesClientExportResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
 // ResumeToken returns a value representing the poller that can be used to resume
 // the LRO at a later time. ResumeTokens are unique per service operation.
 func (p *DatabasesClientExportPoller) ResumeToken() (string, error) {
+	return p.pt.ResumeToken()
+}
+
+// DatabasesClientForceUnlinkPoller provides polling facilities until the operation reaches a terminal state.
+type DatabasesClientForceUnlinkPoller struct {
+	pt *azcore.Poller
+}
+
+// Done returns true if the LRO has reached a terminal state.
+func (p *DatabasesClientForceUnlinkPoller) Done() bool {
+	return p.pt.Done()
+}
+
+// Poll fetches the latest state of the LRO.  It returns an HTTP response or error.
+// If the LRO has completed successfully, the poller's state is updated and the HTTP
+// response is returned.
+// If the LRO has completed with failure or was cancelled, the poller's state is
+// updated and the error is returned.
+// If the LRO has not reached a terminal state, the poller's state is updated and
+// the latest HTTP response is returned.
+// If Poll fails, the poller's state is unmodified and the error is returned.
+// Calling Poll on an LRO that has reached a terminal state will return the final
+// HTTP response or error.
+func (p *DatabasesClientForceUnlinkPoller) Poll(ctx context.Context) (*http.Response, error) {
+	return p.pt.Poll(ctx)
+}
+
+// FinalResponse performs a final GET to the service and returns the final response
+// for the polling operation. If there is an error performing the final GET then an error is returned.
+// If the final GET succeeded then the final DatabasesClientForceUnlinkResponse will be returned.
+func (p *DatabasesClientForceUnlinkPoller) FinalResponse(ctx context.Context) (DatabasesClientForceUnlinkResponse, error) {
+	respType := DatabasesClientForceUnlinkResponse{}
+	_, err := p.pt.FinalResponse(ctx, nil)
+	if err != nil {
+		return DatabasesClientForceUnlinkResponse{}, err
+	}
+	return respType, nil
+}
+
+// ResumeToken returns a value representing the poller that can be used to resume
+// the LRO at a later time. ResumeTokens are unique per service operation.
+func (p *DatabasesClientForceUnlinkPoller) ResumeToken() (string, error) {
 	return p.pt.ResumeToken()
 }
 
@@ -301,11 +337,10 @@ func (p *DatabasesClientImportPoller) Poll(ctx context.Context) (*http.Response,
 // If the final GET succeeded then the final DatabasesClientImportResponse will be returned.
 func (p *DatabasesClientImportPoller) FinalResponse(ctx context.Context) (DatabasesClientImportResponse, error) {
 	respType := DatabasesClientImportResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DatabasesClientImportResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +379,10 @@ func (p *DatabasesClientRegenerateKeyPoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final DatabasesClientRegenerateKeyResponse will be returned.
 func (p *DatabasesClientRegenerateKeyPoller) FinalResponse(ctx context.Context) (DatabasesClientRegenerateKeyResponse, error) {
 	respType := DatabasesClientRegenerateKeyResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.AccessKeys)
+	_, err := p.pt.FinalResponse(ctx, &respType.AccessKeys)
 	if err != nil {
 		return DatabasesClientRegenerateKeyResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +421,10 @@ func (p *DatabasesClientUpdatePoller) Poll(ctx context.Context) (*http.Response,
 // If the final GET succeeded then the final DatabasesClientUpdateResponse will be returned.
 func (p *DatabasesClientUpdatePoller) FinalResponse(ctx context.Context) (DatabasesClientUpdateResponse, error) {
 	respType := DatabasesClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Database)
+	_, err := p.pt.FinalResponse(ctx, &respType.Database)
 	if err != nil {
 		return DatabasesClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -430,11 +463,10 @@ func (p *PrivateEndpointConnectionsClientPutPoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientPutResponse will be returned.
 func (p *PrivateEndpointConnectionsClientPutPoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientPutResponse, error) {
 	respType := PrivateEndpointConnectionsClientPutResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return PrivateEndpointConnectionsClientPutResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

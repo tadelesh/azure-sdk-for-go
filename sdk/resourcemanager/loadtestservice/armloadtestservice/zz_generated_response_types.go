@@ -11,19 +11,11 @@ package armloadtestservice
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // LoadTestsClientCreateOrUpdateResponse contains the response from method LoadTestsClient.CreateOrUpdate.
 type LoadTestsClientCreateOrUpdateResponse struct {
-	LoadTestsClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LoadTestsClientCreateOrUpdateResult contains the result from method LoadTestsClient.CreateOrUpdate.
-type LoadTestsClientCreateOrUpdateResult struct {
 	LoadTestResource
 }
 
@@ -31,9 +23,6 @@ type LoadTestsClientCreateOrUpdateResult struct {
 type LoadTestsClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *LoadTestsClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -41,11 +30,10 @@ type LoadTestsClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l LoadTestsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LoadTestsClientDeleteResponse, error) {
 	respType := LoadTestsClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -58,77 +46,40 @@ func (l *LoadTestsClientDeletePollerResponse) Resume(ctx context.Context, client
 	poller := &LoadTestsClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // LoadTestsClientDeleteResponse contains the response from method LoadTestsClient.Delete.
 type LoadTestsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // LoadTestsClientGetResponse contains the response from method LoadTestsClient.Get.
 type LoadTestsClientGetResponse struct {
-	LoadTestsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LoadTestsClientGetResult contains the result from method LoadTestsClient.Get.
-type LoadTestsClientGetResult struct {
 	LoadTestResource
 }
 
 // LoadTestsClientListByResourceGroupResponse contains the response from method LoadTestsClient.ListByResourceGroup.
 type LoadTestsClientListByResourceGroupResponse struct {
-	LoadTestsClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LoadTestsClientListByResourceGroupResult contains the result from method LoadTestsClient.ListByResourceGroup.
-type LoadTestsClientListByResourceGroupResult struct {
 	LoadTestResourcePageList
 }
 
 // LoadTestsClientListBySubscriptionResponse contains the response from method LoadTestsClient.ListBySubscription.
 type LoadTestsClientListBySubscriptionResponse struct {
-	LoadTestsClientListBySubscriptionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LoadTestsClientListBySubscriptionResult contains the result from method LoadTestsClient.ListBySubscription.
-type LoadTestsClientListBySubscriptionResult struct {
 	LoadTestResourcePageList
 }
 
 // LoadTestsClientUpdateResponse contains the response from method LoadTestsClient.Update.
 type LoadTestsClientUpdateResponse struct {
-	LoadTestsClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LoadTestsClientUpdateResult contains the result from method LoadTestsClient.Update.
-type LoadTestsClientUpdateResult struct {
 	LoadTestResource
 }
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	OperationListResult
 }

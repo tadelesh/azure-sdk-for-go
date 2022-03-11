@@ -35,17 +35,17 @@ type VirtualMachineScaleSetRollingUpgradesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualMachineScaleSetRollingUpgradesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualMachineScaleSetRollingUpgradesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualMachineScaleSetRollingUpgradesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *VirtualMachineScaleSetRollingUpgradesClient) BeginCancel(ctx conte
 	if err != nil {
 		return VirtualMachineScaleSetRollingUpgradesClientCancelPollerResponse{}, err
 	}
-	result := VirtualMachineScaleSetRollingUpgradesClientCancelPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachineScaleSetRollingUpgradesClientCancelPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachineScaleSetRollingUpgradesClient.Cancel", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachineScaleSetRollingUpgradesClientCancelPollerResponse{}, err
@@ -111,8 +109,9 @@ func (client *VirtualMachineScaleSetRollingUpgradesClient) cancelCreateRequest(c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
 }
 
@@ -157,7 +156,7 @@ func (client *VirtualMachineScaleSetRollingUpgradesClient) getLatestCreateReques
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -165,7 +164,7 @@ func (client *VirtualMachineScaleSetRollingUpgradesClient) getLatestCreateReques
 
 // getLatestHandleResponse handles the GetLatest response.
 func (client *VirtualMachineScaleSetRollingUpgradesClient) getLatestHandleResponse(resp *http.Response) (VirtualMachineScaleSetRollingUpgradesClientGetLatestResponse, error) {
-	result := VirtualMachineScaleSetRollingUpgradesClientGetLatestResponse{RawResponse: resp}
+	result := VirtualMachineScaleSetRollingUpgradesClientGetLatestResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RollingUpgradeStatusInfo); err != nil {
 		return VirtualMachineScaleSetRollingUpgradesClientGetLatestResponse{}, err
 	}
@@ -185,9 +184,7 @@ func (client *VirtualMachineScaleSetRollingUpgradesClient) BeginStartExtensionUp
 	if err != nil {
 		return VirtualMachineScaleSetRollingUpgradesClientStartExtensionUpgradePollerResponse{}, err
 	}
-	result := VirtualMachineScaleSetRollingUpgradesClientStartExtensionUpgradePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachineScaleSetRollingUpgradesClientStartExtensionUpgradePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachineScaleSetRollingUpgradesClient.StartExtensionUpgrade", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachineScaleSetRollingUpgradesClientStartExtensionUpgradePollerResponse{}, err
@@ -237,8 +234,9 @@ func (client *VirtualMachineScaleSetRollingUpgradesClient) startExtensionUpgrade
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
 }
 
@@ -255,9 +253,7 @@ func (client *VirtualMachineScaleSetRollingUpgradesClient) BeginStartOSUpgrade(c
 	if err != nil {
 		return VirtualMachineScaleSetRollingUpgradesClientStartOSUpgradePollerResponse{}, err
 	}
-	result := VirtualMachineScaleSetRollingUpgradesClientStartOSUpgradePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachineScaleSetRollingUpgradesClientStartOSUpgradePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachineScaleSetRollingUpgradesClient.StartOSUpgrade", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachineScaleSetRollingUpgradesClientStartOSUpgradePollerResponse{}, err
@@ -307,7 +303,8 @@ func (client *VirtualMachineScaleSetRollingUpgradesClient) startOSUpgradeCreateR
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
 }

@@ -34,17 +34,17 @@ type ProvidersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProvidersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ProvidersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProvidersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *ProvidersClient) getCreateRequest(ctx context.Context, resourcePro
 
 // getHandleResponse handles the Get response.
 func (client *ProvidersClient) getHandleResponse(resp *http.Response) (ProvidersClientGetResponse, error) {
-	result := ProvidersClientGetResponse{RawResponse: resp}
+	result := ProvidersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Provider); err != nil {
 		return ProvidersClientGetResponse{}, err
 	}
@@ -145,7 +145,7 @@ func (client *ProvidersClient) getAtTenantScopeCreateRequest(ctx context.Context
 
 // getAtTenantScopeHandleResponse handles the GetAtTenantScope response.
 func (client *ProvidersClient) getAtTenantScopeHandleResponse(resp *http.Response) (ProvidersClientGetAtTenantScopeResponse, error) {
-	result := ProvidersClientGetAtTenantScopeResponse{RawResponse: resp}
+	result := ProvidersClientGetAtTenantScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Provider); err != nil {
 		return ProvidersClientGetAtTenantScopeResponse{}, err
 	}
@@ -190,7 +190,7 @@ func (client *ProvidersClient) listCreateRequest(ctx context.Context, options *P
 
 // listHandleResponse handles the List response.
 func (client *ProvidersClient) listHandleResponse(resp *http.Response) (ProvidersClientListResponse, error) {
-	result := ProvidersClientListResponse{RawResponse: resp}
+	result := ProvidersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProviderListResult); err != nil {
 		return ProvidersClientListResponse{}, err
 	}
@@ -232,7 +232,7 @@ func (client *ProvidersClient) listAtTenantScopeCreateRequest(ctx context.Contex
 
 // listAtTenantScopeHandleResponse handles the ListAtTenantScope response.
 func (client *ProvidersClient) listAtTenantScopeHandleResponse(resp *http.Response) (ProvidersClientListAtTenantScopeResponse, error) {
-	result := ProvidersClientListAtTenantScopeResponse{RawResponse: resp}
+	result := ProvidersClientListAtTenantScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProviderListResult); err != nil {
 		return ProvidersClientListAtTenantScopeResponse{}, err
 	}
@@ -283,7 +283,7 @@ func (client *ProvidersClient) providerPermissionsCreateRequest(ctx context.Cont
 
 // providerPermissionsHandleResponse handles the ProviderPermissions response.
 func (client *ProvidersClient) providerPermissionsHandleResponse(resp *http.Response) (ProvidersClientProviderPermissionsResponse, error) {
-	result := ProvidersClientProviderPermissionsResponse{RawResponse: resp}
+	result := ProvidersClientProviderPermissionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProviderPermissionListResult); err != nil {
 		return ProvidersClientProviderPermissionsResponse{}, err
 	}
@@ -336,7 +336,7 @@ func (client *ProvidersClient) registerCreateRequest(ctx context.Context, resour
 
 // registerHandleResponse handles the Register response.
 func (client *ProvidersClient) registerHandleResponse(resp *http.Response) (ProvidersClientRegisterResponse, error) {
-	result := ProvidersClientRegisterResponse{RawResponse: resp}
+	result := ProvidersClientRegisterResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Provider); err != nil {
 		return ProvidersClientRegisterResponse{}, err
 	}
@@ -361,7 +361,7 @@ func (client *ProvidersClient) RegisterAtManagementGroupScope(ctx context.Contex
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ProvidersClientRegisterAtManagementGroupScopeResponse{}, runtime.NewResponseError(resp)
 	}
-	return ProvidersClientRegisterAtManagementGroupScopeResponse{RawResponse: resp}, nil
+	return ProvidersClientRegisterAtManagementGroupScopeResponse{}, nil
 }
 
 // registerAtManagementGroupScopeCreateRequest creates the RegisterAtManagementGroupScope request.
@@ -429,7 +429,7 @@ func (client *ProvidersClient) unregisterCreateRequest(ctx context.Context, reso
 
 // unregisterHandleResponse handles the Unregister response.
 func (client *ProvidersClient) unregisterHandleResponse(resp *http.Response) (ProvidersClientUnregisterResponse, error) {
-	result := ProvidersClientUnregisterResponse{RawResponse: resp}
+	result := ProvidersClientUnregisterResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Provider); err != nil {
 		return ProvidersClientUnregisterResponse{}, err
 	}

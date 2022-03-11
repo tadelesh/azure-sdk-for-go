@@ -38,19 +38,19 @@ type PowerBIResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPowerBIResourcesClient(subscriptionID string, resourceGroupName string, azureResourceName string, credential azcore.TokenCredential, options *arm.ClientOptions) *PowerBIResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PowerBIResourcesClient{
 		subscriptionID:    subscriptionID,
 		resourceGroupName: resourceGroupName,
 		azureResourceName: azureResourceName,
-		host:              string(cp.Endpoint),
-		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:              string(ep),
+		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *PowerBIResourcesClient) createCreateRequest(ctx context.Context, b
 
 // createHandleResponse handles the Create response.
 func (client *PowerBIResourcesClient) createHandleResponse(resp *http.Response) (PowerBIResourcesClientCreateResponse, error) {
-	result := PowerBIResourcesClientCreateResponse{RawResponse: resp}
+	result := PowerBIResourcesClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TenantResource); err != nil {
 		return PowerBIResourcesClientCreateResponse{}, err
 	}
@@ -127,7 +127,7 @@ func (client *PowerBIResourcesClient) Delete(ctx context.Context, options *Power
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return PowerBIResourcesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return PowerBIResourcesClientDeleteResponse{RawResponse: resp}, nil
+	return PowerBIResourcesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -203,7 +203,7 @@ func (client *PowerBIResourcesClient) listByResourceNameCreateRequest(ctx contex
 
 // listByResourceNameHandleResponse handles the ListByResourceName response.
 func (client *PowerBIResourcesClient) listByResourceNameHandleResponse(resp *http.Response) (PowerBIResourcesClientListByResourceNameResponse, error) {
-	result := PowerBIResourcesClientListByResourceNameResponse{RawResponse: resp}
+	result := PowerBIResourcesClientListByResourceNameResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TenantResourceArray); err != nil {
 		return PowerBIResourcesClientListByResourceNameResponse{}, err
 	}
@@ -260,7 +260,7 @@ func (client *PowerBIResourcesClient) updateCreateRequest(ctx context.Context, b
 
 // updateHandleResponse handles the Update response.
 func (client *PowerBIResourcesClient) updateHandleResponse(resp *http.Response) (PowerBIResourcesClientUpdateResponse, error) {
-	result := PowerBIResourcesClientUpdateResponse{RawResponse: resp}
+	result := PowerBIResourcesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TenantResource); err != nil {
 		return PowerBIResourcesClientUpdateResponse{}, err
 	}

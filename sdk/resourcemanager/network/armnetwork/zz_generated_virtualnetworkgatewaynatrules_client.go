@@ -35,17 +35,17 @@ type VirtualNetworkGatewayNatRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualNetworkGatewayNatRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualNetworkGatewayNatRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualNetworkGatewayNatRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *VirtualNetworkGatewayNatRulesClient) BeginCreateOrUpdate(ctx conte
 	if err != nil {
 		return VirtualNetworkGatewayNatRulesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VirtualNetworkGatewayNatRulesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualNetworkGatewayNatRulesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualNetworkGatewayNatRulesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VirtualNetworkGatewayNatRulesClientCreateOrUpdatePollerResponse{}, err
@@ -137,9 +135,7 @@ func (client *VirtualNetworkGatewayNatRulesClient) BeginDelete(ctx context.Conte
 	if err != nil {
 		return VirtualNetworkGatewayNatRulesClientDeletePollerResponse{}, err
 	}
-	result := VirtualNetworkGatewayNatRulesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualNetworkGatewayNatRulesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualNetworkGatewayNatRulesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return VirtualNetworkGatewayNatRulesClientDeletePollerResponse{}, err
@@ -251,7 +247,7 @@ func (client *VirtualNetworkGatewayNatRulesClient) getCreateRequest(ctx context.
 
 // getHandleResponse handles the Get response.
 func (client *VirtualNetworkGatewayNatRulesClient) getHandleResponse(resp *http.Response) (VirtualNetworkGatewayNatRulesClientGetResponse, error) {
-	result := VirtualNetworkGatewayNatRulesClientGetResponse{RawResponse: resp}
+	result := VirtualNetworkGatewayNatRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkGatewayNatRule); err != nil {
 		return VirtualNetworkGatewayNatRulesClientGetResponse{}, err
 	}
@@ -304,7 +300,7 @@ func (client *VirtualNetworkGatewayNatRulesClient) listByVirtualNetworkGatewayCr
 
 // listByVirtualNetworkGatewayHandleResponse handles the ListByVirtualNetworkGateway response.
 func (client *VirtualNetworkGatewayNatRulesClient) listByVirtualNetworkGatewayHandleResponse(resp *http.Response) (VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayResponse, error) {
-	result := VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayResponse{RawResponse: resp}
+	result := VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListVirtualNetworkGatewayNatRulesResult); err != nil {
 		return VirtualNetworkGatewayNatRulesClientListByVirtualNetworkGatewayResponse{}, err
 	}

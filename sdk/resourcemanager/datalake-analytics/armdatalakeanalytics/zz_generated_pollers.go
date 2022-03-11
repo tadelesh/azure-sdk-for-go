@@ -43,11 +43,10 @@ func (p *AccountsClientCreatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final AccountsClientCreateResponse will be returned.
 func (p *AccountsClientCreatePoller) FinalResponse(ctx context.Context) (AccountsClientCreateResponse, error) {
 	respType := AccountsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Account)
+	_, err := p.pt.FinalResponse(ctx, &respType.Account)
 	if err != nil {
 		return AccountsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *AccountsClientDeletePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final AccountsClientDeleteResponse will be returned.
 func (p *AccountsClientDeletePoller) FinalResponse(ctx context.Context) (AccountsClientDeleteResponse, error) {
 	respType := AccountsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return AccountsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *AccountsClientUpdatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final AccountsClientUpdateResponse will be returned.
 func (p *AccountsClientUpdatePoller) FinalResponse(ctx context.Context) (AccountsClientUpdateResponse, error) {
 	respType := AccountsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Account)
+	_, err := p.pt.FinalResponse(ctx, &respType.Account)
 	if err != nil {
 		return AccountsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

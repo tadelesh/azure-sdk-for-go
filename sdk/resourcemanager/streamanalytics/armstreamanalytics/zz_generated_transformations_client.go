@@ -34,17 +34,17 @@ type TransformationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTransformationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TransformationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TransformationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -111,7 +111,7 @@ func (client *TransformationsClient) createOrReplaceCreateRequest(ctx context.Co
 
 // createOrReplaceHandleResponse handles the CreateOrReplace response.
 func (client *TransformationsClient) createOrReplaceHandleResponse(resp *http.Response) (TransformationsClientCreateOrReplaceResponse, error) {
-	result := TransformationsClientCreateOrReplaceResponse{RawResponse: resp}
+	result := TransformationsClientCreateOrReplaceResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -174,7 +174,7 @@ func (client *TransformationsClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *TransformationsClient) getHandleResponse(resp *http.Response) (TransformationsClientGetResponse, error) {
-	result := TransformationsClientGetResponse{RawResponse: resp}
+	result := TransformationsClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -246,7 +246,7 @@ func (client *TransformationsClient) updateCreateRequest(ctx context.Context, re
 
 // updateHandleResponse handles the Update response.
 func (client *TransformationsClient) updateHandleResponse(resp *http.Response) (TransformationsClientUpdateResponse, error) {
-	result := TransformationsClientUpdateResponse{RawResponse: resp}
+	result := TransformationsClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

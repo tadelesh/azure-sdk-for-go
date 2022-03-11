@@ -34,17 +34,17 @@ type SQLPoolSchemasClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLPoolSchemasClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLPoolSchemasClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLPoolSchemasClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -107,7 +107,7 @@ func (client *SQLPoolSchemasClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *SQLPoolSchemasClient) getHandleResponse(resp *http.Response) (SQLPoolSchemasClientGetResponse, error) {
-	result := SQLPoolSchemasClientGetResponse{RawResponse: resp}
+	result := SQLPoolSchemasClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLPoolSchema); err != nil {
 		return SQLPoolSchemasClientGetResponse{}, err
 	}
@@ -167,7 +167,7 @@ func (client *SQLPoolSchemasClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *SQLPoolSchemasClient) listHandleResponse(resp *http.Response) (SQLPoolSchemasClientListResponse, error) {
-	result := SQLPoolSchemasClientListResponse{RawResponse: resp}
+	result := SQLPoolSchemasClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLPoolSchemaListResult); err != nil {
 		return SQLPoolSchemasClientListResponse{}, err
 	}

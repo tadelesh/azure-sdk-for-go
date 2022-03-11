@@ -35,17 +35,17 @@ type IntegrationAccountAgreementsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIntegrationAccountAgreementsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IntegrationAccountAgreementsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IntegrationAccountAgreementsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *IntegrationAccountAgreementsClient) createOrUpdateCreateRequest(ct
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *IntegrationAccountAgreementsClient) createOrUpdateHandleResponse(resp *http.Response) (IntegrationAccountAgreementsClientCreateOrUpdateResponse, error) {
-	result := IntegrationAccountAgreementsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := IntegrationAccountAgreementsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountAgreement); err != nil {
 		return IntegrationAccountAgreementsClientCreateOrUpdateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *IntegrationAccountAgreementsClient) Delete(ctx context.Context, re
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return IntegrationAccountAgreementsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return IntegrationAccountAgreementsClientDeleteResponse{RawResponse: resp}, nil
+	return IntegrationAccountAgreementsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -218,7 +218,7 @@ func (client *IntegrationAccountAgreementsClient) getCreateRequest(ctx context.C
 
 // getHandleResponse handles the Get response.
 func (client *IntegrationAccountAgreementsClient) getHandleResponse(resp *http.Response) (IntegrationAccountAgreementsClientGetResponse, error) {
-	result := IntegrationAccountAgreementsClientGetResponse{RawResponse: resp}
+	result := IntegrationAccountAgreementsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountAgreement); err != nil {
 		return IntegrationAccountAgreementsClientGetResponse{}, err
 	}
@@ -277,7 +277,7 @@ func (client *IntegrationAccountAgreementsClient) listCreateRequest(ctx context.
 
 // listHandleResponse handles the List response.
 func (client *IntegrationAccountAgreementsClient) listHandleResponse(resp *http.Response) (IntegrationAccountAgreementsClientListResponse, error) {
-	result := IntegrationAccountAgreementsClientListResponse{RawResponse: resp}
+	result := IntegrationAccountAgreementsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountAgreementListResult); err != nil {
 		return IntegrationAccountAgreementsClientListResponse{}, err
 	}
@@ -338,7 +338,7 @@ func (client *IntegrationAccountAgreementsClient) listContentCallbackURLCreateRe
 
 // listContentCallbackURLHandleResponse handles the ListContentCallbackURL response.
 func (client *IntegrationAccountAgreementsClient) listContentCallbackURLHandleResponse(resp *http.Response) (IntegrationAccountAgreementsClientListContentCallbackURLResponse, error) {
-	result := IntegrationAccountAgreementsClientListContentCallbackURLResponse{RawResponse: resp}
+	result := IntegrationAccountAgreementsClientListContentCallbackURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowTriggerCallbackURL); err != nil {
 		return IntegrationAccountAgreementsClientListContentCallbackURLResponse{}, err
 	}

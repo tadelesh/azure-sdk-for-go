@@ -35,17 +35,17 @@ type EndpointsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewEndpointsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *EndpointsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &EndpointsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *EndpointsClient) BeginPurgeContent(ctx context.Context, resourceGr
 	if err != nil {
 		return EndpointsClientPurgeContentPollerResponse{}, err
 	}
-	result := EndpointsClientPurgeContentPollerResponse{
-		RawResponse: resp,
-	}
+	result := EndpointsClientPurgeContentPollerResponse{}
 	pt, err := armruntime.NewPoller("EndpointsClient.PurgeContent", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return EndpointsClientPurgeContentPollerResponse{}, err

@@ -34,17 +34,17 @@ type WorkspaceManagedSQLServerBlobAuditingPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkspaceManagedSQLServerBlobAuditingPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkspaceManagedSQLServerBlobAuditingPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkspaceManagedSQLServerBlobAuditingPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *WorkspaceManagedSQLServerBlobAuditingPoliciesClient) BeginCreateOr
 	if err != nil {
 		return WorkspaceManagedSQLServerBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := WorkspaceManagedSQLServerBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkspaceManagedSQLServerBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkspaceManagedSQLServerBlobAuditingPoliciesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return WorkspaceManagedSQLServerBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{}, err
@@ -176,7 +174,7 @@ func (client *WorkspaceManagedSQLServerBlobAuditingPoliciesClient) getCreateRequ
 
 // getHandleResponse handles the Get response.
 func (client *WorkspaceManagedSQLServerBlobAuditingPoliciesClient) getHandleResponse(resp *http.Response) (WorkspaceManagedSQLServerBlobAuditingPoliciesClientGetResponse, error) {
-	result := WorkspaceManagedSQLServerBlobAuditingPoliciesClientGetResponse{RawResponse: resp}
+	result := WorkspaceManagedSQLServerBlobAuditingPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerBlobAuditingPolicy); err != nil {
 		return WorkspaceManagedSQLServerBlobAuditingPoliciesClientGetResponse{}, err
 	}
@@ -229,7 +227,7 @@ func (client *WorkspaceManagedSQLServerBlobAuditingPoliciesClient) listByWorkspa
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *WorkspaceManagedSQLServerBlobAuditingPoliciesClient) listByWorkspaceHandleResponse(resp *http.Response) (WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspaceResponse, error) {
-	result := WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspaceResponse{RawResponse: resp}
+	result := WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerBlobAuditingPolicyListResult); err != nil {
 		return WorkspaceManagedSQLServerBlobAuditingPoliciesClientListByWorkspaceResponse{}, err
 	}

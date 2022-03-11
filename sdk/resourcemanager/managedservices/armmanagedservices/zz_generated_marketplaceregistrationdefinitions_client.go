@@ -32,16 +32,16 @@ type MarketplaceRegistrationDefinitionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMarketplaceRegistrationDefinitionsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *MarketplaceRegistrationDefinitionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MarketplaceRegistrationDefinitionsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -90,7 +90,7 @@ func (client *MarketplaceRegistrationDefinitionsClient) getCreateRequest(ctx con
 
 // getHandleResponse handles the Get response.
 func (client *MarketplaceRegistrationDefinitionsClient) getHandleResponse(resp *http.Response) (MarketplaceRegistrationDefinitionsClientGetResponse, error) {
-	result := MarketplaceRegistrationDefinitionsClientGetResponse{RawResponse: resp}
+	result := MarketplaceRegistrationDefinitionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MarketplaceRegistrationDefinition); err != nil {
 		return MarketplaceRegistrationDefinitionsClientGetResponse{}, err
 	}
@@ -134,7 +134,7 @@ func (client *MarketplaceRegistrationDefinitionsClient) listCreateRequest(ctx co
 
 // listHandleResponse handles the List response.
 func (client *MarketplaceRegistrationDefinitionsClient) listHandleResponse(resp *http.Response) (MarketplaceRegistrationDefinitionsClientListResponse, error) {
-	result := MarketplaceRegistrationDefinitionsClientListResponse{RawResponse: resp}
+	result := MarketplaceRegistrationDefinitionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MarketplaceRegistrationDefinitionList); err != nil {
 		return MarketplaceRegistrationDefinitionsClientListResponse{}, err
 	}

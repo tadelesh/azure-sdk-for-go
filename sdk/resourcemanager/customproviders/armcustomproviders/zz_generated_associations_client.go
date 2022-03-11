@@ -32,16 +32,16 @@ type AssociationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAssociationsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *AssociationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AssociationsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -60,9 +60,7 @@ func (client *AssociationsClient) BeginCreateOrUpdate(ctx context.Context, scope
 	if err != nil {
 		return AssociationsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := AssociationsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AssociationsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AssociationsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return AssociationsClientCreateOrUpdatePollerResponse{}, err
@@ -120,9 +118,7 @@ func (client *AssociationsClient) BeginDelete(ctx context.Context, scope string,
 	if err != nil {
 		return AssociationsClientDeletePollerResponse{}, err
 	}
-	result := AssociationsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AssociationsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AssociationsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return AssociationsClientDeletePollerResponse{}, err
@@ -210,7 +206,7 @@ func (client *AssociationsClient) getCreateRequest(ctx context.Context, scope st
 
 // getHandleResponse handles the Get response.
 func (client *AssociationsClient) getHandleResponse(resp *http.Response) (AssociationsClientGetResponse, error) {
-	result := AssociationsClientGetResponse{RawResponse: resp}
+	result := AssociationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Association); err != nil {
 		return AssociationsClientGetResponse{}, err
 	}
@@ -250,7 +246,7 @@ func (client *AssociationsClient) listAllCreateRequest(ctx context.Context, scop
 
 // listAllHandleResponse handles the ListAll response.
 func (client *AssociationsClient) listAllHandleResponse(resp *http.Response) (AssociationsClientListAllResponse, error) {
-	result := AssociationsClientListAllResponse{RawResponse: resp}
+	result := AssociationsClientListAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssociationsList); err != nil {
 		return AssociationsClientListAllResponse{}, err
 	}

@@ -34,17 +34,17 @@ type PrivateEndpointConnectionsForMIPPolicySyncClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateEndpointConnectionsForMIPPolicySyncClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateEndpointConnectionsForMIPPolicySyncClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateEndpointConnectionsForMIPPolicySyncClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *PrivateEndpointConnectionsForMIPPolicySyncClient) BeginCreateOrUpd
 	if err != nil {
 		return PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateEndpointConnectionsForMIPPolicySyncClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *PrivateEndpointConnectionsForMIPPolicySyncClient) BeginDelete(ctx 
 	if err != nil {
 		return PrivateEndpointConnectionsForMIPPolicySyncClientDeletePollerResponse{}, err
 	}
-	result := PrivateEndpointConnectionsForMIPPolicySyncClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateEndpointConnectionsForMIPPolicySyncClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateEndpointConnectionsForMIPPolicySyncClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return PrivateEndpointConnectionsForMIPPolicySyncClientDeletePollerResponse{}, err
@@ -248,7 +244,7 @@ func (client *PrivateEndpointConnectionsForMIPPolicySyncClient) getCreateRequest
 
 // getHandleResponse handles the Get response.
 func (client *PrivateEndpointConnectionsForMIPPolicySyncClient) getHandleResponse(resp *http.Response) (PrivateEndpointConnectionsForMIPPolicySyncClientGetResponse, error) {
-	result := PrivateEndpointConnectionsForMIPPolicySyncClientGetResponse{RawResponse: resp}
+	result := PrivateEndpointConnectionsForMIPPolicySyncClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnection); err != nil {
 		return PrivateEndpointConnectionsForMIPPolicySyncClientGetResponse{}, err
 	}
@@ -301,7 +297,7 @@ func (client *PrivateEndpointConnectionsForMIPPolicySyncClient) listByServiceCre
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *PrivateEndpointConnectionsForMIPPolicySyncClient) listByServiceHandleResponse(resp *http.Response) (PrivateEndpointConnectionsForMIPPolicySyncClientListByServiceResponse, error) {
-	result := PrivateEndpointConnectionsForMIPPolicySyncClientListByServiceResponse{RawResponse: resp}
+	result := PrivateEndpointConnectionsForMIPPolicySyncClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionListResult); err != nil {
 		return PrivateEndpointConnectionsForMIPPolicySyncClientListByServiceResponse{}, err
 	}

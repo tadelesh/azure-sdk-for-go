@@ -34,17 +34,17 @@ type PrivateLinkScopedResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateLinkScopedResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateLinkScopedResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateLinkScopedResourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *PrivateLinkScopedResourcesClient) BeginCreateOrUpdate(ctx context.
 	if err != nil {
 		return PrivateLinkScopedResourcesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PrivateLinkScopedResourcesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateLinkScopedResourcesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateLinkScopedResourcesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return PrivateLinkScopedResourcesClientCreateOrUpdatePollerResponse{}, err
@@ -133,9 +131,7 @@ func (client *PrivateLinkScopedResourcesClient) BeginDelete(ctx context.Context,
 	if err != nil {
 		return PrivateLinkScopedResourcesClientDeletePollerResponse{}, err
 	}
-	result := PrivateLinkScopedResourcesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateLinkScopedResourcesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateLinkScopedResourcesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return PrivateLinkScopedResourcesClientDeletePollerResponse{}, err
@@ -246,7 +242,7 @@ func (client *PrivateLinkScopedResourcesClient) getCreateRequest(ctx context.Con
 
 // getHandleResponse handles the Get response.
 func (client *PrivateLinkScopedResourcesClient) getHandleResponse(resp *http.Response) (PrivateLinkScopedResourcesClientGetResponse, error) {
-	result := PrivateLinkScopedResourcesClientGetResponse{RawResponse: resp}
+	result := PrivateLinkScopedResourcesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScopedResource); err != nil {
 		return PrivateLinkScopedResourcesClientGetResponse{}, err
 	}
@@ -299,7 +295,7 @@ func (client *PrivateLinkScopedResourcesClient) listByPrivateLinkScopeCreateRequ
 
 // listByPrivateLinkScopeHandleResponse handles the ListByPrivateLinkScope response.
 func (client *PrivateLinkScopedResourcesClient) listByPrivateLinkScopeHandleResponse(resp *http.Response) (PrivateLinkScopedResourcesClientListByPrivateLinkScopeResponse, error) {
-	result := PrivateLinkScopedResourcesClientListByPrivateLinkScopeResponse{RawResponse: resp}
+	result := PrivateLinkScopedResourcesClientListByPrivateLinkScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScopedResourceListResult); err != nil {
 		return PrivateLinkScopedResourcesClientListByPrivateLinkScopeResponse{}, err
 	}

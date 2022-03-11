@@ -34,17 +34,17 @@ type ServiceObjectivesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServiceObjectivesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServiceObjectivesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServiceObjectivesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *ServiceObjectivesClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *ServiceObjectivesClient) getHandleResponse(resp *http.Response) (ServiceObjectivesClientGetResponse, error) {
-	result := ServiceObjectivesClientGetResponse{RawResponse: resp}
+	result := ServiceObjectivesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceObjective); err != nil {
 		return ServiceObjectivesClientGetResponse{}, err
 	}
@@ -117,19 +117,13 @@ func (client *ServiceObjectivesClient) getHandleResponse(resp *http.Response) (S
 // serverName - The name of the server.
 // options - ServiceObjectivesClientListByServerOptions contains the optional parameters for the ServiceObjectivesClient.ListByServer
 // method.
-func (client *ServiceObjectivesClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string, options *ServiceObjectivesClientListByServerOptions) (ServiceObjectivesClientListByServerResponse, error) {
-	req, err := client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
-	if err != nil {
-		return ServiceObjectivesClientListByServerResponse{}, err
+func (client *ServiceObjectivesClient) ListByServer(resourceGroupName string, serverName string, options *ServiceObjectivesClientListByServerOptions) *ServiceObjectivesClientListByServerPager {
+	return &ServiceObjectivesClientListByServerPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ServiceObjectivesClientListByServerResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ServiceObjectivesClientListByServerResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByServerHandleResponse(resp)
 }
 
 // listByServerCreateRequest creates the ListByServer request.
@@ -160,7 +154,7 @@ func (client *ServiceObjectivesClient) listByServerCreateRequest(ctx context.Con
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *ServiceObjectivesClient) listByServerHandleResponse(resp *http.Response) (ServiceObjectivesClientListByServerResponse, error) {
-	result := ServiceObjectivesClientListByServerResponse{RawResponse: resp}
+	result := ServiceObjectivesClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceObjectiveListResult); err != nil {
 		return ServiceObjectivesClientListByServerResponse{}, err
 	}

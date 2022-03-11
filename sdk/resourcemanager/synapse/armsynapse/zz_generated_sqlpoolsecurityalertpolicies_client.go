@@ -34,17 +34,17 @@ type SQLPoolSecurityAlertPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLPoolSecurityAlertPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLPoolSecurityAlertPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLPoolSecurityAlertPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *SQLPoolSecurityAlertPoliciesClient) createOrUpdateCreateRequest(ct
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *SQLPoolSecurityAlertPoliciesClient) createOrUpdateHandleResponse(resp *http.Response) (SQLPoolSecurityAlertPoliciesClientCreateOrUpdateResponse, error) {
-	result := SQLPoolSecurityAlertPoliciesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := SQLPoolSecurityAlertPoliciesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLPoolSecurityAlertPolicy); err != nil {
 		return SQLPoolSecurityAlertPoliciesClientCreateOrUpdateResponse{}, err
 	}
@@ -175,7 +175,7 @@ func (client *SQLPoolSecurityAlertPoliciesClient) getCreateRequest(ctx context.C
 
 // getHandleResponse handles the Get response.
 func (client *SQLPoolSecurityAlertPoliciesClient) getHandleResponse(resp *http.Response) (SQLPoolSecurityAlertPoliciesClientGetResponse, error) {
-	result := SQLPoolSecurityAlertPoliciesClientGetResponse{RawResponse: resp}
+	result := SQLPoolSecurityAlertPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLPoolSecurityAlertPolicy); err != nil {
 		return SQLPoolSecurityAlertPoliciesClientGetResponse{}, err
 	}
@@ -233,7 +233,7 @@ func (client *SQLPoolSecurityAlertPoliciesClient) listCreateRequest(ctx context.
 
 // listHandleResponse handles the List response.
 func (client *SQLPoolSecurityAlertPoliciesClient) listHandleResponse(resp *http.Response) (SQLPoolSecurityAlertPoliciesClientListResponse, error) {
-	result := SQLPoolSecurityAlertPoliciesClientListResponse{RawResponse: resp}
+	result := SQLPoolSecurityAlertPoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListSQLPoolSecurityAlertPolicies); err != nil {
 		return SQLPoolSecurityAlertPoliciesClientListResponse{}, err
 	}

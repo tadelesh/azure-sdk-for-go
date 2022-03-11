@@ -35,17 +35,17 @@ type DiskAccessesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDiskAccessesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DiskAccessesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DiskAccessesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *DiskAccessesClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return DiskAccessesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DiskAccessesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DiskAccessesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DiskAccessesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DiskAccessesClientCreateOrUpdatePollerResponse{}, err
@@ -133,9 +131,7 @@ func (client *DiskAccessesClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return DiskAccessesClientDeletePollerResponse{}, err
 	}
-	result := DiskAccessesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DiskAccessesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DiskAccessesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DiskAccessesClientDeletePollerResponse{}, err
@@ -203,9 +199,7 @@ func (client *DiskAccessesClient) BeginDeleteAPrivateEndpointConnection(ctx cont
 	if err != nil {
 		return DiskAccessesClientDeleteAPrivateEndpointConnectionPollerResponse{}, err
 	}
-	result := DiskAccessesClientDeleteAPrivateEndpointConnectionPollerResponse{
-		RawResponse: resp,
-	}
+	result := DiskAccessesClientDeleteAPrivateEndpointConnectionPollerResponse{}
 	pt, err := armruntime.NewPoller("DiskAccessesClient.DeleteAPrivateEndpointConnection", "", resp, client.pl)
 	if err != nil {
 		return DiskAccessesClientDeleteAPrivateEndpointConnectionPollerResponse{}, err
@@ -313,7 +307,7 @@ func (client *DiskAccessesClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *DiskAccessesClient) getHandleResponse(resp *http.Response) (DiskAccessesClientGetResponse, error) {
-	result := DiskAccessesClientGetResponse{RawResponse: resp}
+	result := DiskAccessesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiskAccess); err != nil {
 		return DiskAccessesClientGetResponse{}, err
 	}
@@ -376,7 +370,7 @@ func (client *DiskAccessesClient) getAPrivateEndpointConnectionCreateRequest(ctx
 
 // getAPrivateEndpointConnectionHandleResponse handles the GetAPrivateEndpointConnection response.
 func (client *DiskAccessesClient) getAPrivateEndpointConnectionHandleResponse(resp *http.Response) (DiskAccessesClientGetAPrivateEndpointConnectionResponse, error) {
-	result := DiskAccessesClientGetAPrivateEndpointConnectionResponse{RawResponse: resp}
+	result := DiskAccessesClientGetAPrivateEndpointConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnection); err != nil {
 		return DiskAccessesClientGetAPrivateEndpointConnectionResponse{}, err
 	}
@@ -434,7 +428,7 @@ func (client *DiskAccessesClient) getPrivateLinkResourcesCreateRequest(ctx conte
 
 // getPrivateLinkResourcesHandleResponse handles the GetPrivateLinkResources response.
 func (client *DiskAccessesClient) getPrivateLinkResourcesHandleResponse(resp *http.Response) (DiskAccessesClientGetPrivateLinkResourcesResponse, error) {
-	result := DiskAccessesClientGetPrivateLinkResourcesResponse{RawResponse: resp}
+	result := DiskAccessesClientGetPrivateLinkResourcesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourceListResult); err != nil {
 		return DiskAccessesClientGetPrivateLinkResourcesResponse{}, err
 	}
@@ -476,7 +470,7 @@ func (client *DiskAccessesClient) listCreateRequest(ctx context.Context, options
 
 // listHandleResponse handles the List response.
 func (client *DiskAccessesClient) listHandleResponse(resp *http.Response) (DiskAccessesClientListResponse, error) {
-	result := DiskAccessesClientListResponse{RawResponse: resp}
+	result := DiskAccessesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiskAccessList); err != nil {
 		return DiskAccessesClientListResponse{}, err
 	}
@@ -524,7 +518,7 @@ func (client *DiskAccessesClient) listByResourceGroupCreateRequest(ctx context.C
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *DiskAccessesClient) listByResourceGroupHandleResponse(resp *http.Response) (DiskAccessesClientListByResourceGroupResponse, error) {
-	result := DiskAccessesClientListByResourceGroupResponse{RawResponse: resp}
+	result := DiskAccessesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiskAccessList); err != nil {
 		return DiskAccessesClientListByResourceGroupResponse{}, err
 	}
@@ -579,7 +573,7 @@ func (client *DiskAccessesClient) listPrivateEndpointConnectionsCreateRequest(ct
 
 // listPrivateEndpointConnectionsHandleResponse handles the ListPrivateEndpointConnections response.
 func (client *DiskAccessesClient) listPrivateEndpointConnectionsHandleResponse(resp *http.Response) (DiskAccessesClientListPrivateEndpointConnectionsResponse, error) {
-	result := DiskAccessesClientListPrivateEndpointConnectionsResponse{RawResponse: resp}
+	result := DiskAccessesClientListPrivateEndpointConnectionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionListResult); err != nil {
 		return DiskAccessesClientListPrivateEndpointConnectionsResponse{}, err
 	}
@@ -600,9 +594,7 @@ func (client *DiskAccessesClient) BeginUpdate(ctx context.Context, resourceGroup
 	if err != nil {
 		return DiskAccessesClientUpdatePollerResponse{}, err
 	}
-	result := DiskAccessesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DiskAccessesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DiskAccessesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return DiskAccessesClientUpdatePollerResponse{}, err
@@ -673,9 +665,7 @@ func (client *DiskAccessesClient) BeginUpdateAPrivateEndpointConnection(ctx cont
 	if err != nil {
 		return DiskAccessesClientUpdateAPrivateEndpointConnectionPollerResponse{}, err
 	}
-	result := DiskAccessesClientUpdateAPrivateEndpointConnectionPollerResponse{
-		RawResponse: resp,
-	}
+	result := DiskAccessesClientUpdateAPrivateEndpointConnectionPollerResponse{}
 	pt, err := armruntime.NewPoller("DiskAccessesClient.UpdateAPrivateEndpointConnection", "", resp, client.pl)
 	if err != nil {
 		return DiskAccessesClientUpdateAPrivateEndpointConnectionPollerResponse{}, err

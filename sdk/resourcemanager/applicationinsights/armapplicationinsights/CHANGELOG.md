@@ -1,5 +1,436 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*WorkbooksClientRevisionsListPager.NextPage` return value(s) have been changed from `(bool)` to `(WorkbooksClientRevisionsListResponse, error)`
+- Function `*WorkbooksClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(WorkbooksClientListByResourceGroupResponse, error)`
+- Function `*MyWorkbooksClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(MyWorkbooksClientListBySubscriptionResponse, error)`
+- Function `*MyWorkbooksClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(MyWorkbooksClientListByResourceGroupResponse, error)`
+- Function `*AnnotationsClient.List` parameter(s) have been changed from `(context.Context, string, string, string, string, *AnnotationsClientListOptions)` to `(string, string, string, string, *AnnotationsClientListOptions)`
+- Function `*AnnotationsClient.List` return value(s) have been changed from `(AnnotationsClientListResponse, error)` to `(*AnnotationsClientListPager)`
+- Function `*WorkbookTemplatesClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *WorkbookTemplatesClientListByResourceGroupOptions)` to `(string, *WorkbookTemplatesClientListByResourceGroupOptions)`
+- Function `*WorkbookTemplatesClient.ListByResourceGroup` return value(s) have been changed from `(WorkbookTemplatesClientListByResourceGroupResponse, error)` to `(*WorkbookTemplatesClientListByResourceGroupPager)`
+- Function `*ComponentsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ComponentsClientListResponse, error)`
+- Function `*WebTestsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(WebTestsClientListResponse, error)`
+- Function `*WebTestsClientListByComponentPager.NextPage` return value(s) have been changed from `(bool)` to `(WebTestsClientListByComponentResponse, error)`
+- Function `*WebTestsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(WebTestsClientListByResourceGroupResponse, error)`
+- Function `*WebTestLocationsClient.List` parameter(s) have been changed from `(context.Context, string, string, *WebTestLocationsClientListOptions)` to `(string, string, *WebTestLocationsClientListOptions)`
+- Function `*WebTestLocationsClient.List` return value(s) have been changed from `(WebTestLocationsClientListResponse, error)` to `(*WebTestLocationsClientListPager)`
+- Function `*WorkbooksClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(WorkbooksClientListBySubscriptionResponse, error)`
+- Function `*APIKeysClient.List` parameter(s) have been changed from `(context.Context, string, string, *APIKeysClientListOptions)` to `(string, string, *APIKeysClientListOptions)`
+- Function `*APIKeysClient.List` return value(s) have been changed from `(APIKeysClientListResponse, error)` to `(*APIKeysClientListPager)`
+- Function `*WorkItemConfigurationsClient.List` parameter(s) have been changed from `(context.Context, string, string, *WorkItemConfigurationsClientListOptions)` to `(string, string, *WorkItemConfigurationsClientListOptions)`
+- Function `*WorkItemConfigurationsClient.List` return value(s) have been changed from `(WorkItemConfigurationsClientListResponse, error)` to `(*WorkItemConfigurationsClientListPager)`
+- Function `*ComponentsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ComponentsClientListByResourceGroupResponse, error)`
+- Function `*ComponentsClientListPager.PageResponse` has been removed
+- Function `*WorkbooksClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*WebTestsClientListPager.PageResponse` has been removed
+- Function `*ComponentsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*WorkbooksClientRevisionsListPager.Err` has been removed
+- Function `*WebTestsClientListPager.Err` has been removed
+- Function `*WorkbooksClientRevisionsListPager.PageResponse` has been removed
+- Function `*WebTestsClientListByComponentPager.PageResponse` has been removed
+- Function `*WorkbooksClientListByResourceGroupPager.Err` has been removed
+- Function `*ComponentsClientListByResourceGroupPager.Err` has been removed
+- Function `*WebTestsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*MyWorkbooksClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*WebTestsClientListByComponentPager.Err` has been removed
+- Function `*MyWorkbooksClientListByResourceGroupPager.Err` has been removed
+- Function `*ComponentsClientListPager.Err` has been removed
+- Function `*MyWorkbooksClientListBySubscriptionPager.Err` has been removed
+- Function `*WorkbooksClientListBySubscriptionPager.Err` has been removed
+- Function `*WebTestsClientListByResourceGroupPager.Err` has been removed
+- Function `*WorkbooksClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*MyWorkbooksClientListBySubscriptionPager.PageResponse` has been removed
+- Struct `APIKeysClientCreateResult` has been removed
+- Struct `APIKeysClientDeleteResult` has been removed
+- Struct `APIKeysClientGetResult` has been removed
+- Struct `APIKeysClientListResult` has been removed
+- Struct `AnalyticsItemsClientGetResult` has been removed
+- Struct `AnalyticsItemsClientListResult` has been removed
+- Struct `AnalyticsItemsClientPutResult` has been removed
+- Struct `AnnotationsClientCreateResult` has been removed
+- Struct `AnnotationsClientGetResult` has been removed
+- Struct `AnnotationsClientListResult` has been removed
+- Struct `ComponentAvailableFeaturesClientGetResult` has been removed
+- Struct `ComponentCurrentBillingFeaturesClientGetResult` has been removed
+- Struct `ComponentCurrentBillingFeaturesClientUpdateResult` has been removed
+- Struct `ComponentFeatureCapabilitiesClientGetResult` has been removed
+- Struct `ComponentLinkedStorageAccountsClientCreateAndUpdateResult` has been removed
+- Struct `ComponentLinkedStorageAccountsClientGetResult` has been removed
+- Struct `ComponentLinkedStorageAccountsClientUpdateResult` has been removed
+- Struct `ComponentQuotaStatusClientGetResult` has been removed
+- Struct `ComponentsClientCreateOrUpdateResult` has been removed
+- Struct `ComponentsClientGetPurgeStatusResult` has been removed
+- Struct `ComponentsClientGetResult` has been removed
+- Struct `ComponentsClientListByResourceGroupResult` has been removed
+- Struct `ComponentsClientListResult` has been removed
+- Struct `ComponentsClientPurgeResult` has been removed
+- Struct `ComponentsClientUpdateTagsResult` has been removed
+- Struct `ExportConfigurationsClientCreateResult` has been removed
+- Struct `ExportConfigurationsClientDeleteResult` has been removed
+- Struct `ExportConfigurationsClientGetResult` has been removed
+- Struct `ExportConfigurationsClientListResult` has been removed
+- Struct `ExportConfigurationsClientUpdateResult` has been removed
+- Struct `FavoritesClientAddResult` has been removed
+- Struct `FavoritesClientGetResult` has been removed
+- Struct `FavoritesClientListResult` has been removed
+- Struct `FavoritesClientUpdateResult` has been removed
+- Struct `LiveTokenClientGetResult` has been removed
+- Struct `MyWorkbooksClientCreateOrUpdateResult` has been removed
+- Struct `MyWorkbooksClientGetResult` has been removed
+- Struct `MyWorkbooksClientListByResourceGroupResult` has been removed
+- Struct `MyWorkbooksClientListBySubscriptionResult` has been removed
+- Struct `MyWorkbooksClientUpdateResult` has been removed
+- Struct `ProactiveDetectionConfigurationsClientGetResult` has been removed
+- Struct `ProactiveDetectionConfigurationsClientListResult` has been removed
+- Struct `ProactiveDetectionConfigurationsClientUpdateResult` has been removed
+- Struct `WebTestLocationsClientListResult` has been removed
+- Struct `WebTestsClientCreateOrUpdateResult` has been removed
+- Struct `WebTestsClientGetResult` has been removed
+- Struct `WebTestsClientListByComponentResult` has been removed
+- Struct `WebTestsClientListByResourceGroupResult` has been removed
+- Struct `WebTestsClientListResult` has been removed
+- Struct `WebTestsClientUpdateTagsResult` has been removed
+- Struct `WorkItemConfigurationsClientCreateResult` has been removed
+- Struct `WorkItemConfigurationsClientGetDefaultResult` has been removed
+- Struct `WorkItemConfigurationsClientGetItemResult` has been removed
+- Struct `WorkItemConfigurationsClientListResult` has been removed
+- Struct `WorkItemConfigurationsClientUpdateItemResult` has been removed
+- Struct `WorkbookTemplatesClientCreateOrUpdateResult` has been removed
+- Struct `WorkbookTemplatesClientGetResult` has been removed
+- Struct `WorkbookTemplatesClientListByResourceGroupResult` has been removed
+- Struct `WorkbookTemplatesClientUpdateResult` has been removed
+- Struct `WorkbooksClientCreateOrUpdateResult` has been removed
+- Struct `WorkbooksClientGetResult` has been removed
+- Struct `WorkbooksClientListByResourceGroupResult` has been removed
+- Struct `WorkbooksClientListBySubscriptionResult` has been removed
+- Struct `WorkbooksClientRevisionGetResult` has been removed
+- Struct `WorkbooksClientRevisionsListResult` has been removed
+- Struct `WorkbooksClientUpdateResult` has been removed
+- Field `AnnotationsClientGetResult` of struct `AnnotationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AnnotationsClientGetResponse` has been removed
+- Field `WorkItemConfigurationsClientGetDefaultResult` of struct `WorkItemConfigurationsClientGetDefaultResponse` has been removed
+- Field `RawResponse` of struct `WorkItemConfigurationsClientGetDefaultResponse` has been removed
+- Field `AnalyticsItemsClientListResult` of struct `AnalyticsItemsClientListResponse` has been removed
+- Field `RawResponse` of struct `AnalyticsItemsClientListResponse` has been removed
+- Field `APIKeysClientDeleteResult` of struct `APIKeysClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `APIKeysClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `AnnotationsClientDeleteResponse` has been removed
+- Field `WebTestsClientListResult` of struct `WebTestsClientListResponse` has been removed
+- Field `RawResponse` of struct `WebTestsClientListResponse` has been removed
+- Field `FavoritesClientUpdateResult` of struct `FavoritesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `FavoritesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `WorkbookTemplatesClientDeleteResponse` has been removed
+- Field `WebTestsClientGetResult` of struct `WebTestsClientGetResponse` has been removed
+- Field `RawResponse` of struct `WebTestsClientGetResponse` has been removed
+- Field `ProactiveDetectionConfigurationsClientUpdateResult` of struct `ProactiveDetectionConfigurationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProactiveDetectionConfigurationsClientUpdateResponse` has been removed
+- Field `WorkbooksClientListBySubscriptionResult` of struct `WorkbooksClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `WorkbooksClientListBySubscriptionResponse` has been removed
+- Field `APIKeysClientGetResult` of struct `APIKeysClientGetResponse` has been removed
+- Field `RawResponse` of struct `APIKeysClientGetResponse` has been removed
+- Field `AnnotationsClientListResult` of struct `AnnotationsClientListResponse` has been removed
+- Field `RawResponse` of struct `AnnotationsClientListResponse` has been removed
+- Field `ComponentsClientUpdateTagsResult` of struct `ComponentsClientUpdateTagsResponse` has been removed
+- Field `RawResponse` of struct `ComponentsClientUpdateTagsResponse` has been removed
+- Field `WebTestLocationsClientListResult` of struct `WebTestLocationsClientListResponse` has been removed
+- Field `RawResponse` of struct `WebTestLocationsClientListResponse` has been removed
+- Field `WorkbookTemplatesClientUpdateResult` of struct `WorkbookTemplatesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `WorkbookTemplatesClientUpdateResponse` has been removed
+- Field `ExportConfigurationsClientCreateResult` of struct `ExportConfigurationsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ExportConfigurationsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `WorkItemConfigurationsClientDeleteResponse` has been removed
+- Field `WorkbooksClientRevisionsListResult` of struct `WorkbooksClientRevisionsListResponse` has been removed
+- Field `RawResponse` of struct `WorkbooksClientRevisionsListResponse` has been removed
+- Field `AnalyticsItemsClientPutResult` of struct `AnalyticsItemsClientPutResponse` has been removed
+- Field `RawResponse` of struct `AnalyticsItemsClientPutResponse` has been removed
+- Field `AnalyticsItemsClientGetResult` of struct `AnalyticsItemsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AnalyticsItemsClientGetResponse` has been removed
+- Field `ComponentsClientPurgeResult` of struct `ComponentsClientPurgeResponse` has been removed
+- Field `RawResponse` of struct `ComponentsClientPurgeResponse` has been removed
+- Field `FavoritesClientGetResult` of struct `FavoritesClientGetResponse` has been removed
+- Field `RawResponse` of struct `FavoritesClientGetResponse` has been removed
+- Field `ComponentQuotaStatusClientGetResult` of struct `ComponentQuotaStatusClientGetResponse` has been removed
+- Field `RawResponse` of struct `ComponentQuotaStatusClientGetResponse` has been removed
+- Field `ComponentsClientGetResult` of struct `ComponentsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ComponentsClientGetResponse` has been removed
+- Field `ComponentLinkedStorageAccountsClientCreateAndUpdateResult` of struct `ComponentLinkedStorageAccountsClientCreateAndUpdateResponse` has been removed
+- Field `RawResponse` of struct `ComponentLinkedStorageAccountsClientCreateAndUpdateResponse` has been removed
+- Field `MyWorkbooksClientGetResult` of struct `MyWorkbooksClientGetResponse` has been removed
+- Field `RawResponse` of struct `MyWorkbooksClientGetResponse` has been removed
+- Field `ComponentLinkedStorageAccountsClientUpdateResult` of struct `ComponentLinkedStorageAccountsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ComponentLinkedStorageAccountsClientUpdateResponse` has been removed
+- Field `WorkbookTemplatesClientCreateOrUpdateResult` of struct `WorkbookTemplatesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `WorkbookTemplatesClientCreateOrUpdateResponse` has been removed
+- Field `ComponentsClientListResult` of struct `ComponentsClientListResponse` has been removed
+- Field `RawResponse` of struct `ComponentsClientListResponse` has been removed
+- Field `ComponentCurrentBillingFeaturesClientGetResult` of struct `ComponentCurrentBillingFeaturesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ComponentCurrentBillingFeaturesClientGetResponse` has been removed
+- Field `WorkbooksClientGetResult` of struct `WorkbooksClientGetResponse` has been removed
+- Field `RawResponse` of struct `WorkbooksClientGetResponse` has been removed
+- Field `ProactiveDetectionConfigurationsClientGetResult` of struct `ProactiveDetectionConfigurationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProactiveDetectionConfigurationsClientGetResponse` has been removed
+- Field `ProactiveDetectionConfigurationsClientListResult` of struct `ProactiveDetectionConfigurationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ProactiveDetectionConfigurationsClientListResponse` has been removed
+- Field `MyWorkbooksClientUpdateResult` of struct `MyWorkbooksClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `MyWorkbooksClientUpdateResponse` has been removed
+- Field `WorkItemConfigurationsClientListResult` of struct `WorkItemConfigurationsClientListResponse` has been removed
+- Field `RawResponse` of struct `WorkItemConfigurationsClientListResponse` has been removed
+- Field `RawResponse` of struct `WorkbooksClientDeleteResponse` has been removed
+- Field `WebTestsClientUpdateTagsResult` of struct `WebTestsClientUpdateTagsResponse` has been removed
+- Field `RawResponse` of struct `WebTestsClientUpdateTagsResponse` has been removed
+- Field `WorkItemConfigurationsClientUpdateItemResult` of struct `WorkItemConfigurationsClientUpdateItemResponse` has been removed
+- Field `RawResponse` of struct `WorkItemConfigurationsClientUpdateItemResponse` has been removed
+- Field `WorkItemConfigurationsClientCreateResult` of struct `WorkItemConfigurationsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `WorkItemConfigurationsClientCreateResponse` has been removed
+- Field `MyWorkbooksClientCreateOrUpdateResult` of struct `MyWorkbooksClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `MyWorkbooksClientCreateOrUpdateResponse` has been removed
+- Field `ComponentsClientCreateOrUpdateResult` of struct `ComponentsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ComponentsClientCreateOrUpdateResponse` has been removed
+- Field `APIKeysClientListResult` of struct `APIKeysClientListResponse` has been removed
+- Field `RawResponse` of struct `APIKeysClientListResponse` has been removed
+- Field `MyWorkbooksClientListBySubscriptionResult` of struct `MyWorkbooksClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `MyWorkbooksClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `MyWorkbooksClientDeleteResponse` has been removed
+- Field `WebTestsClientCreateOrUpdateResult` of struct `WebTestsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `WebTestsClientCreateOrUpdateResponse` has been removed
+- Field `MyWorkbooksClientListByResourceGroupResult` of struct `MyWorkbooksClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `MyWorkbooksClientListByResourceGroupResponse` has been removed
+- Field `WebTestsClientListByComponentResult` of struct `WebTestsClientListByComponentResponse` has been removed
+- Field `RawResponse` of struct `WebTestsClientListByComponentResponse` has been removed
+- Field `ComponentsClientGetPurgeStatusResult` of struct `ComponentsClientGetPurgeStatusResponse` has been removed
+- Field `RawResponse` of struct `ComponentsClientGetPurgeStatusResponse` has been removed
+- Field `WorkbooksClientCreateOrUpdateResult` of struct `WorkbooksClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `WorkbooksClientCreateOrUpdateResponse` has been removed
+- Field `WebTestsClientListByResourceGroupResult` of struct `WebTestsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `WebTestsClientListByResourceGroupResponse` has been removed
+- Field `ComponentLinkedStorageAccountsClientGetResult` of struct `ComponentLinkedStorageAccountsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ComponentLinkedStorageAccountsClientGetResponse` has been removed
+- Field `APIKeysClientCreateResult` of struct `APIKeysClientCreateResponse` has been removed
+- Field `RawResponse` of struct `APIKeysClientCreateResponse` has been removed
+- Field `RawResponse` of struct `WebTestsClientDeleteResponse` has been removed
+- Field `ComponentsClientListByResourceGroupResult` of struct `ComponentsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ComponentsClientListByResourceGroupResponse` has been removed
+- Field `ComponentFeatureCapabilitiesClientGetResult` of struct `ComponentFeatureCapabilitiesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ComponentFeatureCapabilitiesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ComponentLinkedStorageAccountsClientDeleteResponse` has been removed
+- Field `AnnotationsClientCreateResult` of struct `AnnotationsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `AnnotationsClientCreateResponse` has been removed
+- Field `WorkbooksClientRevisionGetResult` of struct `WorkbooksClientRevisionGetResponse` has been removed
+- Field `RawResponse` of struct `WorkbooksClientRevisionGetResponse` has been removed
+- Field `WorkbooksClientListByResourceGroupResult` of struct `WorkbooksClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `WorkbooksClientListByResourceGroupResponse` has been removed
+- Field `ExportConfigurationsClientDeleteResult` of struct `ExportConfigurationsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ExportConfigurationsClientDeleteResponse` has been removed
+- Field `WorkbookTemplatesClientListByResourceGroupResult` of struct `WorkbookTemplatesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `WorkbookTemplatesClientListByResourceGroupResponse` has been removed
+- Field `WorkbookTemplatesClientGetResult` of struct `WorkbookTemplatesClientGetResponse` has been removed
+- Field `RawResponse` of struct `WorkbookTemplatesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ComponentsClientDeleteResponse` has been removed
+- Field `WorkbooksClientUpdateResult` of struct `WorkbooksClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `WorkbooksClientUpdateResponse` has been removed
+- Field `ExportConfigurationsClientListResult` of struct `ExportConfigurationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ExportConfigurationsClientListResponse` has been removed
+- Field `ComponentCurrentBillingFeaturesClientUpdateResult` of struct `ComponentCurrentBillingFeaturesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ComponentCurrentBillingFeaturesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `FavoritesClientDeleteResponse` has been removed
+- Field `WorkItemConfigurationsClientGetItemResult` of struct `WorkItemConfigurationsClientGetItemResponse` has been removed
+- Field `RawResponse` of struct `WorkItemConfigurationsClientGetItemResponse` has been removed
+- Field `RawResponse` of struct `AnalyticsItemsClientDeleteResponse` has been removed
+- Field `ExportConfigurationsClientGetResult` of struct `ExportConfigurationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ExportConfigurationsClientGetResponse` has been removed
+- Field `ComponentAvailableFeaturesClientGetResult` of struct `ComponentAvailableFeaturesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ComponentAvailableFeaturesClientGetResponse` has been removed
+- Field `FavoritesClientListResult` of struct `FavoritesClientListResponse` has been removed
+- Field `RawResponse` of struct `FavoritesClientListResponse` has been removed
+- Field `FavoritesClientAddResult` of struct `FavoritesClientAddResponse` has been removed
+- Field `RawResponse` of struct `FavoritesClientAddResponse` has been removed
+- Field `LiveTokenClientGetResult` of struct `LiveTokenClientGetResponse` has been removed
+- Field `RawResponse` of struct `LiveTokenClientGetResponse` has been removed
+- Field `ExportConfigurationsClientUpdateResult` of struct `ExportConfigurationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ExportConfigurationsClientUpdateResponse` has been removed
+
+### Features Added
+
+- New function `*WorkItemConfigurationsClientListPager.More() bool`
+- New function `OperationListResult.MarshalJSON() ([]byte, error)`
+- New function `*WorkItemConfigurationsClientListPager.NextPage(context.Context) (WorkItemConfigurationsClientListResponse, error)`
+- New function `*WorkbookTemplatesClientListByResourceGroupPager.NextPage(context.Context) (WorkbookTemplatesClientListByResourceGroupResponse, error)`
+- New function `*WorkbooksClientListBySubscriptionPager.More() bool`
+- New function `*MyWorkbooksClientListByResourceGroupPager.More() bool`
+- New function `*WorkbooksClientRevisionsListPager.More() bool`
+- New function `WorkbookInnerErrorTrace.MarshalJSON() ([]byte, error)`
+- New function `*WebTestsClientListByResourceGroupPager.More() bool`
+- New function `*AnnotationsClientListPager.NextPage(context.Context) (AnnotationsClientListResponse, error)`
+- New function `*ComponentsClientListPager.More() bool`
+- New function `*WorkbookTemplatesClientListByResourceGroupPager.More() bool`
+- New function `*APIKeysClientListPager.NextPage(context.Context) (APIKeysClientListResponse, error)`
+- New function `InnerError.MarshalJSON() ([]byte, error)`
+- New function `WorkbookTemplateErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*APIKeysClientListPager.More() bool`
+- New function `*InnerError.UnmarshalJSON([]byte) error`
+- New function `*WebTestsClientListByComponentPager.More() bool`
+- New function `OperationsListResult.MarshalJSON() ([]byte, error)`
+- New function `*AnnotationsClientListPager.More() bool`
+- New function `*ComponentsClientListByResourceGroupPager.More() bool`
+- New function `*WorkbooksClientListByResourceGroupPager.More() bool`
+- New function `InnerErrorTrace.MarshalJSON() ([]byte, error)`
+- New function `*WebTestLocationsClientListPager.More() bool`
+- New function `*MyWorkbooksClientListBySubscriptionPager.More() bool`
+- New function `*WebTestLocationsClientListPager.NextPage(context.Context) (WebTestLocationsClientListResponse, error)`
+- New function `*WebTestsClientListPager.More() bool`
+- New struct `APIKeysClientListPager`
+- New struct `AnnotationError`
+- New struct `AnnotationsClientListPager`
+- New struct `ErrorDefinition`
+- New struct `ErrorResponse`
+- New struct `ErrorResponseComponents`
+- New struct `ErrorResponseComponentsError`
+- New struct `ErrorResponseLinkedStorage`
+- New struct `ErrorResponseLinkedStorageError`
+- New struct `InnerError`
+- New struct `InnerErrorTrace`
+- New struct `MyWorkbookError`
+- New struct `Operation`
+- New struct `OperationDisplay`
+- New struct `OperationInfo`
+- New struct `OperationListResult`
+- New struct `OperationLive`
+- New struct `OperationsListResult`
+- New struct `WebTestLocationsClientListPager`
+- New struct `WorkItemConfigurationError`
+- New struct `WorkItemConfigurationsClientListPager`
+- New struct `WorkbookError`
+- New struct `WorkbookErrorDefinition`
+- New struct `WorkbookInnerErrorTrace`
+- New struct `WorkbookTemplateError`
+- New struct `WorkbookTemplateErrorBody`
+- New struct `WorkbookTemplateErrorFieldContract`
+- New struct `WorkbookTemplatesClientListByResourceGroupPager`
+- New anonymous field `ComponentLinkedStorageAccounts` in struct `ComponentLinkedStorageAccountsClientGetResponse`
+- New anonymous field `AnnotationsListResult` in struct `AnnotationsClientListResponse`
+- New anonymous field `ComponentAnalyticsItem` in struct `AnalyticsItemsClientPutResponse`
+- New anonymous field `ComponentExportConfiguration` in struct `ExportConfigurationsClientDeleteResponse`
+- New anonymous field `WebTestListResult` in struct `WebTestsClientListByResourceGroupResponse`
+- New anonymous field `ComponentFavorite` in struct `FavoritesClientAddResponse`
+- New anonymous field `ComponentAPIKey` in struct `APIKeysClientDeleteResponse`
+- New anonymous field `MyWorkbook` in struct `MyWorkbooksClientGetResponse`
+- New field `AnnotationArray` in struct `AnnotationsClientGetResponse`
+- New anonymous field `ComponentExportConfiguration` in struct `ExportConfigurationsClientGetResponse`
+- New anonymous field `Component` in struct `ComponentsClientCreateOrUpdateResponse`
+- New anonymous field `WorkbooksListResult` in struct `WorkbooksClientListBySubscriptionResponse`
+- New anonymous field `ComponentAvailableFeatures` in struct `ComponentAvailableFeaturesClientGetResponse`
+- New anonymous field `ComponentFavorite` in struct `FavoritesClientUpdateResponse`
+- New anonymous field `WebTest` in struct `WebTestsClientGetResponse`
+- New anonymous field `ComponentLinkedStorageAccounts` in struct `ComponentLinkedStorageAccountsClientUpdateResponse`
+- New anonymous field `ComponentAPIKey` in struct `APIKeysClientCreateResponse`
+- New anonymous field `WebTest` in struct `WebTestsClientCreateOrUpdateResponse`
+- New anonymous field `WorkbookTemplate` in struct `WorkbookTemplatesClientUpdateResponse`
+- New anonymous field `WorkItemConfiguration` in struct `WorkItemConfigurationsClientCreateResponse`
+- New anonymous field `WebTestListResult` in struct `WebTestsClientListResponse`
+- New anonymous field `ComponentBillingFeatures` in struct `ComponentCurrentBillingFeaturesClientGetResponse`
+- New anonymous field `ComponentListResult` in struct `ComponentsClientListByResourceGroupResponse`
+- New anonymous field `ComponentExportConfiguration` in struct `ExportConfigurationsClientUpdateResponse`
+- New anonymous field `MyWorkbooksListResult` in struct `MyWorkbooksClientListBySubscriptionResponse`
+- New anonymous field `ComponentProactiveDetectionConfiguration` in struct `ProactiveDetectionConfigurationsClientUpdateResponse`
+- New anonymous field `WorkbookTemplate` in struct `WorkbookTemplatesClientGetResponse`
+- New anonymous field `ComponentBillingFeatures` in struct `ComponentCurrentBillingFeaturesClientUpdateResponse`
+- New field `ComponentExportConfigurationArray` in struct `ExportConfigurationsClientListResponse`
+- New anonymous field `ComponentProactiveDetectionConfiguration` in struct `ProactiveDetectionConfigurationsClientGetResponse`
+- New anonymous field `ComponentListResult` in struct `ComponentsClientListResponse`
+- New field `ComponentExportConfigurationArray` in struct `ExportConfigurationsClientCreateResponse`
+- New anonymous field `ComponentFeatureCapabilities` in struct `ComponentFeatureCapabilitiesClientGetResponse`
+- New anonymous field `WorkbookTemplatesListResult` in struct `WorkbookTemplatesClientListByResourceGroupResponse`
+- New field `AnnotationArray` in struct `AnnotationsClientCreateResponse`
+- New anonymous field `ComponentAPIKeyListResult` in struct `APIKeysClientListResponse`
+- New anonymous field `LiveTokenResponse` in struct `LiveTokenClientGetResponse`
+- New anonymous field `ComponentFavorite` in struct `FavoritesClientGetResponse`
+- New anonymous field `Workbook` in struct `WorkbooksClientCreateOrUpdateResponse`
+- New anonymous field `WebTestListResult` in struct `WebTestsClientListByComponentResponse`
+- New anonymous field `Workbook` in struct `WorkbooksClientUpdateResponse`
+- New anonymous field `ComponentAPIKey` in struct `APIKeysClientGetResponse`
+- New anonymous field `MyWorkbook` in struct `MyWorkbooksClientCreateOrUpdateResponse`
+- New anonymous field `MyWorkbook` in struct `MyWorkbooksClientUpdateResponse`
+- New anonymous field `ComponentPurgeStatusResponse` in struct `ComponentsClientGetPurgeStatusResponse`
+- New anonymous field `Component` in struct `ComponentsClientGetResponse`
+- New anonymous field `Workbook` in struct `WorkbooksClientGetResponse`
+- New anonymous field `Component` in struct `ComponentsClientUpdateTagsResponse`
+- New field `ComponentFavoriteArray` in struct `FavoritesClientListResponse`
+- New anonymous field `WebTestLocationsListResult` in struct `WebTestLocationsClientListResponse`
+- New anonymous field `WebTest` in struct `WebTestsClientUpdateTagsResponse`
+- New field `ComponentAnalyticsItemArray` in struct `AnalyticsItemsClientListResponse`
+- New anonymous field `Workbook` in struct `WorkbooksClientRevisionGetResponse`
+- New anonymous field `WorkItemConfiguration` in struct `WorkItemConfigurationsClientGetDefaultResponse`
+- New anonymous field `ComponentAnalyticsItem` in struct `AnalyticsItemsClientGetResponse`
+- New anonymous field `WorkItemConfiguration` in struct `WorkItemConfigurationsClientGetItemResponse`
+- New anonymous field `WorkbookTemplate` in struct `WorkbookTemplatesClientCreateOrUpdateResponse`
+- New anonymous field `WorkbooksListResult` in struct `WorkbooksClientRevisionsListResponse`
+- New anonymous field `WorkbooksListResult` in struct `WorkbooksClientListByResourceGroupResponse`
+- New anonymous field `WorkItemConfiguration` in struct `WorkItemConfigurationsClientUpdateItemResponse`
+- New anonymous field `MyWorkbooksListResult` in struct `MyWorkbooksClientListByResourceGroupResponse`
+- New anonymous field `ComponentPurgeResponse` in struct `ComponentsClientPurgeResponse`
+- New anonymous field `ComponentLinkedStorageAccounts` in struct `ComponentLinkedStorageAccountsClientCreateAndUpdateResponse`
+- New anonymous field `ComponentQuotaStatus` in struct `ComponentQuotaStatusClientGetResponse`
+- New anonymous field `WorkItemConfigurationsListResult` in struct `WorkItemConfigurationsClientListResponse`
+- New field `ComponentProactiveDetectionConfigurationArray` in struct `ProactiveDetectionConfigurationsClientListResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `WorkbookTemplateLocalizedGallery.TemplateData` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `WorkbookTemplateProperties.TemplateData` has been changed from `map[string]interface{}` to `interface{}`
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*OperationsClient.List` has been removed
+- Function `*OperationsClientListPager.NextPage` has been removed
+- Function `InnerError.MarshalJSON` has been removed
+- Function `NewOperationsClient` has been removed
+- Function `WorkbookInnerErrorTrace.MarshalJSON` has been removed
+- Function `OperationListResult.MarshalJSON` has been removed
+- Function `*InnerError.UnmarshalJSON` has been removed
+- Function `InnerErrorTrace.MarshalJSON` has been removed
+- Function `OperationsListResult.MarshalJSON` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `WorkbookTemplateErrorBody.MarshalJSON` has been removed
+- Struct `AnnotationError` has been removed
+- Struct `ErrorDefinition` has been removed
+- Struct `ErrorResponse` has been removed
+- Struct `ErrorResponseLinkedStorage` has been removed
+- Struct `ErrorResponseLinkedStorageError` has been removed
+- Struct `InnerError` has been removed
+- Struct `InnerErrorTrace` has been removed
+- Struct `MyWorkbookError` has been removed
+- Struct `Operation` has been removed
+- Struct `OperationDisplay` has been removed
+- Struct `OperationInfo` has been removed
+- Struct `OperationListResult` has been removed
+- Struct `OperationLive` has been removed
+- Struct `OperationsClient` has been removed
+- Struct `OperationsClientListOptions` has been removed
+- Struct `OperationsClientListPager` has been removed
+- Struct `OperationsClientListResponse` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `OperationsListResult` has been removed
+- Struct `WorkItemConfigurationError` has been removed
+- Struct `WorkbookError` has been removed
+- Struct `WorkbookErrorDefinition` has been removed
+- Struct `WorkbookInnerErrorTrace` has been removed
+- Struct `WorkbookTemplateError` has been removed
+- Struct `WorkbookTemplateErrorBody` has been removed
+- Struct `WorkbookTemplateErrorFieldContract` has been removed
+
+### Features Added
+
+- New field `Etag` in struct `Component`
+- New field `WorkspaceResourceID` in struct `ComponentProperties`
+- New field `Name` in struct `ComponentProperties`
+- New field `ForceCustomerStorageForProfiler` in struct `ComponentProperties`
+- New field `LaMigrationDate` in struct `ComponentProperties`
+- New field `DisableLocalAuth` in struct `ComponentProperties`
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

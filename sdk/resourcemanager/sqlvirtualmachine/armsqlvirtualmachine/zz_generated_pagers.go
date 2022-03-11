@@ -10,6 +10,7 @@ package armsqlvirtualmachine
 
 import (
 	"context"
+	"errors"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
 	"net/http"
@@ -20,376 +21,341 @@ import (
 type AvailabilityGroupListenersClientListByGroupPager struct {
 	client    *AvailabilityGroupListenersClient
 	current   AvailabilityGroupListenersClientListByGroupResponse
-	err       error
 	requester func(context.Context) (*policy.Request, error)
 	advancer  func(context.Context, AvailabilityGroupListenersClientListByGroupResponse) (*policy.Request, error)
 }
 
-// Err returns the last error encountered while paging.
-func (p *AvailabilityGroupListenersClientListByGroupPager) Err() error {
-	return p.err
-}
-
-// NextPage returns true if the pager advanced to the next page.
-// Returns false if there are no more pages or an error occurred.
-func (p *AvailabilityGroupListenersClientListByGroupPager) NextPage(ctx context.Context) bool {
-	var req *policy.Request
-	var err error
+// More returns true if there are more pages to retrieve.
+func (p *AvailabilityGroupListenersClientListByGroupPager) More() bool {
 	if !reflect.ValueOf(p.current).IsZero() {
 		if p.current.AvailabilityGroupListenerListResult.NextLink == nil || len(*p.current.AvailabilityGroupListenerListResult.NextLink) == 0 {
 			return false
+		}
+	}
+	return true
+}
+
+// NextPage advances the pager to the next page.
+func (p *AvailabilityGroupListenersClientListByGroupPager) NextPage(ctx context.Context) (AvailabilityGroupListenersClientListByGroupResponse, error) {
+	var req *policy.Request
+	var err error
+	if !reflect.ValueOf(p.current).IsZero() {
+		if !p.More() {
+			return AvailabilityGroupListenersClientListByGroupResponse{}, errors.New("no more pages")
 		}
 		req, err = p.advancer(ctx, p.current)
 	} else {
 		req, err = p.requester(ctx)
 	}
 	if err != nil {
-		p.err = err
-		return false
+		return AvailabilityGroupListenersClientListByGroupResponse{}, err
 	}
 	resp, err := p.client.pl.Do(req)
 	if err != nil {
-		p.err = err
-		return false
+		return AvailabilityGroupListenersClientListByGroupResponse{}, err
 	}
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		p.err = runtime.NewResponseError(resp)
-		return false
+
+		return AvailabilityGroupListenersClientListByGroupResponse{}, runtime.NewResponseError(resp)
 	}
 	result, err := p.client.listByGroupHandleResponse(resp)
 	if err != nil {
-		p.err = err
-		return false
+		return AvailabilityGroupListenersClientListByGroupResponse{}, err
 	}
 	p.current = result
-	return true
-}
-
-// PageResponse returns the current AvailabilityGroupListenersClientListByGroupResponse page.
-func (p *AvailabilityGroupListenersClientListByGroupPager) PageResponse() AvailabilityGroupListenersClientListByGroupResponse {
-	return p.current
+	return p.current, nil
 }
 
 // GroupsClientListByResourceGroupPager provides operations for iterating over paged responses.
 type GroupsClientListByResourceGroupPager struct {
 	client    *GroupsClient
 	current   GroupsClientListByResourceGroupResponse
-	err       error
 	requester func(context.Context) (*policy.Request, error)
 	advancer  func(context.Context, GroupsClientListByResourceGroupResponse) (*policy.Request, error)
 }
 
-// Err returns the last error encountered while paging.
-func (p *GroupsClientListByResourceGroupPager) Err() error {
-	return p.err
-}
-
-// NextPage returns true if the pager advanced to the next page.
-// Returns false if there are no more pages or an error occurred.
-func (p *GroupsClientListByResourceGroupPager) NextPage(ctx context.Context) bool {
-	var req *policy.Request
-	var err error
+// More returns true if there are more pages to retrieve.
+func (p *GroupsClientListByResourceGroupPager) More() bool {
 	if !reflect.ValueOf(p.current).IsZero() {
 		if p.current.GroupListResult.NextLink == nil || len(*p.current.GroupListResult.NextLink) == 0 {
 			return false
+		}
+	}
+	return true
+}
+
+// NextPage advances the pager to the next page.
+func (p *GroupsClientListByResourceGroupPager) NextPage(ctx context.Context) (GroupsClientListByResourceGroupResponse, error) {
+	var req *policy.Request
+	var err error
+	if !reflect.ValueOf(p.current).IsZero() {
+		if !p.More() {
+			return GroupsClientListByResourceGroupResponse{}, errors.New("no more pages")
 		}
 		req, err = p.advancer(ctx, p.current)
 	} else {
 		req, err = p.requester(ctx)
 	}
 	if err != nil {
-		p.err = err
-		return false
+		return GroupsClientListByResourceGroupResponse{}, err
 	}
 	resp, err := p.client.pl.Do(req)
 	if err != nil {
-		p.err = err
-		return false
+		return GroupsClientListByResourceGroupResponse{}, err
 	}
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		p.err = runtime.NewResponseError(resp)
-		return false
+
+		return GroupsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
 	}
 	result, err := p.client.listByResourceGroupHandleResponse(resp)
 	if err != nil {
-		p.err = err
-		return false
+		return GroupsClientListByResourceGroupResponse{}, err
 	}
 	p.current = result
-	return true
-}
-
-// PageResponse returns the current GroupsClientListByResourceGroupResponse page.
-func (p *GroupsClientListByResourceGroupPager) PageResponse() GroupsClientListByResourceGroupResponse {
-	return p.current
+	return p.current, nil
 }
 
 // GroupsClientListPager provides operations for iterating over paged responses.
 type GroupsClientListPager struct {
 	client    *GroupsClient
 	current   GroupsClientListResponse
-	err       error
 	requester func(context.Context) (*policy.Request, error)
 	advancer  func(context.Context, GroupsClientListResponse) (*policy.Request, error)
 }
 
-// Err returns the last error encountered while paging.
-func (p *GroupsClientListPager) Err() error {
-	return p.err
-}
-
-// NextPage returns true if the pager advanced to the next page.
-// Returns false if there are no more pages or an error occurred.
-func (p *GroupsClientListPager) NextPage(ctx context.Context) bool {
-	var req *policy.Request
-	var err error
+// More returns true if there are more pages to retrieve.
+func (p *GroupsClientListPager) More() bool {
 	if !reflect.ValueOf(p.current).IsZero() {
 		if p.current.GroupListResult.NextLink == nil || len(*p.current.GroupListResult.NextLink) == 0 {
 			return false
+		}
+	}
+	return true
+}
+
+// NextPage advances the pager to the next page.
+func (p *GroupsClientListPager) NextPage(ctx context.Context) (GroupsClientListResponse, error) {
+	var req *policy.Request
+	var err error
+	if !reflect.ValueOf(p.current).IsZero() {
+		if !p.More() {
+			return GroupsClientListResponse{}, errors.New("no more pages")
 		}
 		req, err = p.advancer(ctx, p.current)
 	} else {
 		req, err = p.requester(ctx)
 	}
 	if err != nil {
-		p.err = err
-		return false
+		return GroupsClientListResponse{}, err
 	}
 	resp, err := p.client.pl.Do(req)
 	if err != nil {
-		p.err = err
-		return false
+		return GroupsClientListResponse{}, err
 	}
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		p.err = runtime.NewResponseError(resp)
-		return false
+
+		return GroupsClientListResponse{}, runtime.NewResponseError(resp)
 	}
 	result, err := p.client.listHandleResponse(resp)
 	if err != nil {
-		p.err = err
-		return false
+		return GroupsClientListResponse{}, err
 	}
 	p.current = result
-	return true
-}
-
-// PageResponse returns the current GroupsClientListResponse page.
-func (p *GroupsClientListPager) PageResponse() GroupsClientListResponse {
-	return p.current
+	return p.current, nil
 }
 
 // OperationsClientListPager provides operations for iterating over paged responses.
 type OperationsClientListPager struct {
 	client    *OperationsClient
 	current   OperationsClientListResponse
-	err       error
 	requester func(context.Context) (*policy.Request, error)
 	advancer  func(context.Context, OperationsClientListResponse) (*policy.Request, error)
 }
 
-// Err returns the last error encountered while paging.
-func (p *OperationsClientListPager) Err() error {
-	return p.err
-}
-
-// NextPage returns true if the pager advanced to the next page.
-// Returns false if there are no more pages or an error occurred.
-func (p *OperationsClientListPager) NextPage(ctx context.Context) bool {
-	var req *policy.Request
-	var err error
+// More returns true if there are more pages to retrieve.
+func (p *OperationsClientListPager) More() bool {
 	if !reflect.ValueOf(p.current).IsZero() {
 		if p.current.OperationListResult.NextLink == nil || len(*p.current.OperationListResult.NextLink) == 0 {
 			return false
+		}
+	}
+	return true
+}
+
+// NextPage advances the pager to the next page.
+func (p *OperationsClientListPager) NextPage(ctx context.Context) (OperationsClientListResponse, error) {
+	var req *policy.Request
+	var err error
+	if !reflect.ValueOf(p.current).IsZero() {
+		if !p.More() {
+			return OperationsClientListResponse{}, errors.New("no more pages")
 		}
 		req, err = p.advancer(ctx, p.current)
 	} else {
 		req, err = p.requester(ctx)
 	}
 	if err != nil {
-		p.err = err
-		return false
+		return OperationsClientListResponse{}, err
 	}
 	resp, err := p.client.pl.Do(req)
 	if err != nil {
-		p.err = err
-		return false
+		return OperationsClientListResponse{}, err
 	}
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		p.err = runtime.NewResponseError(resp)
-		return false
+
+		return OperationsClientListResponse{}, runtime.NewResponseError(resp)
 	}
 	result, err := p.client.listHandleResponse(resp)
 	if err != nil {
-		p.err = err
-		return false
+		return OperationsClientListResponse{}, err
 	}
 	p.current = result
-	return true
-}
-
-// PageResponse returns the current OperationsClientListResponse page.
-func (p *OperationsClientListPager) PageResponse() OperationsClientListResponse {
-	return p.current
+	return p.current, nil
 }
 
 // SQLVirtualMachinesClientListByResourceGroupPager provides operations for iterating over paged responses.
 type SQLVirtualMachinesClientListByResourceGroupPager struct {
 	client    *SQLVirtualMachinesClient
 	current   SQLVirtualMachinesClientListByResourceGroupResponse
-	err       error
 	requester func(context.Context) (*policy.Request, error)
 	advancer  func(context.Context, SQLVirtualMachinesClientListByResourceGroupResponse) (*policy.Request, error)
 }
 
-// Err returns the last error encountered while paging.
-func (p *SQLVirtualMachinesClientListByResourceGroupPager) Err() error {
-	return p.err
-}
-
-// NextPage returns true if the pager advanced to the next page.
-// Returns false if there are no more pages or an error occurred.
-func (p *SQLVirtualMachinesClientListByResourceGroupPager) NextPage(ctx context.Context) bool {
-	var req *policy.Request
-	var err error
+// More returns true if there are more pages to retrieve.
+func (p *SQLVirtualMachinesClientListByResourceGroupPager) More() bool {
 	if !reflect.ValueOf(p.current).IsZero() {
 		if p.current.ListResult.NextLink == nil || len(*p.current.ListResult.NextLink) == 0 {
 			return false
+		}
+	}
+	return true
+}
+
+// NextPage advances the pager to the next page.
+func (p *SQLVirtualMachinesClientListByResourceGroupPager) NextPage(ctx context.Context) (SQLVirtualMachinesClientListByResourceGroupResponse, error) {
+	var req *policy.Request
+	var err error
+	if !reflect.ValueOf(p.current).IsZero() {
+		if !p.More() {
+			return SQLVirtualMachinesClientListByResourceGroupResponse{}, errors.New("no more pages")
 		}
 		req, err = p.advancer(ctx, p.current)
 	} else {
 		req, err = p.requester(ctx)
 	}
 	if err != nil {
-		p.err = err
-		return false
+		return SQLVirtualMachinesClientListByResourceGroupResponse{}, err
 	}
 	resp, err := p.client.pl.Do(req)
 	if err != nil {
-		p.err = err
-		return false
+		return SQLVirtualMachinesClientListByResourceGroupResponse{}, err
 	}
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		p.err = runtime.NewResponseError(resp)
-		return false
+
+		return SQLVirtualMachinesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
 	}
 	result, err := p.client.listByResourceGroupHandleResponse(resp)
 	if err != nil {
-		p.err = err
-		return false
+		return SQLVirtualMachinesClientListByResourceGroupResponse{}, err
 	}
 	p.current = result
-	return true
-}
-
-// PageResponse returns the current SQLVirtualMachinesClientListByResourceGroupResponse page.
-func (p *SQLVirtualMachinesClientListByResourceGroupPager) PageResponse() SQLVirtualMachinesClientListByResourceGroupResponse {
-	return p.current
+	return p.current, nil
 }
 
 // SQLVirtualMachinesClientListBySQLVMGroupPager provides operations for iterating over paged responses.
 type SQLVirtualMachinesClientListBySQLVMGroupPager struct {
 	client    *SQLVirtualMachinesClient
 	current   SQLVirtualMachinesClientListBySQLVMGroupResponse
-	err       error
 	requester func(context.Context) (*policy.Request, error)
 	advancer  func(context.Context, SQLVirtualMachinesClientListBySQLVMGroupResponse) (*policy.Request, error)
 }
 
-// Err returns the last error encountered while paging.
-func (p *SQLVirtualMachinesClientListBySQLVMGroupPager) Err() error {
-	return p.err
-}
-
-// NextPage returns true if the pager advanced to the next page.
-// Returns false if there are no more pages or an error occurred.
-func (p *SQLVirtualMachinesClientListBySQLVMGroupPager) NextPage(ctx context.Context) bool {
-	var req *policy.Request
-	var err error
+// More returns true if there are more pages to retrieve.
+func (p *SQLVirtualMachinesClientListBySQLVMGroupPager) More() bool {
 	if !reflect.ValueOf(p.current).IsZero() {
 		if p.current.ListResult.NextLink == nil || len(*p.current.ListResult.NextLink) == 0 {
 			return false
+		}
+	}
+	return true
+}
+
+// NextPage advances the pager to the next page.
+func (p *SQLVirtualMachinesClientListBySQLVMGroupPager) NextPage(ctx context.Context) (SQLVirtualMachinesClientListBySQLVMGroupResponse, error) {
+	var req *policy.Request
+	var err error
+	if !reflect.ValueOf(p.current).IsZero() {
+		if !p.More() {
+			return SQLVirtualMachinesClientListBySQLVMGroupResponse{}, errors.New("no more pages")
 		}
 		req, err = p.advancer(ctx, p.current)
 	} else {
 		req, err = p.requester(ctx)
 	}
 	if err != nil {
-		p.err = err
-		return false
+		return SQLVirtualMachinesClientListBySQLVMGroupResponse{}, err
 	}
 	resp, err := p.client.pl.Do(req)
 	if err != nil {
-		p.err = err
-		return false
+		return SQLVirtualMachinesClientListBySQLVMGroupResponse{}, err
 	}
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		p.err = runtime.NewResponseError(resp)
-		return false
+
+		return SQLVirtualMachinesClientListBySQLVMGroupResponse{}, runtime.NewResponseError(resp)
 	}
 	result, err := p.client.listBySQLVMGroupHandleResponse(resp)
 	if err != nil {
-		p.err = err
-		return false
+		return SQLVirtualMachinesClientListBySQLVMGroupResponse{}, err
 	}
 	p.current = result
-	return true
-}
-
-// PageResponse returns the current SQLVirtualMachinesClientListBySQLVMGroupResponse page.
-func (p *SQLVirtualMachinesClientListBySQLVMGroupPager) PageResponse() SQLVirtualMachinesClientListBySQLVMGroupResponse {
-	return p.current
+	return p.current, nil
 }
 
 // SQLVirtualMachinesClientListPager provides operations for iterating over paged responses.
 type SQLVirtualMachinesClientListPager struct {
 	client    *SQLVirtualMachinesClient
 	current   SQLVirtualMachinesClientListResponse
-	err       error
 	requester func(context.Context) (*policy.Request, error)
 	advancer  func(context.Context, SQLVirtualMachinesClientListResponse) (*policy.Request, error)
 }
 
-// Err returns the last error encountered while paging.
-func (p *SQLVirtualMachinesClientListPager) Err() error {
-	return p.err
-}
-
-// NextPage returns true if the pager advanced to the next page.
-// Returns false if there are no more pages or an error occurred.
-func (p *SQLVirtualMachinesClientListPager) NextPage(ctx context.Context) bool {
-	var req *policy.Request
-	var err error
+// More returns true if there are more pages to retrieve.
+func (p *SQLVirtualMachinesClientListPager) More() bool {
 	if !reflect.ValueOf(p.current).IsZero() {
 		if p.current.ListResult.NextLink == nil || len(*p.current.ListResult.NextLink) == 0 {
 			return false
+		}
+	}
+	return true
+}
+
+// NextPage advances the pager to the next page.
+func (p *SQLVirtualMachinesClientListPager) NextPage(ctx context.Context) (SQLVirtualMachinesClientListResponse, error) {
+	var req *policy.Request
+	var err error
+	if !reflect.ValueOf(p.current).IsZero() {
+		if !p.More() {
+			return SQLVirtualMachinesClientListResponse{}, errors.New("no more pages")
 		}
 		req, err = p.advancer(ctx, p.current)
 	} else {
 		req, err = p.requester(ctx)
 	}
 	if err != nil {
-		p.err = err
-		return false
+		return SQLVirtualMachinesClientListResponse{}, err
 	}
 	resp, err := p.client.pl.Do(req)
 	if err != nil {
-		p.err = err
-		return false
+		return SQLVirtualMachinesClientListResponse{}, err
 	}
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		p.err = runtime.NewResponseError(resp)
-		return false
+
+		return SQLVirtualMachinesClientListResponse{}, runtime.NewResponseError(resp)
 	}
 	result, err := p.client.listHandleResponse(resp)
 	if err != nil {
-		p.err = err
-		return false
+		return SQLVirtualMachinesClientListResponse{}, err
 	}
 	p.current = result
-	return true
-}
-
-// PageResponse returns the current SQLVirtualMachinesClientListResponse page.
-func (p *SQLVirtualMachinesClientListPager) PageResponse() SQLVirtualMachinesClientListResponse {
-	return p.current
+	return p.current, nil
 }

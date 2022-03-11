@@ -61,9 +61,7 @@ func (client *KubeEnvironmentsClient) BeginCreateOrUpdate(ctx context.Context, r
 	if err != nil {
 		return KubeEnvironmentsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := KubeEnvironmentsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := KubeEnvironmentsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("KubeEnvironmentsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return KubeEnvironmentsClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *KubeEnvironmentsClient) BeginDelete(ctx context.Context, resourceG
 	if err != nil {
 		return KubeEnvironmentsClientDeletePollerResponse{}, err
 	}
-	result := KubeEnvironmentsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := KubeEnvironmentsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("KubeEnvironmentsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return KubeEnvironmentsClientDeletePollerResponse{}, err
@@ -232,7 +228,7 @@ func (client *KubeEnvironmentsClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *KubeEnvironmentsClient) getHandleResponse(resp *http.Response) (KubeEnvironmentsClientGetResponse, error) {
-	result := KubeEnvironmentsClientGetResponse{RawResponse: resp}
+	result := KubeEnvironmentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KubeEnvironment); err != nil {
 		return KubeEnvironmentsClientGetResponse{}, err
 	}
@@ -280,7 +276,7 @@ func (client *KubeEnvironmentsClient) listByResourceGroupCreateRequest(ctx conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *KubeEnvironmentsClient) listByResourceGroupHandleResponse(resp *http.Response) (KubeEnvironmentsClientListByResourceGroupResponse, error) {
-	result := KubeEnvironmentsClientListByResourceGroupResponse{RawResponse: resp}
+	result := KubeEnvironmentsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KubeEnvironmentCollection); err != nil {
 		return KubeEnvironmentsClientListByResourceGroupResponse{}, err
 	}
@@ -323,7 +319,7 @@ func (client *KubeEnvironmentsClient) listBySubscriptionCreateRequest(ctx contex
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *KubeEnvironmentsClient) listBySubscriptionHandleResponse(resp *http.Response) (KubeEnvironmentsClientListBySubscriptionResponse, error) {
-	result := KubeEnvironmentsClientListBySubscriptionResponse{RawResponse: resp}
+	result := KubeEnvironmentsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KubeEnvironmentCollection); err != nil {
 		return KubeEnvironmentsClientListBySubscriptionResponse{}, err
 	}
@@ -379,7 +375,7 @@ func (client *KubeEnvironmentsClient) updateCreateRequest(ctx context.Context, r
 
 // updateHandleResponse handles the Update response.
 func (client *KubeEnvironmentsClient) updateHandleResponse(resp *http.Response) (KubeEnvironmentsClientUpdateResponse, error) {
-	result := KubeEnvironmentsClientUpdateResponse{RawResponse: resp}
+	result := KubeEnvironmentsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KubeEnvironment); err != nil {
 		return KubeEnvironmentsClientUpdateResponse{}, err
 	}

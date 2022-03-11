@@ -36,17 +36,17 @@ type JobExecutionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewJobExecutionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *JobExecutionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &JobExecutionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -72,7 +72,7 @@ func (client *JobExecutionsClient) Cancel(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return JobExecutionsClientCancelResponse{}, runtime.NewResponseError(resp)
 	}
-	return JobExecutionsClientCancelResponse{RawResponse: resp}, nil
+	return JobExecutionsClientCancelResponse{}, nil
 }
 
 // cancelCreateRequest creates the Cancel request.
@@ -123,9 +123,7 @@ func (client *JobExecutionsClient) BeginCreate(ctx context.Context, resourceGrou
 	if err != nil {
 		return JobExecutionsClientCreatePollerResponse{}, err
 	}
-	result := JobExecutionsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := JobExecutionsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("JobExecutionsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return JobExecutionsClientCreatePollerResponse{}, err
@@ -202,9 +200,7 @@ func (client *JobExecutionsClient) BeginCreateOrUpdate(ctx context.Context, reso
 	if err != nil {
 		return JobExecutionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := JobExecutionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := JobExecutionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("JobExecutionsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return JobExecutionsClientCreateOrUpdatePollerResponse{}, err
@@ -328,7 +324,7 @@ func (client *JobExecutionsClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *JobExecutionsClient) getHandleResponse(resp *http.Response) (JobExecutionsClientGetResponse, error) {
-	result := JobExecutionsClientGetResponse{RawResponse: resp}
+	result := JobExecutionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobExecution); err != nil {
 		return JobExecutionsClientGetResponse{}, err
 	}
@@ -408,7 +404,7 @@ func (client *JobExecutionsClient) listByAgentCreateRequest(ctx context.Context,
 
 // listByAgentHandleResponse handles the ListByAgent response.
 func (client *JobExecutionsClient) listByAgentHandleResponse(resp *http.Response) (JobExecutionsClientListByAgentResponse, error) {
-	result := JobExecutionsClientListByAgentResponse{RawResponse: resp}
+	result := JobExecutionsClientListByAgentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobExecutionListResult); err != nil {
 		return JobExecutionsClientListByAgentResponse{}, err
 	}
@@ -492,7 +488,7 @@ func (client *JobExecutionsClient) listByJobCreateRequest(ctx context.Context, r
 
 // listByJobHandleResponse handles the ListByJob response.
 func (client *JobExecutionsClient) listByJobHandleResponse(resp *http.Response) (JobExecutionsClientListByJobResponse, error) {
-	result := JobExecutionsClientListByJobResponse{RawResponse: resp}
+	result := JobExecutionsClientListByJobResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobExecutionListResult); err != nil {
 		return JobExecutionsClientListByJobResponse{}, err
 	}

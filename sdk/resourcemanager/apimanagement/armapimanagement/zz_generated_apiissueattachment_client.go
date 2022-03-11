@@ -36,17 +36,17 @@ type APIIssueAttachmentClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAPIIssueAttachmentClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *APIIssueAttachmentClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &APIIssueAttachmentClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -119,7 +119,7 @@ func (client *APIIssueAttachmentClient) createOrUpdateCreateRequest(ctx context.
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *APIIssueAttachmentClient) createOrUpdateHandleResponse(resp *http.Response) (APIIssueAttachmentClientCreateOrUpdateResponse, error) {
-	result := APIIssueAttachmentClientCreateOrUpdateResponse{RawResponse: resp}
+	result := APIIssueAttachmentClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -152,7 +152,7 @@ func (client *APIIssueAttachmentClient) Delete(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return APIIssueAttachmentClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return APIIssueAttachmentClientDeleteResponse{RawResponse: resp}, nil
+	return APIIssueAttachmentClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -257,7 +257,7 @@ func (client *APIIssueAttachmentClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *APIIssueAttachmentClient) getHandleResponse(resp *http.Response) (APIIssueAttachmentClientGetResponse, error) {
-	result := APIIssueAttachmentClientGetResponse{RawResponse: resp}
+	result := APIIssueAttachmentClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -327,7 +327,7 @@ func (client *APIIssueAttachmentClient) getEntityTagCreateRequest(ctx context.Co
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *APIIssueAttachmentClient) getEntityTagHandleResponse(resp *http.Response) (APIIssueAttachmentClientGetEntityTagResponse, error) {
-	result := APIIssueAttachmentClientGetEntityTagResponse{RawResponse: resp}
+	result := APIIssueAttachmentClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -402,7 +402,7 @@ func (client *APIIssueAttachmentClient) listByServiceCreateRequest(ctx context.C
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *APIIssueAttachmentClient) listByServiceHandleResponse(resp *http.Response) (APIIssueAttachmentClientListByServiceResponse, error) {
-	result := APIIssueAttachmentClientListByServiceResponse{RawResponse: resp}
+	result := APIIssueAttachmentClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IssueAttachmentCollection); err != nil {
 		return APIIssueAttachmentClientListByServiceResponse{}, err
 	}

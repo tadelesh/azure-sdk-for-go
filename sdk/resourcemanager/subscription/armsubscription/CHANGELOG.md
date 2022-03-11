@@ -1,5 +1,114 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*SubscriptionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SubscriptionsClientListResponse, error)`
+- Function `*PolicyClientListPolicyForTenantPager.NextPage` return value(s) have been changed from `(bool)` to `(PolicyClientListPolicyForTenantResponse, error)`
+- Function `*TenantsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(TenantsClientListResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*SubscriptionsClient.ListLocations` parameter(s) have been changed from `(context.Context, string, *SubscriptionsClientListLocationsOptions)` to `(string, *SubscriptionsClientListLocationsOptions)`
+- Function `*SubscriptionsClient.ListLocations` return value(s) have been changed from `(SubscriptionsClientListLocationsResponse, error)` to `(*SubscriptionsClientListLocationsPager)`
+- Function `*PolicyClientListPolicyForTenantPager.PageResponse` has been removed
+- Function `*PolicyClientListPolicyForTenantPager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*TenantsClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*TenantsClientListPager.Err` has been removed
+- Function `*SubscriptionsClientListPager.PageResponse` has been removed
+- Function `*SubscriptionsClientListPager.Err` has been removed
+- Struct `AliasClientCreateResult` has been removed
+- Struct `AliasClientGetResult` has been removed
+- Struct `AliasClientListResult` has been removed
+- Struct `BillingAccountClientGetPolicyResult` has been removed
+- Struct `ClientAcceptOwnershipStatusResult` has been removed
+- Struct `ClientCancelResult` has been removed
+- Struct `ClientEnableResult` has been removed
+- Struct `ClientRenameResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PolicyClientAddUpdatePolicyForTenantResult` has been removed
+- Struct `PolicyClientGetPolicyForTenantResult` has been removed
+- Struct `PolicyClientListPolicyForTenantResult` has been removed
+- Struct `SubscriptionsClientGetResult` has been removed
+- Struct `SubscriptionsClientListLocationsResult` has been removed
+- Struct `SubscriptionsClientListResult` has been removed
+- Struct `TenantsClientListResult` has been removed
+- Field `PolicyClientListPolicyForTenantResult` of struct `PolicyClientListPolicyForTenantResponse` has been removed
+- Field `RawResponse` of struct `PolicyClientListPolicyForTenantResponse` has been removed
+- Field `BillingAccountClientGetPolicyResult` of struct `BillingAccountClientGetPolicyResponse` has been removed
+- Field `RawResponse` of struct `BillingAccountClientGetPolicyResponse` has been removed
+- Field `AliasClientGetResult` of struct `AliasClientGetResponse` has been removed
+- Field `RawResponse` of struct `AliasClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClientAcceptOwnershipPollerResponse` has been removed
+- Field `RawResponse` of struct `AliasClientCreatePollerResponse` has been removed
+- Field `ClientRenameResult` of struct `ClientRenameResponse` has been removed
+- Field `RawResponse` of struct `ClientRenameResponse` has been removed
+- Field `AliasClientListResult` of struct `AliasClientListResponse` has been removed
+- Field `RawResponse` of struct `AliasClientListResponse` has been removed
+- Field `PolicyClientGetPolicyForTenantResult` of struct `PolicyClientGetPolicyForTenantResponse` has been removed
+- Field `RawResponse` of struct `PolicyClientGetPolicyForTenantResponse` has been removed
+- Field `ClientEnableResult` of struct `ClientEnableResponse` has been removed
+- Field `RawResponse` of struct `ClientEnableResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `SubscriptionsClientGetResult` of struct `SubscriptionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionsClientGetResponse` has been removed
+- Field `SubscriptionsClientListLocationsResult` of struct `SubscriptionsClientListLocationsResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionsClientListLocationsResponse` has been removed
+- Field `TenantsClientListResult` of struct `TenantsClientListResponse` has been removed
+- Field `RawResponse` of struct `TenantsClientListResponse` has been removed
+- Field `ClientCancelResult` of struct `ClientCancelResponse` has been removed
+- Field `RawResponse` of struct `ClientCancelResponse` has been removed
+- Field `PolicyClientAddUpdatePolicyForTenantResult` of struct `PolicyClientAddUpdatePolicyForTenantResponse` has been removed
+- Field `RawResponse` of struct `PolicyClientAddUpdatePolicyForTenantResponse` has been removed
+- Field `RawResponse` of struct `ClientAcceptOwnershipResponse` has been removed
+- Field `ClientAcceptOwnershipStatusResult` of struct `ClientAcceptOwnershipStatusResponse` has been removed
+- Field `RawResponse` of struct `ClientAcceptOwnershipStatusResponse` has been removed
+- Field `SubscriptionsClientListResult` of struct `SubscriptionsClientListResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionsClientListResponse` has been removed
+- Field `AliasClientCreateResult` of struct `AliasClientCreateResponse` has been removed
+- Field `RawResponse` of struct `AliasClientCreateResponse` has been removed
+- Field `RawResponse` of struct `AliasClientDeleteResponse` has been removed
+
+### Features Added
+
+- New function `*SubscriptionsClientListLocationsPager.More() bool`
+- New function `*PolicyClientListPolicyForTenantPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*SubscriptionsClientListLocationsPager.NextPage(context.Context) (SubscriptionsClientListLocationsResponse, error)`
+- New function `*SubscriptionsClientListPager.More() bool`
+- New function `*TenantsClientListPager.More() bool`
+- New struct `ErrorResponse`
+- New struct `ErrorResponseBody`
+- New struct `SubscriptionsClientListLocationsPager`
+- New anonymous field `RenamedSubscriptionID` in struct `ClientRenameResponse`
+- New anonymous field `GetTenantPolicyListResponse` in struct `PolicyClientListPolicyForTenantResponse`
+- New anonymous field `Subscription` in struct `SubscriptionsClientGetResponse`
+- New anonymous field `ListResult` in struct `SubscriptionsClientListResponse`
+- New anonymous field `GetTenantPolicyResponse` in struct `PolicyClientGetPolicyForTenantResponse`
+- New anonymous field `AcceptOwnershipStatusResponse` in struct `ClientAcceptOwnershipStatusResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `AliasResponse` in struct `AliasClientCreateResponse`
+- New anonymous field `EnabledSubscriptionID` in struct `ClientEnableResponse`
+- New anonymous field `GetTenantPolicyResponse` in struct `PolicyClientAddUpdatePolicyForTenantResponse`
+- New anonymous field `TenantListResult` in struct `TenantsClientListResponse`
+- New anonymous field `AliasResponse` in struct `AliasClientGetResponse`
+- New anonymous field `LocationListResult` in struct `SubscriptionsClientListLocationsResponse`
+- New anonymous field `AliasListResult` in struct `AliasClientListResponse`
+- New anonymous field `BillingAccountPoliciesResponse` in struct `BillingAccountClientGetPolicyResponse`
+- New anonymous field `CanceledSubscriptionID` in struct `ClientCancelResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Struct `ErrorResponse` has been removed
+- Struct `ErrorResponseBody` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

@@ -1,5 +1,87 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ChildResourcesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ChildResourcesClientListResponse, error)`
+- Function `*AvailabilityStatusesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(AvailabilityStatusesClientListResponse, error)`
+- Function `*ChildAvailabilityStatusesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ChildAvailabilityStatusesClientListResponse, error)`
+- Function `*EmergingIssuesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(EmergingIssuesClientListResponse, error)`
+- Function `*AvailabilityStatusesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(AvailabilityStatusesClientListByResourceGroupResponse, error)`
+- Function `*AvailabilityStatusesClientListBySubscriptionIDPager.NextPage` return value(s) have been changed from `(bool)` to `(AvailabilityStatusesClientListBySubscriptionIDResponse, error)`
+- Function `*AvailabilityStatusesClientListBySubscriptionIDPager.Err` has been removed
+- Function `*EmergingIssuesClientListPager.PageResponse` has been removed
+- Function `*AvailabilityStatusesClientListByResourceGroupPager.Err` has been removed
+- Function `*AvailabilityStatusesClientListPager.Err` has been removed
+- Function `*AvailabilityStatusesClientListBySubscriptionIDPager.PageResponse` has been removed
+- Function `*ChildAvailabilityStatusesClientListPager.Err` has been removed
+- Function `*ChildAvailabilityStatusesClientListPager.PageResponse` has been removed
+- Function `*ChildResourcesClientListPager.Err` has been removed
+- Function `*ChildResourcesClientListPager.PageResponse` has been removed
+- Function `*AvailabilityStatusesClientListPager.PageResponse` has been removed
+- Function `*AvailabilityStatusesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*EmergingIssuesClientListPager.Err` has been removed
+- Struct `AvailabilityStatusesClientGetByResourceResult` has been removed
+- Struct `AvailabilityStatusesClientListByResourceGroupResult` has been removed
+- Struct `AvailabilityStatusesClientListBySubscriptionIDResult` has been removed
+- Struct `AvailabilityStatusesClientListResult` has been removed
+- Struct `ChildAvailabilityStatusesClientGetByResourceResult` has been removed
+- Struct `ChildAvailabilityStatusesClientListResult` has been removed
+- Struct `ChildResourcesClientListResult` has been removed
+- Struct `EmergingIssuesClientGetResult` has been removed
+- Struct `EmergingIssuesClientListResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `EmergingIssuesClientListResult` of struct `EmergingIssuesClientListResponse` has been removed
+- Field `RawResponse` of struct `EmergingIssuesClientListResponse` has been removed
+- Field `AvailabilityStatusesClientListBySubscriptionIDResult` of struct `AvailabilityStatusesClientListBySubscriptionIDResponse` has been removed
+- Field `RawResponse` of struct `AvailabilityStatusesClientListBySubscriptionIDResponse` has been removed
+- Field `EmergingIssuesClientGetResult` of struct `EmergingIssuesClientGetResponse` has been removed
+- Field `RawResponse` of struct `EmergingIssuesClientGetResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `ChildAvailabilityStatusesClientListResult` of struct `ChildAvailabilityStatusesClientListResponse` has been removed
+- Field `RawResponse` of struct `ChildAvailabilityStatusesClientListResponse` has been removed
+- Field `AvailabilityStatusesClientListByResourceGroupResult` of struct `AvailabilityStatusesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `AvailabilityStatusesClientListByResourceGroupResponse` has been removed
+- Field `AvailabilityStatusesClientListResult` of struct `AvailabilityStatusesClientListResponse` has been removed
+- Field `RawResponse` of struct `AvailabilityStatusesClientListResponse` has been removed
+- Field `AvailabilityStatusesClientGetByResourceResult` of struct `AvailabilityStatusesClientGetByResourceResponse` has been removed
+- Field `RawResponse` of struct `AvailabilityStatusesClientGetByResourceResponse` has been removed
+- Field `ChildAvailabilityStatusesClientGetByResourceResult` of struct `ChildAvailabilityStatusesClientGetByResourceResponse` has been removed
+- Field `RawResponse` of struct `ChildAvailabilityStatusesClientGetByResourceResponse` has been removed
+- Field `ChildResourcesClientListResult` of struct `ChildResourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `ChildResourcesClientListResponse` has been removed
+
+### Features Added
+
+- New function `*AvailabilityStatusesClientListPager.More() bool`
+- New function `*AvailabilityStatusesClientListByResourceGroupPager.More() bool`
+- New function `*AvailabilityStatusesClientListBySubscriptionIDPager.More() bool`
+- New function `*EmergingIssuesClientListPager.More() bool`
+- New function `*ChildAvailabilityStatusesClientListPager.More() bool`
+- New function `*ChildResourcesClientListPager.More() bool`
+- New struct `ErrorResponse`
+- New anonymous field `EmergingIssuesGetResult` in struct `EmergingIssuesClientGetResponse`
+- New anonymous field `AvailabilityStatus` in struct `ChildAvailabilityStatusesClientGetByResourceResponse`
+- New anonymous field `EmergingIssueListResult` in struct `EmergingIssuesClientListResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `AvailabilityStatusListResult` in struct `ChildAvailabilityStatusesClientListResponse`
+- New anonymous field `AvailabilityStatusListResult` in struct `AvailabilityStatusesClientListResponse`
+- New anonymous field `AvailabilityStatusListResult` in struct `AvailabilityStatusesClientListBySubscriptionIDResponse`
+- New anonymous field `AvailabilityStatusListResult` in struct `AvailabilityStatusesClientListByResourceGroupResponse`
+- New anonymous field `AvailabilityStatusListResult` in struct `ChildResourcesClientListResponse`
+- New anonymous field `AvailabilityStatus` in struct `AvailabilityStatusesClientGetByResourceResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

@@ -64,9 +64,7 @@ func (client *AdaptiveNetworkHardeningsClient) BeginEnforce(ctx context.Context,
 	if err != nil {
 		return AdaptiveNetworkHardeningsClientEnforcePollerResponse{}, err
 	}
-	result := AdaptiveNetworkHardeningsClientEnforcePollerResponse{
-		RawResponse: resp,
-	}
+	result := AdaptiveNetworkHardeningsClientEnforcePollerResponse{}
 	pt, err := armruntime.NewPoller("AdaptiveNetworkHardeningsClient.Enforce", "", resp, client.pl)
 	if err != nil {
 		return AdaptiveNetworkHardeningsClientEnforcePollerResponse{}, err
@@ -200,7 +198,7 @@ func (client *AdaptiveNetworkHardeningsClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *AdaptiveNetworkHardeningsClient) getHandleResponse(resp *http.Response) (AdaptiveNetworkHardeningsClientGetResponse, error) {
-	result := AdaptiveNetworkHardeningsClientGetResponse{RawResponse: resp}
+	result := AdaptiveNetworkHardeningsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdaptiveNetworkHardening); err != nil {
 		return AdaptiveNetworkHardeningsClientGetResponse{}, err
 	}
@@ -263,7 +261,7 @@ func (client *AdaptiveNetworkHardeningsClient) listByExtendedResourceCreateReque
 
 // listByExtendedResourceHandleResponse handles the ListByExtendedResource response.
 func (client *AdaptiveNetworkHardeningsClient) listByExtendedResourceHandleResponse(resp *http.Response) (AdaptiveNetworkHardeningsClientListByExtendedResourceResponse, error) {
-	result := AdaptiveNetworkHardeningsClientListByExtendedResourceResponse{RawResponse: resp}
+	result := AdaptiveNetworkHardeningsClientListByExtendedResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdaptiveNetworkHardeningsList); err != nil {
 		return AdaptiveNetworkHardeningsClientListByExtendedResourceResponse{}, err
 	}

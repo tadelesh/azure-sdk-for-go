@@ -34,17 +34,17 @@ type MonitorClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMonitorClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MonitorClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MonitorClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *MonitorClient) listVMHostUpdateCreateRequest(ctx context.Context, 
 
 // listVMHostUpdateHandleResponse handles the ListVMHostUpdate response.
 func (client *MonitorClient) listVMHostUpdateHandleResponse(resp *http.Response) (MonitorClientListVMHostUpdateResponse, error) {
-	result := MonitorClientListVMHostUpdateResponse{RawResponse: resp}
+	result := MonitorClientListVMHostUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VMResourcesListResponse); err != nil {
 		return MonitorClientListVMHostUpdateResponse{}, err
 	}
@@ -150,7 +150,7 @@ func (client *MonitorClient) listVMHostsCreateRequest(ctx context.Context, resou
 
 // listVMHostsHandleResponse handles the ListVMHosts response.
 func (client *MonitorClient) listVMHostsHandleResponse(resp *http.Response) (MonitorClientListVMHostsResponse, error) {
-	result := MonitorClientListVMHostsResponse{RawResponse: resp}
+	result := MonitorClientListVMHostsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VMResourcesListResponse); err != nil {
 		return MonitorClientListVMHostsResponse{}, err
 	}
@@ -205,7 +205,7 @@ func (client *MonitorClient) vmHostPayloadCreateRequest(ctx context.Context, res
 
 // vmHostPayloadHandleResponse handles the VMHostPayload response.
 func (client *MonitorClient) vmHostPayloadHandleResponse(resp *http.Response) (MonitorClientVMHostPayloadResponse, error) {
-	result := MonitorClientVMHostPayloadResponse{RawResponse: resp}
+	result := MonitorClientVMHostPayloadResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VMExtensionPayload); err != nil {
 		return MonitorClientVMHostPayloadResponse{}, err
 	}

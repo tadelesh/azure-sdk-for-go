@@ -34,17 +34,17 @@ type WorkspaceConnectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkspaceConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkspaceConnectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkspaceConnectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *WorkspaceConnectionsClient) createCreateRequest(ctx context.Contex
 
 // createHandleResponse handles the Create response.
 func (client *WorkspaceConnectionsClient) createHandleResponse(resp *http.Response) (WorkspaceConnectionsClientCreateResponse, error) {
-	result := WorkspaceConnectionsClientCreateResponse{RawResponse: resp}
+	result := WorkspaceConnectionsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceConnection); err != nil {
 		return WorkspaceConnectionsClientCreateResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *WorkspaceConnectionsClient) Delete(ctx context.Context, resourceGr
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WorkspaceConnectionsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return WorkspaceConnectionsClientDeleteResponse{RawResponse: resp}, nil
+	return WorkspaceConnectionsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -217,7 +217,7 @@ func (client *WorkspaceConnectionsClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *WorkspaceConnectionsClient) getHandleResponse(resp *http.Response) (WorkspaceConnectionsClientGetResponse, error) {
-	result := WorkspaceConnectionsClientGetResponse{RawResponse: resp}
+	result := WorkspaceConnectionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceConnection); err != nil {
 		return WorkspaceConnectionsClientGetResponse{}, err
 	}
@@ -230,19 +230,13 @@ func (client *WorkspaceConnectionsClient) getHandleResponse(resp *http.Response)
 // workspaceName - Name of Azure Machine Learning workspace.
 // options - WorkspaceConnectionsClientListOptions contains the optional parameters for the WorkspaceConnectionsClient.List
 // method.
-func (client *WorkspaceConnectionsClient) List(ctx context.Context, resourceGroupName string, workspaceName string, options *WorkspaceConnectionsClientListOptions) (WorkspaceConnectionsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, workspaceName, options)
-	if err != nil {
-		return WorkspaceConnectionsClientListResponse{}, err
+func (client *WorkspaceConnectionsClient) List(resourceGroupName string, workspaceName string, options *WorkspaceConnectionsClientListOptions) *WorkspaceConnectionsClientListPager {
+	return &WorkspaceConnectionsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, workspaceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return WorkspaceConnectionsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return WorkspaceConnectionsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -279,7 +273,7 @@ func (client *WorkspaceConnectionsClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *WorkspaceConnectionsClient) listHandleResponse(resp *http.Response) (WorkspaceConnectionsClientListResponse, error) {
-	result := WorkspaceConnectionsClientListResponse{RawResponse: resp}
+	result := WorkspaceConnectionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PaginatedWorkspaceConnectionsList); err != nil {
 		return WorkspaceConnectionsClientListResponse{}, err
 	}

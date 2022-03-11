@@ -43,11 +43,10 @@ func (p *ClientBMSPrepareDataMovePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final ClientBMSPrepareDataMoveResponse will be returned.
 func (p *ClientBMSPrepareDataMovePoller) FinalResponse(ctx context.Context) (ClientBMSPrepareDataMoveResponse, error) {
 	respType := ClientBMSPrepareDataMoveResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClientBMSPrepareDataMoveResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ClientBMSTriggerDataMovePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final ClientBMSTriggerDataMoveResponse will be returned.
 func (p *ClientBMSTriggerDataMovePoller) FinalResponse(ctx context.Context) (ClientBMSTriggerDataMoveResponse, error) {
 	respType := ClientBMSTriggerDataMoveResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClientBMSTriggerDataMoveResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ClientMoveRecoveryPointPoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final ClientMoveRecoveryPointResponse will be returned.
 func (p *ClientMoveRecoveryPointPoller) FinalResponse(ctx context.Context) (ClientMoveRecoveryPointResponse, error) {
 	respType := ClientMoveRecoveryPointResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClientMoveRecoveryPointResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *PrivateEndpointConnectionClientDeletePoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final PrivateEndpointConnectionClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointConnectionClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *PrivateEndpointConnectionClientPutPoller) Poll(ctx context.Context) (*h
 // If the final GET succeeded then the final PrivateEndpointConnectionClientPutResponse will be returned.
 func (p *PrivateEndpointConnectionClientPutPoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionClientPutResponse, error) {
 	respType := PrivateEndpointConnectionClientPutResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnectionResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnectionResource)
 	if err != nil {
 		return PrivateEndpointConnectionClientPutResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *ProtectionPoliciesClientDeletePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final ProtectionPoliciesClientDeleteResponse will be returned.
 func (p *ProtectionPoliciesClientDeletePoller) FinalResponse(ctx context.Context) (ProtectionPoliciesClientDeleteResponse, error) {
 	respType := ProtectionPoliciesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ProtectionPoliciesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *RestoresClientTriggerPoller) Poll(ctx context.Context) (*http.Response,
 // If the final GET succeeded then the final RestoresClientTriggerResponse will be returned.
 func (p *RestoresClientTriggerPoller) FinalResponse(ctx context.Context) (RestoresClientTriggerResponse, error) {
 	respType := RestoresClientTriggerResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return RestoresClientTriggerResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *ValidateOperationClientTriggerPoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final ValidateOperationClientTriggerResponse will be returned.
 func (p *ValidateOperationClientTriggerPoller) FinalResponse(ctx context.Context) (ValidateOperationClientTriggerResponse, error) {
 	respType := ValidateOperationClientTriggerResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ValidateOperationClientTriggerResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

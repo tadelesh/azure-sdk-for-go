@@ -30,16 +30,16 @@ type BaselinesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBaselinesClient(credential azcore.TokenCredential, options *arm.ClientOptions) *BaselinesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BaselinesClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -48,19 +48,13 @@ func NewBaselinesClient(credential azcore.TokenCredential, options *arm.ClientOp
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceURI - The identifier of the resource.
 // options - BaselinesClientListOptions contains the optional parameters for the BaselinesClient.List method.
-func (client *BaselinesClient) List(ctx context.Context, resourceURI string, options *BaselinesClientListOptions) (BaselinesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceURI, options)
-	if err != nil {
-		return BaselinesClientListResponse{}, err
+func (client *BaselinesClient) List(resourceURI string, options *BaselinesClientListOptions) *BaselinesClientListPager {
+	return &BaselinesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceURI, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return BaselinesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return BaselinesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -104,7 +98,7 @@ func (client *BaselinesClient) listCreateRequest(ctx context.Context, resourceUR
 
 // listHandleResponse handles the List response.
 func (client *BaselinesClient) listHandleResponse(resp *http.Response) (BaselinesClientListResponse, error) {
-	result := BaselinesClientListResponse{RawResponse: resp}
+	result := BaselinesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetricBaselinesResponse); err != nil {
 		return BaselinesClientListResponse{}, err
 	}

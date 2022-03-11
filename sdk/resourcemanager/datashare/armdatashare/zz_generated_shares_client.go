@@ -34,17 +34,17 @@ type SharesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSharesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SharesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SharesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *SharesClient) createCreateRequest(ctx context.Context, resourceGro
 
 // createHandleResponse handles the Create response.
 func (client *SharesClient) createHandleResponse(resp *http.Response) (SharesClientCreateResponse, error) {
-	result := SharesClientCreateResponse{RawResponse: resp}
+	result := SharesClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Share); err != nil {
 		return SharesClientCreateResponse{}, err
 	}
@@ -121,9 +121,7 @@ func (client *SharesClient) BeginDelete(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return SharesClientDeletePollerResponse{}, err
 	}
-	result := SharesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SharesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SharesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return SharesClientDeletePollerResponse{}, err
@@ -234,7 +232,7 @@ func (client *SharesClient) getCreateRequest(ctx context.Context, resourceGroupN
 
 // getHandleResponse handles the Get response.
 func (client *SharesClient) getHandleResponse(resp *http.Response) (SharesClientGetResponse, error) {
-	result := SharesClientGetResponse{RawResponse: resp}
+	result := SharesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Share); err != nil {
 		return SharesClientGetResponse{}, err
 	}
@@ -295,7 +293,7 @@ func (client *SharesClient) listByAccountCreateRequest(ctx context.Context, reso
 
 // listByAccountHandleResponse handles the ListByAccount response.
 func (client *SharesClient) listByAccountHandleResponse(resp *http.Response) (SharesClientListByAccountResponse, error) {
-	result := SharesClientListByAccountResponse{RawResponse: resp}
+	result := SharesClientListByAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ShareList); err != nil {
 		return SharesClientListByAccountResponse{}, err
 	}
@@ -363,7 +361,7 @@ func (client *SharesClient) listSynchronizationDetailsCreateRequest(ctx context.
 
 // listSynchronizationDetailsHandleResponse handles the ListSynchronizationDetails response.
 func (client *SharesClient) listSynchronizationDetailsHandleResponse(resp *http.Response) (SharesClientListSynchronizationDetailsResponse, error) {
-	result := SharesClientListSynchronizationDetailsResponse{RawResponse: resp}
+	result := SharesClientListSynchronizationDetailsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SynchronizationDetailsList); err != nil {
 		return SharesClientListSynchronizationDetailsResponse{}, err
 	}
@@ -430,7 +428,7 @@ func (client *SharesClient) listSynchronizationsCreateRequest(ctx context.Contex
 
 // listSynchronizationsHandleResponse handles the ListSynchronizations response.
 func (client *SharesClient) listSynchronizationsHandleResponse(resp *http.Response) (SharesClientListSynchronizationsResponse, error) {
-	result := SharesClientListSynchronizationsResponse{RawResponse: resp}
+	result := SharesClientListSynchronizationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ShareSynchronizationList); err != nil {
 		return SharesClientListSynchronizationsResponse{}, err
 	}

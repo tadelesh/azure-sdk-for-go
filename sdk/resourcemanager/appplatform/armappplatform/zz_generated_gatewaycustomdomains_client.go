@@ -35,17 +35,17 @@ type GatewayCustomDomainsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGatewayCustomDomainsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *GatewayCustomDomainsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GatewayCustomDomainsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -65,9 +65,7 @@ func (client *GatewayCustomDomainsClient) BeginCreateOrUpdate(ctx context.Contex
 	if err != nil {
 		return GatewayCustomDomainsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := GatewayCustomDomainsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := GatewayCustomDomainsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("GatewayCustomDomainsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return GatewayCustomDomainsClientCreateOrUpdatePollerResponse{}, err
@@ -143,9 +141,7 @@ func (client *GatewayCustomDomainsClient) BeginDelete(ctx context.Context, resou
 	if err != nil {
 		return GatewayCustomDomainsClientDeletePollerResponse{}, err
 	}
-	result := GatewayCustomDomainsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := GatewayCustomDomainsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("GatewayCustomDomainsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return GatewayCustomDomainsClientDeletePollerResponse{}, err
@@ -267,7 +263,7 @@ func (client *GatewayCustomDomainsClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *GatewayCustomDomainsClient) getHandleResponse(resp *http.Response) (GatewayCustomDomainsClientGetResponse, error) {
-	result := GatewayCustomDomainsClientGetResponse{RawResponse: resp}
+	result := GatewayCustomDomainsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GatewayCustomDomainResource); err != nil {
 		return GatewayCustomDomainsClientGetResponse{}, err
 	}
@@ -326,7 +322,7 @@ func (client *GatewayCustomDomainsClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *GatewayCustomDomainsClient) listHandleResponse(resp *http.Response) (GatewayCustomDomainsClientListResponse, error) {
-	result := GatewayCustomDomainsClientListResponse{RawResponse: resp}
+	result := GatewayCustomDomainsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GatewayCustomDomainResourceCollection); err != nil {
 		return GatewayCustomDomainsClientListResponse{}, err
 	}

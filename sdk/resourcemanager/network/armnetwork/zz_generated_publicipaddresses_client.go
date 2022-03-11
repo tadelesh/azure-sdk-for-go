@@ -35,17 +35,17 @@ type PublicIPAddressesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPublicIPAddressesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PublicIPAddressesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PublicIPAddressesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *PublicIPAddressesClient) BeginCreateOrUpdate(ctx context.Context, 
 	if err != nil {
 		return PublicIPAddressesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PublicIPAddressesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PublicIPAddressesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PublicIPAddressesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return PublicIPAddressesClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *PublicIPAddressesClient) BeginDelete(ctx context.Context, resource
 	if err != nil {
 		return PublicIPAddressesClientDeletePollerResponse{}, err
 	}
-	result := PublicIPAddressesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PublicIPAddressesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PublicIPAddressesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return PublicIPAddressesClientDeletePollerResponse{}, err
@@ -236,7 +232,7 @@ func (client *PublicIPAddressesClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *PublicIPAddressesClient) getHandleResponse(resp *http.Response) (PublicIPAddressesClientGetResponse, error) {
-	result := PublicIPAddressesClientGetResponse{RawResponse: resp}
+	result := PublicIPAddressesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicIPAddress); err != nil {
 		return PublicIPAddressesClientGetResponse{}, err
 	}
@@ -315,7 +311,7 @@ func (client *PublicIPAddressesClient) getCloudServicePublicIPAddressCreateReque
 
 // getCloudServicePublicIPAddressHandleResponse handles the GetCloudServicePublicIPAddress response.
 func (client *PublicIPAddressesClient) getCloudServicePublicIPAddressHandleResponse(resp *http.Response) (PublicIPAddressesClientGetCloudServicePublicIPAddressResponse, error) {
-	result := PublicIPAddressesClientGetCloudServicePublicIPAddressResponse{RawResponse: resp}
+	result := PublicIPAddressesClientGetCloudServicePublicIPAddressResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicIPAddress); err != nil {
 		return PublicIPAddressesClientGetCloudServicePublicIPAddressResponse{}, err
 	}
@@ -394,7 +390,7 @@ func (client *PublicIPAddressesClient) getVirtualMachineScaleSetPublicIPAddressC
 
 // getVirtualMachineScaleSetPublicIPAddressHandleResponse handles the GetVirtualMachineScaleSetPublicIPAddress response.
 func (client *PublicIPAddressesClient) getVirtualMachineScaleSetPublicIPAddressHandleResponse(resp *http.Response) (PublicIPAddressesClientGetVirtualMachineScaleSetPublicIPAddressResponse, error) {
-	result := PublicIPAddressesClientGetVirtualMachineScaleSetPublicIPAddressResponse{RawResponse: resp}
+	result := PublicIPAddressesClientGetVirtualMachineScaleSetPublicIPAddressResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicIPAddress); err != nil {
 		return PublicIPAddressesClientGetVirtualMachineScaleSetPublicIPAddressResponse{}, err
 	}
@@ -441,7 +437,7 @@ func (client *PublicIPAddressesClient) listCreateRequest(ctx context.Context, re
 
 // listHandleResponse handles the List response.
 func (client *PublicIPAddressesClient) listHandleResponse(resp *http.Response) (PublicIPAddressesClientListResponse, error) {
-	result := PublicIPAddressesClientListResponse{RawResponse: resp}
+	result := PublicIPAddressesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicIPAddressListResult); err != nil {
 		return PublicIPAddressesClientListResponse{}, err
 	}
@@ -484,7 +480,7 @@ func (client *PublicIPAddressesClient) listAllCreateRequest(ctx context.Context,
 
 // listAllHandleResponse handles the ListAll response.
 func (client *PublicIPAddressesClient) listAllHandleResponse(resp *http.Response) (PublicIPAddressesClientListAllResponse, error) {
-	result := PublicIPAddressesClientListAllResponse{RawResponse: resp}
+	result := PublicIPAddressesClientListAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicIPAddressListResult); err != nil {
 		return PublicIPAddressesClientListAllResponse{}, err
 	}
@@ -537,7 +533,7 @@ func (client *PublicIPAddressesClient) listCloudServicePublicIPAddressesCreateRe
 
 // listCloudServicePublicIPAddressesHandleResponse handles the ListCloudServicePublicIPAddresses response.
 func (client *PublicIPAddressesClient) listCloudServicePublicIPAddressesHandleResponse(resp *http.Response) (PublicIPAddressesClientListCloudServicePublicIPAddressesResponse, error) {
-	result := PublicIPAddressesClientListCloudServicePublicIPAddressesResponse{RawResponse: resp}
+	result := PublicIPAddressesClientListCloudServicePublicIPAddressesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicIPAddressListResult); err != nil {
 		return PublicIPAddressesClientListCloudServicePublicIPAddressesResponse{}, err
 	}
@@ -606,7 +602,7 @@ func (client *PublicIPAddressesClient) listCloudServiceRoleInstancePublicIPAddre
 
 // listCloudServiceRoleInstancePublicIPAddressesHandleResponse handles the ListCloudServiceRoleInstancePublicIPAddresses response.
 func (client *PublicIPAddressesClient) listCloudServiceRoleInstancePublicIPAddressesHandleResponse(resp *http.Response) (PublicIPAddressesClientListCloudServiceRoleInstancePublicIPAddressesResponse, error) {
-	result := PublicIPAddressesClientListCloudServiceRoleInstancePublicIPAddressesResponse{RawResponse: resp}
+	result := PublicIPAddressesClientListCloudServiceRoleInstancePublicIPAddressesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicIPAddressListResult); err != nil {
 		return PublicIPAddressesClientListCloudServiceRoleInstancePublicIPAddressesResponse{}, err
 	}
@@ -660,7 +656,7 @@ func (client *PublicIPAddressesClient) listVirtualMachineScaleSetPublicIPAddress
 
 // listVirtualMachineScaleSetPublicIPAddressesHandleResponse handles the ListVirtualMachineScaleSetPublicIPAddresses response.
 func (client *PublicIPAddressesClient) listVirtualMachineScaleSetPublicIPAddressesHandleResponse(resp *http.Response) (PublicIPAddressesClientListVirtualMachineScaleSetPublicIPAddressesResponse, error) {
-	result := PublicIPAddressesClientListVirtualMachineScaleSetPublicIPAddressesResponse{RawResponse: resp}
+	result := PublicIPAddressesClientListVirtualMachineScaleSetPublicIPAddressesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicIPAddressListResult); err != nil {
 		return PublicIPAddressesClientListVirtualMachineScaleSetPublicIPAddressesResponse{}, err
 	}
@@ -729,7 +725,7 @@ func (client *PublicIPAddressesClient) listVirtualMachineScaleSetVMPublicIPAddre
 
 // listVirtualMachineScaleSetVMPublicIPAddressesHandleResponse handles the ListVirtualMachineScaleSetVMPublicIPAddresses response.
 func (client *PublicIPAddressesClient) listVirtualMachineScaleSetVMPublicIPAddressesHandleResponse(resp *http.Response) (PublicIPAddressesClientListVirtualMachineScaleSetVMPublicIPAddressesResponse, error) {
-	result := PublicIPAddressesClientListVirtualMachineScaleSetVMPublicIPAddressesResponse{RawResponse: resp}
+	result := PublicIPAddressesClientListVirtualMachineScaleSetVMPublicIPAddressesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicIPAddressListResult); err != nil {
 		return PublicIPAddressesClientListVirtualMachineScaleSetVMPublicIPAddressesResponse{}, err
 	}
@@ -786,7 +782,7 @@ func (client *PublicIPAddressesClient) updateTagsCreateRequest(ctx context.Conte
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *PublicIPAddressesClient) updateTagsHandleResponse(resp *http.Response) (PublicIPAddressesClientUpdateTagsResponse, error) {
-	result := PublicIPAddressesClientUpdateTagsResponse{RawResponse: resp}
+	result := PublicIPAddressesClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicIPAddress); err != nil {
 		return PublicIPAddressesClientUpdateTagsResponse{}, err
 	}

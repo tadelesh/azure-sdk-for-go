@@ -1,5 +1,152 @@
 # Release History
 
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ClientListByResourceGroupResponse, error)`
+- Function `*PrivateEndpointConnectionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateEndpointConnectionsClientListResponse, error)`
+- Function `*HubsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(HubsClientListResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*PrivateLinkResourcesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateLinkResourcesClientListResponse, error)`
+- Function `*ClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ClientListBySubscriptionResponse, error)`
+- Function `*UsagesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(UsagesClientListResponse, error)`
+- Function `*SharedPrivateLinkResourcesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SharedPrivateLinkResourcesClientListResponse, error)`
+- Function `*SharedPrivateLinkResourcesClientListPager.Err` has been removed
+- Function `*SharedPrivateLinkResourcesClientListPager.PageResponse` has been removed
+- Function `*PrivateLinkResourcesClientListPager.PageResponse` has been removed
+- Function `*UsagesClientListPager.PageResponse` has been removed
+- Function `*PrivateEndpointConnectionsClientListPager.Err` has been removed
+- Function `*ClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*PrivateLinkResourcesClientListPager.Err` has been removed
+- Function `*HubsClientListPager.PageResponse` has been removed
+- Function `*ClientListByResourceGroupPager.Err` has been removed
+- Function `*HubsClientListPager.Err` has been removed
+- Function `*PrivateEndpointConnectionsClientListPager.PageResponse` has been removed
+- Function `*ClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*UsagesClientListPager.Err` has been removed
+- Function `*ClientListBySubscriptionPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Struct `ClientCheckNameAvailabilityResult` has been removed
+- Struct `ClientCreateOrUpdateResult` has been removed
+- Struct `ClientGetResult` has been removed
+- Struct `ClientListByResourceGroupResult` has been removed
+- Struct `ClientListBySubscriptionResult` has been removed
+- Struct `ClientListKeysResult` has been removed
+- Struct `ClientListSKUsResult` has been removed
+- Struct `ClientRegenerateKeyResult` has been removed
+- Struct `ClientUpdateResult` has been removed
+- Struct `HubsClientCreateOrUpdateResult` has been removed
+- Struct `HubsClientGetResult` has been removed
+- Struct `HubsClientListResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientUpdateResult` has been removed
+- Struct `PrivateLinkResourcesClientListResult` has been removed
+- Struct `SharedPrivateLinkResourcesClientCreateOrUpdateResult` has been removed
+- Struct `SharedPrivateLinkResourcesClientGetResult` has been removed
+- Struct `SharedPrivateLinkResourcesClientListResult` has been removed
+- Struct `UsagesClientListResult` has been removed
+- Field `RawResponse` of struct `HubsClientCreateOrUpdatePollerResponse` has been removed
+- Field `PrivateLinkResourcesClientListResult` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `ClientUpdateResult` of struct `ClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientCreateOrUpdatePollerResponse` has been removed
+- Field `HubsClientListResult` of struct `HubsClientListResponse` has been removed
+- Field `RawResponse` of struct `HubsClientListResponse` has been removed
+- Field `RawResponse` of struct `ClientDeletePollerResponse` has been removed
+- Field `ClientListByResourceGroupResult` of struct `ClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ClientListByResourceGroupResponse` has been removed
+- Field `ClientGetResult` of struct `ClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClientRestartResponse` has been removed
+- Field `PrivateEndpointConnectionsClientUpdateResult` of struct `PrivateEndpointConnectionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ClientRegenerateKeyPollerResponse` has been removed
+- Field `RawResponse` of struct `SharedPrivateLinkResourcesClientDeletePollerResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ClientRestartPollerResponse` has been removed
+- Field `ClientListBySubscriptionResult` of struct `ClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ClientListBySubscriptionResponse` has been removed
+- Field `ClientRegenerateKeyResult` of struct `ClientRegenerateKeyResponse` has been removed
+- Field `RawResponse` of struct `ClientRegenerateKeyResponse` has been removed
+- Field `UsagesClientListResult` of struct `UsagesClientListResponse` has been removed
+- Field `RawResponse` of struct `UsagesClientListResponse` has been removed
+- Field `ClientListKeysResult` of struct `ClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `ClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeletePollerResponse` has been removed
+- Field `SharedPrivateLinkResourcesClientListResult` of struct `SharedPrivateLinkResourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `SharedPrivateLinkResourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse` has been removed
+- Field `SharedPrivateLinkResourcesClientCreateOrUpdateResult` of struct `SharedPrivateLinkResourcesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SharedPrivateLinkResourcesClientCreateOrUpdateResponse` has been removed
+- Field `ClientCreateOrUpdateResult` of struct `ClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientCreateOrUpdateResponse` has been removed
+- Field `HubsClientCreateOrUpdateResult` of struct `HubsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `HubsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientDeleteResponse` has been removed
+- Field `SharedPrivateLinkResourcesClientGetResult` of struct `SharedPrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `SharedPrivateLinkResourcesClientGetResponse` has been removed
+- Field `ClientCheckNameAvailabilityResult` of struct `ClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ClientCheckNameAvailabilityResponse` has been removed
+- Field `HubsClientGetResult` of struct `HubsClientGetResponse` has been removed
+- Field `RawResponse` of struct `HubsClientGetResponse` has been removed
+- Field `ClientListSKUsResult` of struct `ClientListSKUsResponse` has been removed
+- Field `RawResponse` of struct `ClientListSKUsResponse` has been removed
+- Field `RawResponse` of struct `HubsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `HubsClientDeletePollerResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListResult` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `SharedPrivateLinkResourcesClientDeleteResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*HubsClientListPager.More() bool`
+- New function `*ClientListBySubscriptionPager.More() bool`
+- New function `*UsagesClientListPager.More() bool`
+- New function `*PrivateLinkResourcesClientListPager.More() bool`
+- New function `*SharedPrivateLinkResourcesClientListPager.More() bool`
+- New function `*PrivateEndpointConnectionsClientListPager.More() bool`
+- New function `*ClientListByResourceGroupPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `SharedPrivateLinkResourceList` in struct `SharedPrivateLinkResourcesClientListResponse`
+- New anonymous field `OperationList` in struct `OperationsClientListResponse`
+- New anonymous field `ResourceInfo` in struct `ClientGetResponse`
+- New anonymous field `SharedPrivateLinkResource` in struct `SharedPrivateLinkResourcesClientCreateOrUpdateResponse`
+- New anonymous field `ResourceInfoList` in struct `ClientListByResourceGroupResponse`
+- New anonymous field `PrivateEndpointConnectionList` in struct `PrivateEndpointConnectionsClientListResponse`
+- New anonymous field `SignalRServiceUsageList` in struct `UsagesClientListResponse`
+- New anonymous field `HubList` in struct `HubsClientListResponse`
+- New anonymous field `ResourceInfo` in struct `ClientCreateOrUpdateResponse`
+- New anonymous field `ResourceInfoList` in struct `ClientListBySubscriptionResponse`
+- New anonymous field `Hub` in struct `HubsClientGetResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientUpdateResponse`
+- New anonymous field `ResourceInfo` in struct `ClientUpdateResponse`
+- New anonymous field `Keys` in struct `ClientListKeysResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `PrivateLinkResourceList` in struct `PrivateLinkResourcesClientListResponse`
+- New anonymous field `SKUList` in struct `ClientListSKUsResponse`
+- New anonymous field `NameAvailability` in struct `ClientCheckNameAvailabilityResponse`
+- New anonymous field `SharedPrivateLinkResource` in struct `SharedPrivateLinkResourcesClientGetResponse`
+- New anonymous field `Hub` in struct `HubsClientCreateOrUpdateResponse`
+- New anonymous field `Keys` in struct `ClientRegenerateKeyResponse`
+
+
+## 0.2.1 (2022-03-10)
+### Other Changes
+
+
 ## 0.2.0 (2022-01-21)
 ### Breaking Changes
 

@@ -36,17 +36,17 @@ type UserSubscriptionClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewUserSubscriptionClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *UserSubscriptionClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &UserSubscriptionClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *UserSubscriptionClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *UserSubscriptionClient) getHandleResponse(resp *http.Response) (UserSubscriptionClientGetResponse, error) {
-	result := UserSubscriptionClientGetResponse{RawResponse: resp}
+	result := UserSubscriptionClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -178,7 +178,7 @@ func (client *UserSubscriptionClient) listCreateRequest(ctx context.Context, res
 
 // listHandleResponse handles the List response.
 func (client *UserSubscriptionClient) listHandleResponse(resp *http.Response) (UserSubscriptionClientListResponse, error) {
-	result := UserSubscriptionClientListResponse{RawResponse: resp}
+	result := UserSubscriptionClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SubscriptionCollection); err != nil {
 		return UserSubscriptionClientListResponse{}, err
 	}

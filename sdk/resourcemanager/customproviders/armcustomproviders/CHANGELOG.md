@@ -1,5 +1,85 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*CustomResourceProviderClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(CustomResourceProviderClientListByResourceGroupResponse, error)`
+- Function `*CustomResourceProviderClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(CustomResourceProviderClientListBySubscriptionResponse, error)`
+- Function `*AssociationsClientListAllPager.NextPage` return value(s) have been changed from `(bool)` to `(AssociationsClientListAllResponse, error)`
+- Function `*CustomResourceProviderClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*AssociationsClientListAllPager.Err` has been removed
+- Function `*CustomResourceProviderClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*CustomResourceProviderClientListByResourceGroupPager.Err` has been removed
+- Function `*CustomResourceProviderClientListBySubscriptionPager.Err` has been removed
+- Function `*AssociationsClientListAllPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Struct `AssociationsClientCreateOrUpdateResult` has been removed
+- Struct `AssociationsClientGetResult` has been removed
+- Struct `AssociationsClientListAllResult` has been removed
+- Struct `CustomResourceProviderClientCreateOrUpdateResult` has been removed
+- Struct `CustomResourceProviderClientGetResult` has been removed
+- Struct `CustomResourceProviderClientListByResourceGroupResult` has been removed
+- Struct `CustomResourceProviderClientListBySubscriptionResult` has been removed
+- Struct `CustomResourceProviderClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `CustomResourceProviderClientListBySubscriptionResult` of struct `CustomResourceProviderClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `CustomResourceProviderClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `CustomResourceProviderClientDeletePollerResponse` has been removed
+- Field `CustomResourceProviderClientCreateOrUpdateResult` of struct `CustomResourceProviderClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `CustomResourceProviderClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AssociationsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `AssociationsClientDeletePollerResponse` has been removed
+- Field `AssociationsClientCreateOrUpdateResult` of struct `AssociationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AssociationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `CustomResourceProviderClientDeleteResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `CustomResourceProviderClientListByResourceGroupResult` of struct `CustomResourceProviderClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `CustomResourceProviderClientListByResourceGroupResponse` has been removed
+- Field `AssociationsClientGetResult` of struct `AssociationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AssociationsClientGetResponse` has been removed
+- Field `AssociationsClientListAllResult` of struct `AssociationsClientListAllResponse` has been removed
+- Field `RawResponse` of struct `AssociationsClientListAllResponse` has been removed
+- Field `CustomResourceProviderClientUpdateResult` of struct `CustomResourceProviderClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `CustomResourceProviderClientUpdateResponse` has been removed
+- Field `CustomResourceProviderClientGetResult` of struct `CustomResourceProviderClientGetResponse` has been removed
+- Field `RawResponse` of struct `CustomResourceProviderClientGetResponse` has been removed
+- Field `RawResponse` of struct `AssociationsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `CustomResourceProviderClientCreateOrUpdatePollerResponse` has been removed
+
+### Features Added
+
+- New function `*AssociationsClientListAllPager.More() bool`
+- New function `ErrorDefinition.MarshalJSON() ([]byte, error)`
+- New function `*CustomResourceProviderClientListByResourceGroupPager.More() bool`
+- New function `*CustomResourceProviderClientListBySubscriptionPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New struct `ErrorDefinition`
+- New struct `ErrorResponse`
+- New anonymous field `CustomRPManifest` in struct `CustomResourceProviderClientCreateOrUpdateResponse`
+- New anonymous field `Association` in struct `AssociationsClientCreateOrUpdateResponse`
+- New anonymous field `CustomRPManifest` in struct `CustomResourceProviderClientUpdateResponse`
+- New anonymous field `AssociationsList` in struct `AssociationsClientListAllResponse`
+- New anonymous field `ResourceProviderOperationList` in struct `OperationsClientListResponse`
+- New anonymous field `ListByCustomRPManifest` in struct `CustomResourceProviderClientListByResourceGroupResponse`
+- New anonymous field `CustomRPManifest` in struct `CustomResourceProviderClientGetResponse`
+- New anonymous field `ListByCustomRPManifest` in struct `CustomResourceProviderClientListBySubscriptionResponse`
+- New anonymous field `Association` in struct `AssociationsClientGetResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDefinition.MarshalJSON` has been removed
+- Struct `ErrorDefinition` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

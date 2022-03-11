@@ -34,17 +34,17 @@ type TriggersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTriggersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TriggersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TriggersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *TriggersClient) BeginCreate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return TriggersClientCreatePollerResponse{}, err
 	}
-	result := TriggersClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := TriggersClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("TriggersClient.Create", "", resp, client.pl)
 	if err != nil {
 		return TriggersClientCreatePollerResponse{}, err
@@ -138,9 +136,7 @@ func (client *TriggersClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return TriggersClientDeletePollerResponse{}, err
 	}
-	result := TriggersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := TriggersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("TriggersClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return TriggersClientDeletePollerResponse{}, err
@@ -260,7 +256,7 @@ func (client *TriggersClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *TriggersClient) getHandleResponse(resp *http.Response) (TriggersClientGetResponse, error) {
-	result := TriggersClientGetResponse{RawResponse: resp}
+	result := TriggersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return TriggersClientGetResponse{}, err
 	}
@@ -321,7 +317,7 @@ func (client *TriggersClient) listByShareSubscriptionCreateRequest(ctx context.C
 
 // listByShareSubscriptionHandleResponse handles the ListByShareSubscription response.
 func (client *TriggersClient) listByShareSubscriptionHandleResponse(resp *http.Response) (TriggersClientListByShareSubscriptionResponse, error) {
-	result := TriggersClientListByShareSubscriptionResponse{RawResponse: resp}
+	result := TriggersClientListByShareSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggerList); err != nil {
 		return TriggersClientListByShareSubscriptionResponse{}, err
 	}

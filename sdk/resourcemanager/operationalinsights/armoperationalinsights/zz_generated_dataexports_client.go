@@ -34,17 +34,17 @@ type DataExportsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataExportsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataExportsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataExportsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *DataExportsClient) createOrUpdateCreateRequest(ctx context.Context
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *DataExportsClient) createOrUpdateHandleResponse(resp *http.Response) (DataExportsClientCreateOrUpdateResponse, error) {
-	result := DataExportsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := DataExportsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataExport); err != nil {
 		return DataExportsClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *DataExportsClient) Delete(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNotFound) {
 		return DataExportsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DataExportsClientDeleteResponse{RawResponse: resp}, nil
+	return DataExportsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *DataExportsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *DataExportsClient) getHandleResponse(resp *http.Response) (DataExportsClientGetResponse, error) {
-	result := DataExportsClientGetResponse{RawResponse: resp}
+	result := DataExportsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataExport); err != nil {
 		return DataExportsClientGetResponse{}, err
 	}
@@ -228,19 +228,13 @@ func (client *DataExportsClient) getHandleResponse(resp *http.Response) (DataExp
 // workspaceName - The name of the workspace.
 // options - DataExportsClientListByWorkspaceOptions contains the optional parameters for the DataExportsClient.ListByWorkspace
 // method.
-func (client *DataExportsClient) ListByWorkspace(ctx context.Context, resourceGroupName string, workspaceName string, options *DataExportsClientListByWorkspaceOptions) (DataExportsClientListByWorkspaceResponse, error) {
-	req, err := client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
-	if err != nil {
-		return DataExportsClientListByWorkspaceResponse{}, err
+func (client *DataExportsClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *DataExportsClientListByWorkspaceOptions) *DataExportsClientListByWorkspacePager {
+	return &DataExportsClientListByWorkspacePager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DataExportsClientListByWorkspaceResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DataExportsClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByWorkspaceHandleResponse(resp)
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.
@@ -271,7 +265,7 @@ func (client *DataExportsClient) listByWorkspaceCreateRequest(ctx context.Contex
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *DataExportsClient) listByWorkspaceHandleResponse(resp *http.Response) (DataExportsClientListByWorkspaceResponse, error) {
-	result := DataExportsClientListByWorkspaceResponse{RawResponse: resp}
+	result := DataExportsClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataExportListResult); err != nil {
 		return DataExportsClientListByWorkspaceResponse{}, err
 	}

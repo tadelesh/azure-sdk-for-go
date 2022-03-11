@@ -1,5 +1,112 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*PrivateZonesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateZonesClientListResponse, error)`
+- Function `*RecordSetsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(RecordSetsClientListResponse, error)`
+- Function `*RecordSetsClientListByTypePager.NextPage` return value(s) have been changed from `(bool)` to `(RecordSetsClientListByTypeResponse, error)`
+- Function `*VirtualNetworkLinksClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualNetworkLinksClientListResponse, error)`
+- Function `*PrivateZonesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateZonesClientListByResourceGroupResponse, error)`
+- Function `*PrivateZonesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*VirtualNetworkLinksClientListPager.PageResponse` has been removed
+- Function `*RecordSetsClientListByTypePager.PageResponse` has been removed
+- Function `*PrivateZonesClientListPager.PageResponse` has been removed
+- Function `*PrivateZonesClientListPager.Err` has been removed
+- Function `*PrivateZonesClientListByResourceGroupPager.Err` has been removed
+- Function `*VirtualNetworkLinksClientListPager.Err` has been removed
+- Function `*RecordSetsClientListByTypePager.Err` has been removed
+- Function `*RecordSetsClientListPager.Err` has been removed
+- Function `*RecordSetsClientListPager.PageResponse` has been removed
+- Struct `PrivateZonesClientCreateOrUpdateResult` has been removed
+- Struct `PrivateZonesClientGetResult` has been removed
+- Struct `PrivateZonesClientListByResourceGroupResult` has been removed
+- Struct `PrivateZonesClientListResult` has been removed
+- Struct `PrivateZonesClientUpdateResult` has been removed
+- Struct `RecordSetsClientCreateOrUpdateResult` has been removed
+- Struct `RecordSetsClientGetResult` has been removed
+- Struct `RecordSetsClientListByTypeResult` has been removed
+- Struct `RecordSetsClientListResult` has been removed
+- Struct `RecordSetsClientUpdateResult` has been removed
+- Struct `VirtualNetworkLinksClientCreateOrUpdateResult` has been removed
+- Struct `VirtualNetworkLinksClientGetResult` has been removed
+- Struct `VirtualNetworkLinksClientListResult` has been removed
+- Struct `VirtualNetworkLinksClientUpdateResult` has been removed
+- Field `RecordSetsClientCreateOrUpdateResult` of struct `RecordSetsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `RecordSetsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateZonesClientDeleteResponse` has been removed
+- Field `PrivateZonesClientUpdateResult` of struct `PrivateZonesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateZonesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateZonesClientDeletePollerResponse` has been removed
+- Field `VirtualNetworkLinksClientGetResult` of struct `VirtualNetworkLinksClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualNetworkLinksClientGetResponse` has been removed
+- Field `RecordSetsClientUpdateResult` of struct `RecordSetsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `RecordSetsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualNetworkLinksClientDeleteResponse` has been removed
+- Field `PrivateZonesClientCreateOrUpdateResult` of struct `PrivateZonesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateZonesClientCreateOrUpdateResponse` has been removed
+- Field `RecordSetsClientListByTypeResult` of struct `RecordSetsClientListByTypeResponse` has been removed
+- Field `RawResponse` of struct `RecordSetsClientListByTypeResponse` has been removed
+- Field `RawResponse` of struct `PrivateZonesClientUpdatePollerResponse` has been removed
+- Field `RecordSetsClientListResult` of struct `RecordSetsClientListResponse` has been removed
+- Field `RawResponse` of struct `RecordSetsClientListResponse` has been removed
+- Field `PrivateZonesClientGetResult` of struct `PrivateZonesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateZonesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateZonesClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualNetworkLinksClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualNetworkLinksClientDeletePollerResponse` has been removed
+- Field `VirtualNetworkLinksClientCreateOrUpdateResult` of struct `VirtualNetworkLinksClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualNetworkLinksClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualNetworkLinksClientCreateOrUpdatePollerResponse` has been removed
+- Field `RecordSetsClientGetResult` of struct `RecordSetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `RecordSetsClientGetResponse` has been removed
+- Field `PrivateZonesClientListByResourceGroupResult` of struct `PrivateZonesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `PrivateZonesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `RecordSetsClientDeleteResponse` has been removed
+- Field `VirtualNetworkLinksClientUpdateResult` of struct `VirtualNetworkLinksClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualNetworkLinksClientUpdateResponse` has been removed
+- Field `VirtualNetworkLinksClientListResult` of struct `VirtualNetworkLinksClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualNetworkLinksClientListResponse` has been removed
+- Field `PrivateZonesClientListResult` of struct `PrivateZonesClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateZonesClientListResponse` has been removed
+
+### Features Added
+
+- New function `*RecordSetsClientListByTypePager.More() bool`
+- New function `*PrivateZonesClientListPager.More() bool`
+- New function `*PrivateZonesClientListByResourceGroupPager.More() bool`
+- New function `*VirtualNetworkLinksClientListPager.More() bool`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*RecordSetsClientListPager.More() bool`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New anonymous field `RecordSet` in struct `RecordSetsClientUpdateResponse`
+- New anonymous field `RecordSetListResult` in struct `RecordSetsClientListByTypeResponse`
+- New anonymous field `RecordSet` in struct `RecordSetsClientCreateOrUpdateResponse`
+- New anonymous field `PrivateZone` in struct `PrivateZonesClientGetResponse`
+- New anonymous field `PrivateZone` in struct `PrivateZonesClientUpdateResponse`
+- New anonymous field `PrivateZoneListResult` in struct `PrivateZonesClientListByResourceGroupResponse`
+- New anonymous field `RecordSetListResult` in struct `RecordSetsClientListResponse`
+- New anonymous field `PrivateZone` in struct `PrivateZonesClientCreateOrUpdateResponse`
+- New anonymous field `VirtualNetworkLink` in struct `VirtualNetworkLinksClientGetResponse`
+- New anonymous field `PrivateZoneListResult` in struct `PrivateZonesClientListResponse`
+- New anonymous field `VirtualNetworkLink` in struct `VirtualNetworkLinksClientUpdateResponse`
+- New anonymous field `VirtualNetworkLinkListResult` in struct `VirtualNetworkLinksClientListResponse`
+- New anonymous field `RecordSet` in struct `RecordSetsClientGetResponse`
+- New anonymous field `VirtualNetworkLink` in struct `VirtualNetworkLinksClientCreateOrUpdateResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

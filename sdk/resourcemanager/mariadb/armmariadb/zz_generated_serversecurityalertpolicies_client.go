@@ -34,17 +34,17 @@ type ServerSecurityAlertPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServerSecurityAlertPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServerSecurityAlertPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServerSecurityAlertPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *ServerSecurityAlertPoliciesClient) BeginCreateOrUpdate(ctx context
 	if err != nil {
 		return ServerSecurityAlertPoliciesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ServerSecurityAlertPoliciesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerSecurityAlertPoliciesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerSecurityAlertPoliciesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ServerSecurityAlertPoliciesClientCreateOrUpdatePollerResponse{}, err
@@ -176,7 +174,7 @@ func (client *ServerSecurityAlertPoliciesClient) getCreateRequest(ctx context.Co
 
 // getHandleResponse handles the Get response.
 func (client *ServerSecurityAlertPoliciesClient) getHandleResponse(resp *http.Response) (ServerSecurityAlertPoliciesClientGetResponse, error) {
-	result := ServerSecurityAlertPoliciesClientGetResponse{RawResponse: resp}
+	result := ServerSecurityAlertPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerSecurityAlertPolicy); err != nil {
 		return ServerSecurityAlertPoliciesClientGetResponse{}, err
 	}
@@ -229,7 +227,7 @@ func (client *ServerSecurityAlertPoliciesClient) listByServerCreateRequest(ctx c
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *ServerSecurityAlertPoliciesClient) listByServerHandleResponse(resp *http.Response) (ServerSecurityAlertPoliciesClientListByServerResponse, error) {
-	result := ServerSecurityAlertPoliciesClientListByServerResponse{RawResponse: resp}
+	result := ServerSecurityAlertPoliciesClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerSecurityAlertPolicyListResult); err != nil {
 		return ServerSecurityAlertPoliciesClientListByServerResponse{}, err
 	}

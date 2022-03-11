@@ -34,17 +34,17 @@ type VirtualNetworkRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualNetworkRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualNetworkRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualNetworkRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *VirtualNetworkRulesClient) BeginCreateOrUpdate(ctx context.Context
 	if err != nil {
 		return VirtualNetworkRulesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VirtualNetworkRulesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualNetworkRulesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualNetworkRulesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return VirtualNetworkRulesClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *VirtualNetworkRulesClient) BeginDelete(ctx context.Context, resour
 	if err != nil {
 		return VirtualNetworkRulesClientDeletePollerResponse{}, err
 	}
-	result := VirtualNetworkRulesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualNetworkRulesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualNetworkRulesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return VirtualNetworkRulesClientDeletePollerResponse{}, err
@@ -246,7 +242,7 @@ func (client *VirtualNetworkRulesClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *VirtualNetworkRulesClient) getHandleResponse(resp *http.Response) (VirtualNetworkRulesClientGetResponse, error) {
-	result := VirtualNetworkRulesClientGetResponse{RawResponse: resp}
+	result := VirtualNetworkRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkRule); err != nil {
 		return VirtualNetworkRulesClientGetResponse{}, err
 	}
@@ -299,7 +295,7 @@ func (client *VirtualNetworkRulesClient) listByServerCreateRequest(ctx context.C
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *VirtualNetworkRulesClient) listByServerHandleResponse(resp *http.Response) (VirtualNetworkRulesClientListByServerResponse, error) {
-	result := VirtualNetworkRulesClientListByServerResponse{RawResponse: resp}
+	result := VirtualNetworkRulesClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkRuleListResult); err != nil {
 		return VirtualNetworkRulesClientListByServerResponse{}, err
 	}

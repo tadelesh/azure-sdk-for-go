@@ -35,17 +35,17 @@ type SolutionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSolutionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SolutionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SolutionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *SolutionsClient) BeginCreateOrUpdate(ctx context.Context, resource
 	if err != nil {
 		return SolutionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := SolutionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SolutionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SolutionsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return SolutionsClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *SolutionsClient) BeginDelete(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return SolutionsClientDeletePollerResponse{}, err
 	}
-	result := SolutionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SolutionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SolutionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return SolutionsClientDeletePollerResponse{}, err
@@ -232,7 +228,7 @@ func (client *SolutionsClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *SolutionsClient) getHandleResponse(resp *http.Response) (SolutionsClientGetResponse, error) {
-	result := SolutionsClientGetResponse{RawResponse: resp}
+	result := SolutionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Solution); err != nil {
 		return SolutionsClientGetResponse{}, err
 	}
@@ -283,7 +279,7 @@ func (client *SolutionsClient) listByResourceGroupCreateRequest(ctx context.Cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *SolutionsClient) listByResourceGroupHandleResponse(resp *http.Response) (SolutionsClientListByResourceGroupResponse, error) {
-	result := SolutionsClientListByResourceGroupResponse{RawResponse: resp}
+	result := SolutionsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SolutionPropertiesList); err != nil {
 		return SolutionsClientListByResourceGroupResponse{}, err
 	}
@@ -329,7 +325,7 @@ func (client *SolutionsClient) listBySubscriptionCreateRequest(ctx context.Conte
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *SolutionsClient) listBySubscriptionHandleResponse(resp *http.Response) (SolutionsClientListBySubscriptionResponse, error) {
-	result := SolutionsClientListBySubscriptionResponse{RawResponse: resp}
+	result := SolutionsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SolutionPropertiesList); err != nil {
 		return SolutionsClientListBySubscriptionResponse{}, err
 	}
@@ -347,9 +343,7 @@ func (client *SolutionsClient) BeginUpdate(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return SolutionsClientUpdatePollerResponse{}, err
 	}
-	result := SolutionsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SolutionsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SolutionsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return SolutionsClientUpdatePollerResponse{}, err

@@ -11,7 +11,6 @@ package armhybriddatamanager
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
@@ -19,9 +18,6 @@ import (
 type DataManagersClientCreatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *DataManagersClientCreatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -29,11 +25,10 @@ type DataManagersClientCreatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l DataManagersClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DataManagersClientCreateResponse, error) {
 	respType := DataManagersClientCreateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DataManager)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DataManager)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -46,24 +41,16 @@ func (l *DataManagersClientCreatePollerResponse) Resume(ctx context.Context, cli
 	poller := &DataManagersClientCreatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // DataManagersClientCreateResponse contains the response from method DataManagersClient.Create.
 type DataManagersClientCreateResponse struct {
-	DataManagersClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DataManagersClientCreateResult contains the result from method DataManagersClient.Create.
-type DataManagersClientCreateResult struct {
 	DataManager
 }
 
@@ -71,9 +58,6 @@ type DataManagersClientCreateResult struct {
 type DataManagersClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *DataManagersClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -81,11 +65,10 @@ type DataManagersClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l DataManagersClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DataManagersClientDeleteResponse, error) {
 	respType := DataManagersClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -98,54 +81,31 @@ func (l *DataManagersClientDeletePollerResponse) Resume(ctx context.Context, cli
 	poller := &DataManagersClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // DataManagersClientDeleteResponse contains the response from method DataManagersClient.Delete.
 type DataManagersClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // DataManagersClientGetResponse contains the response from method DataManagersClient.Get.
 type DataManagersClientGetResponse struct {
-	DataManagersClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DataManagersClientGetResult contains the result from method DataManagersClient.Get.
-type DataManagersClientGetResult struct {
 	DataManager
 }
 
 // DataManagersClientListByResourceGroupResponse contains the response from method DataManagersClient.ListByResourceGroup.
 type DataManagersClientListByResourceGroupResponse struct {
-	DataManagersClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DataManagersClientListByResourceGroupResult contains the result from method DataManagersClient.ListByResourceGroup.
-type DataManagersClientListByResourceGroupResult struct {
 	DataManagerList
 }
 
 // DataManagersClientListResponse contains the response from method DataManagersClient.List.
 type DataManagersClientListResponse struct {
-	DataManagersClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DataManagersClientListResult contains the result from method DataManagersClient.List.
-type DataManagersClientListResult struct {
 	DataManagerList
 }
 
@@ -153,9 +113,6 @@ type DataManagersClientListResult struct {
 type DataManagersClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *DataManagersClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -163,11 +120,10 @@ type DataManagersClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l DataManagersClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DataManagersClientUpdateResponse, error) {
 	respType := DataManagersClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DataManager)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DataManager)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -180,72 +136,36 @@ func (l *DataManagersClientUpdatePollerResponse) Resume(ctx context.Context, cli
 	poller := &DataManagersClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // DataManagersClientUpdateResponse contains the response from method DataManagersClient.Update.
 type DataManagersClientUpdateResponse struct {
-	DataManagersClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DataManagersClientUpdateResult contains the result from method DataManagersClient.Update.
-type DataManagersClientUpdateResult struct {
 	DataManager
 }
 
 // DataServicesClientGetResponse contains the response from method DataServicesClient.Get.
 type DataServicesClientGetResponse struct {
-	DataServicesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DataServicesClientGetResult contains the result from method DataServicesClient.Get.
-type DataServicesClientGetResult struct {
 	DataService
 }
 
 // DataServicesClientListByDataManagerResponse contains the response from method DataServicesClient.ListByDataManager.
 type DataServicesClientListByDataManagerResponse struct {
-	DataServicesClientListByDataManagerResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DataServicesClientListByDataManagerResult contains the result from method DataServicesClient.ListByDataManager.
-type DataServicesClientListByDataManagerResult struct {
 	DataServiceList
 }
 
 // DataStoreTypesClientGetResponse contains the response from method DataStoreTypesClient.Get.
 type DataStoreTypesClientGetResponse struct {
-	DataStoreTypesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DataStoreTypesClientGetResult contains the result from method DataStoreTypesClient.Get.
-type DataStoreTypesClientGetResult struct {
 	DataStoreType
 }
 
 // DataStoreTypesClientListByDataManagerResponse contains the response from method DataStoreTypesClient.ListByDataManager.
 type DataStoreTypesClientListByDataManagerResponse struct {
-	DataStoreTypesClientListByDataManagerResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DataStoreTypesClientListByDataManagerResult contains the result from method DataStoreTypesClient.ListByDataManager.
-type DataStoreTypesClientListByDataManagerResult struct {
 	DataStoreTypeList
 }
 
@@ -253,9 +173,6 @@ type DataStoreTypesClientListByDataManagerResult struct {
 type DataStoresClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *DataStoresClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -263,11 +180,10 @@ type DataStoresClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l DataStoresClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DataStoresClientCreateOrUpdateResponse, error) {
 	respType := DataStoresClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DataStore)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DataStore)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -280,24 +196,16 @@ func (l *DataStoresClientCreateOrUpdatePollerResponse) Resume(ctx context.Contex
 	poller := &DataStoresClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // DataStoresClientCreateOrUpdateResponse contains the response from method DataStoresClient.CreateOrUpdate.
 type DataStoresClientCreateOrUpdateResponse struct {
-	DataStoresClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DataStoresClientCreateOrUpdateResult contains the result from method DataStoresClient.CreateOrUpdate.
-type DataStoresClientCreateOrUpdateResult struct {
 	DataStore
 }
 
@@ -305,9 +213,6 @@ type DataStoresClientCreateOrUpdateResult struct {
 type DataStoresClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *DataStoresClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -315,11 +220,10 @@ type DataStoresClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l DataStoresClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DataStoresClientDeleteResponse, error) {
 	respType := DataStoresClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -332,42 +236,26 @@ func (l *DataStoresClientDeletePollerResponse) Resume(ctx context.Context, clien
 	poller := &DataStoresClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // DataStoresClientDeleteResponse contains the response from method DataStoresClient.Delete.
 type DataStoresClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // DataStoresClientGetResponse contains the response from method DataStoresClient.Get.
 type DataStoresClientGetResponse struct {
-	DataStoresClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DataStoresClientGetResult contains the result from method DataStoresClient.Get.
-type DataStoresClientGetResult struct {
 	DataStore
 }
 
 // DataStoresClientListByDataManagerResponse contains the response from method DataStoresClient.ListByDataManager.
 type DataStoresClientListByDataManagerResponse struct {
-	DataStoresClientListByDataManagerResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DataStoresClientListByDataManagerResult contains the result from method DataStoresClient.ListByDataManager.
-type DataStoresClientListByDataManagerResult struct {
 	DataStoreList
 }
 
@@ -375,9 +263,6 @@ type DataStoresClientListByDataManagerResult struct {
 type JobDefinitionsClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *JobDefinitionsClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -385,11 +270,10 @@ type JobDefinitionsClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l JobDefinitionsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (JobDefinitionsClientCreateOrUpdateResponse, error) {
 	respType := JobDefinitionsClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.JobDefinition)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.JobDefinition)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -402,24 +286,16 @@ func (l *JobDefinitionsClientCreateOrUpdatePollerResponse) Resume(ctx context.Co
 	poller := &JobDefinitionsClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // JobDefinitionsClientCreateOrUpdateResponse contains the response from method JobDefinitionsClient.CreateOrUpdate.
 type JobDefinitionsClientCreateOrUpdateResponse struct {
-	JobDefinitionsClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// JobDefinitionsClientCreateOrUpdateResult contains the result from method JobDefinitionsClient.CreateOrUpdate.
-type JobDefinitionsClientCreateOrUpdateResult struct {
 	JobDefinition
 }
 
@@ -427,9 +303,6 @@ type JobDefinitionsClientCreateOrUpdateResult struct {
 type JobDefinitionsClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *JobDefinitionsClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -437,11 +310,10 @@ type JobDefinitionsClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l JobDefinitionsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (JobDefinitionsClientDeleteResponse, error) {
 	respType := JobDefinitionsClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -454,54 +326,31 @@ func (l *JobDefinitionsClientDeletePollerResponse) Resume(ctx context.Context, c
 	poller := &JobDefinitionsClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // JobDefinitionsClientDeleteResponse contains the response from method JobDefinitionsClient.Delete.
 type JobDefinitionsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // JobDefinitionsClientGetResponse contains the response from method JobDefinitionsClient.Get.
 type JobDefinitionsClientGetResponse struct {
-	JobDefinitionsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// JobDefinitionsClientGetResult contains the result from method JobDefinitionsClient.Get.
-type JobDefinitionsClientGetResult struct {
 	JobDefinition
 }
 
 // JobDefinitionsClientListByDataManagerResponse contains the response from method JobDefinitionsClient.ListByDataManager.
 type JobDefinitionsClientListByDataManagerResponse struct {
-	JobDefinitionsClientListByDataManagerResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// JobDefinitionsClientListByDataManagerResult contains the result from method JobDefinitionsClient.ListByDataManager.
-type JobDefinitionsClientListByDataManagerResult struct {
 	JobDefinitionList
 }
 
 // JobDefinitionsClientListByDataServiceResponse contains the response from method JobDefinitionsClient.ListByDataService.
 type JobDefinitionsClientListByDataServiceResponse struct {
-	JobDefinitionsClientListByDataServiceResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// JobDefinitionsClientListByDataServiceResult contains the result from method JobDefinitionsClient.ListByDataService.
-type JobDefinitionsClientListByDataServiceResult struct {
 	JobDefinitionList
 }
 
@@ -509,9 +358,6 @@ type JobDefinitionsClientListByDataServiceResult struct {
 type JobDefinitionsClientRunPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *JobDefinitionsClientRunPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -519,11 +365,10 @@ type JobDefinitionsClientRunPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l JobDefinitionsClientRunPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (JobDefinitionsClientRunResponse, error) {
 	respType := JobDefinitionsClientRunResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -536,28 +381,23 @@ func (l *JobDefinitionsClientRunPollerResponse) Resume(ctx context.Context, clie
 	poller := &JobDefinitionsClientRunPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // JobDefinitionsClientRunResponse contains the response from method JobDefinitionsClient.Run.
 type JobDefinitionsClientRunResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // JobsClientCancelPollerResponse contains the response from method JobsClient.Cancel.
 type JobsClientCancelPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *JobsClientCancelPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -565,11 +405,10 @@ type JobsClientCancelPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l JobsClientCancelPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (JobsClientCancelResponse, error) {
 	respType := JobsClientCancelResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -582,66 +421,36 @@ func (l *JobsClientCancelPollerResponse) Resume(ctx context.Context, client *Job
 	poller := &JobsClientCancelPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // JobsClientCancelResponse contains the response from method JobsClient.Cancel.
 type JobsClientCancelResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // JobsClientGetResponse contains the response from method JobsClient.Get.
 type JobsClientGetResponse struct {
-	JobsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// JobsClientGetResult contains the result from method JobsClient.Get.
-type JobsClientGetResult struct {
 	Job
 }
 
 // JobsClientListByDataManagerResponse contains the response from method JobsClient.ListByDataManager.
 type JobsClientListByDataManagerResponse struct {
-	JobsClientListByDataManagerResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// JobsClientListByDataManagerResult contains the result from method JobsClient.ListByDataManager.
-type JobsClientListByDataManagerResult struct {
 	JobList
 }
 
 // JobsClientListByDataServiceResponse contains the response from method JobsClient.ListByDataService.
 type JobsClientListByDataServiceResponse struct {
-	JobsClientListByDataServiceResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// JobsClientListByDataServiceResult contains the result from method JobsClient.ListByDataService.
-type JobsClientListByDataServiceResult struct {
 	JobList
 }
 
 // JobsClientListByJobDefinitionResponse contains the response from method JobsClient.ListByJobDefinition.
 type JobsClientListByJobDefinitionResponse struct {
-	JobsClientListByJobDefinitionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// JobsClientListByJobDefinitionResult contains the result from method JobsClient.ListByJobDefinition.
-type JobsClientListByJobDefinitionResult struct {
 	JobList
 }
 
@@ -649,9 +458,6 @@ type JobsClientListByJobDefinitionResult struct {
 type JobsClientResumePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *JobsClientResumePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -659,11 +465,10 @@ type JobsClientResumePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l JobsClientResumePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (JobsClientResumeResponse, error) {
 	respType := JobsClientResumeResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -676,53 +481,30 @@ func (l *JobsClientResumePollerResponse) Resume(ctx context.Context, client *Job
 	poller := &JobsClientResumePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // JobsClientResumeResponse contains the response from method JobsClient.Resume.
 type JobsClientResumeResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	AvailableProviderOperations
 }
 
 // PublicKeysClientGetResponse contains the response from method PublicKeysClient.Get.
 type PublicKeysClientGetResponse struct {
-	PublicKeysClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PublicKeysClientGetResult contains the result from method PublicKeysClient.Get.
-type PublicKeysClientGetResult struct {
 	PublicKey
 }
 
 // PublicKeysClientListByDataManagerResponse contains the response from method PublicKeysClient.ListByDataManager.
 type PublicKeysClientListByDataManagerResponse struct {
-	PublicKeysClientListByDataManagerResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PublicKeysClientListByDataManagerResult contains the result from method PublicKeysClient.ListByDataManager.
-type PublicKeysClientListByDataManagerResult struct {
 	PublicKeyList
 }

@@ -37,18 +37,18 @@ type VirtualMachinesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualMachinesClient(subscriptionID string, referer string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualMachinesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualMachinesClient{
 		subscriptionID: subscriptionID,
 		referer:        referer,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -65,9 +65,7 @@ func (client *VirtualMachinesClient) BeginCreateOrUpdate(ctx context.Context, re
 	if err != nil {
 		return VirtualMachinesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VirtualMachinesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientCreateOrUpdatePollerResponse{}, err
@@ -133,9 +131,7 @@ func (client *VirtualMachinesClient) BeginDelete(ctx context.Context, resourceGr
 	if err != nil {
 		return VirtualMachinesClientDeletePollerResponse{}, err
 	}
-	result := VirtualMachinesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientDeletePollerResponse{}, err
@@ -238,7 +234,7 @@ func (client *VirtualMachinesClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *VirtualMachinesClient) getHandleResponse(resp *http.Response) (VirtualMachinesClientGetResponse, error) {
-	result := VirtualMachinesClientGetResponse{RawResponse: resp}
+	result := VirtualMachinesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualMachine); err != nil {
 		return VirtualMachinesClientGetResponse{}, err
 	}
@@ -295,7 +291,7 @@ func (client *VirtualMachinesClient) listByResourceGroupCreateRequest(ctx contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *VirtualMachinesClient) listByResourceGroupHandleResponse(resp *http.Response) (VirtualMachinesClientListByResourceGroupResponse, error) {
-	result := VirtualMachinesClientListByResourceGroupResponse{RawResponse: resp}
+	result := VirtualMachinesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualMachineListResponse); err != nil {
 		return VirtualMachinesClientListByResourceGroupResponse{}, err
 	}
@@ -347,7 +343,7 @@ func (client *VirtualMachinesClient) listBySubscriptionCreateRequest(ctx context
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *VirtualMachinesClient) listBySubscriptionHandleResponse(resp *http.Response) (VirtualMachinesClientListBySubscriptionResponse, error) {
-	result := VirtualMachinesClientListBySubscriptionResponse{RawResponse: resp}
+	result := VirtualMachinesClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualMachineListResponse); err != nil {
 		return VirtualMachinesClientListBySubscriptionResponse{}, err
 	}
@@ -365,9 +361,7 @@ func (client *VirtualMachinesClient) BeginStart(ctx context.Context, resourceGro
 	if err != nil {
 		return VirtualMachinesClientStartPollerResponse{}, err
 	}
-	result := VirtualMachinesClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.Start", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientStartPollerResponse{}, err
@@ -433,9 +427,7 @@ func (client *VirtualMachinesClient) BeginStop(ctx context.Context, resourceGrou
 	if err != nil {
 		return VirtualMachinesClientStopPollerResponse{}, err
 	}
-	result := VirtualMachinesClientStopPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientStopPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.Stop", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientStopPollerResponse{}, err
@@ -508,9 +500,7 @@ func (client *VirtualMachinesClient) BeginUpdate(ctx context.Context, resourceGr
 	if err != nil {
 		return VirtualMachinesClientUpdatePollerResponse{}, err
 	}
-	result := VirtualMachinesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientUpdatePollerResponse{}, err

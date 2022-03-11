@@ -34,17 +34,17 @@ type VolumeClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVolumeClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VolumeClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VolumeClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -96,7 +96,7 @@ func (client *VolumeClient) createCreateRequest(ctx context.Context, resourceGro
 
 // createHandleResponse handles the Create response.
 func (client *VolumeClient) createHandleResponse(resp *http.Response) (VolumeClientCreateResponse, error) {
-	result := VolumeClientCreateResponse{RawResponse: resp}
+	result := VolumeClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VolumeResourceDescription); err != nil {
 		return VolumeClientCreateResponse{}, err
 	}
@@ -120,7 +120,7 @@ func (client *VolumeClient) Delete(ctx context.Context, resourceGroupName string
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return VolumeClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return VolumeClientDeleteResponse{RawResponse: resp}, nil
+	return VolumeClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -192,7 +192,7 @@ func (client *VolumeClient) getCreateRequest(ctx context.Context, resourceGroupN
 
 // getHandleResponse handles the Get response.
 func (client *VolumeClient) getHandleResponse(resp *http.Response) (VolumeClientGetResponse, error) {
-	result := VolumeClientGetResponse{RawResponse: resp}
+	result := VolumeClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VolumeResourceDescription); err != nil {
 		return VolumeClientGetResponse{}, err
 	}
@@ -241,7 +241,7 @@ func (client *VolumeClient) listByResourceGroupCreateRequest(ctx context.Context
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *VolumeClient) listByResourceGroupHandleResponse(resp *http.Response) (VolumeClientListByResourceGroupResponse, error) {
-	result := VolumeClientListByResourceGroupResponse{RawResponse: resp}
+	result := VolumeClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VolumeResourceDescriptionList); err != nil {
 		return VolumeClientListByResourceGroupResponse{}, err
 	}
@@ -285,7 +285,7 @@ func (client *VolumeClient) listBySubscriptionCreateRequest(ctx context.Context,
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *VolumeClient) listBySubscriptionHandleResponse(resp *http.Response) (VolumeClientListBySubscriptionResponse, error) {
-	result := VolumeClientListBySubscriptionResponse{RawResponse: resp}
+	result := VolumeClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VolumeResourceDescriptionList); err != nil {
 		return VolumeClientListBySubscriptionResponse{}, err
 	}

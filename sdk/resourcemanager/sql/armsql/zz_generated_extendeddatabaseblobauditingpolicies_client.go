@@ -34,17 +34,17 @@ type ExtendedDatabaseBlobAuditingPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewExtendedDatabaseBlobAuditingPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ExtendedDatabaseBlobAuditingPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ExtendedDatabaseBlobAuditingPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -106,7 +106,7 @@ func (client *ExtendedDatabaseBlobAuditingPoliciesClient) createOrUpdateCreateRe
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ExtendedDatabaseBlobAuditingPoliciesClient) createOrUpdateHandleResponse(resp *http.Response) (ExtendedDatabaseBlobAuditingPoliciesClientCreateOrUpdateResponse, error) {
-	result := ExtendedDatabaseBlobAuditingPoliciesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ExtendedDatabaseBlobAuditingPoliciesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExtendedDatabaseBlobAuditingPolicy); err != nil {
 		return ExtendedDatabaseBlobAuditingPoliciesClientCreateOrUpdateResponse{}, err
 	}
@@ -169,7 +169,7 @@ func (client *ExtendedDatabaseBlobAuditingPoliciesClient) getCreateRequest(ctx c
 
 // getHandleResponse handles the Get response.
 func (client *ExtendedDatabaseBlobAuditingPoliciesClient) getHandleResponse(resp *http.Response) (ExtendedDatabaseBlobAuditingPoliciesClientGetResponse, error) {
-	result := ExtendedDatabaseBlobAuditingPoliciesClientGetResponse{RawResponse: resp}
+	result := ExtendedDatabaseBlobAuditingPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExtendedDatabaseBlobAuditingPolicy); err != nil {
 		return ExtendedDatabaseBlobAuditingPoliciesClientGetResponse{}, err
 	}
@@ -228,7 +228,7 @@ func (client *ExtendedDatabaseBlobAuditingPoliciesClient) listByDatabaseCreateRe
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *ExtendedDatabaseBlobAuditingPoliciesClient) listByDatabaseHandleResponse(resp *http.Response) (ExtendedDatabaseBlobAuditingPoliciesClientListByDatabaseResponse, error) {
-	result := ExtendedDatabaseBlobAuditingPoliciesClientListByDatabaseResponse{RawResponse: resp}
+	result := ExtendedDatabaseBlobAuditingPoliciesClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExtendedDatabaseBlobAuditingPolicyListResult); err != nil {
 		return ExtendedDatabaseBlobAuditingPoliciesClientListByDatabaseResponse{}, err
 	}

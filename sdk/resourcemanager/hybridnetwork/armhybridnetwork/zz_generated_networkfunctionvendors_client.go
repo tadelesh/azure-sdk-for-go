@@ -34,17 +34,17 @@ type NetworkFunctionVendorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewNetworkFunctionVendorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *NetworkFunctionVendorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &NetworkFunctionVendorsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -85,7 +85,7 @@ func (client *NetworkFunctionVendorsClient) listCreateRequest(ctx context.Contex
 
 // listHandleResponse handles the List response.
 func (client *NetworkFunctionVendorsClient) listHandleResponse(resp *http.Response) (NetworkFunctionVendorsClientListResponse, error) {
-	result := NetworkFunctionVendorsClientListResponse{RawResponse: resp}
+	result := NetworkFunctionVendorsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkFunctionVendorListResult); err != nil {
 		return NetworkFunctionVendorsClientListResponse{}, err
 	}

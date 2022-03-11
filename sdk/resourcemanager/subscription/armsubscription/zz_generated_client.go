@@ -32,16 +32,16 @@ type Client struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewClient(credential azcore.TokenCredential, options *arm.ClientOptions) *Client {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &Client{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -55,9 +55,7 @@ func (client *Client) BeginAcceptOwnership(ctx context.Context, subscriptionID s
 	if err != nil {
 		return ClientAcceptOwnershipPollerResponse{}, err
 	}
-	result := ClientAcceptOwnershipPollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientAcceptOwnershipPollerResponse{}
 	pt, err := armruntime.NewPoller("Client.AcceptOwnership", "", resp, client.pl)
 	if err != nil {
 		return ClientAcceptOwnershipPollerResponse{}, err
@@ -142,7 +140,7 @@ func (client *Client) acceptOwnershipStatusCreateRequest(ctx context.Context, su
 
 // acceptOwnershipStatusHandleResponse handles the AcceptOwnershipStatus response.
 func (client *Client) acceptOwnershipStatusHandleResponse(resp *http.Response) (ClientAcceptOwnershipStatusResponse, error) {
-	result := ClientAcceptOwnershipStatusResponse{RawResponse: resp}
+	result := ClientAcceptOwnershipStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AcceptOwnershipStatusResponse); err != nil {
 		return ClientAcceptOwnershipStatusResponse{}, err
 	}
@@ -188,7 +186,7 @@ func (client *Client) cancelCreateRequest(ctx context.Context, subscriptionID st
 
 // cancelHandleResponse handles the Cancel response.
 func (client *Client) cancelHandleResponse(resp *http.Response) (ClientCancelResponse, error) {
-	result := ClientCancelResponse{RawResponse: resp}
+	result := ClientCancelResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CanceledSubscriptionID); err != nil {
 		return ClientCancelResponse{}, err
 	}
@@ -234,7 +232,7 @@ func (client *Client) enableCreateRequest(ctx context.Context, subscriptionID st
 
 // enableHandleResponse handles the Enable response.
 func (client *Client) enableHandleResponse(resp *http.Response) (ClientEnableResponse, error) {
-	result := ClientEnableResponse{RawResponse: resp}
+	result := ClientEnableResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EnabledSubscriptionID); err != nil {
 		return ClientEnableResponse{}, err
 	}
@@ -281,7 +279,7 @@ func (client *Client) renameCreateRequest(ctx context.Context, subscriptionID st
 
 // renameHandleResponse handles the Rename response.
 func (client *Client) renameHandleResponse(resp *http.Response) (ClientRenameResponse, error) {
-	result := ClientRenameResponse{RawResponse: resp}
+	result := ClientRenameResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RenamedSubscriptionID); err != nil {
 		return ClientRenameResponse{}, err
 	}

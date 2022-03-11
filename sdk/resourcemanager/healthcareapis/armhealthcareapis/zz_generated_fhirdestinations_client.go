@@ -34,17 +34,17 @@ type FhirDestinationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFhirDestinationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FhirDestinationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FhirDestinationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *FhirDestinationsClient) listByIotConnectorCreateRequest(ctx contex
 
 // listByIotConnectorHandleResponse handles the ListByIotConnector response.
 func (client *FhirDestinationsClient) listByIotConnectorHandleResponse(resp *http.Response) (FhirDestinationsClientListByIotConnectorResponse, error) {
-	result := FhirDestinationsClientListByIotConnectorResponse{RawResponse: resp}
+	result := FhirDestinationsClientListByIotConnectorResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IotFhirDestinationCollection); err != nil {
 		return FhirDestinationsClientListByIotConnectorResponse{}, err
 	}

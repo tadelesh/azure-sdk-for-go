@@ -36,17 +36,17 @@ type RolloutsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRolloutsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RolloutsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RolloutsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *RolloutsClient) cancelCreateRequest(ctx context.Context, resourceG
 
 // cancelHandleResponse handles the Cancel response.
 func (client *RolloutsClient) cancelHandleResponse(resp *http.Response) (RolloutsClientCancelResponse, error) {
-	result := RolloutsClientCancelResponse{RawResponse: resp}
+	result := RolloutsClientCancelResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Rollout); err != nil {
 		return RolloutsClientCancelResponse{}, err
 	}
@@ -118,9 +118,7 @@ func (client *RolloutsClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return RolloutsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := RolloutsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := RolloutsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("RolloutsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return RolloutsClientCreateOrUpdatePollerResponse{}, err
@@ -195,7 +193,7 @@ func (client *RolloutsClient) Delete(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return RolloutsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return RolloutsClientDeleteResponse{RawResponse: resp}, nil
+	return RolloutsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -275,7 +273,7 @@ func (client *RolloutsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *RolloutsClient) getHandleResponse(resp *http.Response) (RolloutsClientGetResponse, error) {
-	result := RolloutsClientGetResponse{RawResponse: resp}
+	result := RolloutsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Rollout); err != nil {
 		return RolloutsClientGetResponse{}, err
 	}
@@ -325,7 +323,7 @@ func (client *RolloutsClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *RolloutsClient) listHandleResponse(resp *http.Response) (RolloutsClientListResponse, error) {
-	result := RolloutsClientListResponse{RawResponse: resp}
+	result := RolloutsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RolloutArray); err != nil {
 		return RolloutsClientListResponse{}, err
 	}
@@ -383,7 +381,7 @@ func (client *RolloutsClient) restartCreateRequest(ctx context.Context, resource
 
 // restartHandleResponse handles the Restart response.
 func (client *RolloutsClient) restartHandleResponse(resp *http.Response) (RolloutsClientRestartResponse, error) {
-	result := RolloutsClientRestartResponse{RawResponse: resp}
+	result := RolloutsClientRestartResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Rollout); err != nil {
 		return RolloutsClientRestartResponse{}, err
 	}

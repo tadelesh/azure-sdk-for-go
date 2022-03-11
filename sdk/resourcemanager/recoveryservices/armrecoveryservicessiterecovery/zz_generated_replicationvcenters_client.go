@@ -38,19 +38,19 @@ type ReplicationvCentersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReplicationvCentersClient(resourceName string, resourceGroupName string, subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReplicationvCentersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReplicationvCentersClient{
 		resourceName:      resourceName,
 		resourceGroupName: resourceGroupName,
 		subscriptionID:    subscriptionID,
-		host:              string(cp.Endpoint),
-		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:              string(ep),
+		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -67,9 +67,7 @@ func (client *ReplicationvCentersClient) BeginCreate(ctx context.Context, fabric
 	if err != nil {
 		return ReplicationvCentersClientCreatePollerResponse{}, err
 	}
-	result := ReplicationvCentersClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationvCentersClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationvCentersClient.Create", "", resp, client.pl)
 	if err != nil {
 		return ReplicationvCentersClientCreatePollerResponse{}, err
@@ -125,7 +123,7 @@ func (client *ReplicationvCentersClient) createCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, addVCenterRequest)
@@ -142,9 +140,7 @@ func (client *ReplicationvCentersClient) BeginDelete(ctx context.Context, fabric
 	if err != nil {
 		return ReplicationvCentersClientDeletePollerResponse{}, err
 	}
-	result := ReplicationvCentersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationvCentersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationvCentersClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ReplicationvCentersClientDeletePollerResponse{}, err
@@ -200,7 +196,7 @@ func (client *ReplicationvCentersClient) deleteCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	return req, nil
 }
@@ -253,7 +249,7 @@ func (client *ReplicationvCentersClient) getCreateRequest(ctx context.Context, f
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -261,7 +257,7 @@ func (client *ReplicationvCentersClient) getCreateRequest(ctx context.Context, f
 
 // getHandleResponse handles the Get response.
 func (client *ReplicationvCentersClient) getHandleResponse(resp *http.Response) (ReplicationvCentersClientGetResponse, error) {
-	result := ReplicationvCentersClientGetResponse{RawResponse: resp}
+	result := ReplicationvCentersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VCenter); err != nil {
 		return ReplicationvCentersClientGetResponse{}, err
 	}
@@ -304,7 +300,7 @@ func (client *ReplicationvCentersClient) listCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -312,7 +308,7 @@ func (client *ReplicationvCentersClient) listCreateRequest(ctx context.Context, 
 
 // listHandleResponse handles the List response.
 func (client *ReplicationvCentersClient) listHandleResponse(resp *http.Response) (ReplicationvCentersClientListResponse, error) {
-	result := ReplicationvCentersClientListResponse{RawResponse: resp}
+	result := ReplicationvCentersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VCenterCollection); err != nil {
 		return ReplicationvCentersClientListResponse{}, err
 	}
@@ -360,7 +356,7 @@ func (client *ReplicationvCentersClient) listByReplicationFabricsCreateRequest(c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -368,7 +364,7 @@ func (client *ReplicationvCentersClient) listByReplicationFabricsCreateRequest(c
 
 // listByReplicationFabricsHandleResponse handles the ListByReplicationFabrics response.
 func (client *ReplicationvCentersClient) listByReplicationFabricsHandleResponse(resp *http.Response) (ReplicationvCentersClientListByReplicationFabricsResponse, error) {
-	result := ReplicationvCentersClientListByReplicationFabricsResponse{RawResponse: resp}
+	result := ReplicationvCentersClientListByReplicationFabricsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VCenterCollection); err != nil {
 		return ReplicationvCentersClientListByReplicationFabricsResponse{}, err
 	}
@@ -387,9 +383,7 @@ func (client *ReplicationvCentersClient) BeginUpdate(ctx context.Context, fabric
 	if err != nil {
 		return ReplicationvCentersClientUpdatePollerResponse{}, err
 	}
-	result := ReplicationvCentersClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationvCentersClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationvCentersClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ReplicationvCentersClientUpdatePollerResponse{}, err
@@ -445,7 +439,7 @@ func (client *ReplicationvCentersClient) updateCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, updateVCenterRequest)

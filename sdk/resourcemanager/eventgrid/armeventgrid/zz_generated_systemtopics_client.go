@@ -36,17 +36,17 @@ type SystemTopicsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSystemTopicsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SystemTopicsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SystemTopicsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *SystemTopicsClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return SystemTopicsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := SystemTopicsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SystemTopicsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SystemTopicsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return SystemTopicsClientCreateOrUpdatePollerResponse{}, err
@@ -130,9 +128,7 @@ func (client *SystemTopicsClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return SystemTopicsClientDeletePollerResponse{}, err
 	}
-	result := SystemTopicsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SystemTopicsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SystemTopicsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return SystemTopicsClientDeletePollerResponse{}, err
@@ -233,7 +229,7 @@ func (client *SystemTopicsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *SystemTopicsClient) getHandleResponse(resp *http.Response) (SystemTopicsClientGetResponse, error) {
-	result := SystemTopicsClientGetResponse{RawResponse: resp}
+	result := SystemTopicsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SystemTopic); err != nil {
 		return SystemTopicsClientGetResponse{}, err
 	}
@@ -287,7 +283,7 @@ func (client *SystemTopicsClient) listByResourceGroupCreateRequest(ctx context.C
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *SystemTopicsClient) listByResourceGroupHandleResponse(resp *http.Response) (SystemTopicsClientListByResourceGroupResponse, error) {
-	result := SystemTopicsClientListByResourceGroupResponse{RawResponse: resp}
+	result := SystemTopicsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SystemTopicsListResult); err != nil {
 		return SystemTopicsClientListByResourceGroupResponse{}, err
 	}
@@ -336,7 +332,7 @@ func (client *SystemTopicsClient) listBySubscriptionCreateRequest(ctx context.Co
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *SystemTopicsClient) listBySubscriptionHandleResponse(resp *http.Response) (SystemTopicsClientListBySubscriptionResponse, error) {
-	result := SystemTopicsClientListBySubscriptionResponse{RawResponse: resp}
+	result := SystemTopicsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SystemTopicsListResult); err != nil {
 		return SystemTopicsClientListBySubscriptionResponse{}, err
 	}
@@ -355,9 +351,7 @@ func (client *SystemTopicsClient) BeginUpdate(ctx context.Context, resourceGroup
 	if err != nil {
 		return SystemTopicsClientUpdatePollerResponse{}, err
 	}
-	result := SystemTopicsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SystemTopicsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SystemTopicsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return SystemTopicsClientUpdatePollerResponse{}, err

@@ -34,17 +34,17 @@ type ManagedInstanceEncryptionProtectorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedInstanceEncryptionProtectorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedInstanceEncryptionProtectorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedInstanceEncryptionProtectorsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ManagedInstanceEncryptionProtectorsClient) BeginCreateOrUpdate(ctx
 	if err != nil {
 		return ManagedInstanceEncryptionProtectorsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ManagedInstanceEncryptionProtectorsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedInstanceEncryptionProtectorsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedInstanceEncryptionProtectorsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ManagedInstanceEncryptionProtectorsClientCreateOrUpdatePollerResponse{}, err
@@ -178,7 +176,7 @@ func (client *ManagedInstanceEncryptionProtectorsClient) getCreateRequest(ctx co
 
 // getHandleResponse handles the Get response.
 func (client *ManagedInstanceEncryptionProtectorsClient) getHandleResponse(resp *http.Response) (ManagedInstanceEncryptionProtectorsClientGetResponse, error) {
-	result := ManagedInstanceEncryptionProtectorsClientGetResponse{RawResponse: resp}
+	result := ManagedInstanceEncryptionProtectorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceEncryptionProtector); err != nil {
 		return ManagedInstanceEncryptionProtectorsClientGetResponse{}, err
 	}
@@ -232,7 +230,7 @@ func (client *ManagedInstanceEncryptionProtectorsClient) listByInstanceCreateReq
 
 // listByInstanceHandleResponse handles the ListByInstance response.
 func (client *ManagedInstanceEncryptionProtectorsClient) listByInstanceHandleResponse(resp *http.Response) (ManagedInstanceEncryptionProtectorsClientListByInstanceResponse, error) {
-	result := ManagedInstanceEncryptionProtectorsClientListByInstanceResponse{RawResponse: resp}
+	result := ManagedInstanceEncryptionProtectorsClientListByInstanceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceEncryptionProtectorListResult); err != nil {
 		return ManagedInstanceEncryptionProtectorsClientListByInstanceResponse{}, err
 	}
@@ -252,9 +250,7 @@ func (client *ManagedInstanceEncryptionProtectorsClient) BeginRevalidate(ctx con
 	if err != nil {
 		return ManagedInstanceEncryptionProtectorsClientRevalidatePollerResponse{}, err
 	}
-	result := ManagedInstanceEncryptionProtectorsClientRevalidatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedInstanceEncryptionProtectorsClientRevalidatePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedInstanceEncryptionProtectorsClient.Revalidate", "", resp, client.pl)
 	if err != nil {
 		return ManagedInstanceEncryptionProtectorsClientRevalidatePollerResponse{}, err

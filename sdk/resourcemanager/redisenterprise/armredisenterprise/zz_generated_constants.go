@@ -10,7 +10,7 @@ package armredisenterprise
 
 const (
 	moduleName    = "armredisenterprise"
-	moduleVersion = "v0.2.0"
+	moduleVersion = "v0.3.0"
 )
 
 // AccessKeyType - Which access key to regenerate.
@@ -125,6 +125,33 @@ func PossibleEvictionPolicyValues() []EvictionPolicy {
 
 // ToPtr returns a *EvictionPolicy pointing to the current value.
 func (c EvictionPolicy) ToPtr() *EvictionPolicy {
+	return &c
+}
+
+// LinkState - State of the link between the database resources.
+type LinkState string
+
+const (
+	LinkStateLinkFailed   LinkState = "LinkFailed"
+	LinkStateLinked       LinkState = "Linked"
+	LinkStateLinking      LinkState = "Linking"
+	LinkStateUnlinkFailed LinkState = "UnlinkFailed"
+	LinkStateUnlinking    LinkState = "Unlinking"
+)
+
+// PossibleLinkStateValues returns the possible values for the LinkState const type.
+func PossibleLinkStateValues() []LinkState {
+	return []LinkState{
+		LinkStateLinkFailed,
+		LinkStateLinked,
+		LinkStateLinking,
+		LinkStateUnlinkFailed,
+		LinkStateUnlinking,
+	}
+}
+
+// ToPtr returns a *LinkState pointing to the current value.
+func (c LinkState) ToPtr() *LinkState {
 	return &c
 }
 

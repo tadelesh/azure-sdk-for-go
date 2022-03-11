@@ -35,17 +35,17 @@ type IncidentCommentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIncidentCommentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IncidentCommentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IncidentCommentsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -110,7 +110,7 @@ func (client *IncidentCommentsClient) createOrUpdateCreateRequest(ctx context.Co
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *IncidentCommentsClient) createOrUpdateHandleResponse(resp *http.Response) (IncidentCommentsClientCreateOrUpdateResponse, error) {
-	result := IncidentCommentsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := IncidentCommentsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IncidentComment); err != nil {
 		return IncidentCommentsClientCreateOrUpdateResponse{}, err
 	}
@@ -136,7 +136,7 @@ func (client *IncidentCommentsClient) Delete(ctx context.Context, resourceGroupN
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return IncidentCommentsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return IncidentCommentsClientDeleteResponse{RawResponse: resp}, nil
+	return IncidentCommentsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -231,7 +231,7 @@ func (client *IncidentCommentsClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *IncidentCommentsClient) getHandleResponse(resp *http.Response) (IncidentCommentsClientGetResponse, error) {
-	result := IncidentCommentsClientGetResponse{RawResponse: resp}
+	result := IncidentCommentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IncidentComment); err != nil {
 		return IncidentCommentsClientGetResponse{}, err
 	}
@@ -300,7 +300,7 @@ func (client *IncidentCommentsClient) listCreateRequest(ctx context.Context, res
 
 // listHandleResponse handles the List response.
 func (client *IncidentCommentsClient) listHandleResponse(resp *http.Response) (IncidentCommentsClientListResponse, error) {
-	result := IncidentCommentsClientListResponse{RawResponse: resp}
+	result := IncidentCommentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IncidentCommentList); err != nil {
 		return IncidentCommentsClientListResponse{}, err
 	}

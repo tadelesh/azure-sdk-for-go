@@ -32,16 +32,16 @@ type ArtifactsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewArtifactsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ArtifactsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ArtifactsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *ArtifactsClient) createOrUpdateCreateRequest(ctx context.Context, 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ArtifactsClient) createOrUpdateHandleResponse(resp *http.Response) (ArtifactsClientCreateOrUpdateResponse, error) {
-	result := ArtifactsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ArtifactsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return ArtifactsClientCreateOrUpdateResponse{}, err
 	}
@@ -149,7 +149,7 @@ func (client *ArtifactsClient) deleteCreateRequest(ctx context.Context, resource
 
 // deleteHandleResponse handles the Delete response.
 func (client *ArtifactsClient) deleteHandleResponse(resp *http.Response) (ArtifactsClientDeleteResponse, error) {
-	result := ArtifactsClientDeleteResponse{RawResponse: resp}
+	result := ArtifactsClientDeleteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return ArtifactsClientDeleteResponse{}, err
 	}
@@ -203,7 +203,7 @@ func (client *ArtifactsClient) getCreateRequest(ctx context.Context, resourceSco
 
 // getHandleResponse handles the Get response.
 func (client *ArtifactsClient) getHandleResponse(resp *http.Response) (ArtifactsClientGetResponse, error) {
-	result := ArtifactsClientGetResponse{RawResponse: resp}
+	result := ArtifactsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return ArtifactsClientGetResponse{}, err
 	}
@@ -249,7 +249,7 @@ func (client *ArtifactsClient) listCreateRequest(ctx context.Context, resourceSc
 
 // listHandleResponse handles the List response.
 func (client *ArtifactsClient) listHandleResponse(resp *http.Response) (ArtifactsClientListResponse, error) {
-	result := ArtifactsClientListResponse{RawResponse: resp}
+	result := ArtifactsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ArtifactList); err != nil {
 		return ArtifactsClientListResponse{}, err
 	}

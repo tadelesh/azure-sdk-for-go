@@ -66,7 +66,7 @@ func (client *AlertsSuppressionRulesClient) Delete(ctx context.Context, alertsSu
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return AlertsSuppressionRulesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AlertsSuppressionRulesClientDeleteResponse{RawResponse: resp}, nil
+	return AlertsSuppressionRulesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -135,7 +135,7 @@ func (client *AlertsSuppressionRulesClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *AlertsSuppressionRulesClient) getHandleResponse(resp *http.Response) (AlertsSuppressionRulesClientGetResponse, error) {
-	result := AlertsSuppressionRulesClientGetResponse{RawResponse: resp}
+	result := AlertsSuppressionRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AlertsSuppressionRule); err != nil {
 		return AlertsSuppressionRulesClientGetResponse{}, err
 	}
@@ -181,7 +181,7 @@ func (client *AlertsSuppressionRulesClient) listCreateRequest(ctx context.Contex
 
 // listHandleResponse handles the List response.
 func (client *AlertsSuppressionRulesClient) listHandleResponse(resp *http.Response) (AlertsSuppressionRulesClientListResponse, error) {
-	result := AlertsSuppressionRulesClientListResponse{RawResponse: resp}
+	result := AlertsSuppressionRulesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AlertsSuppressionRulesList); err != nil {
 		return AlertsSuppressionRulesClientListResponse{}, err
 	}
@@ -233,7 +233,7 @@ func (client *AlertsSuppressionRulesClient) updateCreateRequest(ctx context.Cont
 
 // updateHandleResponse handles the Update response.
 func (client *AlertsSuppressionRulesClient) updateHandleResponse(resp *http.Response) (AlertsSuppressionRulesClientUpdateResponse, error) {
-	result := AlertsSuppressionRulesClientUpdateResponse{RawResponse: resp}
+	result := AlertsSuppressionRulesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AlertsSuppressionRule); err != nil {
 		return AlertsSuppressionRulesClientUpdateResponse{}, err
 	}

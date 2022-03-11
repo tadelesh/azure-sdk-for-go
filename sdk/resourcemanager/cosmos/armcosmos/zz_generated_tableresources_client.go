@@ -34,17 +34,17 @@ type TableResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTableResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TableResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TableResourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *TableResourcesClient) BeginCreateUpdateTable(ctx context.Context, 
 	if err != nil {
 		return TableResourcesClientCreateUpdateTablePollerResponse{}, err
 	}
-	result := TableResourcesClientCreateUpdateTablePollerResponse{
-		RawResponse: resp,
-	}
+	result := TableResourcesClientCreateUpdateTablePollerResponse{}
 	pt, err := armruntime.NewPoller("TableResourcesClient.CreateUpdateTable", "", resp, client.pl)
 	if err != nil {
 		return TableResourcesClientCreateUpdateTablePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *TableResourcesClient) BeginDeleteTable(ctx context.Context, resour
 	if err != nil {
 		return TableResourcesClientDeleteTablePollerResponse{}, err
 	}
-	result := TableResourcesClientDeleteTablePollerResponse{
-		RawResponse: resp,
-	}
+	result := TableResourcesClientDeleteTablePollerResponse{}
 	pt, err := armruntime.NewPoller("TableResourcesClient.DeleteTable", "", resp, client.pl)
 	if err != nil {
 		return TableResourcesClientDeleteTablePollerResponse{}, err
@@ -246,7 +242,7 @@ func (client *TableResourcesClient) getTableCreateRequest(ctx context.Context, r
 
 // getTableHandleResponse handles the GetTable response.
 func (client *TableResourcesClient) getTableHandleResponse(resp *http.Response) (TableResourcesClientGetTableResponse, error) {
-	result := TableResourcesClientGetTableResponse{RawResponse: resp}
+	result := TableResourcesClientGetTableResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TableGetResults); err != nil {
 		return TableResourcesClientGetTableResponse{}, err
 	}
@@ -308,7 +304,7 @@ func (client *TableResourcesClient) getTableThroughputCreateRequest(ctx context.
 
 // getTableThroughputHandleResponse handles the GetTableThroughput response.
 func (client *TableResourcesClient) getTableThroughputHandleResponse(resp *http.Response) (TableResourcesClientGetTableThroughputResponse, error) {
-	result := TableResourcesClientGetTableThroughputResponse{RawResponse: resp}
+	result := TableResourcesClientGetTableThroughputResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ThroughputSettingsGetResults); err != nil {
 		return TableResourcesClientGetTableThroughputResponse{}, err
 	}
@@ -321,19 +317,13 @@ func (client *TableResourcesClient) getTableThroughputHandleResponse(resp *http.
 // accountName - Cosmos DB database account name.
 // options - TableResourcesClientListTablesOptions contains the optional parameters for the TableResourcesClient.ListTables
 // method.
-func (client *TableResourcesClient) ListTables(ctx context.Context, resourceGroupName string, accountName string, options *TableResourcesClientListTablesOptions) (TableResourcesClientListTablesResponse, error) {
-	req, err := client.listTablesCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return TableResourcesClientListTablesResponse{}, err
+func (client *TableResourcesClient) ListTables(resourceGroupName string, accountName string, options *TableResourcesClientListTablesOptions) *TableResourcesClientListTablesPager {
+	return &TableResourcesClientListTablesPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listTablesCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return TableResourcesClientListTablesResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return TableResourcesClientListTablesResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listTablesHandleResponse(resp)
 }
 
 // listTablesCreateRequest creates the ListTables request.
@@ -364,7 +354,7 @@ func (client *TableResourcesClient) listTablesCreateRequest(ctx context.Context,
 
 // listTablesHandleResponse handles the ListTables response.
 func (client *TableResourcesClient) listTablesHandleResponse(resp *http.Response) (TableResourcesClientListTablesResponse, error) {
-	result := TableResourcesClientListTablesResponse{RawResponse: resp}
+	result := TableResourcesClientListTablesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TableListResult); err != nil {
 		return TableResourcesClientListTablesResponse{}, err
 	}
@@ -383,9 +373,7 @@ func (client *TableResourcesClient) BeginMigrateTableToAutoscale(ctx context.Con
 	if err != nil {
 		return TableResourcesClientMigrateTableToAutoscalePollerResponse{}, err
 	}
-	result := TableResourcesClientMigrateTableToAutoscalePollerResponse{
-		RawResponse: resp,
-	}
+	result := TableResourcesClientMigrateTableToAutoscalePollerResponse{}
 	pt, err := armruntime.NewPoller("TableResourcesClient.MigrateTableToAutoscale", "", resp, client.pl)
 	if err != nil {
 		return TableResourcesClientMigrateTableToAutoscalePollerResponse{}, err
@@ -455,9 +443,7 @@ func (client *TableResourcesClient) BeginMigrateTableToManualThroughput(ctx cont
 	if err != nil {
 		return TableResourcesClientMigrateTableToManualThroughputPollerResponse{}, err
 	}
-	result := TableResourcesClientMigrateTableToManualThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := TableResourcesClientMigrateTableToManualThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("TableResourcesClient.MigrateTableToManualThroughput", "", resp, client.pl)
 	if err != nil {
 		return TableResourcesClientMigrateTableToManualThroughputPollerResponse{}, err
@@ -528,9 +514,7 @@ func (client *TableResourcesClient) BeginUpdateTableThroughput(ctx context.Conte
 	if err != nil {
 		return TableResourcesClientUpdateTableThroughputPollerResponse{}, err
 	}
-	result := TableResourcesClientUpdateTableThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := TableResourcesClientUpdateTableThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("TableResourcesClient.UpdateTableThroughput", "", resp, client.pl)
 	if err != nil {
 		return TableResourcesClientUpdateTableThroughputPollerResponse{}, err

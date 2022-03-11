@@ -34,17 +34,17 @@ type PrivateCloudsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateCloudsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateCloudsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateCloudsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -97,7 +97,7 @@ func (client *PrivateCloudsClient) getCreateRequest(ctx context.Context, pcName 
 
 // getHandleResponse handles the Get response.
 func (client *PrivateCloudsClient) getHandleResponse(resp *http.Response) (PrivateCloudsClientGetResponse, error) {
-	result := PrivateCloudsClientGetResponse{RawResponse: resp}
+	result := PrivateCloudsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateCloud); err != nil {
 		return PrivateCloudsClientGetResponse{}, err
 	}
@@ -144,7 +144,7 @@ func (client *PrivateCloudsClient) listCreateRequest(ctx context.Context, region
 
 // listHandleResponse handles the List response.
 func (client *PrivateCloudsClient) listHandleResponse(resp *http.Response) (PrivateCloudsClientListResponse, error) {
-	result := PrivateCloudsClientListResponse{RawResponse: resp}
+	result := PrivateCloudsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateCloudList); err != nil {
 		return PrivateCloudsClientListResponse{}, err
 	}

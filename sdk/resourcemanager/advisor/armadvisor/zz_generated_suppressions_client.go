@@ -35,17 +35,17 @@ type SuppressionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSuppressionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SuppressionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SuppressionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *SuppressionsClient) createCreateRequest(ctx context.Context, resou
 
 // createHandleResponse handles the Create response.
 func (client *SuppressionsClient) createHandleResponse(resp *http.Response) (SuppressionsClientCreateResponse, error) {
-	result := SuppressionsClientCreateResponse{RawResponse: resp}
+	result := SuppressionsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SuppressionContract); err != nil {
 		return SuppressionsClientCreateResponse{}, err
 	}
@@ -128,7 +128,7 @@ func (client *SuppressionsClient) Delete(ctx context.Context, resourceURI string
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return SuppressionsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SuppressionsClientDeleteResponse{RawResponse: resp}, nil
+	return SuppressionsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -206,7 +206,7 @@ func (client *SuppressionsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *SuppressionsClient) getHandleResponse(resp *http.Response) (SuppressionsClientGetResponse, error) {
-	result := SuppressionsClientGetResponse{RawResponse: resp}
+	result := SuppressionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SuppressionContract); err != nil {
 		return SuppressionsClientGetResponse{}, err
 	}
@@ -255,7 +255,7 @@ func (client *SuppressionsClient) listCreateRequest(ctx context.Context, options
 
 // listHandleResponse handles the List response.
 func (client *SuppressionsClient) listHandleResponse(resp *http.Response) (SuppressionsClientListResponse, error) {
-	result := SuppressionsClientListResponse{RawResponse: resp}
+	result := SuppressionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SuppressionContractListResult); err != nil {
 		return SuppressionsClientListResponse{}, err
 	}

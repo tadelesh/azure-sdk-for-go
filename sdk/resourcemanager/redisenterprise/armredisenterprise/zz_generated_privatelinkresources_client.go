@@ -34,17 +34,17 @@ type PrivateLinkResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateLinkResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateLinkResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateLinkResourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -55,19 +55,13 @@ func NewPrivateLinkResourcesClient(subscriptionID string, credential azcore.Toke
 // clusterName - The name of the RedisEnterprise cluster.
 // options - PrivateLinkResourcesClientListByClusterOptions contains the optional parameters for the PrivateLinkResourcesClient.ListByCluster
 // method.
-func (client *PrivateLinkResourcesClient) ListByCluster(ctx context.Context, resourceGroupName string, clusterName string, options *PrivateLinkResourcesClientListByClusterOptions) (PrivateLinkResourcesClientListByClusterResponse, error) {
-	req, err := client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
-	if err != nil {
-		return PrivateLinkResourcesClientListByClusterResponse{}, err
+func (client *PrivateLinkResourcesClient) ListByCluster(resourceGroupName string, clusterName string, options *PrivateLinkResourcesClientListByClusterOptions) *PrivateLinkResourcesClientListByClusterPager {
+	return &PrivateLinkResourcesClientListByClusterPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return PrivateLinkResourcesClientListByClusterResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return PrivateLinkResourcesClientListByClusterResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByClusterHandleResponse(resp)
 }
 
 // listByClusterCreateRequest creates the ListByCluster request.
@@ -90,7 +84,7 @@ func (client *PrivateLinkResourcesClient) listByClusterCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-08-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -98,7 +92,7 @@ func (client *PrivateLinkResourcesClient) listByClusterCreateRequest(ctx context
 
 // listByClusterHandleResponse handles the ListByCluster response.
 func (client *PrivateLinkResourcesClient) listByClusterHandleResponse(resp *http.Response) (PrivateLinkResourcesClientListByClusterResponse, error) {
-	result := PrivateLinkResourcesClientListByClusterResponse{RawResponse: resp}
+	result := PrivateLinkResourcesClientListByClusterResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourceListResult); err != nil {
 		return PrivateLinkResourcesClientListByClusterResponse{}, err
 	}

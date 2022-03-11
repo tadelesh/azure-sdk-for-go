@@ -92,7 +92,7 @@ func (client *SettingsClient) getCreateRequest(ctx context.Context, settingName 
 
 // getHandleResponse handles the Get response.
 func (client *SettingsClient) getHandleResponse(resp *http.Response) (SettingsClientGetResponse, error) {
-	result := SettingsClientGetResponse{RawResponse: resp}
+	result := SettingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return SettingsClientGetResponse{}, err
 	}
@@ -134,7 +134,7 @@ func (client *SettingsClient) listCreateRequest(ctx context.Context, options *Se
 
 // listHandleResponse handles the List response.
 func (client *SettingsClient) listHandleResponse(resp *http.Response) (SettingsClientListResponse, error) {
-	result := SettingsClientListResponse{RawResponse: resp}
+	result := SettingsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SettingsList); err != nil {
 		return SettingsClientListResponse{}, err
 	}
@@ -185,7 +185,7 @@ func (client *SettingsClient) updateCreateRequest(ctx context.Context, settingNa
 
 // updateHandleResponse handles the Update response.
 func (client *SettingsClient) updateHandleResponse(resp *http.Response) (SettingsClientUpdateResponse, error) {
-	result := SettingsClientUpdateResponse{RawResponse: resp}
+	result := SettingsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return SettingsClientUpdateResponse{}, err
 	}

@@ -32,16 +32,16 @@ type LotsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLotsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *LotsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LotsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -88,7 +88,7 @@ func (client *LotsClient) listByBillingAccountCreateRequest(ctx context.Context,
 
 // listByBillingAccountHandleResponse handles the ListByBillingAccount response.
 func (client *LotsClient) listByBillingAccountHandleResponse(resp *http.Response) (LotsClientListByBillingAccountResponse, error) {
-	result := LotsClientListByBillingAccountResponse{RawResponse: resp}
+	result := LotsClientListByBillingAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Lots); err != nil {
 		return LotsClientListByBillingAccountResponse{}, err
 	}
@@ -139,7 +139,7 @@ func (client *LotsClient) listByBillingProfileCreateRequest(ctx context.Context,
 
 // listByBillingProfileHandleResponse handles the ListByBillingProfile response.
 func (client *LotsClient) listByBillingProfileHandleResponse(resp *http.Response) (LotsClientListByBillingProfileResponse, error) {
-	result := LotsClientListByBillingProfileResponse{RawResponse: resp}
+	result := LotsClientListByBillingProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Lots); err != nil {
 		return LotsClientListByBillingProfileResponse{}, err
 	}

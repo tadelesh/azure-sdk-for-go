@@ -32,16 +32,16 @@ type PermissionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPermissionsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *PermissionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PermissionsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -83,7 +83,7 @@ func (client *PermissionsClient) listByBillingAccountCreateRequest(ctx context.C
 
 // listByBillingAccountHandleResponse handles the ListByBillingAccount response.
 func (client *PermissionsClient) listByBillingAccountHandleResponse(resp *http.Response) (PermissionsClientListByBillingAccountResponse, error) {
-	result := PermissionsClientListByBillingAccountResponse{RawResponse: resp}
+	result := PermissionsClientListByBillingAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PermissionsListResult); err != nil {
 		return PermissionsClientListByBillingAccountResponse{}, err
 	}
@@ -132,7 +132,7 @@ func (client *PermissionsClient) listByBillingProfileCreateRequest(ctx context.C
 
 // listByBillingProfileHandleResponse handles the ListByBillingProfile response.
 func (client *PermissionsClient) listByBillingProfileHandleResponse(resp *http.Response) (PermissionsClientListByBillingProfileResponse, error) {
-	result := PermissionsClientListByBillingProfileResponse{RawResponse: resp}
+	result := PermissionsClientListByBillingProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PermissionsListResult); err != nil {
 		return PermissionsClientListByBillingProfileResponse{}, err
 	}
@@ -181,7 +181,7 @@ func (client *PermissionsClient) listByCustomerCreateRequest(ctx context.Context
 
 // listByCustomerHandleResponse handles the ListByCustomer response.
 func (client *PermissionsClient) listByCustomerHandleResponse(resp *http.Response) (PermissionsClientListByCustomerResponse, error) {
-	result := PermissionsClientListByCustomerResponse{RawResponse: resp}
+	result := PermissionsClientListByCustomerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PermissionsListResult); err != nil {
 		return PermissionsClientListByCustomerResponse{}, err
 	}
@@ -235,7 +235,7 @@ func (client *PermissionsClient) listByInvoiceSectionsCreateRequest(ctx context.
 
 // listByInvoiceSectionsHandleResponse handles the ListByInvoiceSections response.
 func (client *PermissionsClient) listByInvoiceSectionsHandleResponse(resp *http.Response) (PermissionsClientListByInvoiceSectionsResponse, error) {
-	result := PermissionsClientListByInvoiceSectionsResponse{RawResponse: resp}
+	result := PermissionsClientListByInvoiceSectionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PermissionsListResult); err != nil {
 		return PermissionsClientListByInvoiceSectionsResponse{}, err
 	}

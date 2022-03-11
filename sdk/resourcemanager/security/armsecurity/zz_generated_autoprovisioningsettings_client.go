@@ -94,7 +94,7 @@ func (client *AutoProvisioningSettingsClient) createCreateRequest(ctx context.Co
 
 // createHandleResponse handles the Create response.
 func (client *AutoProvisioningSettingsClient) createHandleResponse(resp *http.Response) (AutoProvisioningSettingsClientCreateResponse, error) {
-	result := AutoProvisioningSettingsClientCreateResponse{RawResponse: resp}
+	result := AutoProvisioningSettingsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AutoProvisioningSetting); err != nil {
 		return AutoProvisioningSettingsClientCreateResponse{}, err
 	}
@@ -145,7 +145,7 @@ func (client *AutoProvisioningSettingsClient) getCreateRequest(ctx context.Conte
 
 // getHandleResponse handles the Get response.
 func (client *AutoProvisioningSettingsClient) getHandleResponse(resp *http.Response) (AutoProvisioningSettingsClientGetResponse, error) {
-	result := AutoProvisioningSettingsClientGetResponse{RawResponse: resp}
+	result := AutoProvisioningSettingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AutoProvisioningSetting); err != nil {
 		return AutoProvisioningSettingsClientGetResponse{}, err
 	}
@@ -188,7 +188,7 @@ func (client *AutoProvisioningSettingsClient) listCreateRequest(ctx context.Cont
 
 // listHandleResponse handles the List response.
 func (client *AutoProvisioningSettingsClient) listHandleResponse(resp *http.Response) (AutoProvisioningSettingsClientListResponse, error) {
-	result := AutoProvisioningSettingsClientListResponse{RawResponse: resp}
+	result := AutoProvisioningSettingsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AutoProvisioningSettingList); err != nil {
 		return AutoProvisioningSettingsClientListResponse{}, err
 	}

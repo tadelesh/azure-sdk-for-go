@@ -34,17 +34,17 @@ type SQLPoolMetadataSyncConfigsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLPoolMetadataSyncConfigsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLPoolMetadataSyncConfigsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLPoolMetadataSyncConfigsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *SQLPoolMetadataSyncConfigsClient) createCreateRequest(ctx context.
 
 // createHandleResponse handles the Create response.
 func (client *SQLPoolMetadataSyncConfigsClient) createHandleResponse(resp *http.Response) (SQLPoolMetadataSyncConfigsClientCreateResponse, error) {
-	result := SQLPoolMetadataSyncConfigsClientCreateResponse{RawResponse: resp}
+	result := SQLPoolMetadataSyncConfigsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetadataSyncConfig); err != nil {
 		return SQLPoolMetadataSyncConfigsClientCreateResponse{}, err
 	}
@@ -165,7 +165,7 @@ func (client *SQLPoolMetadataSyncConfigsClient) getCreateRequest(ctx context.Con
 
 // getHandleResponse handles the Get response.
 func (client *SQLPoolMetadataSyncConfigsClient) getHandleResponse(resp *http.Response) (SQLPoolMetadataSyncConfigsClientGetResponse, error) {
-	result := SQLPoolMetadataSyncConfigsClientGetResponse{RawResponse: resp}
+	result := SQLPoolMetadataSyncConfigsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetadataSyncConfig); err != nil {
 		return SQLPoolMetadataSyncConfigsClientGetResponse{}, err
 	}

@@ -30,16 +30,16 @@ type SitesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSitesClient(credential azcore.TokenCredential, options *arm.ClientOptions) *SitesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SitesClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -81,7 +81,7 @@ func (client *SitesClient) createOrUpdateCreateRequest(ctx context.Context, scop
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *SitesClient) createOrUpdateHandleResponse(resp *http.Response) (SitesClientCreateOrUpdateResponse, error) {
-	result := SitesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := SitesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteModel); err != nil {
 		return SitesClientCreateOrUpdateResponse{}, err
 	}
@@ -104,7 +104,7 @@ func (client *SitesClient) Delete(ctx context.Context, scope string, options *Si
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SitesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SitesClientDeleteResponse{RawResponse: resp}, nil
+	return SitesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -158,7 +158,7 @@ func (client *SitesClient) getCreateRequest(ctx context.Context, scope string, o
 
 // getHandleResponse handles the Get response.
 func (client *SitesClient) getHandleResponse(resp *http.Response) (SitesClientGetResponse, error) {
-	result := SitesClientGetResponse{RawResponse: resp}
+	result := SitesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteModel); err != nil {
 		return SitesClientGetResponse{}, err
 	}
@@ -201,7 +201,7 @@ func (client *SitesClient) listCreateRequest(ctx context.Context, scope string, 
 
 // listHandleResponse handles the List response.
 func (client *SitesClient) listHandleResponse(resp *http.Response) (SitesClientListResponse, error) {
-	result := SitesClientListResponse{RawResponse: resp}
+	result := SitesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SitesList); err != nil {
 		return SitesClientListResponse{}, err
 	}

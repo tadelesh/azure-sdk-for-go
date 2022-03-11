@@ -34,17 +34,17 @@ type VNetPeeringClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVNetPeeringClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VNetPeeringClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VNetPeeringClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *VNetPeeringClient) BeginCreateOrUpdate(ctx context.Context, resour
 	if err != nil {
 		return VNetPeeringClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VNetPeeringClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VNetPeeringClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VNetPeeringClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return VNetPeeringClientCreateOrUpdatePollerResponse{}, err
@@ -133,9 +131,7 @@ func (client *VNetPeeringClient) BeginDelete(ctx context.Context, resourceGroupN
 	if err != nil {
 		return VNetPeeringClientDeletePollerResponse{}, err
 	}
-	result := VNetPeeringClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VNetPeeringClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VNetPeeringClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return VNetPeeringClientDeletePollerResponse{}, err
@@ -246,7 +242,7 @@ func (client *VNetPeeringClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *VNetPeeringClient) getHandleResponse(resp *http.Response) (VNetPeeringClientGetResponse, error) {
-	result := VNetPeeringClientGetResponse{RawResponse: resp}
+	result := VNetPeeringClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkPeering); err != nil {
 		return VNetPeeringClientGetResponse{}, err
 	}
@@ -299,7 +295,7 @@ func (client *VNetPeeringClient) listByWorkspaceCreateRequest(ctx context.Contex
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *VNetPeeringClient) listByWorkspaceHandleResponse(resp *http.Response) (VNetPeeringClientListByWorkspaceResponse, error) {
-	result := VNetPeeringClientListByWorkspaceResponse{RawResponse: resp}
+	result := VNetPeeringClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkPeeringList); err != nil {
 		return VNetPeeringClientListByWorkspaceResponse{}, err
 	}

@@ -34,17 +34,17 @@ type GroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *GroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *GroupsClient) BeginCreateOrUpdate(ctx context.Context, resourceGro
 	if err != nil {
 		return GroupsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := GroupsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := GroupsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("GroupsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return GroupsClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *GroupsClient) BeginDelete(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return GroupsClientDeletePollerResponse{}, err
 	}
-	result := GroupsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := GroupsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("GroupsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return GroupsClientDeletePollerResponse{}, err
@@ -233,7 +229,7 @@ func (client *GroupsClient) getCreateRequest(ctx context.Context, resourceGroupN
 
 // getHandleResponse handles the Get response.
 func (client *GroupsClient) getHandleResponse(resp *http.Response) (GroupsClientGetResponse, error) {
-	result := GroupsClientGetResponse{RawResponse: resp}
+	result := GroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Group); err != nil {
 		return GroupsClientGetResponse{}, err
 	}
@@ -275,7 +271,7 @@ func (client *GroupsClient) listCreateRequest(ctx context.Context, options *Grou
 
 // listHandleResponse handles the List response.
 func (client *GroupsClient) listHandleResponse(resp *http.Response) (GroupsClientListResponse, error) {
-	result := GroupsClientListResponse{RawResponse: resp}
+	result := GroupsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GroupListResult); err != nil {
 		return GroupsClientListResponse{}, err
 	}
@@ -324,7 +320,7 @@ func (client *GroupsClient) listByResourceGroupCreateRequest(ctx context.Context
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *GroupsClient) listByResourceGroupHandleResponse(resp *http.Response) (GroupsClientListByResourceGroupResponse, error) {
-	result := GroupsClientListByResourceGroupResponse{RawResponse: resp}
+	result := GroupsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GroupListResult); err != nil {
 		return GroupsClientListByResourceGroupResponse{}, err
 	}
@@ -343,9 +339,7 @@ func (client *GroupsClient) BeginUpdate(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return GroupsClientUpdatePollerResponse{}, err
 	}
-	result := GroupsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := GroupsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("GroupsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return GroupsClientUpdatePollerResponse{}, err

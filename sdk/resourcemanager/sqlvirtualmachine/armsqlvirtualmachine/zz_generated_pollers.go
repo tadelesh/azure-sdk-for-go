@@ -43,11 +43,10 @@ func (p *AvailabilityGroupListenersClientCreateOrUpdatePoller) Poll(ctx context.
 // If the final GET succeeded then the final AvailabilityGroupListenersClientCreateOrUpdateResponse will be returned.
 func (p *AvailabilityGroupListenersClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (AvailabilityGroupListenersClientCreateOrUpdateResponse, error) {
 	respType := AvailabilityGroupListenersClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.AvailabilityGroupListener)
+	_, err := p.pt.FinalResponse(ctx, &respType.AvailabilityGroupListener)
 	if err != nil {
 		return AvailabilityGroupListenersClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *AvailabilityGroupListenersClientDeletePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final AvailabilityGroupListenersClientDeleteResponse will be returned.
 func (p *AvailabilityGroupListenersClientDeletePoller) FinalResponse(ctx context.Context) (AvailabilityGroupListenersClientDeleteResponse, error) {
 	respType := AvailabilityGroupListenersClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return AvailabilityGroupListenersClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *GroupsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final GroupsClientCreateOrUpdateResponse will be returned.
 func (p *GroupsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (GroupsClientCreateOrUpdateResponse, error) {
 	respType := GroupsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Group)
+	_, err := p.pt.FinalResponse(ctx, &respType.Group)
 	if err != nil {
 		return GroupsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *GroupsClientDeletePoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final GroupsClientDeleteResponse will be returned.
 func (p *GroupsClientDeletePoller) FinalResponse(ctx context.Context) (GroupsClientDeleteResponse, error) {
 	respType := GroupsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return GroupsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *GroupsClientUpdatePoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final GroupsClientUpdateResponse will be returned.
 func (p *GroupsClientUpdatePoller) FinalResponse(ctx context.Context) (GroupsClientUpdateResponse, error) {
 	respType := GroupsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Group)
+	_, err := p.pt.FinalResponse(ctx, &respType.Group)
 	if err != nil {
 		return GroupsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *SQLVirtualMachinesClientCreateOrUpdatePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final SQLVirtualMachinesClientCreateOrUpdateResponse will be returned.
 func (p *SQLVirtualMachinesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (SQLVirtualMachinesClientCreateOrUpdateResponse, error) {
 	respType := SQLVirtualMachinesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SQLVirtualMachine)
+	_, err := p.pt.FinalResponse(ctx, &respType.SQLVirtualMachine)
 	if err != nil {
 		return SQLVirtualMachinesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *SQLVirtualMachinesClientDeletePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final SQLVirtualMachinesClientDeleteResponse will be returned.
 func (p *SQLVirtualMachinesClientDeletePoller) FinalResponse(ctx context.Context) (SQLVirtualMachinesClientDeleteResponse, error) {
 	respType := SQLVirtualMachinesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SQLVirtualMachinesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *SQLVirtualMachinesClientUpdatePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final SQLVirtualMachinesClientUpdateResponse will be returned.
 func (p *SQLVirtualMachinesClientUpdatePoller) FinalResponse(ctx context.Context) (SQLVirtualMachinesClientUpdateResponse, error) {
 	respType := SQLVirtualMachinesClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SQLVirtualMachine)
+	_, err := p.pt.FinalResponse(ctx, &respType.SQLVirtualMachine)
 	if err != nil {
 		return SQLVirtualMachinesClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

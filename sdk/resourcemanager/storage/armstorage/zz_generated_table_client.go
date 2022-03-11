@@ -104,7 +104,7 @@ func (client *TableClient) createCreateRequest(ctx context.Context, resourceGrou
 
 // createHandleResponse handles the Create response.
 func (client *TableClient) createHandleResponse(resp *http.Response) (TableClientCreateResponse, error) {
-	result := TableClientCreateResponse{RawResponse: resp}
+	result := TableClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Table); err != nil {
 		return TableClientCreateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *TableClient) Delete(ctx context.Context, resourceGroupName string,
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return TableClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return TableClientDeleteResponse{RawResponse: resp}, nil
+	return TableClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -219,7 +219,7 @@ func (client *TableClient) getCreateRequest(ctx context.Context, resourceGroupNa
 
 // getHandleResponse handles the Get response.
 func (client *TableClient) getHandleResponse(resp *http.Response) (TableClientGetResponse, error) {
-	result := TableClientGetResponse{RawResponse: resp}
+	result := TableClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Table); err != nil {
 		return TableClientGetResponse{}, err
 	}
@@ -272,7 +272,7 @@ func (client *TableClient) listCreateRequest(ctx context.Context, resourceGroupN
 
 // listHandleResponse handles the List response.
 func (client *TableClient) listHandleResponse(resp *http.Response) (TableClientListResponse, error) {
-	result := TableClientListResponse{RawResponse: resp}
+	result := TableClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListTableResource); err != nil {
 		return TableClientListResponse{}, err
 	}
@@ -334,7 +334,7 @@ func (client *TableClient) updateCreateRequest(ctx context.Context, resourceGrou
 
 // updateHandleResponse handles the Update response.
 func (client *TableClient) updateHandleResponse(resp *http.Response) (TableClientUpdateResponse, error) {
-	result := TableClientUpdateResponse{RawResponse: resp}
+	result := TableClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Table); err != nil {
 		return TableClientUpdateResponse{}, err
 	}

@@ -1,5 +1,57 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Struct `MarketplaceAgreementsClientCancelResult` has been removed
+- Struct `MarketplaceAgreementsClientCreateResult` has been removed
+- Struct `MarketplaceAgreementsClientGetAgreementResult` has been removed
+- Struct `MarketplaceAgreementsClientGetResult` has been removed
+- Struct `MarketplaceAgreementsClientListResult` has been removed
+- Struct `MarketplaceAgreementsClientSignResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `MarketplaceAgreementsClientGetAgreementResult` of struct `MarketplaceAgreementsClientGetAgreementResponse` has been removed
+- Field `RawResponse` of struct `MarketplaceAgreementsClientGetAgreementResponse` has been removed
+- Field `MarketplaceAgreementsClientCreateResult` of struct `MarketplaceAgreementsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `MarketplaceAgreementsClientCreateResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `MarketplaceAgreementsClientGetResult` of struct `MarketplaceAgreementsClientGetResponse` has been removed
+- Field `RawResponse` of struct `MarketplaceAgreementsClientGetResponse` has been removed
+- Field `MarketplaceAgreementsClientListResult` of struct `MarketplaceAgreementsClientListResponse` has been removed
+- Field `RawResponse` of struct `MarketplaceAgreementsClientListResponse` has been removed
+- Field `MarketplaceAgreementsClientSignResult` of struct `MarketplaceAgreementsClientSignResponse` has been removed
+- Field `RawResponse` of struct `MarketplaceAgreementsClientSignResponse` has been removed
+- Field `MarketplaceAgreementsClientCancelResult` of struct `MarketplaceAgreementsClientCancelResponse` has been removed
+- Field `RawResponse` of struct `MarketplaceAgreementsClientCancelResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New struct `ErrorResponse`
+- New struct `ErrorResponseError`
+- New anonymous field `AgreementTerms` in struct `MarketplaceAgreementsClientSignResponse`
+- New anonymous field `AgreementTerms` in struct `MarketplaceAgreementsClientCancelResponse`
+- New anonymous field `AgreementTerms` in struct `MarketplaceAgreementsClientGetResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `AgreementTerms` in struct `MarketplaceAgreementsClientCreateResponse`
+- New anonymous field `AgreementTerms` in struct `MarketplaceAgreementsClientGetAgreementResponse`
+- New field `AgreementTermsArray` in struct `MarketplaceAgreementsClientListResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Struct `ErrorResponse` has been removed
+- Struct `ErrorResponseError` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

@@ -93,7 +93,7 @@ func (client *SubAssessmentsClient) getCreateRequest(ctx context.Context, scope 
 
 // getHandleResponse handles the Get response.
 func (client *SubAssessmentsClient) getHandleResponse(resp *http.Response) (SubAssessmentsClientGetResponse, error) {
-	result := SubAssessmentsClientGetResponse{RawResponse: resp}
+	result := SubAssessmentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SubAssessment); err != nil {
 		return SubAssessmentsClientGetResponse{}, err
 	}
@@ -139,7 +139,7 @@ func (client *SubAssessmentsClient) listCreateRequest(ctx context.Context, scope
 
 // listHandleResponse handles the List response.
 func (client *SubAssessmentsClient) listHandleResponse(resp *http.Response) (SubAssessmentsClientListResponse, error) {
-	result := SubAssessmentsClientListResponse{RawResponse: resp}
+	result := SubAssessmentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SubAssessmentList); err != nil {
 		return SubAssessmentsClientListResponse{}, err
 	}
@@ -180,7 +180,7 @@ func (client *SubAssessmentsClient) listAllCreateRequest(ctx context.Context, sc
 
 // listAllHandleResponse handles the ListAll response.
 func (client *SubAssessmentsClient) listAllHandleResponse(resp *http.Response) (SubAssessmentsClientListAllResponse, error) {
-	result := SubAssessmentsClientListAllResponse{RawResponse: resp}
+	result := SubAssessmentsClientListAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SubAssessmentList); err != nil {
 		return SubAssessmentsClientListAllResponse{}, err
 	}

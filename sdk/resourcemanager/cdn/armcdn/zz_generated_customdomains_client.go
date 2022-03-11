@@ -63,9 +63,7 @@ func (client *CustomDomainsClient) BeginCreate(ctx context.Context, resourceGrou
 	if err != nil {
 		return CustomDomainsClientCreatePollerResponse{}, err
 	}
-	result := CustomDomainsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CustomDomainsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("CustomDomainsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return CustomDomainsClientCreatePollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *CustomDomainsClient) BeginDelete(ctx context.Context, resourceGrou
 	if err != nil {
 		return CustomDomainsClientDeletePollerResponse{}, err
 	}
-	result := CustomDomainsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CustomDomainsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CustomDomainsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return CustomDomainsClientDeletePollerResponse{}, err
@@ -263,7 +259,7 @@ func (client *CustomDomainsClient) disableCustomHTTPSCreateRequest(ctx context.C
 
 // disableCustomHTTPSHandleResponse handles the DisableCustomHTTPS response.
 func (client *CustomDomainsClient) disableCustomHTTPSHandleResponse(resp *http.Response) (CustomDomainsClientDisableCustomHTTPSResponse, error) {
-	result := CustomDomainsClientDisableCustomHTTPSResponse{RawResponse: resp}
+	result := CustomDomainsClientDisableCustomHTTPSResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomDomain); err != nil {
 		return CustomDomainsClientDisableCustomHTTPSResponse{}, err
 	}
@@ -332,7 +328,7 @@ func (client *CustomDomainsClient) enableCustomHTTPSCreateRequest(ctx context.Co
 
 // enableCustomHTTPSHandleResponse handles the EnableCustomHTTPS response.
 func (client *CustomDomainsClient) enableCustomHTTPSHandleResponse(resp *http.Response) (CustomDomainsClientEnableCustomHTTPSResponse, error) {
-	result := CustomDomainsClientEnableCustomHTTPSResponse{RawResponse: resp}
+	result := CustomDomainsClientEnableCustomHTTPSResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomDomain); err != nil {
 		return CustomDomainsClientEnableCustomHTTPSResponse{}, err
 	}
@@ -397,7 +393,7 @@ func (client *CustomDomainsClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *CustomDomainsClient) getHandleResponse(resp *http.Response) (CustomDomainsClientGetResponse, error) {
-	result := CustomDomainsClientGetResponse{RawResponse: resp}
+	result := CustomDomainsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomDomain); err != nil {
 		return CustomDomainsClientGetResponse{}, err
 	}
@@ -455,7 +451,7 @@ func (client *CustomDomainsClient) listByEndpointCreateRequest(ctx context.Conte
 
 // listByEndpointHandleResponse handles the ListByEndpoint response.
 func (client *CustomDomainsClient) listByEndpointHandleResponse(resp *http.Response) (CustomDomainsClientListByEndpointResponse, error) {
-	result := CustomDomainsClientListByEndpointResponse{RawResponse: resp}
+	result := CustomDomainsClientListByEndpointResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomDomainListResult); err != nil {
 		return CustomDomainsClientListByEndpointResponse{}, err
 	}

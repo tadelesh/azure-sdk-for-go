@@ -35,17 +35,17 @@ type KeysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewKeysClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *KeysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &KeysClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -106,7 +106,7 @@ func (client *KeysClient) createIfNotExistCreateRequest(ctx context.Context, res
 
 // createIfNotExistHandleResponse handles the CreateIfNotExist response.
 func (client *KeysClient) createIfNotExistHandleResponse(resp *http.Response) (KeysClientCreateIfNotExistResponse, error) {
-	result := KeysClientCreateIfNotExistResponse{RawResponse: resp}
+	result := KeysClientCreateIfNotExistResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Key); err != nil {
 		return KeysClientCreateIfNotExistResponse{}, err
 	}
@@ -166,7 +166,7 @@ func (client *KeysClient) getCreateRequest(ctx context.Context, resourceGroupNam
 
 // getHandleResponse handles the Get response.
 func (client *KeysClient) getHandleResponse(resp *http.Response) (KeysClientGetResponse, error) {
-	result := KeysClientGetResponse{RawResponse: resp}
+	result := KeysClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Key); err != nil {
 		return KeysClientGetResponse{}, err
 	}
@@ -231,7 +231,7 @@ func (client *KeysClient) getVersionCreateRequest(ctx context.Context, resourceG
 
 // getVersionHandleResponse handles the GetVersion response.
 func (client *KeysClient) getVersionHandleResponse(resp *http.Response) (KeysClientGetVersionResponse, error) {
-	result := KeysClientGetVersionResponse{RawResponse: resp}
+	result := KeysClientGetVersionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Key); err != nil {
 		return KeysClientGetVersionResponse{}, err
 	}
@@ -283,7 +283,7 @@ func (client *KeysClient) listCreateRequest(ctx context.Context, resourceGroupNa
 
 // listHandleResponse handles the List response.
 func (client *KeysClient) listHandleResponse(resp *http.Response) (KeysClientListResponse, error) {
-	result := KeysClientListResponse{RawResponse: resp}
+	result := KeysClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KeyListResult); err != nil {
 		return KeysClientListResponse{}, err
 	}
@@ -340,7 +340,7 @@ func (client *KeysClient) listVersionsCreateRequest(ctx context.Context, resourc
 
 // listVersionsHandleResponse handles the ListVersions response.
 func (client *KeysClient) listVersionsHandleResponse(resp *http.Response) (KeysClientListVersionsResponse, error) {
-	result := KeysClientListVersionsResponse{RawResponse: resp}
+	result := KeysClientListVersionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KeyListResult); err != nil {
 		return KeysClientListVersionsResponse{}, err
 	}

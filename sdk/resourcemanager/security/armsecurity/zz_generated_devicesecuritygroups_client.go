@@ -90,7 +90,7 @@ func (client *DeviceSecurityGroupsClient) createOrUpdateCreateRequest(ctx contex
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *DeviceSecurityGroupsClient) createOrUpdateHandleResponse(resp *http.Response) (DeviceSecurityGroupsClientCreateOrUpdateResponse, error) {
-	result := DeviceSecurityGroupsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := DeviceSecurityGroupsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceSecurityGroup); err != nil {
 		return DeviceSecurityGroupsClientCreateOrUpdateResponse{}, err
 	}
@@ -116,7 +116,7 @@ func (client *DeviceSecurityGroupsClient) Delete(ctx context.Context, resourceID
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DeviceSecurityGroupsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DeviceSecurityGroupsClientDeleteResponse{RawResponse: resp}, nil
+	return DeviceSecurityGroupsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -181,7 +181,7 @@ func (client *DeviceSecurityGroupsClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *DeviceSecurityGroupsClient) getHandleResponse(resp *http.Response) (DeviceSecurityGroupsClientGetResponse, error) {
-	result := DeviceSecurityGroupsClientGetResponse{RawResponse: resp}
+	result := DeviceSecurityGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceSecurityGroup); err != nil {
 		return DeviceSecurityGroupsClientGetResponse{}, err
 	}
@@ -222,7 +222,7 @@ func (client *DeviceSecurityGroupsClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *DeviceSecurityGroupsClient) listHandleResponse(resp *http.Response) (DeviceSecurityGroupsClientListResponse, error) {
-	result := DeviceSecurityGroupsClientListResponse{RawResponse: resp}
+	result := DeviceSecurityGroupsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceSecurityGroupList); err != nil {
 		return DeviceSecurityGroupsClientListResponse{}, err
 	}

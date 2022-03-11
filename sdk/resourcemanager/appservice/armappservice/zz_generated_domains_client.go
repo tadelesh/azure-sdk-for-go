@@ -90,7 +90,7 @@ func (client *DomainsClient) checkAvailabilityCreateRequest(ctx context.Context,
 
 // checkAvailabilityHandleResponse handles the CheckAvailability response.
 func (client *DomainsClient) checkAvailabilityHandleResponse(resp *http.Response) (DomainsClientCheckAvailabilityResponse, error) {
-	result := DomainsClientCheckAvailabilityResponse{RawResponse: resp}
+	result := DomainsClientCheckAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainAvailabilityCheckResult); err != nil {
 		return DomainsClientCheckAvailabilityResponse{}, err
 	}
@@ -109,9 +109,7 @@ func (client *DomainsClient) BeginCreateOrUpdate(ctx context.Context, resourceGr
 	if err != nil {
 		return DomainsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DomainsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DomainsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DomainsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DomainsClientCreateOrUpdatePollerResponse{}, err
@@ -221,7 +219,7 @@ func (client *DomainsClient) createOrUpdateOwnershipIdentifierCreateRequest(ctx 
 
 // createOrUpdateOwnershipIdentifierHandleResponse handles the CreateOrUpdateOwnershipIdentifier response.
 func (client *DomainsClient) createOrUpdateOwnershipIdentifierHandleResponse(resp *http.Response) (DomainsClientCreateOrUpdateOwnershipIdentifierResponse, error) {
-	result := DomainsClientCreateOrUpdateOwnershipIdentifierResponse{RawResponse: resp}
+	result := DomainsClientCreateOrUpdateOwnershipIdentifierResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainOwnershipIdentifier); err != nil {
 		return DomainsClientCreateOrUpdateOwnershipIdentifierResponse{}, err
 	}
@@ -245,7 +243,7 @@ func (client *DomainsClient) Delete(ctx context.Context, resourceGroupName strin
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DomainsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DomainsClientDeleteResponse{RawResponse: resp}, nil
+	return DomainsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -296,7 +294,7 @@ func (client *DomainsClient) DeleteOwnershipIdentifier(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DomainsClientDeleteOwnershipIdentifierResponse{}, runtime.NewResponseError(resp)
 	}
-	return DomainsClientDeleteOwnershipIdentifierResponse{RawResponse: resp}, nil
+	return DomainsClientDeleteOwnershipIdentifierResponse{}, nil
 }
 
 // deleteOwnershipIdentifierCreateRequest creates the DeleteOwnershipIdentifier request.
@@ -377,7 +375,7 @@ func (client *DomainsClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *DomainsClient) getHandleResponse(resp *http.Response) (DomainsClientGetResponse, error) {
-	result := DomainsClientGetResponse{RawResponse: resp}
+	result := DomainsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Domain); err != nil {
 		return DomainsClientGetResponse{}, err
 	}
@@ -423,7 +421,7 @@ func (client *DomainsClient) getControlCenterSsoRequestCreateRequest(ctx context
 
 // getControlCenterSsoRequestHandleResponse handles the GetControlCenterSsoRequest response.
 func (client *DomainsClient) getControlCenterSsoRequestHandleResponse(resp *http.Response) (DomainsClientGetControlCenterSsoRequestResponse, error) {
-	result := DomainsClientGetControlCenterSsoRequestResponse{RawResponse: resp}
+	result := DomainsClientGetControlCenterSsoRequestResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainControlCenterSsoRequest); err != nil {
 		return DomainsClientGetControlCenterSsoRequestResponse{}, err
 	}
@@ -484,7 +482,7 @@ func (client *DomainsClient) getOwnershipIdentifierCreateRequest(ctx context.Con
 
 // getOwnershipIdentifierHandleResponse handles the GetOwnershipIdentifier response.
 func (client *DomainsClient) getOwnershipIdentifierHandleResponse(resp *http.Response) (DomainsClientGetOwnershipIdentifierResponse, error) {
-	result := DomainsClientGetOwnershipIdentifierResponse{RawResponse: resp}
+	result := DomainsClientGetOwnershipIdentifierResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainOwnershipIdentifier); err != nil {
 		return DomainsClientGetOwnershipIdentifierResponse{}, err
 	}
@@ -526,7 +524,7 @@ func (client *DomainsClient) listCreateRequest(ctx context.Context, options *Dom
 
 // listHandleResponse handles the List response.
 func (client *DomainsClient) listHandleResponse(resp *http.Response) (DomainsClientListResponse, error) {
-	result := DomainsClientListResponse{RawResponse: resp}
+	result := DomainsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainCollection); err != nil {
 		return DomainsClientListResponse{}, err
 	}
@@ -574,7 +572,7 @@ func (client *DomainsClient) listByResourceGroupCreateRequest(ctx context.Contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *DomainsClient) listByResourceGroupHandleResponse(resp *http.Response) (DomainsClientListByResourceGroupResponse, error) {
-	result := DomainsClientListByResourceGroupResponse{RawResponse: resp}
+	result := DomainsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainCollection); err != nil {
 		return DomainsClientListByResourceGroupResponse{}, err
 	}
@@ -627,7 +625,7 @@ func (client *DomainsClient) listOwnershipIdentifiersCreateRequest(ctx context.C
 
 // listOwnershipIdentifiersHandleResponse handles the ListOwnershipIdentifiers response.
 func (client *DomainsClient) listOwnershipIdentifiersHandleResponse(resp *http.Response) (DomainsClientListOwnershipIdentifiersResponse, error) {
-	result := DomainsClientListOwnershipIdentifiersResponse{RawResponse: resp}
+	result := DomainsClientListOwnershipIdentifiersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainOwnershipIdentifierCollection); err != nil {
 		return DomainsClientListOwnershipIdentifiersResponse{}, err
 	}
@@ -671,7 +669,7 @@ func (client *DomainsClient) listRecommendationsCreateRequest(ctx context.Contex
 
 // listRecommendationsHandleResponse handles the ListRecommendations response.
 func (client *DomainsClient) listRecommendationsHandleResponse(resp *http.Response) (DomainsClientListRecommendationsResponse, error) {
-	result := DomainsClientListRecommendationsResponse{RawResponse: resp}
+	result := DomainsClientListRecommendationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NameIdentifierCollection); err != nil {
 		return DomainsClientListRecommendationsResponse{}, err
 	}
@@ -695,7 +693,7 @@ func (client *DomainsClient) Renew(ctx context.Context, resourceGroupName string
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return DomainsClientRenewResponse{}, runtime.NewResponseError(resp)
 	}
-	return DomainsClientRenewResponse{RawResponse: resp}, nil
+	return DomainsClientRenewResponse{}, nil
 }
 
 // renewCreateRequest creates the Renew request.
@@ -772,7 +770,7 @@ func (client *DomainsClient) transferOutCreateRequest(ctx context.Context, resou
 
 // transferOutHandleResponse handles the TransferOut response.
 func (client *DomainsClient) transferOutHandleResponse(resp *http.Response) (DomainsClientTransferOutResponse, error) {
-	result := DomainsClientTransferOutResponse{RawResponse: resp}
+	result := DomainsClientTransferOutResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Domain); err != nil {
 		return DomainsClientTransferOutResponse{}, err
 	}
@@ -828,7 +826,7 @@ func (client *DomainsClient) updateCreateRequest(ctx context.Context, resourceGr
 
 // updateHandleResponse handles the Update response.
 func (client *DomainsClient) updateHandleResponse(resp *http.Response) (DomainsClientUpdateResponse, error) {
-	result := DomainsClientUpdateResponse{RawResponse: resp}
+	result := DomainsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Domain); err != nil {
 		return DomainsClientUpdateResponse{}, err
 	}
@@ -891,7 +889,7 @@ func (client *DomainsClient) updateOwnershipIdentifierCreateRequest(ctx context.
 
 // updateOwnershipIdentifierHandleResponse handles the UpdateOwnershipIdentifier response.
 func (client *DomainsClient) updateOwnershipIdentifierHandleResponse(resp *http.Response) (DomainsClientUpdateOwnershipIdentifierResponse, error) {
-	result := DomainsClientUpdateOwnershipIdentifierResponse{RawResponse: resp}
+	result := DomainsClientUpdateOwnershipIdentifierResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainOwnershipIdentifier); err != nil {
 		return DomainsClientUpdateOwnershipIdentifierResponse{}, err
 	}

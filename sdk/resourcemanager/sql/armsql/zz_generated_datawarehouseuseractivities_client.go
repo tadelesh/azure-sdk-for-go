@@ -34,17 +34,17 @@ type DataWarehouseUserActivitiesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataWarehouseUserActivitiesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataWarehouseUserActivitiesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataWarehouseUserActivitiesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *DataWarehouseUserActivitiesClient) getCreateRequest(ctx context.Co
 
 // getHandleResponse handles the Get response.
 func (client *DataWarehouseUserActivitiesClient) getHandleResponse(resp *http.Response) (DataWarehouseUserActivitiesClientGetResponse, error) {
-	result := DataWarehouseUserActivitiesClientGetResponse{RawResponse: resp}
+	result := DataWarehouseUserActivitiesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataWarehouseUserActivities); err != nil {
 		return DataWarehouseUserActivitiesClientGetResponse{}, err
 	}
@@ -168,7 +168,7 @@ func (client *DataWarehouseUserActivitiesClient) listByDatabaseCreateRequest(ctx
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *DataWarehouseUserActivitiesClient) listByDatabaseHandleResponse(resp *http.Response) (DataWarehouseUserActivitiesClientListByDatabaseResponse, error) {
-	result := DataWarehouseUserActivitiesClientListByDatabaseResponse{RawResponse: resp}
+	result := DataWarehouseUserActivitiesClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataWarehouseUserActivitiesListResult); err != nil {
 		return DataWarehouseUserActivitiesClientListByDatabaseResponse{}, err
 	}

@@ -35,17 +35,17 @@ type MembersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMembersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MembersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MembersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *MembersClient) BeginCreate(ctx context.Context, blockchainMemberNa
 	if err != nil {
 		return MembersClientCreatePollerResponse{}, err
 	}
-	result := MembersClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := MembersClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("MembersClient.Create", "", resp, client.pl)
 	if err != nil {
 		return MembersClientCreatePollerResponse{}, err
@@ -131,9 +129,7 @@ func (client *MembersClient) BeginDelete(ctx context.Context, blockchainMemberNa
 	if err != nil {
 		return MembersClientDeletePollerResponse{}, err
 	}
-	result := MembersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := MembersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("MembersClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return MembersClientDeletePollerResponse{}, err
@@ -235,7 +231,7 @@ func (client *MembersClient) getCreateRequest(ctx context.Context, blockchainMem
 
 // getHandleResponse handles the Get response.
 func (client *MembersClient) getHandleResponse(resp *http.Response) (MembersClientGetResponse, error) {
-	result := MembersClientGetResponse{RawResponse: resp}
+	result := MembersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Member); err != nil {
 		return MembersClientGetResponse{}, err
 	}
@@ -283,7 +279,7 @@ func (client *MembersClient) listCreateRequest(ctx context.Context, resourceGrou
 
 // listHandleResponse handles the List response.
 func (client *MembersClient) listHandleResponse(resp *http.Response) (MembersClientListResponse, error) {
-	result := MembersClientListResponse{RawResponse: resp}
+	result := MembersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MemberCollection); err != nil {
 		return MembersClientListResponse{}, err
 	}
@@ -339,7 +335,7 @@ func (client *MembersClient) listAPIKeysCreateRequest(ctx context.Context, block
 
 // listAPIKeysHandleResponse handles the ListAPIKeys response.
 func (client *MembersClient) listAPIKeysHandleResponse(resp *http.Response) (MembersClientListAPIKeysResponse, error) {
-	result := MembersClientListAPIKeysResponse{RawResponse: resp}
+	result := MembersClientListAPIKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIKeyCollection); err != nil {
 		return MembersClientListAPIKeysResponse{}, err
 	}
@@ -381,7 +377,7 @@ func (client *MembersClient) listAllCreateRequest(ctx context.Context, options *
 
 // listAllHandleResponse handles the ListAll response.
 func (client *MembersClient) listAllHandleResponse(resp *http.Response) (MembersClientListAllResponse, error) {
-	result := MembersClientListAllResponse{RawResponse: resp}
+	result := MembersClientListAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MemberCollection); err != nil {
 		return MembersClientListAllResponse{}, err
 	}
@@ -435,7 +431,7 @@ func (client *MembersClient) listConsortiumMembersCreateRequest(ctx context.Cont
 
 // listConsortiumMembersHandleResponse handles the ListConsortiumMembers response.
 func (client *MembersClient) listConsortiumMembersHandleResponse(resp *http.Response) (MembersClientListConsortiumMembersResponse, error) {
-	result := MembersClientListConsortiumMembersResponse{RawResponse: resp}
+	result := MembersClientListConsortiumMembersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConsortiumMemberCollection); err != nil {
 		return MembersClientListConsortiumMembersResponse{}, err
 	}
@@ -495,7 +491,7 @@ func (client *MembersClient) listRegenerateAPIKeysCreateRequest(ctx context.Cont
 
 // listRegenerateAPIKeysHandleResponse handles the ListRegenerateAPIKeys response.
 func (client *MembersClient) listRegenerateAPIKeysHandleResponse(resp *http.Response) (MembersClientListRegenerateAPIKeysResponse, error) {
-	result := MembersClientListRegenerateAPIKeysResponse{RawResponse: resp}
+	result := MembersClientListRegenerateAPIKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIKeyCollection); err != nil {
 		return MembersClientListRegenerateAPIKeysResponse{}, err
 	}
@@ -554,7 +550,7 @@ func (client *MembersClient) updateCreateRequest(ctx context.Context, blockchain
 
 // updateHandleResponse handles the Update response.
 func (client *MembersClient) updateHandleResponse(resp *http.Response) (MembersClientUpdateResponse, error) {
-	result := MembersClientUpdateResponse{RawResponse: resp}
+	result := MembersClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Member); err != nil {
 		return MembersClientUpdateResponse{}, err
 	}

@@ -35,17 +35,17 @@ type IntegrationAccountsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIntegrationAccountsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IntegrationAccountsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IntegrationAccountsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *IntegrationAccountsClient) createOrUpdateCreateRequest(ctx context
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *IntegrationAccountsClient) createOrUpdateHandleResponse(resp *http.Response) (IntegrationAccountsClientCreateOrUpdateResponse, error) {
-	result := IntegrationAccountsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := IntegrationAccountsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccount); err != nil {
 		return IntegrationAccountsClientCreateOrUpdateResponse{}, err
 	}
@@ -125,7 +125,7 @@ func (client *IntegrationAccountsClient) Delete(ctx context.Context, resourceGro
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return IntegrationAccountsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return IntegrationAccountsClientDeleteResponse{RawResponse: resp}, nil
+	return IntegrationAccountsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -202,7 +202,7 @@ func (client *IntegrationAccountsClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *IntegrationAccountsClient) getHandleResponse(resp *http.Response) (IntegrationAccountsClientGetResponse, error) {
-	result := IntegrationAccountsClientGetResponse{RawResponse: resp}
+	result := IntegrationAccountsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccount); err != nil {
 		return IntegrationAccountsClientGetResponse{}, err
 	}
@@ -253,7 +253,7 @@ func (client *IntegrationAccountsClient) listByResourceGroupCreateRequest(ctx co
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *IntegrationAccountsClient) listByResourceGroupHandleResponse(resp *http.Response) (IntegrationAccountsClientListByResourceGroupResponse, error) {
-	result := IntegrationAccountsClientListByResourceGroupResponse{RawResponse: resp}
+	result := IntegrationAccountsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountListResult); err != nil {
 		return IntegrationAccountsClientListByResourceGroupResponse{}, err
 	}
@@ -299,7 +299,7 @@ func (client *IntegrationAccountsClient) listBySubscriptionCreateRequest(ctx con
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *IntegrationAccountsClient) listBySubscriptionHandleResponse(resp *http.Response) (IntegrationAccountsClientListBySubscriptionResponse, error) {
-	result := IntegrationAccountsClientListBySubscriptionResponse{RawResponse: resp}
+	result := IntegrationAccountsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountListResult); err != nil {
 		return IntegrationAccountsClientListBySubscriptionResponse{}, err
 	}
@@ -356,7 +356,7 @@ func (client *IntegrationAccountsClient) listCallbackURLCreateRequest(ctx contex
 
 // listCallbackURLHandleResponse handles the ListCallbackURL response.
 func (client *IntegrationAccountsClient) listCallbackURLHandleResponse(resp *http.Response) (IntegrationAccountsClientListCallbackURLResponse, error) {
-	result := IntegrationAccountsClientListCallbackURLResponse{RawResponse: resp}
+	result := IntegrationAccountsClientListCallbackURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CallbackURL); err != nil {
 		return IntegrationAccountsClientListCallbackURLResponse{}, err
 	}
@@ -370,19 +370,13 @@ func (client *IntegrationAccountsClient) listCallbackURLHandleResponse(resp *htt
 // listKeyVaultKeys - The key vault parameters.
 // options - IntegrationAccountsClientListKeyVaultKeysOptions contains the optional parameters for the IntegrationAccountsClient.ListKeyVaultKeys
 // method.
-func (client *IntegrationAccountsClient) ListKeyVaultKeys(ctx context.Context, resourceGroupName string, integrationAccountName string, listKeyVaultKeys ListKeyVaultKeysDefinition, options *IntegrationAccountsClientListKeyVaultKeysOptions) (IntegrationAccountsClientListKeyVaultKeysResponse, error) {
-	req, err := client.listKeyVaultKeysCreateRequest(ctx, resourceGroupName, integrationAccountName, listKeyVaultKeys, options)
-	if err != nil {
-		return IntegrationAccountsClientListKeyVaultKeysResponse{}, err
+func (client *IntegrationAccountsClient) ListKeyVaultKeys(resourceGroupName string, integrationAccountName string, listKeyVaultKeys ListKeyVaultKeysDefinition, options *IntegrationAccountsClientListKeyVaultKeysOptions) *IntegrationAccountsClientListKeyVaultKeysPager {
+	return &IntegrationAccountsClientListKeyVaultKeysPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listKeyVaultKeysCreateRequest(ctx, resourceGroupName, integrationAccountName, listKeyVaultKeys, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return IntegrationAccountsClientListKeyVaultKeysResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return IntegrationAccountsClientListKeyVaultKeysResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listKeyVaultKeysHandleResponse(resp)
 }
 
 // listKeyVaultKeysCreateRequest creates the ListKeyVaultKeys request.
@@ -413,7 +407,7 @@ func (client *IntegrationAccountsClient) listKeyVaultKeysCreateRequest(ctx conte
 
 // listKeyVaultKeysHandleResponse handles the ListKeyVaultKeys response.
 func (client *IntegrationAccountsClient) listKeyVaultKeysHandleResponse(resp *http.Response) (IntegrationAccountsClientListKeyVaultKeysResponse, error) {
-	result := IntegrationAccountsClientListKeyVaultKeysResponse{RawResponse: resp}
+	result := IntegrationAccountsClientListKeyVaultKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KeyVaultKeyCollection); err != nil {
 		return IntegrationAccountsClientListKeyVaultKeysResponse{}, err
 	}
@@ -439,7 +433,7 @@ func (client *IntegrationAccountsClient) LogTrackingEvents(ctx context.Context, 
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return IntegrationAccountsClientLogTrackingEventsResponse{}, runtime.NewResponseError(resp)
 	}
-	return IntegrationAccountsClientLogTrackingEventsResponse{RawResponse: resp}, nil
+	return IntegrationAccountsClientLogTrackingEventsResponse{}, nil
 }
 
 // logTrackingEventsCreateRequest creates the LogTrackingEvents request.
@@ -518,7 +512,7 @@ func (client *IntegrationAccountsClient) regenerateAccessKeyCreateRequest(ctx co
 
 // regenerateAccessKeyHandleResponse handles the RegenerateAccessKey response.
 func (client *IntegrationAccountsClient) regenerateAccessKeyHandleResponse(resp *http.Response) (IntegrationAccountsClientRegenerateAccessKeyResponse, error) {
-	result := IntegrationAccountsClientRegenerateAccessKeyResponse{RawResponse: resp}
+	result := IntegrationAccountsClientRegenerateAccessKeyResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccount); err != nil {
 		return IntegrationAccountsClientRegenerateAccessKeyResponse{}, err
 	}
@@ -575,7 +569,7 @@ func (client *IntegrationAccountsClient) updateCreateRequest(ctx context.Context
 
 // updateHandleResponse handles the Update response.
 func (client *IntegrationAccountsClient) updateHandleResponse(resp *http.Response) (IntegrationAccountsClientUpdateResponse, error) {
-	result := IntegrationAccountsClientUpdateResponse{RawResponse: resp}
+	result := IntegrationAccountsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccount); err != nil {
 		return IntegrationAccountsClientUpdateResponse{}, err
 	}

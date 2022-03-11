@@ -1,5 +1,130 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ApplicationsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ApplicationsClientListBySubscriptionResponse, error)`
+- Function `*ApplicationDefinitionsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ApplicationDefinitionsClientListByResourceGroupResponse, error)`
+- Function `*ApplicationClientListOperationsPager.NextPage` return value(s) have been changed from `(bool)` to `(ApplicationClientListOperationsResponse, error)`
+- Function `*ApplicationDefinitionsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ApplicationDefinitionsClientListBySubscriptionResponse, error)`
+- Function `*ApplicationsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ApplicationsClientListByResourceGroupResponse, error)`
+- Function `*ApplicationDefinitionsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*ApplicationsClientListBySubscriptionPager.Err` has been removed
+- Function `*ApplicationClientListOperationsPager.Err` has been removed
+- Function `*ApplicationClientListOperationsPager.PageResponse` has been removed
+- Function `*ApplicationDefinitionsClientListByResourceGroupPager.Err` has been removed
+- Function `*ApplicationsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*ApplicationDefinitionsClientListBySubscriptionPager.Err` has been removed
+- Function `*ApplicationsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ApplicationDefinitionsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ApplicationsClientListByResourceGroupPager.Err` has been removed
+- Struct `ApplicationClientListOperationsResult` has been removed
+- Struct `ApplicationDefinitionsClientCreateOrUpdateResult` has been removed
+- Struct `ApplicationDefinitionsClientGetResult` has been removed
+- Struct `ApplicationDefinitionsClientListByResourceGroupResult` has been removed
+- Struct `ApplicationDefinitionsClientListBySubscriptionResult` has been removed
+- Struct `ApplicationDefinitionsClientUpdateResult` has been removed
+- Struct `ApplicationsClientCreateOrUpdateResult` has been removed
+- Struct `ApplicationsClientGetResult` has been removed
+- Struct `ApplicationsClientListByResourceGroupResult` has been removed
+- Struct `ApplicationsClientListBySubscriptionResult` has been removed
+- Struct `ApplicationsClientUpdateResult` has been removed
+- Struct `JitRequestsClientCreateOrUpdateResult` has been removed
+- Struct `JitRequestsClientGetResult` has been removed
+- Struct `JitRequestsClientListByResourceGroupResult` has been removed
+- Struct `JitRequestsClientListBySubscriptionResult` has been removed
+- Struct `JitRequestsClientUpdateResult` has been removed
+- Field `RawResponse` of struct `ApplicationsClientListAllowedUpgradePlansResponse` has been removed
+- Field `ApplicationDefinitionsClientListBySubscriptionResult` of struct `ApplicationDefinitionsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ApplicationDefinitionsClientListBySubscriptionResponse` has been removed
+- Field `JitRequestsClientListByResourceGroupResult` of struct `JitRequestsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `JitRequestsClientListByResourceGroupResponse` has been removed
+- Field `JitRequestsClientListBySubscriptionResult` of struct `JitRequestsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `JitRequestsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ApplicationDefinitionsClientDeleteResponse` has been removed
+- Field `ApplicationsClientListByResourceGroupResult` of struct `ApplicationsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientRefreshPermissionsResponse` has been removed
+- Field `JitRequestsClientGetResult` of struct `JitRequestsClientGetResponse` has been removed
+- Field `RawResponse` of struct `JitRequestsClientGetResponse` has been removed
+- Field `ApplicationDefinitionsClientUpdateResult` of struct `ApplicationDefinitionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationDefinitionsClientUpdateResponse` has been removed
+- Field `ApplicationDefinitionsClientListByResourceGroupResult` of struct `ApplicationDefinitionsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ApplicationDefinitionsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ApplicationDefinitionsClientDeletePollerResponse` has been removed
+- Field `JitRequestsClientCreateOrUpdateResult` of struct `JitRequestsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `JitRequestsClientCreateOrUpdateResponse` has been removed
+- Field `JitRequestsClientUpdateResult` of struct `JitRequestsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `JitRequestsClientUpdateResponse` has been removed
+- Field `ApplicationDefinitionsClientGetResult` of struct `ApplicationDefinitionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ApplicationDefinitionsClientGetResponse` has been removed
+- Field `ApplicationsClientCreateOrUpdateResult` of struct `ApplicationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientCreateOrUpdateResponse` has been removed
+- Field `ApplicationDefinitionsClientCreateOrUpdateResult` of struct `ApplicationDefinitionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationDefinitionsClientCreateOrUpdateResponse` has been removed
+- Field `ApplicationsClientUpdateResult` of struct `ApplicationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientRefreshPermissionsPollerResponse` has been removed
+- Field `ApplicationClientListOperationsResult` of struct `ApplicationClientListOperationsResponse` has been removed
+- Field `RawResponse` of struct `ApplicationClientListOperationsResponse` has been removed
+- Field `RawResponse` of struct `ApplicationDefinitionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientDeletePollerResponse` has been removed
+- Field `ApplicationsClientListBySubscriptionResult` of struct `ApplicationsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `JitRequestsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `JitRequestsClientDeleteResponse` has been removed
+- Field `ApplicationsClientGetResult` of struct `ApplicationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientGetResponse` has been removed
+
+### Features Added
+
+- New function `*ApplicationDefinitionsClientListBySubscriptionPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*ApplicationsClientListByResourceGroupPager.More() bool`
+- New function `*ApplicationClientListOperationsPager.More() bool`
+- New function `*ApplicationsClientListBySubscriptionPager.More() bool`
+- New function `*ApplicationDefinitionsClientListByResourceGroupPager.More() bool`
+- New struct `ApplicationPropertiesPatchable`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `Application` in struct `ApplicationsClientGetResponse`
+- New anonymous field `JitRequestDefinition` in struct `JitRequestsClientGetResponse`
+- New anonymous field `ApplicationListResult` in struct `ApplicationsClientListByResourceGroupResponse`
+- New anonymous field `ApplicationDefinition` in struct `ApplicationDefinitionsClientUpdateResponse`
+- New anonymous field `ApplicationDefinition` in struct `ApplicationDefinitionsClientCreateOrUpdateResponse`
+- New anonymous field `OperationListResult` in struct `ApplicationClientListOperationsResponse`
+- New anonymous field `ApplicationDefinitionListResult` in struct `ApplicationDefinitionsClientListBySubscriptionResponse`
+- New anonymous field `Application` in struct `ApplicationsClientUpdateResponse`
+- New anonymous field `JitRequestDefinitionListResult` in struct `JitRequestsClientListByResourceGroupResponse`
+- New anonymous field `ApplicationDefinitionListResult` in struct `ApplicationDefinitionsClientListByResourceGroupResponse`
+- New anonymous field `JitRequestDefinitionListResult` in struct `JitRequestsClientListBySubscriptionResponse`
+- New anonymous field `Application` in struct `ApplicationsClientCreateOrUpdateResponse`
+- New anonymous field `ApplicationDefinition` in struct `ApplicationDefinitionsClientGetResponse`
+- New anonymous field `JitRequestDefinition` in struct `JitRequestsClientUpdateResponse`
+- New anonymous field `JitRequestDefinition` in struct `JitRequestsClientCreateOrUpdateResponse`
+- New anonymous field `ApplicationListResult` in struct `ApplicationsClientListBySubscriptionResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `ApplicationDefinitionProperties.MainTemplate` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `ApplicationDefinitionProperties.CreateUIDefinition` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `ApplicationProperties.Parameters` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `ApplicationProperties.Outputs` has been changed from `map[string]interface{}` to `interface{}`
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ApplicationPropertiesPatchable` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

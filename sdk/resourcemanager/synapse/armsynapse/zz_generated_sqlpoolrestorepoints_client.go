@@ -34,17 +34,17 @@ type SQLPoolRestorePointsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLPoolRestorePointsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLPoolRestorePointsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLPoolRestorePointsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *SQLPoolRestorePointsClient) BeginCreate(ctx context.Context, resou
 	if err != nil {
 		return SQLPoolRestorePointsClientCreatePollerResponse{}, err
 	}
-	result := SQLPoolRestorePointsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLPoolRestorePointsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLPoolRestorePointsClient.Create", "location", resp, client.pl)
 	if err != nil {
 		return SQLPoolRestorePointsClientCreatePollerResponse{}, err
@@ -142,7 +140,7 @@ func (client *SQLPoolRestorePointsClient) Delete(ctx context.Context, resourceGr
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SQLPoolRestorePointsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SQLPoolRestorePointsClientDeleteResponse{RawResponse: resp}, nil
+	return SQLPoolRestorePointsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -237,7 +235,7 @@ func (client *SQLPoolRestorePointsClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *SQLPoolRestorePointsClient) getHandleResponse(resp *http.Response) (SQLPoolRestorePointsClientGetResponse, error) {
-	result := SQLPoolRestorePointsClientGetResponse{RawResponse: resp}
+	result := SQLPoolRestorePointsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorePoint); err != nil {
 		return SQLPoolRestorePointsClientGetResponse{}, err
 	}
@@ -295,7 +293,7 @@ func (client *SQLPoolRestorePointsClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *SQLPoolRestorePointsClient) listHandleResponse(resp *http.Response) (SQLPoolRestorePointsClientListResponse, error) {
-	result := SQLPoolRestorePointsClientListResponse{RawResponse: resp}
+	result := SQLPoolRestorePointsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorePointListResult); err != nil {
 		return SQLPoolRestorePointsClientListResponse{}, err
 	}

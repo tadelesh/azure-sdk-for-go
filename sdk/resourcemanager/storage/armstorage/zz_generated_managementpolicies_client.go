@@ -105,7 +105,7 @@ func (client *ManagementPoliciesClient) createOrUpdateCreateRequest(ctx context.
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ManagementPoliciesClient) createOrUpdateHandleResponse(resp *http.Response) (ManagementPoliciesClientCreateOrUpdateResponse, error) {
-	result := ManagementPoliciesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ManagementPoliciesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagementPolicy); err != nil {
 		return ManagementPoliciesClientCreateOrUpdateResponse{}, err
 	}
@@ -132,7 +132,7 @@ func (client *ManagementPoliciesClient) Delete(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ManagementPoliciesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ManagementPoliciesClientDeleteResponse{RawResponse: resp}, nil
+	return ManagementPoliciesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -218,7 +218,7 @@ func (client *ManagementPoliciesClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *ManagementPoliciesClient) getHandleResponse(resp *http.Response) (ManagementPoliciesClientGetResponse, error) {
-	result := ManagementPoliciesClientGetResponse{RawResponse: resp}
+	result := ManagementPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagementPolicy); err != nil {
 		return ManagementPoliciesClientGetResponse{}, err
 	}

@@ -36,17 +36,17 @@ type ProductAPIClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProductAPIClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ProductAPIClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProductAPIClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -68,7 +68,7 @@ func (client *ProductAPIClient) CheckEntityExists(ctx context.Context, resourceG
 	if err != nil {
 		return ProductAPIClientCheckEntityExistsResponse{}, err
 	}
-	result := ProductAPIClientCheckEntityExistsResponse{RawResponse: resp}
+	result := ProductAPIClientCheckEntityExistsResponse{}
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		result.Success = true
 	}
@@ -169,7 +169,7 @@ func (client *ProductAPIClient) createOrUpdateCreateRequest(ctx context.Context,
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ProductAPIClient) createOrUpdateHandleResponse(resp *http.Response) (ProductAPIClientCreateOrUpdateResponse, error) {
-	result := ProductAPIClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ProductAPIClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIContract); err != nil {
 		return ProductAPIClientCreateOrUpdateResponse{}, err
 	}
@@ -196,7 +196,7 @@ func (client *ProductAPIClient) Delete(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ProductAPIClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ProductAPIClientDeleteResponse{RawResponse: resp}, nil
+	return ProductAPIClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -293,7 +293,7 @@ func (client *ProductAPIClient) listByProductCreateRequest(ctx context.Context, 
 
 // listByProductHandleResponse handles the ListByProduct response.
 func (client *ProductAPIClient) listByProductHandleResponse(resp *http.Response) (ProductAPIClientListByProductResponse, error) {
-	result := ProductAPIClientListByProductResponse{RawResponse: resp}
+	result := ProductAPIClientListByProductResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APICollection); err != nil {
 		return ProductAPIClientListByProductResponse{}, err
 	}

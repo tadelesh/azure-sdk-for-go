@@ -38,19 +38,19 @@ type ReplicationLogicalNetworksClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReplicationLogicalNetworksClient(resourceName string, resourceGroupName string, subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReplicationLogicalNetworksClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReplicationLogicalNetworksClient{
 		resourceName:      resourceName,
 		resourceGroupName: resourceGroupName,
 		subscriptionID:    subscriptionID,
-		host:              string(cp.Endpoint),
-		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:              string(ep),
+		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *ReplicationLogicalNetworksClient) getCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -112,7 +112,7 @@ func (client *ReplicationLogicalNetworksClient) getCreateRequest(ctx context.Con
 
 // getHandleResponse handles the Get response.
 func (client *ReplicationLogicalNetworksClient) getHandleResponse(resp *http.Response) (ReplicationLogicalNetworksClientGetResponse, error) {
-	result := ReplicationLogicalNetworksClientGetResponse{RawResponse: resp}
+	result := ReplicationLogicalNetworksClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LogicalNetwork); err != nil {
 		return ReplicationLogicalNetworksClientGetResponse{}, err
 	}
@@ -160,7 +160,7 @@ func (client *ReplicationLogicalNetworksClient) listByReplicationFabricsCreateRe
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -168,7 +168,7 @@ func (client *ReplicationLogicalNetworksClient) listByReplicationFabricsCreateRe
 
 // listByReplicationFabricsHandleResponse handles the ListByReplicationFabrics response.
 func (client *ReplicationLogicalNetworksClient) listByReplicationFabricsHandleResponse(resp *http.Response) (ReplicationLogicalNetworksClientListByReplicationFabricsResponse, error) {
-	result := ReplicationLogicalNetworksClientListByReplicationFabricsResponse{RawResponse: resp}
+	result := ReplicationLogicalNetworksClientListByReplicationFabricsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LogicalNetworkCollection); err != nil {
 		return ReplicationLogicalNetworksClientListByReplicationFabricsResponse{}, err
 	}

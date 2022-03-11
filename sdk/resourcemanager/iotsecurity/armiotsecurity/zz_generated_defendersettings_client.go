@@ -34,17 +34,17 @@ type DefenderSettingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDefenderSettingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DefenderSettingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DefenderSettingsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -89,7 +89,7 @@ func (client *DefenderSettingsClient) createOrUpdateCreateRequest(ctx context.Co
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *DefenderSettingsClient) createOrUpdateHandleResponse(resp *http.Response) (DefenderSettingsClientCreateOrUpdateResponse, error) {
-	result := DefenderSettingsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := DefenderSettingsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DefenderSettingsModel); err != nil {
 		return DefenderSettingsClientCreateOrUpdateResponse{}, err
 	}
@@ -111,7 +111,7 @@ func (client *DefenderSettingsClient) Delete(ctx context.Context, options *Defen
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DefenderSettingsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DefenderSettingsClientDeleteResponse{RawResponse: resp}, nil
+	return DefenderSettingsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -148,7 +148,7 @@ func (client *DefenderSettingsClient) DownloadManagerActivation(ctx context.Cont
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return DefenderSettingsClientDownloadManagerActivationResponse{}, runtime.NewResponseError(resp)
 	}
-	return DefenderSettingsClientDownloadManagerActivationResponse{RawResponse: resp}, nil
+	return DefenderSettingsClientDownloadManagerActivationResponse{Body: resp.Body}, nil
 }
 
 // downloadManagerActivationCreateRequest creates the DownloadManagerActivation request.
@@ -208,7 +208,7 @@ func (client *DefenderSettingsClient) getCreateRequest(ctx context.Context, opti
 
 // getHandleResponse handles the Get response.
 func (client *DefenderSettingsClient) getHandleResponse(resp *http.Response) (DefenderSettingsClientGetResponse, error) {
-	result := DefenderSettingsClientGetResponse{RawResponse: resp}
+	result := DefenderSettingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DefenderSettingsModel); err != nil {
 		return DefenderSettingsClientGetResponse{}, err
 	}
@@ -253,7 +253,7 @@ func (client *DefenderSettingsClient) listCreateRequest(ctx context.Context, opt
 
 // listHandleResponse handles the List response.
 func (client *DefenderSettingsClient) listHandleResponse(resp *http.Response) (DefenderSettingsClientListResponse, error) {
-	result := DefenderSettingsClientListResponse{RawResponse: resp}
+	result := DefenderSettingsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DefenderSettingsList); err != nil {
 		return DefenderSettingsClientListResponse{}, err
 	}
@@ -299,7 +299,7 @@ func (client *DefenderSettingsClient) packageDownloadsCreateRequest(ctx context.
 
 // packageDownloadsHandleResponse handles the PackageDownloads response.
 func (client *DefenderSettingsClient) packageDownloadsHandleResponse(resp *http.Response) (DefenderSettingsClientPackageDownloadsResponse, error) {
-	result := DefenderSettingsClientPackageDownloadsResponse{RawResponse: resp}
+	result := DefenderSettingsClientPackageDownloadsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PackageDownloads); err != nil {
 		return DefenderSettingsClientPackageDownloadsResponse{}, err
 	}

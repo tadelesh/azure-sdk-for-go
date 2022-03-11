@@ -34,17 +34,17 @@ type LogFilesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLogFilesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LogFilesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LogFilesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -54,19 +54,13 @@ func NewLogFilesClient(subscriptionID string, credential azcore.TokenCredential,
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // serverName - The name of the server.
 // options - LogFilesClientListByServerOptions contains the optional parameters for the LogFilesClient.ListByServer method.
-func (client *LogFilesClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string, options *LogFilesClientListByServerOptions) (LogFilesClientListByServerResponse, error) {
-	req, err := client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
-	if err != nil {
-		return LogFilesClientListByServerResponse{}, err
+func (client *LogFilesClient) ListByServer(resourceGroupName string, serverName string, options *LogFilesClientListByServerOptions) *LogFilesClientListByServerPager {
+	return &LogFilesClientListByServerPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return LogFilesClientListByServerResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return LogFilesClientListByServerResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByServerHandleResponse(resp)
 }
 
 // listByServerCreateRequest creates the ListByServer request.
@@ -97,7 +91,7 @@ func (client *LogFilesClient) listByServerCreateRequest(ctx context.Context, res
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *LogFilesClient) listByServerHandleResponse(resp *http.Response) (LogFilesClientListByServerResponse, error) {
-	result := LogFilesClientListByServerResponse{RawResponse: resp}
+	result := LogFilesClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LogFileListResult); err != nil {
 		return LogFilesClientListByServerResponse{}, err
 	}

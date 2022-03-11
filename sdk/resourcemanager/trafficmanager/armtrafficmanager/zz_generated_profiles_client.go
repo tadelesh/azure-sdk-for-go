@@ -35,17 +35,17 @@ type ProfilesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProfilesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ProfilesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProfilesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -86,7 +86,7 @@ func (client *ProfilesClient) checkTrafficManagerRelativeDNSNameAvailabilityCrea
 
 // checkTrafficManagerRelativeDNSNameAvailabilityHandleResponse handles the CheckTrafficManagerRelativeDNSNameAvailability response.
 func (client *ProfilesClient) checkTrafficManagerRelativeDNSNameAvailabilityHandleResponse(resp *http.Response) (ProfilesClientCheckTrafficManagerRelativeDNSNameAvailabilityResponse, error) {
-	result := ProfilesClientCheckTrafficManagerRelativeDNSNameAvailabilityResponse{RawResponse: resp}
+	result := ProfilesClientCheckTrafficManagerRelativeDNSNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NameAvailability); err != nil {
 		return ProfilesClientCheckTrafficManagerRelativeDNSNameAvailabilityResponse{}, err
 	}
@@ -142,7 +142,7 @@ func (client *ProfilesClient) createOrUpdateCreateRequest(ctx context.Context, r
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ProfilesClient) createOrUpdateHandleResponse(resp *http.Response) (ProfilesClientCreateOrUpdateResponse, error) {
-	result := ProfilesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ProfilesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Profile); err != nil {
 		return ProfilesClientCreateOrUpdateResponse{}, err
 	}
@@ -197,7 +197,7 @@ func (client *ProfilesClient) deleteCreateRequest(ctx context.Context, resourceG
 
 // deleteHandleResponse handles the Delete response.
 func (client *ProfilesClient) deleteHandleResponse(resp *http.Response) (ProfilesClientDeleteResponse, error) {
-	result := ProfilesClientDeleteResponse{RawResponse: resp}
+	result := ProfilesClientDeleteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeleteOperationResult); err != nil {
 		return ProfilesClientDeleteResponse{}, err
 	}
@@ -252,7 +252,7 @@ func (client *ProfilesClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *ProfilesClient) getHandleResponse(resp *http.Response) (ProfilesClientGetResponse, error) {
-	result := ProfilesClientGetResponse{RawResponse: resp}
+	result := ProfilesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Profile); err != nil {
 		return ProfilesClientGetResponse{}, err
 	}
@@ -264,19 +264,13 @@ func (client *ProfilesClient) getHandleResponse(resp *http.Response) (ProfilesCl
 // resourceGroupName - The name of the resource group containing the Traffic Manager profiles to be listed.
 // options - ProfilesClientListByResourceGroupOptions contains the optional parameters for the ProfilesClient.ListByResourceGroup
 // method.
-func (client *ProfilesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, options *ProfilesClientListByResourceGroupOptions) (ProfilesClientListByResourceGroupResponse, error) {
-	req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-	if err != nil {
-		return ProfilesClientListByResourceGroupResponse{}, err
+func (client *ProfilesClient) ListByResourceGroup(resourceGroupName string, options *ProfilesClientListByResourceGroupOptions) *ProfilesClientListByResourceGroupPager {
+	return &ProfilesClientListByResourceGroupPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ProfilesClientListByResourceGroupResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ProfilesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByResourceGroupHandleResponse(resp)
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -303,7 +297,7 @@ func (client *ProfilesClient) listByResourceGroupCreateRequest(ctx context.Conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ProfilesClient) listByResourceGroupHandleResponse(resp *http.Response) (ProfilesClientListByResourceGroupResponse, error) {
-	result := ProfilesClientListByResourceGroupResponse{RawResponse: resp}
+	result := ProfilesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProfileListResult); err != nil {
 		return ProfilesClientListByResourceGroupResponse{}, err
 	}
@@ -314,19 +308,13 @@ func (client *ProfilesClient) listByResourceGroupHandleResponse(resp *http.Respo
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ProfilesClientListBySubscriptionOptions contains the optional parameters for the ProfilesClient.ListBySubscription
 // method.
-func (client *ProfilesClient) ListBySubscription(ctx context.Context, options *ProfilesClientListBySubscriptionOptions) (ProfilesClientListBySubscriptionResponse, error) {
-	req, err := client.listBySubscriptionCreateRequest(ctx, options)
-	if err != nil {
-		return ProfilesClientListBySubscriptionResponse{}, err
+func (client *ProfilesClient) ListBySubscription(options *ProfilesClientListBySubscriptionOptions) *ProfilesClientListBySubscriptionPager {
+	return &ProfilesClientListBySubscriptionPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listBySubscriptionCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ProfilesClientListBySubscriptionResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ProfilesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listBySubscriptionHandleResponse(resp)
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -349,7 +337,7 @@ func (client *ProfilesClient) listBySubscriptionCreateRequest(ctx context.Contex
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *ProfilesClient) listBySubscriptionHandleResponse(resp *http.Response) (ProfilesClientListBySubscriptionResponse, error) {
-	result := ProfilesClientListBySubscriptionResponse{RawResponse: resp}
+	result := ProfilesClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProfileListResult); err != nil {
 		return ProfilesClientListBySubscriptionResponse{}, err
 	}
@@ -405,7 +393,7 @@ func (client *ProfilesClient) updateCreateRequest(ctx context.Context, resourceG
 
 // updateHandleResponse handles the Update response.
 func (client *ProfilesClient) updateHandleResponse(resp *http.Response) (ProfilesClientUpdateResponse, error) {
-	result := ProfilesClientUpdateResponse{RawResponse: resp}
+	result := ProfilesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Profile); err != nil {
 		return ProfilesClientUpdateResponse{}, err
 	}

@@ -34,17 +34,17 @@ type PrivateEndpointClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateEndpointClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateEndpointClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateEndpointClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *PrivateEndpointClient) getOperationStatusCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-10-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -108,7 +108,7 @@ func (client *PrivateEndpointClient) getOperationStatusCreateRequest(ctx context
 
 // getOperationStatusHandleResponse handles the GetOperationStatus response.
 func (client *PrivateEndpointClient) getOperationStatusHandleResponse(resp *http.Response) (PrivateEndpointClientGetOperationStatusResponse, error) {
-	result := PrivateEndpointClientGetOperationStatusResponse{RawResponse: resp}
+	result := PrivateEndpointClientGetOperationStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OperationStatus); err != nil {
 		return PrivateEndpointClientGetOperationStatusResponse{}, err
 	}

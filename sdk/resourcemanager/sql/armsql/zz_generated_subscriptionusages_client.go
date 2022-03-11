@@ -34,17 +34,17 @@ type SubscriptionUsagesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSubscriptionUsagesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SubscriptionUsagesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SubscriptionUsagesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -97,7 +97,7 @@ func (client *SubscriptionUsagesClient) getCreateRequest(ctx context.Context, lo
 
 // getHandleResponse handles the Get response.
 func (client *SubscriptionUsagesClient) getHandleResponse(resp *http.Response) (SubscriptionUsagesClientGetResponse, error) {
-	result := SubscriptionUsagesClientGetResponse{RawResponse: resp}
+	result := SubscriptionUsagesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SubscriptionUsage); err != nil {
 		return SubscriptionUsagesClientGetResponse{}, err
 	}
@@ -145,7 +145,7 @@ func (client *SubscriptionUsagesClient) listByLocationCreateRequest(ctx context.
 
 // listByLocationHandleResponse handles the ListByLocation response.
 func (client *SubscriptionUsagesClient) listByLocationHandleResponse(resp *http.Response) (SubscriptionUsagesClientListByLocationResponse, error) {
-	result := SubscriptionUsagesClientListByLocationResponse{RawResponse: resp}
+	result := SubscriptionUsagesClientListByLocationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SubscriptionUsageListResult); err != nil {
 		return SubscriptionUsagesClientListByLocationResponse{}, err
 	}

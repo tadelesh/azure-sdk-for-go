@@ -43,11 +43,10 @@ func (p *ArcSettingsClientDeletePoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final ArcSettingsClientDeleteResponse will be returned.
 func (p *ArcSettingsClientDeletePoller) FinalResponse(ctx context.Context) (ArcSettingsClientDeleteResponse, error) {
 	respType := ArcSettingsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ArcSettingsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ExtensionsClientCreatePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final ExtensionsClientCreateResponse will be returned.
 func (p *ExtensionsClientCreatePoller) FinalResponse(ctx context.Context) (ExtensionsClientCreateResponse, error) {
 	respType := ExtensionsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Extension)
+	_, err := p.pt.FinalResponse(ctx, &respType.Extension)
 	if err != nil {
 		return ExtensionsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ExtensionsClientDeletePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final ExtensionsClientDeleteResponse will be returned.
 func (p *ExtensionsClientDeletePoller) FinalResponse(ctx context.Context) (ExtensionsClientDeleteResponse, error) {
 	respType := ExtensionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ExtensionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *ExtensionsClientUpdatePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final ExtensionsClientUpdateResponse will be returned.
 func (p *ExtensionsClientUpdatePoller) FinalResponse(ctx context.Context) (ExtensionsClientUpdateResponse, error) {
 	respType := ExtensionsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Extension)
+	_, err := p.pt.FinalResponse(ctx, &respType.Extension)
 	if err != nil {
 		return ExtensionsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

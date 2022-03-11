@@ -36,17 +36,17 @@ type TopicsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTopicsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TopicsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TopicsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *TopicsClient) BeginCreateOrUpdate(ctx context.Context, resourceGro
 	if err != nil {
 		return TopicsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := TopicsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := TopicsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("TopicsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return TopicsClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *TopicsClient) BeginDelete(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return TopicsClientDeletePollerResponse{}, err
 	}
-	result := TopicsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := TopicsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("TopicsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return TopicsClientDeletePollerResponse{}, err
@@ -232,7 +228,7 @@ func (client *TopicsClient) getCreateRequest(ctx context.Context, resourceGroupN
 
 // getHandleResponse handles the Get response.
 func (client *TopicsClient) getHandleResponse(resp *http.Response) (TopicsClientGetResponse, error) {
-	result := TopicsClientGetResponse{RawResponse: resp}
+	result := TopicsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Topic); err != nil {
 		return TopicsClientGetResponse{}, err
 	}
@@ -286,7 +282,7 @@ func (client *TopicsClient) listByResourceGroupCreateRequest(ctx context.Context
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *TopicsClient) listByResourceGroupHandleResponse(resp *http.Response) (TopicsClientListByResourceGroupResponse, error) {
-	result := TopicsClientListByResourceGroupResponse{RawResponse: resp}
+	result := TopicsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TopicsListResult); err != nil {
 		return TopicsClientListByResourceGroupResponse{}, err
 	}
@@ -335,7 +331,7 @@ func (client *TopicsClient) listBySubscriptionCreateRequest(ctx context.Context,
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *TopicsClient) listBySubscriptionHandleResponse(resp *http.Response) (TopicsClientListBySubscriptionResponse, error) {
-	result := TopicsClientListBySubscriptionResponse{RawResponse: resp}
+	result := TopicsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TopicsListResult); err != nil {
 		return TopicsClientListBySubscriptionResponse{}, err
 	}
@@ -349,19 +345,13 @@ func (client *TopicsClient) listBySubscriptionHandleResponse(resp *http.Response
 // resourceTypeName - Name of the topic type.
 // resourceName - Name of the topic.
 // options - TopicsClientListEventTypesOptions contains the optional parameters for the TopicsClient.ListEventTypes method.
-func (client *TopicsClient) ListEventTypes(ctx context.Context, resourceGroupName string, providerNamespace string, resourceTypeName string, resourceName string, options *TopicsClientListEventTypesOptions) (TopicsClientListEventTypesResponse, error) {
-	req, err := client.listEventTypesCreateRequest(ctx, resourceGroupName, providerNamespace, resourceTypeName, resourceName, options)
-	if err != nil {
-		return TopicsClientListEventTypesResponse{}, err
+func (client *TopicsClient) ListEventTypes(resourceGroupName string, providerNamespace string, resourceTypeName string, resourceName string, options *TopicsClientListEventTypesOptions) *TopicsClientListEventTypesPager {
+	return &TopicsClientListEventTypesPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listEventTypesCreateRequest(ctx, resourceGroupName, providerNamespace, resourceTypeName, resourceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return TopicsClientListEventTypesResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return TopicsClientListEventTypesResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listEventTypesHandleResponse(resp)
 }
 
 // listEventTypesCreateRequest creates the ListEventTypes request.
@@ -400,7 +390,7 @@ func (client *TopicsClient) listEventTypesCreateRequest(ctx context.Context, res
 
 // listEventTypesHandleResponse handles the ListEventTypes response.
 func (client *TopicsClient) listEventTypesHandleResponse(resp *http.Response) (TopicsClientListEventTypesResponse, error) {
-	result := TopicsClientListEventTypesResponse{RawResponse: resp}
+	result := TopicsClientListEventTypesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventTypesListResult); err != nil {
 		return TopicsClientListEventTypesResponse{}, err
 	}
@@ -456,7 +446,7 @@ func (client *TopicsClient) listSharedAccessKeysCreateRequest(ctx context.Contex
 
 // listSharedAccessKeysHandleResponse handles the ListSharedAccessKeys response.
 func (client *TopicsClient) listSharedAccessKeysHandleResponse(resp *http.Response) (TopicsClientListSharedAccessKeysResponse, error) {
-	result := TopicsClientListSharedAccessKeysResponse{RawResponse: resp}
+	result := TopicsClientListSharedAccessKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TopicSharedAccessKeys); err != nil {
 		return TopicsClientListSharedAccessKeysResponse{}, err
 	}
@@ -475,9 +465,7 @@ func (client *TopicsClient) BeginRegenerateKey(ctx context.Context, resourceGrou
 	if err != nil {
 		return TopicsClientRegenerateKeyPollerResponse{}, err
 	}
-	result := TopicsClientRegenerateKeyPollerResponse{
-		RawResponse: resp,
-	}
+	result := TopicsClientRegenerateKeyPollerResponse{}
 	pt, err := armruntime.NewPoller("TopicsClient.RegenerateKey", "", resp, client.pl)
 	if err != nil {
 		return TopicsClientRegenerateKeyPollerResponse{}, err
@@ -542,9 +530,7 @@ func (client *TopicsClient) BeginUpdate(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return TopicsClientUpdatePollerResponse{}, err
 	}
-	result := TopicsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := TopicsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("TopicsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return TopicsClientUpdatePollerResponse{}, err

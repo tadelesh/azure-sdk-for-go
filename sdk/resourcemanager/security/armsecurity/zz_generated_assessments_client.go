@@ -90,7 +90,7 @@ func (client *AssessmentsClient) createOrUpdateCreateRequest(ctx context.Context
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *AssessmentsClient) createOrUpdateHandleResponse(resp *http.Response) (AssessmentsClientCreateOrUpdateResponse, error) {
-	result := AssessmentsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := AssessmentsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssessmentResponse); err != nil {
 		return AssessmentsClientCreateOrUpdateResponse{}, err
 	}
@@ -115,7 +115,7 @@ func (client *AssessmentsClient) Delete(ctx context.Context, resourceID string, 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return AssessmentsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AssessmentsClientDeleteResponse{RawResponse: resp}, nil
+	return AssessmentsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -181,7 +181,7 @@ func (client *AssessmentsClient) getCreateRequest(ctx context.Context, resourceI
 
 // getHandleResponse handles the Get response.
 func (client *AssessmentsClient) getHandleResponse(resp *http.Response) (AssessmentsClientGetResponse, error) {
-	result := AssessmentsClientGetResponse{RawResponse: resp}
+	result := AssessmentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssessmentResponse); err != nil {
 		return AssessmentsClientGetResponse{}, err
 	}
@@ -222,7 +222,7 @@ func (client *AssessmentsClient) listCreateRequest(ctx context.Context, scope st
 
 // listHandleResponse handles the List response.
 func (client *AssessmentsClient) listHandleResponse(resp *http.Response) (AssessmentsClientListResponse, error) {
-	result := AssessmentsClientListResponse{RawResponse: resp}
+	result := AssessmentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssessmentList); err != nil {
 		return AssessmentsClientListResponse{}, err
 	}

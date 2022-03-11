@@ -32,16 +32,16 @@ type InstructionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewInstructionsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *InstructionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &InstructionsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *InstructionsClient) getCreateRequest(ctx context.Context, billingA
 
 // getHandleResponse handles the Get response.
 func (client *InstructionsClient) getHandleResponse(resp *http.Response) (InstructionsClientGetResponse, error) {
-	result := InstructionsClientGetResponse{RawResponse: resp}
+	result := InstructionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Instruction); err != nil {
 		return InstructionsClientGetResponse{}, err
 	}
@@ -144,7 +144,7 @@ func (client *InstructionsClient) listByBillingProfileCreateRequest(ctx context.
 
 // listByBillingProfileHandleResponse handles the ListByBillingProfile response.
 func (client *InstructionsClient) listByBillingProfileHandleResponse(resp *http.Response) (InstructionsClientListByBillingProfileResponse, error) {
-	result := InstructionsClientListByBillingProfileResponse{RawResponse: resp}
+	result := InstructionsClientListByBillingProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InstructionListResult); err != nil {
 		return InstructionsClientListByBillingProfileResponse{}, err
 	}
@@ -201,7 +201,7 @@ func (client *InstructionsClient) putCreateRequest(ctx context.Context, billingA
 
 // putHandleResponse handles the Put response.
 func (client *InstructionsClient) putHandleResponse(resp *http.Response) (InstructionsClientPutResponse, error) {
-	result := InstructionsClientPutResponse{RawResponse: resp}
+	result := InstructionsClientPutResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Instruction); err != nil {
 		return InstructionsClientPutResponse{}, err
 	}

@@ -43,11 +43,10 @@ func (p *AccountsClientCreatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final AccountsClientCreateResponse will be returned.
 func (p *AccountsClientCreatePoller) FinalResponse(ctx context.Context) (AccountsClientCreateResponse, error) {
 	respType := AccountsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Account)
+	_, err := p.pt.FinalResponse(ctx, &respType.Account)
 	if err != nil {
 		return AccountsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *AccountsClientDeletePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final AccountsClientDeleteResponse will be returned.
 func (p *AccountsClientDeletePoller) FinalResponse(ctx context.Context) (AccountsClientDeleteResponse, error) {
 	respType := AccountsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationResponse)
 	if err != nil {
 		return AccountsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *DataSetsClientDeletePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final DataSetsClientDeleteResponse will be returned.
 func (p *DataSetsClientDeletePoller) FinalResponse(ctx context.Context) (DataSetsClientDeleteResponse, error) {
 	respType := DataSetsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DataSetsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *ProviderShareSubscriptionsClientRevokePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final ProviderShareSubscriptionsClientRevokeResponse will be returned.
 func (p *ProviderShareSubscriptionsClientRevokePoller) FinalResponse(ctx context.Context) (ProviderShareSubscriptionsClientRevokeResponse, error) {
 	respType := ProviderShareSubscriptionsClientRevokeResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ProviderShareSubscription)
+	_, err := p.pt.FinalResponse(ctx, &respType.ProviderShareSubscription)
 	if err != nil {
 		return ProviderShareSubscriptionsClientRevokeResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *ShareSubscriptionsClientCancelSynchronizationPoller) Poll(ctx context.C
 // If the final GET succeeded then the final ShareSubscriptionsClientCancelSynchronizationResponse will be returned.
 func (p *ShareSubscriptionsClientCancelSynchronizationPoller) FinalResponse(ctx context.Context) (ShareSubscriptionsClientCancelSynchronizationResponse, error) {
 	respType := ShareSubscriptionsClientCancelSynchronizationResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ShareSubscriptionSynchronization)
+	_, err := p.pt.FinalResponse(ctx, &respType.ShareSubscriptionSynchronization)
 	if err != nil {
 		return ShareSubscriptionsClientCancelSynchronizationResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *ShareSubscriptionsClientDeletePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final ShareSubscriptionsClientDeleteResponse will be returned.
 func (p *ShareSubscriptionsClientDeletePoller) FinalResponse(ctx context.Context) (ShareSubscriptionsClientDeleteResponse, error) {
 	respType := ShareSubscriptionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationResponse)
 	if err != nil {
 		return ShareSubscriptionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *ShareSubscriptionsClientSynchronizePoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final ShareSubscriptionsClientSynchronizeResponse will be returned.
 func (p *ShareSubscriptionsClientSynchronizePoller) FinalResponse(ctx context.Context) (ShareSubscriptionsClientSynchronizeResponse, error) {
 	respType := ShareSubscriptionsClientSynchronizeResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ShareSubscriptionSynchronization)
+	_, err := p.pt.FinalResponse(ctx, &respType.ShareSubscriptionSynchronization)
 	if err != nil {
 		return ShareSubscriptionsClientSynchronizeResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *SharesClientDeletePoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final SharesClientDeleteResponse will be returned.
 func (p *SharesClientDeletePoller) FinalResponse(ctx context.Context) (SharesClientDeleteResponse, error) {
 	respType := SharesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationResponse)
 	if err != nil {
 		return SharesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *SynchronizationSettingsClientDeletePoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final SynchronizationSettingsClientDeleteResponse will be returned.
 func (p *SynchronizationSettingsClientDeletePoller) FinalResponse(ctx context.Context) (SynchronizationSettingsClientDeleteResponse, error) {
 	respType := SynchronizationSettingsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationResponse)
 	if err != nil {
 		return SynchronizationSettingsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -430,11 +421,10 @@ func (p *TriggersClientCreatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final TriggersClientCreateResponse will be returned.
 func (p *TriggersClientCreatePoller) FinalResponse(ctx context.Context) (TriggersClientCreateResponse, error) {
 	respType := TriggersClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.TriggersClientCreateResult)
+	_, err := p.pt.FinalResponse(ctx, &respType)
 	if err != nil {
 		return TriggersClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -473,11 +463,10 @@ func (p *TriggersClientDeletePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final TriggersClientDeleteResponse will be returned.
 func (p *TriggersClientDeletePoller) FinalResponse(ctx context.Context) (TriggersClientDeleteResponse, error) {
 	respType := TriggersClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationResponse)
 	if err != nil {
 		return TriggersClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

@@ -1,5 +1,124 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*CachesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(CachesClientListByResourceGroupResponse, error)`
+- Function `*SKUsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SKUsClientListResponse, error)`
+- Function `*StorageTargetsClientListByCachePager.NextPage` return value(s) have been changed from `(bool)` to `(StorageTargetsClientListByCacheResponse, error)`
+- Function `*CachesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(CachesClientListResponse, error)`
+- Function `*UsageModelsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(UsageModelsClientListResponse, error)`
+- Function `*CachesClientListPager.Err` has been removed
+- Function `*UsageModelsClientListPager.Err` has been removed
+- Function `*StorageTargetsClientListByCachePager.PageResponse` has been removed
+- Function `*UsageModelsClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*CachesClientListByResourceGroupPager.Err` has been removed
+- Function `*StorageTargetsClientListByCachePager.Err` has been removed
+- Function `*CachesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*CachesClientListPager.PageResponse` has been removed
+- Function `*SKUsClientListPager.PageResponse` has been removed
+- Function `*SKUsClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Struct `AscOperationsClientGetResult` has been removed
+- Struct `CachesClientCreateOrUpdateResult` has been removed
+- Struct `CachesClientGetResult` has been removed
+- Struct `CachesClientListByResourceGroupResult` has been removed
+- Struct `CachesClientListResult` has been removed
+- Struct `CachesClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `SKUsClientListResult` has been removed
+- Struct `StorageTargetsClientCreateOrUpdateResult` has been removed
+- Struct `StorageTargetsClientGetResult` has been removed
+- Struct `StorageTargetsClientListByCacheResult` has been removed
+- Struct `UsageModelsClientListResult` has been removed
+- Field `RawResponse` of struct `CachesClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `CachesClientFlushPollerResponse` has been removed
+- Field `RawResponse` of struct `StorageTargetsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `CachesClientDeletePollerResponse` has been removed
+- Field `CachesClientListResult` of struct `CachesClientListResponse` has been removed
+- Field `RawResponse` of struct `CachesClientListResponse` has been removed
+- Field `StorageTargetsClientGetResult` of struct `StorageTargetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `StorageTargetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `CachesClientStartResponse` has been removed
+- Field `RawResponse` of struct `CachesClientUpgradeFirmwareResponse` has been removed
+- Field `CachesClientUpdateResult` of struct `CachesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `CachesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `StorageTargetsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `StorageTargetClientSuspendResponse` has been removed
+- Field `RawResponse` of struct `CachesClientUpgradeFirmwarePollerResponse` has been removed
+- Field `CachesClientCreateOrUpdateResult` of struct `CachesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `CachesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `StorageTargetClientFlushPollerResponse` has been removed
+- Field `AscOperationsClientGetResult` of struct `AscOperationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AscOperationsClientGetResponse` has been removed
+- Field `UsageModelsClientListResult` of struct `UsageModelsClientListResponse` has been removed
+- Field `RawResponse` of struct `UsageModelsClientListResponse` has been removed
+- Field `RawResponse` of struct `CachesClientStartPollerResponse` has been removed
+- Field `RawResponse` of struct `CachesClientDeleteResponse` has been removed
+- Field `SKUsClientListResult` of struct `SKUsClientListResponse` has been removed
+- Field `RawResponse` of struct `SKUsClientListResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `CachesClientDebugInfoResponse` has been removed
+- Field `RawResponse` of struct `StorageTargetClientFlushResponse` has been removed
+- Field `StorageTargetsClientCreateOrUpdateResult` of struct `StorageTargetsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `StorageTargetsClientCreateOrUpdateResponse` has been removed
+- Field `CachesClientListByResourceGroupResult` of struct `CachesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `CachesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `StorageTargetClientResumePollerResponse` has been removed
+- Field `RawResponse` of struct `StorageTargetsClientDNSRefreshPollerResponse` has been removed
+- Field `RawResponse` of struct `StorageTargetClientResumeResponse` has been removed
+- Field `CachesClientGetResult` of struct `CachesClientGetResponse` has been removed
+- Field `RawResponse` of struct `CachesClientGetResponse` has been removed
+- Field `RawResponse` of struct `CachesClientDebugInfoPollerResponse` has been removed
+- Field `RawResponse` of struct `StorageTargetsClientDeletePollerResponse` has been removed
+- Field `StorageTargetsClientListByCacheResult` of struct `StorageTargetsClientListByCacheResponse` has been removed
+- Field `RawResponse` of struct `StorageTargetsClientListByCacheResponse` has been removed
+- Field `RawResponse` of struct `CachesClientStopResponse` has been removed
+- Field `RawResponse` of struct `CachesClientStopPollerResponse` has been removed
+- Field `RawResponse` of struct `CachesClientFlushResponse` has been removed
+- Field `RawResponse` of struct `StorageTargetsClientDNSRefreshResponse` has been removed
+- Field `RawResponse` of struct `StorageTargetClientSuspendPollerResponse` has been removed
+
+### Features Added
+
+- New function `*CachesClientListByResourceGroupPager.More() bool`
+- New function `*CachesClientListPager.More() bool`
+- New function `*SKUsClientListPager.More() bool`
+- New function `*StorageTargetsClientListByCachePager.More() bool`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*UsageModelsClientListPager.More() bool`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New anonymous field `CachesListResult` in struct `CachesClientListResponse`
+- New anonymous field `ResourceSKUsResult` in struct `SKUsClientListResponse`
+- New anonymous field `CachesListResult` in struct `CachesClientListByResourceGroupResponse`
+- New anonymous field `Cache` in struct `CachesClientCreateOrUpdateResponse`
+- New anonymous field `StorageTarget` in struct `StorageTargetsClientGetResponse`
+- New anonymous field `APIOperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `StorageTarget` in struct `StorageTargetsClientCreateOrUpdateResponse`
+- New anonymous field `Cache` in struct `CachesClientGetResponse`
+- New anonymous field `StorageTargetsResult` in struct `StorageTargetsClientListByCacheResponse`
+- New anonymous field `Cache` in struct `CachesClientUpdateResponse`
+- New anonymous field `UsageModelsResult` in struct `UsageModelsClientListResponse`
+- New anonymous field `AscOperation` in struct `AscOperationsClientGetResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `AscOperationProperties.Output` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

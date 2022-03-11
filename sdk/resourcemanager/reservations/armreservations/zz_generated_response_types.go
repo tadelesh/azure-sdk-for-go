@@ -11,31 +11,16 @@ package armreservations
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // AzureReservationAPIClientGetAppliedReservationListResponse contains the response from method AzureReservationAPIClient.GetAppliedReservationList.
 type AzureReservationAPIClientGetAppliedReservationListResponse struct {
-	AzureReservationAPIClientGetAppliedReservationListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AzureReservationAPIClientGetAppliedReservationListResult contains the result from method AzureReservationAPIClient.GetAppliedReservationList.
-type AzureReservationAPIClientGetAppliedReservationListResult struct {
 	AppliedReservations
 }
 
 // AzureReservationAPIClientGetCatalogResponse contains the response from method AzureReservationAPIClient.GetCatalog.
 type AzureReservationAPIClientGetCatalogResponse struct {
-	AzureReservationAPIClientGetCatalogResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AzureReservationAPIClientGetCatalogResult contains the result from method AzureReservationAPIClient.GetCatalog.
-type AzureReservationAPIClientGetCatalogResult struct {
 	// Array of Catalog
 	CatalogArray []*Catalog
 }
@@ -44,9 +29,6 @@ type AzureReservationAPIClientGetCatalogResult struct {
 type CalculateExchangeClientPostPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *CalculateExchangeClientPostPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -54,11 +36,10 @@ type CalculateExchangeClientPostPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l CalculateExchangeClientPostPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CalculateExchangeClientPostResponse, error) {
 	respType := CalculateExchangeClientPostResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.CalculateExchangeOperationResultResponse)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.CalculateExchangeOperationResultResponse)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -71,24 +52,16 @@ func (l *CalculateExchangeClientPostPollerResponse) Resume(ctx context.Context, 
 	poller := &CalculateExchangeClientPostPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // CalculateExchangeClientPostResponse contains the response from method CalculateExchangeClient.Post.
 type CalculateExchangeClientPostResponse struct {
-	CalculateExchangeClientPostResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CalculateExchangeClientPostResult contains the result from method CalculateExchangeClient.Post.
-type CalculateExchangeClientPostResult struct {
 	CalculateExchangeOperationResultResponse
 }
 
@@ -96,9 +69,6 @@ type CalculateExchangeClientPostResult struct {
 type ExchangeClientPostPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ExchangeClientPostPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -106,11 +76,10 @@ type ExchangeClientPostPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ExchangeClientPostPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ExchangeClientPostResponse, error) {
 	respType := ExchangeClientPostResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ExchangeOperationResultResponse)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ExchangeOperationResultResponse)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -123,36 +92,21 @@ func (l *ExchangeClientPostPollerResponse) Resume(ctx context.Context, client *E
 	poller := &ExchangeClientPostPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ExchangeClientPostResponse contains the response from method ExchangeClient.Post.
 type ExchangeClientPostResponse struct {
-	ExchangeClientPostResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ExchangeClientPostResult contains the result from method ExchangeClient.Post.
-type ExchangeClientPostResult struct {
 	ExchangeOperationResultResponse
 }
 
 // OperationClientListResponse contains the response from method OperationClient.List.
 type OperationClientListResponse struct {
-	OperationClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationClientListResult contains the result from method OperationClient.List.
-type OperationClientListResult struct {
 	OperationList
 }
 
@@ -160,9 +114,6 @@ type OperationClientListResult struct {
 type QuotaClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *QuotaClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -170,11 +121,10 @@ type QuotaClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l QuotaClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (QuotaClientCreateOrUpdateResponse, error) {
 	respType := QuotaClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.QuotaRequestOneResourceSubmitResponse)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.QuotaRequestOneResourceSubmitResponse)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -187,36 +137,21 @@ func (l *QuotaClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, cl
 	poller := &QuotaClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // QuotaClientCreateOrUpdateResponse contains the response from method QuotaClient.CreateOrUpdate.
 type QuotaClientCreateOrUpdateResponse struct {
-	QuotaClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// QuotaClientCreateOrUpdateResult contains the result from method QuotaClient.CreateOrUpdate.
-type QuotaClientCreateOrUpdateResult struct {
 	QuotaRequestOneResourceSubmitResponse
 }
 
 // QuotaClientGetResponse contains the response from method QuotaClient.Get.
 type QuotaClientGetResponse struct {
-	QuotaClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// QuotaClientGetResult contains the result from method QuotaClient.Get.
-type QuotaClientGetResult struct {
 	CurrentQuotaLimitBase
 	// ETag contains the information returned from the ETag header response.
 	ETag *string
@@ -224,13 +159,6 @@ type QuotaClientGetResult struct {
 
 // QuotaClientListResponse contains the response from method QuotaClient.List.
 type QuotaClientListResponse struct {
-	QuotaClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// QuotaClientListResult contains the result from method QuotaClient.List.
-type QuotaClientListResult struct {
 	QuotaLimits
 	// ETag contains the information returned from the ETag header response.
 	ETag *string
@@ -240,9 +168,6 @@ type QuotaClientListResult struct {
 type QuotaClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *QuotaClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -250,11 +175,10 @@ type QuotaClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l QuotaClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (QuotaClientUpdateResponse, error) {
 	respType := QuotaClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.QuotaRequestOneResourceSubmitResponse)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.QuotaRequestOneResourceSubmitResponse)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -267,48 +191,26 @@ func (l *QuotaClientUpdatePollerResponse) Resume(ctx context.Context, client *Qu
 	poller := &QuotaClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // QuotaClientUpdateResponse contains the response from method QuotaClient.Update.
 type QuotaClientUpdateResponse struct {
-	QuotaClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// QuotaClientUpdateResult contains the result from method QuotaClient.Update.
-type QuotaClientUpdateResult struct {
 	QuotaRequestOneResourceSubmitResponse
 }
 
 // QuotaRequestStatusClientGetResponse contains the response from method QuotaRequestStatusClient.Get.
 type QuotaRequestStatusClientGetResponse struct {
-	QuotaRequestStatusClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// QuotaRequestStatusClientGetResult contains the result from method QuotaRequestStatusClient.Get.
-type QuotaRequestStatusClientGetResult struct {
 	QuotaRequestDetails
 }
 
 // QuotaRequestStatusClientListResponse contains the response from method QuotaRequestStatusClient.List.
 type QuotaRequestStatusClientListResponse struct {
-	QuotaRequestStatusClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// QuotaRequestStatusClientListResult contains the result from method QuotaRequestStatusClient.List.
-type QuotaRequestStatusClientListResult struct {
 	QuotaRequestDetailsList
 }
 
@@ -316,9 +218,6 @@ type QuotaRequestStatusClientListResult struct {
 type ReservationClientAvailableScopesPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ReservationClientAvailableScopesPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -326,11 +225,10 @@ type ReservationClientAvailableScopesPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ReservationClientAvailableScopesPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ReservationClientAvailableScopesResponse, error) {
 	respType := ReservationClientAvailableScopesResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.AvailableScopeProperties)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.AvailableScopeProperties)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -343,72 +241,36 @@ func (l *ReservationClientAvailableScopesPollerResponse) Resume(ctx context.Cont
 	poller := &ReservationClientAvailableScopesPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ReservationClientAvailableScopesResponse contains the response from method ReservationClient.AvailableScopes.
 type ReservationClientAvailableScopesResponse struct {
-	ReservationClientAvailableScopesResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ReservationClientAvailableScopesResult contains the result from method ReservationClient.AvailableScopes.
-type ReservationClientAvailableScopesResult struct {
 	AvailableScopeProperties
 }
 
 // ReservationClientGetResponse contains the response from method ReservationClient.Get.
 type ReservationClientGetResponse struct {
-	ReservationClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ReservationClientGetResult contains the result from method ReservationClient.Get.
-type ReservationClientGetResult struct {
 	ReservationResponse
 }
 
 // ReservationClientListAllResponse contains the response from method ReservationClient.ListAll.
 type ReservationClientListAllResponse struct {
-	ReservationClientListAllResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ReservationClientListAllResult contains the result from method ReservationClient.ListAll.
-type ReservationClientListAllResult struct {
 	ListResult
 }
 
 // ReservationClientListResponse contains the response from method ReservationClient.List.
 type ReservationClientListResponse struct {
-	ReservationClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ReservationClientListResult contains the result from method ReservationClient.List.
-type ReservationClientListResult struct {
 	ReservationList
 }
 
 // ReservationClientListRevisionsResponse contains the response from method ReservationClient.ListRevisions.
 type ReservationClientListRevisionsResponse struct {
-	ReservationClientListRevisionsResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ReservationClientListRevisionsResult contains the result from method ReservationClient.ListRevisions.
-type ReservationClientListRevisionsResult struct {
 	ReservationList
 }
 
@@ -416,9 +278,6 @@ type ReservationClientListRevisionsResult struct {
 type ReservationClientMergePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ReservationClientMergePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -426,11 +285,10 @@ type ReservationClientMergePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ReservationClientMergePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ReservationClientMergeResponse, error) {
 	respType := ReservationClientMergeResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ReservationResponseArray)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ReservationResponseArray)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -443,24 +301,16 @@ func (l *ReservationClientMergePollerResponse) Resume(ctx context.Context, clien
 	poller := &ReservationClientMergePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ReservationClientMergeResponse contains the response from method ReservationClient.Merge.
 type ReservationClientMergeResponse struct {
-	ReservationClientMergeResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ReservationClientMergeResult contains the result from method ReservationClient.Merge.
-type ReservationClientMergeResult struct {
 	// Array of ReservationResponse
 	ReservationResponseArray []*ReservationResponse
 }
@@ -469,9 +319,6 @@ type ReservationClientMergeResult struct {
 type ReservationClientSplitPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ReservationClientSplitPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -479,11 +326,10 @@ type ReservationClientSplitPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ReservationClientSplitPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ReservationClientSplitResponse, error) {
 	respType := ReservationClientSplitResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ReservationResponseArray)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ReservationResponseArray)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -496,24 +342,16 @@ func (l *ReservationClientSplitPollerResponse) Resume(ctx context.Context, clien
 	poller := &ReservationClientSplitPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ReservationClientSplitResponse contains the response from method ReservationClient.Split.
 type ReservationClientSplitResponse struct {
-	ReservationClientSplitResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ReservationClientSplitResult contains the result from method ReservationClient.Split.
-type ReservationClientSplitResult struct {
 	// Array of ReservationResponse
 	ReservationResponseArray []*ReservationResponse
 }
@@ -522,9 +360,6 @@ type ReservationClientSplitResult struct {
 type ReservationClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ReservationClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -532,11 +367,10 @@ type ReservationClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ReservationClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ReservationClientUpdateResponse, error) {
 	respType := ReservationClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ReservationResponse)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ReservationResponse)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -549,72 +383,36 @@ func (l *ReservationClientUpdatePollerResponse) Resume(ctx context.Context, clie
 	poller := &ReservationClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ReservationClientUpdateResponse contains the response from method ReservationClient.Update.
 type ReservationClientUpdateResponse struct {
-	ReservationClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ReservationClientUpdateResult contains the result from method ReservationClient.Update.
-type ReservationClientUpdateResult struct {
 	ReservationResponse
 }
 
 // ReservationOrderClientCalculateResponse contains the response from method ReservationOrderClient.Calculate.
 type ReservationOrderClientCalculateResponse struct {
-	ReservationOrderClientCalculateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ReservationOrderClientCalculateResult contains the result from method ReservationOrderClient.Calculate.
-type ReservationOrderClientCalculateResult struct {
 	CalculatePriceResponse
 }
 
 // ReservationOrderClientChangeDirectoryResponse contains the response from method ReservationOrderClient.ChangeDirectory.
 type ReservationOrderClientChangeDirectoryResponse struct {
-	ReservationOrderClientChangeDirectoryResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ReservationOrderClientChangeDirectoryResult contains the result from method ReservationOrderClient.ChangeDirectory.
-type ReservationOrderClientChangeDirectoryResult struct {
 	ChangeDirectoryResponse
 }
 
 // ReservationOrderClientGetResponse contains the response from method ReservationOrderClient.Get.
 type ReservationOrderClientGetResponse struct {
-	ReservationOrderClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ReservationOrderClientGetResult contains the result from method ReservationOrderClient.Get.
-type ReservationOrderClientGetResult struct {
 	ReservationOrderResponse
 }
 
 // ReservationOrderClientListResponse contains the response from method ReservationOrderClient.List.
 type ReservationOrderClientListResponse struct {
-	ReservationOrderClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ReservationOrderClientListResult contains the result from method ReservationOrderClient.List.
-type ReservationOrderClientListResult struct {
 	ReservationOrderList
 }
 
@@ -622,9 +420,6 @@ type ReservationOrderClientListResult struct {
 type ReservationOrderClientPurchasePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ReservationOrderClientPurchasePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -632,11 +427,10 @@ type ReservationOrderClientPurchasePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ReservationOrderClientPurchasePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ReservationOrderClientPurchaseResponse, error) {
 	respType := ReservationOrderClientPurchaseResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ReservationOrderResponse)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ReservationOrderResponse)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -649,23 +443,15 @@ func (l *ReservationOrderClientPurchasePollerResponse) Resume(ctx context.Contex
 	poller := &ReservationOrderClientPurchasePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ReservationOrderClientPurchaseResponse contains the response from method ReservationOrderClient.Purchase.
 type ReservationOrderClientPurchaseResponse struct {
-	ReservationOrderClientPurchaseResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ReservationOrderClientPurchaseResult contains the result from method ReservationOrderClient.Purchase.
-type ReservationOrderClientPurchaseResult struct {
 	ReservationOrderResponse
 }

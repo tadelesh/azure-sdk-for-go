@@ -35,17 +35,17 @@ type FirewallPolicyRuleCollectionGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFirewallPolicyRuleCollectionGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FirewallPolicyRuleCollectionGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FirewallPolicyRuleCollectionGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *FirewallPolicyRuleCollectionGroupsClient) BeginCreateOrUpdate(ctx 
 	if err != nil {
 		return FirewallPolicyRuleCollectionGroupsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := FirewallPolicyRuleCollectionGroupsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := FirewallPolicyRuleCollectionGroupsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("FirewallPolicyRuleCollectionGroupsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return FirewallPolicyRuleCollectionGroupsClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *FirewallPolicyRuleCollectionGroupsClient) BeginDelete(ctx context.
 	if err != nil {
 		return FirewallPolicyRuleCollectionGroupsClientDeletePollerResponse{}, err
 	}
-	result := FirewallPolicyRuleCollectionGroupsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := FirewallPolicyRuleCollectionGroupsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("FirewallPolicyRuleCollectionGroupsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return FirewallPolicyRuleCollectionGroupsClientDeletePollerResponse{}, err
@@ -249,7 +245,7 @@ func (client *FirewallPolicyRuleCollectionGroupsClient) getCreateRequest(ctx con
 
 // getHandleResponse handles the Get response.
 func (client *FirewallPolicyRuleCollectionGroupsClient) getHandleResponse(resp *http.Response) (FirewallPolicyRuleCollectionGroupsClientGetResponse, error) {
-	result := FirewallPolicyRuleCollectionGroupsClientGetResponse{RawResponse: resp}
+	result := FirewallPolicyRuleCollectionGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FirewallPolicyRuleCollectionGroup); err != nil {
 		return FirewallPolicyRuleCollectionGroupsClientGetResponse{}, err
 	}
@@ -302,7 +298,7 @@ func (client *FirewallPolicyRuleCollectionGroupsClient) listCreateRequest(ctx co
 
 // listHandleResponse handles the List response.
 func (client *FirewallPolicyRuleCollectionGroupsClient) listHandleResponse(resp *http.Response) (FirewallPolicyRuleCollectionGroupsClientListResponse, error) {
-	result := FirewallPolicyRuleCollectionGroupsClientListResponse{RawResponse: resp}
+	result := FirewallPolicyRuleCollectionGroupsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FirewallPolicyRuleCollectionGroupListResult); err != nil {
 		return FirewallPolicyRuleCollectionGroupsClientListResponse{}, err
 	}

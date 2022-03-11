@@ -35,17 +35,17 @@ type Python2PackageClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPython2PackageClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *Python2PackageClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &Python2PackageClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *Python2PackageClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *Python2PackageClient) createOrUpdateHandleResponse(resp *http.Response) (Python2PackageClientCreateOrUpdateResponse, error) {
-	result := Python2PackageClientCreateOrUpdateResponse{RawResponse: resp}
+	result := Python2PackageClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Module); err != nil {
 		return Python2PackageClientCreateOrUpdateResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *Python2PackageClient) Delete(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return Python2PackageClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return Python2PackageClientDeleteResponse{RawResponse: resp}, nil
+	return Python2PackageClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -216,7 +216,7 @@ func (client *Python2PackageClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *Python2PackageClient) getHandleResponse(resp *http.Response) (Python2PackageClientGetResponse, error) {
-	result := Python2PackageClientGetResponse{RawResponse: resp}
+	result := Python2PackageClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Module); err != nil {
 		return Python2PackageClientGetResponse{}, err
 	}
@@ -269,7 +269,7 @@ func (client *Python2PackageClient) listByAutomationAccountCreateRequest(ctx con
 
 // listByAutomationAccountHandleResponse handles the ListByAutomationAccount response.
 func (client *Python2PackageClient) listByAutomationAccountHandleResponse(resp *http.Response) (Python2PackageClientListByAutomationAccountResponse, error) {
-	result := Python2PackageClientListByAutomationAccountResponse{RawResponse: resp}
+	result := Python2PackageClientListByAutomationAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ModuleListResult); err != nil {
 		return Python2PackageClientListByAutomationAccountResponse{}, err
 	}
@@ -330,7 +330,7 @@ func (client *Python2PackageClient) updateCreateRequest(ctx context.Context, res
 
 // updateHandleResponse handles the Update response.
 func (client *Python2PackageClient) updateHandleResponse(resp *http.Response) (Python2PackageClientUpdateResponse, error) {
-	result := Python2PackageClientUpdateResponse{RawResponse: resp}
+	result := Python2PackageClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Module); err != nil {
 		return Python2PackageClientUpdateResponse{}, err
 	}

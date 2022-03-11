@@ -43,11 +43,10 @@ func (p *PipelinesClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final PipelinesClientCreateOrUpdateResponse will be returned.
 func (p *PipelinesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PipelinesClientCreateOrUpdateResponse, error) {
 	respType := PipelinesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Pipeline)
+	_, err := p.pt.FinalResponse(ctx, &respType.Pipeline)
 	if err != nil {
 		return PipelinesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

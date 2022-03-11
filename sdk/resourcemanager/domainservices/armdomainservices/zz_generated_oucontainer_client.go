@@ -35,17 +35,17 @@ type OuContainerClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewOuContainerClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *OuContainerClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &OuContainerClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *OuContainerClient) BeginCreate(ctx context.Context, resourceGroupN
 	if err != nil {
 		return OuContainerClientCreatePollerResponse{}, err
 	}
-	result := OuContainerClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := OuContainerClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("OuContainerClient.Create", "", resp, client.pl)
 	if err != nil {
 		return OuContainerClientCreatePollerResponse{}, err
@@ -133,9 +131,7 @@ func (client *OuContainerClient) BeginDelete(ctx context.Context, resourceGroupN
 	if err != nil {
 		return OuContainerClientDeletePollerResponse{}, err
 	}
-	result := OuContainerClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := OuContainerClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("OuContainerClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return OuContainerClientDeletePollerResponse{}, err
@@ -246,7 +242,7 @@ func (client *OuContainerClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *OuContainerClient) getHandleResponse(resp *http.Response) (OuContainerClientGetResponse, error) {
-	result := OuContainerClientGetResponse{RawResponse: resp}
+	result := OuContainerClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OuContainer); err != nil {
 		return OuContainerClientGetResponse{}, err
 	}
@@ -298,7 +294,7 @@ func (client *OuContainerClient) listCreateRequest(ctx context.Context, resource
 
 // listHandleResponse handles the List response.
 func (client *OuContainerClient) listHandleResponse(resp *http.Response) (OuContainerClientListResponse, error) {
-	result := OuContainerClientListResponse{RawResponse: resp}
+	result := OuContainerClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OuContainerListResult); err != nil {
 		return OuContainerClientListResponse{}, err
 	}
@@ -317,9 +313,7 @@ func (client *OuContainerClient) BeginUpdate(ctx context.Context, resourceGroupN
 	if err != nil {
 		return OuContainerClientUpdatePollerResponse{}, err
 	}
-	result := OuContainerClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := OuContainerClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("OuContainerClient.Update", "", resp, client.pl)
 	if err != nil {
 		return OuContainerClientUpdatePollerResponse{}, err

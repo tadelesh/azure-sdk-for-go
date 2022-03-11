@@ -43,11 +43,10 @@ func (p *ClustersClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final ClustersClientCreateOrUpdateResponse will be returned.
 func (p *ClustersClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ClustersClientCreateOrUpdateResponse, error) {
 	respType := ClustersClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Cluster)
+	_, err := p.pt.FinalResponse(ctx, &respType.Cluster)
 	if err != nil {
 		return ClustersClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ClustersClientDeletePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ClustersClientDeleteResponse will be returned.
 func (p *ClustersClientDeletePoller) FinalResponse(ctx context.Context) (ClustersClientDeleteResponse, error) {
 	respType := ClustersClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClustersClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ClustersClientUpdatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ClustersClientUpdateResponse will be returned.
 func (p *ClustersClientUpdatePoller) FinalResponse(ctx context.Context) (ClustersClientUpdateResponse, error) {
 	respType := ClustersClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Cluster)
+	_, err := p.pt.FinalResponse(ctx, &respType.Cluster)
 	if err != nil {
 		return ClustersClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *LinkedServicesClientCreateOrUpdatePoller) Poll(ctx context.Context) (*h
 // If the final GET succeeded then the final LinkedServicesClientCreateOrUpdateResponse will be returned.
 func (p *LinkedServicesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (LinkedServicesClientCreateOrUpdateResponse, error) {
 	respType := LinkedServicesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.LinkedService)
+	_, err := p.pt.FinalResponse(ctx, &respType.LinkedService)
 	if err != nil {
 		return LinkedServicesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *LinkedServicesClientDeletePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final LinkedServicesClientDeleteResponse will be returned.
 func (p *LinkedServicesClientDeletePoller) FinalResponse(ctx context.Context) (LinkedServicesClientDeleteResponse, error) {
 	respType := LinkedServicesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.LinkedService)
+	_, err := p.pt.FinalResponse(ctx, &respType.LinkedService)
 	if err != nil {
 		return LinkedServicesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *TablesClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final TablesClientCreateOrUpdateResponse will be returned.
 func (p *TablesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (TablesClientCreateOrUpdateResponse, error) {
 	respType := TablesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Table)
+	_, err := p.pt.FinalResponse(ctx, &respType.Table)
 	if err != nil {
 		return TablesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *TablesClientDeletePoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final TablesClientDeleteResponse will be returned.
 func (p *TablesClientDeletePoller) FinalResponse(ctx context.Context) (TablesClientDeleteResponse, error) {
 	respType := TablesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return TablesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *TablesClientUpdatePoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final TablesClientUpdateResponse will be returned.
 func (p *TablesClientUpdatePoller) FinalResponse(ctx context.Context) (TablesClientUpdateResponse, error) {
 	respType := TablesClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Table)
+	_, err := p.pt.FinalResponse(ctx, &respType.Table)
 	if err != nil {
 		return TablesClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *WorkspacesClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final WorkspacesClientCreateOrUpdateResponse will be returned.
 func (p *WorkspacesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (WorkspacesClientCreateOrUpdateResponse, error) {
 	respType := WorkspacesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Workspace)
+	_, err := p.pt.FinalResponse(ctx, &respType.Workspace)
 	if err != nil {
 		return WorkspacesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -430,11 +421,10 @@ func (p *WorkspacesClientDeletePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final WorkspacesClientDeleteResponse will be returned.
 func (p *WorkspacesClientDeletePoller) FinalResponse(ctx context.Context) (WorkspacesClientDeleteResponse, error) {
 	respType := WorkspacesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return WorkspacesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

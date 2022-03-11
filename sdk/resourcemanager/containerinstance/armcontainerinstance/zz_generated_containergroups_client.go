@@ -35,17 +35,17 @@ type ContainerGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewContainerGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ContainerGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ContainerGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *ContainerGroupsClient) BeginCreateOrUpdate(ctx context.Context, re
 	if err != nil {
 		return ContainerGroupsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ContainerGroupsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ContainerGroupsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ContainerGroupsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ContainerGroupsClientCreateOrUpdatePollerResponse{}, err
@@ -130,9 +128,7 @@ func (client *ContainerGroupsClient) BeginDelete(ctx context.Context, resourceGr
 	if err != nil {
 		return ContainerGroupsClientDeletePollerResponse{}, err
 	}
-	result := ContainerGroupsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ContainerGroupsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ContainerGroupsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ContainerGroupsClientDeletePollerResponse{}, err
@@ -237,7 +233,7 @@ func (client *ContainerGroupsClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *ContainerGroupsClient) getHandleResponse(resp *http.Response) (ContainerGroupsClientGetResponse, error) {
-	result := ContainerGroupsClientGetResponse{RawResponse: resp}
+	result := ContainerGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContainerGroup); err != nil {
 		return ContainerGroupsClientGetResponse{}, err
 	}
@@ -294,7 +290,7 @@ func (client *ContainerGroupsClient) getOutboundNetworkDependenciesEndpointsCrea
 
 // getOutboundNetworkDependenciesEndpointsHandleResponse handles the GetOutboundNetworkDependenciesEndpoints response.
 func (client *ContainerGroupsClient) getOutboundNetworkDependenciesEndpointsHandleResponse(resp *http.Response) (ContainerGroupsClientGetOutboundNetworkDependenciesEndpointsResponse, error) {
-	result := ContainerGroupsClientGetOutboundNetworkDependenciesEndpointsResponse{RawResponse: resp}
+	result := ContainerGroupsClientGetOutboundNetworkDependenciesEndpointsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringArray); err != nil {
 		return ContainerGroupsClientGetOutboundNetworkDependenciesEndpointsResponse{}, err
 	}
@@ -338,7 +334,7 @@ func (client *ContainerGroupsClient) listCreateRequest(ctx context.Context, opti
 
 // listHandleResponse handles the List response.
 func (client *ContainerGroupsClient) listHandleResponse(resp *http.Response) (ContainerGroupsClientListResponse, error) {
-	result := ContainerGroupsClientListResponse{RawResponse: resp}
+	result := ContainerGroupsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContainerGroupListResult); err != nil {
 		return ContainerGroupsClientListResponse{}, err
 	}
@@ -388,7 +384,7 @@ func (client *ContainerGroupsClient) listByResourceGroupCreateRequest(ctx contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ContainerGroupsClient) listByResourceGroupHandleResponse(resp *http.Response) (ContainerGroupsClientListByResourceGroupResponse, error) {
-	result := ContainerGroupsClientListByResourceGroupResponse{RawResponse: resp}
+	result := ContainerGroupsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContainerGroupListResult); err != nil {
 		return ContainerGroupsClientListByResourceGroupResponse{}, err
 	}
@@ -407,9 +403,7 @@ func (client *ContainerGroupsClient) BeginRestart(ctx context.Context, resourceG
 	if err != nil {
 		return ContainerGroupsClientRestartPollerResponse{}, err
 	}
-	result := ContainerGroupsClientRestartPollerResponse{
-		RawResponse: resp,
-	}
+	result := ContainerGroupsClientRestartPollerResponse{}
 	pt, err := armruntime.NewPoller("ContainerGroupsClient.Restart", "", resp, client.pl)
 	if err != nil {
 		return ContainerGroupsClientRestartPollerResponse{}, err
@@ -474,9 +468,7 @@ func (client *ContainerGroupsClient) BeginStart(ctx context.Context, resourceGro
 	if err != nil {
 		return ContainerGroupsClientStartPollerResponse{}, err
 	}
-	result := ContainerGroupsClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := ContainerGroupsClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("ContainerGroupsClient.Start", "", resp, client.pl)
 	if err != nil {
 		return ContainerGroupsClientStartPollerResponse{}, err
@@ -547,7 +539,7 @@ func (client *ContainerGroupsClient) Stop(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return ContainerGroupsClientStopResponse{}, runtime.NewResponseError(resp)
 	}
-	return ContainerGroupsClientStopResponse{RawResponse: resp}, nil
+	return ContainerGroupsClientStopResponse{}, nil
 }
 
 // stopCreateRequest creates the Stop request.
@@ -625,7 +617,7 @@ func (client *ContainerGroupsClient) updateCreateRequest(ctx context.Context, re
 
 // updateHandleResponse handles the Update response.
 func (client *ContainerGroupsClient) updateHandleResponse(resp *http.Response) (ContainerGroupsClientUpdateResponse, error) {
-	result := ContainerGroupsClientUpdateResponse{RawResponse: resp}
+	result := ContainerGroupsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContainerGroup); err != nil {
 		return ContainerGroupsClientUpdateResponse{}, err
 	}

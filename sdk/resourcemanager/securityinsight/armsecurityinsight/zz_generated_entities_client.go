@@ -34,17 +34,17 @@ type EntitiesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewEntitiesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *EntitiesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &EntitiesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *EntitiesClient) expandCreateRequest(ctx context.Context, resourceG
 
 // expandHandleResponse handles the Expand response.
 func (client *EntitiesClient) expandHandleResponse(resp *http.Response) (EntitiesClientExpandResponse, error) {
-	result := EntitiesClientExpandResponse{RawResponse: resp}
+	result := EntitiesClientExpandResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EntityExpandResponse); err != nil {
 		return EntitiesClientExpandResponse{}, err
 	}
@@ -163,7 +163,7 @@ func (client *EntitiesClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *EntitiesClient) getHandleResponse(resp *http.Response) (EntitiesClientGetResponse, error) {
-	result := EntitiesClientGetResponse{RawResponse: resp}
+	result := EntitiesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return EntitiesClientGetResponse{}, err
 	}
@@ -224,7 +224,7 @@ func (client *EntitiesClient) getInsightsCreateRequest(ctx context.Context, reso
 
 // getInsightsHandleResponse handles the GetInsights response.
 func (client *EntitiesClient) getInsightsHandleResponse(resp *http.Response) (EntitiesClientGetInsightsResponse, error) {
-	result := EntitiesClientGetInsightsResponse{RawResponse: resp}
+	result := EntitiesClientGetInsightsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EntityGetInsightsResponse); err != nil {
 		return EntitiesClientGetInsightsResponse{}, err
 	}
@@ -276,7 +276,7 @@ func (client *EntitiesClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *EntitiesClient) listHandleResponse(resp *http.Response) (EntitiesClientListResponse, error) {
-	result := EntitiesClientListResponse{RawResponse: resp}
+	result := EntitiesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EntityList); err != nil {
 		return EntitiesClientListResponse{}, err
 	}
@@ -338,7 +338,7 @@ func (client *EntitiesClient) queriesCreateRequest(ctx context.Context, resource
 
 // queriesHandleResponse handles the Queries response.
 func (client *EntitiesClient) queriesHandleResponse(resp *http.Response) (EntitiesClientQueriesResponse, error) {
-	result := EntitiesClientQueriesResponse{RawResponse: resp}
+	result := EntitiesClientQueriesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GetQueriesResponse); err != nil {
 		return EntitiesClientQueriesResponse{}, err
 	}

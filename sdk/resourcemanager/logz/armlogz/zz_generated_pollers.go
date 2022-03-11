@@ -43,11 +43,10 @@ func (p *MonitorsClientCreatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final MonitorsClientCreateResponse will be returned.
 func (p *MonitorsClientCreatePoller) FinalResponse(ctx context.Context) (MonitorsClientCreateResponse, error) {
 	respType := MonitorsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MonitorResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.MonitorResource)
 	if err != nil {
 		return MonitorsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *MonitorsClientDeletePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final MonitorsClientDeleteResponse will be returned.
 func (p *MonitorsClientDeletePoller) FinalResponse(ctx context.Context) (MonitorsClientDeleteResponse, error) {
 	respType := MonitorsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return MonitorsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *SingleSignOnClientCreateOrUpdatePoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final SingleSignOnClientCreateOrUpdateResponse will be returned.
 func (p *SingleSignOnClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (SingleSignOnClientCreateOrUpdateResponse, error) {
 	respType := SingleSignOnClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SingleSignOnResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.SingleSignOnResource)
 	if err != nil {
 		return SingleSignOnClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *SubAccountClientCreatePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final SubAccountClientCreateResponse will be returned.
 func (p *SubAccountClientCreatePoller) FinalResponse(ctx context.Context) (SubAccountClientCreateResponse, error) {
 	respType := SubAccountClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MonitorResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.MonitorResource)
 	if err != nil {
 		return SubAccountClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *SubAccountClientDeletePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final SubAccountClientDeleteResponse will be returned.
 func (p *SubAccountClientDeletePoller) FinalResponse(ctx context.Context) (SubAccountClientDeleteResponse, error) {
 	respType := SubAccountClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SubAccountClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

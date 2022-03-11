@@ -35,17 +35,17 @@ type DeploymentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDeploymentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DeploymentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DeploymentsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -65,9 +65,7 @@ func (client *DeploymentsClient) BeginCreateOrUpdate(ctx context.Context, resour
 	if err != nil {
 		return DeploymentsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DeploymentsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientCreateOrUpdatePollerResponse{}, err
@@ -142,9 +140,7 @@ func (client *DeploymentsClient) BeginDelete(ctx context.Context, resourceGroupN
 	if err != nil {
 		return DeploymentsClientDeletePollerResponse{}, err
 	}
-	result := DeploymentsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientDeletePollerResponse{}, err
@@ -221,9 +217,7 @@ func (client *DeploymentsClient) BeginGenerateHeapDump(ctx context.Context, reso
 	if err != nil {
 		return DeploymentsClientGenerateHeapDumpPollerResponse{}, err
 	}
-	result := DeploymentsClientGenerateHeapDumpPollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientGenerateHeapDumpPollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.GenerateHeapDump", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientGenerateHeapDumpPollerResponse{}, err
@@ -300,9 +294,7 @@ func (client *DeploymentsClient) BeginGenerateThreadDump(ctx context.Context, re
 	if err != nil {
 		return DeploymentsClientGenerateThreadDumpPollerResponse{}, err
 	}
-	result := DeploymentsClientGenerateThreadDumpPollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientGenerateThreadDumpPollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.GenerateThreadDump", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientGenerateThreadDumpPollerResponse{}, err
@@ -423,7 +415,7 @@ func (client *DeploymentsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *DeploymentsClient) getHandleResponse(resp *http.Response) (DeploymentsClientGetResponse, error) {
-	result := DeploymentsClientGetResponse{RawResponse: resp}
+	result := DeploymentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentResource); err != nil {
 		return DeploymentsClientGetResponse{}, err
 	}
@@ -490,7 +482,7 @@ func (client *DeploymentsClient) getLogFileURLCreateRequest(ctx context.Context,
 
 // getLogFileURLHandleResponse handles the GetLogFileURL response.
 func (client *DeploymentsClient) getLogFileURLHandleResponse(resp *http.Response) (DeploymentsClientGetLogFileURLResponse, error) {
-	result := DeploymentsClientGetLogFileURLResponse{RawResponse: resp}
+	result := DeploymentsClientGetLogFileURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LogFileURLResponse); err != nil {
 		return DeploymentsClientGetLogFileURLResponse{}, err
 	}
@@ -553,7 +545,7 @@ func (client *DeploymentsClient) listCreateRequest(ctx context.Context, resource
 
 // listHandleResponse handles the List response.
 func (client *DeploymentsClient) listHandleResponse(resp *http.Response) (DeploymentsClientListResponse, error) {
-	result := DeploymentsClientListResponse{RawResponse: resp}
+	result := DeploymentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentResourceCollection); err != nil {
 		return DeploymentsClientListResponse{}, err
 	}
@@ -612,7 +604,7 @@ func (client *DeploymentsClient) listForClusterCreateRequest(ctx context.Context
 
 // listForClusterHandleResponse handles the ListForCluster response.
 func (client *DeploymentsClient) listForClusterHandleResponse(resp *http.Response) (DeploymentsClientListForClusterResponse, error) {
-	result := DeploymentsClientListForClusterResponse{RawResponse: resp}
+	result := DeploymentsClientListForClusterResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentResourceCollection); err != nil {
 		return DeploymentsClientListForClusterResponse{}, err
 	}
@@ -633,9 +625,7 @@ func (client *DeploymentsClient) BeginRestart(ctx context.Context, resourceGroup
 	if err != nil {
 		return DeploymentsClientRestartPollerResponse{}, err
 	}
-	result := DeploymentsClientRestartPollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientRestartPollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.Restart", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientRestartPollerResponse{}, err
@@ -710,9 +700,7 @@ func (client *DeploymentsClient) BeginStart(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return DeploymentsClientStartPollerResponse{}, err
 	}
-	result := DeploymentsClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.Start", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientStartPollerResponse{}, err
@@ -789,9 +777,7 @@ func (client *DeploymentsClient) BeginStartJFR(ctx context.Context, resourceGrou
 	if err != nil {
 		return DeploymentsClientStartJFRPollerResponse{}, err
 	}
-	result := DeploymentsClientStartJFRPollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientStartJFRPollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.StartJFR", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientStartJFRPollerResponse{}, err
@@ -866,9 +852,7 @@ func (client *DeploymentsClient) BeginStop(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DeploymentsClientStopPollerResponse{}, err
 	}
-	result := DeploymentsClientStopPollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientStopPollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.Stop", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientStopPollerResponse{}, err
@@ -944,9 +928,7 @@ func (client *DeploymentsClient) BeginUpdate(ctx context.Context, resourceGroupN
 	if err != nil {
 		return DeploymentsClientUpdatePollerResponse{}, err
 	}
-	result := DeploymentsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientUpdatePollerResponse{}, err

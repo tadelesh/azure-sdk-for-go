@@ -43,11 +43,10 @@ func (p *PrivateEndpointConnectionsAdtAPIClientCreateOrUpdatePoller) Poll(ctx co
 // If the final GET succeeded then the final PrivateEndpointConnectionsAdtAPIClientCreateOrUpdateResponse will be returned.
 func (p *PrivateEndpointConnectionsAdtAPIClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsAdtAPIClientCreateOrUpdateResponse, error) {
 	respType := PrivateEndpointConnectionsAdtAPIClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return PrivateEndpointConnectionsAdtAPIClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *PrivateEndpointConnectionsAdtAPIClientDeletePoller) Poll(ctx context.Co
 // If the final GET succeeded then the final PrivateEndpointConnectionsAdtAPIClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionsAdtAPIClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsAdtAPIClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsAdtAPIClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointConnectionsAdtAPIClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *PrivateEndpointConnectionsCompClientCreateOrUpdatePoller) Poll(ctx cont
 // If the final GET succeeded then the final PrivateEndpointConnectionsCompClientCreateOrUpdateResponse will be returned.
 func (p *PrivateEndpointConnectionsCompClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsCompClientCreateOrUpdateResponse, error) {
 	respType := PrivateEndpointConnectionsCompClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return PrivateEndpointConnectionsCompClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *PrivateEndpointConnectionsCompClientDeletePoller) Poll(ctx context.Cont
 // If the final GET succeeded then the final PrivateEndpointConnectionsCompClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionsCompClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsCompClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsCompClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointConnectionsCompClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *PrivateEndpointConnectionsForEDMClientCreateOrUpdatePoller) Poll(ctx co
 // If the final GET succeeded then the final PrivateEndpointConnectionsForEDMClientCreateOrUpdateResponse will be returned.
 func (p *PrivateEndpointConnectionsForEDMClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsForEDMClientCreateOrUpdateResponse, error) {
 	respType := PrivateEndpointConnectionsForEDMClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return PrivateEndpointConnectionsForEDMClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *PrivateEndpointConnectionsForEDMClientDeletePoller) Poll(ctx context.Co
 // If the final GET succeeded then the final PrivateEndpointConnectionsForEDMClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionsForEDMClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsForEDMClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsForEDMClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointConnectionsForEDMClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdatePoller) P
 // If the final GET succeeded then the final PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdateResponse will be returned.
 func (p *PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdateResponse, error) {
 	respType := PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return PrivateEndpointConnectionsForMIPPolicySyncClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *PrivateEndpointConnectionsForMIPPolicySyncClientDeletePoller) Poll(ctx 
 // If the final GET succeeded then the final PrivateEndpointConnectionsForMIPPolicySyncClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionsForMIPPolicySyncClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsForMIPPolicySyncClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsForMIPPolicySyncClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointConnectionsForMIPPolicySyncClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdatePoller) P
 // If the final GET succeeded then the final PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdateResponse will be returned.
 func (p *PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdateResponse, error) {
 	respType := PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -430,11 +421,10 @@ func (p *PrivateEndpointConnectionsForSCCPowershellClientDeletePoller) Poll(ctx 
 // If the final GET succeeded then the final PrivateEndpointConnectionsForSCCPowershellClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionsForSCCPowershellClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsForSCCPowershellClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsForSCCPowershellClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointConnectionsForSCCPowershellClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -473,11 +463,10 @@ func (p *PrivateEndpointConnectionsSecClientCreateOrUpdatePoller) Poll(ctx conte
 // If the final GET succeeded then the final PrivateEndpointConnectionsSecClientCreateOrUpdateResponse will be returned.
 func (p *PrivateEndpointConnectionsSecClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsSecClientCreateOrUpdateResponse, error) {
 	respType := PrivateEndpointConnectionsSecClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return PrivateEndpointConnectionsSecClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -516,11 +505,10 @@ func (p *PrivateEndpointConnectionsSecClientDeletePoller) Poll(ctx context.Conte
 // If the final GET succeeded then the final PrivateEndpointConnectionsSecClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionsSecClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsSecClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsSecClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointConnectionsSecClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -559,11 +547,10 @@ func (p *PrivateLinkServicesForEDMUploadClientCreateOrUpdatePoller) Poll(ctx con
 // If the final GET succeeded then the final PrivateLinkServicesForEDMUploadClientCreateOrUpdateResponse will be returned.
 func (p *PrivateLinkServicesForEDMUploadClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateLinkServicesForEDMUploadClientCreateOrUpdateResponse, error) {
 	respType := PrivateLinkServicesForEDMUploadClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForEDMUploadDescription)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForEDMUploadDescription)
 	if err != nil {
 		return PrivateLinkServicesForEDMUploadClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -602,11 +589,10 @@ func (p *PrivateLinkServicesForEDMUploadClientUpdatePoller) Poll(ctx context.Con
 // If the final GET succeeded then the final PrivateLinkServicesForEDMUploadClientUpdateResponse will be returned.
 func (p *PrivateLinkServicesForEDMUploadClientUpdatePoller) FinalResponse(ctx context.Context) (PrivateLinkServicesForEDMUploadClientUpdateResponse, error) {
 	respType := PrivateLinkServicesForEDMUploadClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForEDMUploadDescription)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForEDMUploadDescription)
 	if err != nil {
 		return PrivateLinkServicesForEDMUploadClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -645,11 +631,10 @@ func (p *PrivateLinkServicesForM365ComplianceCenterClientCreateOrUpdatePoller) P
 // If the final GET succeeded then the final PrivateLinkServicesForM365ComplianceCenterClientCreateOrUpdateResponse will be returned.
 func (p *PrivateLinkServicesForM365ComplianceCenterClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateLinkServicesForM365ComplianceCenterClientCreateOrUpdateResponse, error) {
 	respType := PrivateLinkServicesForM365ComplianceCenterClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForM365ComplianceCenterDescription)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForM365ComplianceCenterDescription)
 	if err != nil {
 		return PrivateLinkServicesForM365ComplianceCenterClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -688,11 +673,10 @@ func (p *PrivateLinkServicesForM365ComplianceCenterClientDeletePoller) Poll(ctx 
 // If the final GET succeeded then the final PrivateLinkServicesForM365ComplianceCenterClientDeleteResponse will be returned.
 func (p *PrivateLinkServicesForM365ComplianceCenterClientDeletePoller) FinalResponse(ctx context.Context) (PrivateLinkServicesForM365ComplianceCenterClientDeleteResponse, error) {
 	respType := PrivateLinkServicesForM365ComplianceCenterClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateLinkServicesForM365ComplianceCenterClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -731,11 +715,10 @@ func (p *PrivateLinkServicesForM365ComplianceCenterClientUpdatePoller) Poll(ctx 
 // If the final GET succeeded then the final PrivateLinkServicesForM365ComplianceCenterClientUpdateResponse will be returned.
 func (p *PrivateLinkServicesForM365ComplianceCenterClientUpdatePoller) FinalResponse(ctx context.Context) (PrivateLinkServicesForM365ComplianceCenterClientUpdateResponse, error) {
 	respType := PrivateLinkServicesForM365ComplianceCenterClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForM365ComplianceCenterDescription)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForM365ComplianceCenterDescription)
 	if err != nil {
 		return PrivateLinkServicesForM365ComplianceCenterClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -774,11 +757,10 @@ func (p *PrivateLinkServicesForM365SecurityCenterClientCreateOrUpdatePoller) Pol
 // If the final GET succeeded then the final PrivateLinkServicesForM365SecurityCenterClientCreateOrUpdateResponse will be returned.
 func (p *PrivateLinkServicesForM365SecurityCenterClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateLinkServicesForM365SecurityCenterClientCreateOrUpdateResponse, error) {
 	respType := PrivateLinkServicesForM365SecurityCenterClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForM365SecurityCenterDescription)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForM365SecurityCenterDescription)
 	if err != nil {
 		return PrivateLinkServicesForM365SecurityCenterClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -817,11 +799,10 @@ func (p *PrivateLinkServicesForM365SecurityCenterClientDeletePoller) Poll(ctx co
 // If the final GET succeeded then the final PrivateLinkServicesForM365SecurityCenterClientDeleteResponse will be returned.
 func (p *PrivateLinkServicesForM365SecurityCenterClientDeletePoller) FinalResponse(ctx context.Context) (PrivateLinkServicesForM365SecurityCenterClientDeleteResponse, error) {
 	respType := PrivateLinkServicesForM365SecurityCenterClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateLinkServicesForM365SecurityCenterClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -860,11 +841,10 @@ func (p *PrivateLinkServicesForM365SecurityCenterClientUpdatePoller) Poll(ctx co
 // If the final GET succeeded then the final PrivateLinkServicesForM365SecurityCenterClientUpdateResponse will be returned.
 func (p *PrivateLinkServicesForM365SecurityCenterClientUpdatePoller) FinalResponse(ctx context.Context) (PrivateLinkServicesForM365SecurityCenterClientUpdateResponse, error) {
 	respType := PrivateLinkServicesForM365SecurityCenterClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForM365SecurityCenterDescription)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForM365SecurityCenterDescription)
 	if err != nil {
 		return PrivateLinkServicesForM365SecurityCenterClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -903,11 +883,10 @@ func (p *PrivateLinkServicesForMIPPolicySyncClientCreateOrUpdatePoller) Poll(ctx
 // If the final GET succeeded then the final PrivateLinkServicesForMIPPolicySyncClientCreateOrUpdateResponse will be returned.
 func (p *PrivateLinkServicesForMIPPolicySyncClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateLinkServicesForMIPPolicySyncClientCreateOrUpdateResponse, error) {
 	respType := PrivateLinkServicesForMIPPolicySyncClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForMIPPolicySyncDescription)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForMIPPolicySyncDescription)
 	if err != nil {
 		return PrivateLinkServicesForMIPPolicySyncClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -946,11 +925,10 @@ func (p *PrivateLinkServicesForMIPPolicySyncClientDeletePoller) Poll(ctx context
 // If the final GET succeeded then the final PrivateLinkServicesForMIPPolicySyncClientDeleteResponse will be returned.
 func (p *PrivateLinkServicesForMIPPolicySyncClientDeletePoller) FinalResponse(ctx context.Context) (PrivateLinkServicesForMIPPolicySyncClientDeleteResponse, error) {
 	respType := PrivateLinkServicesForMIPPolicySyncClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateLinkServicesForMIPPolicySyncClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -989,11 +967,10 @@ func (p *PrivateLinkServicesForMIPPolicySyncClientUpdatePoller) Poll(ctx context
 // If the final GET succeeded then the final PrivateLinkServicesForMIPPolicySyncClientUpdateResponse will be returned.
 func (p *PrivateLinkServicesForMIPPolicySyncClientUpdatePoller) FinalResponse(ctx context.Context) (PrivateLinkServicesForMIPPolicySyncClientUpdateResponse, error) {
 	respType := PrivateLinkServicesForMIPPolicySyncClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForMIPPolicySyncDescription)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForMIPPolicySyncDescription)
 	if err != nil {
 		return PrivateLinkServicesForMIPPolicySyncClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1032,11 +1009,10 @@ func (p *PrivateLinkServicesForO365ManagementActivityAPIClientCreateOrUpdatePoll
 // If the final GET succeeded then the final PrivateLinkServicesForO365ManagementActivityAPIClientCreateOrUpdateResponse will be returned.
 func (p *PrivateLinkServicesForO365ManagementActivityAPIClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateLinkServicesForO365ManagementActivityAPIClientCreateOrUpdateResponse, error) {
 	respType := PrivateLinkServicesForO365ManagementActivityAPIClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForO365ManagementActivityAPIDescription)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForO365ManagementActivityAPIDescription)
 	if err != nil {
 		return PrivateLinkServicesForO365ManagementActivityAPIClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1075,11 +1051,10 @@ func (p *PrivateLinkServicesForO365ManagementActivityAPIClientDeletePoller) Poll
 // If the final GET succeeded then the final PrivateLinkServicesForO365ManagementActivityAPIClientDeleteResponse will be returned.
 func (p *PrivateLinkServicesForO365ManagementActivityAPIClientDeletePoller) FinalResponse(ctx context.Context) (PrivateLinkServicesForO365ManagementActivityAPIClientDeleteResponse, error) {
 	respType := PrivateLinkServicesForO365ManagementActivityAPIClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateLinkServicesForO365ManagementActivityAPIClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1118,11 +1093,10 @@ func (p *PrivateLinkServicesForO365ManagementActivityAPIClientUpdatePoller) Poll
 // If the final GET succeeded then the final PrivateLinkServicesForO365ManagementActivityAPIClientUpdateResponse will be returned.
 func (p *PrivateLinkServicesForO365ManagementActivityAPIClientUpdatePoller) FinalResponse(ctx context.Context) (PrivateLinkServicesForO365ManagementActivityAPIClientUpdateResponse, error) {
 	respType := PrivateLinkServicesForO365ManagementActivityAPIClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForO365ManagementActivityAPIDescription)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForO365ManagementActivityAPIDescription)
 	if err != nil {
 		return PrivateLinkServicesForO365ManagementActivityAPIClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1161,11 +1135,10 @@ func (p *PrivateLinkServicesForSCCPowershellClientCreateOrUpdatePoller) Poll(ctx
 // If the final GET succeeded then the final PrivateLinkServicesForSCCPowershellClientCreateOrUpdateResponse will be returned.
 func (p *PrivateLinkServicesForSCCPowershellClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateLinkServicesForSCCPowershellClientCreateOrUpdateResponse, error) {
 	respType := PrivateLinkServicesForSCCPowershellClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForSCCPowershellDescription)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForSCCPowershellDescription)
 	if err != nil {
 		return PrivateLinkServicesForSCCPowershellClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1204,11 +1177,10 @@ func (p *PrivateLinkServicesForSCCPowershellClientDeletePoller) Poll(ctx context
 // If the final GET succeeded then the final PrivateLinkServicesForSCCPowershellClientDeleteResponse will be returned.
 func (p *PrivateLinkServicesForSCCPowershellClientDeletePoller) FinalResponse(ctx context.Context) (PrivateLinkServicesForSCCPowershellClientDeleteResponse, error) {
 	respType := PrivateLinkServicesForSCCPowershellClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateLinkServicesForSCCPowershellClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1247,11 +1219,10 @@ func (p *PrivateLinkServicesForSCCPowershellClientUpdatePoller) Poll(ctx context
 // If the final GET succeeded then the final PrivateLinkServicesForSCCPowershellClientUpdateResponse will be returned.
 func (p *PrivateLinkServicesForSCCPowershellClientUpdatePoller) FinalResponse(ctx context.Context) (PrivateLinkServicesForSCCPowershellClientUpdateResponse, error) {
 	respType := PrivateLinkServicesForSCCPowershellClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForSCCPowershellDescription)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateLinkServicesForSCCPowershellDescription)
 	if err != nil {
 		return PrivateLinkServicesForSCCPowershellClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1290,11 +1261,10 @@ func (p *ServicesClientDeletePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ServicesClientDeleteResponse will be returned.
 func (p *ServicesClientDeletePoller) FinalResponse(ctx context.Context) (ServicesClientDeleteResponse, error) {
 	respType := ServicesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ServicesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

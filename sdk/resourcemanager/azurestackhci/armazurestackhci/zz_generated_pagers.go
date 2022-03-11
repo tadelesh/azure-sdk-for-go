@@ -10,6 +10,7 @@ package armazurestackhci
 
 import (
 	"context"
+	"errors"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
 	"net/http"
@@ -20,214 +21,194 @@ import (
 type ArcSettingsClientListByClusterPager struct {
 	client    *ArcSettingsClient
 	current   ArcSettingsClientListByClusterResponse
-	err       error
 	requester func(context.Context) (*policy.Request, error)
 	advancer  func(context.Context, ArcSettingsClientListByClusterResponse) (*policy.Request, error)
 }
 
-// Err returns the last error encountered while paging.
-func (p *ArcSettingsClientListByClusterPager) Err() error {
-	return p.err
-}
-
-// NextPage returns true if the pager advanced to the next page.
-// Returns false if there are no more pages or an error occurred.
-func (p *ArcSettingsClientListByClusterPager) NextPage(ctx context.Context) bool {
-	var req *policy.Request
-	var err error
+// More returns true if there are more pages to retrieve.
+func (p *ArcSettingsClientListByClusterPager) More() bool {
 	if !reflect.ValueOf(p.current).IsZero() {
 		if p.current.ArcSettingList.NextLink == nil || len(*p.current.ArcSettingList.NextLink) == 0 {
 			return false
+		}
+	}
+	return true
+}
+
+// NextPage advances the pager to the next page.
+func (p *ArcSettingsClientListByClusterPager) NextPage(ctx context.Context) (ArcSettingsClientListByClusterResponse, error) {
+	var req *policy.Request
+	var err error
+	if !reflect.ValueOf(p.current).IsZero() {
+		if !p.More() {
+			return ArcSettingsClientListByClusterResponse{}, errors.New("no more pages")
 		}
 		req, err = p.advancer(ctx, p.current)
 	} else {
 		req, err = p.requester(ctx)
 	}
 	if err != nil {
-		p.err = err
-		return false
+		return ArcSettingsClientListByClusterResponse{}, err
 	}
 	resp, err := p.client.pl.Do(req)
 	if err != nil {
-		p.err = err
-		return false
+		return ArcSettingsClientListByClusterResponse{}, err
 	}
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		p.err = runtime.NewResponseError(resp)
-		return false
+
+		return ArcSettingsClientListByClusterResponse{}, runtime.NewResponseError(resp)
 	}
 	result, err := p.client.listByClusterHandleResponse(resp)
 	if err != nil {
-		p.err = err
-		return false
+		return ArcSettingsClientListByClusterResponse{}, err
 	}
 	p.current = result
-	return true
-}
-
-// PageResponse returns the current ArcSettingsClientListByClusterResponse page.
-func (p *ArcSettingsClientListByClusterPager) PageResponse() ArcSettingsClientListByClusterResponse {
-	return p.current
+	return p.current, nil
 }
 
 // ClustersClientListByResourceGroupPager provides operations for iterating over paged responses.
 type ClustersClientListByResourceGroupPager struct {
 	client    *ClustersClient
 	current   ClustersClientListByResourceGroupResponse
-	err       error
 	requester func(context.Context) (*policy.Request, error)
 	advancer  func(context.Context, ClustersClientListByResourceGroupResponse) (*policy.Request, error)
 }
 
-// Err returns the last error encountered while paging.
-func (p *ClustersClientListByResourceGroupPager) Err() error {
-	return p.err
-}
-
-// NextPage returns true if the pager advanced to the next page.
-// Returns false if there are no more pages or an error occurred.
-func (p *ClustersClientListByResourceGroupPager) NextPage(ctx context.Context) bool {
-	var req *policy.Request
-	var err error
+// More returns true if there are more pages to retrieve.
+func (p *ClustersClientListByResourceGroupPager) More() bool {
 	if !reflect.ValueOf(p.current).IsZero() {
 		if p.current.ClusterList.NextLink == nil || len(*p.current.ClusterList.NextLink) == 0 {
 			return false
+		}
+	}
+	return true
+}
+
+// NextPage advances the pager to the next page.
+func (p *ClustersClientListByResourceGroupPager) NextPage(ctx context.Context) (ClustersClientListByResourceGroupResponse, error) {
+	var req *policy.Request
+	var err error
+	if !reflect.ValueOf(p.current).IsZero() {
+		if !p.More() {
+			return ClustersClientListByResourceGroupResponse{}, errors.New("no more pages")
 		}
 		req, err = p.advancer(ctx, p.current)
 	} else {
 		req, err = p.requester(ctx)
 	}
 	if err != nil {
-		p.err = err
-		return false
+		return ClustersClientListByResourceGroupResponse{}, err
 	}
 	resp, err := p.client.pl.Do(req)
 	if err != nil {
-		p.err = err
-		return false
+		return ClustersClientListByResourceGroupResponse{}, err
 	}
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		p.err = runtime.NewResponseError(resp)
-		return false
+
+		return ClustersClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
 	}
 	result, err := p.client.listByResourceGroupHandleResponse(resp)
 	if err != nil {
-		p.err = err
-		return false
+		return ClustersClientListByResourceGroupResponse{}, err
 	}
 	p.current = result
-	return true
-}
-
-// PageResponse returns the current ClustersClientListByResourceGroupResponse page.
-func (p *ClustersClientListByResourceGroupPager) PageResponse() ClustersClientListByResourceGroupResponse {
-	return p.current
+	return p.current, nil
 }
 
 // ClustersClientListBySubscriptionPager provides operations for iterating over paged responses.
 type ClustersClientListBySubscriptionPager struct {
 	client    *ClustersClient
 	current   ClustersClientListBySubscriptionResponse
-	err       error
 	requester func(context.Context) (*policy.Request, error)
 	advancer  func(context.Context, ClustersClientListBySubscriptionResponse) (*policy.Request, error)
 }
 
-// Err returns the last error encountered while paging.
-func (p *ClustersClientListBySubscriptionPager) Err() error {
-	return p.err
-}
-
-// NextPage returns true if the pager advanced to the next page.
-// Returns false if there are no more pages or an error occurred.
-func (p *ClustersClientListBySubscriptionPager) NextPage(ctx context.Context) bool {
-	var req *policy.Request
-	var err error
+// More returns true if there are more pages to retrieve.
+func (p *ClustersClientListBySubscriptionPager) More() bool {
 	if !reflect.ValueOf(p.current).IsZero() {
 		if p.current.ClusterList.NextLink == nil || len(*p.current.ClusterList.NextLink) == 0 {
 			return false
+		}
+	}
+	return true
+}
+
+// NextPage advances the pager to the next page.
+func (p *ClustersClientListBySubscriptionPager) NextPage(ctx context.Context) (ClustersClientListBySubscriptionResponse, error) {
+	var req *policy.Request
+	var err error
+	if !reflect.ValueOf(p.current).IsZero() {
+		if !p.More() {
+			return ClustersClientListBySubscriptionResponse{}, errors.New("no more pages")
 		}
 		req, err = p.advancer(ctx, p.current)
 	} else {
 		req, err = p.requester(ctx)
 	}
 	if err != nil {
-		p.err = err
-		return false
+		return ClustersClientListBySubscriptionResponse{}, err
 	}
 	resp, err := p.client.pl.Do(req)
 	if err != nil {
-		p.err = err
-		return false
+		return ClustersClientListBySubscriptionResponse{}, err
 	}
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		p.err = runtime.NewResponseError(resp)
-		return false
+
+		return ClustersClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
 	}
 	result, err := p.client.listBySubscriptionHandleResponse(resp)
 	if err != nil {
-		p.err = err
-		return false
+		return ClustersClientListBySubscriptionResponse{}, err
 	}
 	p.current = result
-	return true
-}
-
-// PageResponse returns the current ClustersClientListBySubscriptionResponse page.
-func (p *ClustersClientListBySubscriptionPager) PageResponse() ClustersClientListBySubscriptionResponse {
-	return p.current
+	return p.current, nil
 }
 
 // ExtensionsClientListByArcSettingPager provides operations for iterating over paged responses.
 type ExtensionsClientListByArcSettingPager struct {
 	client    *ExtensionsClient
 	current   ExtensionsClientListByArcSettingResponse
-	err       error
 	requester func(context.Context) (*policy.Request, error)
 	advancer  func(context.Context, ExtensionsClientListByArcSettingResponse) (*policy.Request, error)
 }
 
-// Err returns the last error encountered while paging.
-func (p *ExtensionsClientListByArcSettingPager) Err() error {
-	return p.err
-}
-
-// NextPage returns true if the pager advanced to the next page.
-// Returns false if there are no more pages or an error occurred.
-func (p *ExtensionsClientListByArcSettingPager) NextPage(ctx context.Context) bool {
-	var req *policy.Request
-	var err error
+// More returns true if there are more pages to retrieve.
+func (p *ExtensionsClientListByArcSettingPager) More() bool {
 	if !reflect.ValueOf(p.current).IsZero() {
 		if p.current.ExtensionList.NextLink == nil || len(*p.current.ExtensionList.NextLink) == 0 {
 			return false
+		}
+	}
+	return true
+}
+
+// NextPage advances the pager to the next page.
+func (p *ExtensionsClientListByArcSettingPager) NextPage(ctx context.Context) (ExtensionsClientListByArcSettingResponse, error) {
+	var req *policy.Request
+	var err error
+	if !reflect.ValueOf(p.current).IsZero() {
+		if !p.More() {
+			return ExtensionsClientListByArcSettingResponse{}, errors.New("no more pages")
 		}
 		req, err = p.advancer(ctx, p.current)
 	} else {
 		req, err = p.requester(ctx)
 	}
 	if err != nil {
-		p.err = err
-		return false
+		return ExtensionsClientListByArcSettingResponse{}, err
 	}
 	resp, err := p.client.pl.Do(req)
 	if err != nil {
-		p.err = err
-		return false
+		return ExtensionsClientListByArcSettingResponse{}, err
 	}
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		p.err = runtime.NewResponseError(resp)
-		return false
+
+		return ExtensionsClientListByArcSettingResponse{}, runtime.NewResponseError(resp)
 	}
 	result, err := p.client.listByArcSettingHandleResponse(resp)
 	if err != nil {
-		p.err = err
-		return false
+		return ExtensionsClientListByArcSettingResponse{}, err
 	}
 	p.current = result
-	return true
-}
-
-// PageResponse returns the current ExtensionsClientListByArcSettingResponse page.
-func (p *ExtensionsClientListByArcSettingPager) PageResponse() ExtensionsClientListByArcSettingResponse {
-	return p.current
+	return p.current, nil
 }

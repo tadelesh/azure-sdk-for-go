@@ -34,17 +34,17 @@ type ArcSettingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewArcSettingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ArcSettingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ArcSettingsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *ArcSettingsClient) createCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, arcSetting)
@@ -103,7 +103,7 @@ func (client *ArcSettingsClient) createCreateRequest(ctx context.Context, resour
 
 // createHandleResponse handles the Create response.
 func (client *ArcSettingsClient) createHandleResponse(resp *http.Response) (ArcSettingsClientCreateResponse, error) {
-	result := ArcSettingsClientCreateResponse{RawResponse: resp}
+	result := ArcSettingsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ArcSetting); err != nil {
 		return ArcSettingsClientCreateResponse{}, err
 	}
@@ -121,9 +121,7 @@ func (client *ArcSettingsClient) BeginDelete(ctx context.Context, resourceGroupN
 	if err != nil {
 		return ArcSettingsClientDeletePollerResponse{}, err
 	}
-	result := ArcSettingsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ArcSettingsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ArcSettingsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ArcSettingsClientDeletePollerResponse{}, err
@@ -175,7 +173,7 @@ func (client *ArcSettingsClient) deleteCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -226,7 +224,7 @@ func (client *ArcSettingsClient) getCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -234,7 +232,7 @@ func (client *ArcSettingsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *ArcSettingsClient) getHandleResponse(resp *http.Response) (ArcSettingsClientGetResponse, error) {
-	result := ArcSettingsClientGetResponse{RawResponse: resp}
+	result := ArcSettingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ArcSetting); err != nil {
 		return ArcSettingsClientGetResponse{}, err
 	}
@@ -279,7 +277,7 @@ func (client *ArcSettingsClient) listByClusterCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -287,7 +285,7 @@ func (client *ArcSettingsClient) listByClusterCreateRequest(ctx context.Context,
 
 // listByClusterHandleResponse handles the ListByCluster response.
 func (client *ArcSettingsClient) listByClusterHandleResponse(resp *http.Response) (ArcSettingsClientListByClusterResponse, error) {
-	result := ArcSettingsClientListByClusterResponse{RawResponse: resp}
+	result := ArcSettingsClientListByClusterResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ArcSettingList); err != nil {
 		return ArcSettingsClientListByClusterResponse{}, err
 	}

@@ -34,17 +34,17 @@ type RestorableDroppedDatabasesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRestorableDroppedDatabasesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RestorableDroppedDatabasesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RestorableDroppedDatabasesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *RestorableDroppedDatabasesClient) getCreateRequest(ctx context.Con
 
 // getHandleResponse handles the Get response.
 func (client *RestorableDroppedDatabasesClient) getHandleResponse(resp *http.Response) (RestorableDroppedDatabasesClientGetResponse, error) {
-	result := RestorableDroppedDatabasesClientGetResponse{RawResponse: resp}
+	result := RestorableDroppedDatabasesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorableDroppedDatabase); err != nil {
 		return RestorableDroppedDatabasesClientGetResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *RestorableDroppedDatabasesClient) listByServerCreateRequest(ctx co
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *RestorableDroppedDatabasesClient) listByServerHandleResponse(resp *http.Response) (RestorableDroppedDatabasesClientListByServerResponse, error) {
-	result := RestorableDroppedDatabasesClientListByServerResponse{RawResponse: resp}
+	result := RestorableDroppedDatabasesClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorableDroppedDatabaseListResult); err != nil {
 		return RestorableDroppedDatabasesClientListByServerResponse{}, err
 	}

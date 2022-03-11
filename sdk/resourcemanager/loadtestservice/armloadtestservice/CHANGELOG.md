@@ -1,5 +1,68 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*LoadTestsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(LoadTestsClientListBySubscriptionResponse, error)`
+- Function `*LoadTestsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(LoadTestsClientListByResourceGroupResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*LoadTestsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*LoadTestsClientListBySubscriptionPager.Err` has been removed
+- Function `*LoadTestsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*LoadTestsClientListByResourceGroupPager.Err` has been removed
+- Struct `LoadTestsClientCreateOrUpdateResult` has been removed
+- Struct `LoadTestsClientGetResult` has been removed
+- Struct `LoadTestsClientListByResourceGroupResult` has been removed
+- Struct `LoadTestsClientListBySubscriptionResult` has been removed
+- Struct `LoadTestsClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `RawResponse` of struct `LoadTestsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `LoadTestsClientDeletePollerResponse` has been removed
+- Field `LoadTestsClientListByResourceGroupResult` of struct `LoadTestsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `LoadTestsClientListByResourceGroupResponse` has been removed
+- Field `LoadTestsClientUpdateResult` of struct `LoadTestsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `LoadTestsClientUpdateResponse` has been removed
+- Field `LoadTestsClientListBySubscriptionResult` of struct `LoadTestsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `LoadTestsClientListBySubscriptionResponse` has been removed
+- Field `LoadTestsClientGetResult` of struct `LoadTestsClientGetResponse` has been removed
+- Field `RawResponse` of struct `LoadTestsClientGetResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `LoadTestsClientCreateOrUpdateResult` of struct `LoadTestsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `LoadTestsClientCreateOrUpdateResponse` has been removed
+
+### Features Added
+
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*LoadTestsClientListByResourceGroupPager.More() bool`
+- New function `*LoadTestsClientListBySubscriptionPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `LoadTestResourcePageList` in struct `LoadTestsClientListByResourceGroupResponse`
+- New anonymous field `LoadTestResource` in struct `LoadTestsClientUpdateResponse`
+- New anonymous field `LoadTestResource` in struct `LoadTestsClientGetResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `LoadTestResource` in struct `LoadTestsClientCreateOrUpdateResponse`
+- New anonymous field `LoadTestResourcePageList` in struct `LoadTestsClientListBySubscriptionResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `LoadTestResourcePatchRequestBody.Tags` has been changed from `map[string]interface{}` to `interface{}`
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

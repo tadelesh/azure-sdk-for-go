@@ -35,17 +35,17 @@ type ServiceSKUsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServiceSKUsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServiceSKUsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServiceSKUsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -96,7 +96,7 @@ func (client *ServiceSKUsClient) listAvailableServiceSKUsCreateRequest(ctx conte
 
 // listAvailableServiceSKUsHandleResponse handles the ListAvailableServiceSKUs response.
 func (client *ServiceSKUsClient) listAvailableServiceSKUsHandleResponse(resp *http.Response) (ServiceSKUsClientListAvailableServiceSKUsResponse, error) {
-	result := ServiceSKUsClientListAvailableServiceSKUsResponse{RawResponse: resp}
+	result := ServiceSKUsClientListAvailableServiceSKUsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceSKUResults); err != nil {
 		return ServiceSKUsClientListAvailableServiceSKUsResponse{}, err
 	}

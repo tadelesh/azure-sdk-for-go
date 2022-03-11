@@ -1,5 +1,69 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ServicesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ServicesClientListByResourceGroupResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ServicesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ServicesClientListResponse, error)`
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*ServicesClientListByResourceGroupPager.Err` has been removed
+- Function `*ServicesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ServicesClientListPager.Err` has been removed
+- Function `*ServicesClientListPager.PageResponse` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `ServicesClientCheckDeviceServiceNameAvailabilityResult` has been removed
+- Struct `ServicesClientCreateOrUpdateResult` has been removed
+- Struct `ServicesClientDeleteResult` has been removed
+- Struct `ServicesClientGetResult` has been removed
+- Struct `ServicesClientListByResourceGroupResult` has been removed
+- Struct `ServicesClientListResult` has been removed
+- Struct `ServicesClientUpdateResult` has been removed
+- Field `ServicesClientCreateOrUpdateResult` of struct `ServicesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCreateOrUpdateResponse` has been removed
+- Field `ServicesClientListByResourceGroupResult` of struct `ServicesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientListByResourceGroupResponse` has been removed
+- Field `ServicesClientCheckDeviceServiceNameAvailabilityResult` of struct `ServicesClientCheckDeviceServiceNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCheckDeviceServiceNameAvailabilityResponse` has been removed
+- Field `ServicesClientDeleteResult` of struct `ServicesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientDeleteResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `ServicesClientListResult` of struct `ServicesClientListResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientListResponse` has been removed
+- Field `ServicesClientUpdateResult` of struct `ServicesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientUpdateResponse` has been removed
+- Field `ServicesClientGetResult` of struct `ServicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientGetResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New function `*ServicesClientListByResourceGroupPager.More() bool`
+- New function `*ServicesClientListPager.More() bool`
+- New struct `ErrorDetails`
+- New struct `ErrorDetailsError`
+- New anonymous field `DeviceServiceNameAvailabilityInfo` in struct `ServicesClientCheckDeviceServiceNameAvailabilityResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `DeviceService` in struct `ServicesClientGetResponse`
+- New anonymous field `DeviceServiceDescriptionListResult` in struct `ServicesClientListResponse`
+- New anonymous field `DeviceService` in struct `ServicesClientDeleteResponse`
+- New anonymous field `DeviceServiceDescriptionListResult` in struct `ServicesClientListByResourceGroupResponse`
+- New anonymous field `DeviceService` in struct `ServicesClientCreateOrUpdateResponse`
+- New anonymous field `DeviceService` in struct `ServicesClientUpdateResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Struct `ErrorDetails` has been removed
+- Struct `ErrorDetailsError` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

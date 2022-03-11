@@ -1,5 +1,21 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `SourceControlSyncJobStreamByIDProperties.Value` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `JobStreamProperties.Value` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `EncryptionPropertiesIdentity.UserAssignedIdentity` has been changed from `map[string]interface{}` to `interface{}`
+- Struct `HybridRunbookWorkerGroupUpdateParameters` has been removed
+- Struct `RunbookCreateOrUpdateDraftParameters` has been removed
+- Struct `RunbookCreateOrUpdateDraftProperties` has been removed
+- Field `Object` of struct `NodeReportsClientGetContentResult` has been removed
+
+### Features Added
+
+- New field `Interface` in struct `NodeReportsClientGetContentResult`
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

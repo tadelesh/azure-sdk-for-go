@@ -34,17 +34,17 @@ type MachinesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMachinesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MachinesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MachinesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -90,7 +90,7 @@ func (client *MachinesClient) createOrUpdateCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-10-preview")
+	reqQP.Set("api-version", "2021-12-10-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -98,7 +98,7 @@ func (client *MachinesClient) createOrUpdateCreateRequest(ctx context.Context, r
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *MachinesClient) createOrUpdateHandleResponse(resp *http.Response) (MachinesClientCreateOrUpdateResponse, error) {
-	result := MachinesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := MachinesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Machine); err != nil {
 		return MachinesClientCreateOrUpdateResponse{}, err
 	}
@@ -122,7 +122,7 @@ func (client *MachinesClient) Delete(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return MachinesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return MachinesClientDeleteResponse{RawResponse: resp}, nil
+	return MachinesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -145,7 +145,7 @@ func (client *MachinesClient) deleteCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-10-preview")
+	reqQP.Set("api-version", "2021-12-10-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -191,7 +191,7 @@ func (client *MachinesClient) getCreateRequest(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-10-preview")
+	reqQP.Set("api-version", "2021-12-10-preview")
 	if options != nil && options.Expand != nil {
 		reqQP.Set("$expand", string(*options.Expand))
 	}
@@ -202,7 +202,7 @@ func (client *MachinesClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *MachinesClient) getHandleResponse(resp *http.Response) (MachinesClientGetResponse, error) {
-	result := MachinesClientGetResponse{RawResponse: resp}
+	result := MachinesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Machine); err != nil {
 		return MachinesClientGetResponse{}, err
 	}
@@ -243,7 +243,7 @@ func (client *MachinesClient) listByResourceGroupCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-10-preview")
+	reqQP.Set("api-version", "2021-12-10-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -251,7 +251,7 @@ func (client *MachinesClient) listByResourceGroupCreateRequest(ctx context.Conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *MachinesClient) listByResourceGroupHandleResponse(resp *http.Response) (MachinesClientListByResourceGroupResponse, error) {
-	result := MachinesClientListByResourceGroupResponse{RawResponse: resp}
+	result := MachinesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MachineListResult); err != nil {
 		return MachinesClientListByResourceGroupResponse{}, err
 	}
@@ -287,7 +287,7 @@ func (client *MachinesClient) listBySubscriptionCreateRequest(ctx context.Contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-10-preview")
+	reqQP.Set("api-version", "2021-12-10-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -295,7 +295,7 @@ func (client *MachinesClient) listBySubscriptionCreateRequest(ctx context.Contex
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *MachinesClient) listBySubscriptionHandleResponse(resp *http.Response) (MachinesClientListBySubscriptionResponse, error) {
-	result := MachinesClientListBySubscriptionResponse{RawResponse: resp}
+	result := MachinesClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MachineListResult); err != nil {
 		return MachinesClientListBySubscriptionResponse{}, err
 	}
@@ -343,7 +343,7 @@ func (client *MachinesClient) updateCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-10-preview")
+	reqQP.Set("api-version", "2021-12-10-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -351,7 +351,7 @@ func (client *MachinesClient) updateCreateRequest(ctx context.Context, resourceG
 
 // updateHandleResponse handles the Update response.
 func (client *MachinesClient) updateHandleResponse(resp *http.Response) (MachinesClientUpdateResponse, error) {
-	result := MachinesClientUpdateResponse{RawResponse: resp}
+	result := MachinesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Machine); err != nil {
 		return MachinesClientUpdateResponse{}, err
 	}

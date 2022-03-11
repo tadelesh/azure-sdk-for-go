@@ -62,9 +62,7 @@ func (client *PipelineJobsClient) BeginCancel(ctx context.Context, resourceGroup
 	if err != nil {
 		return PipelineJobsClientCancelPollerResponse{}, err
 	}
-	result := PipelineJobsClientCancelPollerResponse{
-		RawResponse: resp,
-	}
+	result := PipelineJobsClientCancelPollerResponse{}
 	pt, err := armruntime.NewPoller("PipelineJobsClient.Cancel", "", resp, client.pl)
 	if err != nil {
 		return PipelineJobsClientCancelPollerResponse{}, err
@@ -177,7 +175,7 @@ func (client *PipelineJobsClient) createOrUpdateCreateRequest(ctx context.Contex
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *PipelineJobsClient) createOrUpdateHandleResponse(resp *http.Response) (PipelineJobsClientCreateOrUpdateResponse, error) {
-	result := PipelineJobsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := PipelineJobsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PipelineJob); err != nil {
 		return PipelineJobsClientCreateOrUpdateResponse{}, err
 	}
@@ -202,7 +200,7 @@ func (client *PipelineJobsClient) Delete(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return PipelineJobsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return PipelineJobsClientDeleteResponse{RawResponse: resp}, nil
+	return PipelineJobsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -289,7 +287,7 @@ func (client *PipelineJobsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *PipelineJobsClient) getHandleResponse(resp *http.Response) (PipelineJobsClientGetResponse, error) {
-	result := PipelineJobsClientGetResponse{RawResponse: resp}
+	result := PipelineJobsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PipelineJob); err != nil {
 		return PipelineJobsClientGetResponse{}, err
 	}
@@ -347,7 +345,7 @@ func (client *PipelineJobsClient) listCreateRequest(ctx context.Context, resourc
 
 // listHandleResponse handles the List response.
 func (client *PipelineJobsClient) listHandleResponse(resp *http.Response) (PipelineJobsClientListResponse, error) {
-	result := PipelineJobsClientListResponse{RawResponse: resp}
+	result := PipelineJobsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PipelineJobCollection); err != nil {
 		return PipelineJobsClientListResponse{}, err
 	}
@@ -408,7 +406,7 @@ func (client *PipelineJobsClient) updateCreateRequest(ctx context.Context, resou
 
 // updateHandleResponse handles the Update response.
 func (client *PipelineJobsClient) updateHandleResponse(resp *http.Response) (PipelineJobsClientUpdateResponse, error) {
-	result := PipelineJobsClientUpdateResponse{RawResponse: resp}
+	result := PipelineJobsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PipelineJob); err != nil {
 		return PipelineJobsClientUpdateResponse{}, err
 	}

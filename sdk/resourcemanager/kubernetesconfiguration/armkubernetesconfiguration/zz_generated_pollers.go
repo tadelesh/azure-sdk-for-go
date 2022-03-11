@@ -43,11 +43,10 @@ func (p *ExtensionsClientCreatePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final ExtensionsClientCreateResponse will be returned.
 func (p *ExtensionsClientCreatePoller) FinalResponse(ctx context.Context) (ExtensionsClientCreateResponse, error) {
 	respType := ExtensionsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Extension)
+	_, err := p.pt.FinalResponse(ctx, &respType.Extension)
 	if err != nil {
 		return ExtensionsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ExtensionsClientDeletePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final ExtensionsClientDeleteResponse will be returned.
 func (p *ExtensionsClientDeletePoller) FinalResponse(ctx context.Context) (ExtensionsClientDeleteResponse, error) {
 	respType := ExtensionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ExtensionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ExtensionsClientUpdatePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final ExtensionsClientUpdateResponse will be returned.
 func (p *ExtensionsClientUpdatePoller) FinalResponse(ctx context.Context) (ExtensionsClientUpdateResponse, error) {
 	respType := ExtensionsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Extension)
+	_, err := p.pt.FinalResponse(ctx, &respType.Extension)
 	if err != nil {
 		return ExtensionsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *FluxConfigurationsClientCreateOrUpdatePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final FluxConfigurationsClientCreateOrUpdateResponse will be returned.
 func (p *FluxConfigurationsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (FluxConfigurationsClientCreateOrUpdateResponse, error) {
 	respType := FluxConfigurationsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.FluxConfiguration)
+	_, err := p.pt.FinalResponse(ctx, &respType.FluxConfiguration)
 	if err != nil {
 		return FluxConfigurationsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *FluxConfigurationsClientDeletePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final FluxConfigurationsClientDeleteResponse will be returned.
 func (p *FluxConfigurationsClientDeletePoller) FinalResponse(ctx context.Context) (FluxConfigurationsClientDeleteResponse, error) {
 	respType := FluxConfigurationsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return FluxConfigurationsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *FluxConfigurationsClientUpdatePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final FluxConfigurationsClientUpdateResponse will be returned.
 func (p *FluxConfigurationsClientUpdatePoller) FinalResponse(ctx context.Context) (FluxConfigurationsClientUpdateResponse, error) {
 	respType := FluxConfigurationsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.FluxConfiguration)
+	_, err := p.pt.FinalResponse(ctx, &respType.FluxConfiguration)
 	if err != nil {
 		return FluxConfigurationsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *SourceControlConfigurationsClientDeletePoller) Poll(ctx context.Context
 // If the final GET succeeded then the final SourceControlConfigurationsClientDeleteResponse will be returned.
 func (p *SourceControlConfigurationsClientDeletePoller) FinalResponse(ctx context.Context) (SourceControlConfigurationsClientDeleteResponse, error) {
 	respType := SourceControlConfigurationsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SourceControlConfigurationsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

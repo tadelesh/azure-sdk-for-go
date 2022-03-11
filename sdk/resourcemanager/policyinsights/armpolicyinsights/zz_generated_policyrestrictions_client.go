@@ -34,17 +34,17 @@ type PolicyRestrictionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPolicyRestrictionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PolicyRestrictionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PolicyRestrictionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *PolicyRestrictionsClient) checkAtResourceGroupScopeCreateRequest(c
 
 // checkAtResourceGroupScopeHandleResponse handles the CheckAtResourceGroupScope response.
 func (client *PolicyRestrictionsClient) checkAtResourceGroupScopeHandleResponse(resp *http.Response) (PolicyRestrictionsClientCheckAtResourceGroupScopeResponse, error) {
-	result := PolicyRestrictionsClientCheckAtResourceGroupScopeResponse{RawResponse: resp}
+	result := PolicyRestrictionsClientCheckAtResourceGroupScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckRestrictionsResult); err != nil {
 		return PolicyRestrictionsClientCheckAtResourceGroupScopeResponse{}, err
 	}
@@ -142,7 +142,7 @@ func (client *PolicyRestrictionsClient) checkAtSubscriptionScopeCreateRequest(ct
 
 // checkAtSubscriptionScopeHandleResponse handles the CheckAtSubscriptionScope response.
 func (client *PolicyRestrictionsClient) checkAtSubscriptionScopeHandleResponse(resp *http.Response) (PolicyRestrictionsClientCheckAtSubscriptionScopeResponse, error) {
-	result := PolicyRestrictionsClientCheckAtSubscriptionScopeResponse{RawResponse: resp}
+	result := PolicyRestrictionsClientCheckAtSubscriptionScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckRestrictionsResult); err != nil {
 		return PolicyRestrictionsClientCheckAtSubscriptionScopeResponse{}, err
 	}

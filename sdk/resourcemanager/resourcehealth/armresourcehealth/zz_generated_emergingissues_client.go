@@ -32,16 +32,16 @@ type EmergingIssuesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewEmergingIssuesClient(credential azcore.TokenCredential, options *arm.ClientOptions) *EmergingIssuesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &EmergingIssuesClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -85,7 +85,7 @@ func (client *EmergingIssuesClient) getCreateRequest(ctx context.Context, issueN
 
 // getHandleResponse handles the Get response.
 func (client *EmergingIssuesClient) getHandleResponse(resp *http.Response) (EmergingIssuesClientGetResponse, error) {
-	result := EmergingIssuesClientGetResponse{RawResponse: resp}
+	result := EmergingIssuesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EmergingIssuesGetResult); err != nil {
 		return EmergingIssuesClientGetResponse{}, err
 	}
@@ -123,7 +123,7 @@ func (client *EmergingIssuesClient) listCreateRequest(ctx context.Context, optio
 
 // listHandleResponse handles the List response.
 func (client *EmergingIssuesClient) listHandleResponse(resp *http.Response) (EmergingIssuesClientListResponse, error) {
-	result := EmergingIssuesClientListResponse{RawResponse: resp}
+	result := EmergingIssuesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EmergingIssueListResult); err != nil {
 		return EmergingIssuesClientListResponse{}, err
 	}

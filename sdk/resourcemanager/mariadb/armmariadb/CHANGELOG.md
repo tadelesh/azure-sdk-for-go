@@ -1,5 +1,332 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*VirtualNetworkRulesClientListByServerPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualNetworkRulesClientListByServerResponse, error)`
+- Function `*ServersClient.List` parameter(s) have been changed from `(context.Context, *ServersClientListOptions)` to `(*ServersClientListOptions)`
+- Function `*ServersClient.List` return value(s) have been changed from `(ServersClientListResponse, error)` to `(*ServersClientListPager)`
+- Function `*LogFilesClient.ListByServer` parameter(s) have been changed from `(context.Context, string, string, *LogFilesClientListByServerOptions)` to `(string, string, *LogFilesClientListByServerOptions)`
+- Function `*LogFilesClient.ListByServer` return value(s) have been changed from `(LogFilesClientListByServerResponse, error)` to `(*LogFilesClientListByServerPager)`
+- Function `*ServerBasedPerformanceTierClient.List` parameter(s) have been changed from `(context.Context, string, string, *ServerBasedPerformanceTierClientListOptions)` to `(string, string, *ServerBasedPerformanceTierClientListOptions)`
+- Function `*ServerBasedPerformanceTierClient.List` return value(s) have been changed from `(ServerBasedPerformanceTierClientListResponse, error)` to `(*ServerBasedPerformanceTierClientListPager)`
+- Function `*TopQueryStatisticsClientListByServerPager.NextPage` return value(s) have been changed from `(bool)` to `(TopQueryStatisticsClientListByServerResponse, error)`
+- Function `*PrivateEndpointConnectionsClientListByServerPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateEndpointConnectionsClientListByServerResponse, error)`
+- Function `*ConfigurationsClient.ListByServer` parameter(s) have been changed from `(context.Context, string, string, *ConfigurationsClientListByServerOptions)` to `(string, string, *ConfigurationsClientListByServerOptions)`
+- Function `*ConfigurationsClient.ListByServer` return value(s) have been changed from `(ConfigurationsClientListByServerResponse, error)` to `(*ConfigurationsClientListByServerPager)`
+- Function `*DatabasesClient.ListByServer` parameter(s) have been changed from `(context.Context, string, string, *DatabasesClientListByServerOptions)` to `(string, string, *DatabasesClientListByServerOptions)`
+- Function `*DatabasesClient.ListByServer` return value(s) have been changed from `(DatabasesClientListByServerResponse, error)` to `(*DatabasesClientListByServerPager)`
+- Function `*WaitStatisticsClientListByServerPager.NextPage` return value(s) have been changed from `(bool)` to `(WaitStatisticsClientListByServerResponse, error)`
+- Function `*FirewallRulesClient.ListByServer` parameter(s) have been changed from `(context.Context, string, string, *FirewallRulesClientListByServerOptions)` to `(string, string, *FirewallRulesClientListByServerOptions)`
+- Function `*FirewallRulesClient.ListByServer` return value(s) have been changed from `(FirewallRulesClientListByServerResponse, error)` to `(*FirewallRulesClientListByServerPager)`
+- Function `*PrivateLinkResourcesClientListByServerPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateLinkResourcesClientListByServerResponse, error)`
+- Function `*LocationBasedPerformanceTierClient.List` parameter(s) have been changed from `(context.Context, string, *LocationBasedPerformanceTierClientListOptions)` to `(string, *LocationBasedPerformanceTierClientListOptions)`
+- Function `*LocationBasedPerformanceTierClient.List` return value(s) have been changed from `(LocationBasedPerformanceTierClientListResponse, error)` to `(*LocationBasedPerformanceTierClientListPager)`
+- Function `*ReplicasClient.ListByServer` parameter(s) have been changed from `(context.Context, string, string, *ReplicasClientListByServerOptions)` to `(string, string, *ReplicasClientListByServerOptions)`
+- Function `*ReplicasClient.ListByServer` return value(s) have been changed from `(ReplicasClientListByServerResponse, error)` to `(*ReplicasClientListByServerPager)`
+- Function `*ServersClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *ServersClientListByResourceGroupOptions)` to `(string, *ServersClientListByResourceGroupOptions)`
+- Function `*ServersClient.ListByResourceGroup` return value(s) have been changed from `(ServersClientListByResourceGroupResponse, error)` to `(*ServersClientListByResourceGroupPager)`
+- Function `*LocationBasedRecommendedActionSessionsResultClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(LocationBasedRecommendedActionSessionsResultClientListResponse, error)`
+- Function `*ServerSecurityAlertPoliciesClientListByServerPager.NextPage` return value(s) have been changed from `(bool)` to `(ServerSecurityAlertPoliciesClientListByServerResponse, error)`
+- Function `*AdvisorsClientListByServerPager.NextPage` return value(s) have been changed from `(bool)` to `(AdvisorsClientListByServerResponse, error)`
+- Function `*RecommendedActionsClientListByServerPager.NextPage` return value(s) have been changed from `(bool)` to `(RecommendedActionsClientListByServerResponse, error)`
+- Function `*QueryTextsClientListByServerPager.NextPage` return value(s) have been changed from `(bool)` to `(QueryTextsClientListByServerResponse, error)`
+- Function `*PrivateEndpointConnectionsClientListByServerPager.Err` has been removed
+- Function `*PrivateLinkResourcesClientListByServerPager.PageResponse` has been removed
+- Function `*RecommendedActionsClientListByServerPager.Err` has been removed
+- Function `*LocationBasedRecommendedActionSessionsResultClientListPager.PageResponse` has been removed
+- Function `*PrivateEndpointConnectionsClientListByServerPager.PageResponse` has been removed
+- Function `*VirtualNetworkRulesClientListByServerPager.Err` has been removed
+- Function `*TopQueryStatisticsClientListByServerPager.Err` has been removed
+- Function `*ServerSecurityAlertPoliciesClientListByServerPager.PageResponse` has been removed
+- Function `*QueryTextsClientListByServerPager.Err` has been removed
+- Function `*PrivateLinkResourcesClientListByServerPager.Err` has been removed
+- Function `*QueryTextsClientListByServerPager.PageResponse` has been removed
+- Function `*TopQueryStatisticsClientListByServerPager.PageResponse` has been removed
+- Function `*RecommendedActionsClientListByServerPager.PageResponse` has been removed
+- Function `*WaitStatisticsClientListByServerPager.PageResponse` has been removed
+- Function `*VirtualNetworkRulesClientListByServerPager.PageResponse` has been removed
+- Function `*WaitStatisticsClientListByServerPager.Err` has been removed
+- Function `*AdvisorsClientListByServerPager.PageResponse` has been removed
+- Function `*AdvisorsClientListByServerPager.Err` has been removed
+- Function `*ServerSecurityAlertPoliciesClientListByServerPager.Err` has been removed
+- Function `*LocationBasedRecommendedActionSessionsResultClientListPager.Err` has been removed
+- Struct `AdvisorsClientGetResult` has been removed
+- Struct `AdvisorsClientListByServerResult` has been removed
+- Struct `CheckNameAvailabilityClientExecuteResult` has been removed
+- Struct `ConfigurationsClientCreateOrUpdateResult` has been removed
+- Struct `ConfigurationsClientGetResult` has been removed
+- Struct `ConfigurationsClientListByServerResult` has been removed
+- Struct `DatabasesClientCreateOrUpdateResult` has been removed
+- Struct `DatabasesClientGetResult` has been removed
+- Struct `DatabasesClientListByServerResult` has been removed
+- Struct `FirewallRulesClientCreateOrUpdateResult` has been removed
+- Struct `FirewallRulesClientGetResult` has been removed
+- Struct `FirewallRulesClientListByServerResult` has been removed
+- Struct `LocationBasedPerformanceTierClientListResult` has been removed
+- Struct `LocationBasedRecommendedActionSessionsOperationStatusClientGetResult` has been removed
+- Struct `LocationBasedRecommendedActionSessionsResultClientListResult` has been removed
+- Struct `LogFilesClientListByServerResult` has been removed
+- Struct `ManagementClientResetQueryPerformanceInsightDataResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientCreateOrUpdateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListByServerResult` has been removed
+- Struct `PrivateEndpointConnectionsClientUpdateTagsResult` has been removed
+- Struct `PrivateLinkResourcesClientGetResult` has been removed
+- Struct `PrivateLinkResourcesClientListByServerResult` has been removed
+- Struct `QueryTextsClientGetResult` has been removed
+- Struct `QueryTextsClientListByServerResult` has been removed
+- Struct `RecommendedActionsClientGetResult` has been removed
+- Struct `RecommendedActionsClientListByServerResult` has been removed
+- Struct `RecoverableServersClientGetResult` has been removed
+- Struct `ReplicasClientListByServerResult` has been removed
+- Struct `ServerBasedPerformanceTierClientListResult` has been removed
+- Struct `ServerParametersClientListUpdateConfigurationsResult` has been removed
+- Struct `ServerSecurityAlertPoliciesClientCreateOrUpdateResult` has been removed
+- Struct `ServerSecurityAlertPoliciesClientGetResult` has been removed
+- Struct `ServerSecurityAlertPoliciesClientListByServerResult` has been removed
+- Struct `ServersClientCreateResult` has been removed
+- Struct `ServersClientGetResult` has been removed
+- Struct `ServersClientListByResourceGroupResult` has been removed
+- Struct `ServersClientListResult` has been removed
+- Struct `ServersClientUpdateResult` has been removed
+- Struct `TopQueryStatisticsClientGetResult` has been removed
+- Struct `TopQueryStatisticsClientListByServerResult` has been removed
+- Struct `VirtualNetworkRulesClientCreateOrUpdateResult` has been removed
+- Struct `VirtualNetworkRulesClientGetResult` has been removed
+- Struct `VirtualNetworkRulesClientListByServerResult` has been removed
+- Struct `WaitStatisticsClientGetResult` has been removed
+- Struct `WaitStatisticsClientListByServerResult` has been removed
+- Field `PrivateEndpointConnectionsClientCreateOrUpdateResult` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServersClientStartResponse` has been removed
+- Field `RawResponse` of struct `FirewallRulesClientDeletePollerResponse` has been removed
+- Field `LocationBasedRecommendedActionSessionsResultClientListResult` of struct `LocationBasedRecommendedActionSessionsResultClientListResponse` has been removed
+- Field `RawResponse` of struct `LocationBasedRecommendedActionSessionsResultClientListResponse` has been removed
+- Field `QueryTextsClientGetResult` of struct `QueryTextsClientGetResponse` has been removed
+- Field `RawResponse` of struct `QueryTextsClientGetResponse` has been removed
+- Field `ServerBasedPerformanceTierClientListResult` of struct `ServerBasedPerformanceTierClientListResponse` has been removed
+- Field `RawResponse` of struct `ServerBasedPerformanceTierClientListResponse` has been removed
+- Field `DatabasesClientListByServerResult` of struct `DatabasesClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `FirewallRulesClientCreateOrUpdatePollerResponse` has been removed
+- Field `WaitStatisticsClientGetResult` of struct `WaitStatisticsClientGetResponse` has been removed
+- Field `RawResponse` of struct `WaitStatisticsClientGetResponse` has been removed
+- Field `ServerSecurityAlertPoliciesClientCreateOrUpdateResult` of struct `ServerSecurityAlertPoliciesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServerSecurityAlertPoliciesClientCreateOrUpdateResponse` has been removed
+- Field `FirewallRulesClientCreateOrUpdateResult` of struct `FirewallRulesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `FirewallRulesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServersClientStartPollerResponse` has been removed
+- Field `RawResponse` of struct `ServersClientStopResponse` has been removed
+- Field `ConfigurationsClientListByServerResult` of struct `ConfigurationsClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VirtualNetworkRulesClientCreateOrUpdatePollerResponse` has been removed
+- Field `PrivateLinkResourcesClientListByServerResult` of struct `PrivateLinkResourcesClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListByServerResponse` has been removed
+- Field `VirtualNetworkRulesClientListByServerResult` of struct `VirtualNetworkRulesClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `VirtualNetworkRulesClientListByServerResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListByServerResult` of struct `PrivateEndpointConnectionsClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ServersClientRestartPollerResponse` has been removed
+- Field `PrivateEndpointConnectionsClientUpdateTagsResult` of struct `PrivateEndpointConnectionsClientUpdateTagsResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientUpdateTagsResponse` has been removed
+- Field `ServersClientGetResult` of struct `ServersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientCreateOrUpdatePollerResponse` has been removed
+- Field `AdvisorsClientGetResult` of struct `AdvisorsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AdvisorsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `ConfigurationsClientGetResult` of struct `ConfigurationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientGetResponse` has been removed
+- Field `LocationBasedRecommendedActionSessionsOperationStatusClientGetResult` of struct `LocationBasedRecommendedActionSessionsOperationStatusClientGetResponse` has been removed
+- Field `RawResponse` of struct `LocationBasedRecommendedActionSessionsOperationStatusClientGetResponse` has been removed
+- Field `ServerParametersClientListUpdateConfigurationsResult` of struct `ServerParametersClientListUpdateConfigurationsResponse` has been removed
+- Field `RawResponse` of struct `ServerParametersClientListUpdateConfigurationsResponse` has been removed
+- Field `QueryTextsClientListByServerResult` of struct `QueryTextsClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `QueryTextsClientListByServerResponse` has been removed
+- Field `DatabasesClientGetResult` of struct `DatabasesClientGetResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientGetResponse` has been removed
+- Field `ReplicasClientListByServerResult` of struct `ReplicasClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `ReplicasClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `VirtualNetworkRulesClientDeletePollerResponse` has been removed
+- Field `AdvisorsClientListByServerResult` of struct `AdvisorsClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `AdvisorsClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientCreateRecommendedActionSessionResponse` has been removed
+- Field `RecommendedActionsClientGetResult` of struct `RecommendedActionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `RecommendedActionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServerParametersClientListUpdateConfigurationsPollerResponse` has been removed
+- Field `LogFilesClientListByServerResult` of struct `LogFilesClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `LogFilesClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientCreateOrUpdatePollerResponse` has been removed
+- Field `ServerSecurityAlertPoliciesClientListByServerResult` of struct `ServerSecurityAlertPoliciesClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `ServerSecurityAlertPoliciesClientListByServerResponse` has been removed
+- Field `ServersClientListResult` of struct `ServersClientListResponse` has been removed
+- Field `RawResponse` of struct `ServersClientListResponse` has been removed
+- Field `FirewallRulesClientGetResult` of struct `FirewallRulesClientGetResponse` has been removed
+- Field `RawResponse` of struct `FirewallRulesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServersClientDeletePollerResponse` has been removed
+- Field `WaitStatisticsClientListByServerResult` of struct `WaitStatisticsClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `WaitStatisticsClientListByServerResponse` has been removed
+- Field `TopQueryStatisticsClientListByServerResult` of struct `TopQueryStatisticsClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `TopQueryStatisticsClientListByServerResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `ServersClientUpdateResult` of struct `ServersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `FirewallRulesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VirtualNetworkRulesClientDeleteResponse` has been removed
+- Field `ServersClientListByResourceGroupResult` of struct `ServersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ServersClientListByResourceGroupResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ServerSecurityAlertPoliciesClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ServersClientRestartResponse` has been removed
+- Field `RawResponse` of struct `ServersClientStopPollerResponse` has been removed
+- Field `RecoverableServersClientGetResult` of struct `RecoverableServersClientGetResponse` has been removed
+- Field `RawResponse` of struct `RecoverableServersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServersClientCreatePollerResponse` has been removed
+- Field `ServersClientCreateResult` of struct `ServersClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ServersClientCreateResponse` has been removed
+- Field `ServerSecurityAlertPoliciesClientGetResult` of struct `ServerSecurityAlertPoliciesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServerSecurityAlertPoliciesClientGetResponse` has been removed
+- Field `ManagementClientResetQueryPerformanceInsightDataResult` of struct `ManagementClientResetQueryPerformanceInsightDataResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientResetQueryPerformanceInsightDataResponse` has been removed
+- Field `LocationBasedPerformanceTierClientListResult` of struct `LocationBasedPerformanceTierClientListResponse` has been removed
+- Field `RawResponse` of struct `LocationBasedPerformanceTierClientListResponse` has been removed
+- Field `ConfigurationsClientCreateOrUpdateResult` of struct `ConfigurationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientCreateOrUpdateResponse` has been removed
+- Field `TopQueryStatisticsClientGetResult` of struct `TopQueryStatisticsClientGetResponse` has been removed
+- Field `RawResponse` of struct `TopQueryStatisticsClientGetResponse` has been removed
+- Field `DatabasesClientCreateOrUpdateResult` of struct `DatabasesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientCreateRecommendedActionSessionPollerResponse` has been removed
+- Field `RawResponse` of struct `ServersClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientUpdateTagsPollerResponse` has been removed
+- Field `RawResponse` of struct `ServersClientDeleteResponse` has been removed
+- Field `CheckNameAvailabilityClientExecuteResult` of struct `CheckNameAvailabilityClientExecuteResponse` has been removed
+- Field `RawResponse` of struct `CheckNameAvailabilityClientExecuteResponse` has been removed
+- Field `VirtualNetworkRulesClientCreateOrUpdateResult` of struct `VirtualNetworkRulesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualNetworkRulesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeletePollerResponse` has been removed
+- Field `VirtualNetworkRulesClientGetResult` of struct `VirtualNetworkRulesClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualNetworkRulesClientGetResponse` has been removed
+- Field `RecommendedActionsClientListByServerResult` of struct `RecommendedActionsClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `RecommendedActionsClientListByServerResponse` has been removed
+- Field `FirewallRulesClientListByServerResult` of struct `FirewallRulesClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `FirewallRulesClientListByServerResponse` has been removed
+- Field `PrivateLinkResourcesClientGetResult` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+
+### Features Added
+
+- New function `*DatabasesClientListByServerPager.More() bool`
+- New function `*PrivateEndpointConnectionsClientListByServerPager.More() bool`
+- New function `*ServersClientListPager.More() bool`
+- New function `*LogFilesClientListByServerPager.NextPage(context.Context) (LogFilesClientListByServerResponse, error)`
+- New function `*AdvisorsClientListByServerPager.More() bool`
+- New function `*ServerBasedPerformanceTierClientListPager.More() bool`
+- New function `*LocationBasedPerformanceTierClientListPager.NextPage(context.Context) (LocationBasedPerformanceTierClientListResponse, error)`
+- New function `*RecommendedActionsClientListByServerPager.More() bool`
+- New function `*WaitStatisticsClientListByServerPager.More() bool`
+- New function `*FirewallRulesClientListByServerPager.NextPage(context.Context) (FirewallRulesClientListByServerResponse, error)`
+- New function `*ServersClientListByResourceGroupPager.More() bool`
+- New function `*ServersClientListPager.NextPage(context.Context) (ServersClientListResponse, error)`
+- New function `*QueryTextsClientListByServerPager.More() bool`
+- New function `*ServersClientListByResourceGroupPager.NextPage(context.Context) (ServersClientListByResourceGroupResponse, error)`
+- New function `*ServerBasedPerformanceTierClientListPager.NextPage(context.Context) (ServerBasedPerformanceTierClientListResponse, error)`
+- New function `*ConfigurationsClientListByServerPager.NextPage(context.Context) (ConfigurationsClientListByServerResponse, error)`
+- New function `*LocationBasedPerformanceTierClientListPager.More() bool`
+- New function `*PrivateLinkResourcesClientListByServerPager.More() bool`
+- New function `*DatabasesClientListByServerPager.NextPage(context.Context) (DatabasesClientListByServerResponse, error)`
+- New function `*TopQueryStatisticsClientListByServerPager.More() bool`
+- New function `*LogFilesClientListByServerPager.More() bool`
+- New function `*VirtualNetworkRulesClientListByServerPager.More() bool`
+- New function `*ReplicasClientListByServerPager.More() bool`
+- New function `ErrorResponse.MarshalJSON() ([]byte, error)`
+- New function `*LocationBasedRecommendedActionSessionsResultClientListPager.More() bool`
+- New function `*ReplicasClientListByServerPager.NextPage(context.Context) (ReplicasClientListByServerResponse, error)`
+- New function `*FirewallRulesClientListByServerPager.More() bool`
+- New function `*ServerSecurityAlertPoliciesClientListByServerPager.More() bool`
+- New function `*ConfigurationsClientListByServerPager.More() bool`
+- New struct `CloudError`
+- New struct `ConfigurationsClientListByServerPager`
+- New struct `DatabasesClientListByServerPager`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorResponse`
+- New struct `FirewallRulesClientListByServerPager`
+- New struct `LocationBasedPerformanceTierClientListPager`
+- New struct `LogFilesClientListByServerPager`
+- New struct `ReplicasClientListByServerPager`
+- New struct `ServerBasedPerformanceTierClientListPager`
+- New struct `ServersClientListByResourceGroupPager`
+- New struct `ServersClientListPager`
+- New anonymous field `Configuration` in struct `ConfigurationsClientGetResponse`
+- New anonymous field `LogFileListResult` in struct `LogFilesClientListByServerResponse`
+- New anonymous field `Configuration` in struct `ConfigurationsClientCreateOrUpdateResponse`
+- New anonymous field `QueryStatistic` in struct `TopQueryStatisticsClientGetResponse`
+- New anonymous field `RecommendedActionSessionsOperationStatus` in struct `LocationBasedRecommendedActionSessionsOperationStatusClientGetResponse`
+- New anonymous field `AdvisorsResultList` in struct `AdvisorsClientListByServerResponse`
+- New anonymous field `ServerListResult` in struct `ServersClientListResponse`
+- New anonymous field `TopQueryStatisticsResultList` in struct `TopQueryStatisticsClientListByServerResponse`
+- New anonymous field `PerformanceTierListResult` in struct `ServerBasedPerformanceTierClientListResponse`
+- New anonymous field `Server` in struct `ServersClientUpdateResponse`
+- New anonymous field `WaitStatistic` in struct `WaitStatisticsClientGetResponse`
+- New anonymous field `RecommendationAction` in struct `RecommendedActionsClientGetResponse`
+- New anonymous field `PrivateLinkResource` in struct `PrivateLinkResourcesClientGetResponse`
+- New anonymous field `ConfigurationListResult` in struct `ConfigurationsClientListByServerResponse`
+- New anonymous field `Database` in struct `DatabasesClientCreateOrUpdateResponse`
+- New anonymous field `Server` in struct `ServersClientGetResponse`
+- New anonymous field `ConfigurationListResult` in struct `ServerParametersClientListUpdateConfigurationsResponse`
+- New anonymous field `Advisor` in struct `AdvisorsClientGetResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `PrivateLinkResourcesClientListByServerResponse`
+- New anonymous field `ServerSecurityAlertPolicy` in struct `ServerSecurityAlertPoliciesClientCreateOrUpdateResponse`
+- New anonymous field `RecommendationActionsResultList` in struct `RecommendedActionsClientListByServerResponse`
+- New anonymous field `FirewallRule` in struct `FirewallRulesClientGetResponse`
+- New anonymous field `VirtualNetworkRule` in struct `VirtualNetworkRulesClientCreateOrUpdateResponse`
+- New anonymous field `ServerListResult` in struct `ServersClientListByResourceGroupResponse`
+- New anonymous field `VirtualNetworkRuleListResult` in struct `VirtualNetworkRulesClientListByServerResponse`
+- New anonymous field `WaitStatisticsResultList` in struct `WaitStatisticsClientListByServerResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListByServerResponse`
+- New anonymous field `RecoverableServerResource` in struct `RecoverableServersClientGetResponse`
+- New anonymous field `QueryTextsResultList` in struct `QueryTextsClientListByServerResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `NameAvailability` in struct `CheckNameAvailabilityClientExecuteResponse`
+- New anonymous field `VirtualNetworkRule` in struct `VirtualNetworkRulesClientGetResponse`
+- New anonymous field `Database` in struct `DatabasesClientGetResponse`
+- New anonymous field `PerformanceTierListResult` in struct `LocationBasedPerformanceTierClientListResponse`
+- New anonymous field `FirewallRuleListResult` in struct `FirewallRulesClientListByServerResponse`
+- New anonymous field `QueryPerformanceInsightResetDataResult` in struct `ManagementClientResetQueryPerformanceInsightDataResponse`
+- New anonymous field `ServerListResult` in struct `ReplicasClientListByServerResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientUpdateTagsResponse`
+- New anonymous field `QueryText` in struct `QueryTextsClientGetResponse`
+- New anonymous field `Server` in struct `ServersClientCreateResponse`
+- New anonymous field `FirewallRule` in struct `FirewallRulesClientCreateOrUpdateResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `DatabaseListResult` in struct `DatabasesClientListByServerResponse`
+- New anonymous field `ServerSecurityAlertPolicy` in struct `ServerSecurityAlertPoliciesClientGetResponse`
+- New anonymous field `RecommendationActionsResultList` in struct `LocationBasedRecommendedActionSessionsResultClientListResponse`
+- New anonymous field `ServerSecurityAlertPolicyListResult` in struct `ServerSecurityAlertPoliciesClientListByServerResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `Advisor.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `Operation.Properties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Function `ErrorResponse.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

@@ -35,17 +35,17 @@ type RoutingIntentClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRoutingIntentClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RoutingIntentClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RoutingIntentClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *RoutingIntentClient) BeginCreateOrUpdate(ctx context.Context, reso
 	if err != nil {
 		return RoutingIntentClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := RoutingIntentClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := RoutingIntentClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("RoutingIntentClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return RoutingIntentClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *RoutingIntentClient) BeginDelete(ctx context.Context, resourceGrou
 	if err != nil {
 		return RoutingIntentClientDeletePollerResponse{}, err
 	}
-	result := RoutingIntentClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := RoutingIntentClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("RoutingIntentClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return RoutingIntentClientDeletePollerResponse{}, err
@@ -248,7 +244,7 @@ func (client *RoutingIntentClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *RoutingIntentClient) getHandleResponse(resp *http.Response) (RoutingIntentClientGetResponse, error) {
-	result := RoutingIntentClientGetResponse{RawResponse: resp}
+	result := RoutingIntentClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RoutingIntent); err != nil {
 		return RoutingIntentClientGetResponse{}, err
 	}
@@ -300,7 +296,7 @@ func (client *RoutingIntentClient) listCreateRequest(ctx context.Context, resour
 
 // listHandleResponse handles the List response.
 func (client *RoutingIntentClient) listHandleResponse(resp *http.Response) (RoutingIntentClientListResponse, error) {
-	result := RoutingIntentClientListResponse{RawResponse: resp}
+	result := RoutingIntentClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListRoutingIntentResult); err != nil {
 		return RoutingIntentClientListResponse{}, err
 	}

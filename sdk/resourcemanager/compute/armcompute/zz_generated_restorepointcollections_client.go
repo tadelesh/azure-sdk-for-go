@@ -35,17 +35,17 @@ type RestorePointCollectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRestorePointCollectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RestorePointCollectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RestorePointCollectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -93,7 +93,7 @@ func (client *RestorePointCollectionsClient) createOrUpdateCreateRequest(ctx con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -101,7 +101,7 @@ func (client *RestorePointCollectionsClient) createOrUpdateCreateRequest(ctx con
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *RestorePointCollectionsClient) createOrUpdateHandleResponse(resp *http.Response) (RestorePointCollectionsClientCreateOrUpdateResponse, error) {
-	result := RestorePointCollectionsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := RestorePointCollectionsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorePointCollection); err != nil {
 		return RestorePointCollectionsClientCreateOrUpdateResponse{}, err
 	}
@@ -120,9 +120,7 @@ func (client *RestorePointCollectionsClient) BeginDelete(ctx context.Context, re
 	if err != nil {
 		return RestorePointCollectionsClientDeletePollerResponse{}, err
 	}
-	result := RestorePointCollectionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := RestorePointCollectionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("RestorePointCollectionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return RestorePointCollectionsClientDeletePollerResponse{}, err
@@ -171,7 +169,7 @@ func (client *RestorePointCollectionsClient) deleteCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -221,7 +219,7 @@ func (client *RestorePointCollectionsClient) getCreateRequest(ctx context.Contex
 	if options != nil && options.Expand != nil {
 		reqQP.Set("$expand", string(*options.Expand))
 	}
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -229,7 +227,7 @@ func (client *RestorePointCollectionsClient) getCreateRequest(ctx context.Contex
 
 // getHandleResponse handles the Get response.
 func (client *RestorePointCollectionsClient) getHandleResponse(resp *http.Response) (RestorePointCollectionsClientGetResponse, error) {
-	result := RestorePointCollectionsClientGetResponse{RawResponse: resp}
+	result := RestorePointCollectionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorePointCollection); err != nil {
 		return RestorePointCollectionsClientGetResponse{}, err
 	}
@@ -269,7 +267,7 @@ func (client *RestorePointCollectionsClient) listCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -277,7 +275,7 @@ func (client *RestorePointCollectionsClient) listCreateRequest(ctx context.Conte
 
 // listHandleResponse handles the List response.
 func (client *RestorePointCollectionsClient) listHandleResponse(resp *http.Response) (RestorePointCollectionsClientListResponse, error) {
-	result := RestorePointCollectionsClientListResponse{RawResponse: resp}
+	result := RestorePointCollectionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorePointCollectionListResult); err != nil {
 		return RestorePointCollectionsClientListResponse{}, err
 	}
@@ -314,7 +312,7 @@ func (client *RestorePointCollectionsClient) listAllCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -322,7 +320,7 @@ func (client *RestorePointCollectionsClient) listAllCreateRequest(ctx context.Co
 
 // listAllHandleResponse handles the ListAll response.
 func (client *RestorePointCollectionsClient) listAllHandleResponse(resp *http.Response) (RestorePointCollectionsClientListAllResponse, error) {
-	result := RestorePointCollectionsClientListAllResponse{RawResponse: resp}
+	result := RestorePointCollectionsClientListAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorePointCollectionListResult); err != nil {
 		return RestorePointCollectionsClientListAllResponse{}, err
 	}
@@ -371,7 +369,7 @@ func (client *RestorePointCollectionsClient) updateCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -379,7 +377,7 @@ func (client *RestorePointCollectionsClient) updateCreateRequest(ctx context.Con
 
 // updateHandleResponse handles the Update response.
 func (client *RestorePointCollectionsClient) updateHandleResponse(resp *http.Response) (RestorePointCollectionsClientUpdateResponse, error) {
-	result := RestorePointCollectionsClientUpdateResponse{RawResponse: resp}
+	result := RestorePointCollectionsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorePointCollection); err != nil {
 		return RestorePointCollectionsClientUpdateResponse{}, err
 	}

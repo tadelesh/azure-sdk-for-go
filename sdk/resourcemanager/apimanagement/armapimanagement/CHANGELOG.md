@@ -1,5 +1,1686 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*GroupUserClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(GroupUserClientListResponse, error)`
+- Function `*ContentItemClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(ContentItemClientListByServiceResponse, error)`
+- Function `*APIIssueAttachmentClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(APIIssueAttachmentClientListByServiceResponse, error)`
+- Function `*ReportsClientListByTimePager.NextPage` return value(s) have been changed from `(bool)` to `(ReportsClientListByTimeResponse, error)`
+- Function `*APIIssueClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(APIIssueClientListByServiceResponse, error)`
+- Function `*UserGroupClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(UserGroupClientListResponse, error)`
+- Function `*NamedValueClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(NamedValueClientListByServiceResponse, error)`
+- Function `*APIClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(APIClientListByServiceResponse, error)`
+- Function `*IdentityProviderClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(IdentityProviderClientListByServiceResponse, error)`
+- Function `*TenantSettingsClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(TenantSettingsClientListByServiceResponse, error)`
+- Function `*ServiceClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ServiceClientListResponse, error)`
+- Function `*RegionClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(RegionClientListByServiceResponse, error)`
+- Function `*ReportsClientListByAPIPager.NextPage` return value(s) have been changed from `(bool)` to `(ReportsClientListByAPIResponse, error)`
+- Function `*CacheClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(CacheClientListByServiceResponse, error)`
+- Function `*ProductGroupClientListByProductPager.NextPage` return value(s) have been changed from `(bool)` to `(ProductGroupClientListByProductResponse, error)`
+- Function `*APIRevisionClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(APIRevisionClientListByServiceResponse, error)`
+- Function `*ProductClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(ProductClientListByServiceResponse, error)`
+- Function `*APIIssueCommentClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(APIIssueCommentClientListByServiceResponse, error)`
+- Function `*APIOperationClientListByAPIPager.NextPage` return value(s) have been changed from `(bool)` to `(APIOperationClientListByAPIResponse, error)`
+- Function `*GlobalSchemaClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(GlobalSchemaClientListByServiceResponse, error)`
+- Function `*TagClientListByAPIPager.NextPage` return value(s) have been changed from `(bool)` to `(TagClientListByAPIResponse, error)`
+- Function `*APISchemaClientListByAPIPager.NextPage` return value(s) have been changed from `(bool)` to `(APISchemaClientListByAPIResponse, error)`
+- Function `*TagClientListByOperationPager.NextPage` return value(s) have been changed from `(bool)` to `(TagClientListByOperationResponse, error)`
+- Function `*ProductSubscriptionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ProductSubscriptionsClientListResponse, error)`
+- Function `*LoggerClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(LoggerClientListByServiceResponse, error)`
+- Function `*UserSubscriptionClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(UserSubscriptionClientListResponse, error)`
+- Function `*ServiceClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ServiceClientListByResourceGroupResponse, error)`
+- Function `*TenantAccessClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(TenantAccessClientListByServiceResponse, error)`
+- Function `*APIReleaseClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(APIReleaseClientListByServiceResponse, error)`
+- Function `*APIClientListByTagsPager.NextPage` return value(s) have been changed from `(bool)` to `(APIClientListByTagsResponse, error)`
+- Function `*ReportsClient.ListByRequest` parameter(s) have been changed from `(context.Context, string, string, string, *ReportsClientListByRequestOptions)` to `(string, string, string, *ReportsClientListByRequestOptions)`
+- Function `*ReportsClient.ListByRequest` return value(s) have been changed from `(ReportsClientListByRequestResponse, error)` to `(*ReportsClientListByRequestPager)`
+- Function `*UserClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(UserClientListByServiceResponse, error)`
+- Function `*ReportsClientListByProductPager.NextPage` return value(s) have been changed from `(bool)` to `(ReportsClientListByProductResponse, error)`
+- Function `*ReportsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ReportsClientListBySubscriptionResponse, error)`
+- Function `*TagClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(TagClientListByServiceResponse, error)`
+- Function `*GatewayAPIClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(GatewayAPIClientListByServiceResponse, error)`
+- Function `*ReportsClientListByUserPager.NextPage` return value(s) have been changed from `(bool)` to `(ReportsClientListByUserResponse, error)`
+- Function `*ProductAPIClientListByProductPager.NextPage` return value(s) have been changed from `(bool)` to `(ProductAPIClientListByProductResponse, error)`
+- Function `*GatewayCertificateAuthorityClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(GatewayCertificateAuthorityClientListByServiceResponse, error)`
+- Function `*GatewayHostnameConfigurationClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(GatewayHostnameConfigurationClientListByServiceResponse, error)`
+- Function `*OperationClientListByTagsPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationClientListByTagsResponse, error)`
+- Function `*PrivateEndpointConnectionClient.ListByService` parameter(s) have been changed from `(context.Context, string, string, *PrivateEndpointConnectionClientListByServiceOptions)` to `(string, string, *PrivateEndpointConnectionClientListByServiceOptions)`
+- Function `*PrivateEndpointConnectionClient.ListByService` return value(s) have been changed from `(PrivateEndpointConnectionClientListByServiceResponse, error)` to `(*PrivateEndpointConnectionClientListByServicePager)`
+- Function `*AuthorizationServerClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(AuthorizationServerClientListByServiceResponse, error)`
+- Function `*DeletedServicesClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(DeletedServicesClientListBySubscriptionResponse, error)`
+- Function `*APIProductClientListByApisPager.NextPage` return value(s) have been changed from `(bool)` to `(APIProductClientListByApisResponse, error)`
+- Function `*ProductClientListByTagsPager.NextPage` return value(s) have been changed from `(bool)` to `(ProductClientListByTagsResponse, error)`
+- Function `*APIDiagnosticClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(APIDiagnosticClientListByServiceResponse, error)`
+- Function `*EmailTemplateClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(EmailTemplateClientListByServiceResponse, error)`
+- Function `*TagClientListByProductPager.NextPage` return value(s) have been changed from `(bool)` to `(TagClientListByProductResponse, error)`
+- Function `*UserIdentitiesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(UserIdentitiesClientListResponse, error)`
+- Function `*TagResourceClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(TagResourceClientListByServiceResponse, error)`
+- Function `*BackendClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(BackendClientListByServiceResponse, error)`
+- Function `*IssueClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(IssueClientListByServiceResponse, error)`
+- Function `*OpenIDConnectProviderClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(OpenIDConnectProviderClientListByServiceResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*SKUsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SKUsClientListResponse, error)`
+- Function `*APIVersionSetClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(APIVersionSetClientListByServiceResponse, error)`
+- Function `*SubscriptionClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SubscriptionClientListResponse, error)`
+- Function `*APITagDescriptionClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(APITagDescriptionClientListByServiceResponse, error)`
+- Function `*ReportsClientListByGeoPager.NextPage` return value(s) have been changed from `(bool)` to `(ReportsClientListByGeoResponse, error)`
+- Function `*NotificationClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(NotificationClientListByServiceResponse, error)`
+- Function `*PortalRevisionClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(PortalRevisionClientListByServiceResponse, error)`
+- Function `*ContentTypeClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(ContentTypeClientListByServiceResponse, error)`
+- Function `*ReportsClientListByOperationPager.NextPage` return value(s) have been changed from `(bool)` to `(ReportsClientListByOperationResponse, error)`
+- Function `*GroupClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(GroupClientListByServiceResponse, error)`
+- Function `*DiagnosticClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(DiagnosticClientListByServiceResponse, error)`
+- Function `*ServiceSKUsClientListAvailableServiceSKUsPager.NextPage` return value(s) have been changed from `(bool)` to `(ServiceSKUsClientListAvailableServiceSKUsResponse, error)`
+- Function `*CertificateClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(CertificateClientListByServiceResponse, error)`
+- Function `*GatewayClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(GatewayClientListByServiceResponse, error)`
+- Function `*ReportsClientListByAPIPager.Err` has been removed
+- Function `*TenantAccessClientListByServicePager.Err` has been removed
+- Function `*GatewayAPIClientListByServicePager.PageResponse` has been removed
+- Function `*ContentItemClientListByServicePager.PageResponse` has been removed
+- Function `*ReportsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*ReportsClientListByTimePager.Err` has been removed
+- Function `*UserIdentitiesClientListPager.PageResponse` has been removed
+- Function `*NamedValueClientListByServicePager.Err` has been removed
+- Function `*GlobalSchemaClientListByServicePager.PageResponse` has been removed
+- Function `*APIRevisionClientListByServicePager.PageResponse` has been removed
+- Function `*TagClientListByOperationPager.Err` has been removed
+- Function `*NotificationClientListByServicePager.Err` has been removed
+- Function `*ProductAPIClientListByProductPager.Err` has been removed
+- Function `*SKUsClientListPager.Err` has been removed
+- Function `*OperationClientListByTagsPager.Err` has been removed
+- Function `*TagResourceClientListByServicePager.PageResponse` has been removed
+- Function `*ContentItemClientListByServicePager.Err` has been removed
+- Function `*ProductGroupClientListByProductPager.Err` has been removed
+- Function `*LoggerClientListByServicePager.Err` has been removed
+- Function `*IdentityProviderClientListByServicePager.Err` has been removed
+- Function `*APIOperationClientListByAPIPager.PageResponse` has been removed
+- Function `*ProductClientListByTagsPager.Err` has been removed
+- Function `*BackendClientListByServicePager.Err` has been removed
+- Function `*DeletedServicesClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*ReportsClientListByProductPager.Err` has been removed
+- Function `*ProductClientListByServicePager.PageResponse` has been removed
+- Function `*UserIdentitiesClientListPager.Err` has been removed
+- Function `*ContentTypeClientListByServicePager.PageResponse` has been removed
+- Function `*UserGroupClientListPager.Err` has been removed
+- Function `*NamedValueClientListByServicePager.PageResponse` has been removed
+- Function `*ServiceSKUsClientListAvailableServiceSKUsPager.PageResponse` has been removed
+- Function `*RegionClientListByServicePager.PageResponse` has been removed
+- Function `*TenantAccessClientListByServicePager.PageResponse` has been removed
+- Function `*TagResourceClientListByServicePager.Err` has been removed
+- Function `*APIDiagnosticClientListByServicePager.PageResponse` has been removed
+- Function `*GroupClientListByServicePager.PageResponse` has been removed
+- Function `*TagClientListByAPIPager.Err` has been removed
+- Function `*UserClientListByServicePager.PageResponse` has been removed
+- Function `*ReportsClientListByAPIPager.PageResponse` has been removed
+- Function `*CertificateClientListByServicePager.PageResponse` has been removed
+- Function `*APIDiagnosticClientListByServicePager.Err` has been removed
+- Function `*APITagDescriptionClientListByServicePager.Err` has been removed
+- Function `*UserClientListByServicePager.Err` has been removed
+- Function `*AuthorizationServerClientListByServicePager.Err` has been removed
+- Function `*ProductClientListByServicePager.Err` has been removed
+- Function `*TagClientListByOperationPager.PageResponse` has been removed
+- Function `*GroupClientListByServicePager.Err` has been removed
+- Function `*TagClientListByServicePager.Err` has been removed
+- Function `*CertificateClientListByServicePager.Err` has been removed
+- Function `*IssueClientListByServicePager.Err` has been removed
+- Function `*ReportsClientListByUserPager.Err` has been removed
+- Function `*PortalRevisionClientListByServicePager.PageResponse` has been removed
+- Function `*EmailTemplateClientListByServicePager.Err` has been removed
+- Function `*APIClientListByServicePager.Err` has been removed
+- Function `*APIReleaseClientListByServicePager.Err` has been removed
+- Function `*SubscriptionClientListPager.PageResponse` has been removed
+- Function `*PortalRevisionClientListByServicePager.Err` has been removed
+- Function `*ReportsClientListByProductPager.PageResponse` has been removed
+- Function `*TagClientListByProductPager.PageResponse` has been removed
+- Function `*OpenIDConnectProviderClientListByServicePager.Err` has been removed
+- Function `*APIVersionSetClientListByServicePager.Err` has been removed
+- Function `*OperationClientListByTagsPager.PageResponse` has been removed
+- Function `*ServiceClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*AuthorizationServerClientListByServicePager.PageResponse` has been removed
+- Function `*APIIssueAttachmentClientListByServicePager.Err` has been removed
+- Function `*GatewayCertificateAuthorityClientListByServicePager.PageResponse` has been removed
+- Function `*APIClientListByTagsPager.PageResponse` has been removed
+- Function `*ReportsClientListByGeoPager.Err` has been removed
+- Function `*APISchemaClientListByAPIPager.Err` has been removed
+- Function `*APIClientListByServicePager.PageResponse` has been removed
+- Function `*APIIssueAttachmentClientListByServicePager.PageResponse` has been removed
+- Function `*APIClientListByTagsPager.Err` has been removed
+- Function `*APIProductClientListByApisPager.PageResponse` has been removed
+- Function `*TagClientListByAPIPager.PageResponse` has been removed
+- Function `*APISchemaClientListByAPIPager.PageResponse` has been removed
+- Function `*GatewayCertificateAuthorityClientListByServicePager.Err` has been removed
+- Function `*ReportsClientListByOperationPager.Err` has been removed
+- Function `*APIOperationClientListByAPIPager.Err` has been removed
+- Function `*APIIssueClientListByServicePager.Err` has been removed
+- Function `*ProductClientListByTagsPager.PageResponse` has been removed
+- Function `*IssueClientListByServicePager.PageResponse` has been removed
+- Function `*BackendClientListByServicePager.PageResponse` has been removed
+- Function `*ProductAPIClientListByProductPager.PageResponse` has been removed
+- Function `*ServiceSKUsClientListAvailableServiceSKUsPager.Err` has been removed
+- Function `*APIRevisionClientListByServicePager.Err` has been removed
+- Function `*ReportsClientListByOperationPager.PageResponse` has been removed
+- Function `*ProductGroupClientListByProductPager.PageResponse` has been removed
+- Function `*APIReleaseClientListByServicePager.PageResponse` has been removed
+- Function `*ProductSubscriptionsClientListPager.Err` has been removed
+- Function `*GlobalSchemaClientListByServicePager.Err` has been removed
+- Function `*GatewayClientListByServicePager.PageResponse` has been removed
+- Function `*UserSubscriptionClientListPager.PageResponse` has been removed
+- Function `*OpenIDConnectProviderClientListByServicePager.PageResponse` has been removed
+- Function `*RegionClientListByServicePager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*ContentTypeClientListByServicePager.Err` has been removed
+- Function `*DiagnosticClientListByServicePager.PageResponse` has been removed
+- Function `*ProductSubscriptionsClientListPager.PageResponse` has been removed
+- Function `*APIIssueCommentClientListByServicePager.Err` has been removed
+- Function `*UserSubscriptionClientListPager.Err` has been removed
+- Function `*CacheClientListByServicePager.Err` has been removed
+- Function `*GatewayClientListByServicePager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*GroupUserClientListPager.PageResponse` has been removed
+- Function `*ReportsClientListByTimePager.PageResponse` has been removed
+- Function `*TagClientListByServicePager.PageResponse` has been removed
+- Function `*TenantSettingsClientListByServicePager.Err` has been removed
+- Function `*EmailTemplateClientListByServicePager.PageResponse` has been removed
+- Function `*NotificationClientListByServicePager.PageResponse` has been removed
+- Function `*CacheClientListByServicePager.PageResponse` has been removed
+- Function `*LoggerClientListByServicePager.PageResponse` has been removed
+- Function `*TenantSettingsClientListByServicePager.PageResponse` has been removed
+- Function `*UserGroupClientListPager.PageResponse` has been removed
+- Function `*ReportsClientListByUserPager.PageResponse` has been removed
+- Function `*APIVersionSetClientListByServicePager.PageResponse` has been removed
+- Function `*ReportsClientListByGeoPager.PageResponse` has been removed
+- Function `*GatewayAPIClientListByServicePager.Err` has been removed
+- Function `*ServiceClientListByResourceGroupPager.Err` has been removed
+- Function `*DiagnosticClientListByServicePager.Err` has been removed
+- Function `*ServiceClientListPager.Err` has been removed
+- Function `*DeletedServicesClientListBySubscriptionPager.Err` has been removed
+- Function `*APIIssueCommentClientListByServicePager.PageResponse` has been removed
+- Function `*GatewayHostnameConfigurationClientListByServicePager.PageResponse` has been removed
+- Function `*ServiceClientListPager.PageResponse` has been removed
+- Function `*SubscriptionClientListPager.Err` has been removed
+- Function `*APITagDescriptionClientListByServicePager.PageResponse` has been removed
+- Function `*GroupUserClientListPager.Err` has been removed
+- Function `*ReportsClientListBySubscriptionPager.Err` has been removed
+- Function `*GatewayHostnameConfigurationClientListByServicePager.Err` has been removed
+- Function `*IdentityProviderClientListByServicePager.PageResponse` has been removed
+- Function `*APIIssueClientListByServicePager.PageResponse` has been removed
+- Function `*TagClientListByProductPager.Err` has been removed
+- Function `*APIProductClientListByApisPager.Err` has been removed
+- Function `*SKUsClientListPager.PageResponse` has been removed
+- Struct `APIClientCreateOrUpdateResult` has been removed
+- Struct `APIClientGetEntityTagResult` has been removed
+- Struct `APIClientGetResult` has been removed
+- Struct `APIClientListByServiceResult` has been removed
+- Struct `APIClientListByTagsResult` has been removed
+- Struct `APIClientUpdateResult` has been removed
+- Struct `APIDiagnosticClientCreateOrUpdateResult` has been removed
+- Struct `APIDiagnosticClientGetEntityTagResult` has been removed
+- Struct `APIDiagnosticClientGetResult` has been removed
+- Struct `APIDiagnosticClientListByServiceResult` has been removed
+- Struct `APIDiagnosticClientUpdateResult` has been removed
+- Struct `APIExportClientGetResult` has been removed
+- Struct `APIIssueAttachmentClientCreateOrUpdateResult` has been removed
+- Struct `APIIssueAttachmentClientGetEntityTagResult` has been removed
+- Struct `APIIssueAttachmentClientGetResult` has been removed
+- Struct `APIIssueAttachmentClientListByServiceResult` has been removed
+- Struct `APIIssueClientCreateOrUpdateResult` has been removed
+- Struct `APIIssueClientGetEntityTagResult` has been removed
+- Struct `APIIssueClientGetResult` has been removed
+- Struct `APIIssueClientListByServiceResult` has been removed
+- Struct `APIIssueClientUpdateResult` has been removed
+- Struct `APIIssueCommentClientCreateOrUpdateResult` has been removed
+- Struct `APIIssueCommentClientGetEntityTagResult` has been removed
+- Struct `APIIssueCommentClientGetResult` has been removed
+- Struct `APIIssueCommentClientListByServiceResult` has been removed
+- Struct `APIOperationClientCreateOrUpdateResult` has been removed
+- Struct `APIOperationClientGetEntityTagResult` has been removed
+- Struct `APIOperationClientGetResult` has been removed
+- Struct `APIOperationClientListByAPIResult` has been removed
+- Struct `APIOperationClientUpdateResult` has been removed
+- Struct `APIOperationPolicyClientCreateOrUpdateResult` has been removed
+- Struct `APIOperationPolicyClientGetEntityTagResult` has been removed
+- Struct `APIOperationPolicyClientGetResult` has been removed
+- Struct `APIOperationPolicyClientListByOperationResult` has been removed
+- Struct `APIPolicyClientCreateOrUpdateResult` has been removed
+- Struct `APIPolicyClientGetEntityTagResult` has been removed
+- Struct `APIPolicyClientGetResult` has been removed
+- Struct `APIPolicyClientListByAPIResult` has been removed
+- Struct `APIProductClientListByApisResult` has been removed
+- Struct `APIReleaseClientCreateOrUpdateResult` has been removed
+- Struct `APIReleaseClientGetEntityTagResult` has been removed
+- Struct `APIReleaseClientGetResult` has been removed
+- Struct `APIReleaseClientListByServiceResult` has been removed
+- Struct `APIReleaseClientUpdateResult` has been removed
+- Struct `APIRevisionClientListByServiceResult` has been removed
+- Struct `APISchemaClientCreateOrUpdateResult` has been removed
+- Struct `APISchemaClientGetEntityTagResult` has been removed
+- Struct `APISchemaClientGetResult` has been removed
+- Struct `APISchemaClientListByAPIResult` has been removed
+- Struct `APITagDescriptionClientCreateOrUpdateResult` has been removed
+- Struct `APITagDescriptionClientGetEntityTagResult` has been removed
+- Struct `APITagDescriptionClientGetResult` has been removed
+- Struct `APITagDescriptionClientListByServiceResult` has been removed
+- Struct `APIVersionSetClientCreateOrUpdateResult` has been removed
+- Struct `APIVersionSetClientGetEntityTagResult` has been removed
+- Struct `APIVersionSetClientGetResult` has been removed
+- Struct `APIVersionSetClientListByServiceResult` has been removed
+- Struct `APIVersionSetClientUpdateResult` has been removed
+- Struct `AuthorizationServerClientCreateOrUpdateResult` has been removed
+- Struct `AuthorizationServerClientGetEntityTagResult` has been removed
+- Struct `AuthorizationServerClientGetResult` has been removed
+- Struct `AuthorizationServerClientListByServiceResult` has been removed
+- Struct `AuthorizationServerClientListSecretsResult` has been removed
+- Struct `AuthorizationServerClientUpdateResult` has been removed
+- Struct `BackendClientCreateOrUpdateResult` has been removed
+- Struct `BackendClientGetEntityTagResult` has been removed
+- Struct `BackendClientGetResult` has been removed
+- Struct `BackendClientListByServiceResult` has been removed
+- Struct `BackendClientUpdateResult` has been removed
+- Struct `CacheClientCreateOrUpdateResult` has been removed
+- Struct `CacheClientGetEntityTagResult` has been removed
+- Struct `CacheClientGetResult` has been removed
+- Struct `CacheClientListByServiceResult` has been removed
+- Struct `CacheClientUpdateResult` has been removed
+- Struct `CertificateClientCreateOrUpdateResult` has been removed
+- Struct `CertificateClientGetEntityTagResult` has been removed
+- Struct `CertificateClientGetResult` has been removed
+- Struct `CertificateClientListByServiceResult` has been removed
+- Struct `CertificateClientRefreshSecretResult` has been removed
+- Struct `ClientPerformConnectivityCheckAsyncResult` has been removed
+- Struct `ContentItemClientCreateOrUpdateResult` has been removed
+- Struct `ContentItemClientGetEntityTagResult` has been removed
+- Struct `ContentItemClientGetResult` has been removed
+- Struct `ContentItemClientListByServiceResult` has been removed
+- Struct `ContentTypeClientCreateOrUpdateResult` has been removed
+- Struct `ContentTypeClientGetResult` has been removed
+- Struct `ContentTypeClientListByServiceResult` has been removed
+- Struct `DelegationSettingsClientCreateOrUpdateResult` has been removed
+- Struct `DelegationSettingsClientGetEntityTagResult` has been removed
+- Struct `DelegationSettingsClientGetResult` has been removed
+- Struct `DelegationSettingsClientListSecretsResult` has been removed
+- Struct `DeletedServicesClientGetByNameResult` has been removed
+- Struct `DeletedServicesClientListBySubscriptionResult` has been removed
+- Struct `DeletedServicesClientPurgeResult` has been removed
+- Struct `DiagnosticClientCreateOrUpdateResult` has been removed
+- Struct `DiagnosticClientGetEntityTagResult` has been removed
+- Struct `DiagnosticClientGetResult` has been removed
+- Struct `DiagnosticClientListByServiceResult` has been removed
+- Struct `DiagnosticClientUpdateResult` has been removed
+- Struct `EmailTemplateClientCreateOrUpdateResult` has been removed
+- Struct `EmailTemplateClientGetEntityTagResult` has been removed
+- Struct `EmailTemplateClientGetResult` has been removed
+- Struct `EmailTemplateClientListByServiceResult` has been removed
+- Struct `EmailTemplateClientUpdateResult` has been removed
+- Struct `GatewayAPIClientCreateOrUpdateResult` has been removed
+- Struct `GatewayAPIClientGetEntityTagResult` has been removed
+- Struct `GatewayAPIClientListByServiceResult` has been removed
+- Struct `GatewayCertificateAuthorityClientCreateOrUpdateResult` has been removed
+- Struct `GatewayCertificateAuthorityClientGetEntityTagResult` has been removed
+- Struct `GatewayCertificateAuthorityClientGetResult` has been removed
+- Struct `GatewayCertificateAuthorityClientListByServiceResult` has been removed
+- Struct `GatewayClientCreateOrUpdateResult` has been removed
+- Struct `GatewayClientGenerateTokenResult` has been removed
+- Struct `GatewayClientGetEntityTagResult` has been removed
+- Struct `GatewayClientGetResult` has been removed
+- Struct `GatewayClientListByServiceResult` has been removed
+- Struct `GatewayClientListKeysResult` has been removed
+- Struct `GatewayClientUpdateResult` has been removed
+- Struct `GatewayHostnameConfigurationClientCreateOrUpdateResult` has been removed
+- Struct `GatewayHostnameConfigurationClientGetEntityTagResult` has been removed
+- Struct `GatewayHostnameConfigurationClientGetResult` has been removed
+- Struct `GatewayHostnameConfigurationClientListByServiceResult` has been removed
+- Struct `GlobalSchemaClientCreateOrUpdateResult` has been removed
+- Struct `GlobalSchemaClientGetEntityTagResult` has been removed
+- Struct `GlobalSchemaClientGetResult` has been removed
+- Struct `GlobalSchemaClientListByServiceResult` has been removed
+- Struct `GroupClientCreateOrUpdateResult` has been removed
+- Struct `GroupClientGetEntityTagResult` has been removed
+- Struct `GroupClientGetResult` has been removed
+- Struct `GroupClientListByServiceResult` has been removed
+- Struct `GroupClientUpdateResult` has been removed
+- Struct `GroupUserClientCheckEntityExistsResult` has been removed
+- Struct `GroupUserClientCreateResult` has been removed
+- Struct `GroupUserClientListResult` has been removed
+- Struct `IdentityProviderClientCreateOrUpdateResult` has been removed
+- Struct `IdentityProviderClientGetEntityTagResult` has been removed
+- Struct `IdentityProviderClientGetResult` has been removed
+- Struct `IdentityProviderClientListByServiceResult` has been removed
+- Struct `IdentityProviderClientListSecretsResult` has been removed
+- Struct `IdentityProviderClientUpdateResult` has been removed
+- Struct `IssueClientGetResult` has been removed
+- Struct `IssueClientListByServiceResult` has been removed
+- Struct `LoggerClientCreateOrUpdateResult` has been removed
+- Struct `LoggerClientGetEntityTagResult` has been removed
+- Struct `LoggerClientGetResult` has been removed
+- Struct `LoggerClientListByServiceResult` has been removed
+- Struct `LoggerClientUpdateResult` has been removed
+- Struct `NamedValueClientCreateOrUpdateResult` has been removed
+- Struct `NamedValueClientGetEntityTagResult` has been removed
+- Struct `NamedValueClientGetResult` has been removed
+- Struct `NamedValueClientListByServiceResult` has been removed
+- Struct `NamedValueClientListValueResult` has been removed
+- Struct `NamedValueClientRefreshSecretResult` has been removed
+- Struct `NamedValueClientUpdateResult` has been removed
+- Struct `NetworkStatusClientListByLocationResult` has been removed
+- Struct `NetworkStatusClientListByServiceResult` has been removed
+- Struct `NotificationClientCreateOrUpdateResult` has been removed
+- Struct `NotificationClientGetResult` has been removed
+- Struct `NotificationClientListByServiceResult` has been removed
+- Struct `NotificationRecipientEmailClientCheckEntityExistsResult` has been removed
+- Struct `NotificationRecipientEmailClientCreateOrUpdateResult` has been removed
+- Struct `NotificationRecipientEmailClientListByNotificationResult` has been removed
+- Struct `NotificationRecipientUserClientCheckEntityExistsResult` has been removed
+- Struct `NotificationRecipientUserClientCreateOrUpdateResult` has been removed
+- Struct `NotificationRecipientUserClientListByNotificationResult` has been removed
+- Struct `OpenIDConnectProviderClientCreateOrUpdateResult` has been removed
+- Struct `OpenIDConnectProviderClientGetEntityTagResult` has been removed
+- Struct `OpenIDConnectProviderClientGetResult` has been removed
+- Struct `OpenIDConnectProviderClientListByServiceResult` has been removed
+- Struct `OpenIDConnectProviderClientListSecretsResult` has been removed
+- Struct `OpenIDConnectProviderClientUpdateResult` has been removed
+- Struct `OperationClientListByTagsResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `OutboundNetworkDependenciesEndpointsClientListByServiceResult` has been removed
+- Struct `PolicyClientCreateOrUpdateResult` has been removed
+- Struct `PolicyClientGetEntityTagResult` has been removed
+- Struct `PolicyClientGetResult` has been removed
+- Struct `PolicyClientListByServiceResult` has been removed
+- Struct `PolicyDescriptionClientListByServiceResult` has been removed
+- Struct `PortalRevisionClientCreateOrUpdateResult` has been removed
+- Struct `PortalRevisionClientGetEntityTagResult` has been removed
+- Struct `PortalRevisionClientGetResult` has been removed
+- Struct `PortalRevisionClientListByServiceResult` has been removed
+- Struct `PortalRevisionClientUpdateResult` has been removed
+- Struct `PortalSettingsClientListByServiceResult` has been removed
+- Struct `PrivateEndpointConnectionClientCreateOrUpdateResult` has been removed
+- Struct `PrivateEndpointConnectionClientGetByNameResult` has been removed
+- Struct `PrivateEndpointConnectionClientGetPrivateLinkResourceResult` has been removed
+- Struct `PrivateEndpointConnectionClientListByServiceResult` has been removed
+- Struct `PrivateEndpointConnectionClientListPrivateLinkResourcesResult` has been removed
+- Struct `ProductAPIClientCheckEntityExistsResult` has been removed
+- Struct `ProductAPIClientCreateOrUpdateResult` has been removed
+- Struct `ProductAPIClientListByProductResult` has been removed
+- Struct `ProductClientCreateOrUpdateResult` has been removed
+- Struct `ProductClientGetEntityTagResult` has been removed
+- Struct `ProductClientGetResult` has been removed
+- Struct `ProductClientListByServiceResult` has been removed
+- Struct `ProductClientListByTagsResult` has been removed
+- Struct `ProductClientUpdateResult` has been removed
+- Struct `ProductGroupClientCheckEntityExistsResult` has been removed
+- Struct `ProductGroupClientCreateOrUpdateResult` has been removed
+- Struct `ProductGroupClientListByProductResult` has been removed
+- Struct `ProductPolicyClientCreateOrUpdateResult` has been removed
+- Struct `ProductPolicyClientGetEntityTagResult` has been removed
+- Struct `ProductPolicyClientGetResult` has been removed
+- Struct `ProductPolicyClientListByProductResult` has been removed
+- Struct `ProductSubscriptionsClientListResult` has been removed
+- Struct `QuotaByCounterKeysClientListByServiceResult` has been removed
+- Struct `QuotaByCounterKeysClientUpdateResult` has been removed
+- Struct `QuotaByPeriodKeysClientGetResult` has been removed
+- Struct `QuotaByPeriodKeysClientUpdateResult` has been removed
+- Struct `RegionClientListByServiceResult` has been removed
+- Struct `ReportsClientListByAPIResult` has been removed
+- Struct `ReportsClientListByGeoResult` has been removed
+- Struct `ReportsClientListByOperationResult` has been removed
+- Struct `ReportsClientListByProductResult` has been removed
+- Struct `ReportsClientListByRequestResult` has been removed
+- Struct `ReportsClientListBySubscriptionResult` has been removed
+- Struct `ReportsClientListByTimeResult` has been removed
+- Struct `ReportsClientListByUserResult` has been removed
+- Struct `SKUsClientListResult` has been removed
+- Struct `ServiceClientApplyNetworkConfigurationUpdatesResult` has been removed
+- Struct `ServiceClientBackupResult` has been removed
+- Struct `ServiceClientCheckNameAvailabilityResult` has been removed
+- Struct `ServiceClientCreateOrUpdateResult` has been removed
+- Struct `ServiceClientDeleteResult` has been removed
+- Struct `ServiceClientGetDomainOwnershipIdentifierResult` has been removed
+- Struct `ServiceClientGetResult` has been removed
+- Struct `ServiceClientGetSsoTokenResult` has been removed
+- Struct `ServiceClientListByResourceGroupResult` has been removed
+- Struct `ServiceClientListResult` has been removed
+- Struct `ServiceClientRestoreResult` has been removed
+- Struct `ServiceClientUpdateResult` has been removed
+- Struct `ServiceSKUsClientListAvailableServiceSKUsResult` has been removed
+- Struct `SignInSettingsClientCreateOrUpdateResult` has been removed
+- Struct `SignInSettingsClientGetEntityTagResult` has been removed
+- Struct `SignInSettingsClientGetResult` has been removed
+- Struct `SignUpSettingsClientCreateOrUpdateResult` has been removed
+- Struct `SignUpSettingsClientGetEntityTagResult` has been removed
+- Struct `SignUpSettingsClientGetResult` has been removed
+- Struct `SubscriptionClientCreateOrUpdateResult` has been removed
+- Struct `SubscriptionClientGetEntityTagResult` has been removed
+- Struct `SubscriptionClientGetResult` has been removed
+- Struct `SubscriptionClientListResult` has been removed
+- Struct `SubscriptionClientListSecretsResult` has been removed
+- Struct `SubscriptionClientUpdateResult` has been removed
+- Struct `TagClientAssignToAPIResult` has been removed
+- Struct `TagClientAssignToOperationResult` has been removed
+- Struct `TagClientAssignToProductResult` has been removed
+- Struct `TagClientCreateOrUpdateResult` has been removed
+- Struct `TagClientGetByAPIResult` has been removed
+- Struct `TagClientGetByOperationResult` has been removed
+- Struct `TagClientGetByProductResult` has been removed
+- Struct `TagClientGetEntityStateByAPIResult` has been removed
+- Struct `TagClientGetEntityStateByOperationResult` has been removed
+- Struct `TagClientGetEntityStateByProductResult` has been removed
+- Struct `TagClientGetEntityStateResult` has been removed
+- Struct `TagClientGetResult` has been removed
+- Struct `TagClientListByAPIResult` has been removed
+- Struct `TagClientListByOperationResult` has been removed
+- Struct `TagClientListByProductResult` has been removed
+- Struct `TagClientListByServiceResult` has been removed
+- Struct `TagClientUpdateResult` has been removed
+- Struct `TagResourceClientListByServiceResult` has been removed
+- Struct `TenantAccessClientCreateResult` has been removed
+- Struct `TenantAccessClientGetEntityTagResult` has been removed
+- Struct `TenantAccessClientGetResult` has been removed
+- Struct `TenantAccessClientListByServiceResult` has been removed
+- Struct `TenantAccessClientListSecretsResult` has been removed
+- Struct `TenantAccessClientUpdateResult` has been removed
+- Struct `TenantConfigurationClientDeployResult` has been removed
+- Struct `TenantConfigurationClientGetSyncStateResult` has been removed
+- Struct `TenantConfigurationClientSaveResult` has been removed
+- Struct `TenantConfigurationClientValidateResult` has been removed
+- Struct `TenantSettingsClientGetResult` has been removed
+- Struct `TenantSettingsClientListByServiceResult` has been removed
+- Struct `UserClientCreateOrUpdateResult` has been removed
+- Struct `UserClientGenerateSsoURLResult` has been removed
+- Struct `UserClientGetEntityTagResult` has been removed
+- Struct `UserClientGetResult` has been removed
+- Struct `UserClientGetSharedAccessTokenResult` has been removed
+- Struct `UserClientListByServiceResult` has been removed
+- Struct `UserClientUpdateResult` has been removed
+- Struct `UserGroupClientListResult` has been removed
+- Struct `UserIdentitiesClientListResult` has been removed
+- Struct `UserSubscriptionClientGetResult` has been removed
+- Struct `UserSubscriptionClientListResult` has been removed
+- Field `ProductClientGetResult` of struct `ProductClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProductClientGetResponse` has been removed
+- Field `GatewayClientListKeysResult` of struct `GatewayClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `GatewayClientListKeysResponse` has been removed
+- Field `PrivateEndpointConnectionClientGetPrivateLinkResourceResult` of struct `PrivateEndpointConnectionClientGetPrivateLinkResourceResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientGetPrivateLinkResourceResponse` has been removed
+- Field `DiagnosticClientCreateOrUpdateResult` of struct `DiagnosticClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProductAPIClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `APIReleaseClientDeleteResponse` has been removed
+- Field `TagClientAssignToOperationResult` of struct `TagClientAssignToOperationResponse` has been removed
+- Field `RawResponse` of struct `TagClientAssignToOperationResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `TenantAccessClientRegenerateSecondaryKeyResponse` has been removed
+- Field `GatewayClientGetEntityTagResult` of struct `GatewayClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `GatewayClientGetEntityTagResponse` has been removed
+- Field `PolicyDescriptionClientListByServiceResult` of struct `PolicyDescriptionClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `PolicyDescriptionClientListByServiceResponse` has been removed
+- Field `ContentTypeClientListByServiceResult` of struct `ContentTypeClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `ContentTypeClientListByServiceResponse` has been removed
+- Field `PrivateEndpointConnectionClientListByServiceResult` of struct `PrivateEndpointConnectionClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientBackupPollerResponse` has been removed
+- Field `APIOperationPolicyClientGetEntityTagResult` of struct `APIOperationPolicyClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `APIOperationPolicyClientGetEntityTagResponse` has been removed
+- Field `AuthorizationServerClientListByServiceResult` of struct `AuthorizationServerClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `AuthorizationServerClientListByServiceResponse` has been removed
+- Field `APIOperationPolicyClientListByOperationResult` of struct `APIOperationPolicyClientListByOperationResponse` has been removed
+- Field `RawResponse` of struct `APIOperationPolicyClientListByOperationResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientCreateOrUpdatePollerResponse` has been removed
+- Field `APIVersionSetClientGetResult` of struct `APIVersionSetClientGetResponse` has been removed
+- Field `RawResponse` of struct `APIVersionSetClientGetResponse` has been removed
+- Field `APISchemaClientCreateOrUpdateResult` of struct `APISchemaClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `APISchemaClientCreateOrUpdateResponse` has been removed
+- Field `PortalRevisionClientCreateOrUpdateResult` of struct `PortalRevisionClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PortalRevisionClientCreateOrUpdateResponse` has been removed
+- Field `APIPolicyClientCreateOrUpdateResult` of struct `APIPolicyClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIPolicyClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientDeleteResponse` has been removed
+- Field `TenantAccessClientListSecretsResult` of struct `TenantAccessClientListSecretsResponse` has been removed
+- Field `RawResponse` of struct `TenantAccessClientListSecretsResponse` has been removed
+- Field `RawResponse` of struct `APIClientDeleteResponse` has been removed
+- Field `APIOperationClientUpdateResult` of struct `APIOperationClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIOperationClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `NotificationRecipientUserClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `APIClientCreateOrUpdatePollerResponse` has been removed
+- Field `ProductPolicyClientListByProductResult` of struct `ProductPolicyClientListByProductResponse` has been removed
+- Field `RawResponse` of struct `ProductPolicyClientListByProductResponse` has been removed
+- Field `RawResponse` of struct `BackendClientReconnectResponse` has been removed
+- Field `UserClientCreateOrUpdateResult` of struct `UserClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `UserClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `NamedValueClientCreateOrUpdatePollerResponse` has been removed
+- Field `NamedValueClientListValueResult` of struct `NamedValueClientListValueResponse` has been removed
+- Field `RawResponse` of struct `NamedValueClientListValueResponse` has been removed
+- Field `RawResponse` of struct `ContentItemClientDeleteResponse` has been removed
+- Field `TenantConfigurationClientGetSyncStateResult` of struct `TenantConfigurationClientGetSyncStateResponse` has been removed
+- Field `RawResponse` of struct `TenantConfigurationClientGetSyncStateResponse` has been removed
+- Field `GatewayHostnameConfigurationClientListByServiceResult` of struct `GatewayHostnameConfigurationClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `GatewayHostnameConfigurationClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `APIIssueAttachmentClientDeleteResponse` has been removed
+- Field `APIClientUpdateResult` of struct `APIClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIClientUpdateResponse` has been removed
+- Field `TagClientListByServiceResult` of struct `TagClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `TagClientListByServiceResponse` has been removed
+- Field `DiagnosticClientGetResult` of struct `DiagnosticClientGetResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticClientGetResponse` has been removed
+- Field `PortalRevisionClientListByServiceResult` of struct `PortalRevisionClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `PortalRevisionClientListByServiceResponse` has been removed
+- Field `GatewayClientGetResult` of struct `GatewayClientGetResponse` has been removed
+- Field `RawResponse` of struct `GatewayClientGetResponse` has been removed
+- Field `NotificationRecipientUserClientCheckEntityExistsResult` of struct `NotificationRecipientUserClientCheckEntityExistsResponse` has been removed
+- Field `RawResponse` of struct `NotificationRecipientUserClientCheckEntityExistsResponse` has been removed
+- Field `GatewayClientUpdateResult` of struct `GatewayClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `GatewayClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `GroupUserClientDeleteResponse` has been removed
+- Field `ProductPolicyClientGetEntityTagResult` of struct `ProductPolicyClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `ProductPolicyClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `OpenIDConnectProviderClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionClientRegenerateSecondaryKeyResponse` has been removed
+- Field `NetworkStatusClientListByLocationResult` of struct `NetworkStatusClientListByLocationResponse` has been removed
+- Field `RawResponse` of struct `NetworkStatusClientListByLocationResponse` has been removed
+- Field `DelegationSettingsClientGetEntityTagResult` of struct `DelegationSettingsClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `DelegationSettingsClientGetEntityTagResponse` has been removed
+- Field `APIIssueAttachmentClientListByServiceResult` of struct `APIIssueAttachmentClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `APIIssueAttachmentClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `APIOperationClientDeleteResponse` has been removed
+- Field `EmailTemplateClientUpdateResult` of struct `EmailTemplateClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `EmailTemplateClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PolicyClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `GlobalSchemaClientDeleteResponse` has been removed
+- Field `ServiceClientRestoreResult` of struct `ServiceClientRestoreResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientRestoreResponse` has been removed
+- Field `APITagDescriptionClientCreateOrUpdateResult` of struct `APITagDescriptionClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `APITagDescriptionClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `APISchemaClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `GatewayAPIClientDeleteResponse` has been removed
+- Field `DeletedServicesClientGetByNameResult` of struct `DeletedServicesClientGetByNameResponse` has been removed
+- Field `RawResponse` of struct `DeletedServicesClientGetByNameResponse` has been removed
+- Field `APIIssueCommentClientGetEntityTagResult` of struct `APIIssueCommentClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `APIIssueCommentClientGetEntityTagResponse` has been removed
+- Field `QuotaByPeriodKeysClientUpdateResult` of struct `QuotaByPeriodKeysClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `QuotaByPeriodKeysClientUpdateResponse` has been removed
+- Field `BackendClientListByServiceResult` of struct `BackendClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `BackendClientListByServiceResponse` has been removed
+- Field `GroupUserClientCreateResult` of struct `GroupUserClientCreateResponse` has been removed
+- Field `RawResponse` of struct `GroupUserClientCreateResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `GatewayClientGenerateTokenResult` of struct `GatewayClientGenerateTokenResponse` has been removed
+- Field `RawResponse` of struct `GatewayClientGenerateTokenResponse` has been removed
+- Field `NotificationClientListByServiceResult` of struct `NotificationClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `NotificationClientListByServiceResponse` has been removed
+- Field `NotificationRecipientEmailClientCreateOrUpdateResult` of struct `NotificationRecipientEmailClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `NotificationRecipientEmailClientCreateOrUpdateResponse` has been removed
+- Field `ProductClientListByServiceResult` of struct `ProductClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `ProductClientListByServiceResponse` has been removed
+- Field `APISchemaClientListByAPIResult` of struct `APISchemaClientListByAPIResponse` has been removed
+- Field `RawResponse` of struct `APISchemaClientListByAPIResponse` has been removed
+- Field `APIIssueClientListByServiceResult` of struct `APIIssueClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `APIIssueClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `GatewayClientDeleteResponse` has been removed
+- Field `ServiceClientListByResourceGroupResult` of struct `ServiceClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientListByResourceGroupResponse` has been removed
+- Field `NamedValueClientGetResult` of struct `NamedValueClientGetResponse` has been removed
+- Field `RawResponse` of struct `NamedValueClientGetResponse` has been removed
+- Field `ReportsClientListByOperationResult` of struct `ReportsClientListByOperationResponse` has been removed
+- Field `RawResponse` of struct `ReportsClientListByOperationResponse` has been removed
+- Field `RawResponse` of struct `SignInSettingsClientUpdateResponse` has been removed
+- Field `DeletedServicesClientPurgeResult` of struct `DeletedServicesClientPurgeResponse` has been removed
+- Field `RawResponse` of struct `DeletedServicesClientPurgeResponse` has been removed
+- Field `GroupClientCreateOrUpdateResult` of struct `GroupClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `GroupClientCreateOrUpdateResponse` has been removed
+- Field `OperationClientListByTagsResult` of struct `OperationClientListByTagsResponse` has been removed
+- Field `RawResponse` of struct `OperationClientListByTagsResponse` has been removed
+- Field `IdentityProviderClientCreateOrUpdateResult` of struct `IdentityProviderClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `IdentityProviderClientCreateOrUpdateResponse` has been removed
+- Field `APIPolicyClientGetResult` of struct `APIPolicyClientGetResponse` has been removed
+- Field `RawResponse` of struct `APIPolicyClientGetResponse` has been removed
+- Field `SignInSettingsClientGetResult` of struct `SignInSettingsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SignInSettingsClientGetResponse` has been removed
+- Field `TagClientUpdateResult` of struct `TagClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `TagClientUpdateResponse` has been removed
+- Field `BackendClientGetEntityTagResult` of struct `BackendClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `BackendClientGetEntityTagResponse` has been removed
+- Field `APIIssueAttachmentClientGetEntityTagResult` of struct `APIIssueAttachmentClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `APIIssueAttachmentClientGetEntityTagResponse` has been removed
+- Field `DeletedServicesClientListBySubscriptionResult` of struct `DeletedServicesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `DeletedServicesClientListBySubscriptionResponse` has been removed
+- Field `APIOperationClientGetEntityTagResult` of struct `APIOperationClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `APIOperationClientGetEntityTagResponse` has been removed
+- Field `NamedValueClientRefreshSecretResult` of struct `NamedValueClientRefreshSecretResponse` has been removed
+- Field `RawResponse` of struct `NamedValueClientRefreshSecretResponse` has been removed
+- Field `ProductGroupClientListByProductResult` of struct `ProductGroupClientListByProductResponse` has been removed
+- Field `RawResponse` of struct `ProductGroupClientListByProductResponse` has been removed
+- Field `NamedValueClientGetEntityTagResult` of struct `NamedValueClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `NamedValueClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientCreateOrUpdatePollerResponse` has been removed
+- Field `ContentTypeClientCreateOrUpdateResult` of struct `ContentTypeClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ContentTypeClientCreateOrUpdateResponse` has been removed
+- Field `DiagnosticClientGetEntityTagResult` of struct `DiagnosticClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticClientGetEntityTagResponse` has been removed
+- Field `TagClientGetByOperationResult` of struct `TagClientGetByOperationResponse` has been removed
+- Field `RawResponse` of struct `TagClientGetByOperationResponse` has been removed
+- Field `NotificationRecipientEmailClientListByNotificationResult` of struct `NotificationRecipientEmailClientListByNotificationResponse` has been removed
+- Field `RawResponse` of struct `NotificationRecipientEmailClientListByNotificationResponse` has been removed
+- Field `TagClientCreateOrUpdateResult` of struct `TagClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `TagClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientApplyNetworkConfigurationUpdatesPollerResponse` has been removed
+- Field `RawResponse` of struct `APIIssueCommentClientDeleteResponse` has been removed
+- Field `TenantAccessClientGetResult` of struct `TenantAccessClientGetResponse` has been removed
+- Field `RawResponse` of struct `TenantAccessClientGetResponse` has been removed
+- Field `APIVersionSetClientGetEntityTagResult` of struct `APIVersionSetClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `APIVersionSetClientGetEntityTagResponse` has been removed
+- Field `APIIssueCommentClientListByServiceResult` of struct `APIIssueCommentClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `APIIssueCommentClientListByServiceResponse` has been removed
+- Field `UserSubscriptionClientListResult` of struct `UserSubscriptionClientListResponse` has been removed
+- Field `RawResponse` of struct `UserSubscriptionClientListResponse` has been removed
+- Field `QuotaByPeriodKeysClientGetResult` of struct `QuotaByPeriodKeysClientGetResponse` has been removed
+- Field `RawResponse` of struct `QuotaByPeriodKeysClientGetResponse` has been removed
+- Field `APIOperationPolicyClientGetResult` of struct `APIOperationPolicyClientGetResponse` has been removed
+- Field `RawResponse` of struct `APIOperationPolicyClientGetResponse` has been removed
+- Field `APIIssueClientGetEntityTagResult` of struct `APIIssueClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `APIIssueClientGetEntityTagResponse` has been removed
+- Field `PrivateEndpointConnectionClientCreateOrUpdateResult` of struct `PrivateEndpointConnectionClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientCreateOrUpdateResponse` has been removed
+- Field `PortalRevisionClientGetEntityTagResult` of struct `PortalRevisionClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `PortalRevisionClientGetEntityTagResponse` has been removed
+- Field `APITagDescriptionClientListByServiceResult` of struct `APITagDescriptionClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `APITagDescriptionClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `NotificationRecipientEmailClientDeleteResponse` has been removed
+- Field `EmailTemplateClientGetResult` of struct `EmailTemplateClientGetResponse` has been removed
+- Field `RawResponse` of struct `EmailTemplateClientGetResponse` has been removed
+- Field `OpenIDConnectProviderClientGetEntityTagResult` of struct `OpenIDConnectProviderClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `OpenIDConnectProviderClientGetEntityTagResponse` has been removed
+- Field `TagClientGetByProductResult` of struct `TagClientGetByProductResponse` has been removed
+- Field `RawResponse` of struct `TagClientGetByProductResponse` has been removed
+- Field `EmailTemplateClientListByServiceResult` of struct `EmailTemplateClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `EmailTemplateClientListByServiceResponse` has been removed
+- Field `GatewayCertificateAuthorityClientListByServiceResult` of struct `GatewayCertificateAuthorityClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `GatewayCertificateAuthorityClientListByServiceResponse` has been removed
+- Field `ContentItemClientListByServiceResult` of struct `ContentItemClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `ContentItemClientListByServiceResponse` has been removed
+- Field `TenantAccessClientCreateResult` of struct `TenantAccessClientCreateResponse` has been removed
+- Field `RawResponse` of struct `TenantAccessClientCreateResponse` has been removed
+- Field `NotificationClientCreateOrUpdateResult` of struct `NotificationClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `NotificationClientCreateOrUpdateResponse` has been removed
+- Field `LoggerClientListByServiceResult` of struct `LoggerClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `LoggerClientListByServiceResponse` has been removed
+- Field `GlobalSchemaClientGetResult` of struct `GlobalSchemaClientGetResponse` has been removed
+- Field `RawResponse` of struct `GlobalSchemaClientGetResponse` has been removed
+- Field `APIClientListByTagsResult` of struct `APIClientListByTagsResponse` has been removed
+- Field `RawResponse` of struct `APIClientListByTagsResponse` has been removed
+- Field `BackendClientUpdateResult` of struct `BackendClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `BackendClientUpdateResponse` has been removed
+- Field `NotificationRecipientUserClientListByNotificationResult` of struct `NotificationRecipientUserClientListByNotificationResponse` has been removed
+- Field `RawResponse` of struct `NotificationRecipientUserClientListByNotificationResponse` has been removed
+- Field `TenantAccessClientUpdateResult` of struct `TenantAccessClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `TenantAccessClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientPerformConnectivityCheckAsyncPollerResponse` has been removed
+- Field `RawResponse` of struct `ProductGroupClientDeleteResponse` has been removed
+- Field `CertificateClientRefreshSecretResult` of struct `CertificateClientRefreshSecretResponse` has been removed
+- Field `RawResponse` of struct `CertificateClientRefreshSecretResponse` has been removed
+- Field `OpenIDConnectProviderClientUpdateResult` of struct `OpenIDConnectProviderClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `OpenIDConnectProviderClientUpdateResponse` has been removed
+- Field `AuthorizationServerClientUpdateResult` of struct `AuthorizationServerClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AuthorizationServerClientUpdateResponse` has been removed
+- Field `IdentityProviderClientUpdateResult` of struct `IdentityProviderClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `IdentityProviderClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `CertificateClientDeleteResponse` has been removed
+- Field `UserClientUpdateResult` of struct `UserClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `UserClientUpdateResponse` has been removed
+- Field `APIDiagnosticClientListByServiceResult` of struct `APIDiagnosticClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `APIDiagnosticClientListByServiceResponse` has been removed
+- Field `ContentItemClientCreateOrUpdateResult` of struct `ContentItemClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ContentItemClientCreateOrUpdateResponse` has been removed
+- Field `APIReleaseClientGetEntityTagResult` of struct `APIReleaseClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `APIReleaseClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `TenantConfigurationClientValidatePollerResponse` has been removed
+- Field `APIPolicyClientGetEntityTagResult` of struct `APIPolicyClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `APIPolicyClientGetEntityTagResponse` has been removed
+- Field `TenantConfigurationClientDeployResult` of struct `TenantConfigurationClientDeployResponse` has been removed
+- Field `RawResponse` of struct `TenantConfigurationClientDeployResponse` has been removed
+- Field `RawResponse` of struct `TenantConfigurationClientSavePollerResponse` has been removed
+- Field `TagClientGetEntityStateByProductResult` of struct `TagClientGetEntityStateByProductResponse` has been removed
+- Field `RawResponse` of struct `TagClientGetEntityStateByProductResponse` has been removed
+- Field `ProductAPIClientCreateOrUpdateResult` of struct `ProductAPIClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProductAPIClientCreateOrUpdateResponse` has been removed
+- Field `IdentityProviderClientListSecretsResult` of struct `IdentityProviderClientListSecretsResponse` has been removed
+- Field `RawResponse` of struct `IdentityProviderClientListSecretsResponse` has been removed
+- Field `RawResponse` of struct `EmailTemplateClientDeleteResponse` has been removed
+- Field `AuthorizationServerClientGetResult` of struct `AuthorizationServerClientGetResponse` has been removed
+- Field `RawResponse` of struct `AuthorizationServerClientGetResponse` has been removed
+- Field `APIIssueClientUpdateResult` of struct `APIIssueClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIIssueClientUpdateResponse` has been removed
+- Field `IssueClientGetResult` of struct `IssueClientGetResponse` has been removed
+- Field `RawResponse` of struct `IssueClientGetResponse` has been removed
+- Field `RawResponse` of struct `APITagDescriptionClientDeleteResponse` has been removed
+- Field `IdentityProviderClientGetResult` of struct `IdentityProviderClientGetResponse` has been removed
+- Field `RawResponse` of struct `IdentityProviderClientGetResponse` has been removed
+- Field `RawResponse` of struct `UserConfirmationPasswordClientSendResponse` has been removed
+- Field `GatewayCertificateAuthorityClientCreateOrUpdateResult` of struct `GatewayCertificateAuthorityClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `GatewayCertificateAuthorityClientCreateOrUpdateResponse` has been removed
+- Field `AuthorizationServerClientCreateOrUpdateResult` of struct `AuthorizationServerClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AuthorizationServerClientCreateOrUpdateResponse` has been removed
+- Field `IdentityProviderClientGetEntityTagResult` of struct `IdentityProviderClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `IdentityProviderClientGetEntityTagResponse` has been removed
+- Field `TagClientListByOperationResult` of struct `TagClientListByOperationResponse` has been removed
+- Field `RawResponse` of struct `TagClientListByOperationResponse` has been removed
+- Field `APIOperationClientCreateOrUpdateResult` of struct `APIOperationClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIOperationClientCreateOrUpdateResponse` has been removed
+- Field `QuotaByCounterKeysClientUpdateResult` of struct `QuotaByCounterKeysClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `QuotaByCounterKeysClientUpdateResponse` has been removed
+- Field `SignUpSettingsClientCreateOrUpdateResult` of struct `SignUpSettingsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SignUpSettingsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientRestorePollerResponse` has been removed
+- Field `RawResponse` of struct `GlobalSchemaClientCreateOrUpdatePollerResponse` has been removed
+- Field `APIOperationClientListByAPIResult` of struct `APIOperationClientListByAPIResponse` has been removed
+- Field `RawResponse` of struct `APIOperationClientListByAPIResponse` has been removed
+- Field `ServiceSKUsClientListAvailableServiceSKUsResult` of struct `ServiceSKUsClientListAvailableServiceSKUsResponse` has been removed
+- Field `RawResponse` of struct `ServiceSKUsClientListAvailableServiceSKUsResponse` has been removed
+- Field `APIDiagnosticClientGetEntityTagResult` of struct `APIDiagnosticClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `APIDiagnosticClientGetEntityTagResponse` has been removed
+- Field `SubscriptionClientGetEntityTagResult` of struct `SubscriptionClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionClientGetEntityTagResponse` has been removed
+- Field `GatewayHostnameConfigurationClientCreateOrUpdateResult` of struct `GatewayHostnameConfigurationClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `GatewayHostnameConfigurationClientCreateOrUpdateResponse` has been removed
+- Field `ServiceClientDeleteResult` of struct `ServiceClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ProductPolicyClientDeleteResponse` has been removed
+- Field `OpenIDConnectProviderClientCreateOrUpdateResult` of struct `OpenIDConnectProviderClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `OpenIDConnectProviderClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `TagClientDetachFromOperationResponse` has been removed
+- Field `ServiceClientCheckNameAvailabilityResult` of struct `ServiceClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientCheckNameAvailabilityResponse` has been removed
+- Field `ServiceClientBackupResult` of struct `ServiceClientBackupResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientBackupResponse` has been removed
+- Field `ProductPolicyClientCreateOrUpdateResult` of struct `ProductPolicyClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProductPolicyClientCreateOrUpdateResponse` has been removed
+- Field `NotificationClientGetResult` of struct `NotificationClientGetResponse` has been removed
+- Field `RawResponse` of struct `NotificationClientGetResponse` has been removed
+- Field `RawResponse` of struct `UserClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientDeletePollerResponse` has been removed
+- Field `APITagDescriptionClientGetEntityTagResult` of struct `APITagDescriptionClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `APITagDescriptionClientGetEntityTagResponse` has been removed
+- Field `APIProductClientListByApisResult` of struct `APIProductClientListByApisResponse` has been removed
+- Field `RawResponse` of struct `APIProductClientListByApisResponse` has been removed
+- Field `ProductClientListByTagsResult` of struct `ProductClientListByTagsResponse` has been removed
+- Field `RawResponse` of struct `ProductClientListByTagsResponse` has been removed
+- Field `ReportsClientListByProductResult` of struct `ReportsClientListByProductResponse` has been removed
+- Field `RawResponse` of struct `ReportsClientListByProductResponse` has been removed
+- Field `GlobalSchemaClientListByServiceResult` of struct `GlobalSchemaClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `GlobalSchemaClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `IdentityProviderClientDeleteResponse` has been removed
+- Field `EmailTemplateClientGetEntityTagResult` of struct `EmailTemplateClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `EmailTemplateClientGetEntityTagResponse` has been removed
+- Field `APITagDescriptionClientGetResult` of struct `APITagDescriptionClientGetResponse` has been removed
+- Field `RawResponse` of struct `APITagDescriptionClientGetResponse` has been removed
+- Field `OpenIDConnectProviderClientGetResult` of struct `OpenIDConnectProviderClientGetResponse` has been removed
+- Field `RawResponse` of struct `OpenIDConnectProviderClientGetResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticClientDeleteResponse` has been removed
+- Field `SignInSettingsClientGetEntityTagResult` of struct `SignInSettingsClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `SignInSettingsClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `DeletedServicesClientPurgePollerResponse` has been removed
+- Field `UserClientGetSharedAccessTokenResult` of struct `UserClientGetSharedAccessTokenResponse` has been removed
+- Field `RawResponse` of struct `UserClientGetSharedAccessTokenResponse` has been removed
+- Field `UserIdentitiesClientListResult` of struct `UserIdentitiesClientListResponse` has been removed
+- Field `RawResponse` of struct `UserIdentitiesClientListResponse` has been removed
+- Field `RawResponse` of struct `TenantAccessGitClientRegenerateSecondaryKeyResponse` has been removed
+- Field `ServiceClientGetSsoTokenResult` of struct `ServiceClientGetSsoTokenResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientGetSsoTokenResponse` has been removed
+- Field `SubscriptionClientUpdateResult` of struct `SubscriptionClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionClientUpdateResponse` has been removed
+- Field `SubscriptionClientGetResult` of struct `SubscriptionClientGetResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionClientGetResponse` has been removed
+- Field `RawResponse` of struct `TenantAccessGitClientRegeneratePrimaryKeyResponse` has been removed
+- Field `GatewayHostnameConfigurationClientGetResult` of struct `GatewayHostnameConfigurationClientGetResponse` has been removed
+- Field `RawResponse` of struct `GatewayHostnameConfigurationClientGetResponse` has been removed
+- Field `SignInSettingsClientCreateOrUpdateResult` of struct `SignInSettingsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SignInSettingsClientCreateOrUpdateResponse` has been removed
+- Field `LoggerClientGetEntityTagResult` of struct `LoggerClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `LoggerClientGetEntityTagResponse` has been removed
+- Field `GatewayAPIClientListByServiceResult` of struct `GatewayAPIClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `GatewayAPIClientListByServiceResponse` has been removed
+- Field `PortalSettingsClientListByServiceResult` of struct `PortalSettingsClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `PortalSettingsClientListByServiceResponse` has been removed
+- Field `DiagnosticClientUpdateResult` of struct `DiagnosticClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticClientUpdateResponse` has been removed
+- Field `GroupUserClientListResult` of struct `GroupUserClientListResponse` has been removed
+- Field `RawResponse` of struct `GroupUserClientListResponse` has been removed
+- Field `RawResponse` of struct `APISchemaClientCreateOrUpdatePollerResponse` has been removed
+- Field `UserClientGetEntityTagResult` of struct `UserClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `UserClientGetEntityTagResponse` has been removed
+- Field `ReportsClientListByRequestResult` of struct `ReportsClientListByRequestResponse` has been removed
+- Field `RawResponse` of struct `ReportsClientListByRequestResponse` has been removed
+- Field `APIPolicyClientListByAPIResult` of struct `APIPolicyClientListByAPIResponse` has been removed
+- Field `RawResponse` of struct `APIPolicyClientListByAPIResponse` has been removed
+- Field `NetworkStatusClientListByServiceResult` of struct `NetworkStatusClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `NetworkStatusClientListByServiceResponse` has been removed
+- Field `ServiceClientCreateOrUpdateResult` of struct `ServiceClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientCreateOrUpdateResponse` has been removed
+- Field `APIIssueAttachmentClientGetResult` of struct `APIIssueAttachmentClientGetResponse` has been removed
+- Field `RawResponse` of struct `APIIssueAttachmentClientGetResponse` has been removed
+- Field `ProductPolicyClientGetResult` of struct `ProductPolicyClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProductPolicyClientGetResponse` has been removed
+- Field `TagClientListByAPIResult` of struct `TagClientListByAPIResponse` has been removed
+- Field `RawResponse` of struct `TagClientListByAPIResponse` has been removed
+- Field `GroupClientGetResult` of struct `GroupClientGetResponse` has been removed
+- Field `RawResponse` of struct `GroupClientGetResponse` has been removed
+- Field `RawResponse` of struct `BackendClientDeleteResponse` has been removed
+- Field `CertificateClientCreateOrUpdateResult` of struct `CertificateClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `CertificateClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SignUpSettingsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIVersionSetClientDeleteResponse` has been removed
+- Field `ProductAPIClientCheckEntityExistsResult` of struct `ProductAPIClientCheckEntityExistsResponse` has been removed
+- Field `RawResponse` of struct `ProductAPIClientCheckEntityExistsResponse` has been removed
+- Field `APIIssueClientCreateOrUpdateResult` of struct `APIIssueClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIIssueClientCreateOrUpdateResponse` has been removed
+- Field `APIDiagnosticClientGetResult` of struct `APIDiagnosticClientGetResponse` has been removed
+- Field `RawResponse` of struct `APIDiagnosticClientGetResponse` has been removed
+- Field `TenantSettingsClientListByServiceResult` of struct `TenantSettingsClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `TenantSettingsClientListByServiceResponse` has been removed
+- Field `APIIssueAttachmentClientCreateOrUpdateResult` of struct `APIIssueAttachmentClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIIssueAttachmentClientCreateOrUpdateResponse` has been removed
+- Field `EmailTemplateClientCreateOrUpdateResult` of struct `EmailTemplateClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `EmailTemplateClientCreateOrUpdateResponse` has been removed
+- Field `ServiceClientUpdateResult` of struct `ServiceClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientUpdateResponse` has been removed
+- Field `RegionClientListByServiceResult` of struct `RegionClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `RegionClientListByServiceResponse` has been removed
+- Field `AuthorizationServerClientGetEntityTagResult` of struct `AuthorizationServerClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `AuthorizationServerClientGetEntityTagResponse` has been removed
+- Field `TagClientGetEntityStateByOperationResult` of struct `TagClientGetEntityStateByOperationResponse` has been removed
+- Field `RawResponse` of struct `TagClientGetEntityStateByOperationResponse` has been removed
+- Field `SignUpSettingsClientGetResult` of struct `SignUpSettingsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SignUpSettingsClientGetResponse` has been removed
+- Field `CacheClientUpdateResult` of struct `CacheClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `CacheClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionClientDeleteResponse` has been removed
+- Field `SignUpSettingsClientGetEntityTagResult` of struct `SignUpSettingsClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `SignUpSettingsClientGetEntityTagResponse` has been removed
+- Field `OpenIDConnectProviderClientListByServiceResult` of struct `OpenIDConnectProviderClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `OpenIDConnectProviderClientListByServiceResponse` has been removed
+- Field `APIClientCreateOrUpdateResult` of struct `APIClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIClientCreateOrUpdateResponse` has been removed
+- Field `GlobalSchemaClientGetEntityTagResult` of struct `GlobalSchemaClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `GlobalSchemaClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `PortalRevisionClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `GatewayCertificateAuthorityClientDeleteResponse` has been removed
+- Field `PrivateEndpointConnectionClientGetByNameResult` of struct `PrivateEndpointConnectionClientGetByNameResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientGetByNameResponse` has been removed
+- Field `RawResponse` of struct `GroupClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientUpdatePollerResponse` has been removed
+- Field `ProductAPIClientListByProductResult` of struct `ProductAPIClientListByProductResponse` has been removed
+- Field `RawResponse` of struct `ProductAPIClientListByProductResponse` has been removed
+- Field `RawResponse` of struct `GatewayHostnameConfigurationClientDeleteResponse` has been removed
+- Field `ServiceClientApplyNetworkConfigurationUpdatesResult` of struct `ServiceClientApplyNetworkConfigurationUpdatesResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientApplyNetworkConfigurationUpdatesResponse` has been removed
+- Field `PortalRevisionClientGetResult` of struct `PortalRevisionClientGetResponse` has been removed
+- Field `RawResponse` of struct `PortalRevisionClientGetResponse` has been removed
+- Field `CacheClientGetResult` of struct `CacheClientGetResponse` has been removed
+- Field `RawResponse` of struct `CacheClientGetResponse` has been removed
+- Field `TenantAccessClientGetEntityTagResult` of struct `TenantAccessClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `TenantAccessClientGetEntityTagResponse` has been removed
+- Field `UserClientGenerateSsoURLResult` of struct `UserClientGenerateSsoURLResponse` has been removed
+- Field `RawResponse` of struct `UserClientGenerateSsoURLResponse` has been removed
+- Field `RawResponse` of struct `APIPolicyClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DelegationSettingsClientUpdateResponse` has been removed
+- Field `APIOperationClientGetResult` of struct `APIOperationClientGetResponse` has been removed
+- Field `RawResponse` of struct `APIOperationClientGetResponse` has been removed
+- Field `GatewayAPIClientGetEntityTagResult` of struct `GatewayAPIClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `GatewayAPIClientGetEntityTagResponse` has been removed
+- Field `CacheClientCreateOrUpdateResult` of struct `CacheClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `CacheClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `TagClientDetachFromAPIResponse` has been removed
+- Field `APIDiagnosticClientUpdateResult` of struct `APIDiagnosticClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIDiagnosticClientUpdateResponse` has been removed
+- Field `GatewayCertificateAuthorityClientGetResult` of struct `GatewayCertificateAuthorityClientGetResponse` has been removed
+- Field `RawResponse` of struct `GatewayCertificateAuthorityClientGetResponse` has been removed
+- Field `ProductGroupClientCheckEntityExistsResult` of struct `ProductGroupClientCheckEntityExistsResponse` has been removed
+- Field `RawResponse` of struct `ProductGroupClientCheckEntityExistsResponse` has been removed
+- Field `ServiceClientListResult` of struct `ServiceClientListResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientListResponse` has been removed
+- Field `RawResponse` of struct `NamedValueClientUpdatePollerResponse` has been removed
+- Field `DelegationSettingsClientCreateOrUpdateResult` of struct `DelegationSettingsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DelegationSettingsClientCreateOrUpdateResponse` has been removed
+- Field `PortalRevisionClientUpdateResult` of struct `PortalRevisionClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PortalRevisionClientUpdateResponse` has been removed
+- Field `TagClientAssignToProductResult` of struct `TagClientAssignToProductResponse` has been removed
+- Field `RawResponse` of struct `TagClientAssignToProductResponse` has been removed
+- Field `ReportsClientListByAPIResult` of struct `ReportsClientListByAPIResponse` has been removed
+- Field `RawResponse` of struct `ReportsClientListByAPIResponse` has been removed
+- Field `RawResponse` of struct `APIIssueClientDeleteResponse` has been removed
+- Field `ContentTypeClientGetResult` of struct `ContentTypeClientGetResponse` has been removed
+- Field `RawResponse` of struct `ContentTypeClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProductClientDeleteResponse` has been removed
+- Field `GroupUserClientCheckEntityExistsResult` of struct `GroupUserClientCheckEntityExistsResponse` has been removed
+- Field `RawResponse` of struct `GroupUserClientCheckEntityExistsResponse` has been removed
+- Field `RawResponse` of struct `TenantAccessClientRegeneratePrimaryKeyResponse` has been removed
+- Field `GlobalSchemaClientCreateOrUpdateResult` of struct `GlobalSchemaClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `GlobalSchemaClientCreateOrUpdateResponse` has been removed
+- Field `TenantConfigurationClientSaveResult` of struct `TenantConfigurationClientSaveResponse` has been removed
+- Field `RawResponse` of struct `TenantConfigurationClientSaveResponse` has been removed
+- Field `APIOperationPolicyClientCreateOrUpdateResult` of struct `APIOperationPolicyClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIOperationPolicyClientCreateOrUpdateResponse` has been removed
+- Field `TagClientGetResult` of struct `TagClientGetResponse` has been removed
+- Field `RawResponse` of struct `TagClientGetResponse` has been removed
+- Field `GatewayClientListByServiceResult` of struct `GatewayClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `GatewayClientListByServiceResponse` has been removed
+- Field `APIDiagnosticClientCreateOrUpdateResult` of struct `APIDiagnosticClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIDiagnosticClientCreateOrUpdateResponse` has been removed
+- Field `ContentItemClientGetResult` of struct `ContentItemClientGetResponse` has been removed
+- Field `RawResponse` of struct `ContentItemClientGetResponse` has been removed
+- Field `APIReleaseClientGetResult` of struct `APIReleaseClientGetResponse` has been removed
+- Field `RawResponse` of struct `APIReleaseClientGetResponse` has been removed
+- Field `OutboundNetworkDependenciesEndpointsClientListByServiceResult` of struct `OutboundNetworkDependenciesEndpointsClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `OutboundNetworkDependenciesEndpointsClientListByServiceResponse` has been removed
+- Field `APIRevisionClientListByServiceResult` of struct `APIRevisionClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `APIRevisionClientListByServiceResponse` has been removed
+- Field `CertificateClientGetEntityTagResult` of struct `CertificateClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `CertificateClientGetEntityTagResponse` has been removed
+- Field `APISchemaClientGetEntityTagResult` of struct `APISchemaClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `APISchemaClientGetEntityTagResponse` has been removed
+- Field `DelegationSettingsClientGetResult` of struct `DelegationSettingsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DelegationSettingsClientGetResponse` has been removed
+- Field `BackendClientCreateOrUpdateResult` of struct `BackendClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `BackendClientCreateOrUpdateResponse` has been removed
+- Field `GatewayAPIClientCreateOrUpdateResult` of struct `GatewayAPIClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `GatewayAPIClientCreateOrUpdateResponse` has been removed
+- Field `ServiceClientGetDomainOwnershipIdentifierResult` of struct `ServiceClientGetDomainOwnershipIdentifierResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientGetDomainOwnershipIdentifierResponse` has been removed
+- Field `ReportsClientListByUserResult` of struct `ReportsClientListByUserResponse` has been removed
+- Field `RawResponse` of struct `ReportsClientListByUserResponse` has been removed
+- Field `RawResponse` of struct `TagClientDeleteResponse` has been removed
+- Field `APIIssueCommentClientCreateOrUpdateResult` of struct `APIIssueCommentClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIIssueCommentClientCreateOrUpdateResponse` has been removed
+- Field `ContentItemClientGetEntityTagResult` of struct `ContentItemClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `ContentItemClientGetEntityTagResponse` has been removed
+- Field `CacheClientListByServiceResult` of struct `CacheClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `CacheClientListByServiceResponse` has been removed
+- Field `BackendClientGetResult` of struct `BackendClientGetResponse` has been removed
+- Field `RawResponse` of struct `BackendClientGetResponse` has been removed
+- Field `LoggerClientCreateOrUpdateResult` of struct `LoggerClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `LoggerClientCreateOrUpdateResponse` has been removed
+- Field `APIClientGetResult` of struct `APIClientGetResponse` has been removed
+- Field `RawResponse` of struct `APIClientGetResponse` has been removed
+- Field `GroupClientGetEntityTagResult` of struct `GroupClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `GroupClientGetEntityTagResponse` has been removed
+- Field `UserGroupClientListResult` of struct `UserGroupClientListResponse` has been removed
+- Field `RawResponse` of struct `UserGroupClientListResponse` has been removed
+- Field `AuthorizationServerClientListSecretsResult` of struct `AuthorizationServerClientListSecretsResponse` has been removed
+- Field `RawResponse` of struct `AuthorizationServerClientListSecretsResponse` has been removed
+- Field `NamedValueClientCreateOrUpdateResult` of struct `NamedValueClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `NamedValueClientCreateOrUpdateResponse` has been removed
+- Field `ReportsClientListBySubscriptionResult` of struct `ReportsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ReportsClientListBySubscriptionResponse` has been removed
+- Field `GatewayCertificateAuthorityClientGetEntityTagResult` of struct `GatewayCertificateAuthorityClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `GatewayCertificateAuthorityClientGetEntityTagResponse` has been removed
+- Field `ClientPerformConnectivityCheckAsyncResult` of struct `ClientPerformConnectivityCheckAsyncResponse` has been removed
+- Field `RawResponse` of struct `ClientPerformConnectivityCheckAsyncResponse` has been removed
+- Field `ReportsClientListByGeoResult` of struct `ReportsClientListByGeoResponse` has been removed
+- Field `RawResponse` of struct `ReportsClientListByGeoResponse` has been removed
+- Field `UserSubscriptionClientGetResult` of struct `UserSubscriptionClientGetResponse` has been removed
+- Field `RawResponse` of struct `UserSubscriptionClientGetResponse` has been removed
+- Field `LoggerClientGetResult` of struct `LoggerClientGetResponse` has been removed
+- Field `RawResponse` of struct `LoggerClientGetResponse` has been removed
+- Field `QuotaByCounterKeysClientListByServiceResult` of struct `QuotaByCounterKeysClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `QuotaByCounterKeysClientListByServiceResponse` has been removed
+- Field `APIClientGetEntityTagResult` of struct `APIClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `APIClientGetEntityTagResponse` has been removed
+- Field `APIIssueCommentClientGetResult` of struct `APIIssueCommentClientGetResponse` has been removed
+- Field `RawResponse` of struct `APIIssueCommentClientGetResponse` has been removed
+- Field `CertificateClientListByServiceResult` of struct `CertificateClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `CertificateClientListByServiceResponse` has been removed
+- Field `TenantAccessClientListByServiceResult` of struct `TenantAccessClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `TenantAccessClientListByServiceResponse` has been removed
+- Field `APIVersionSetClientUpdateResult` of struct `APIVersionSetClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIVersionSetClientUpdateResponse` has been removed
+- Field `GatewayHostnameConfigurationClientGetEntityTagResult` of struct `GatewayHostnameConfigurationClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `GatewayHostnameConfigurationClientGetEntityTagResponse` has been removed
+- Field `GatewayClientCreateOrUpdateResult` of struct `GatewayClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `GatewayClientCreateOrUpdateResponse` has been removed
+- Field `ServiceClientGetResult` of struct `ServiceClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientGetResponse` has been removed
+- Field `LoggerClientUpdateResult` of struct `LoggerClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `LoggerClientUpdateResponse` has been removed
+- Field `NotificationRecipientUserClientCreateOrUpdateResult` of struct `NotificationRecipientUserClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `NotificationRecipientUserClientCreateOrUpdateResponse` has been removed
+- Field `TagClientGetEntityStateByAPIResult` of struct `TagClientGetEntityStateByAPIResponse` has been removed
+- Field `RawResponse` of struct `TagClientGetEntityStateByAPIResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionClientRegeneratePrimaryKeyResponse` has been removed
+- Field `SubscriptionClientListResult` of struct `SubscriptionClientListResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionClientListResponse` has been removed
+- Field `RawResponse` of struct `TagClientDetachFromProductResponse` has been removed
+- Field `ProductClientUpdateResult` of struct `ProductClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProductClientUpdateResponse` has been removed
+- Field `APIVersionSetClientListByServiceResult` of struct `APIVersionSetClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `APIVersionSetClientListByServiceResponse` has been removed
+- Field `ProductClientCreateOrUpdateResult` of struct `ProductClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProductClientCreateOrUpdateResponse` has been removed
+- Field `TagClientListByProductResult` of struct `TagClientListByProductResponse` has been removed
+- Field `RawResponse` of struct `TagClientListByProductResponse` has been removed
+- Field `APIIssueClientGetResult` of struct `APIIssueClientGetResponse` has been removed
+- Field `RawResponse` of struct `APIIssueClientGetResponse` has been removed
+- Field `UserClientListByServiceResult` of struct `UserClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `UserClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `NamedValueClientRefreshSecretPollerResponse` has been removed
+- Field `NamedValueClientUpdateResult` of struct `NamedValueClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `NamedValueClientUpdateResponse` has been removed
+- Field `DelegationSettingsClientListSecretsResult` of struct `DelegationSettingsClientListSecretsResponse` has been removed
+- Field `RawResponse` of struct `DelegationSettingsClientListSecretsResponse` has been removed
+- Field `APIVersionSetClientCreateOrUpdateResult` of struct `APIVersionSetClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIVersionSetClientCreateOrUpdateResponse` has been removed
+- Field `TagClientAssignToAPIResult` of struct `TagClientAssignToAPIResponse` has been removed
+- Field `RawResponse` of struct `TagClientAssignToAPIResponse` has been removed
+- Field `CertificateClientGetResult` of struct `CertificateClientGetResponse` has been removed
+- Field `RawResponse` of struct `CertificateClientGetResponse` has been removed
+- Field `IssueClientListByServiceResult` of struct `IssueClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `IssueClientListByServiceResponse` has been removed
+- Field `TagResourceClientListByServiceResult` of struct `TagResourceClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `TagResourceClientListByServiceResponse` has been removed
+- Field `PolicyClientGetEntityTagResult` of struct `PolicyClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `PolicyClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `APIOperationPolicyClientDeleteResponse` has been removed
+- Field `GroupClientUpdateResult` of struct `GroupClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `GroupClientUpdateResponse` has been removed
+- Field `APISchemaClientGetResult` of struct `APISchemaClientGetResponse` has been removed
+- Field `RawResponse` of struct `APISchemaClientGetResponse` has been removed
+- Field `NotificationRecipientEmailClientCheckEntityExistsResult` of struct `NotificationRecipientEmailClientCheckEntityExistsResponse` has been removed
+- Field `RawResponse` of struct `NotificationRecipientEmailClientCheckEntityExistsResponse` has been removed
+- Field `RawResponse` of struct `NamedValueClientDeleteResponse` has been removed
+- Field `UserClientGetResult` of struct `UserClientGetResponse` has been removed
+- Field `RawResponse` of struct `UserClientGetResponse` has been removed
+- Field `GroupClientListByServiceResult` of struct `GroupClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `GroupClientListByServiceResponse` has been removed
+- Field `TenantSettingsClientGetResult` of struct `TenantSettingsClientGetResponse` has been removed
+- Field `RawResponse` of struct `TenantSettingsClientGetResponse` has been removed
+- Field `APIReleaseClientCreateOrUpdateResult` of struct `APIReleaseClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIReleaseClientCreateOrUpdateResponse` has been removed
+- Field `CacheClientGetEntityTagResult` of struct `CacheClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `CacheClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `AuthorizationServerClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `GatewayClientRegenerateKeyResponse` has been removed
+- Field `APIExportClientGetResult` of struct `APIExportClientGetResponse` has been removed
+- Field `RawResponse` of struct `APIExportClientGetResponse` has been removed
+- Field `SubscriptionClientCreateOrUpdateResult` of struct `SubscriptionClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `TenantConfigurationClientDeployPollerResponse` has been removed
+- Field `OpenIDConnectProviderClientListSecretsResult` of struct `OpenIDConnectProviderClientListSecretsResponse` has been removed
+- Field `RawResponse` of struct `OpenIDConnectProviderClientListSecretsResponse` has been removed
+- Field `RawResponse` of struct `PortalRevisionClientUpdatePollerResponse` has been removed
+- Field `NamedValueClientListByServiceResult` of struct `NamedValueClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `NamedValueClientListByServiceResponse` has been removed
+- Field `ProductSubscriptionsClientListResult` of struct `ProductSubscriptionsClientListResponse` has been removed
+- Field `RawResponse` of struct `ProductSubscriptionsClientListResponse` has been removed
+- Field `SKUsClientListResult` of struct `SKUsClientListResponse` has been removed
+- Field `RawResponse` of struct `SKUsClientListResponse` has been removed
+- Field `DiagnosticClientListByServiceResult` of struct `DiagnosticClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticClientListByServiceResponse` has been removed
+- Field `ProductGroupClientCreateOrUpdateResult` of struct `ProductGroupClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProductGroupClientCreateOrUpdateResponse` has been removed
+- Field `PrivateEndpointConnectionClientListPrivateLinkResourcesResult` of struct `PrivateEndpointConnectionClientListPrivateLinkResourcesResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientListPrivateLinkResourcesResponse` has been removed
+- Field `TenantConfigurationClientValidateResult` of struct `TenantConfigurationClientValidateResponse` has been removed
+- Field `RawResponse` of struct `TenantConfigurationClientValidateResponse` has been removed
+- Field `IdentityProviderClientListByServiceResult` of struct `IdentityProviderClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `IdentityProviderClientListByServiceResponse` has been removed
+- Field `APIClientListByServiceResult` of struct `APIClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `APIClientListByServiceResponse` has been removed
+- Field `TagClientGetByAPIResult` of struct `TagClientGetByAPIResponse` has been removed
+- Field `RawResponse` of struct `TagClientGetByAPIResponse` has been removed
+- Field `PolicyClientCreateOrUpdateResult` of struct `PolicyClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PolicyClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `CacheClientDeleteResponse` has been removed
+- Field `PolicyClientListByServiceResult` of struct `PolicyClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `PolicyClientListByServiceResponse` has been removed
+- Field `PolicyClientGetResult` of struct `PolicyClientGetResponse` has been removed
+- Field `RawResponse` of struct `PolicyClientGetResponse` has been removed
+- Field `APIReleaseClientUpdateResult` of struct `APIReleaseClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIReleaseClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `LoggerClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `APIDiagnosticClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ContentTypeClientDeleteResponse` has been removed
+- Field `SubscriptionClientListSecretsResult` of struct `SubscriptionClientListSecretsResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionClientListSecretsResponse` has been removed
+- Field `ReportsClientListByTimeResult` of struct `ReportsClientListByTimeResponse` has been removed
+- Field `RawResponse` of struct `ReportsClientListByTimeResponse` has been removed
+- Field `TagClientGetEntityStateResult` of struct `TagClientGetEntityStateResponse` has been removed
+- Field `RawResponse` of struct `TagClientGetEntityStateResponse` has been removed
+- Field `ProductClientGetEntityTagResult` of struct `ProductClientGetEntityTagResponse` has been removed
+- Field `RawResponse` of struct `ProductClientGetEntityTagResponse` has been removed
+- Field `APIReleaseClientListByServiceResult` of struct `APIReleaseClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `APIReleaseClientListByServiceResponse` has been removed
+
+### Features Added
+
+- New function `*APIDiagnosticClientListByServicePager.More() bool`
+- New function `*ReportsClientListByAPIPager.More() bool`
+- New function `*SubscriptionClientListPager.More() bool`
+- New function `*ProductAPIClientListByProductPager.More() bool`
+- New function `*NotificationClientListByServicePager.More() bool`
+- New function `*UserClientListByServicePager.More() bool`
+- New function `*APIIssueAttachmentClientListByServicePager.More() bool`
+- New function `*APIIssueCommentClientListByServicePager.More() bool`
+- New function `*ServiceClientListPager.More() bool`
+- New function `*ReportsClientListByUserPager.More() bool`
+- New function `*GatewayCertificateAuthorityClientListByServicePager.More() bool`
+- New function `*ProductSubscriptionsClientListPager.More() bool`
+- New function `*APIClientListByTagsPager.More() bool`
+- New function `*OperationClientListByTagsPager.More() bool`
+- New function `*ProductGroupClientListByProductPager.More() bool`
+- New function `*ReportsClientListByGeoPager.More() bool`
+- New function `*TagClientListByServicePager.More() bool`
+- New function `*APIProductClientListByApisPager.More() bool`
+- New function `*ReportsClientListByRequestPager.NextPage(context.Context) (ReportsClientListByRequestResponse, error)`
+- New function `*LoggerClientListByServicePager.More() bool`
+- New function `*PrivateEndpointConnectionClientListByServicePager.NextPage(context.Context) (PrivateEndpointConnectionClientListByServiceResponse, error)`
+- New function `*OpenIDConnectProviderClientListByServicePager.More() bool`
+- New function `*TenantAccessClientListByServicePager.More() bool`
+- New function `*ServiceSKUsClientListAvailableServiceSKUsPager.More() bool`
+- New function `*ReportsClientListByTimePager.More() bool`
+- New function `*APIRevisionClientListByServicePager.More() bool`
+- New function `*ServiceClientListByResourceGroupPager.More() bool`
+- New function `*PortalRevisionClientListByServicePager.More() bool`
+- New function `*APITagDescriptionClientListByServicePager.More() bool`
+- New function `*TagClientListByOperationPager.More() bool`
+- New function `*TagClientListByProductPager.More() bool`
+- New function `*GatewayClientListByServicePager.More() bool`
+- New function `*UserIdentitiesClientListPager.More() bool`
+- New function `*GroupUserClientListPager.More() bool`
+- New function `*TagClientListByAPIPager.More() bool`
+- New function `*IdentityProviderClientListByServicePager.More() bool`
+- New function `*AuthorizationServerClientListByServicePager.More() bool`
+- New function `*GatewayHostnameConfigurationClientListByServicePager.More() bool`
+- New function `*BackendClientListByServicePager.More() bool`
+- New function `*EmailTemplateClientListByServicePager.More() bool`
+- New function `*TenantSettingsClientListByServicePager.More() bool`
+- New function `*APISchemaClientListByAPIPager.More() bool`
+- New function `*DiagnosticClientListByServicePager.More() bool`
+- New function `*GatewayAPIClientListByServicePager.More() bool`
+- New function `*ContentItemClientListByServicePager.More() bool`
+- New function `*APIIssueClientListByServicePager.More() bool`
+- New function `*SKUsClientListPager.More() bool`
+- New function `*APIClientListByServicePager.More() bool`
+- New function `*ReportsClientListByOperationPager.More() bool`
+- New function `*GroupClientListByServicePager.More() bool`
+- New function `*APIVersionSetClientListByServicePager.More() bool`
+- New function `*TagResourceClientListByServicePager.More() bool`
+- New function `*RegionClientListByServicePager.More() bool`
+- New function `*ReportsClientListByProductPager.More() bool`
+- New function `*CertificateClientListByServicePager.More() bool`
+- New function `*GlobalSchemaClientListByServicePager.More() bool`
+- New function `*ProductClientListByTagsPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*CacheClientListByServicePager.More() bool`
+- New function `*ProductClientListByServicePager.More() bool`
+- New function `*PrivateEndpointConnectionClientListByServicePager.More() bool`
+- New function `*NamedValueClientListByServicePager.More() bool`
+- New function `*ContentTypeClientListByServicePager.More() bool`
+- New function `*APIOperationClientListByAPIPager.More() bool`
+- New function `*UserSubscriptionClientListPager.More() bool`
+- New function `*DeletedServicesClientListBySubscriptionPager.More() bool`
+- New function `*APIReleaseClientListByServicePager.More() bool`
+- New function `*ReportsClientListBySubscriptionPager.More() bool`
+- New function `*IssueClientListByServicePager.More() bool`
+- New function `*ReportsClientListByRequestPager.More() bool`
+- New function `*UserGroupClientListPager.More() bool`
+- New struct `APIRevisionInfoContract`
+- New struct `ErrorResponse`
+- New struct `PrivateEndpointConnectionClientListByServicePager`
+- New struct `QuotaCounterValueContract`
+- New struct `ReportsClientListByRequestPager`
+- New anonymous field `ServiceGetSsoTokenResult` in struct `ServiceClientGetSsoTokenResponse`
+- New anonymous field `ContentTypeContract` in struct `ContentTypeClientGetResponse`
+- New field `ETag` in struct `ContentTypeClientGetResponse`
+- New anonymous field `ServiceListResult` in struct `ServiceClientListByResourceGroupResponse`
+- New anonymous field `RecipientEmailContract` in struct `NotificationRecipientEmailClientCreateOrUpdateResponse`
+- New anonymous field `GroupContract` in struct `GroupClientCreateOrUpdateResponse`
+- New field `ETag` in struct `GroupClientCreateOrUpdateResponse`
+- New anonymous field `ConnectivityCheckResponse` in struct `ClientPerformConnectivityCheckAsyncResponse`
+- New field `ETag` in struct `GatewayHostnameConfigurationClientGetEntityTagResponse`
+- New field `Success` in struct `GatewayHostnameConfigurationClientGetEntityTagResponse`
+- New anonymous field `GlobalSchemaContract` in struct `GlobalSchemaClientGetResponse`
+- New field `ETag` in struct `GlobalSchemaClientGetResponse`
+- New anonymous field `PortalSignupSettings` in struct `SignUpSettingsClientGetResponse`
+- New field `ETag` in struct `SignUpSettingsClientGetResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `PrivateEndpointConnectionClientListPrivateLinkResourcesResponse`
+- New anonymous field `ReportCollection` in struct `ReportsClientListByProductResponse`
+- New anonymous field `UserIdentityCollection` in struct `UserIdentitiesClientListResponse`
+- New anonymous field `PolicyCollection` in struct `ProductPolicyClientListByProductResponse`
+- New anonymous field `GroupContract` in struct `GroupClientGetResponse`
+- New field `ETag` in struct `GroupClientGetResponse`
+- New anonymous field `IssueContract` in struct `IssueClientGetResponse`
+- New field `ETag` in struct `IssueClientGetResponse`
+- New anonymous field `ReportCollection` in struct `ReportsClientListByAPIResponse`
+- New anonymous field `ContentItemCollection` in struct `ContentItemClientListByServiceResponse`
+- New anonymous field `DiagnosticContract` in struct `APIDiagnosticClientCreateOrUpdateResponse`
+- New field `ETag` in struct `APIDiagnosticClientCreateOrUpdateResponse`
+- New anonymous field `APIVersionSetContract` in struct `APIVersionSetClientUpdateResponse`
+- New field `ETag` in struct `APIVersionSetClientUpdateResponse`
+- New anonymous field `ServiceResource` in struct `ServiceClientUpdateResponse`
+- New anonymous field `APIContract` in struct `ProductAPIClientCreateOrUpdateResponse`
+- New anonymous field `UserContract` in struct `UserClientGetResponse`
+- New field `ETag` in struct `UserClientGetResponse`
+- New field `ETag` in struct `BackendClientGetEntityTagResponse`
+- New field `Success` in struct `BackendClientGetEntityTagResponse`
+- New anonymous field `ProductContract` in struct `ProductClientUpdateResponse`
+- New field `ETag` in struct `ProductClientUpdateResponse`
+- New anonymous field `ClientSecretContract` in struct `IdentityProviderClientListSecretsResponse`
+- New field `ETag` in struct `IdentityProviderClientListSecretsResponse`
+- New anonymous field `NamedValueContract` in struct `NamedValueClientRefreshSecretResponse`
+- New anonymous field `ServiceResource` in struct `ServiceClientGetResponse`
+- New anonymous field `TenantConfigurationSyncStateContract` in struct `TenantConfigurationClientGetSyncStateResponse`
+- New anonymous field `NamedValueSecretContract` in struct `NamedValueClientListValueResponse`
+- New field `ETag` in struct `NamedValueClientListValueResponse`
+- New anonymous field `TenantSettingsCollection` in struct `TenantSettingsClientListByServiceResponse`
+- New field `Success` in struct `GroupUserClientCheckEntityExistsResponse`
+- New anonymous field `PolicyContract` in struct `APIOperationPolicyClientCreateOrUpdateResponse`
+- New field `ETag` in struct `APIOperationPolicyClientCreateOrUpdateResponse`
+- New anonymous field `ServiceResource` in struct `ServiceClientDeleteResponse`
+- New anonymous field `IssueCollection` in struct `IssueClientListByServiceResponse`
+- New anonymous field `TenantSettingsContract` in struct `TenantSettingsClientGetResponse`
+- New field `ETag` in struct `TenantSettingsClientGetResponse`
+- New anonymous field `UserContract` in struct `UserClientUpdateResponse`
+- New field `ETag` in struct `UserClientUpdateResponse`
+- New anonymous field `TagContract` in struct `TagClientGetByOperationResponse`
+- New field `ETag` in struct `TagClientGetByOperationResponse`
+- New anonymous field `SubscriptionCollection` in struct `ProductSubscriptionsClientListResponse`
+- New anonymous field `PolicyContract` in struct `APIPolicyClientCreateOrUpdateResponse`
+- New field `ETag` in struct `APIPolicyClientCreateOrUpdateResponse`
+- New anonymous field `APIExportResult` in struct `APIExportClientGetResponse`
+- New anonymous field `PortalSigninSettings` in struct `SignInSettingsClientGetResponse`
+- New field `ETag` in struct `SignInSettingsClientGetResponse`
+- New anonymous field `DiagnosticCollection` in struct `DiagnosticClientListByServiceResponse`
+- New anonymous field `CertificateCollection` in struct `CertificateClientListByServiceResponse`
+- New anonymous field `ReportCollection` in struct `ReportsClientListByTimeResponse`
+- New anonymous field `IdentityProviderContract` in struct `IdentityProviderClientUpdateResponse`
+- New field `ETag` in struct `IdentityProviderClientUpdateResponse`
+- New anonymous field `DiagnosticCollection` in struct `APIDiagnosticClientListByServiceResponse`
+- New anonymous field `PolicyContract` in struct `APIPolicyClientGetResponse`
+- New field `ETag` in struct `APIPolicyClientGetResponse`
+- New anonymous field `IssueCommentContract` in struct `APIIssueCommentClientGetResponse`
+- New field `ETag` in struct `APIIssueCommentClientGetResponse`
+- New anonymous field `GenerateSsoURLResult` in struct `UserClientGenerateSsoURLResponse`
+- New anonymous field `LoggerContract` in struct `LoggerClientUpdateResponse`
+- New field `ETag` in struct `LoggerClientUpdateResponse`
+- New anonymous field `ProductContract` in struct `ProductClientGetResponse`
+- New field `ETag` in struct `ProductClientGetResponse`
+- New field `ETag` in struct `APIClientGetEntityTagResponse`
+- New field `Success` in struct `APIClientGetEntityTagResponse`
+- New anonymous field `ServiceResource` in struct `ServiceClientApplyNetworkConfigurationUpdatesResponse`
+- New anonymous field `TagResourceCollection` in struct `TagResourceClientListByServiceResponse`
+- New anonymous field `QuotaCounterContract` in struct `QuotaByPeriodKeysClientGetResponse`
+- New anonymous field `PolicyDescriptionCollection` in struct `PolicyDescriptionClientListByServiceResponse`
+- New anonymous field `IssueCollection` in struct `APIIssueClientListByServiceResponse`
+- New anonymous field `GatewayCollection` in struct `GatewayClientListByServiceResponse`
+- New anonymous field `IssueContract` in struct `APIIssueClientUpdateResponse`
+- New field `ETag` in struct `APIIssueClientUpdateResponse`
+- New anonymous field `IssueCommentCollection` in struct `APIIssueCommentClientListByServiceResponse`
+- New field `ETag` in struct `DelegationSettingsClientGetEntityTagResponse`
+- New field `Success` in struct `DelegationSettingsClientGetEntityTagResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionClientGetByNameResponse`
+- New field `ETag` in struct `NamedValueClientGetEntityTagResponse`
+- New field `Success` in struct `NamedValueClientGetEntityTagResponse`
+- New field `ETag` in struct `APIIssueClientGetEntityTagResponse`
+- New field `Success` in struct `APIIssueClientGetEntityTagResponse`
+- New anonymous field `ResourceSKUResults` in struct `ServiceSKUsClientListAvailableServiceSKUsResponse`
+- New anonymous field `PolicyContract` in struct `ProductPolicyClientGetResponse`
+- New field `ETag` in struct `ProductPolicyClientGetResponse`
+- New field `ETag` in struct `TagClientGetEntityStateByProductResponse`
+- New field `Success` in struct `TagClientGetEntityStateByProductResponse`
+- New anonymous field `DeletedServicesCollection` in struct `DeletedServicesClientListBySubscriptionResponse`
+- New anonymous field `AccessInformationSecretsContract` in struct `TenantAccessClientListSecretsResponse`
+- New field `ETag` in struct `TenantAccessClientListSecretsResponse`
+- New anonymous field `ServiceResource` in struct `ServiceClientBackupResponse`
+- New anonymous field `LoggerContract` in struct `LoggerClientCreateOrUpdateResponse`
+- New field `ETag` in struct `LoggerClientCreateOrUpdateResponse`
+- New anonymous field `DeletedServiceContract` in struct `DeletedServicesClientGetByNameResponse`
+- New anonymous field `GroupContract` in struct `GroupClientUpdateResponse`
+- New field `ETag` in struct `GroupClientUpdateResponse`
+- New anonymous field `PortalRevisionCollection` in struct `PortalRevisionClientListByServiceResponse`
+- New anonymous field `APIReleaseContract` in struct `APIReleaseClientCreateOrUpdateResponse`
+- New field `ETag` in struct `APIReleaseClientCreateOrUpdateResponse`
+- New anonymous field `TagCollection` in struct `TagClientListByProductResponse`
+- New anonymous field `PolicyContract` in struct `APIOperationPolicyClientGetResponse`
+- New field `ETag` in struct `APIOperationPolicyClientGetResponse`
+- New anonymous field `QuotaCounterContract` in struct `QuotaByPeriodKeysClientUpdateResponse`
+- New anonymous field `APIReleaseContract` in struct `APIReleaseClientGetResponse`
+- New field `ETag` in struct `APIReleaseClientGetResponse`
+- New anonymous field `TagCollection` in struct `TagClientListByServiceResponse`
+- New anonymous field `APICollection` in struct `ProductAPIClientListByProductResponse`
+- New anonymous field `CertificateContract` in struct `CertificateClientGetResponse`
+- New field `ETag` in struct `CertificateClientGetResponse`
+- New anonymous field `APICollection` in struct `APIClientListByServiceResponse`
+- New anonymous field `GatewayHostnameConfigurationContract` in struct `GatewayHostnameConfigurationClientGetResponse`
+- New field `ETag` in struct `GatewayHostnameConfigurationClientGetResponse`
+- New anonymous field `APIContract` in struct `APIClientCreateOrUpdateResponse`
+- New anonymous field `GatewayKeysContract` in struct `GatewayClientListKeysResponse`
+- New field `ETag` in struct `GatewayClientListKeysResponse`
+- New field `ETag` in struct `DiagnosticClientGetEntityTagResponse`
+- New field `Success` in struct `DiagnosticClientGetEntityTagResponse`
+- New anonymous field `AuthorizationServerContract` in struct `AuthorizationServerClientUpdateResponse`
+- New field `ETag` in struct `AuthorizationServerClientUpdateResponse`
+- New anonymous field `UserCollection` in struct `GroupUserClientListResponse`
+- New anonymous field `AccessInformationContract` in struct `TenantAccessClientUpdateResponse`
+- New field `ETag` in struct `TenantAccessClientUpdateResponse`
+- New anonymous field `GatewayCertificateAuthorityCollection` in struct `GatewayCertificateAuthorityClientListByServiceResponse`
+- New anonymous field `RecipientEmailCollection` in struct `NotificationRecipientEmailClientListByNotificationResponse`
+- New anonymous field `TagContract` in struct `TagClientGetResponse`
+- New field `ETag` in struct `TagClientGetResponse`
+- New anonymous field `PortalDelegationSettings` in struct `DelegationSettingsClientGetResponse`
+- New field `ETag` in struct `DelegationSettingsClientGetResponse`
+- New anonymous field `OperationContract` in struct `APIOperationClientGetResponse`
+- New field `ETag` in struct `APIOperationClientGetResponse`
+- New anonymous field `PolicyContract` in struct `PolicyClientCreateOrUpdateResponse`
+- New field `ETag` in struct `PolicyClientCreateOrUpdateResponse`
+- New field `ETag` in struct `LoggerClientGetEntityTagResponse`
+- New field `Success` in struct `LoggerClientGetEntityTagResponse`
+- New anonymous field `TagContract` in struct `TagClientAssignToAPIResponse`
+- New field `ETag` in struct `TagClientAssignToAPIResponse`
+- New anonymous field `IssueCommentContract` in struct `APIIssueCommentClientCreateOrUpdateResponse`
+- New field `ETag` in struct `APIIssueCommentClientCreateOrUpdateResponse`
+- New anonymous field `DeletedServiceContract` in struct `DeletedServicesClientPurgeResponse`
+- New anonymous field `ReportCollection` in struct `ReportsClientListByOperationResponse`
+- New anonymous field `ProductContract` in struct `ProductClientCreateOrUpdateResponse`
+- New field `ETag` in struct `ProductClientCreateOrUpdateResponse`
+- New anonymous field `AccessInformationContract` in struct `TenantAccessClientCreateResponse`
+- New field `ETag` in struct `TenantAccessClientCreateResponse`
+- New anonymous field `GatewayContract` in struct `GatewayClientCreateOrUpdateResponse`
+- New field `ETag` in struct `GatewayClientCreateOrUpdateResponse`
+- New anonymous field `EmailTemplateContract` in struct `EmailTemplateClientGetResponse`
+- New field `ETag` in struct `EmailTemplateClientGetResponse`
+- New anonymous field `TagDescriptionCollection` in struct `APITagDescriptionClientListByServiceResponse`
+- New anonymous field `SKUsResult` in struct `SKUsClientListResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionClientCreateOrUpdateResponse`
+- New anonymous field `ContentItemContract` in struct `ContentItemClientGetResponse`
+- New field `ETag` in struct `ContentItemClientGetResponse`
+- New anonymous field `ReportCollection` in struct `ReportsClientListByUserResponse`
+- New anonymous field `PortalDelegationSettings` in struct `DelegationSettingsClientCreateOrUpdateResponse`
+- New anonymous field `ServiceGetDomainOwnershipIdentifierResult` in struct `ServiceClientGetDomainOwnershipIdentifierResponse`
+- New anonymous field `PolicyCollection` in struct `APIOperationPolicyClientListByOperationResponse`
+- New anonymous field `BackendContract` in struct `BackendClientUpdateResponse`
+- New field `ETag` in struct `BackendClientUpdateResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionClientListByServiceResponse`
+- New anonymous field `DiagnosticContract` in struct `DiagnosticClientGetResponse`
+- New field `ETag` in struct `DiagnosticClientGetResponse`
+- New field `Success` in struct `NotificationRecipientUserClientCheckEntityExistsResponse`
+- New anonymous field `APIContract` in struct `GatewayAPIClientCreateOrUpdateResponse`
+- New anonymous field `QuotaCounterCollection` in struct `QuotaByCounterKeysClientUpdateResponse`
+- New anonymous field `RecipientUserContract` in struct `NotificationRecipientUserClientCreateOrUpdateResponse`
+- New anonymous field `GroupCollection` in struct `ProductGroupClientListByProductResponse`
+- New anonymous field `OperationContract` in struct `APIOperationClientCreateOrUpdateResponse`
+- New field `ETag` in struct `APIOperationClientCreateOrUpdateResponse`
+- New anonymous field `SubscriptionCollection` in struct `SubscriptionClientListResponse`
+- New field `ETag` in struct `TenantAccessClientGetEntityTagResponse`
+- New field `Success` in struct `TenantAccessClientGetEntityTagResponse`
+- New field `ETag` in struct `TagClientGetEntityStateByAPIResponse`
+- New field `Success` in struct `TagClientGetEntityStateByAPIResponse`
+- New anonymous field `TagContract` in struct `TagClientCreateOrUpdateResponse`
+- New field `ETag` in struct `TagClientCreateOrUpdateResponse`
+- New anonymous field `EmailTemplateContract` in struct `EmailTemplateClientCreateOrUpdateResponse`
+- New anonymous field `IssueAttachmentCollection` in struct `APIIssueAttachmentClientListByServiceResponse`
+- New anonymous field `TagDescriptionContract` in struct `APITagDescriptionClientGetResponse`
+- New field `ETag` in struct `APITagDescriptionClientGetResponse`
+- New field `ETag` in struct `APISchemaClientGetEntityTagResponse`
+- New field `Success` in struct `APISchemaClientGetEntityTagResponse`
+- New anonymous field `TagContract` in struct `TagClientUpdateResponse`
+- New field `ETag` in struct `TagClientUpdateResponse`
+- New anonymous field `APIContract` in struct `APIClientGetResponse`
+- New field `ETag` in struct `APIClientGetResponse`
+- New field `Success` in struct `GroupClientGetEntityTagResponse`
+- New field `ETag` in struct `GroupClientGetEntityTagResponse`
+- New anonymous field `PrivateLinkResource` in struct `PrivateEndpointConnectionClientGetPrivateLinkResourceResponse`
+- New anonymous field `ContentTypeCollection` in struct `ContentTypeClientListByServiceResponse`
+- New anonymous field `LoggerCollection` in struct `LoggerClientListByServiceResponse`
+- New anonymous field `UserTokenResult` in struct `UserClientGetSharedAccessTokenResponse`
+- New anonymous field `GatewayCertificateAuthorityContract` in struct `GatewayCertificateAuthorityClientCreateOrUpdateResponse`
+- New field `ETag` in struct `GatewayCertificateAuthorityClientCreateOrUpdateResponse`
+- New anonymous field `PortalSigninSettings` in struct `SignInSettingsClientCreateOrUpdateResponse`
+- New anonymous field `IdentityProviderContract` in struct `IdentityProviderClientGetResponse`
+- New field `ETag` in struct `IdentityProviderClientGetResponse`
+- New field `ETag` in struct `APIVersionSetClientGetEntityTagResponse`
+- New field `Success` in struct `APIVersionSetClientGetEntityTagResponse`
+- New field `Success` in struct `ProductAPIClientCheckEntityExistsResponse`
+- New anonymous field `OpenidConnectProviderContract` in struct `OpenIDConnectProviderClientCreateOrUpdateResponse`
+- New field `ETag` in struct `OpenIDConnectProviderClientCreateOrUpdateResponse`
+- New field `ETag` in struct `APIReleaseClientGetEntityTagResponse`
+- New field `Success` in struct `APIReleaseClientGetEntityTagResponse`
+- New field `Success` in struct `ProductClientGetEntityTagResponse`
+- New field `ETag` in struct `ProductClientGetEntityTagResponse`
+- New anonymous field `PortalSignupSettings` in struct `SignUpSettingsClientCreateOrUpdateResponse`
+- New anonymous field `NotificationContract` in struct `NotificationClientGetResponse`
+- New anonymous field `BackendContract` in struct `BackendClientGetResponse`
+- New field `ETag` in struct `BackendClientGetResponse`
+- New anonymous field `RecipientUserCollection` in struct `NotificationRecipientUserClientListByNotificationResponse`
+- New anonymous field `APIVersionSetCollection` in struct `APIVersionSetClientListByServiceResponse`
+- New anonymous field `OutboundEnvironmentEndpointList` in struct `OutboundNetworkDependenciesEndpointsClientListByServiceResponse`
+- New field `ETag` in struct `GatewayClientGetEntityTagResponse`
+- New field `Success` in struct `GatewayClientGetEntityTagResponse`
+- New anonymous field `AuthorizationServerContract` in struct `AuthorizationServerClientGetResponse`
+- New field `ETag` in struct `AuthorizationServerClientGetResponse`
+- New anonymous field `LoggerContract` in struct `LoggerClientGetResponse`
+- New field `ETag` in struct `LoggerClientGetResponse`
+- New anonymous field `GlobalSchemaCollection` in struct `GlobalSchemaClientListByServiceResponse`
+- New anonymous field `NamedValueCollection` in struct `NamedValueClientListByServiceResponse`
+- New field `ETag` in struct `GlobalSchemaClientGetEntityTagResponse`
+- New field `Success` in struct `GlobalSchemaClientGetEntityTagResponse`
+- New anonymous field `DiagnosticContract` in struct `DiagnosticClientCreateOrUpdateResponse`
+- New field `ETag` in struct `DiagnosticClientCreateOrUpdateResponse`
+- New anonymous field `TagResourceCollection` in struct `OperationClientListByTagsResponse`
+- New anonymous field `AuthorizationServerCollection` in struct `AuthorizationServerClientListByServiceResponse`
+- New anonymous field `SubscriptionContract` in struct `SubscriptionClientUpdateResponse`
+- New field `ETag` in struct `SubscriptionClientUpdateResponse`
+- New anonymous field `OperationResultContract` in struct `TenantConfigurationClientDeployResponse`
+- New anonymous field `ReportCollection` in struct `ReportsClientListBySubscriptionResponse`
+- New anonymous field `DiagnosticContract` in struct `APIDiagnosticClientGetResponse`
+- New field `ETag` in struct `APIDiagnosticClientGetResponse`
+- New anonymous field `CertificateContract` in struct `CertificateClientCreateOrUpdateResponse`
+- New field `ETag` in struct `CertificateClientCreateOrUpdateResponse`
+- New anonymous field `GatewayContract` in struct `GatewayClientGetResponse`
+- New field `ETag` in struct `GatewayClientGetResponse`
+- New anonymous field `NotificationContract` in struct `NotificationClientCreateOrUpdateResponse`
+- New anonymous field `TagResourceCollection` in struct `APIClientListByTagsResponse`
+- New anonymous field `UserContract` in struct `UserClientCreateOrUpdateResponse`
+- New field `ETag` in struct `UserClientCreateOrUpdateResponse`
+- New field `ETag` in struct `APIOperationClientGetEntityTagResponse`
+- New field `Success` in struct `APIOperationClientGetEntityTagResponse`
+- New anonymous field `CacheContract` in struct `CacheClientUpdateResponse`
+- New field `ETag` in struct `CacheClientUpdateResponse`
+- New anonymous field `TagContract` in struct `TagClientGetByProductResponse`
+- New field `ETag` in struct `TagClientGetByProductResponse`
+- New anonymous field `GlobalSchemaContract` in struct `GlobalSchemaClientCreateOrUpdateResponse`
+- New anonymous field `UserCollection` in struct `UserClientListByServiceResponse`
+- New anonymous field `RegionListResult` in struct `RegionClientListByServiceResponse`
+- New field `ETag` in struct `APITagDescriptionClientGetEntityTagResponse`
+- New field `Success` in struct `APITagDescriptionClientGetEntityTagResponse`
+- New anonymous field `GatewayHostnameConfigurationContract` in struct `GatewayHostnameConfigurationClientCreateOrUpdateResponse`
+- New field `ETag` in struct `GatewayHostnameConfigurationClientCreateOrUpdateResponse`
+- New field `Success` in struct `SignInSettingsClientGetEntityTagResponse`
+- New field `ETag` in struct `SignInSettingsClientGetEntityTagResponse`
+- New anonymous field `APIVersionSetContract` in struct `APIVersionSetClientGetResponse`
+- New field `ETag` in struct `APIVersionSetClientGetResponse`
+- New anonymous field `RequestReportCollection` in struct `ReportsClientListByRequestResponse`
+- New anonymous field `PortalRevisionContract` in struct `PortalRevisionClientGetResponse`
+- New field `ETag` in struct `PortalRevisionClientGetResponse`
+- New anonymous field `NotificationCollection` in struct `NotificationClientListByServiceResponse`
+- New anonymous field `DiagnosticContract` in struct `DiagnosticClientUpdateResponse`
+- New field `ETag` in struct `DiagnosticClientUpdateResponse`
+- New anonymous field `IssueAttachmentContract` in struct `APIIssueAttachmentClientCreateOrUpdateResponse`
+- New field `ETag` in struct `APIIssueAttachmentClientCreateOrUpdateResponse`
+- New anonymous field `APIReleaseContract` in struct `APIReleaseClientUpdateResponse`
+- New field `ETag` in struct `APIReleaseClientUpdateResponse`
+- New anonymous field `PortalSettingValidationKeyContract` in struct `DelegationSettingsClientListSecretsResponse`
+- New field `ETag` in struct `AuthorizationServerClientGetEntityTagResponse`
+- New field `Success` in struct `AuthorizationServerClientGetEntityTagResponse`
+- New field `ETag` in struct `SubscriptionClientGetEntityTagResponse`
+- New field `Success` in struct `SubscriptionClientGetEntityTagResponse`
+- New anonymous field `SchemaContract` in struct `APISchemaClientCreateOrUpdateResponse`
+- New field `ETag` in struct `CacheClientGetEntityTagResponse`
+- New field `Success` in struct `CacheClientGetEntityTagResponse`
+- New field `Success` in struct `APIIssueAttachmentClientGetEntityTagResponse`
+- New field `ETag` in struct `APIIssueAttachmentClientGetEntityTagResponse`
+- New field `ETag` in struct `APIIssueCommentClientGetEntityTagResponse`
+- New field `Success` in struct `APIIssueCommentClientGetEntityTagResponse`
+- New anonymous field `GroupContract` in struct `ProductGroupClientCreateOrUpdateResponse`
+- New anonymous field `ServiceResource` in struct `ServiceClientRestoreResponse`
+- New anonymous field `PolicyCollection` in struct `PolicyClientListByServiceResponse`
+- New anonymous field `CertificateContract` in struct `CertificateClientRefreshSecretResponse`
+- New field `ETag` in struct `CertificateClientRefreshSecretResponse`
+- New field `NetworkStatusContractByLocationArray` in struct `NetworkStatusClientListByServiceResponse`
+- New anonymous field `IssueContract` in struct `APIIssueClientGetResponse`
+- New field `ETag` in struct `APIIssueClientGetResponse`
+- New anonymous field `TagContract` in struct `TagClientAssignToOperationResponse`
+- New anonymous field `ServiceNameAvailabilityResult` in struct `ServiceClientCheckNameAvailabilityResponse`
+- New anonymous field `CacheCollection` in struct `CacheClientListByServiceResponse`
+- New field `Success` in struct `APIPolicyClientGetEntityTagResponse`
+- New field `ETag` in struct `APIPolicyClientGetEntityTagResponse`
+- New anonymous field `APIRevisionCollection` in struct `APIRevisionClientListByServiceResponse`
+- New field `ETag` in struct `ProductPolicyClientGetEntityTagResponse`
+- New field `Success` in struct `ProductPolicyClientGetEntityTagResponse`
+- New anonymous field `ServiceResource` in struct `ServiceClientCreateOrUpdateResponse`
+- New anonymous field `OpenIDConnectProviderCollection` in struct `OpenIDConnectProviderClientListByServiceResponse`
+- New field `ETag` in struct `OpenIDConnectProviderClientGetEntityTagResponse`
+- New field `Success` in struct `OpenIDConnectProviderClientGetEntityTagResponse`
+- New anonymous field `ContentTypeContract` in struct `ContentTypeClientCreateOrUpdateResponse`
+- New field `ETag` in struct `ContentTypeClientCreateOrUpdateResponse`
+- New anonymous field `QuotaCounterCollection` in struct `QuotaByCounterKeysClientListByServiceResponse`
+- New anonymous field `APIContract` in struct `APIClientUpdateResponse`
+- New field `ETag` in struct `APIClientUpdateResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `SubscriptionContract` in struct `UserSubscriptionClientGetResponse`
+- New field `ETag` in struct `UserSubscriptionClientGetResponse`
+- New anonymous field `OpenidConnectProviderContract` in struct `OpenIDConnectProviderClientUpdateResponse`
+- New field `ETag` in struct `OpenIDConnectProviderClientUpdateResponse`
+- New anonymous field `PortalRevisionContract` in struct `PortalRevisionClientUpdateResponse`
+- New anonymous field `NetworkStatusContract` in struct `NetworkStatusClientListByLocationResponse`
+- New anonymous field `SubscriptionContract` in struct `SubscriptionClientCreateOrUpdateResponse`
+- New field `ETag` in struct `SubscriptionClientCreateOrUpdateResponse`
+- New field `ETag` in struct `GatewayAPIClientGetEntityTagResponse`
+- New field `Success` in struct `GatewayAPIClientGetEntityTagResponse`
+- New anonymous field `TagCollection` in struct `TagClientListByOperationResponse`
+- New anonymous field `GroupCollection` in struct `GroupClientListByServiceResponse`
+- New anonymous field `PolicyContract` in struct `ProductPolicyClientCreateOrUpdateResponse`
+- New field `ETag` in struct `ProductPolicyClientCreateOrUpdateResponse`
+- New anonymous field `AuthorizationServerContract` in struct `AuthorizationServerClientCreateOrUpdateResponse`
+- New field `ETag` in struct `AuthorizationServerClientCreateOrUpdateResponse`
+- New anonymous field `ServiceListResult` in struct `ServiceClientListResponse`
+- New anonymous field `IdentityProviderList` in struct `IdentityProviderClientListByServiceResponse`
+- New anonymous field `OperationCollection` in struct `APIOperationClientListByAPIResponse`
+- New anonymous field `ContentItemContract` in struct `ContentItemClientCreateOrUpdateResponse`
+- New field `ETag` in struct `ContentItemClientCreateOrUpdateResponse`
+- New anonymous field `PortalSettingsCollection` in struct `PortalSettingsClientListByServiceResponse`
+- New field `ETag` in struct `IdentityProviderClientGetEntityTagResponse`
+- New field `Success` in struct `IdentityProviderClientGetEntityTagResponse`
+- New anonymous field `NamedValueContract` in struct `NamedValueClientGetResponse`
+- New field `ETag` in struct `NamedValueClientGetResponse`
+- New anonymous field `CacheContract` in struct `CacheClientCreateOrUpdateResponse`
+- New field `ETag` in struct `CacheClientCreateOrUpdateResponse`
+- New anonymous field `IssueContract` in struct `APIIssueClientCreateOrUpdateResponse`
+- New field `ETag` in struct `APIIssueClientCreateOrUpdateResponse`
+- New anonymous field `TagResourceCollection` in struct `ProductClientListByTagsResponse`
+- New field `ETag` in struct `ContentItemClientGetEntityTagResponse`
+- New field `Success` in struct `ContentItemClientGetEntityTagResponse`
+- New anonymous field `NamedValueContract` in struct `NamedValueClientCreateOrUpdateResponse`
+- New anonymous field `AccessInformationContract` in struct `TenantAccessClientGetResponse`
+- New field `ETag` in struct `TenantAccessClientGetResponse`
+- New anonymous field `GatewayTokenContract` in struct `GatewayClientGenerateTokenResponse`
+- New anonymous field `GatewayHostnameConfigurationCollection` in struct `GatewayHostnameConfigurationClientListByServiceResponse`
+- New anonymous field `OperationResultContract` in struct `TenantConfigurationClientSaveResponse`
+- New field `Success` in struct `GatewayCertificateAuthorityClientGetEntityTagResponse`
+- New field `ETag` in struct `GatewayCertificateAuthorityClientGetEntityTagResponse`
+- New anonymous field `EmailTemplateContract` in struct `EmailTemplateClientUpdateResponse`
+- New field `ETag` in struct `EmailTemplateClientUpdateResponse`
+- New anonymous field `TagDescriptionContract` in struct `APITagDescriptionClientCreateOrUpdateResponse`
+- New field `ETag` in struct `APITagDescriptionClientCreateOrUpdateResponse`
+- New field `ETag` in struct `APIOperationPolicyClientGetEntityTagResponse`
+- New field `Success` in struct `APIOperationPolicyClientGetEntityTagResponse`
+- New anonymous field `OperationResultContract` in struct `TenantConfigurationClientValidateResponse`
+- New anonymous field `SubscriptionContract` in struct `SubscriptionClientGetResponse`
+- New field `ETag` in struct `SubscriptionClientGetResponse`
+- New anonymous field `AuthorizationServerSecretsContract` in struct `AuthorizationServerClientListSecretsResponse`
+- New field `ETag` in struct `AuthorizationServerClientListSecretsResponse`
+- New field `ETag` in struct `SignUpSettingsClientGetEntityTagResponse`
+- New field `Success` in struct `SignUpSettingsClientGetEntityTagResponse`
+- New anonymous field `BackendContract` in struct `BackendClientCreateOrUpdateResponse`
+- New field `ETag` in struct `BackendClientCreateOrUpdateResponse`
+- New anonymous field `PortalRevisionContract` in struct `PortalRevisionClientCreateOrUpdateResponse`
+- New anonymous field `AccessInformationCollection` in struct `TenantAccessClientListByServiceResponse`
+- New anonymous field `IdentityProviderContract` in struct `IdentityProviderClientCreateOrUpdateResponse`
+- New field `ETag` in struct `IdentityProviderClientCreateOrUpdateResponse`
+- New field `ETag` in struct `CertificateClientGetEntityTagResponse`
+- New field `Success` in struct `CertificateClientGetEntityTagResponse`
+- New anonymous field `ClientSecretContract` in struct `OpenIDConnectProviderClientListSecretsResponse`
+- New field `ETag` in struct `OpenIDConnectProviderClientListSecretsResponse`
+- New field `ETag` in struct `PortalRevisionClientGetEntityTagResponse`
+- New field `Success` in struct `PortalRevisionClientGetEntityTagResponse`
+- New anonymous field `GroupCollection` in struct `UserGroupClientListResponse`
+- New anonymous field `PolicyCollection` in struct `APIPolicyClientListByAPIResponse`
+- New anonymous field `APIVersionSetContract` in struct `APIVersionSetClientCreateOrUpdateResponse`
+- New field `ETag` in struct `APIVersionSetClientCreateOrUpdateResponse`
+- New anonymous field `ProductCollection` in struct `APIProductClientListByApisResponse`
+- New field `Success` in struct `NotificationRecipientEmailClientCheckEntityExistsResponse`
+- New field `Success` in struct `TagClientGetEntityStateByOperationResponse`
+- New field `ETag` in struct `TagClientGetEntityStateByOperationResponse`
+- New anonymous field `EmailTemplateCollection` in struct `EmailTemplateClientListByServiceResponse`
+- New anonymous field `SchemaContract` in struct `APISchemaClientGetResponse`
+- New field `ETag` in struct `APISchemaClientGetResponse`
+- New anonymous field `OperationContract` in struct `APIOperationClientUpdateResponse`
+- New field `ETag` in struct `APIOperationClientUpdateResponse`
+- New anonymous field `TagContract` in struct `TagClientGetByAPIResponse`
+- New field `ETag` in struct `TagClientGetByAPIResponse`
+- New anonymous field `APICollection` in struct `GatewayAPIClientListByServiceResponse`
+- New anonymous field `GatewayContract` in struct `GatewayClientUpdateResponse`
+- New field `ETag` in struct `GatewayClientUpdateResponse`
+- New anonymous field `CacheContract` in struct `CacheClientGetResponse`
+- New field `ETag` in struct `CacheClientGetResponse`
+- New anonymous field `ProductCollection` in struct `ProductClientListByServiceResponse`
+- New anonymous field `NamedValueContract` in struct `NamedValueClientUpdateResponse`
+- New anonymous field `ReportCollection` in struct `ReportsClientListByGeoResponse`
+- New field `ETag` in struct `TagClientGetEntityStateResponse`
+- New field `Success` in struct `TagClientGetEntityStateResponse`
+- New anonymous field `DiagnosticContract` in struct `APIDiagnosticClientUpdateResponse`
+- New field `ETag` in struct `APIDiagnosticClientUpdateResponse`
+- New anonymous field `SchemaCollection` in struct `APISchemaClientListByAPIResponse`
+- New anonymous field `SubscriptionKeysContract` in struct `SubscriptionClientListSecretsResponse`
+- New field `ETag` in struct `SubscriptionClientListSecretsResponse`
+- New anonymous field `UserContract` in struct `GroupUserClientCreateResponse`
+- New anonymous field `TagContract` in struct `TagClientAssignToProductResponse`
+- New field `ETag` in struct `UserClientGetEntityTagResponse`
+- New field `Success` in struct `UserClientGetEntityTagResponse`
+- New anonymous field `IssueAttachmentContract` in struct `APIIssueAttachmentClientGetResponse`
+- New field `ETag` in struct `APIIssueAttachmentClientGetResponse`
+- New anonymous field `GatewayCertificateAuthorityContract` in struct `GatewayCertificateAuthorityClientGetResponse`
+- New field `ETag` in struct `GatewayCertificateAuthorityClientGetResponse`
+- New anonymous field `PolicyContract` in struct `PolicyClientGetResponse`
+- New field `ETag` in struct `PolicyClientGetResponse`
+- New anonymous field `APIReleaseCollection` in struct `APIReleaseClientListByServiceResponse`
+- New anonymous field `OpenidConnectProviderContract` in struct `OpenIDConnectProviderClientGetResponse`
+- New field `ETag` in struct `OpenIDConnectProviderClientGetResponse`
+- New field `ETag` in struct `PolicyClientGetEntityTagResponse`
+- New field `Success` in struct `PolicyClientGetEntityTagResponse`
+- New anonymous field `SubscriptionCollection` in struct `UserSubscriptionClientListResponse`
+- New anonymous field `BackendCollection` in struct `BackendClientListByServiceResponse`
+- New field `Success` in struct `EmailTemplateClientGetEntityTagResponse`
+- New field `ETag` in struct `EmailTemplateClientGetEntityTagResponse`
+- New anonymous field `TagCollection` in struct `TagClientListByAPIResponse`
+- New field `ETag` in struct `APIDiagnosticClientGetEntityTagResponse`
+- New field `Success` in struct `APIDiagnosticClientGetEntityTagResponse`
+- New field `Success` in struct `ProductGroupClientCheckEntityExistsResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `ContentTypeContractProperties.Schema` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `Operation.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `GlobalSchemaContractProperties.Document` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `SchemaDocumentProperties.Definitions` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `SchemaDocumentProperties.Components` has been changed from `map[string]interface{}` to `interface{}`
+- Struct `APIRevisionInfoContract` has been removed
+- Struct `ErrorResponse` has been removed
+- Struct `QuotaCounterValueContract` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

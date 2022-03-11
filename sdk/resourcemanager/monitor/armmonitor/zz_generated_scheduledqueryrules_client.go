@@ -34,17 +34,17 @@ type ScheduledQueryRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewScheduledQueryRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ScheduledQueryRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ScheduledQueryRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *ScheduledQueryRulesClient) createOrUpdateCreateRequest(ctx context
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ScheduledQueryRulesClient) createOrUpdateHandleResponse(resp *http.Response) (ScheduledQueryRulesClientCreateOrUpdateResponse, error) {
-	result := ScheduledQueryRulesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ScheduledQueryRulesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LogSearchRuleResource); err != nil {
 		return ScheduledQueryRulesClientCreateOrUpdateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *ScheduledQueryRulesClient) Delete(ctx context.Context, resourceGro
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ScheduledQueryRulesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ScheduledQueryRulesClientDeleteResponse{RawResponse: resp}, nil
+	return ScheduledQueryRulesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -201,7 +201,7 @@ func (client *ScheduledQueryRulesClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *ScheduledQueryRulesClient) getHandleResponse(resp *http.Response) (ScheduledQueryRulesClientGetResponse, error) {
-	result := ScheduledQueryRulesClientGetResponse{RawResponse: resp}
+	result := ScheduledQueryRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LogSearchRuleResource); err != nil {
 		return ScheduledQueryRulesClientGetResponse{}, err
 	}
@@ -213,19 +213,13 @@ func (client *ScheduledQueryRulesClient) getHandleResponse(resp *http.Response) 
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ScheduledQueryRulesClientListByResourceGroupOptions contains the optional parameters for the ScheduledQueryRulesClient.ListByResourceGroup
 // method.
-func (client *ScheduledQueryRulesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, options *ScheduledQueryRulesClientListByResourceGroupOptions) (ScheduledQueryRulesClientListByResourceGroupResponse, error) {
-	req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-	if err != nil {
-		return ScheduledQueryRulesClientListByResourceGroupResponse{}, err
+func (client *ScheduledQueryRulesClient) ListByResourceGroup(resourceGroupName string, options *ScheduledQueryRulesClientListByResourceGroupOptions) *ScheduledQueryRulesClientListByResourceGroupPager {
+	return &ScheduledQueryRulesClientListByResourceGroupPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ScheduledQueryRulesClientListByResourceGroupResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ScheduledQueryRulesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByResourceGroupHandleResponse(resp)
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -255,7 +249,7 @@ func (client *ScheduledQueryRulesClient) listByResourceGroupCreateRequest(ctx co
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ScheduledQueryRulesClient) listByResourceGroupHandleResponse(resp *http.Response) (ScheduledQueryRulesClientListByResourceGroupResponse, error) {
-	result := ScheduledQueryRulesClientListByResourceGroupResponse{RawResponse: resp}
+	result := ScheduledQueryRulesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LogSearchRuleResourceCollection); err != nil {
 		return ScheduledQueryRulesClientListByResourceGroupResponse{}, err
 	}
@@ -266,19 +260,13 @@ func (client *ScheduledQueryRulesClient) listByResourceGroupHandleResponse(resp 
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ScheduledQueryRulesClientListBySubscriptionOptions contains the optional parameters for the ScheduledQueryRulesClient.ListBySubscription
 // method.
-func (client *ScheduledQueryRulesClient) ListBySubscription(ctx context.Context, options *ScheduledQueryRulesClientListBySubscriptionOptions) (ScheduledQueryRulesClientListBySubscriptionResponse, error) {
-	req, err := client.listBySubscriptionCreateRequest(ctx, options)
-	if err != nil {
-		return ScheduledQueryRulesClientListBySubscriptionResponse{}, err
+func (client *ScheduledQueryRulesClient) ListBySubscription(options *ScheduledQueryRulesClientListBySubscriptionOptions) *ScheduledQueryRulesClientListBySubscriptionPager {
+	return &ScheduledQueryRulesClientListBySubscriptionPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listBySubscriptionCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ScheduledQueryRulesClientListBySubscriptionResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ScheduledQueryRulesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listBySubscriptionHandleResponse(resp)
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -304,7 +292,7 @@ func (client *ScheduledQueryRulesClient) listBySubscriptionCreateRequest(ctx con
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *ScheduledQueryRulesClient) listBySubscriptionHandleResponse(resp *http.Response) (ScheduledQueryRulesClientListBySubscriptionResponse, error) {
-	result := ScheduledQueryRulesClientListBySubscriptionResponse{RawResponse: resp}
+	result := ScheduledQueryRulesClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LogSearchRuleResourceCollection); err != nil {
 		return ScheduledQueryRulesClientListBySubscriptionResponse{}, err
 	}
@@ -361,7 +349,7 @@ func (client *ScheduledQueryRulesClient) updateCreateRequest(ctx context.Context
 
 // updateHandleResponse handles the Update response.
 func (client *ScheduledQueryRulesClient) updateHandleResponse(resp *http.Response) (ScheduledQueryRulesClientUpdateResponse, error) {
-	result := ScheduledQueryRulesClientUpdateResponse{RawResponse: resp}
+	result := ScheduledQueryRulesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LogSearchRuleResource); err != nil {
 		return ScheduledQueryRulesClientUpdateResponse{}, err
 	}

@@ -32,16 +32,16 @@ type LinkerClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLinkerClient(credential azcore.TokenCredential, options *arm.ClientOptions) *LinkerClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LinkerClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -58,9 +58,7 @@ func (client *LinkerClient) BeginCreateOrUpdate(ctx context.Context, resourceURI
 	if err != nil {
 		return LinkerClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := LinkerClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LinkerClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("LinkerClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return LinkerClientCreateOrUpdatePollerResponse{}, err
@@ -117,9 +115,7 @@ func (client *LinkerClient) BeginDelete(ctx context.Context, resourceURI string,
 	if err != nil {
 		return LinkerClientDeletePollerResponse{}, err
 	}
-	result := LinkerClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := LinkerClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("LinkerClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return LinkerClientDeletePollerResponse{}, err
@@ -207,7 +203,7 @@ func (client *LinkerClient) getCreateRequest(ctx context.Context, resourceURI st
 
 // getHandleResponse handles the Get response.
 func (client *LinkerClient) getHandleResponse(resp *http.Response) (LinkerClientGetResponse, error) {
-	result := LinkerClientGetResponse{RawResponse: resp}
+	result := LinkerClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LinkerResource); err != nil {
 		return LinkerClientGetResponse{}, err
 	}
@@ -247,7 +243,7 @@ func (client *LinkerClient) listCreateRequest(ctx context.Context, resourceURI s
 
 // listHandleResponse handles the List response.
 func (client *LinkerClient) listHandleResponse(resp *http.Response) (LinkerClientListResponse, error) {
-	result := LinkerClientListResponse{RawResponse: resp}
+	result := LinkerClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LinkerList); err != nil {
 		return LinkerClientListResponse{}, err
 	}
@@ -296,7 +292,7 @@ func (client *LinkerClient) listConfigurationsCreateRequest(ctx context.Context,
 
 // listConfigurationsHandleResponse handles the ListConfigurations response.
 func (client *LinkerClient) listConfigurationsHandleResponse(resp *http.Response) (LinkerClientListConfigurationsResponse, error) {
-	result := LinkerClientListConfigurationsResponse{RawResponse: resp}
+	result := LinkerClientListConfigurationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceConfigurationResult); err != nil {
 		return LinkerClientListConfigurationsResponse{}, err
 	}
@@ -314,9 +310,7 @@ func (client *LinkerClient) BeginUpdate(ctx context.Context, resourceURI string,
 	if err != nil {
 		return LinkerClientUpdatePollerResponse{}, err
 	}
-	result := LinkerClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LinkerClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("LinkerClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return LinkerClientUpdatePollerResponse{}, err
@@ -373,9 +367,7 @@ func (client *LinkerClient) BeginValidate(ctx context.Context, resourceURI strin
 	if err != nil {
 		return LinkerClientValidatePollerResponse{}, err
 	}
-	result := LinkerClientValidatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LinkerClientValidatePollerResponse{}
 	pt, err := armruntime.NewPoller("LinkerClient.Validate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return LinkerClientValidatePollerResponse{}, err

@@ -35,17 +35,17 @@ type FlowLogsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFlowLogsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FlowLogsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FlowLogsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *FlowLogsClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return FlowLogsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := FlowLogsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := FlowLogsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("FlowLogsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return FlowLogsClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *FlowLogsClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return FlowLogsClientDeletePollerResponse{}, err
 	}
-	result := FlowLogsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := FlowLogsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("FlowLogsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return FlowLogsClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *FlowLogsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *FlowLogsClient) getHandleResponse(resp *http.Response) (FlowLogsClientGetResponse, error) {
-	result := FlowLogsClientGetResponse{RawResponse: resp}
+	result := FlowLogsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FlowLog); err != nil {
 		return FlowLogsClientGetResponse{}, err
 	}
@@ -299,7 +295,7 @@ func (client *FlowLogsClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *FlowLogsClient) listHandleResponse(resp *http.Response) (FlowLogsClientListResponse, error) {
-	result := FlowLogsClientListResponse{RawResponse: resp}
+	result := FlowLogsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FlowLogListResult); err != nil {
 		return FlowLogsClientListResponse{}, err
 	}
@@ -360,7 +356,7 @@ func (client *FlowLogsClient) updateTagsCreateRequest(ctx context.Context, resou
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *FlowLogsClient) updateTagsHandleResponse(resp *http.Response) (FlowLogsClientUpdateTagsResponse, error) {
-	result := FlowLogsClientUpdateTagsResponse{RawResponse: resp}
+	result := FlowLogsClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FlowLog); err != nil {
 		return FlowLogsClientUpdateTagsResponse{}, err
 	}

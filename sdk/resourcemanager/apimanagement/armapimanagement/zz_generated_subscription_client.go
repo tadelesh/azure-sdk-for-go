@@ -36,17 +36,17 @@ type SubscriptionClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSubscriptionClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SubscriptionClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SubscriptionClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -115,7 +115,7 @@ func (client *SubscriptionClient) createOrUpdateCreateRequest(ctx context.Contex
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *SubscriptionClient) createOrUpdateHandleResponse(resp *http.Response) (SubscriptionClientCreateOrUpdateResponse, error) {
-	result := SubscriptionClientCreateOrUpdateResponse{RawResponse: resp}
+	result := SubscriptionClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -145,7 +145,7 @@ func (client *SubscriptionClient) Delete(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SubscriptionClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SubscriptionClientDeleteResponse{RawResponse: resp}, nil
+	return SubscriptionClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -232,7 +232,7 @@ func (client *SubscriptionClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *SubscriptionClient) getHandleResponse(resp *http.Response) (SubscriptionClientGetResponse, error) {
-	result := SubscriptionClientGetResponse{RawResponse: resp}
+	result := SubscriptionClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -292,7 +292,7 @@ func (client *SubscriptionClient) getEntityTagCreateRequest(ctx context.Context,
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *SubscriptionClient) getEntityTagHandleResponse(resp *http.Response) (SubscriptionClientGetEntityTagResponse, error) {
-	result := SubscriptionClientGetEntityTagResponse{RawResponse: resp}
+	result := SubscriptionClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -356,7 +356,7 @@ func (client *SubscriptionClient) listCreateRequest(ctx context.Context, resourc
 
 // listHandleResponse handles the List response.
 func (client *SubscriptionClient) listHandleResponse(resp *http.Response) (SubscriptionClientListResponse, error) {
-	result := SubscriptionClientListResponse{RawResponse: resp}
+	result := SubscriptionClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SubscriptionCollection); err != nil {
 		return SubscriptionClientListResponse{}, err
 	}
@@ -417,7 +417,7 @@ func (client *SubscriptionClient) listSecretsCreateRequest(ctx context.Context, 
 
 // listSecretsHandleResponse handles the ListSecrets response.
 func (client *SubscriptionClient) listSecretsHandleResponse(resp *http.Response) (SubscriptionClientListSecretsResponse, error) {
-	result := SubscriptionClientListSecretsResponse{RawResponse: resp}
+	result := SubscriptionClientListSecretsResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -446,7 +446,7 @@ func (client *SubscriptionClient) RegeneratePrimaryKey(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return SubscriptionClientRegeneratePrimaryKeyResponse{}, runtime.NewResponseError(resp)
 	}
-	return SubscriptionClientRegeneratePrimaryKeyResponse{RawResponse: resp}, nil
+	return SubscriptionClientRegeneratePrimaryKeyResponse{}, nil
 }
 
 // regeneratePrimaryKeyCreateRequest creates the RegeneratePrimaryKey request.
@@ -498,7 +498,7 @@ func (client *SubscriptionClient) RegenerateSecondaryKey(ctx context.Context, re
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return SubscriptionClientRegenerateSecondaryKeyResponse{}, runtime.NewResponseError(resp)
 	}
-	return SubscriptionClientRegenerateSecondaryKeyResponse{RawResponse: resp}, nil
+	return SubscriptionClientRegenerateSecondaryKeyResponse{}, nil
 }
 
 // regenerateSecondaryKeyCreateRequest creates the RegenerateSecondaryKey request.
@@ -594,7 +594,7 @@ func (client *SubscriptionClient) updateCreateRequest(ctx context.Context, resou
 
 // updateHandleResponse handles the Update response.
 func (client *SubscriptionClient) updateHandleResponse(resp *http.Response) (SubscriptionClientUpdateResponse, error) {
-	result := SubscriptionClientUpdateResponse{RawResponse: resp}
+	result := SubscriptionClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

@@ -38,16 +38,15 @@ func (p *ClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Response, 
 	return p.pt.Poll(ctx)
 }
 
-	// FinalResponse performs a final GET to the service and returns the final response
-	// for the polling operation. If there is an error performing the final GET then an error is returned.
-	// If the final GET succeeded then the final ClientCreateOrUpdateResponse will be returned.
+// FinalResponse performs a final GET to the service and returns the final response
+// for the polling operation. If there is an error performing the final GET then an error is returned.
+// If the final GET succeeded then the final ClientCreateOrUpdateResponse will be returned.
 func (p *ClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ClientCreateOrUpdateResponse, error) {
 	respType := ClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ResourceInfo)
+	_, err := p.pt.FinalResponse(ctx, &respType.ResourceInfo)
 	if err != nil {
 		return ClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -81,16 +80,15 @@ func (p *ClientDeletePoller) Poll(ctx context.Context) (*http.Response, error) {
 	return p.pt.Poll(ctx)
 }
 
-	// FinalResponse performs a final GET to the service and returns the final response
-	// for the polling operation. If there is an error performing the final GET then an error is returned.
-	// If the final GET succeeded then the final ClientDeleteResponse will be returned.
+// FinalResponse performs a final GET to the service and returns the final response
+// for the polling operation. If there is an error performing the final GET then an error is returned.
+// If the final GET succeeded then the final ClientDeleteResponse will be returned.
 func (p *ClientDeletePoller) FinalResponse(ctx context.Context) (ClientDeleteResponse, error) {
 	respType := ClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -124,16 +122,15 @@ func (p *ClientRegenerateKeyPoller) Poll(ctx context.Context) (*http.Response, e
 	return p.pt.Poll(ctx)
 }
 
-	// FinalResponse performs a final GET to the service and returns the final response
-	// for the polling operation. If there is an error performing the final GET then an error is returned.
-	// If the final GET succeeded then the final ClientRegenerateKeyResponse will be returned.
+// FinalResponse performs a final GET to the service and returns the final response
+// for the polling operation. If there is an error performing the final GET then an error is returned.
+// If the final GET succeeded then the final ClientRegenerateKeyResponse will be returned.
 func (p *ClientRegenerateKeyPoller) FinalResponse(ctx context.Context) (ClientRegenerateKeyResponse, error) {
 	respType := ClientRegenerateKeyResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Keys)
+	_, err := p.pt.FinalResponse(ctx, &respType.Keys)
 	if err != nil {
 		return ClientRegenerateKeyResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -167,16 +164,15 @@ func (p *ClientRestartPoller) Poll(ctx context.Context) (*http.Response, error) 
 	return p.pt.Poll(ctx)
 }
 
-	// FinalResponse performs a final GET to the service and returns the final response
-	// for the polling operation. If there is an error performing the final GET then an error is returned.
-	// If the final GET succeeded then the final ClientRestartResponse will be returned.
+// FinalResponse performs a final GET to the service and returns the final response
+// for the polling operation. If there is an error performing the final GET then an error is returned.
+// If the final GET succeeded then the final ClientRestartResponse will be returned.
 func (p *ClientRestartPoller) FinalResponse(ctx context.Context) (ClientRestartResponse, error) {
 	respType := ClientRestartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClientRestartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -210,16 +206,15 @@ func (p *ClientUpdatePoller) Poll(ctx context.Context) (*http.Response, error) {
 	return p.pt.Poll(ctx)
 }
 
-	// FinalResponse performs a final GET to the service and returns the final response
-	// for the polling operation. If there is an error performing the final GET then an error is returned.
-	// If the final GET succeeded then the final ClientUpdateResponse will be returned.
+// FinalResponse performs a final GET to the service and returns the final response
+// for the polling operation. If there is an error performing the final GET then an error is returned.
+// If the final GET succeeded then the final ClientUpdateResponse will be returned.
 func (p *ClientUpdatePoller) FinalResponse(ctx context.Context) (ClientUpdateResponse, error) {
 	respType := ClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ResourceInfo)
+	_, err := p.pt.FinalResponse(ctx, &respType.ResourceInfo)
 	if err != nil {
 		return ClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -253,16 +248,15 @@ func (p *PrivateEndpointConnectionsClientDeletePoller) Poll(ctx context.Context)
 	return p.pt.Poll(ctx)
 }
 
-	// FinalResponse performs a final GET to the service and returns the final response
-	// for the polling operation. If there is an error performing the final GET then an error is returned.
-	// If the final GET succeeded then the final PrivateEndpointConnectionsClientDeleteResponse will be returned.
+// FinalResponse performs a final GET to the service and returns the final response
+// for the polling operation. If there is an error performing the final GET then an error is returned.
+// If the final GET succeeded then the final PrivateEndpointConnectionsClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionsClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointConnectionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -296,16 +290,15 @@ func (p *SharedPrivateLinkResourcesClientCreateOrUpdatePoller) Poll(ctx context.
 	return p.pt.Poll(ctx)
 }
 
-	// FinalResponse performs a final GET to the service and returns the final response
-	// for the polling operation. If there is an error performing the final GET then an error is returned.
-	// If the final GET succeeded then the final SharedPrivateLinkResourcesClientCreateOrUpdateResponse will be returned.
+// FinalResponse performs a final GET to the service and returns the final response
+// for the polling operation. If there is an error performing the final GET then an error is returned.
+// If the final GET succeeded then the final SharedPrivateLinkResourcesClientCreateOrUpdateResponse will be returned.
 func (p *SharedPrivateLinkResourcesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (SharedPrivateLinkResourcesClientCreateOrUpdateResponse, error) {
 	respType := SharedPrivateLinkResourcesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SharedPrivateLinkResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.SharedPrivateLinkResource)
 	if err != nil {
 		return SharedPrivateLinkResourcesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -339,16 +332,15 @@ func (p *SharedPrivateLinkResourcesClientDeletePoller) Poll(ctx context.Context)
 	return p.pt.Poll(ctx)
 }
 
-	// FinalResponse performs a final GET to the service and returns the final response
-	// for the polling operation. If there is an error performing the final GET then an error is returned.
-	// If the final GET succeeded then the final SharedPrivateLinkResourcesClientDeleteResponse will be returned.
+// FinalResponse performs a final GET to the service and returns the final response
+// for the polling operation. If there is an error performing the final GET then an error is returned.
+// If the final GET succeeded then the final SharedPrivateLinkResourcesClientDeleteResponse will be returned.
 func (p *SharedPrivateLinkResourcesClientDeletePoller) FinalResponse(ctx context.Context) (SharedPrivateLinkResourcesClientDeleteResponse, error) {
 	respType := SharedPrivateLinkResourcesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SharedPrivateLinkResourcesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -357,4 +349,3 @@ func (p *SharedPrivateLinkResourcesClientDeletePoller) FinalResponse(ctx context
 func (p *SharedPrivateLinkResourcesClientDeletePoller) ResumeToken() (string, error) {
 	return p.pt.ResumeToken()
 }
-

@@ -1,0 +1,312 @@
+# Release History
+
+## 0.2.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ResourceSKUsClientListSKUsPager.NextPage` return value(s) have been changed from `(bool)` to `(ResourceSKUsClientListSKUsResponse, error)`
+- Function `*SQLMigrationServicesClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(SQLMigrationServicesClientListBySubscriptionResponse, error)`
+- Function `*ServicesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ServicesClientListResponse, error)`
+- Function `*ServicesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ServicesClientListByResourceGroupResponse, error)`
+- Function `*SQLMigrationServicesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(SQLMigrationServicesClientListByResourceGroupResponse, error)`
+- Function `*ProjectsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ProjectsClientListResponse, error)`
+- Function `*SQLMigrationServicesClientListMigrationsPager.NextPage` return value(s) have been changed from `(bool)` to `(SQLMigrationServicesClientListMigrationsResponse, error)`
+- Function `*FilesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(FilesClientListResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ServicesClientListSKUsPager.NextPage` return value(s) have been changed from `(bool)` to `(ServicesClientListSKUsResponse, error)`
+- Function `*UsagesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(UsagesClientListResponse, error)`
+- Function `*ServiceTasksClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ServiceTasksClientListResponse, error)`
+- Function `*TasksClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(TasksClientListResponse, error)`
+- Function `*TasksClientListPager.Err` has been removed
+- Function `*ProjectsClientListPager.PageResponse` has been removed
+- Function `*SQLMigrationServicesClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*TasksClientListPager.PageResponse` has been removed
+- Function `*UsagesClientListPager.PageResponse` has been removed
+- Function `*ServiceTasksClientListPager.Err` has been removed
+- Function `*SQLMigrationServicesClientListBySubscriptionPager.Err` has been removed
+- Function `*ServicesClientListPager.Err` has been removed
+- Function `*UsagesClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*SQLMigrationServicesClientListMigrationsPager.PageResponse` has been removed
+- Function `*SQLMigrationServicesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ServicesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ResourceSKUsClientListSKUsPager.Err` has been removed
+- Function `*FilesClientListPager.Err` has been removed
+- Function `*ServiceTasksClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*TasksClientCommandResult.UnmarshalJSON` has been removed
+- Function `*ProjectsClientListPager.Err` has been removed
+- Function `*ServicesClientListSKUsPager.PageResponse` has been removed
+- Function `*ServicesClientListSKUsPager.Err` has been removed
+- Function `*SQLMigrationServicesClientListMigrationsPager.Err` has been removed
+- Function `*ResourceSKUsClientListSKUsPager.PageResponse` has been removed
+- Function `*SQLMigrationServicesClientListByResourceGroupPager.Err` has been removed
+- Function `*FilesClientListPager.PageResponse` has been removed
+- Function `*ServicesClientListByResourceGroupPager.Err` has been removed
+- Function `*ServicesClientListPager.PageResponse` has been removed
+- Struct `DatabaseMigrationsSQLMiClientCreateOrUpdateResult` has been removed
+- Struct `DatabaseMigrationsSQLMiClientGetResult` has been removed
+- Struct `DatabaseMigrationsSQLVMClientCreateOrUpdateResult` has been removed
+- Struct `DatabaseMigrationsSQLVMClientGetResult` has been removed
+- Struct `FilesClientCreateOrUpdateResult` has been removed
+- Struct `FilesClientGetResult` has been removed
+- Struct `FilesClientListResult` has been removed
+- Struct `FilesClientReadResult` has been removed
+- Struct `FilesClientReadWriteResult` has been removed
+- Struct `FilesClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `ProjectsClientCreateOrUpdateResult` has been removed
+- Struct `ProjectsClientGetResult` has been removed
+- Struct `ProjectsClientListResult` has been removed
+- Struct `ProjectsClientUpdateResult` has been removed
+- Struct `ResourceSKUsClientListSKUsResult` has been removed
+- Struct `SQLMigrationServicesClientCreateOrUpdateResult` has been removed
+- Struct `SQLMigrationServicesClientDeleteNodeResult` has been removed
+- Struct `SQLMigrationServicesClientGetResult` has been removed
+- Struct `SQLMigrationServicesClientListAuthKeysResult` has been removed
+- Struct `SQLMigrationServicesClientListByResourceGroupResult` has been removed
+- Struct `SQLMigrationServicesClientListBySubscriptionResult` has been removed
+- Struct `SQLMigrationServicesClientListMigrationsResult` has been removed
+- Struct `SQLMigrationServicesClientListMonitoringDataResult` has been removed
+- Struct `SQLMigrationServicesClientRegenerateAuthKeysResult` has been removed
+- Struct `SQLMigrationServicesClientUpdateResult` has been removed
+- Struct `ServiceTasksClientCancelResult` has been removed
+- Struct `ServiceTasksClientCreateOrUpdateResult` has been removed
+- Struct `ServiceTasksClientGetResult` has been removed
+- Struct `ServiceTasksClientListResult` has been removed
+- Struct `ServiceTasksClientUpdateResult` has been removed
+- Struct `ServicesClientCheckChildrenNameAvailabilityResult` has been removed
+- Struct `ServicesClientCheckNameAvailabilityResult` has been removed
+- Struct `ServicesClientCheckStatusResult` has been removed
+- Struct `ServicesClientCreateOrUpdateResult` has been removed
+- Struct `ServicesClientGetResult` has been removed
+- Struct `ServicesClientListByResourceGroupResult` has been removed
+- Struct `ServicesClientListResult` has been removed
+- Struct `ServicesClientListSKUsResult` has been removed
+- Struct `ServicesClientUpdateResult` has been removed
+- Struct `TasksClientCancelResult` has been removed
+- Struct `TasksClientCommandResult` has been removed
+- Struct `TasksClientCreateOrUpdateResult` has been removed
+- Struct `TasksClientGetResult` has been removed
+- Struct `TasksClientListResult` has been removed
+- Struct `TasksClientUpdateResult` has been removed
+- Struct `UsagesClientListResult` has been removed
+- Field `ServiceTasksClientUpdateResult` of struct `ServiceTasksClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServiceTasksClientUpdateResponse` has been removed
+- Field `ServiceTasksClientListResult` of struct `ServiceTasksClientListResponse` has been removed
+- Field `RawResponse` of struct `ServiceTasksClientListResponse` has been removed
+- Field `RawResponse` of struct `SQLMigrationServicesClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DatabaseMigrationsSQLMiClientCancelResponse` has been removed
+- Field `RawResponse` of struct `SQLMigrationServicesClientDeleteResponse` has been removed
+- Field `ProjectsClientUpdateResult` of struct `ProjectsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientStartResponse` has been removed
+- Field `TasksClientCommandResult` of struct `TasksClientCommandResponse` has been removed
+- Field `RawResponse` of struct `TasksClientCommandResponse` has been removed
+- Field `UsagesClientListResult` of struct `UsagesClientListResponse` has been removed
+- Field `RawResponse` of struct `UsagesClientListResponse` has been removed
+- Field `DatabaseMigrationsSQLMiClientGetResult` of struct `DatabaseMigrationsSQLMiClientGetResponse` has been removed
+- Field `RawResponse` of struct `DatabaseMigrationsSQLMiClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientStopPollerResponse` has been removed
+- Field `RawResponse` of struct `DatabaseMigrationsSQLMiClientCutoverResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `SQLMigrationServicesClientCreateOrUpdateResult` of struct `SQLMigrationServicesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SQLMigrationServicesClientCreateOrUpdateResponse` has been removed
+- Field `ServiceTasksClientCancelResult` of struct `ServiceTasksClientCancelResponse` has been removed
+- Field `RawResponse` of struct `ServiceTasksClientCancelResponse` has been removed
+- Field `ProjectsClientListResult` of struct `ProjectsClientListResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientListResponse` has been removed
+- Field `ServicesClientUpdateResult` of struct `ServicesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientUpdateResponse` has been removed
+- Field `ProjectsClientGetResult` of struct `ProjectsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientGetResponse` has been removed
+- Field `SQLMigrationServicesClientRegenerateAuthKeysResult` of struct `SQLMigrationServicesClientRegenerateAuthKeysResponse` has been removed
+- Field `RawResponse` of struct `SQLMigrationServicesClientRegenerateAuthKeysResponse` has been removed
+- Field `SQLMigrationServicesClientListBySubscriptionResult` of struct `SQLMigrationServicesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `SQLMigrationServicesClientListBySubscriptionResponse` has been removed
+- Field `ServicesClientListByResourceGroupResult` of struct `ServicesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientListByResourceGroupResponse` has been removed
+- Field `TasksClientGetResult` of struct `TasksClientGetResponse` has been removed
+- Field `RawResponse` of struct `TasksClientGetResponse` has been removed
+- Field `TasksClientUpdateResult` of struct `TasksClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `TasksClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DatabaseMigrationsSQLVMClientCancelResponse` has been removed
+- Field `SQLMigrationServicesClientListMonitoringDataResult` of struct `SQLMigrationServicesClientListMonitoringDataResponse` has been removed
+- Field `RawResponse` of struct `SQLMigrationServicesClientListMonitoringDataResponse` has been removed
+- Field `RawResponse` of struct `ServiceTasksClientDeleteResponse` has been removed
+- Field `DatabaseMigrationsSQLMiClientCreateOrUpdateResult` of struct `DatabaseMigrationsSQLMiClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DatabaseMigrationsSQLMiClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DatabaseMigrationsSQLVMClientCutoverPollerResponse` has been removed
+- Field `ServicesClientCheckNameAvailabilityResult` of struct `ServicesClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCheckNameAvailabilityResponse` has been removed
+- Field `SQLMigrationServicesClientListAuthKeysResult` of struct `SQLMigrationServicesClientListAuthKeysResponse` has been removed
+- Field `RawResponse` of struct `SQLMigrationServicesClientListAuthKeysResponse` has been removed
+- Field `ServiceTasksClientGetResult` of struct `ServiceTasksClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServiceTasksClientGetResponse` has been removed
+- Field `RawResponse` of struct `TasksClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientStopResponse` has been removed
+- Field `RawResponse` of struct `SQLMigrationServicesClientCreateOrUpdatePollerResponse` has been removed
+- Field `FilesClientUpdateResult` of struct `FilesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `FilesClientUpdateResponse` has been removed
+- Field `ServiceTasksClientCreateOrUpdateResult` of struct `ServiceTasksClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServiceTasksClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientUpdatePollerResponse` has been removed
+- Field `FilesClientReadWriteResult` of struct `FilesClientReadWriteResponse` has been removed
+- Field `RawResponse` of struct `FilesClientReadWriteResponse` has been removed
+- Field `ResourceSKUsClientListSKUsResult` of struct `ResourceSKUsClientListSKUsResponse` has been removed
+- Field `RawResponse` of struct `ResourceSKUsClientListSKUsResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCreateOrUpdatePollerResponse` has been removed
+- Field `SQLMigrationServicesClientUpdateResult` of struct `SQLMigrationServicesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SQLMigrationServicesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientStartPollerResponse` has been removed
+- Field `TasksClientCancelResult` of struct `TasksClientCancelResponse` has been removed
+- Field `RawResponse` of struct `TasksClientCancelResponse` has been removed
+- Field `ServicesClientCheckStatusResult` of struct `ServicesClientCheckStatusResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCheckStatusResponse` has been removed
+- Field `DatabaseMigrationsSQLVMClientGetResult` of struct `DatabaseMigrationsSQLVMClientGetResponse` has been removed
+- Field `RawResponse` of struct `DatabaseMigrationsSQLVMClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientDeleteResponse` has been removed
+- Field `TasksClientListResult` of struct `TasksClientListResponse` has been removed
+- Field `RawResponse` of struct `TasksClientListResponse` has been removed
+- Field `RawResponse` of struct `DatabaseMigrationsSQLMiClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientDeletePollerResponse` has been removed
+- Field `ServicesClientGetResult` of struct `ServicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `DatabaseMigrationsSQLMiClientCutoverPollerResponse` has been removed
+- Field `FilesClientGetResult` of struct `FilesClientGetResponse` has been removed
+- Field `RawResponse` of struct `FilesClientGetResponse` has been removed
+- Field `FilesClientListResult` of struct `FilesClientListResponse` has been removed
+- Field `RawResponse` of struct `FilesClientListResponse` has been removed
+- Field `FilesClientReadResult` of struct `FilesClientReadResponse` has been removed
+- Field `RawResponse` of struct `FilesClientReadResponse` has been removed
+- Field `RawResponse` of struct `SQLMigrationServicesClientDeletePollerResponse` has been removed
+- Field `SQLMigrationServicesClientListByResourceGroupResult` of struct `SQLMigrationServicesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SQLMigrationServicesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `DatabaseMigrationsSQLVMClientCreateOrUpdatePollerResponse` has been removed
+- Field `SQLMigrationServicesClientGetResult` of struct `SQLMigrationServicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `SQLMigrationServicesClientGetResponse` has been removed
+- Field `ServicesClientCreateOrUpdateResult` of struct `ServicesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCreateOrUpdateResponse` has been removed
+- Field `SQLMigrationServicesClientDeleteNodeResult` of struct `SQLMigrationServicesClientDeleteNodeResponse` has been removed
+- Field `RawResponse` of struct `SQLMigrationServicesClientDeleteNodeResponse` has been removed
+- Field `ProjectsClientCreateOrUpdateResult` of struct `ProjectsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientCreateOrUpdateResponse` has been removed
+- Field `ServicesClientCheckChildrenNameAvailabilityResult` of struct `ServicesClientCheckChildrenNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCheckChildrenNameAvailabilityResponse` has been removed
+- Field `ServicesClientListSKUsResult` of struct `ServicesClientListSKUsResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientListSKUsResponse` has been removed
+- Field `RawResponse` of struct `DatabaseMigrationsSQLMiClientCancelPollerResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `FilesClientDeleteResponse` has been removed
+- Field `TasksClientCreateOrUpdateResult` of struct `TasksClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `TasksClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DatabaseMigrationsSQLVMClientCutoverResponse` has been removed
+- Field `FilesClientCreateOrUpdateResult` of struct `FilesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `FilesClientCreateOrUpdateResponse` has been removed
+- Field `SQLMigrationServicesClientListMigrationsResult` of struct `SQLMigrationServicesClientListMigrationsResponse` has been removed
+- Field `RawResponse` of struct `SQLMigrationServicesClientListMigrationsResponse` has been removed
+- Field `DatabaseMigrationsSQLVMClientCreateOrUpdateResult` of struct `DatabaseMigrationsSQLVMClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DatabaseMigrationsSQLVMClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DatabaseMigrationsSQLVMClientCancelPollerResponse` has been removed
+- Field `ServicesClientListResult` of struct `ServicesClientListResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientListResponse` has been removed
+
+### Features Added
+
+- New function `StartMigrationScenarioServerRoleResult.MarshalJSON() ([]byte, error)`
+- New function `*ServicesClientListByResourceGroupPager.More() bool`
+- New function `*DataItemMigrationSummaryResult.UnmarshalJSON([]byte) error`
+- New function `*SQLMigrationServicesClientListMigrationsPager.More() bool`
+- New function `*NonSQLMigrationTaskOutput.UnmarshalJSON([]byte) error`
+- New function `NonSQLMigrationTaskInput.MarshalJSON() ([]byte, error)`
+- New function `*ServicesClientListPager.More() bool`
+- New function `*UsagesClientListPager.More() bool`
+- New function `*TasksClientCommandResponse.UnmarshalJSON([]byte) error`
+- New function `*ProjectsClientListPager.More() bool`
+- New function `*SQLMigrationServicesClientListByResourceGroupPager.More() bool`
+- New function `*FilesClientListPager.More() bool`
+- New function `*ServiceTasksClientListPager.More() bool`
+- New function `DatabaseSummaryResult.MarshalJSON() ([]byte, error)`
+- New function `*ResourceSKUsClientListSKUsPager.More() bool`
+- New function `*TasksClientListPager.More() bool`
+- New function `*SQLMigrationServicesClientListBySubscriptionPager.More() bool`
+- New function `NonSQLMigrationTaskOutput.MarshalJSON() ([]byte, error)`
+- New function `MigrateSQLServerDatabaseInput.MarshalJSON() ([]byte, error)`
+- New function `ServiceOperationList.MarshalJSON() ([]byte, error)`
+- New function `*ServicesClientListSKUsPager.More() bool`
+- New function `ProjectMetadata.MarshalJSON() ([]byte, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `NonSQLDataMigrationTableResult.MarshalJSON() ([]byte, error)`
+- New function `DataItemMigrationSummaryResult.MarshalJSON() ([]byte, error)`
+- New function `*DatabaseSummaryResult.UnmarshalJSON([]byte) error`
+- New struct `APIError`
+- New struct `DataItemMigrationSummaryResult`
+- New struct `Database`
+- New struct `DatabaseFileInput`
+- New struct `DatabaseObjectName`
+- New struct `DatabaseSummaryResult`
+- New struct `Error`
+- New struct `GetProjectDetailsNonSQLTaskInput`
+- New struct `MigrateSQLServerDatabaseInput`
+- New struct `MigrationTableMetadata`
+- New struct `NonSQLDataMigrationTable`
+- New struct `NonSQLDataMigrationTableResult`
+- New struct `NonSQLMigrationTaskInput`
+- New struct `NonSQLMigrationTaskOutput`
+- New struct `ProjectMetadata`
+- New struct `ServiceOperation`
+- New struct `ServiceOperationDisplay`
+- New struct `ServiceOperationList`
+- New struct `StartMigrationScenarioServerRoleResult`
+- New anonymous field `Service` in struct `ServicesClientGetResponse`
+- New anonymous field `AuthenticationKeys` in struct `SQLMigrationServicesClientListAuthKeysResponse`
+- New anonymous field `Project` in struct `ProjectsClientCreateOrUpdateResponse`
+- New anonymous field `Service` in struct `ServicesClientUpdateResponse`
+- New anonymous field `DatabaseMigrationSQLVM` in struct `DatabaseMigrationsSQLVMClientGetResponse`
+- New anonymous field `TaskList` in struct `TasksClientListResponse`
+- New anonymous field `NameAvailabilityResponse` in struct `ServicesClientCheckChildrenNameAvailabilityResponse`
+- New anonymous field `SQLMigrationListResult` in struct `SQLMigrationServicesClientListBySubscriptionResponse`
+- New anonymous field `FileStorageInfo` in struct `FilesClientReadResponse`
+- New anonymous field `Project` in struct `ProjectsClientUpdateResponse`
+- New anonymous field `ServiceSKUList` in struct `ServicesClientListSKUsResponse`
+- New anonymous field `ProjectTask` in struct `ServiceTasksClientCancelResponse`
+- New anonymous field `DeleteNode` in struct `SQLMigrationServicesClientDeleteNodeResponse`
+- New anonymous field `ProjectTask` in struct `ServiceTasksClientCreateOrUpdateResponse`
+- New anonymous field `ProjectFile` in struct `FilesClientGetResponse`
+- New anonymous field `FileStorageInfo` in struct `FilesClientReadWriteResponse`
+- New anonymous field `SQLMigrationService` in struct `SQLMigrationServicesClientUpdateResponse`
+- New anonymous field `ProjectFile` in struct `FilesClientUpdateResponse`
+- New anonymous field `ProjectTask` in struct `TasksClientGetResponse`
+- New anonymous field `IntegrationRuntimeMonitoringData` in struct `SQLMigrationServicesClientListMonitoringDataResponse`
+- New anonymous field `TaskList` in struct `ServiceTasksClientListResponse`
+- New anonymous field `RegenAuthKeys` in struct `SQLMigrationServicesClientRegenerateAuthKeysResponse`
+- New anonymous field `Project` in struct `ProjectsClientGetResponse`
+- New anonymous field `SQLMigrationListResult` in struct `SQLMigrationServicesClientListByResourceGroupResponse`
+- New anonymous field `ProjectList` in struct `ProjectsClientListResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `ProjectTask` in struct `TasksClientUpdateResponse`
+- New anonymous field `ProjectFile` in struct `FilesClientCreateOrUpdateResponse`
+- New anonymous field `CommandPropertiesClassification` in struct `TasksClientCommandResponse`
+- New anonymous field `ResourceSKUsResult` in struct `ResourceSKUsClientListSKUsResponse`
+- New anonymous field `ProjectTask` in struct `TasksClientCreateOrUpdateResponse`
+- New anonymous field `ServiceStatusResponse` in struct `ServicesClientCheckStatusResponse`
+- New anonymous field `ServiceList` in struct `ServicesClientListResponse`
+- New anonymous field `SQLMigrationService` in struct `SQLMigrationServicesClientCreateOrUpdateResponse`
+- New anonymous field `QuotaList` in struct `UsagesClientListResponse`
+- New anonymous field `ServiceList` in struct `ServicesClientListByResourceGroupResponse`
+- New anonymous field `FileList` in struct `FilesClientListResponse`
+- New anonymous field `DatabaseMigrationSQLVM` in struct `DatabaseMigrationsSQLVMClientCreateOrUpdateResponse`
+- New anonymous field `DatabaseMigrationSQLMi` in struct `DatabaseMigrationsSQLMiClientCreateOrUpdateResponse`
+- New anonymous field `NameAvailabilityResponse` in struct `ServicesClientCheckNameAvailabilityResponse`
+- New anonymous field `Service` in struct `ServicesClientCreateOrUpdateResponse`
+- New anonymous field `ProjectTask` in struct `ServiceTasksClientUpdateResponse`
+- New anonymous field `DatabaseMigrationListResult` in struct `SQLMigrationServicesClientListMigrationsResponse`
+- New anonymous field `DatabaseMigrationSQLMi` in struct `DatabaseMigrationsSQLMiClientGetResponse`
+- New anonymous field `ProjectTask` in struct `TasksClientCancelResponse`
+- New anonymous field `SQLMigrationService` in struct `SQLMigrationServicesClientGetResponse`
+- New anonymous field `ProjectTask` in struct `ServiceTasksClientGetResponse`
+
+
+## 0.1.0 (2022-03-10)
+
+- Init release.

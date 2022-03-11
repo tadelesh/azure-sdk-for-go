@@ -29,16 +29,16 @@ type OperationsDiscoveryClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewOperationsDiscoveryClient(credential azcore.TokenCredential, options *arm.ClientOptions) *OperationsDiscoveryClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &OperationsDiscoveryClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -77,7 +77,7 @@ func (client *OperationsDiscoveryClient) getCreateRequest(ctx context.Context, o
 
 // getHandleResponse handles the Get response.
 func (client *OperationsDiscoveryClient) getHandleResponse(resp *http.Response) (OperationsDiscoveryClientGetResponse, error) {
-	result := OperationsDiscoveryClientGetResponse{RawResponse: resp}
+	result := OperationsDiscoveryClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OperationsDiscoveryCollection); err != nil {
 		return OperationsDiscoveryClientGetResponse{}, err
 	}

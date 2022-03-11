@@ -35,17 +35,17 @@ type AlertsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAlertsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AlertsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AlertsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *AlertsClient) changeStateCreateRequest(ctx context.Context, alertI
 
 // changeStateHandleResponse handles the ChangeState response.
 func (client *AlertsClient) changeStateHandleResponse(resp *http.Response) (AlertsClientChangeStateResponse, error) {
-	result := AlertsClientChangeStateResponse{RawResponse: resp}
+	result := AlertsClientChangeStateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Alert); err != nil {
 		return AlertsClientChangeStateResponse{}, err
 	}
@@ -190,7 +190,7 @@ func (client *AlertsClient) getAllCreateRequest(ctx context.Context, options *Al
 
 // getAllHandleResponse handles the GetAll response.
 func (client *AlertsClient) getAllHandleResponse(resp *http.Response) (AlertsClientGetAllResponse, error) {
-	result := AlertsClientGetAllResponse{RawResponse: resp}
+	result := AlertsClientGetAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AlertsList); err != nil {
 		return AlertsClientGetAllResponse{}, err
 	}
@@ -240,7 +240,7 @@ func (client *AlertsClient) getByIDCreateRequest(ctx context.Context, alertID st
 
 // getByIDHandleResponse handles the GetByID response.
 func (client *AlertsClient) getByIDHandleResponse(resp *http.Response) (AlertsClientGetByIDResponse, error) {
-	result := AlertsClientGetByIDResponse{RawResponse: resp}
+	result := AlertsClientGetByIDResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Alert); err != nil {
 		return AlertsClientGetByIDResponse{}, err
 	}
@@ -291,7 +291,7 @@ func (client *AlertsClient) getHistoryCreateRequest(ctx context.Context, alertID
 
 // getHistoryHandleResponse handles the GetHistory response.
 func (client *AlertsClient) getHistoryHandleResponse(resp *http.Response) (AlertsClientGetHistoryResponse, error) {
-	result := AlertsClientGetHistoryResponse{RawResponse: resp}
+	result := AlertsClientGetHistoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AlertModification); err != nil {
 		return AlertsClientGetHistoryResponse{}, err
 	}
@@ -373,7 +373,7 @@ func (client *AlertsClient) getSummaryCreateRequest(ctx context.Context, groupby
 
 // getSummaryHandleResponse handles the GetSummary response.
 func (client *AlertsClient) getSummaryHandleResponse(resp *http.Response) (AlertsClientGetSummaryResponse, error) {
-	result := AlertsClientGetSummaryResponse{RawResponse: resp}
+	result := AlertsClientGetSummaryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AlertsSummary); err != nil {
 		return AlertsClientGetSummaryResponse{}, err
 	}
@@ -416,7 +416,7 @@ func (client *AlertsClient) metaDataCreateRequest(ctx context.Context, identifie
 
 // metaDataHandleResponse handles the MetaData response.
 func (client *AlertsClient) metaDataHandleResponse(resp *http.Response) (AlertsClientMetaDataResponse, error) {
-	result := AlertsClientMetaDataResponse{RawResponse: resp}
+	result := AlertsClientMetaDataResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AlertsMetaData); err != nil {
 		return AlertsClientMetaDataResponse{}, err
 	}

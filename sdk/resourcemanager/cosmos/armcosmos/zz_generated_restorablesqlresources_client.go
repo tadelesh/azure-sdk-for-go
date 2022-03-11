@@ -34,17 +34,17 @@ type RestorableSQLResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRestorableSQLResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RestorableSQLResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RestorableSQLResourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -57,19 +57,13 @@ func NewRestorableSQLResourcesClient(subscriptionID string, credential azcore.To
 // instanceID - The instanceId GUID of a restorable database account.
 // options - RestorableSQLResourcesClientListOptions contains the optional parameters for the RestorableSQLResourcesClient.List
 // method.
-func (client *RestorableSQLResourcesClient) List(ctx context.Context, location string, instanceID string, options *RestorableSQLResourcesClientListOptions) (RestorableSQLResourcesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, location, instanceID, options)
-	if err != nil {
-		return RestorableSQLResourcesClientListResponse{}, err
+func (client *RestorableSQLResourcesClient) List(location string, instanceID string, options *RestorableSQLResourcesClientListOptions) *RestorableSQLResourcesClientListPager {
+	return &RestorableSQLResourcesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, location, instanceID, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return RestorableSQLResourcesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return RestorableSQLResourcesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -106,7 +100,7 @@ func (client *RestorableSQLResourcesClient) listCreateRequest(ctx context.Contex
 
 // listHandleResponse handles the List response.
 func (client *RestorableSQLResourcesClient) listHandleResponse(resp *http.Response) (RestorableSQLResourcesClientListResponse, error) {
-	result := RestorableSQLResourcesClientListResponse{RawResponse: resp}
+	result := RestorableSQLResourcesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorableSQLResourcesListResult); err != nil {
 		return RestorableSQLResourcesClientListResponse{}, err
 	}

@@ -1,5 +1,295 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*DisasterRecoveryConfigsClientListAuthorizationRulesPager.NextPage` return value(s) have been changed from `(bool)` to `(DisasterRecoveryConfigsClientListAuthorizationRulesResponse, error)`
+- Function `*ClustersClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ClustersClientListBySubscriptionResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*NamespacesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(NamespacesClientListByResourceGroupResponse, error)`
+- Function `*EventHubsClientListAuthorizationRulesPager.NextPage` return value(s) have been changed from `(bool)` to `(EventHubsClientListAuthorizationRulesResponse, error)`
+- Function `*NamespacesClientListAuthorizationRulesPager.NextPage` return value(s) have been changed from `(bool)` to `(NamespacesClientListAuthorizationRulesResponse, error)`
+- Function `*DisasterRecoveryConfigsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(DisasterRecoveryConfigsClientListResponse, error)`
+- Function `*SchemaRegistryClientListByNamespacePager.NextPage` return value(s) have been changed from `(bool)` to `(SchemaRegistryClientListByNamespaceResponse, error)`
+- Function `*ClustersClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ClustersClientListByResourceGroupResponse, error)`
+- Function `*NamespacesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(NamespacesClientListResponse, error)`
+- Function `*ConsumerGroupsClientListByEventHubPager.NextPage` return value(s) have been changed from `(bool)` to `(ConsumerGroupsClientListByEventHubResponse, error)`
+- Function `*EventHubsClientListByNamespacePager.NextPage` return value(s) have been changed from `(bool)` to `(EventHubsClientListByNamespaceResponse, error)`
+- Function `*PrivateEndpointConnectionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateEndpointConnectionsClientListResponse, error)`
+- Function `*EventHubsClientListAuthorizationRulesPager.PageResponse` has been removed
+- Function `*DisasterRecoveryConfigsClientListPager.Err` has been removed
+- Function `*PrivateEndpointConnectionsClientListPager.Err` has been removed
+- Function `*EventHubsClientListByNamespacePager.Err` has been removed
+- Function `*PrivateEndpointConnectionsClientListPager.PageResponse` has been removed
+- Function `*NamespacesClientListAuthorizationRulesPager.PageResponse` has been removed
+- Function `*ClustersClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*DisasterRecoveryConfigsClientListAuthorizationRulesPager.PageResponse` has been removed
+- Function `*ClustersClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*EventHubsClientListByNamespacePager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*SchemaRegistryClientListByNamespacePager.Err` has been removed
+- Function `*ClustersClientListByResourceGroupPager.Err` has been removed
+- Function `*DisasterRecoveryConfigsClientListAuthorizationRulesPager.Err` has been removed
+- Function `*ConsumerGroupsClientListByEventHubPager.PageResponse` has been removed
+- Function `*NamespacesClientListPager.PageResponse` has been removed
+- Function `*DisasterRecoveryConfigsClientListPager.PageResponse` has been removed
+- Function `*NamespacesClientListByResourceGroupPager.Err` has been removed
+- Function `*SchemaRegistryClientListByNamespacePager.PageResponse` has been removed
+- Function `*NamespacesClientListAuthorizationRulesPager.Err` has been removed
+- Function `*ClustersClientListBySubscriptionPager.Err` has been removed
+- Function `*EventHubsClientListAuthorizationRulesPager.Err` has been removed
+- Function `*NamespacesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ConsumerGroupsClientListByEventHubPager.Err` has been removed
+- Function `*NamespacesClientListPager.Err` has been removed
+- Struct `ClustersClientCreateOrUpdateResult` has been removed
+- Struct `ClustersClientGetResult` has been removed
+- Struct `ClustersClientListAvailableClusterRegionResult` has been removed
+- Struct `ClustersClientListByResourceGroupResult` has been removed
+- Struct `ClustersClientListBySubscriptionResult` has been removed
+- Struct `ClustersClientListNamespacesResult` has been removed
+- Struct `ClustersClientUpdateResult` has been removed
+- Struct `ConfigurationClientGetResult` has been removed
+- Struct `ConfigurationClientPatchResult` has been removed
+- Struct `ConsumerGroupsClientCreateOrUpdateResult` has been removed
+- Struct `ConsumerGroupsClientGetResult` has been removed
+- Struct `ConsumerGroupsClientListByEventHubResult` has been removed
+- Struct `DisasterRecoveryConfigsClientCheckNameAvailabilityResult` has been removed
+- Struct `DisasterRecoveryConfigsClientCreateOrUpdateResult` has been removed
+- Struct `DisasterRecoveryConfigsClientGetAuthorizationRuleResult` has been removed
+- Struct `DisasterRecoveryConfigsClientGetResult` has been removed
+- Struct `DisasterRecoveryConfigsClientListAuthorizationRulesResult` has been removed
+- Struct `DisasterRecoveryConfigsClientListKeysResult` has been removed
+- Struct `DisasterRecoveryConfigsClientListResult` has been removed
+- Struct `EventHubsClientCreateOrUpdateAuthorizationRuleResult` has been removed
+- Struct `EventHubsClientCreateOrUpdateResult` has been removed
+- Struct `EventHubsClientGetAuthorizationRuleResult` has been removed
+- Struct `EventHubsClientGetResult` has been removed
+- Struct `EventHubsClientListAuthorizationRulesResult` has been removed
+- Struct `EventHubsClientListByNamespaceResult` has been removed
+- Struct `EventHubsClientListKeysResult` has been removed
+- Struct `EventHubsClientRegenerateKeysResult` has been removed
+- Struct `NamespacesClientCheckNameAvailabilityResult` has been removed
+- Struct `NamespacesClientCreateOrUpdateAuthorizationRuleResult` has been removed
+- Struct `NamespacesClientCreateOrUpdateNetworkRuleSetResult` has been removed
+- Struct `NamespacesClientCreateOrUpdateResult` has been removed
+- Struct `NamespacesClientGetAuthorizationRuleResult` has been removed
+- Struct `NamespacesClientGetNetworkRuleSetResult` has been removed
+- Struct `NamespacesClientGetResult` has been removed
+- Struct `NamespacesClientListAuthorizationRulesResult` has been removed
+- Struct `NamespacesClientListByResourceGroupResult` has been removed
+- Struct `NamespacesClientListKeysResult` has been removed
+- Struct `NamespacesClientListNetworkRuleSetResult` has been removed
+- Struct `NamespacesClientListResult` has been removed
+- Struct `NamespacesClientRegenerateKeysResult` has been removed
+- Struct `NamespacesClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientCreateOrUpdateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListResult` has been removed
+- Struct `PrivateLinkResourcesClientGetResult` has been removed
+- Struct `SchemaRegistryClientCreateOrUpdateResult` has been removed
+- Struct `SchemaRegistryClientGetResult` has been removed
+- Struct `SchemaRegistryClientListByNamespaceResult` has been removed
+- Field `RawResponse` of struct `SchemaRegistryClientDeleteResponse` has been removed
+- Field `ClustersClientListNamespacesResult` of struct `ClustersClientListNamespacesResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListNamespacesResponse` has been removed
+- Field `NamespacesClientCheckNameAvailabilityResult` of struct `NamespacesClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeletePollerResponse` has been removed
+- Field `NamespacesClientCreateOrUpdateResult` of struct `NamespacesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientCreateOrUpdateResponse` has been removed
+- Field `ClustersClientGetResult` of struct `ClustersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientCreateOrUpdatePollerResponse` has been removed
+- Field `NamespacesClientUpdateResult` of struct `NamespacesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientCreateOrUpdatePollerResponse` has been removed
+- Field `DisasterRecoveryConfigsClientListAuthorizationRulesResult` of struct `DisasterRecoveryConfigsClientListAuthorizationRulesResponse` has been removed
+- Field `RawResponse` of struct `DisasterRecoveryConfigsClientListAuthorizationRulesResponse` has been removed
+- Field `EventHubsClientGetAuthorizationRuleResult` of struct `EventHubsClientGetAuthorizationRuleResponse` has been removed
+- Field `RawResponse` of struct `EventHubsClientGetAuthorizationRuleResponse` has been removed
+- Field `EventHubsClientGetResult` of struct `EventHubsClientGetResponse` has been removed
+- Field `RawResponse` of struct `EventHubsClientGetResponse` has been removed
+- Field `EventHubsClientCreateOrUpdateResult` of struct `EventHubsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `EventHubsClientCreateOrUpdateResponse` has been removed
+- Field `EventHubsClientCreateOrUpdateAuthorizationRuleResult` of struct `EventHubsClientCreateOrUpdateAuthorizationRuleResponse` has been removed
+- Field `RawResponse` of struct `EventHubsClientCreateOrUpdateAuthorizationRuleResponse` has been removed
+- Field `RawResponse` of struct `ConsumerGroupsClientDeleteResponse` has been removed
+- Field `NamespacesClientCreateOrUpdateAuthorizationRuleResult` of struct `NamespacesClientCreateOrUpdateAuthorizationRuleResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientCreateOrUpdateAuthorizationRuleResponse` has been removed
+- Field `RawResponse` of struct `DisasterRecoveryConfigsClientBreakPairingResponse` has been removed
+- Field `DisasterRecoveryConfigsClientCheckNameAvailabilityResult` of struct `DisasterRecoveryConfigsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `DisasterRecoveryConfigsClientCheckNameAvailabilityResponse` has been removed
+- Field `DisasterRecoveryConfigsClientCreateOrUpdateResult` of struct `DisasterRecoveryConfigsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DisasterRecoveryConfigsClientCreateOrUpdateResponse` has been removed
+- Field `DisasterRecoveryConfigsClientListKeysResult` of struct `DisasterRecoveryConfigsClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `DisasterRecoveryConfigsClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `DisasterRecoveryConfigsClientDeleteResponse` has been removed
+- Field `ConsumerGroupsClientCreateOrUpdateResult` of struct `ConsumerGroupsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ConsumerGroupsClientCreateOrUpdateResponse` has been removed
+- Field `NamespacesClientCreateOrUpdateNetworkRuleSetResult` of struct `NamespacesClientCreateOrUpdateNetworkRuleSetResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientCreateOrUpdateNetworkRuleSetResponse` has been removed
+- Field `EventHubsClientRegenerateKeysResult` of struct `EventHubsClientRegenerateKeysResponse` has been removed
+- Field `RawResponse` of struct `EventHubsClientRegenerateKeysResponse` has been removed
+- Field `ConfigurationClientGetResult` of struct `ConfigurationClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationClientGetResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `NamespacesClientGetResult` of struct `NamespacesClientGetResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientGetResponse` has been removed
+- Field `PrivateLinkResourcesClientGetResult` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `EventHubsClientListKeysResult` of struct `EventHubsClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `EventHubsClientListKeysResponse` has been removed
+- Field `ClustersClientListByResourceGroupResult` of struct `ClustersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListByResourceGroupResponse` has been removed
+- Field `ClustersClientCreateOrUpdateResult` of struct `ClustersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientCreateOrUpdateResponse` has been removed
+- Field `NamespacesClientListKeysResult` of struct `NamespacesClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdatePollerResponse` has been removed
+- Field `NamespacesClientListByResourceGroupResult` of struct `NamespacesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientListByResourceGroupResponse` has been removed
+- Field `SchemaRegistryClientCreateOrUpdateResult` of struct `SchemaRegistryClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SchemaRegistryClientCreateOrUpdateResponse` has been removed
+- Field `EventHubsClientListAuthorizationRulesResult` of struct `EventHubsClientListAuthorizationRulesResponse` has been removed
+- Field `RawResponse` of struct `EventHubsClientListAuthorizationRulesResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `EventHubsClientDeleteResponse` has been removed
+- Field `DisasterRecoveryConfigsClientListResult` of struct `DisasterRecoveryConfigsClientListResponse` has been removed
+- Field `RawResponse` of struct `DisasterRecoveryConfigsClientListResponse` has been removed
+- Field `DisasterRecoveryConfigsClientGetResult` of struct `DisasterRecoveryConfigsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DisasterRecoveryConfigsClientGetResponse` has been removed
+- Field `NamespacesClientGetAuthorizationRuleResult` of struct `NamespacesClientGetAuthorizationRuleResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientGetAuthorizationRuleResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListResult` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `ClustersClientListAvailableClusterRegionResult` of struct `ClustersClientListAvailableClusterRegionResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListAvailableClusterRegionResponse` has been removed
+- Field `NamespacesClientRegenerateKeysResult` of struct `NamespacesClientRegenerateKeysResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientRegenerateKeysResponse` has been removed
+- Field `NamespacesClientGetNetworkRuleSetResult` of struct `NamespacesClientGetNetworkRuleSetResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientGetNetworkRuleSetResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientDeleteAuthorizationRuleResponse` has been removed
+- Field `EventHubsClientListByNamespaceResult` of struct `EventHubsClientListByNamespaceResponse` has been removed
+- Field `RawResponse` of struct `EventHubsClientListByNamespaceResponse` has been removed
+- Field `ConsumerGroupsClientListByEventHubResult` of struct `ConsumerGroupsClientListByEventHubResponse` has been removed
+- Field `RawResponse` of struct `ConsumerGroupsClientListByEventHubResponse` has been removed
+- Field `NamespacesClientListResult` of struct `NamespacesClientListResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientListResponse` has been removed
+- Field `ConsumerGroupsClientGetResult` of struct `ConsumerGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConsumerGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientDeleteResponse` has been removed
+- Field `NamespacesClientListAuthorizationRulesResult` of struct `NamespacesClientListAuthorizationRulesResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientListAuthorizationRulesResponse` has been removed
+- Field `NamespacesClientListNetworkRuleSetResult` of struct `NamespacesClientListNetworkRuleSetResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientListNetworkRuleSetResponse` has been removed
+- Field `RawResponse` of struct `EventHubsClientDeleteAuthorizationRuleResponse` has been removed
+- Field `ClustersClientListBySubscriptionResult` of struct `ClustersClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `NamespacesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DisasterRecoveryConfigsClientFailOverResponse` has been removed
+- Field `PrivateEndpointConnectionsClientCreateOrUpdateResult` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `SchemaRegistryClientListByNamespaceResult` of struct `SchemaRegistryClientListByNamespaceResponse` has been removed
+- Field `RawResponse` of struct `SchemaRegistryClientListByNamespaceResponse` has been removed
+- Field `DisasterRecoveryConfigsClientGetAuthorizationRuleResult` of struct `DisasterRecoveryConfigsClientGetAuthorizationRuleResponse` has been removed
+- Field `RawResponse` of struct `DisasterRecoveryConfigsClientGetAuthorizationRuleResponse` has been removed
+- Field `SchemaRegistryClientGetResult` of struct `SchemaRegistryClientGetResponse` has been removed
+- Field `RawResponse` of struct `SchemaRegistryClientGetResponse` has been removed
+- Field `ClustersClientUpdateResult` of struct `ClustersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdateResponse` has been removed
+- Field `ConfigurationClientPatchResult` of struct `ConfigurationClientPatchResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationClientPatchResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+
+### Features Added
+
+- New function `*ClustersClientListBySubscriptionPager.More() bool`
+- New function `*DisasterRecoveryConfigsClientListAuthorizationRulesPager.More() bool`
+- New function `*EventHubsClientListByNamespacePager.More() bool`
+- New function `*NamespacesClientListByResourceGroupPager.More() bool`
+- New function `*SchemaRegistryClientListByNamespacePager.More() bool`
+- New function `*NamespacesClientListAuthorizationRulesPager.More() bool`
+- New function `*ConsumerGroupsClientListByEventHubPager.More() bool`
+- New function `*DisasterRecoveryConfigsClientListPager.More() bool`
+- New function `*EventHubsClientListAuthorizationRulesPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*ClustersClientListByResourceGroupPager.More() bool`
+- New function `*NamespacesClientListPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*PrivateEndpointConnectionsClientListPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `NetworkRuleSet` in struct `NamespacesClientGetNetworkRuleSetResponse`
+- New anonymous field `Cluster` in struct `ClustersClientUpdateResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse`
+- New anonymous field `ConsumerGroupListResult` in struct `ConsumerGroupsClientListByEventHubResponse`
+- New anonymous field `ListResult` in struct `EventHubsClientListByNamespaceResponse`
+- New anonymous field `AuthorizationRuleListResult` in struct `NamespacesClientListAuthorizationRulesResponse`
+- New anonymous field `AccessKeys` in struct `DisasterRecoveryConfigsClientListKeysResponse`
+- New anonymous field `ArmDisasterRecovery` in struct `DisasterRecoveryConfigsClientCreateOrUpdateResponse`
+- New anonymous field `EHNamespaceListResult` in struct `NamespacesClientListByResourceGroupResponse`
+- New anonymous field `EHNamespace` in struct `NamespacesClientCreateOrUpdateResponse`
+- New anonymous field `EHNamespaceListResult` in struct `NamespacesClientListResponse`
+- New anonymous field `EHNamespace` in struct `NamespacesClientUpdateResponse`
+- New anonymous field `AuthorizationRule` in struct `EventHubsClientGetAuthorizationRuleResponse`
+- New anonymous field `AccessKeys` in struct `EventHubsClientListKeysResponse`
+- New anonymous field `EHNamespace` in struct `NamespacesClientGetResponse`
+- New anonymous field `AuthorizationRule` in struct `NamespacesClientCreateOrUpdateAuthorizationRuleResponse`
+- New anonymous field `ClusterListResult` in struct `ClustersClientListByResourceGroupResponse`
+- New anonymous field `CheckNameAvailabilityResult` in struct `DisasterRecoveryConfigsClientCheckNameAvailabilityResponse`
+- New anonymous field `AuthorizationRuleListResult` in struct `EventHubsClientListAuthorizationRulesResponse`
+- New anonymous field `AccessKeys` in struct `NamespacesClientRegenerateKeysResponse`
+- New anonymous field `Eventhub` in struct `EventHubsClientCreateOrUpdateResponse`
+- New anonymous field `ConsumerGroup` in struct `ConsumerGroupsClientGetResponse`
+- New anonymous field `EHNamespaceIDListResult` in struct `ClustersClientListNamespacesResponse`
+- New anonymous field `AuthorizationRule` in struct `DisasterRecoveryConfigsClientGetAuthorizationRuleResponse`
+- New anonymous field `Cluster` in struct `ClustersClientCreateOrUpdateResponse`
+- New anonymous field `AuthorizationRuleListResult` in struct `DisasterRecoveryConfigsClientListAuthorizationRulesResponse`
+- New anonymous field `AuthorizationRule` in struct `NamespacesClientGetAuthorizationRuleResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `ClusterQuotaConfigurationProperties` in struct `ConfigurationClientGetResponse`
+- New anonymous field `ArmDisasterRecovery` in struct `DisasterRecoveryConfigsClientGetResponse`
+- New anonymous field `ConsumerGroup` in struct `ConsumerGroupsClientCreateOrUpdateResponse`
+- New anonymous field `NetworkRuleSet` in struct `NamespacesClientCreateOrUpdateNetworkRuleSetResponse`
+- New anonymous field `Cluster` in struct `ClustersClientGetResponse`
+- New anonymous field `ClusterListResult` in struct `ClustersClientListBySubscriptionResponse`
+- New anonymous field `AccessKeys` in struct `NamespacesClientListKeysResponse`
+- New anonymous field `PrivateLinkResourcesListResult` in struct `PrivateLinkResourcesClientGetResponse`
+- New anonymous field `CheckNameAvailabilityResult` in struct `NamespacesClientCheckNameAvailabilityResponse`
+- New anonymous field `ClusterQuotaConfigurationProperties` in struct `ConfigurationClientPatchResponse`
+- New anonymous field `NetworkRuleSetListResult` in struct `NamespacesClientListNetworkRuleSetResponse`
+- New anonymous field `SchemaGroupListResult` in struct `SchemaRegistryClientListByNamespaceResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListResponse`
+- New anonymous field `ArmDisasterRecoveryListResult` in struct `DisasterRecoveryConfigsClientListResponse`
+- New anonymous field `SchemaGroup` in struct `SchemaRegistryClientCreateOrUpdateResponse`
+- New anonymous field `AuthorizationRule` in struct `EventHubsClientCreateOrUpdateAuthorizationRuleResponse`
+- New anonymous field `AccessKeys` in struct `EventHubsClientRegenerateKeysResponse`
+- New anonymous field `SchemaGroup` in struct `SchemaRegistryClientGetResponse`
+- New anonymous field `Eventhub` in struct `EventHubsClientGetResponse`
+- New anonymous field `AvailableClustersList` in struct `ClustersClientListAvailableClusterRegionResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `Operation.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

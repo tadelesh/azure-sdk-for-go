@@ -32,16 +32,16 @@ type Client struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewClient(credential azcore.TokenCredential, options *arm.ClientOptions) *Client {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &Client{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -68,10 +68,8 @@ func (client *Client) BeginCreateOrUpdate(ctx context.Context, resourceName stri
 	if err != nil {
 		return ClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
-	pt, err := armruntime.NewPoller("Client.CreateOrUpdate", "location", resp, client.pl)
+	result := ClientCreateOrUpdatePollerResponse{}
+	pt, err := armruntime.NewPoller("Client.CreateOrUpdate", "original-uri", resp, client.pl)
 	if err != nil {
 		return ClientCreateOrUpdatePollerResponse{}, err
 	}
@@ -170,7 +168,7 @@ func (client *Client) getCreateRequest(ctx context.Context, resourceName string,
 
 // getHandleResponse handles the Get response.
 func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse, error) {
-	result := ClientGetResponse{RawResponse: resp}
+	result := ClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -217,7 +215,7 @@ func (client *Client) listCreateRequest(ctx context.Context, scope string, optio
 
 // listHandleResponse handles the List response.
 func (client *Client) listHandleResponse(resp *http.Response) (ClientListResponse, error) {
-	result := ClientListResponse{RawResponse: resp}
+	result := ClientListResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -248,10 +246,8 @@ func (client *Client) BeginUpdate(ctx context.Context, resourceName string, scop
 	if err != nil {
 		return ClientUpdatePollerResponse{}, err
 	}
-	result := ClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
-	pt, err := armruntime.NewPoller("Client.Update", "location", resp, client.pl)
+	result := ClientUpdatePollerResponse{}
+	pt, err := armruntime.NewPoller("Client.Update", "original-uri", resp, client.pl)
 	if err != nil {
 		return ClientUpdatePollerResponse{}, err
 	}

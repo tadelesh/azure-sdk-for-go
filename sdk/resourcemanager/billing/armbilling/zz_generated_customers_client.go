@@ -32,16 +32,16 @@ type CustomersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCustomersClient(credential azcore.TokenCredential, options *arm.ClientOptions) *CustomersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CustomersClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -94,7 +94,7 @@ func (client *CustomersClient) getCreateRequest(ctx context.Context, billingAcco
 
 // getHandleResponse handles the Get response.
 func (client *CustomersClient) getHandleResponse(resp *http.Response) (CustomersClientGetResponse, error) {
-	result := CustomersClientGetResponse{RawResponse: resp}
+	result := CustomersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Customer); err != nil {
 		return CustomersClientGetResponse{}, err
 	}
@@ -145,7 +145,7 @@ func (client *CustomersClient) listByBillingAccountCreateRequest(ctx context.Con
 
 // listByBillingAccountHandleResponse handles the ListByBillingAccount response.
 func (client *CustomersClient) listByBillingAccountHandleResponse(resp *http.Response) (CustomersClientListByBillingAccountResponse, error) {
-	result := CustomersClientListByBillingAccountResponse{RawResponse: resp}
+	result := CustomersClientListByBillingAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomerListResult); err != nil {
 		return CustomersClientListByBillingAccountResponse{}, err
 	}
@@ -201,7 +201,7 @@ func (client *CustomersClient) listByBillingProfileCreateRequest(ctx context.Con
 
 // listByBillingProfileHandleResponse handles the ListByBillingProfile response.
 func (client *CustomersClient) listByBillingProfileHandleResponse(resp *http.Response) (CustomersClientListByBillingProfileResponse, error) {
-	result := CustomersClientListByBillingProfileResponse{RawResponse: resp}
+	result := CustomersClientListByBillingProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomerListResult); err != nil {
 		return CustomersClientListByBillingProfileResponse{}, err
 	}

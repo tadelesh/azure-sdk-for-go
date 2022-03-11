@@ -34,17 +34,17 @@ type DatabaseExtensionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDatabaseExtensionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DatabaseExtensionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DatabaseExtensionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *DatabaseExtensionsClient) BeginCreateOrUpdate(ctx context.Context,
 	if err != nil {
 		return DatabaseExtensionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DatabaseExtensionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabaseExtensionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabaseExtensionsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DatabaseExtensionsClientCreateOrUpdatePollerResponse{}, err
@@ -146,7 +144,7 @@ func (client *DatabaseExtensionsClient) Get(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return DatabaseExtensionsClientGetResponse{}, runtime.NewResponseError(resp)
 	}
-	return DatabaseExtensionsClientGetResponse{RawResponse: resp}, nil
+	return DatabaseExtensionsClientGetResponse{}, nil
 }
 
 // getCreateRequest creates the Get request.
@@ -234,7 +232,7 @@ func (client *DatabaseExtensionsClient) listByDatabaseCreateRequest(ctx context.
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *DatabaseExtensionsClient) listByDatabaseHandleResponse(resp *http.Response) (DatabaseExtensionsClientListByDatabaseResponse, error) {
-	result := DatabaseExtensionsClientListByDatabaseResponse{RawResponse: resp}
+	result := DatabaseExtensionsClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ImportExportExtensionsOperationListResult); err != nil {
 		return DatabaseExtensionsClientListByDatabaseResponse{}, err
 	}

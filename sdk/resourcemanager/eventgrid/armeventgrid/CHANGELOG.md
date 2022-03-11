@@ -1,5 +1,365 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*SystemTopicEventSubscriptionsClientListBySystemTopicPager.NextPage` return value(s) have been changed from `(bool)` to `(SystemTopicEventSubscriptionsClientListBySystemTopicResponse, error)`
+- Function `*EventSubscriptionsClientListGlobalByResourceGroupForTopicTypePager.NextPage` return value(s) have been changed from `(bool)` to `(EventSubscriptionsClientListGlobalByResourceGroupForTopicTypeResponse, error)`
+- Function `*EventSubscriptionsClientListGlobalBySubscriptionForTopicTypePager.NextPage` return value(s) have been changed from `(bool)` to `(EventSubscriptionsClientListGlobalBySubscriptionForTopicTypeResponse, error)`
+- Function `*DomainsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(DomainsClientListByResourceGroupResponse, error)`
+- Function `*PrivateLinkResourcesClientListByResourcePager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateLinkResourcesClientListByResourceResponse, error)`
+- Function `*EventSubscriptionsClientListByResourcePager.NextPage` return value(s) have been changed from `(bool)` to `(EventSubscriptionsClientListByResourceResponse, error)`
+- Function `*DomainsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(DomainsClientListBySubscriptionResponse, error)`
+- Function `*EventSubscriptionsClientListGlobalByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(EventSubscriptionsClientListGlobalByResourceGroupResponse, error)`
+- Function `*EventSubscriptionsClientListGlobalBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(EventSubscriptionsClientListGlobalBySubscriptionResponse, error)`
+- Function `*PrivateEndpointConnectionsClientListByResourcePager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateEndpointConnectionsClientListByResourceResponse, error)`
+- Function `*TopicsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(TopicsClientListBySubscriptionResponse, error)`
+- Function `*OperationsClient.List` parameter(s) have been changed from `(context.Context, *OperationsClientListOptions)` to `(*OperationsClientListOptions)`
+- Function `*OperationsClient.List` return value(s) have been changed from `(OperationsClientListResponse, error)` to `(*OperationsClientListPager)`
+- Function `*TopicsClient.ListEventTypes` parameter(s) have been changed from `(context.Context, string, string, string, string, *TopicsClientListEventTypesOptions)` to `(string, string, string, string, *TopicsClientListEventTypesOptions)`
+- Function `*TopicsClient.ListEventTypes` return value(s) have been changed from `(TopicsClientListEventTypesResponse, error)` to `(*TopicsClientListEventTypesPager)`
+- Function `*SystemTopicsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(SystemTopicsClientListBySubscriptionResponse, error)`
+- Function `*SystemTopicsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(SystemTopicsClientListByResourceGroupResponse, error)`
+- Function `*EventSubscriptionsClientListRegionalBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(EventSubscriptionsClientListRegionalBySubscriptionResponse, error)`
+- Function `*EventSubscriptionsClientListRegionalByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(EventSubscriptionsClientListRegionalByResourceGroupResponse, error)`
+- Function `*DomainTopicsClientListByDomainPager.NextPage` return value(s) have been changed from `(bool)` to `(DomainTopicsClientListByDomainResponse, error)`
+- Function `*EventSubscriptionsClientListByDomainTopicPager.NextPage` return value(s) have been changed from `(bool)` to `(EventSubscriptionsClientListByDomainTopicResponse, error)`
+- Function `*TopicsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(TopicsClientListByResourceGroupResponse, error)`
+- Function `*EventSubscriptionsClientListRegionalBySubscriptionForTopicTypePager.NextPage` return value(s) have been changed from `(bool)` to `(EventSubscriptionsClientListRegionalBySubscriptionForTopicTypeResponse, error)`
+- Function `*TopicTypesClient.ListEventTypes` parameter(s) have been changed from `(context.Context, string, *TopicTypesClientListEventTypesOptions)` to `(string, *TopicTypesClientListEventTypesOptions)`
+- Function `*TopicTypesClient.ListEventTypes` return value(s) have been changed from `(TopicTypesClientListEventTypesResponse, error)` to `(*TopicTypesClientListEventTypesPager)`
+- Function `*TopicTypesClient.List` parameter(s) have been changed from `(context.Context, *TopicTypesClientListOptions)` to `(*TopicTypesClientListOptions)`
+- Function `*TopicTypesClient.List` return value(s) have been changed from `(TopicTypesClientListResponse, error)` to `(*TopicTypesClientListPager)`
+- Function `*EventSubscriptionsClientListRegionalByResourceGroupForTopicTypePager.NextPage` return value(s) have been changed from `(bool)` to `(EventSubscriptionsClientListRegionalByResourceGroupForTopicTypeResponse, error)`
+- Function `*DomainsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*DomainTopicsClientListByDomainPager.PageResponse` has been removed
+- Function `*EventSubscriptionsClientListByResourcePager.Err` has been removed
+- Function `*EventSubscriptionsClientListGlobalBySubscriptionPager.Err` has been removed
+- Function `*EventSubscriptionsClientListRegionalBySubscriptionForTopicTypePager.PageResponse` has been removed
+- Function `*PrivateEndpointConnectionsClientListByResourcePager.PageResponse` has been removed
+- Function `*EventSubscriptionsClientListRegionalByResourceGroupPager.PageResponse` has been removed
+- Function `*DomainsClientListByResourceGroupPager.Err` has been removed
+- Function `*EventSubscriptionsClientListRegionalBySubscriptionPager.Err` has been removed
+- Function `*TopicsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*DomainsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*EventSubscriptionsClientListGlobalByResourceGroupPager.Err` has been removed
+- Function `*EventSubscriptionsClientListGlobalByResourceGroupPager.PageResponse` has been removed
+- Function `*EventSubscriptionsClientListByDomainTopicPager.Err` has been removed
+- Function `*EventSubscriptionsClientListGlobalBySubscriptionForTopicTypePager.PageResponse` has been removed
+- Function `*SystemTopicsClientListBySubscriptionPager.Err` has been removed
+- Function `*EventSubscriptionsClientListGlobalByResourceGroupForTopicTypePager.Err` has been removed
+- Function `*EventSubscriptionsClientListGlobalByResourceGroupForTopicTypePager.PageResponse` has been removed
+- Function `*EventSubscriptionsClientListByResourcePager.PageResponse` has been removed
+- Function `*DomainTopicsClientListByDomainPager.Err` has been removed
+- Function `*EventSubscriptionsClientListGlobalBySubscriptionPager.PageResponse` has been removed
+- Function `*TopicsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*PrivateLinkResourcesClientListByResourcePager.Err` has been removed
+- Function `*EventSubscriptionsClientListRegionalByResourceGroupForTopicTypePager.PageResponse` has been removed
+- Function `*TopicsClientListByResourceGroupPager.Err` has been removed
+- Function `*EventSubscriptionsClientListGlobalBySubscriptionForTopicTypePager.Err` has been removed
+- Function `*SystemTopicEventSubscriptionsClientListBySystemTopicPager.PageResponse` has been removed
+- Function `*PrivateLinkResourcesClientListByResourcePager.PageResponse` has been removed
+- Function `*EventSubscriptionsClientListByDomainTopicPager.PageResponse` has been removed
+- Function `*SystemTopicsClientListByResourceGroupPager.Err` has been removed
+- Function `*PrivateEndpointConnectionsClientListByResourcePager.Err` has been removed
+- Function `*SystemTopicEventSubscriptionsClientListBySystemTopicPager.Err` has been removed
+- Function `*DomainsClientListBySubscriptionPager.Err` has been removed
+- Function `*EventSubscriptionsClientListRegionalByResourceGroupForTopicTypePager.Err` has been removed
+- Function `*TopicsClientListBySubscriptionPager.Err` has been removed
+- Function `*EventSubscriptionsClientListRegionalBySubscriptionForTopicTypePager.Err` has been removed
+- Function `*EventSubscriptionsClientListRegionalByResourceGroupPager.Err` has been removed
+- Function `*SystemTopicsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*SystemTopicsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*EventSubscriptionsClientListRegionalBySubscriptionPager.PageResponse` has been removed
+- Struct `DomainTopicsClientCreateOrUpdateResult` has been removed
+- Struct `DomainTopicsClientGetResult` has been removed
+- Struct `DomainTopicsClientListByDomainResult` has been removed
+- Struct `DomainsClientCreateOrUpdateResult` has been removed
+- Struct `DomainsClientGetResult` has been removed
+- Struct `DomainsClientListByResourceGroupResult` has been removed
+- Struct `DomainsClientListBySubscriptionResult` has been removed
+- Struct `DomainsClientListSharedAccessKeysResult` has been removed
+- Struct `DomainsClientRegenerateKeyResult` has been removed
+- Struct `DomainsClientUpdateResult` has been removed
+- Struct `EventSubscriptionsClientCreateOrUpdateResult` has been removed
+- Struct `EventSubscriptionsClientGetDeliveryAttributesResult` has been removed
+- Struct `EventSubscriptionsClientGetFullURLResult` has been removed
+- Struct `EventSubscriptionsClientGetResult` has been removed
+- Struct `EventSubscriptionsClientListByDomainTopicResult` has been removed
+- Struct `EventSubscriptionsClientListByResourceResult` has been removed
+- Struct `EventSubscriptionsClientListGlobalByResourceGroupForTopicTypeResult` has been removed
+- Struct `EventSubscriptionsClientListGlobalByResourceGroupResult` has been removed
+- Struct `EventSubscriptionsClientListGlobalBySubscriptionForTopicTypeResult` has been removed
+- Struct `EventSubscriptionsClientListGlobalBySubscriptionResult` has been removed
+- Struct `EventSubscriptionsClientListRegionalByResourceGroupForTopicTypeResult` has been removed
+- Struct `EventSubscriptionsClientListRegionalByResourceGroupResult` has been removed
+- Struct `EventSubscriptionsClientListRegionalBySubscriptionForTopicTypeResult` has been removed
+- Struct `EventSubscriptionsClientListRegionalBySubscriptionResult` has been removed
+- Struct `EventSubscriptionsClientUpdateResult` has been removed
+- Struct `ExtensionTopicsClientGetResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListByResourceResult` has been removed
+- Struct `PrivateEndpointConnectionsClientUpdateResult` has been removed
+- Struct `PrivateLinkResourcesClientGetResult` has been removed
+- Struct `PrivateLinkResourcesClientListByResourceResult` has been removed
+- Struct `SystemTopicEventSubscriptionsClientCreateOrUpdateResult` has been removed
+- Struct `SystemTopicEventSubscriptionsClientGetDeliveryAttributesResult` has been removed
+- Struct `SystemTopicEventSubscriptionsClientGetFullURLResult` has been removed
+- Struct `SystemTopicEventSubscriptionsClientGetResult` has been removed
+- Struct `SystemTopicEventSubscriptionsClientListBySystemTopicResult` has been removed
+- Struct `SystemTopicEventSubscriptionsClientUpdateResult` has been removed
+- Struct `SystemTopicsClientCreateOrUpdateResult` has been removed
+- Struct `SystemTopicsClientGetResult` has been removed
+- Struct `SystemTopicsClientListByResourceGroupResult` has been removed
+- Struct `SystemTopicsClientListBySubscriptionResult` has been removed
+- Struct `SystemTopicsClientUpdateResult` has been removed
+- Struct `TopicTypesClientGetResult` has been removed
+- Struct `TopicTypesClientListEventTypesResult` has been removed
+- Struct `TopicTypesClientListResult` has been removed
+- Struct `TopicsClientCreateOrUpdateResult` has been removed
+- Struct `TopicsClientGetResult` has been removed
+- Struct `TopicsClientListByResourceGroupResult` has been removed
+- Struct `TopicsClientListBySubscriptionResult` has been removed
+- Struct `TopicsClientListEventTypesResult` has been removed
+- Struct `TopicsClientListSharedAccessKeysResult` has been removed
+- Struct `TopicsClientRegenerateKeyResult` has been removed
+- Struct `TopicsClientUpdateResult` has been removed
+- Field `PrivateEndpointConnectionsClientUpdateResult` of struct `PrivateEndpointConnectionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientUpdateResponse` has been removed
+- Field `EventSubscriptionsClientListRegionalBySubscriptionForTopicTypeResult` of struct `EventSubscriptionsClientListRegionalBySubscriptionForTopicTypeResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientListRegionalBySubscriptionForTopicTypeResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DomainsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicEventSubscriptionsClientDeleteResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListByResourceResult` of struct `PrivateEndpointConnectionsClientListByResourceResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListByResourceResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `DomainTopicsClientCreateOrUpdatePollerResponse` has been removed
+- Field `EventSubscriptionsClientListRegionalByResourceGroupResult` of struct `EventSubscriptionsClientListRegionalByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientListRegionalByResourceGroupResponse` has been removed
+- Field `DomainTopicsClientGetResult` of struct `DomainTopicsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DomainTopicsClientGetResponse` has been removed
+- Field `EventSubscriptionsClientListRegionalBySubscriptionResult` of struct `EventSubscriptionsClientListRegionalBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientListRegionalBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicsClientCreateOrUpdatePollerResponse` has been removed
+- Field `DomainsClientListByResourceGroupResult` of struct `DomainsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `DomainsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `TopicsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `TopicsClientRegenerateKeyPollerResponse` has been removed
+- Field `EventSubscriptionsClientCreateOrUpdateResult` of struct `EventSubscriptionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicEventSubscriptionsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientUpdatePollerResponse` has been removed
+- Field `SystemTopicsClientListBySubscriptionResult` of struct `SystemTopicsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicsClientListBySubscriptionResponse` has been removed
+- Field `EventSubscriptionsClientListByDomainTopicResult` of struct `EventSubscriptionsClientListByDomainTopicResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientListByDomainTopicResponse` has been removed
+- Field `SystemTopicEventSubscriptionsClientGetFullURLResult` of struct `SystemTopicEventSubscriptionsClientGetFullURLResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicEventSubscriptionsClientGetFullURLResponse` has been removed
+- Field `TopicsClientListBySubscriptionResult` of struct `TopicsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `TopicsClientListBySubscriptionResponse` has been removed
+- Field `SystemTopicsClientCreateOrUpdateResult` of struct `SystemTopicsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicsClientCreateOrUpdateResponse` has been removed
+- Field `DomainTopicsClientListByDomainResult` of struct `DomainTopicsClientListByDomainResponse` has been removed
+- Field `RawResponse` of struct `DomainTopicsClientListByDomainResponse` has been removed
+- Field `PrivateLinkResourcesClientGetResult` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `TopicsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicEventSubscriptionsClientUpdatePollerResponse` has been removed
+- Field `PrivateLinkResourcesClientListByResourceResult` of struct `PrivateLinkResourcesClientListByResourceResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListByResourceResponse` has been removed
+- Field `EventSubscriptionsClientListByResourceResult` of struct `EventSubscriptionsClientListByResourceResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientListByResourceResponse` has been removed
+- Field `DomainsClientListSharedAccessKeysResult` of struct `DomainsClientListSharedAccessKeysResponse` has been removed
+- Field `RawResponse` of struct `DomainsClientListSharedAccessKeysResponse` has been removed
+- Field `TopicTypesClientGetResult` of struct `TopicTypesClientGetResponse` has been removed
+- Field `RawResponse` of struct `TopicTypesClientGetResponse` has been removed
+- Field `RawResponse` of struct `TopicsClientDeletePollerResponse` has been removed
+- Field `SystemTopicsClientListByResourceGroupResult` of struct `SystemTopicsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicsClientListByResourceGroupResponse` has been removed
+- Field `TopicsClientUpdateResult` of struct `TopicsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `TopicsClientUpdateResponse` has been removed
+- Field `EventSubscriptionsClientListGlobalBySubscriptionForTopicTypeResult` of struct `EventSubscriptionsClientListGlobalBySubscriptionForTopicTypeResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientListGlobalBySubscriptionForTopicTypeResponse` has been removed
+- Field `RawResponse` of struct `DomainTopicsClientDeletePollerResponse` has been removed
+- Field `SystemTopicsClientUpdateResult` of struct `SystemTopicsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicsClientUpdateResponse` has been removed
+- Field `EventSubscriptionsClientListGlobalBySubscriptionResult` of struct `EventSubscriptionsClientListGlobalBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientListGlobalBySubscriptionResponse` has been removed
+- Field `DomainsClientGetResult` of struct `DomainsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DomainsClientGetResponse` has been removed
+- Field `ExtensionTopicsClientGetResult` of struct `ExtensionTopicsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ExtensionTopicsClientGetResponse` has been removed
+- Field `TopicsClientRegenerateKeyResult` of struct `TopicsClientRegenerateKeyResponse` has been removed
+- Field `RawResponse` of struct `TopicsClientRegenerateKeyResponse` has been removed
+- Field `SystemTopicEventSubscriptionsClientGetResult` of struct `SystemTopicEventSubscriptionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicEventSubscriptionsClientGetResponse` has been removed
+- Field `DomainTopicsClientCreateOrUpdateResult` of struct `DomainTopicsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DomainTopicsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicEventSubscriptionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `EventSubscriptionsClientListGlobalByResourceGroupForTopicTypeResult` of struct `EventSubscriptionsClientListGlobalByResourceGroupForTopicTypeResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientListGlobalByResourceGroupForTopicTypeResponse` has been removed
+- Field `DomainsClientCreateOrUpdateResult` of struct `DomainsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DomainsClientCreateOrUpdateResponse` has been removed
+- Field `DomainsClientUpdateResult` of struct `DomainsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DomainsClientUpdateResponse` has been removed
+- Field `EventSubscriptionsClientListGlobalByResourceGroupResult` of struct `EventSubscriptionsClientListGlobalByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientListGlobalByResourceGroupResponse` has been removed
+- Field `SystemTopicsClientGetResult` of struct `SystemTopicsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicsClientGetResponse` has been removed
+- Field `SystemTopicEventSubscriptionsClientUpdateResult` of struct `SystemTopicEventSubscriptionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicEventSubscriptionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `EventSubscriptionsClientGetDeliveryAttributesResult` of struct `EventSubscriptionsClientGetDeliveryAttributesResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientGetDeliveryAttributesResponse` has been removed
+- Field `TopicsClientCreateOrUpdateResult` of struct `TopicsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `TopicsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DomainsClientDeletePollerResponse` has been removed
+- Field `SystemTopicEventSubscriptionsClientCreateOrUpdateResult` of struct `SystemTopicEventSubscriptionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicEventSubscriptionsClientCreateOrUpdateResponse` has been removed
+- Field `TopicsClientListEventTypesResult` of struct `TopicsClientListEventTypesResponse` has been removed
+- Field `RawResponse` of struct `TopicsClientListEventTypesResponse` has been removed
+- Field `DomainsClientListBySubscriptionResult` of struct `DomainsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `DomainsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientDeleteResponse` has been removed
+- Field `TopicsClientListByResourceGroupResult` of struct `TopicsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `TopicsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicsClientDeletePollerResponse` has been removed
+- Field `EventSubscriptionsClientGetFullURLResult` of struct `EventSubscriptionsClientGetFullURLResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientGetFullURLResponse` has been removed
+- Field `SystemTopicEventSubscriptionsClientListBySystemTopicResult` of struct `SystemTopicEventSubscriptionsClientListBySystemTopicResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicEventSubscriptionsClientListBySystemTopicResponse` has been removed
+- Field `RawResponse` of struct `DomainsClientUpdatePollerResponse` has been removed
+- Field `TopicsClientGetResult` of struct `TopicsClientGetResponse` has been removed
+- Field `RawResponse` of struct `TopicsClientGetResponse` has been removed
+- Field `TopicTypesClientListResult` of struct `TopicTypesClientListResponse` has been removed
+- Field `RawResponse` of struct `TopicTypesClientListResponse` has been removed
+- Field `RawResponse` of struct `DomainTopicsClientDeleteResponse` has been removed
+- Field `EventSubscriptionsClientGetResult` of struct `EventSubscriptionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientGetResponse` has been removed
+- Field `EventSubscriptionsClientListRegionalByResourceGroupForTopicTypeResult` of struct `EventSubscriptionsClientListRegionalByResourceGroupForTopicTypeResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientListRegionalByResourceGroupForTopicTypeResponse` has been removed
+- Field `RawResponse` of struct `DomainsClientCreateOrUpdatePollerResponse` has been removed
+- Field `SystemTopicEventSubscriptionsClientGetDeliveryAttributesResult` of struct `SystemTopicEventSubscriptionsClientGetDeliveryAttributesResponse` has been removed
+- Field `RawResponse` of struct `SystemTopicEventSubscriptionsClientGetDeliveryAttributesResponse` has been removed
+- Field `DomainsClientRegenerateKeyResult` of struct `DomainsClientRegenerateKeyResponse` has been removed
+- Field `RawResponse` of struct `DomainsClientRegenerateKeyResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `TopicsClientDeleteResponse` has been removed
+- Field `TopicTypesClientListEventTypesResult` of struct `TopicTypesClientListEventTypesResponse` has been removed
+- Field `RawResponse` of struct `TopicTypesClientListEventTypesResponse` has been removed
+- Field `EventSubscriptionsClientUpdateResult` of struct `EventSubscriptionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `EventSubscriptionsClientUpdateResponse` has been removed
+- Field `TopicsClientListSharedAccessKeysResult` of struct `TopicsClientListSharedAccessKeysResponse` has been removed
+- Field `RawResponse` of struct `TopicsClientListSharedAccessKeysResponse` has been removed
+
+### Features Added
+
+- New function `*EventSubscriptionsClientListGlobalBySubscriptionForTopicTypePager.More() bool`
+- New function `*TopicsClientListBySubscriptionPager.More() bool`
+- New function `*TopicTypesClientListPager.NextPage(context.Context) (TopicTypesClientListResponse, error)`
+- New function `*DomainTopicsClientListByDomainPager.More() bool`
+- New function `*TopicsClientListEventTypesPager.NextPage(context.Context) (TopicsClientListEventTypesResponse, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*EventSubscriptionsClientListGlobalByResourceGroupForTopicTypePager.More() bool`
+- New function `*EventSubscriptionsClientListRegionalByResourceGroupForTopicTypePager.More() bool`
+- New function `*TopicTypesClientListPager.More() bool`
+- New function `*TopicTypesClientListEventTypesPager.NextPage(context.Context) (TopicTypesClientListEventTypesResponse, error)`
+- New function `*EventSubscriptionsClientListRegionalBySubscriptionPager.More() bool`
+- New function `*PrivateLinkResourcesClientListByResourcePager.More() bool`
+- New function `*TopicTypesClientListEventTypesPager.More() bool`
+- New function `*TopicsClientListEventTypesPager.More() bool`
+- New function `*EventSubscriptionsClientListRegionalByResourceGroupPager.More() bool`
+- New function `*DomainsClientListBySubscriptionPager.More() bool`
+- New function `*EventSubscriptionsClientListByResourcePager.More() bool`
+- New function `*TopicsClientListByResourceGroupPager.More() bool`
+- New function `*EventSubscriptionsClientListGlobalByResourceGroupPager.More() bool`
+- New function `*DomainsClientListByResourceGroupPager.More() bool`
+- New function `*SystemTopicsClientListBySubscriptionPager.More() bool`
+- New function `*EventSubscriptionsClientListByDomainTopicPager.More() bool`
+- New function `*EventSubscriptionsClientListGlobalBySubscriptionPager.More() bool`
+- New function `*SystemTopicEventSubscriptionsClientListBySystemTopicPager.More() bool`
+- New function `*PrivateEndpointConnectionsClientListByResourcePager.More() bool`
+- New function `*EventSubscriptionsClientListRegionalBySubscriptionForTopicTypePager.More() bool`
+- New function `*OperationsClientListPager.NextPage(context.Context) (OperationsClientListResponse, error)`
+- New function `*SystemTopicsClientListByResourceGroupPager.More() bool`
+- New struct `OperationsClientListPager`
+- New struct `TopicTypesClientListEventTypesPager`
+- New struct `TopicTypesClientListPager`
+- New struct `TopicsClientListEventTypesPager`
+- New anonymous field `EventSubscriptionsListResult` in struct `EventSubscriptionsClientListGlobalByResourceGroupResponse`
+- New anonymous field `EventSubscriptionsListResult` in struct `EventSubscriptionsClientListRegionalByResourceGroupResponse`
+- New anonymous field `EventSubscriptionsListResult` in struct `EventSubscriptionsClientListGlobalByResourceGroupForTopicTypeResponse`
+- New anonymous field `SystemTopic` in struct `SystemTopicsClientCreateOrUpdateResponse`
+- New anonymous field `DomainTopic` in struct `DomainTopicsClientCreateOrUpdateResponse`
+- New anonymous field `DomainsListResult` in struct `DomainsClientListBySubscriptionResponse`
+- New anonymous field `DomainTopicsListResult` in struct `DomainTopicsClientListByDomainResponse`
+- New anonymous field `EventSubscription` in struct `SystemTopicEventSubscriptionsClientCreateOrUpdateResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `Topic` in struct `TopicsClientCreateOrUpdateResponse`
+- New anonymous field `EventSubscriptionsListResult` in struct `EventSubscriptionsClientListByDomainTopicResponse`
+- New anonymous field `OperationsListResult` in struct `OperationsClientListResponse`
+- New anonymous field `EventSubscription` in struct `EventSubscriptionsClientGetResponse`
+- New anonymous field `TopicsListResult` in struct `TopicsClientListByResourceGroupResponse`
+- New anonymous field `SystemTopic` in struct `SystemTopicsClientUpdateResponse`
+- New anonymous field `EventSubscriptionFullURL` in struct `SystemTopicEventSubscriptionsClientGetFullURLResponse`
+- New anonymous field `Domain` in struct `DomainsClientGetResponse`
+- New anonymous field `EventTypesListResult` in struct `TopicTypesClientListEventTypesResponse`
+- New anonymous field `EventSubscriptionsListResult` in struct `EventSubscriptionsClientListRegionalByResourceGroupForTopicTypeResponse`
+- New anonymous field `Topic` in struct `TopicsClientUpdateResponse`
+- New anonymous field `SystemTopicsListResult` in struct `SystemTopicsClientListByResourceGroupResponse`
+- New anonymous field `EventSubscription` in struct `EventSubscriptionsClientCreateOrUpdateResponse`
+- New anonymous field `EventSubscriptionsListResult` in struct `SystemTopicEventSubscriptionsClientListBySystemTopicResponse`
+- New anonymous field `Domain` in struct `DomainsClientUpdateResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListByResourceResponse`
+- New anonymous field `DomainsListResult` in struct `DomainsClientListByResourceGroupResponse`
+- New anonymous field `Topic` in struct `TopicsClientGetResponse`
+- New anonymous field `DeliveryAttributeListResult` in struct `SystemTopicEventSubscriptionsClientGetDeliveryAttributesResponse`
+- New anonymous field `EventSubscriptionsListResult` in struct `EventSubscriptionsClientListGlobalBySubscriptionResponse`
+- New anonymous field `EventSubscriptionsListResult` in struct `EventSubscriptionsClientListRegionalBySubscriptionResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientUpdateResponse`
+- New anonymous field `TopicSharedAccessKeys` in struct `TopicsClientRegenerateKeyResponse`
+- New anonymous field `EventSubscriptionFullURL` in struct `EventSubscriptionsClientGetFullURLResponse`
+- New anonymous field `Domain` in struct `DomainsClientCreateOrUpdateResponse`
+- New anonymous field `TopicSharedAccessKeys` in struct `TopicsClientListSharedAccessKeysResponse`
+- New anonymous field `DomainSharedAccessKeys` in struct `DomainsClientListSharedAccessKeysResponse`
+- New anonymous field `DomainTopic` in struct `DomainTopicsClientGetResponse`
+- New anonymous field `EventSubscriptionsListResult` in struct `EventSubscriptionsClientListRegionalBySubscriptionForTopicTypeResponse`
+- New anonymous field `ExtensionTopic` in struct `ExtensionTopicsClientGetResponse`
+- New anonymous field `EventSubscription` in struct `EventSubscriptionsClientUpdateResponse`
+- New anonymous field `DeliveryAttributeListResult` in struct `EventSubscriptionsClientGetDeliveryAttributesResponse`
+- New anonymous field `TopicTypeInfo` in struct `TopicTypesClientGetResponse`
+- New anonymous field `TopicsListResult` in struct `TopicsClientListBySubscriptionResponse`
+- New anonymous field `SystemTopic` in struct `SystemTopicsClientGetResponse`
+- New anonymous field `EventTypesListResult` in struct `TopicsClientListEventTypesResponse`
+- New anonymous field `EventSubscriptionsListResult` in struct `EventSubscriptionsClientListGlobalBySubscriptionForTopicTypeResponse`
+- New anonymous field `EventSubscription` in struct `SystemTopicEventSubscriptionsClientUpdateResponse`
+- New anonymous field `TopicTypesListResult` in struct `TopicTypesClientListResponse`
+- New anonymous field `DomainSharedAccessKeys` in struct `DomainsClientRegenerateKeyResponse`
+- New anonymous field `SystemTopicsListResult` in struct `SystemTopicsClientListBySubscriptionResponse`
+- New anonymous field `PrivateLinkResourcesListResult` in struct `PrivateLinkResourcesClientListByResourceResponse`
+- New anonymous field `PrivateLinkResource` in struct `PrivateLinkResourcesClientGetResponse`
+- New anonymous field `EventSubscription` in struct `SystemTopicEventSubscriptionsClientGetResponse`
+- New anonymous field `EventSubscriptionsListResult` in struct `EventSubscriptionsClientListByResourceResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `Operation.Properties` has been changed from `map[string]interface{}` to `interface{}`
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

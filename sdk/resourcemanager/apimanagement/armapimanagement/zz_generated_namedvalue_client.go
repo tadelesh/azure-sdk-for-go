@@ -36,17 +36,17 @@ type NamedValueClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewNamedValueClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *NamedValueClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &NamedValueClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *NamedValueClient) BeginCreateOrUpdate(ctx context.Context, resourc
 	if err != nil {
 		return NamedValueClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := NamedValueClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := NamedValueClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("NamedValueClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return NamedValueClientCreateOrUpdatePollerResponse{}, err
@@ -147,7 +145,7 @@ func (client *NamedValueClient) Delete(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return NamedValueClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return NamedValueClientDeleteResponse{RawResponse: resp}, nil
+	return NamedValueClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -234,7 +232,7 @@ func (client *NamedValueClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *NamedValueClient) getHandleResponse(resp *http.Response) (NamedValueClientGetResponse, error) {
-	result := NamedValueClientGetResponse{RawResponse: resp}
+	result := NamedValueClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -293,7 +291,7 @@ func (client *NamedValueClient) getEntityTagCreateRequest(ctx context.Context, r
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *NamedValueClient) getEntityTagHandleResponse(resp *http.Response) (NamedValueClientGetEntityTagResponse, error) {
-	result := NamedValueClientGetEntityTagResponse{RawResponse: resp}
+	result := NamedValueClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -361,7 +359,7 @@ func (client *NamedValueClient) listByServiceCreateRequest(ctx context.Context, 
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *NamedValueClient) listByServiceHandleResponse(resp *http.Response) (NamedValueClientListByServiceResponse, error) {
-	result := NamedValueClientListByServiceResponse{RawResponse: resp}
+	result := NamedValueClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NamedValueCollection); err != nil {
 		return NamedValueClientListByServiceResponse{}, err
 	}
@@ -421,7 +419,7 @@ func (client *NamedValueClient) listValueCreateRequest(ctx context.Context, reso
 
 // listValueHandleResponse handles the ListValue response.
 func (client *NamedValueClient) listValueHandleResponse(resp *http.Response) (NamedValueClientListValueResponse, error) {
-	result := NamedValueClientListValueResponse{RawResponse: resp}
+	result := NamedValueClientListValueResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -443,9 +441,7 @@ func (client *NamedValueClient) BeginRefreshSecret(ctx context.Context, resource
 	if err != nil {
 		return NamedValueClientRefreshSecretPollerResponse{}, err
 	}
-	result := NamedValueClientRefreshSecretPollerResponse{
-		RawResponse: resp,
-	}
+	result := NamedValueClientRefreshSecretPollerResponse{}
 	pt, err := armruntime.NewPoller("NamedValueClient.RefreshSecret", "location", resp, client.pl)
 	if err != nil {
 		return NamedValueClientRefreshSecretPollerResponse{}, err
@@ -517,9 +513,7 @@ func (client *NamedValueClient) BeginUpdate(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return NamedValueClientUpdatePollerResponse{}, err
 	}
-	result := NamedValueClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := NamedValueClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("NamedValueClient.Update", "location", resp, client.pl)
 	if err != nil {
 		return NamedValueClientUpdatePollerResponse{}, err

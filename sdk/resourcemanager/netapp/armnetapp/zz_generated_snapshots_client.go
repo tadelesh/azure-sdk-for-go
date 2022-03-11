@@ -35,17 +35,17 @@ type SnapshotsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSnapshotsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SnapshotsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SnapshotsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *SnapshotsClient) BeginCreate(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return SnapshotsClientCreatePollerResponse{}, err
 	}
-	result := SnapshotsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SnapshotsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("SnapshotsClient.Create", "location", resp, client.pl)
 	if err != nil {
 		return SnapshotsClientCreatePollerResponse{}, err
@@ -145,9 +143,7 @@ func (client *SnapshotsClient) BeginDelete(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return SnapshotsClientDeletePollerResponse{}, err
 	}
-	result := SnapshotsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SnapshotsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SnapshotsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return SnapshotsClientDeletePollerResponse{}, err
@@ -275,7 +271,7 @@ func (client *SnapshotsClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *SnapshotsClient) getHandleResponse(resp *http.Response) (SnapshotsClientGetResponse, error) {
-	result := SnapshotsClientGetResponse{RawResponse: resp}
+	result := SnapshotsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Snapshot); err != nil {
 		return SnapshotsClientGetResponse{}, err
 	}
@@ -289,19 +285,13 @@ func (client *SnapshotsClient) getHandleResponse(resp *http.Response) (Snapshots
 // poolName - The name of the capacity pool
 // volumeName - The name of the volume
 // options - SnapshotsClientListOptions contains the optional parameters for the SnapshotsClient.List method.
-func (client *SnapshotsClient) List(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, options *SnapshotsClientListOptions) (SnapshotsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, poolName, volumeName, options)
-	if err != nil {
-		return SnapshotsClientListResponse{}, err
+func (client *SnapshotsClient) List(resourceGroupName string, accountName string, poolName string, volumeName string, options *SnapshotsClientListOptions) *SnapshotsClientListPager {
+	return &SnapshotsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, accountName, poolName, volumeName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return SnapshotsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return SnapshotsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -340,7 +330,7 @@ func (client *SnapshotsClient) listCreateRequest(ctx context.Context, resourceGr
 
 // listHandleResponse handles the List response.
 func (client *SnapshotsClient) listHandleResponse(resp *http.Response) (SnapshotsClientListResponse, error) {
-	result := SnapshotsClientListResponse{RawResponse: resp}
+	result := SnapshotsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SnapshotsList); err != nil {
 		return SnapshotsClientListResponse{}, err
 	}
@@ -356,14 +346,12 @@ func (client *SnapshotsClient) listHandleResponse(resp *http.Response) (Snapshot
 // snapshotName - The name of the snapshot
 // body - Snapshot object supplied in the body of the operation.
 // options - SnapshotsClientBeginUpdateOptions contains the optional parameters for the SnapshotsClient.BeginUpdate method.
-func (client *SnapshotsClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, snapshotName string, body map[string]interface{}, options *SnapshotsClientBeginUpdateOptions) (SnapshotsClientUpdatePollerResponse, error) {
+func (client *SnapshotsClient) BeginUpdate(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, snapshotName string, body interface{}, options *SnapshotsClientBeginUpdateOptions) (SnapshotsClientUpdatePollerResponse, error) {
 	resp, err := client.update(ctx, resourceGroupName, accountName, poolName, volumeName, snapshotName, body, options)
 	if err != nil {
 		return SnapshotsClientUpdatePollerResponse{}, err
 	}
-	result := SnapshotsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SnapshotsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SnapshotsClient.Update", "location", resp, client.pl)
 	if err != nil {
 		return SnapshotsClientUpdatePollerResponse{}, err
@@ -376,7 +364,7 @@ func (client *SnapshotsClient) BeginUpdate(ctx context.Context, resourceGroupNam
 
 // Update - Patch a snapshot
 // If the operation fails it returns an *azcore.ResponseError type.
-func (client *SnapshotsClient) update(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, snapshotName string, body map[string]interface{}, options *SnapshotsClientBeginUpdateOptions) (*http.Response, error) {
+func (client *SnapshotsClient) update(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, snapshotName string, body interface{}, options *SnapshotsClientBeginUpdateOptions) (*http.Response, error) {
 	req, err := client.updateCreateRequest(ctx, resourceGroupName, accountName, poolName, volumeName, snapshotName, body, options)
 	if err != nil {
 		return nil, err
@@ -392,7 +380,7 @@ func (client *SnapshotsClient) update(ctx context.Context, resourceGroupName str
 }
 
 // updateCreateRequest creates the Update request.
-func (client *SnapshotsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, snapshotName string, body map[string]interface{}, options *SnapshotsClientBeginUpdateOptions) (*policy.Request, error) {
+func (client *SnapshotsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, snapshotName string, body interface{}, options *SnapshotsClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/capacityPools/{poolName}/volumes/{volumeName}/snapshots/{snapshotName}"
 	if client.subscriptionID == "" {
 		return nil, errors.New("parameter client.subscriptionID cannot be empty")

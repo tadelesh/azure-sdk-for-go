@@ -35,17 +35,17 @@ type WCFRelaysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWCFRelaysClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WCFRelaysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WCFRelaysClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *WCFRelaysClient) createOrUpdateCreateRequest(ctx context.Context, 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *WCFRelaysClient) createOrUpdateHandleResponse(resp *http.Response) (WCFRelaysClientCreateOrUpdateResponse, error) {
-	result := WCFRelaysClientCreateOrUpdateResponse{RawResponse: resp}
+	result := WCFRelaysClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WcfRelay); err != nil {
 		return WCFRelaysClientCreateOrUpdateResponse{}, err
 	}
@@ -172,7 +172,7 @@ func (client *WCFRelaysClient) createOrUpdateAuthorizationRuleCreateRequest(ctx 
 
 // createOrUpdateAuthorizationRuleHandleResponse handles the CreateOrUpdateAuthorizationRule response.
 func (client *WCFRelaysClient) createOrUpdateAuthorizationRuleHandleResponse(resp *http.Response) (WCFRelaysClientCreateOrUpdateAuthorizationRuleResponse, error) {
-	result := WCFRelaysClientCreateOrUpdateAuthorizationRuleResponse{RawResponse: resp}
+	result := WCFRelaysClientCreateOrUpdateAuthorizationRuleResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AuthorizationRule); err != nil {
 		return WCFRelaysClientCreateOrUpdateAuthorizationRuleResponse{}, err
 	}
@@ -197,7 +197,7 @@ func (client *WCFRelaysClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WCFRelaysClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return WCFRelaysClientDeleteResponse{RawResponse: resp}, nil
+	return WCFRelaysClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -250,7 +250,7 @@ func (client *WCFRelaysClient) DeleteAuthorizationRule(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WCFRelaysClientDeleteAuthorizationRuleResponse{}, runtime.NewResponseError(resp)
 	}
-	return WCFRelaysClientDeleteAuthorizationRuleResponse{RawResponse: resp}, nil
+	return WCFRelaysClientDeleteAuthorizationRuleResponse{}, nil
 }
 
 // deleteAuthorizationRuleCreateRequest creates the DeleteAuthorizationRule request.
@@ -340,7 +340,7 @@ func (client *WCFRelaysClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *WCFRelaysClient) getHandleResponse(resp *http.Response) (WCFRelaysClientGetResponse, error) {
-	result := WCFRelaysClientGetResponse{RawResponse: resp}
+	result := WCFRelaysClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WcfRelay); err != nil {
 		return WCFRelaysClientGetResponse{}, err
 	}
@@ -406,7 +406,7 @@ func (client *WCFRelaysClient) getAuthorizationRuleCreateRequest(ctx context.Con
 
 // getAuthorizationRuleHandleResponse handles the GetAuthorizationRule response.
 func (client *WCFRelaysClient) getAuthorizationRuleHandleResponse(resp *http.Response) (WCFRelaysClientGetAuthorizationRuleResponse, error) {
-	result := WCFRelaysClientGetAuthorizationRuleResponse{RawResponse: resp}
+	result := WCFRelaysClientGetAuthorizationRuleResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AuthorizationRule); err != nil {
 		return WCFRelaysClientGetAuthorizationRuleResponse{}, err
 	}
@@ -464,7 +464,7 @@ func (client *WCFRelaysClient) listAuthorizationRulesCreateRequest(ctx context.C
 
 // listAuthorizationRulesHandleResponse handles the ListAuthorizationRules response.
 func (client *WCFRelaysClient) listAuthorizationRulesHandleResponse(resp *http.Response) (WCFRelaysClientListAuthorizationRulesResponse, error) {
-	result := WCFRelaysClientListAuthorizationRulesResponse{RawResponse: resp}
+	result := WCFRelaysClientListAuthorizationRulesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AuthorizationRuleListResult); err != nil {
 		return WCFRelaysClientListAuthorizationRulesResponse{}, err
 	}
@@ -517,7 +517,7 @@ func (client *WCFRelaysClient) listByNamespaceCreateRequest(ctx context.Context,
 
 // listByNamespaceHandleResponse handles the ListByNamespace response.
 func (client *WCFRelaysClient) listByNamespaceHandleResponse(resp *http.Response) (WCFRelaysClientListByNamespaceResponse, error) {
-	result := WCFRelaysClientListByNamespaceResponse{RawResponse: resp}
+	result := WCFRelaysClientListByNamespaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WcfRelaysListResult); err != nil {
 		return WCFRelaysClientListByNamespaceResponse{}, err
 	}
@@ -582,7 +582,7 @@ func (client *WCFRelaysClient) listKeysCreateRequest(ctx context.Context, resour
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *WCFRelaysClient) listKeysHandleResponse(resp *http.Response) (WCFRelaysClientListKeysResponse, error) {
-	result := WCFRelaysClientListKeysResponse{RawResponse: resp}
+	result := WCFRelaysClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessKeys); err != nil {
 		return WCFRelaysClientListKeysResponse{}, err
 	}
@@ -649,7 +649,7 @@ func (client *WCFRelaysClient) regenerateKeysCreateRequest(ctx context.Context, 
 
 // regenerateKeysHandleResponse handles the RegenerateKeys response.
 func (client *WCFRelaysClient) regenerateKeysHandleResponse(resp *http.Response) (WCFRelaysClientRegenerateKeysResponse, error) {
-	result := WCFRelaysClientRegenerateKeysResponse{RawResponse: resp}
+	result := WCFRelaysClientRegenerateKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessKeys); err != nil {
 		return WCFRelaysClientRegenerateKeysResponse{}, err
 	}

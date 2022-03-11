@@ -32,16 +32,16 @@ type CreditsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCreditsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *CreditsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CreditsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -90,7 +90,7 @@ func (client *CreditsClient) getCreateRequest(ctx context.Context, billingAccoun
 
 // getHandleResponse handles the Get response.
 func (client *CreditsClient) getHandleResponse(resp *http.Response) (CreditsClientGetResponse, error) {
-	result := CreditsClientGetResponse{RawResponse: resp}
+	result := CreditsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CreditSummary); err != nil {
 		return CreditsClientGetResponse{}, err
 	}

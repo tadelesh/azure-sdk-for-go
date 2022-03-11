@@ -34,17 +34,17 @@ type MSIXPackagesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMSIXPackagesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MSIXPackagesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MSIXPackagesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *MSIXPackagesClient) createOrUpdateCreateRequest(ctx context.Contex
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *MSIXPackagesClient) createOrUpdateHandleResponse(resp *http.Response) (MSIXPackagesClientCreateOrUpdateResponse, error) {
-	result := MSIXPackagesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := MSIXPackagesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MSIXPackage); err != nil {
 		return MSIXPackagesClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *MSIXPackagesClient) Delete(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return MSIXPackagesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return MSIXPackagesClientDeleteResponse{RawResponse: resp}, nil
+	return MSIXPackagesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *MSIXPackagesClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *MSIXPackagesClient) getHandleResponse(resp *http.Response) (MSIXPackagesClientGetResponse, error) {
-	result := MSIXPackagesClientGetResponse{RawResponse: resp}
+	result := MSIXPackagesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MSIXPackage); err != nil {
 		return MSIXPackagesClientGetResponse{}, err
 	}
@@ -267,7 +267,7 @@ func (client *MSIXPackagesClient) listCreateRequest(ctx context.Context, resourc
 
 // listHandleResponse handles the List response.
 func (client *MSIXPackagesClient) listHandleResponse(resp *http.Response) (MSIXPackagesClientListResponse, error) {
-	result := MSIXPackagesClientListResponse{RawResponse: resp}
+	result := MSIXPackagesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MSIXPackageList); err != nil {
 		return MSIXPackagesClientListResponse{}, err
 	}
@@ -330,7 +330,7 @@ func (client *MSIXPackagesClient) updateCreateRequest(ctx context.Context, resou
 
 // updateHandleResponse handles the Update response.
 func (client *MSIXPackagesClient) updateHandleResponse(resp *http.Response) (MSIXPackagesClientUpdateResponse, error) {
-	result := MSIXPackagesClientUpdateResponse{RawResponse: resp}
+	result := MSIXPackagesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MSIXPackage); err != nil {
 		return MSIXPackagesClientUpdateResponse{}, err
 	}

@@ -1,5 +1,325 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*PrivateLinkResourcesClientListByWorkspacePager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateLinkResourcesClientListByWorkspaceResponse, error)`
+- Function `*DesktopsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(DesktopsClientListResponse, error)`
+- Function `*ApplicationGroupsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ApplicationGroupsClientListBySubscriptionResponse, error)`
+- Function `*ApplicationGroupsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ApplicationGroupsClientListByResourceGroupResponse, error)`
+- Function `*ScalingPlansClientListByHostPoolPager.NextPage` return value(s) have been changed from `(bool)` to `(ScalingPlansClientListByHostPoolResponse, error)`
+- Function `*PrivateEndpointConnectionsClientListByWorkspacePager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateEndpointConnectionsClientListByWorkspaceResponse, error)`
+- Function `*WorkspacesClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(WorkspacesClientListBySubscriptionResponse, error)`
+- Function `*ApplicationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ApplicationsClientListResponse, error)`
+- Function `*HostPoolsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(HostPoolsClientListResponse, error)`
+- Function `*HostPoolsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(HostPoolsClientListByResourceGroupResponse, error)`
+- Function `*UserSessionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(UserSessionsClientListResponse, error)`
+- Function `*PrivateEndpointConnectionsClientListByHostPoolPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateEndpointConnectionsClientListByHostPoolResponse, error)`
+- Function `*UserSessionsClientListByHostPoolPager.NextPage` return value(s) have been changed from `(bool)` to `(UserSessionsClientListByHostPoolResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*WorkspacesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(WorkspacesClientListByResourceGroupResponse, error)`
+- Function `*MSIXPackagesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(MSIXPackagesClientListResponse, error)`
+- Function `*MsixImagesClientExpandPager.NextPage` return value(s) have been changed from `(bool)` to `(MsixImagesClientExpandResponse, error)`
+- Function `*PrivateLinkResourcesClientListByHostPoolPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateLinkResourcesClientListByHostPoolResponse, error)`
+- Function `*StartMenuItemsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(StartMenuItemsClientListResponse, error)`
+- Function `*SessionHostsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SessionHostsClientListResponse, error)`
+- Function `*ScalingPlansClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ScalingPlansClientListBySubscriptionResponse, error)`
+- Function `*ScalingPlansClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ScalingPlansClientListByResourceGroupResponse, error)`
+- Function `*WorkspacesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*HostPoolsClientListByResourceGroupPager.Err` has been removed
+- Function `*PrivateEndpointConnectionsClientListByHostPoolPager.Err` has been removed
+- Function `*ScalingPlansClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*UserSessionsClientListPager.PageResponse` has been removed
+- Function `*StartMenuItemsClientListPager.Err` has been removed
+- Function `*PrivateLinkResourcesClientListByHostPoolPager.PageResponse` has been removed
+- Function `*ApplicationGroupsClientListBySubscriptionPager.Err` has been removed
+- Function `*MSIXPackagesClientListPager.PageResponse` has been removed
+- Function `*StartMenuItemsClientListPager.PageResponse` has been removed
+- Function `*PrivateLinkResourcesClientListByWorkspacePager.Err` has been removed
+- Function `*ApplicationGroupsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*ScalingPlansClientListByHostPoolPager.Err` has been removed
+- Function `*PrivateLinkResourcesClientListByHostPoolPager.Err` has been removed
+- Function `*ScalingPlansClientListBySubscriptionPager.Err` has been removed
+- Function `*PrivateEndpointConnectionsClientListByWorkspacePager.Err` has been removed
+- Function `*ApplicationsClientListPager.Err` has been removed
+- Function `*ApplicationGroupsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ApplicationGroupsClientListByResourceGroupPager.Err` has been removed
+- Function `*PrivateLinkResourcesClientListByWorkspacePager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*DesktopsClientListPager.PageResponse` has been removed
+- Function `*MsixImagesClientExpandPager.Err` has been removed
+- Function `*WorkspacesClientListBySubscriptionPager.Err` has been removed
+- Function `*ScalingPlansClientListByResourceGroupPager.Err` has been removed
+- Function `*PrivateEndpointConnectionsClientListByWorkspacePager.PageResponse` has been removed
+- Function `*ScalingPlansClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*WorkspacesClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*MSIXPackagesClientListPager.Err` has been removed
+- Function `*ApplicationsClientListPager.PageResponse` has been removed
+- Function `*HostPoolsClientListPager.PageResponse` has been removed
+- Function `*UserSessionsClientListByHostPoolPager.PageResponse` has been removed
+- Function `*PrivateEndpointConnectionsClientListByHostPoolPager.PageResponse` has been removed
+- Function `*DesktopsClientListPager.Err` has been removed
+- Function `*HostPoolsClientListPager.Err` has been removed
+- Function `*HostPoolsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*MsixImagesClientExpandPager.PageResponse` has been removed
+- Function `*UserSessionsClientListByHostPoolPager.Err` has been removed
+- Function `*WorkspacesClientListByResourceGroupPager.Err` has been removed
+- Function `*ScalingPlansClientListByHostPoolPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*SessionHostsClientListPager.PageResponse` has been removed
+- Function `*SessionHostsClientListPager.Err` has been removed
+- Function `*UserSessionsClientListPager.Err` has been removed
+- Struct `ApplicationGroupsClientCreateOrUpdateResult` has been removed
+- Struct `ApplicationGroupsClientGetResult` has been removed
+- Struct `ApplicationGroupsClientListByResourceGroupResult` has been removed
+- Struct `ApplicationGroupsClientListBySubscriptionResult` has been removed
+- Struct `ApplicationGroupsClientUpdateResult` has been removed
+- Struct `ApplicationsClientCreateOrUpdateResult` has been removed
+- Struct `ApplicationsClientGetResult` has been removed
+- Struct `ApplicationsClientListResult` has been removed
+- Struct `ApplicationsClientUpdateResult` has been removed
+- Struct `DesktopsClientGetResult` has been removed
+- Struct `DesktopsClientListResult` has been removed
+- Struct `DesktopsClientUpdateResult` has been removed
+- Struct `HostPoolsClientCreateOrUpdateResult` has been removed
+- Struct `HostPoolsClientGetResult` has been removed
+- Struct `HostPoolsClientListByResourceGroupResult` has been removed
+- Struct `HostPoolsClientListResult` has been removed
+- Struct `HostPoolsClientRetrieveRegistrationTokenResult` has been removed
+- Struct `HostPoolsClientUpdateResult` has been removed
+- Struct `MSIXPackagesClientCreateOrUpdateResult` has been removed
+- Struct `MSIXPackagesClientGetResult` has been removed
+- Struct `MSIXPackagesClientListResult` has been removed
+- Struct `MSIXPackagesClientUpdateResult` has been removed
+- Struct `MsixImagesClientExpandResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetByHostPoolResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetByWorkspaceResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListByHostPoolResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListByWorkspaceResult` has been removed
+- Struct `PrivateEndpointConnectionsClientUpdateByHostPoolResult` has been removed
+- Struct `PrivateEndpointConnectionsClientUpdateByWorkspaceResult` has been removed
+- Struct `PrivateLinkResourcesClientListByHostPoolResult` has been removed
+- Struct `PrivateLinkResourcesClientListByWorkspaceResult` has been removed
+- Struct `ScalingPlansClientCreateResult` has been removed
+- Struct `ScalingPlansClientGetResult` has been removed
+- Struct `ScalingPlansClientListByHostPoolResult` has been removed
+- Struct `ScalingPlansClientListByResourceGroupResult` has been removed
+- Struct `ScalingPlansClientListBySubscriptionResult` has been removed
+- Struct `ScalingPlansClientUpdateResult` has been removed
+- Struct `SessionHostsClientGetResult` has been removed
+- Struct `SessionHostsClientListResult` has been removed
+- Struct `SessionHostsClientUpdateResult` has been removed
+- Struct `StartMenuItemsClientListResult` has been removed
+- Struct `UserSessionsClientGetResult` has been removed
+- Struct `UserSessionsClientListByHostPoolResult` has been removed
+- Struct `UserSessionsClientListResult` has been removed
+- Struct `WorkspacesClientCreateOrUpdateResult` has been removed
+- Struct `WorkspacesClientGetResult` has been removed
+- Struct `WorkspacesClientListByResourceGroupResult` has been removed
+- Struct `WorkspacesClientListBySubscriptionResult` has been removed
+- Struct `WorkspacesClientUpdateResult` has been removed
+- Field `PrivateEndpointConnectionsClientGetByHostPoolResult` of struct `PrivateEndpointConnectionsClientGetByHostPoolResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetByHostPoolResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `SessionHostsClientListResult` of struct `SessionHostsClientListResponse` has been removed
+- Field `RawResponse` of struct `SessionHostsClientListResponse` has been removed
+- Field `ApplicationsClientUpdateResult` of struct `ApplicationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientUpdateResponse` has been removed
+- Field `MsixImagesClientExpandResult` of struct `MsixImagesClientExpandResponse` has been removed
+- Field `RawResponse` of struct `MsixImagesClientExpandResponse` has been removed
+- Field `UserSessionsClientListByHostPoolResult` of struct `UserSessionsClientListByHostPoolResponse` has been removed
+- Field `RawResponse` of struct `UserSessionsClientListByHostPoolResponse` has been removed
+- Field `PrivateLinkResourcesClientListByHostPoolResult` of struct `PrivateLinkResourcesClientListByHostPoolResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListByHostPoolResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListByHostPoolResult` of struct `PrivateEndpointConnectionsClientListByHostPoolResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListByHostPoolResponse` has been removed
+- Field `HostPoolsClientUpdateResult` of struct `HostPoolsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `HostPoolsClientUpdateResponse` has been removed
+- Field `ApplicationGroupsClientUpdateResult` of struct `ApplicationGroupsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationGroupsClientUpdateResponse` has been removed
+- Field `UserSessionsClientListResult` of struct `UserSessionsClientListResponse` has been removed
+- Field `RawResponse` of struct `UserSessionsClientListResponse` has been removed
+- Field `HostPoolsClientCreateOrUpdateResult` of struct `HostPoolsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `HostPoolsClientCreateOrUpdateResponse` has been removed
+- Field `MSIXPackagesClientCreateOrUpdateResult` of struct `MSIXPackagesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `MSIXPackagesClientCreateOrUpdateResponse` has been removed
+- Field `StartMenuItemsClientListResult` of struct `StartMenuItemsClientListResponse` has been removed
+- Field `RawResponse` of struct `StartMenuItemsClientListResponse` has been removed
+- Field `HostPoolsClientListResult` of struct `HostPoolsClientListResponse` has been removed
+- Field `RawResponse` of struct `HostPoolsClientListResponse` has been removed
+- Field `ApplicationGroupsClientGetResult` of struct `ApplicationGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ApplicationGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `HostPoolsClientDeleteResponse` has been removed
+- Field `WorkspacesClientCreateOrUpdateResult` of struct `WorkspacesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientCreateOrUpdateResponse` has been removed
+- Field `ScalingPlansClientListBySubscriptionResult` of struct `ScalingPlansClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ScalingPlansClientListBySubscriptionResponse` has been removed
+- Field `PrivateEndpointConnectionsClientUpdateByWorkspaceResult` of struct `PrivateEndpointConnectionsClientUpdateByWorkspaceResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientUpdateByWorkspaceResponse` has been removed
+- Field `RawResponse` of struct `MSIXPackagesClientDeleteResponse` has been removed
+- Field `WorkspacesClientListByResourceGroupResult` of struct `WorkspacesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientListByResourceGroupResponse` has been removed
+- Field `HostPoolsClientGetResult` of struct `HostPoolsClientGetResponse` has been removed
+- Field `RawResponse` of struct `HostPoolsClientGetResponse` has been removed
+- Field `DesktopsClientGetResult` of struct `DesktopsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DesktopsClientGetResponse` has been removed
+- Field `SessionHostsClientGetResult` of struct `SessionHostsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SessionHostsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteByHostPoolResponse` has been removed
+- Field `MSIXPackagesClientUpdateResult` of struct `MSIXPackagesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `MSIXPackagesClientUpdateResponse` has been removed
+- Field `WorkspacesClientUpdateResult` of struct `WorkspacesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientUpdateResponse` has been removed
+- Field `WorkspacesClientGetResult` of struct `WorkspacesClientGetResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ApplicationGroupsClientDeleteResponse` has been removed
+- Field `ApplicationGroupsClientListBySubscriptionResult` of struct `ApplicationGroupsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ApplicationGroupsClientListBySubscriptionResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetByWorkspaceResult` of struct `PrivateEndpointConnectionsClientGetByWorkspaceResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetByWorkspaceResponse` has been removed
+- Field `MSIXPackagesClientGetResult` of struct `MSIXPackagesClientGetResponse` has been removed
+- Field `RawResponse` of struct `MSIXPackagesClientGetResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientDeleteResponse` has been removed
+- Field `ApplicationsClientGetResult` of struct `ApplicationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientGetResponse` has been removed
+- Field `ScalingPlansClientGetResult` of struct `ScalingPlansClientGetResponse` has been removed
+- Field `RawResponse` of struct `ScalingPlansClientGetResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListByWorkspaceResult` of struct `PrivateEndpointConnectionsClientListByWorkspaceResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListByWorkspaceResponse` has been removed
+- Field `RawResponse` of struct `UserSessionsClientDisconnectResponse` has been removed
+- Field `RawResponse` of struct `SessionHostsClientDeleteResponse` has been removed
+- Field `HostPoolsClientListByResourceGroupResult` of struct `HostPoolsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `HostPoolsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `UserSessionsClientDeleteResponse` has been removed
+- Field `ScalingPlansClientListByResourceGroupResult` of struct `ScalingPlansClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ScalingPlansClientListByResourceGroupResponse` has been removed
+- Field `ApplicationGroupsClientCreateOrUpdateResult` of struct `ApplicationGroupsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationGroupsClientCreateOrUpdateResponse` has been removed
+- Field `ApplicationsClientListResult` of struct `ApplicationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientListResponse` has been removed
+- Field `DesktopsClientUpdateResult` of struct `DesktopsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DesktopsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `UserSessionsClientSendMessageResponse` has been removed
+- Field `SessionHostsClientUpdateResult` of struct `SessionHostsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SessionHostsClientUpdateResponse` has been removed
+- Field `PrivateLinkResourcesClientListByWorkspaceResult` of struct `PrivateLinkResourcesClientListByWorkspaceResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListByWorkspaceResponse` has been removed
+- Field `ScalingPlansClientListByHostPoolResult` of struct `ScalingPlansClientListByHostPoolResponse` has been removed
+- Field `RawResponse` of struct `ScalingPlansClientListByHostPoolResponse` has been removed
+- Field `MSIXPackagesClientListResult` of struct `MSIXPackagesClientListResponse` has been removed
+- Field `RawResponse` of struct `MSIXPackagesClientListResponse` has been removed
+- Field `ScalingPlansClientCreateResult` of struct `ScalingPlansClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ScalingPlansClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ScalingPlansClientDeleteResponse` has been removed
+- Field `ApplicationGroupsClientListByResourceGroupResult` of struct `ApplicationGroupsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ApplicationGroupsClientListByResourceGroupResponse` has been removed
+- Field `WorkspacesClientListBySubscriptionResult` of struct `WorkspacesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientDeleteResponse` has been removed
+- Field `UserSessionsClientGetResult` of struct `UserSessionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `UserSessionsClientGetResponse` has been removed
+- Field `PrivateEndpointConnectionsClientUpdateByHostPoolResult` of struct `PrivateEndpointConnectionsClientUpdateByHostPoolResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientUpdateByHostPoolResponse` has been removed
+- Field `ScalingPlansClientUpdateResult` of struct `ScalingPlansClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ScalingPlansClientUpdateResponse` has been removed
+- Field `DesktopsClientListResult` of struct `DesktopsClientListResponse` has been removed
+- Field `RawResponse` of struct `DesktopsClientListResponse` has been removed
+- Field `ApplicationsClientCreateOrUpdateResult` of struct `ApplicationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientCreateOrUpdateResponse` has been removed
+- Field `HostPoolsClientRetrieveRegistrationTokenResult` of struct `HostPoolsClientRetrieveRegistrationTokenResponse` has been removed
+- Field `RawResponse` of struct `HostPoolsClientRetrieveRegistrationTokenResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteByWorkspaceResponse` has been removed
+
+### Features Added
+
+- New function `*ApplicationsClientListPager.More() bool`
+- New function `*StartMenuItemsClientListPager.More() bool`
+- New function `*WorkspacesClientListByResourceGroupPager.More() bool`
+- New function `*HostPoolsClientListPager.More() bool`
+- New function `*HostPoolsClientListByResourceGroupPager.More() bool`
+- New function `*PrivateLinkResourcesClientListByWorkspacePager.More() bool`
+- New function `*MSIXPackagesClientListPager.More() bool`
+- New function `*DesktopsClientListPager.More() bool`
+- New function `*ScalingPlansClientListByResourceGroupPager.More() bool`
+- New function `*PrivateEndpointConnectionsClientListByWorkspacePager.More() bool`
+- New function `*WorkspacesClientListBySubscriptionPager.More() bool`
+- New function `*PrivateLinkResourcesClientListByHostPoolPager.More() bool`
+- New function `*UserSessionsClientListPager.More() bool`
+- New function `*ApplicationGroupsClientListByResourceGroupPager.More() bool`
+- New function `*PrivateEndpointConnectionsClientListByHostPoolPager.More() bool`
+- New function `*ScalingPlansClientListBySubscriptionPager.More() bool`
+- New function `*UserSessionsClientListByHostPoolPager.More() bool`
+- New function `*MsixImagesClientExpandPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*ScalingPlansClientListByHostPoolPager.More() bool`
+- New function `*ApplicationGroupsClientListBySubscriptionPager.More() bool`
+- New function `*SessionHostsClientListPager.More() bool`
+- New struct `CloudError`
+- New struct `CloudErrorProperties`
+- New anonymous field `PrivateEndpointConnectionWithSystemData` in struct `PrivateEndpointConnectionsClientUpdateByWorkspaceResponse`
+- New anonymous field `Application` in struct `ApplicationsClientUpdateResponse`
+- New anonymous field `WorkspaceList` in struct `WorkspacesClientListBySubscriptionResponse`
+- New anonymous field `ResourceProviderOperationList` in struct `OperationsClientListResponse`
+- New anonymous field `UserSessionList` in struct `UserSessionsClientListByHostPoolResponse`
+- New anonymous field `Application` in struct `ApplicationsClientCreateOrUpdateResponse`
+- New anonymous field `MSIXPackage` in struct `MSIXPackagesClientUpdateResponse`
+- New anonymous field `ScalingPlan` in struct `ScalingPlansClientCreateResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `PrivateLinkResourcesClientListByWorkspaceResponse`
+- New anonymous field `WorkspaceList` in struct `WorkspacesClientListByResourceGroupResponse`
+- New anonymous field `ApplicationGroup` in struct `ApplicationGroupsClientCreateOrUpdateResponse`
+- New anonymous field `ApplicationGroupList` in struct `ApplicationGroupsClientListByResourceGroupResponse`
+- New anonymous field `PrivateEndpointConnectionWithSystemData` in struct `PrivateEndpointConnectionsClientGetByWorkspaceResponse`
+- New anonymous field `DesktopList` in struct `DesktopsClientListResponse`
+- New anonymous field `PrivateEndpointConnectionWithSystemData` in struct `PrivateEndpointConnectionsClientGetByHostPoolResponse`
+- New anonymous field `ScalingPlan` in struct `ScalingPlansClientUpdateResponse`
+- New anonymous field `HostPoolList` in struct `HostPoolsClientListResponse`
+- New anonymous field `HostPoolList` in struct `HostPoolsClientListByResourceGroupResponse`
+- New anonymous field `ScalingPlan` in struct `ScalingPlansClientGetResponse`
+- New anonymous field `RegistrationInfo` in struct `HostPoolsClientRetrieveRegistrationTokenResponse`
+- New anonymous field `Application` in struct `ApplicationsClientGetResponse`
+- New anonymous field `HostPool` in struct `HostPoolsClientUpdateResponse`
+- New anonymous field `UserSessionList` in struct `UserSessionsClientListResponse`
+- New anonymous field `PrivateEndpointConnectionListResultWithSystemData` in struct `PrivateEndpointConnectionsClientListByHostPoolResponse`
+- New anonymous field `ExpandMsixImageList` in struct `MsixImagesClientExpandResponse`
+- New anonymous field `ApplicationGroup` in struct `ApplicationGroupsClientGetResponse`
+- New anonymous field `ScalingPlanList` in struct `ScalingPlansClientListBySubscriptionResponse`
+- New anonymous field `ScalingPlanList` in struct `ScalingPlansClientListByHostPoolResponse`
+- New anonymous field `Workspace` in struct `WorkspacesClientGetResponse`
+- New anonymous field `Workspace` in struct `WorkspacesClientCreateOrUpdateResponse`
+- New anonymous field `HostPool` in struct `HostPoolsClientCreateOrUpdateResponse`
+- New anonymous field `SessionHost` in struct `SessionHostsClientUpdateResponse`
+- New anonymous field `ApplicationList` in struct `ApplicationsClientListResponse`
+- New anonymous field `Workspace` in struct `WorkspacesClientUpdateResponse`
+- New anonymous field `SessionHost` in struct `SessionHostsClientGetResponse`
+- New anonymous field `MSIXPackage` in struct `MSIXPackagesClientGetResponse`
+- New anonymous field `PrivateEndpointConnectionWithSystemData` in struct `PrivateEndpointConnectionsClientUpdateByHostPoolResponse`
+- New anonymous field `HostPool` in struct `HostPoolsClientGetResponse`
+- New anonymous field `PrivateEndpointConnectionListResultWithSystemData` in struct `PrivateEndpointConnectionsClientListByWorkspaceResponse`
+- New anonymous field `MSIXPackageList` in struct `MSIXPackagesClientListResponse`
+- New anonymous field `Desktop` in struct `DesktopsClientGetResponse`
+- New anonymous field `StartMenuItemList` in struct `StartMenuItemsClientListResponse`
+- New anonymous field `UserSession` in struct `UserSessionsClientGetResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `PrivateLinkResourcesClientListByHostPoolResponse`
+- New anonymous field `SessionHostList` in struct `SessionHostsClientListResponse`
+- New anonymous field `Desktop` in struct `DesktopsClientUpdateResponse`
+- New anonymous field `ApplicationGroup` in struct `ApplicationGroupsClientUpdateResponse`
+- New anonymous field `MSIXPackage` in struct `MSIXPackagesClientCreateOrUpdateResponse`
+- New anonymous field `ScalingPlanList` in struct `ScalingPlansClientListByResourceGroupResponse`
+- New anonymous field `ApplicationGroupList` in struct `ApplicationGroupsClientListBySubscriptionResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Struct `CloudError` has been removed
+- Struct `CloudErrorProperties` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

@@ -34,17 +34,17 @@ type ApplicationDefinitionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewApplicationDefinitionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ApplicationDefinitionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ApplicationDefinitionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *ApplicationDefinitionsClient) BeginCreateOrUpdate(ctx context.Cont
 	if err != nil {
 		return ApplicationDefinitionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ApplicationDefinitionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ApplicationDefinitionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ApplicationDefinitionsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ApplicationDefinitionsClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *ApplicationDefinitionsClient) BeginDelete(ctx context.Context, res
 	if err != nil {
 		return ApplicationDefinitionsClientDeletePollerResponse{}, err
 	}
-	result := ApplicationDefinitionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ApplicationDefinitionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ApplicationDefinitionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ApplicationDefinitionsClientDeletePollerResponse{}, err
@@ -233,7 +229,7 @@ func (client *ApplicationDefinitionsClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *ApplicationDefinitionsClient) getHandleResponse(resp *http.Response) (ApplicationDefinitionsClientGetResponse, error) {
-	result := ApplicationDefinitionsClientGetResponse{RawResponse: resp}
+	result := ApplicationDefinitionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationDefinition); err != nil {
 		return ApplicationDefinitionsClientGetResponse{}, err
 	}
@@ -281,7 +277,7 @@ func (client *ApplicationDefinitionsClient) listByResourceGroupCreateRequest(ctx
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ApplicationDefinitionsClient) listByResourceGroupHandleResponse(resp *http.Response) (ApplicationDefinitionsClientListByResourceGroupResponse, error) {
-	result := ApplicationDefinitionsClientListByResourceGroupResponse{RawResponse: resp}
+	result := ApplicationDefinitionsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationDefinitionListResult); err != nil {
 		return ApplicationDefinitionsClientListByResourceGroupResponse{}, err
 	}
@@ -324,7 +320,7 @@ func (client *ApplicationDefinitionsClient) listBySubscriptionCreateRequest(ctx 
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *ApplicationDefinitionsClient) listBySubscriptionHandleResponse(resp *http.Response) (ApplicationDefinitionsClientListBySubscriptionResponse, error) {
-	result := ApplicationDefinitionsClientListBySubscriptionResponse{RawResponse: resp}
+	result := ApplicationDefinitionsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationDefinitionListResult); err != nil {
 		return ApplicationDefinitionsClientListBySubscriptionResponse{}, err
 	}
@@ -381,7 +377,7 @@ func (client *ApplicationDefinitionsClient) updateCreateRequest(ctx context.Cont
 
 // updateHandleResponse handles the Update response.
 func (client *ApplicationDefinitionsClient) updateHandleResponse(resp *http.Response) (ApplicationDefinitionsClientUpdateResponse, error) {
-	result := ApplicationDefinitionsClientUpdateResponse{RawResponse: resp}
+	result := ApplicationDefinitionsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationDefinition); err != nil {
 		return ApplicationDefinitionsClientUpdateResponse{}, err
 	}

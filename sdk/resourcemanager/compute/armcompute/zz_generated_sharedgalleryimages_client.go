@@ -35,17 +35,17 @@ type SharedGalleryImagesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSharedGalleryImagesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SharedGalleryImagesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SharedGalleryImagesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *SharedGalleryImagesClient) getCreateRequest(ctx context.Context, l
 
 // getHandleResponse handles the Get response.
 func (client *SharedGalleryImagesClient) getHandleResponse(resp *http.Response) (SharedGalleryImagesClientGetResponse, error) {
-	result := SharedGalleryImagesClientGetResponse{RawResponse: resp}
+	result := SharedGalleryImagesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedGalleryImage); err != nil {
 		return SharedGalleryImagesClientGetResponse{}, err
 	}
@@ -159,7 +159,7 @@ func (client *SharedGalleryImagesClient) listCreateRequest(ctx context.Context, 
 
 // listHandleResponse handles the List response.
 func (client *SharedGalleryImagesClient) listHandleResponse(resp *http.Response) (SharedGalleryImagesClientListResponse, error) {
-	result := SharedGalleryImagesClientListResponse{RawResponse: resp}
+	result := SharedGalleryImagesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedGalleryImageList); err != nil {
 		return SharedGalleryImagesClientListResponse{}, err
 	}

@@ -34,17 +34,17 @@ type PrivateEndpointConnectionClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateEndpointConnectionClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateEndpointConnectionClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateEndpointConnectionClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *PrivateEndpointConnectionClient) BeginDelete(ctx context.Context, 
 	if err != nil {
 		return PrivateEndpointConnectionClientDeletePollerResponse{}, err
 	}
-	result := PrivateEndpointConnectionClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateEndpointConnectionClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateEndpointConnectionClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return PrivateEndpointConnectionClientDeletePollerResponse{}, err
@@ -115,7 +113,7 @@ func (client *PrivateEndpointConnectionClient) deleteCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-10-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -167,7 +165,7 @@ func (client *PrivateEndpointConnectionClient) getCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-10-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -175,7 +173,7 @@ func (client *PrivateEndpointConnectionClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *PrivateEndpointConnectionClient) getHandleResponse(resp *http.Response) (PrivateEndpointConnectionClientGetResponse, error) {
-	result := PrivateEndpointConnectionClientGetResponse{RawResponse: resp}
+	result := PrivateEndpointConnectionClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionResource); err != nil {
 		return PrivateEndpointConnectionClientGetResponse{}, err
 	}
@@ -195,9 +193,7 @@ func (client *PrivateEndpointConnectionClient) BeginPut(ctx context.Context, vau
 	if err != nil {
 		return PrivateEndpointConnectionClientPutPollerResponse{}, err
 	}
-	result := PrivateEndpointConnectionClientPutPollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateEndpointConnectionClientPutPollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateEndpointConnectionClient.Put", "", resp, client.pl)
 	if err != nil {
 		return PrivateEndpointConnectionClientPutPollerResponse{}, err
@@ -249,7 +245,7 @@ func (client *PrivateEndpointConnectionClient) putCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-10-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)

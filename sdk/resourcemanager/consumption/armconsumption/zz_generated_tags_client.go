@@ -30,16 +30,16 @@ type TagsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTagsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *TagsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TagsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -86,7 +86,7 @@ func (client *TagsClient) getCreateRequest(ctx context.Context, scope string, op
 
 // getHandleResponse handles the Get response.
 func (client *TagsClient) getHandleResponse(resp *http.Response) (TagsClientGetResponse, error) {
-	result := TagsClientGetResponse{RawResponse: resp}
+	result := TagsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TagsResult); err != nil {
 		return TagsClientGetResponse{}, err
 	}

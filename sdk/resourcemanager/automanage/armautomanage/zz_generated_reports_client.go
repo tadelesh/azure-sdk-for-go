@@ -34,17 +34,17 @@ type ReportsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReportsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReportsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReportsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -107,7 +107,7 @@ func (client *ReportsClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *ReportsClient) getHandleResponse(resp *http.Response) (ReportsClientGetResponse, error) {
-	result := ReportsClientGetResponse{RawResponse: resp}
+	result := ReportsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Report); err != nil {
 		return ReportsClientGetResponse{}, err
 	}
@@ -121,19 +121,13 @@ func (client *ReportsClient) getHandleResponse(resp *http.Response) (ReportsClie
 // vmName - The name of the virtual machine.
 // options - ReportsClientListByConfigurationProfileAssignmentsOptions contains the optional parameters for the ReportsClient.ListByConfigurationProfileAssignments
 // method.
-func (client *ReportsClient) ListByConfigurationProfileAssignments(ctx context.Context, resourceGroupName string, configurationProfileAssignmentName string, vmName string, options *ReportsClientListByConfigurationProfileAssignmentsOptions) (ReportsClientListByConfigurationProfileAssignmentsResponse, error) {
-	req, err := client.listByConfigurationProfileAssignmentsCreateRequest(ctx, resourceGroupName, configurationProfileAssignmentName, vmName, options)
-	if err != nil {
-		return ReportsClientListByConfigurationProfileAssignmentsResponse{}, err
+func (client *ReportsClient) ListByConfigurationProfileAssignments(resourceGroupName string, configurationProfileAssignmentName string, vmName string, options *ReportsClientListByConfigurationProfileAssignmentsOptions) *ReportsClientListByConfigurationProfileAssignmentsPager {
+	return &ReportsClientListByConfigurationProfileAssignmentsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByConfigurationProfileAssignmentsCreateRequest(ctx, resourceGroupName, configurationProfileAssignmentName, vmName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ReportsClientListByConfigurationProfileAssignmentsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ReportsClientListByConfigurationProfileAssignmentsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByConfigurationProfileAssignmentsHandleResponse(resp)
 }
 
 // listByConfigurationProfileAssignmentsCreateRequest creates the ListByConfigurationProfileAssignments request.
@@ -168,7 +162,7 @@ func (client *ReportsClient) listByConfigurationProfileAssignmentsCreateRequest(
 
 // listByConfigurationProfileAssignmentsHandleResponse handles the ListByConfigurationProfileAssignments response.
 func (client *ReportsClient) listByConfigurationProfileAssignmentsHandleResponse(resp *http.Response) (ReportsClientListByConfigurationProfileAssignmentsResponse, error) {
-	result := ReportsClientListByConfigurationProfileAssignmentsResponse{RawResponse: resp}
+	result := ReportsClientListByConfigurationProfileAssignmentsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReportList); err != nil {
 		return ReportsClientListByConfigurationProfileAssignmentsResponse{}, err
 	}

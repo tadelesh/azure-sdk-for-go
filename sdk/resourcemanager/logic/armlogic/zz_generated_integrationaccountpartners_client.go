@@ -35,17 +35,17 @@ type IntegrationAccountPartnersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIntegrationAccountPartnersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IntegrationAccountPartnersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IntegrationAccountPartnersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *IntegrationAccountPartnersClient) createOrUpdateCreateRequest(ctx 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *IntegrationAccountPartnersClient) createOrUpdateHandleResponse(resp *http.Response) (IntegrationAccountPartnersClientCreateOrUpdateResponse, error) {
-	result := IntegrationAccountPartnersClientCreateOrUpdateResponse{RawResponse: resp}
+	result := IntegrationAccountPartnersClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountPartner); err != nil {
 		return IntegrationAccountPartnersClientCreateOrUpdateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *IntegrationAccountPartnersClient) Delete(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return IntegrationAccountPartnersClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return IntegrationAccountPartnersClientDeleteResponse{RawResponse: resp}, nil
+	return IntegrationAccountPartnersClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -218,7 +218,7 @@ func (client *IntegrationAccountPartnersClient) getCreateRequest(ctx context.Con
 
 // getHandleResponse handles the Get response.
 func (client *IntegrationAccountPartnersClient) getHandleResponse(resp *http.Response) (IntegrationAccountPartnersClientGetResponse, error) {
-	result := IntegrationAccountPartnersClientGetResponse{RawResponse: resp}
+	result := IntegrationAccountPartnersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountPartner); err != nil {
 		return IntegrationAccountPartnersClientGetResponse{}, err
 	}
@@ -277,7 +277,7 @@ func (client *IntegrationAccountPartnersClient) listCreateRequest(ctx context.Co
 
 // listHandleResponse handles the List response.
 func (client *IntegrationAccountPartnersClient) listHandleResponse(resp *http.Response) (IntegrationAccountPartnersClientListResponse, error) {
-	result := IntegrationAccountPartnersClientListResponse{RawResponse: resp}
+	result := IntegrationAccountPartnersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountPartnerListResult); err != nil {
 		return IntegrationAccountPartnersClientListResponse{}, err
 	}
@@ -338,7 +338,7 @@ func (client *IntegrationAccountPartnersClient) listContentCallbackURLCreateRequ
 
 // listContentCallbackURLHandleResponse handles the ListContentCallbackURL response.
 func (client *IntegrationAccountPartnersClient) listContentCallbackURLHandleResponse(resp *http.Response) (IntegrationAccountPartnersClientListContentCallbackURLResponse, error) {
-	result := IntegrationAccountPartnersClientListContentCallbackURLResponse{RawResponse: resp}
+	result := IntegrationAccountPartnersClientListContentCallbackURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowTriggerCallbackURL); err != nil {
 		return IntegrationAccountPartnersClientListContentCallbackURLResponse{}, err
 	}

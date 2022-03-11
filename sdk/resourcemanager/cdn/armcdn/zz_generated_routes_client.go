@@ -64,9 +64,7 @@ func (client *RoutesClient) BeginCreate(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return RoutesClientCreatePollerResponse{}, err
 	}
-	result := RoutesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := RoutesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("RoutesClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return RoutesClientCreatePollerResponse{}, err
@@ -143,9 +141,7 @@ func (client *RoutesClient) BeginDelete(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return RoutesClientDeletePollerResponse{}, err
 	}
-	result := RoutesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := RoutesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("RoutesClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return RoutesClientDeletePollerResponse{}, err
@@ -268,7 +264,7 @@ func (client *RoutesClient) getCreateRequest(ctx context.Context, resourceGroupN
 
 // getHandleResponse handles the Get response.
 func (client *RoutesClient) getHandleResponse(resp *http.Response) (RoutesClientGetResponse, error) {
-	result := RoutesClientGetResponse{RawResponse: resp}
+	result := RoutesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Route); err != nil {
 		return RoutesClientGetResponse{}, err
 	}
@@ -326,7 +322,7 @@ func (client *RoutesClient) listByEndpointCreateRequest(ctx context.Context, res
 
 // listByEndpointHandleResponse handles the ListByEndpoint response.
 func (client *RoutesClient) listByEndpointHandleResponse(resp *http.Response) (RoutesClientListByEndpointResponse, error) {
-	result := RoutesClientListByEndpointResponse{RawResponse: resp}
+	result := RoutesClientListByEndpointResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RouteListResult); err != nil {
 		return RoutesClientListByEndpointResponse{}, err
 	}
@@ -348,9 +344,7 @@ func (client *RoutesClient) BeginUpdate(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return RoutesClientUpdatePollerResponse{}, err
 	}
-	result := RoutesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := RoutesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("RoutesClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return RoutesClientUpdatePollerResponse{}, err

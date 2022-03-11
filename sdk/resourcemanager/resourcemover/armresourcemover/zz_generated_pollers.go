@@ -43,11 +43,10 @@ func (p *MoveCollectionsClientBulkRemovePoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final MoveCollectionsClientBulkRemoveResponse will be returned.
 func (p *MoveCollectionsClientBulkRemovePoller) FinalResponse(ctx context.Context) (MoveCollectionsClientBulkRemoveResponse, error) {
 	respType := MoveCollectionsClientBulkRemoveResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationStatus)
 	if err != nil {
 		return MoveCollectionsClientBulkRemoveResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *MoveCollectionsClientCommitPoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final MoveCollectionsClientCommitResponse will be returned.
 func (p *MoveCollectionsClientCommitPoller) FinalResponse(ctx context.Context) (MoveCollectionsClientCommitResponse, error) {
 	respType := MoveCollectionsClientCommitResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationStatus)
 	if err != nil {
 		return MoveCollectionsClientCommitResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *MoveCollectionsClientDeletePoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final MoveCollectionsClientDeleteResponse will be returned.
 func (p *MoveCollectionsClientDeletePoller) FinalResponse(ctx context.Context) (MoveCollectionsClientDeleteResponse, error) {
 	respType := MoveCollectionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationStatus)
 	if err != nil {
 		return MoveCollectionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *MoveCollectionsClientDiscardPoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final MoveCollectionsClientDiscardResponse will be returned.
 func (p *MoveCollectionsClientDiscardPoller) FinalResponse(ctx context.Context) (MoveCollectionsClientDiscardResponse, error) {
 	respType := MoveCollectionsClientDiscardResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationStatus)
 	if err != nil {
 		return MoveCollectionsClientDiscardResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *MoveCollectionsClientInitiateMovePoller) Poll(ctx context.Context) (*ht
 // If the final GET succeeded then the final MoveCollectionsClientInitiateMoveResponse will be returned.
 func (p *MoveCollectionsClientInitiateMovePoller) FinalResponse(ctx context.Context) (MoveCollectionsClientInitiateMoveResponse, error) {
 	respType := MoveCollectionsClientInitiateMoveResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationStatus)
 	if err != nil {
 		return MoveCollectionsClientInitiateMoveResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *MoveCollectionsClientPreparePoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final MoveCollectionsClientPrepareResponse will be returned.
 func (p *MoveCollectionsClientPreparePoller) FinalResponse(ctx context.Context) (MoveCollectionsClientPrepareResponse, error) {
 	respType := MoveCollectionsClientPrepareResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationStatus)
 	if err != nil {
 		return MoveCollectionsClientPrepareResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *MoveCollectionsClientResolveDependenciesPoller) Poll(ctx context.Contex
 // If the final GET succeeded then the final MoveCollectionsClientResolveDependenciesResponse will be returned.
 func (p *MoveCollectionsClientResolveDependenciesPoller) FinalResponse(ctx context.Context) (MoveCollectionsClientResolveDependenciesResponse, error) {
 	respType := MoveCollectionsClientResolveDependenciesResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationStatus)
 	if err != nil {
 		return MoveCollectionsClientResolveDependenciesResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *MoveResourcesClientCreatePoller) Poll(ctx context.Context) (*http.Respo
 // If the final GET succeeded then the final MoveResourcesClientCreateResponse will be returned.
 func (p *MoveResourcesClientCreatePoller) FinalResponse(ctx context.Context) (MoveResourcesClientCreateResponse, error) {
 	respType := MoveResourcesClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MoveResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.MoveResource)
 	if err != nil {
 		return MoveResourcesClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *MoveResourcesClientDeletePoller) Poll(ctx context.Context) (*http.Respo
 // If the final GET succeeded then the final MoveResourcesClientDeleteResponse will be returned.
 func (p *MoveResourcesClientDeletePoller) FinalResponse(ctx context.Context) (MoveResourcesClientDeleteResponse, error) {
 	respType := MoveResourcesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationStatus)
 	if err != nil {
 		return MoveResourcesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

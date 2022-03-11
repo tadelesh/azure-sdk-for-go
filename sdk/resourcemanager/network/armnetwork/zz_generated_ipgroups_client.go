@@ -35,17 +35,17 @@ type IPGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIPGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IPGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IPGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *IPGroupsClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return IPGroupsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := IPGroupsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := IPGroupsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("IPGroupsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return IPGroupsClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *IPGroupsClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return IPGroupsClientDeletePollerResponse{}, err
 	}
-	result := IPGroupsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := IPGroupsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("IPGroupsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return IPGroupsClientDeletePollerResponse{}, err
@@ -235,7 +231,7 @@ func (client *IPGroupsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *IPGroupsClient) getHandleResponse(resp *http.Response) (IPGroupsClientGetResponse, error) {
-	result := IPGroupsClientGetResponse{RawResponse: resp}
+	result := IPGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IPGroup); err != nil {
 		return IPGroupsClientGetResponse{}, err
 	}
@@ -277,7 +273,7 @@ func (client *IPGroupsClient) listCreateRequest(ctx context.Context, options *IP
 
 // listHandleResponse handles the List response.
 func (client *IPGroupsClient) listHandleResponse(resp *http.Response) (IPGroupsClientListResponse, error) {
-	result := IPGroupsClientListResponse{RawResponse: resp}
+	result := IPGroupsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IPGroupListResult); err != nil {
 		return IPGroupsClientListResponse{}, err
 	}
@@ -325,7 +321,7 @@ func (client *IPGroupsClient) listByResourceGroupCreateRequest(ctx context.Conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *IPGroupsClient) listByResourceGroupHandleResponse(resp *http.Response) (IPGroupsClientListByResourceGroupResponse, error) {
-	result := IPGroupsClientListByResourceGroupResponse{RawResponse: resp}
+	result := IPGroupsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IPGroupListResult); err != nil {
 		return IPGroupsClientListByResourceGroupResponse{}, err
 	}
@@ -381,7 +377,7 @@ func (client *IPGroupsClient) updateGroupsCreateRequest(ctx context.Context, res
 
 // updateGroupsHandleResponse handles the UpdateGroups response.
 func (client *IPGroupsClient) updateGroupsHandleResponse(resp *http.Response) (IPGroupsClientUpdateGroupsResponse, error) {
-	result := IPGroupsClientUpdateGroupsResponse{RawResponse: resp}
+	result := IPGroupsClientUpdateGroupsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IPGroup); err != nil {
 		return IPGroupsClientUpdateGroupsResponse{}, err
 	}

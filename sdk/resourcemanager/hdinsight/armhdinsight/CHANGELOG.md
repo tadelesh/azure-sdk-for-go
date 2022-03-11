@@ -1,5 +1,239 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ClustersClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ClustersClientListResponse, error)`
+- Function `*ApplicationsClientListByClusterPager.NextPage` return value(s) have been changed from `(bool)` to `(ApplicationsClientListByClusterResponse, error)`
+- Function `*PrivateEndpointConnectionsClientListByClusterPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateEndpointConnectionsClientListByClusterResponse, error)`
+- Function `*ScriptExecutionHistoryClientListByClusterPager.NextPage` return value(s) have been changed from `(bool)` to `(ScriptExecutionHistoryClientListByClusterResponse, error)`
+- Function `*ClustersClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ClustersClientListByResourceGroupResponse, error)`
+- Function `*ScriptActionsClientListByClusterPager.NextPage` return value(s) have been changed from `(bool)` to `(ScriptActionsClientListByClusterResponse, error)`
+- Function `*PrivateEndpointConnectionsClientListByClusterPager.Err` has been removed
+- Function `*PrivateEndpointConnectionsClientListByClusterPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*ScriptActionsClientListByClusterPager.PageResponse` has been removed
+- Function `*ClustersClientListPager.Err` has been removed
+- Function `*ApplicationsClientListByClusterPager.Err` has been removed
+- Function `*ClustersClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*ScriptActionsClientListByClusterPager.Err` has been removed
+- Function `*ScriptExecutionHistoryClientListByClusterPager.PageResponse` has been removed
+- Function `*ApplicationsClientListByClusterPager.PageResponse` has been removed
+- Function `*ScriptExecutionHistoryClientListByClusterPager.Err` has been removed
+- Function `*ClustersClientListByResourceGroupPager.Err` has been removed
+- Function `*ClustersClientListPager.PageResponse` has been removed
+- Struct `ApplicationsClientCreateResult` has been removed
+- Struct `ApplicationsClientGetAzureAsyncOperationStatusResult` has been removed
+- Struct `ApplicationsClientGetResult` has been removed
+- Struct `ApplicationsClientListByClusterResult` has been removed
+- Struct `ClustersClientCreateResult` has been removed
+- Struct `ClustersClientGetAzureAsyncOperationStatusResult` has been removed
+- Struct `ClustersClientGetGatewaySettingsResult` has been removed
+- Struct `ClustersClientGetResult` has been removed
+- Struct `ClustersClientListByResourceGroupResult` has been removed
+- Struct `ClustersClientListResult` has been removed
+- Struct `ClustersClientUpdateResult` has been removed
+- Struct `ConfigurationsClientGetResult` has been removed
+- Struct `ConfigurationsClientListResult` has been removed
+- Struct `ExtensionsClientGetAzureAsyncOperationStatusResult` has been removed
+- Struct `ExtensionsClientGetAzureMonitorStatusResult` has been removed
+- Struct `ExtensionsClientGetMonitoringStatusResult` has been removed
+- Struct `ExtensionsClientGetResult` has been removed
+- Struct `LocationsClientCheckNameAvailabilityResult` has been removed
+- Struct `LocationsClientGetAzureAsyncOperationStatusResult` has been removed
+- Struct `LocationsClientGetCapabilitiesResult` has been removed
+- Struct `LocationsClientListBillingSpecsResult` has been removed
+- Struct `LocationsClientListUsagesResult` has been removed
+- Struct `LocationsClientValidateClusterCreateRequestResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientCreateOrUpdateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListByClusterResult` has been removed
+- Struct `PrivateLinkResourcesClientGetResult` has been removed
+- Struct `PrivateLinkResourcesClientListByClusterResult` has been removed
+- Struct `ScriptActionsClientGetExecutionAsyncOperationStatusResult` has been removed
+- Struct `ScriptActionsClientGetExecutionDetailResult` has been removed
+- Struct `ScriptActionsClientListByClusterResult` has been removed
+- Struct `ScriptExecutionHistoryClientListByClusterResult` has been removed
+- Struct `VirtualMachinesClientGetAsyncOperationStatusResult` has been removed
+- Struct `VirtualMachinesClientListHostsResult` has been removed
+- Field `LocationsClientGetAzureAsyncOperationStatusResult` of struct `LocationsClientGetAzureAsyncOperationStatusResponse` has been removed
+- Field `RawResponse` of struct `LocationsClientGetAzureAsyncOperationStatusResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeletePollerResponse` has been removed
+- Field `PrivateLinkResourcesClientGetResult` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientEnableAzureMonitorResponse` has been removed
+- Field `RawResponse` of struct `ScriptActionsClientDeleteResponse` has been removed
+- Field `ApplicationsClientGetAzureAsyncOperationStatusResult` of struct `ApplicationsClientGetAzureAsyncOperationStatusResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientGetAzureAsyncOperationStatusResponse` has been removed
+- Field `RawResponse` of struct `ScriptExecutionHistoryClientPromoteResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientCreatePollerResponse` has been removed
+- Field `ConfigurationsClientGetResult` of struct `ConfigurationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientRotateDiskEncryptionKeyPollerResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdateAutoScaleConfigurationResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientCreatePollerResponse` has been removed
+- Field `ScriptActionsClientGetExecutionDetailResult` of struct `ScriptActionsClientGetExecutionDetailResponse` has been removed
+- Field `RawResponse` of struct `ScriptActionsClientGetExecutionDetailResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientDeletePollerResponse` has been removed
+- Field `ScriptActionsClientGetExecutionAsyncOperationStatusResult` of struct `ScriptActionsClientGetExecutionAsyncOperationStatusResponse` has been removed
+- Field `RawResponse` of struct `ScriptActionsClientGetExecutionAsyncOperationStatusResponse` has been removed
+- Field `ClustersClientGetResult` of struct `ClustersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientDeleteResponse` has been removed
+- Field `ScriptExecutionHistoryClientListByClusterResult` of struct `ScriptExecutionHistoryClientListByClusterResponse` has been removed
+- Field `RawResponse` of struct `ScriptExecutionHistoryClientListByClusterResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientDisableMonitoringPollerResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientResizeResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientDeletePollerResponse` has been removed
+- Field `ExtensionsClientGetMonitoringStatusResult` of struct `ExtensionsClientGetMonitoringStatusResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientGetMonitoringStatusResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdateGatewaySettingsPollerResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientDisableAzureMonitorResponse` has been removed
+- Field `ClustersClientUpdateResult` of struct `ClustersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdateAutoScaleConfigurationPollerResponse` has been removed
+- Field `ConfigurationsClientListResult` of struct `ConfigurationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdateIdentityCertificatePollerResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientExecuteScriptActionsPollerResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientExecuteScriptActionsResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientEnableMonitoringResponse` has been removed
+- Field `VirtualMachinesClientListHostsResult` of struct `VirtualMachinesClientListHostsResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientListHostsResponse` has been removed
+- Field `PrivateLinkResourcesClientListByClusterResult` of struct `PrivateLinkResourcesClientListByClusterResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListByClusterResponse` has been removed
+- Field `ClustersClientGetGatewaySettingsResult` of struct `ClustersClientGetGatewaySettingsResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientGetGatewaySettingsResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientEnableMonitoringPollerResponse` has been removed
+- Field `LocationsClientCheckNameAvailabilityResult` of struct `LocationsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `LocationsClientCheckNameAvailabilityResponse` has been removed
+- Field `PrivateEndpointConnectionsClientCreateOrUpdateResult` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `ExtensionsClientGetAzureMonitorStatusResult` of struct `ExtensionsClientGetAzureMonitorStatusResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientGetAzureMonitorStatusResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientResizePollerResponse` has been removed
+- Field `ClustersClientListResult` of struct `ClustersClientListResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListResponse` has been removed
+- Field `ScriptActionsClientListByClusterResult` of struct `ScriptActionsClientListByClusterResponse` has been removed
+- Field `RawResponse` of struct `ScriptActionsClientListByClusterResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListByClusterResult` of struct `PrivateEndpointConnectionsClientListByClusterResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListByClusterResponse` has been removed
+- Field `ClustersClientGetAzureAsyncOperationStatusResult` of struct `ClustersClientGetAzureAsyncOperationStatusResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientGetAzureAsyncOperationStatusResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientDeleteResponse` has been removed
+- Field `LocationsClientListBillingSpecsResult` of struct `LocationsClientListBillingSpecsResponse` has been removed
+- Field `RawResponse` of struct `LocationsClientListBillingSpecsResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdateGatewaySettingsResponse` has been removed
+- Field `ApplicationsClientListByClusterResult` of struct `ApplicationsClientListByClusterResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientListByClusterResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientDisableMonitoringResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdateIdentityCertificateResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientRestartHostsResponse` has been removed
+- Field `ExtensionsClientGetResult` of struct `ExtensionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientGetResponse` has been removed
+- Field `ExtensionsClientGetAzureAsyncOperationStatusResult` of struct `ExtensionsClientGetAzureAsyncOperationStatusResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientGetAzureAsyncOperationStatusResponse` has been removed
+- Field `ClustersClientCreateResult` of struct `ClustersClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientCreateResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientCreateResponse` has been removed
+- Field `ApplicationsClientGetResult` of struct `ApplicationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientGetResponse` has been removed
+- Field `ClustersClientListByResourceGroupResult` of struct `ClustersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListByResourceGroupResponse` has been removed
+- Field `LocationsClientGetCapabilitiesResult` of struct `LocationsClientGetCapabilitiesResponse` has been removed
+- Field `RawResponse` of struct `LocationsClientGetCapabilitiesResponse` has been removed
+- Field `VirtualMachinesClientGetAsyncOperationStatusResult` of struct `VirtualMachinesClientGetAsyncOperationStatusResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientGetAsyncOperationStatusResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientCreatePollerResponse` has been removed
+- Field `ApplicationsClientCreateResult` of struct `ApplicationsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientCreateResponse` has been removed
+- Field `LocationsClientListUsagesResult` of struct `LocationsClientListUsagesResponse` has been removed
+- Field `RawResponse` of struct `LocationsClientListUsagesResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientDisableAzureMonitorPollerResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientUpdatePollerResponse` has been removed
+- Field `LocationsClientValidateClusterCreateRequestResult` of struct `LocationsClientValidateClusterCreateRequestResponse` has been removed
+- Field `RawResponse` of struct `LocationsClientValidateClusterCreateRequestResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientRestartHostsPollerResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientRotateDiskEncryptionKeyResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientEnableAzureMonitorPollerResponse` has been removed
+
+### Features Added
+
+- New function `*ClustersClientListPager.More() bool`
+- New function `ClusterListPersistedScriptActionsResult.MarshalJSON() ([]byte, error)`
+- New function `*ClustersClientListByResourceGroupPager.More() bool`
+- New function `ScriptActionPersistedGetResponseSpec.MarshalJSON() ([]byte, error)`
+- New function `*ApplicationsClientListByClusterPager.More() bool`
+- New function `*ScriptExecutionHistoryClientListByClusterPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*PrivateEndpointConnectionsClientListByClusterPager.More() bool`
+- New function `*ScriptActionsClientListByClusterPager.More() bool`
+- New struct `ClusterListPersistedScriptActionsResult`
+- New struct `ErrorResponse`
+- New struct `ScriptActionPersistedGetResponseSpec`
+- New anonymous field `ClusterConfigurations` in struct `ConfigurationsClientListResponse`
+- New anonymous field `ClusterListResult` in struct `ClustersClientListByResourceGroupResponse`
+- New anonymous field `AsyncOperationResult` in struct `LocationsClientGetAzureAsyncOperationStatusResponse`
+- New anonymous field `AsyncOperationResult` in struct `ClustersClientGetAzureAsyncOperationStatusResponse`
+- New anonymous field `ClusterMonitoringResponse` in struct `ExtensionsClientGetMonitoringStatusResponse`
+- New anonymous field `Application` in struct `ApplicationsClientGetResponse`
+- New anonymous field `BillingResponseListResult` in struct `LocationsClientListBillingSpecsResponse`
+- New field `Value` in struct `ConfigurationsClientGetResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `ScriptActionExecutionHistoryList` in struct `ScriptExecutionHistoryClientListByClusterResponse`
+- New anonymous field `AsyncOperationResult` in struct `ScriptActionsClientGetExecutionAsyncOperationStatusResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse`
+- New anonymous field `ClusterCreateValidationResult` in struct `LocationsClientValidateClusterCreateRequestResponse`
+- New anonymous field `GatewaySettings` in struct `ClustersClientGetGatewaySettingsResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListByClusterResponse`
+- New anonymous field `CapabilitiesResult` in struct `LocationsClientGetCapabilitiesResponse`
+- New anonymous field `Cluster` in struct `ClustersClientCreateResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `PrivateLinkResourcesClientListByClusterResponse`
+- New anonymous field `UsagesListResult` in struct `LocationsClientListUsagesResponse`
+- New anonymous field `ApplicationListResult` in struct `ApplicationsClientListByClusterResponse`
+- New anonymous field `AsyncOperationResult` in struct `ExtensionsClientGetAzureAsyncOperationStatusResponse`
+- New field `HostInfoArray` in struct `VirtualMachinesClientListHostsResponse`
+- New anonymous field `AsyncOperationResult` in struct `VirtualMachinesClientGetAsyncOperationStatusResponse`
+- New anonymous field `AsyncOperationResult` in struct `ApplicationsClientGetAzureAsyncOperationStatusResponse`
+- New anonymous field `Application` in struct `ApplicationsClientCreateResponse`
+- New anonymous field `AzureMonitorResponse` in struct `ExtensionsClientGetAzureMonitorStatusResponse`
+- New anonymous field `ClusterListResult` in struct `ClustersClientListResponse`
+- New anonymous field `ScriptActionsList` in struct `ScriptActionsClientListByClusterResponse`
+- New anonymous field `ClusterMonitoringResponse` in struct `ExtensionsClientGetResponse`
+- New anonymous field `RuntimeScriptActionDetail` in struct `ScriptActionsClientGetExecutionDetailResponse`
+- New anonymous field `Cluster` in struct `ClustersClientGetResponse`
+- New anonymous field `Cluster` in struct `ClustersClientUpdateResponse`
+- New anonymous field `PrivateLinkResource` in struct `PrivateLinkResourcesClientGetResponse`
+- New anonymous field `NameAvailabilityCheckResult` in struct `LocationsClientCheckNameAvailabilityResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `ClusterDefinition.Configurations` has been changed from `map[string]interface{}` to `interface{}`
+- Function `ScriptActionPersistedGetResponseSpec.MarshalJSON` has been removed
+- Function `ClusterListPersistedScriptActionsResult.MarshalJSON` has been removed
+- Struct `ClusterListPersistedScriptActionsResult` has been removed
+- Struct `ErrorResponse` has been removed
+- Struct `ScriptActionPersistedGetResponseSpec` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

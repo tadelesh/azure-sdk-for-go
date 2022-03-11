@@ -43,11 +43,10 @@ func (p *MHSMPrivateEndpointConnectionsClientDeletePoller) Poll(ctx context.Cont
 // If the final GET succeeded then the final MHSMPrivateEndpointConnectionsClientDeleteResponse will be returned.
 func (p *MHSMPrivateEndpointConnectionsClientDeletePoller) FinalResponse(ctx context.Context) (MHSMPrivateEndpointConnectionsClientDeleteResponse, error) {
 	respType := MHSMPrivateEndpointConnectionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MHSMPrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.MHSMPrivateEndpointConnection)
 	if err != nil {
 		return MHSMPrivateEndpointConnectionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ManagedHsmsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final ManagedHsmsClientCreateOrUpdateResponse will be returned.
 func (p *ManagedHsmsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ManagedHsmsClientCreateOrUpdateResponse, error) {
 	respType := ManagedHsmsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ManagedHsm)
+	_, err := p.pt.FinalResponse(ctx, &respType.ManagedHsm)
 	if err != nil {
 		return ManagedHsmsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ManagedHsmsClientDeletePoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final ManagedHsmsClientDeleteResponse will be returned.
 func (p *ManagedHsmsClientDeletePoller) FinalResponse(ctx context.Context) (ManagedHsmsClientDeleteResponse, error) {
 	respType := ManagedHsmsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ManagedHsmsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *ManagedHsmsClientPurgeDeletedPoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final ManagedHsmsClientPurgeDeletedResponse will be returned.
 func (p *ManagedHsmsClientPurgeDeletedPoller) FinalResponse(ctx context.Context) (ManagedHsmsClientPurgeDeletedResponse, error) {
 	respType := ManagedHsmsClientPurgeDeletedResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ManagedHsmsClientPurgeDeletedResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *ManagedHsmsClientUpdatePoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final ManagedHsmsClientUpdateResponse will be returned.
 func (p *ManagedHsmsClientUpdatePoller) FinalResponse(ctx context.Context) (ManagedHsmsClientUpdateResponse, error) {
 	respType := ManagedHsmsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ManagedHsm)
+	_, err := p.pt.FinalResponse(ctx, &respType.ManagedHsm)
 	if err != nil {
 		return ManagedHsmsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *PrivateEndpointConnectionsClientDeletePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionsClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return PrivateEndpointConnectionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *VaultsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final VaultsClientCreateOrUpdateResponse will be returned.
 func (p *VaultsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (VaultsClientCreateOrUpdateResponse, error) {
 	respType := VaultsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Vault)
+	_, err := p.pt.FinalResponse(ctx, &respType.Vault)
 	if err != nil {
 		return VaultsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *VaultsClientPurgeDeletedPoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final VaultsClientPurgeDeletedResponse will be returned.
 func (p *VaultsClientPurgeDeletedPoller) FinalResponse(ctx context.Context) (VaultsClientPurgeDeletedResponse, error) {
 	respType := VaultsClientPurgeDeletedResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return VaultsClientPurgeDeletedResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

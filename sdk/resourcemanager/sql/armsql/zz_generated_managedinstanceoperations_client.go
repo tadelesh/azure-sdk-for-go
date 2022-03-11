@@ -34,17 +34,17 @@ type ManagedInstanceOperationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedInstanceOperationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedInstanceOperationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedInstanceOperationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -68,7 +68,7 @@ func (client *ManagedInstanceOperationsClient) Cancel(ctx context.Context, resou
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ManagedInstanceOperationsClientCancelResponse{}, runtime.NewResponseError(resp)
 	}
-	return ManagedInstanceOperationsClientCancelResponse{RawResponse: resp}, nil
+	return ManagedInstanceOperationsClientCancelResponse{}, nil
 }
 
 // cancelCreateRequest creates the Cancel request.
@@ -148,7 +148,7 @@ func (client *ManagedInstanceOperationsClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *ManagedInstanceOperationsClient) getHandleResponse(resp *http.Response) (ManagedInstanceOperationsClientGetResponse, error) {
-	result := ManagedInstanceOperationsClientGetResponse{RawResponse: resp}
+	result := ManagedInstanceOperationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceOperation); err != nil {
 		return ManagedInstanceOperationsClientGetResponse{}, err
 	}
@@ -202,7 +202,7 @@ func (client *ManagedInstanceOperationsClient) listByManagedInstanceCreateReques
 
 // listByManagedInstanceHandleResponse handles the ListByManagedInstance response.
 func (client *ManagedInstanceOperationsClient) listByManagedInstanceHandleResponse(resp *http.Response) (ManagedInstanceOperationsClientListByManagedInstanceResponse, error) {
-	result := ManagedInstanceOperationsClientListByManagedInstanceResponse{RawResponse: resp}
+	result := ManagedInstanceOperationsClientListByManagedInstanceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceOperationListResult); err != nil {
 		return ManagedInstanceOperationsClientListByManagedInstanceResponse{}, err
 	}

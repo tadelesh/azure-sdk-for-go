@@ -35,17 +35,17 @@ type WorkbooksClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkbooksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkbooksClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkbooksClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *WorkbooksClient) createOrUpdateCreateRequest(ctx context.Context, 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *WorkbooksClient) createOrUpdateHandleResponse(resp *http.Response) (WorkbooksClientCreateOrUpdateResponse, error) {
-	result := WorkbooksClientCreateOrUpdateResponse{RawResponse: resp}
+	result := WorkbooksClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Workbook); err != nil {
 		return WorkbooksClientCreateOrUpdateResponse{}, err
 	}
@@ -127,7 +127,7 @@ func (client *WorkbooksClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WorkbooksClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return WorkbooksClientDeleteResponse{RawResponse: resp}, nil
+	return WorkbooksClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -204,7 +204,7 @@ func (client *WorkbooksClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *WorkbooksClient) getHandleResponse(resp *http.Response) (WorkbooksClientGetResponse, error) {
-	result := WorkbooksClientGetResponse{RawResponse: resp}
+	result := WorkbooksClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Workbook); err != nil {
 		return WorkbooksClientGetResponse{}, err
 	}
@@ -263,7 +263,7 @@ func (client *WorkbooksClient) listByResourceGroupCreateRequest(ctx context.Cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *WorkbooksClient) listByResourceGroupHandleResponse(resp *http.Response) (WorkbooksClientListByResourceGroupResponse, error) {
-	result := WorkbooksClientListByResourceGroupResponse{RawResponse: resp}
+	result := WorkbooksClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkbooksListResult); err != nil {
 		return WorkbooksClientListByResourceGroupResponse{}, err
 	}
@@ -314,7 +314,7 @@ func (client *WorkbooksClient) listBySubscriptionCreateRequest(ctx context.Conte
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *WorkbooksClient) listBySubscriptionHandleResponse(resp *http.Response) (WorkbooksClientListBySubscriptionResponse, error) {
-	result := WorkbooksClientListBySubscriptionResponse{RawResponse: resp}
+	result := WorkbooksClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkbooksListResult); err != nil {
 		return WorkbooksClientListBySubscriptionResponse{}, err
 	}
@@ -374,7 +374,7 @@ func (client *WorkbooksClient) revisionGetCreateRequest(ctx context.Context, res
 
 // revisionGetHandleResponse handles the RevisionGet response.
 func (client *WorkbooksClient) revisionGetHandleResponse(resp *http.Response) (WorkbooksClientRevisionGetResponse, error) {
-	result := WorkbooksClientRevisionGetResponse{RawResponse: resp}
+	result := WorkbooksClientRevisionGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Workbook); err != nil {
 		return WorkbooksClientRevisionGetResponse{}, err
 	}
@@ -426,7 +426,7 @@ func (client *WorkbooksClient) revisionsListCreateRequest(ctx context.Context, r
 
 // revisionsListHandleResponse handles the RevisionsList response.
 func (client *WorkbooksClient) revisionsListHandleResponse(resp *http.Response) (WorkbooksClientRevisionsListResponse, error) {
-	result := WorkbooksClientRevisionsListResponse{RawResponse: resp}
+	result := WorkbooksClientRevisionsListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkbooksListResult); err != nil {
 		return WorkbooksClientRevisionsListResponse{}, err
 	}
@@ -487,7 +487,7 @@ func (client *WorkbooksClient) updateCreateRequest(ctx context.Context, resource
 
 // updateHandleResponse handles the Update response.
 func (client *WorkbooksClient) updateHandleResponse(resp *http.Response) (WorkbooksClientUpdateResponse, error) {
-	result := WorkbooksClientUpdateResponse{RawResponse: resp}
+	result := WorkbooksClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Workbook); err != nil {
 		return WorkbooksClientUpdateResponse{}, err
 	}

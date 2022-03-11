@@ -43,11 +43,10 @@ func (p *DedicatedHsmClientCreateOrUpdatePoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final DedicatedHsmClientCreateOrUpdateResponse will be returned.
 func (p *DedicatedHsmClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (DedicatedHsmClientCreateOrUpdateResponse, error) {
 	respType := DedicatedHsmClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DedicatedHsm)
+	_, err := p.pt.FinalResponse(ctx, &respType.DedicatedHsm)
 	if err != nil {
 		return DedicatedHsmClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *DedicatedHsmClientDeletePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final DedicatedHsmClientDeleteResponse will be returned.
 func (p *DedicatedHsmClientDeletePoller) FinalResponse(ctx context.Context) (DedicatedHsmClientDeleteResponse, error) {
 	respType := DedicatedHsmClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DedicatedHsmClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *DedicatedHsmClientUpdatePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final DedicatedHsmClientUpdateResponse will be returned.
 func (p *DedicatedHsmClientUpdatePoller) FinalResponse(ctx context.Context) (DedicatedHsmClientUpdateResponse, error) {
 	respType := DedicatedHsmClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DedicatedHsm)
+	_, err := p.pt.FinalResponse(ctx, &respType.DedicatedHsm)
 	if err != nil {
 		return DedicatedHsmClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

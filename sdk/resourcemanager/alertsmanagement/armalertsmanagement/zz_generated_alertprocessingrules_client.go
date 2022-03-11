@@ -34,17 +34,17 @@ type AlertProcessingRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAlertProcessingRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AlertProcessingRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AlertProcessingRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *AlertProcessingRulesClient) createOrUpdateCreateRequest(ctx contex
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *AlertProcessingRulesClient) createOrUpdateHandleResponse(resp *http.Response) (AlertProcessingRulesClientCreateOrUpdateResponse, error) {
-	result := AlertProcessingRulesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := AlertProcessingRulesClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -158,7 +158,7 @@ func (client *AlertProcessingRulesClient) deleteCreateRequest(ctx context.Contex
 
 // deleteHandleResponse handles the Delete response.
 func (client *AlertProcessingRulesClient) deleteHandleResponse(resp *http.Response) (AlertProcessingRulesClientDeleteResponse, error) {
-	result := AlertProcessingRulesClientDeleteResponse{RawResponse: resp}
+	result := AlertProcessingRulesClientDeleteResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -214,7 +214,7 @@ func (client *AlertProcessingRulesClient) getByNameCreateRequest(ctx context.Con
 
 // getByNameHandleResponse handles the GetByName response.
 func (client *AlertProcessingRulesClient) getByNameHandleResponse(resp *http.Response) (AlertProcessingRulesClientGetByNameResponse, error) {
-	result := AlertProcessingRulesClientGetByNameResponse{RawResponse: resp}
+	result := AlertProcessingRulesClientGetByNameResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -265,7 +265,7 @@ func (client *AlertProcessingRulesClient) listByResourceGroupCreateRequest(ctx c
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *AlertProcessingRulesClient) listByResourceGroupHandleResponse(resp *http.Response) (AlertProcessingRulesClientListByResourceGroupResponse, error) {
-	result := AlertProcessingRulesClientListByResourceGroupResponse{RawResponse: resp}
+	result := AlertProcessingRulesClientListByResourceGroupResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -311,7 +311,7 @@ func (client *AlertProcessingRulesClient) listBySubscriptionCreateRequest(ctx co
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *AlertProcessingRulesClient) listBySubscriptionHandleResponse(resp *http.Response) (AlertProcessingRulesClientListBySubscriptionResponse, error) {
-	result := AlertProcessingRulesClientListBySubscriptionResponse{RawResponse: resp}
+	result := AlertProcessingRulesClientListBySubscriptionResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -371,7 +371,7 @@ func (client *AlertProcessingRulesClient) updateCreateRequest(ctx context.Contex
 
 // updateHandleResponse handles the Update response.
 func (client *AlertProcessingRulesClient) updateHandleResponse(resp *http.Response) (AlertProcessingRulesClientUpdateResponse, error) {
-	result := AlertProcessingRulesClientUpdateResponse{RawResponse: resp}
+	result := AlertProcessingRulesClientUpdateResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}

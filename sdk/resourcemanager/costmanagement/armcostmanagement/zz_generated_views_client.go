@@ -32,16 +32,16 @@ type ViewsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewViewsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ViewsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ViewsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -88,7 +88,7 @@ func (client *ViewsClient) createOrUpdateCreateRequest(ctx context.Context, view
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ViewsClient) createOrUpdateHandleResponse(resp *http.Response) (ViewsClientCreateOrUpdateResponse, error) {
-	result := ViewsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ViewsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.View); err != nil {
 		return ViewsClientCreateOrUpdateResponse{}, err
 	}
@@ -155,7 +155,7 @@ func (client *ViewsClient) createOrUpdateByScopeCreateRequest(ctx context.Contex
 
 // createOrUpdateByScopeHandleResponse handles the CreateOrUpdateByScope response.
 func (client *ViewsClient) createOrUpdateByScopeHandleResponse(resp *http.Response) (ViewsClientCreateOrUpdateByScopeResponse, error) {
-	result := ViewsClientCreateOrUpdateByScopeResponse{RawResponse: resp}
+	result := ViewsClientCreateOrUpdateByScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.View); err != nil {
 		return ViewsClientCreateOrUpdateByScopeResponse{}, err
 	}
@@ -178,7 +178,7 @@ func (client *ViewsClient) Delete(ctx context.Context, viewName string, options 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ViewsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ViewsClientDeleteResponse{RawResponse: resp}, nil
+	return ViewsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -228,7 +228,7 @@ func (client *ViewsClient) DeleteByScope(ctx context.Context, scope string, view
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ViewsClientDeleteByScopeResponse{}, runtime.NewResponseError(resp)
 	}
-	return ViewsClientDeleteByScopeResponse{RawResponse: resp}, nil
+	return ViewsClientDeleteByScopeResponse{}, nil
 }
 
 // deleteByScopeCreateRequest creates the DeleteByScope request.
@@ -292,7 +292,7 @@ func (client *ViewsClient) getCreateRequest(ctx context.Context, viewName string
 
 // getHandleResponse handles the Get response.
 func (client *ViewsClient) getHandleResponse(resp *http.Response) (ViewsClientGetResponse, error) {
-	result := ViewsClientGetResponse{RawResponse: resp}
+	result := ViewsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.View); err != nil {
 		return ViewsClientGetResponse{}, err
 	}
@@ -355,7 +355,7 @@ func (client *ViewsClient) getByScopeCreateRequest(ctx context.Context, scope st
 
 // getByScopeHandleResponse handles the GetByScope response.
 func (client *ViewsClient) getByScopeHandleResponse(resp *http.Response) (ViewsClientGetByScopeResponse, error) {
-	result := ViewsClientGetByScopeResponse{RawResponse: resp}
+	result := ViewsClientGetByScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.View); err != nil {
 		return ViewsClientGetByScopeResponse{}, err
 	}
@@ -393,7 +393,7 @@ func (client *ViewsClient) listCreateRequest(ctx context.Context, options *Views
 
 // listHandleResponse handles the List response.
 func (client *ViewsClient) listHandleResponse(resp *http.Response) (ViewsClientListResponse, error) {
-	result := ViewsClientListResponse{RawResponse: resp}
+	result := ViewsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ViewListResult); err != nil {
 		return ViewsClientListResponse{}, err
 	}
@@ -448,7 +448,7 @@ func (client *ViewsClient) listByScopeCreateRequest(ctx context.Context, scope s
 
 // listByScopeHandleResponse handles the ListByScope response.
 func (client *ViewsClient) listByScopeHandleResponse(resp *http.Response) (ViewsClientListByScopeResponse, error) {
-	result := ViewsClientListByScopeResponse{RawResponse: resp}
+	result := ViewsClientListByScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ViewListResult); err != nil {
 		return ViewsClientListByScopeResponse{}, err
 	}

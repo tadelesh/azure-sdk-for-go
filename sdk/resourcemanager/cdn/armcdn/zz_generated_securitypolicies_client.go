@@ -63,9 +63,7 @@ func (client *SecurityPoliciesClient) BeginCreate(ctx context.Context, resourceG
 	if err != nil {
 		return SecurityPoliciesClientCreatePollerResponse{}, err
 	}
-	result := SecurityPoliciesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SecurityPoliciesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("SecurityPoliciesClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return SecurityPoliciesClientCreatePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *SecurityPoliciesClient) BeginDelete(ctx context.Context, resourceG
 	if err != nil {
 		return SecurityPoliciesClientDeletePollerResponse{}, err
 	}
-	result := SecurityPoliciesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SecurityPoliciesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SecurityPoliciesClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return SecurityPoliciesClientDeletePollerResponse{}, err
@@ -250,7 +246,7 @@ func (client *SecurityPoliciesClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *SecurityPoliciesClient) getHandleResponse(resp *http.Response) (SecurityPoliciesClientGetResponse, error) {
-	result := SecurityPoliciesClientGetResponse{RawResponse: resp}
+	result := SecurityPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecurityPolicy); err != nil {
 		return SecurityPoliciesClientGetResponse{}, err
 	}
@@ -304,7 +300,7 @@ func (client *SecurityPoliciesClient) listByProfileCreateRequest(ctx context.Con
 
 // listByProfileHandleResponse handles the ListByProfile response.
 func (client *SecurityPoliciesClient) listByProfileHandleResponse(resp *http.Response) (SecurityPoliciesClientListByProfileResponse, error) {
-	result := SecurityPoliciesClientListByProfileResponse{RawResponse: resp}
+	result := SecurityPoliciesClientListByProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecurityPolicyListResult); err != nil {
 		return SecurityPoliciesClientListByProfileResponse{}, err
 	}
@@ -325,9 +321,7 @@ func (client *SecurityPoliciesClient) BeginPatch(ctx context.Context, resourceGr
 	if err != nil {
 		return SecurityPoliciesClientPatchPollerResponse{}, err
 	}
-	result := SecurityPoliciesClientPatchPollerResponse{
-		RawResponse: resp,
-	}
+	result := SecurityPoliciesClientPatchPollerResponse{}
 	pt, err := armruntime.NewPoller("SecurityPoliciesClient.Patch", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return SecurityPoliciesClientPatchPollerResponse{}, err

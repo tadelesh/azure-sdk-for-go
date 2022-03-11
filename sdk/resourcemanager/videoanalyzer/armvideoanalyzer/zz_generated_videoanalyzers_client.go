@@ -61,9 +61,7 @@ func (client *VideoAnalyzersClient) BeginCreateOrUpdate(ctx context.Context, res
 	if err != nil {
 		return VideoAnalyzersClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VideoAnalyzersClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VideoAnalyzersClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VideoAnalyzersClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return VideoAnalyzersClientCreateOrUpdatePollerResponse{}, err
@@ -134,7 +132,7 @@ func (client *VideoAnalyzersClient) Delete(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return VideoAnalyzersClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return VideoAnalyzersClientDeleteResponse{RawResponse: resp}, nil
+	return VideoAnalyzersClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -211,7 +209,7 @@ func (client *VideoAnalyzersClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *VideoAnalyzersClient) getHandleResponse(resp *http.Response) (VideoAnalyzersClientGetResponse, error) {
-	result := VideoAnalyzersClientGetResponse{RawResponse: resp}
+	result := VideoAnalyzersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VideoAnalyzer); err != nil {
 		return VideoAnalyzersClientGetResponse{}, err
 	}
@@ -261,7 +259,7 @@ func (client *VideoAnalyzersClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *VideoAnalyzersClient) listHandleResponse(resp *http.Response) (VideoAnalyzersClientListResponse, error) {
-	result := VideoAnalyzersClientListResponse{RawResponse: resp}
+	result := VideoAnalyzersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Collection); err != nil {
 		return VideoAnalyzersClientListResponse{}, err
 	}
@@ -307,7 +305,7 @@ func (client *VideoAnalyzersClient) listBySubscriptionCreateRequest(ctx context.
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *VideoAnalyzersClient) listBySubscriptionHandleResponse(resp *http.Response) (VideoAnalyzersClientListBySubscriptionResponse, error) {
-	result := VideoAnalyzersClientListBySubscriptionResponse{RawResponse: resp}
+	result := VideoAnalyzersClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Collection); err != nil {
 		return VideoAnalyzersClientListBySubscriptionResponse{}, err
 	}
@@ -326,9 +324,7 @@ func (client *VideoAnalyzersClient) BeginUpdate(ctx context.Context, resourceGro
 	if err != nil {
 		return VideoAnalyzersClientUpdatePollerResponse{}, err
 	}
-	result := VideoAnalyzersClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VideoAnalyzersClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VideoAnalyzersClient.Update", "", resp, client.pl)
 	if err != nil {
 		return VideoAnalyzersClientUpdatePollerResponse{}, err

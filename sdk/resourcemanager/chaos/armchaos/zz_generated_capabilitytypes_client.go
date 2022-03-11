@@ -34,17 +34,17 @@ type CapabilityTypesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCapabilityTypesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CapabilityTypesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CapabilityTypesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *CapabilityTypesClient) getCreateRequest(ctx context.Context, locat
 
 // getHandleResponse handles the Get response.
 func (client *CapabilityTypesClient) getHandleResponse(resp *http.Response) (CapabilityTypesClientGetResponse, error) {
-	result := CapabilityTypesClientGetResponse{RawResponse: resp}
+	result := CapabilityTypesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CapabilityType); err != nil {
 		return CapabilityTypesClientGetResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *CapabilityTypesClient) listCreateRequest(ctx context.Context, loca
 
 // listHandleResponse handles the List response.
 func (client *CapabilityTypesClient) listHandleResponse(resp *http.Response) (CapabilityTypesClientListResponse, error) {
-	result := CapabilityTypesClientListResponse{RawResponse: resp}
+	result := CapabilityTypesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CapabilityTypeListResult); err != nil {
 		return CapabilityTypesClientListResponse{}, err
 	}

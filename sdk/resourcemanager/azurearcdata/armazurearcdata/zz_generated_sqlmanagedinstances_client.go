@@ -34,17 +34,17 @@ type SQLManagedInstancesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLManagedInstancesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLManagedInstancesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLManagedInstancesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *SQLManagedInstancesClient) BeginCreate(ctx context.Context, resour
 	if err != nil {
 		return SQLManagedInstancesClientCreatePollerResponse{}, err
 	}
-	result := SQLManagedInstancesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLManagedInstancesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLManagedInstancesClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return SQLManagedInstancesClientCreatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *SQLManagedInstancesClient) BeginDelete(ctx context.Context, resour
 	if err != nil {
 		return SQLManagedInstancesClientDeletePollerResponse{}, err
 	}
-	result := SQLManagedInstancesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLManagedInstancesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLManagedInstancesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return SQLManagedInstancesClientDeletePollerResponse{}, err
@@ -232,7 +228,7 @@ func (client *SQLManagedInstancesClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *SQLManagedInstancesClient) getHandleResponse(resp *http.Response) (SQLManagedInstancesClientGetResponse, error) {
-	result := SQLManagedInstancesClientGetResponse{RawResponse: resp}
+	result := SQLManagedInstancesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLManagedInstance); err != nil {
 		return SQLManagedInstancesClientGetResponse{}, err
 	}
@@ -275,7 +271,7 @@ func (client *SQLManagedInstancesClient) listCreateRequest(ctx context.Context, 
 
 // listHandleResponse handles the List response.
 func (client *SQLManagedInstancesClient) listHandleResponse(resp *http.Response) (SQLManagedInstancesClientListResponse, error) {
-	result := SQLManagedInstancesClientListResponse{RawResponse: resp}
+	result := SQLManagedInstancesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLManagedInstanceListResult); err != nil {
 		return SQLManagedInstancesClientListResponse{}, err
 	}
@@ -323,7 +319,7 @@ func (client *SQLManagedInstancesClient) listByResourceGroupCreateRequest(ctx co
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *SQLManagedInstancesClient) listByResourceGroupHandleResponse(resp *http.Response) (SQLManagedInstancesClientListByResourceGroupResponse, error) {
-	result := SQLManagedInstancesClientListByResourceGroupResponse{RawResponse: resp}
+	result := SQLManagedInstancesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLManagedInstanceListResult); err != nil {
 		return SQLManagedInstancesClientListByResourceGroupResponse{}, err
 	}
@@ -380,7 +376,7 @@ func (client *SQLManagedInstancesClient) updateCreateRequest(ctx context.Context
 
 // updateHandleResponse handles the Update response.
 func (client *SQLManagedInstancesClient) updateHandleResponse(resp *http.Response) (SQLManagedInstancesClientUpdateResponse, error) {
-	result := SQLManagedInstancesClientUpdateResponse{RawResponse: resp}
+	result := SQLManagedInstancesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLManagedInstance); err != nil {
 		return SQLManagedInstancesClientUpdateResponse{}, err
 	}

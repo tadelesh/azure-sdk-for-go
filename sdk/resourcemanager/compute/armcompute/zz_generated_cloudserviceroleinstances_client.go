@@ -35,17 +35,17 @@ type CloudServiceRoleInstancesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCloudServiceRoleInstancesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CloudServiceRoleInstancesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CloudServiceRoleInstancesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -60,9 +60,7 @@ func (client *CloudServiceRoleInstancesClient) BeginDelete(ctx context.Context, 
 	if err != nil {
 		return CloudServiceRoleInstancesClientDeletePollerResponse{}, err
 	}
-	result := CloudServiceRoleInstancesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudServiceRoleInstancesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CloudServiceRoleInstancesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return CloudServiceRoleInstancesClientDeletePollerResponse{}, err
@@ -175,7 +173,7 @@ func (client *CloudServiceRoleInstancesClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *CloudServiceRoleInstancesClient) getHandleResponse(resp *http.Response) (CloudServiceRoleInstancesClientGetResponse, error) {
-	result := CloudServiceRoleInstancesClientGetResponse{RawResponse: resp}
+	result := CloudServiceRoleInstancesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RoleInstance); err != nil {
 		return CloudServiceRoleInstancesClientGetResponse{}, err
 	}
@@ -234,7 +232,7 @@ func (client *CloudServiceRoleInstancesClient) getInstanceViewCreateRequest(ctx 
 
 // getInstanceViewHandleResponse handles the GetInstanceView response.
 func (client *CloudServiceRoleInstancesClient) getInstanceViewHandleResponse(resp *http.Response) (CloudServiceRoleInstancesClientGetInstanceViewResponse, error) {
-	result := CloudServiceRoleInstancesClientGetInstanceViewResponse{RawResponse: resp}
+	result := CloudServiceRoleInstancesClientGetInstanceViewResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RoleInstanceView); err != nil {
 		return CloudServiceRoleInstancesClientGetInstanceViewResponse{}, err
 	}
@@ -258,7 +256,7 @@ func (client *CloudServiceRoleInstancesClient) GetRemoteDesktopFile(ctx context.
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return CloudServiceRoleInstancesClientGetRemoteDesktopFileResponse{}, runtime.NewResponseError(resp)
 	}
-	return CloudServiceRoleInstancesClientGetRemoteDesktopFileResponse{RawResponse: resp}, nil
+	return CloudServiceRoleInstancesClientGetRemoteDesktopFileResponse{Body: resp.Body}, nil
 }
 
 // getRemoteDesktopFileCreateRequest creates the GetRemoteDesktopFile request.
@@ -340,7 +338,7 @@ func (client *CloudServiceRoleInstancesClient) listCreateRequest(ctx context.Con
 
 // listHandleResponse handles the List response.
 func (client *CloudServiceRoleInstancesClient) listHandleResponse(resp *http.Response) (CloudServiceRoleInstancesClientListResponse, error) {
-	result := CloudServiceRoleInstancesClientListResponse{RawResponse: resp}
+	result := CloudServiceRoleInstancesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RoleInstanceListResult); err != nil {
 		return CloudServiceRoleInstancesClientListResponse{}, err
 	}
@@ -359,9 +357,7 @@ func (client *CloudServiceRoleInstancesClient) BeginRebuild(ctx context.Context,
 	if err != nil {
 		return CloudServiceRoleInstancesClientRebuildPollerResponse{}, err
 	}
-	result := CloudServiceRoleInstancesClientRebuildPollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudServiceRoleInstancesClientRebuildPollerResponse{}
 	pt, err := armruntime.NewPoller("CloudServiceRoleInstancesClient.Rebuild", "", resp, client.pl)
 	if err != nil {
 		return CloudServiceRoleInstancesClientRebuildPollerResponse{}, err
@@ -432,9 +428,7 @@ func (client *CloudServiceRoleInstancesClient) BeginReimage(ctx context.Context,
 	if err != nil {
 		return CloudServiceRoleInstancesClientReimagePollerResponse{}, err
 	}
-	result := CloudServiceRoleInstancesClientReimagePollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudServiceRoleInstancesClientReimagePollerResponse{}
 	pt, err := armruntime.NewPoller("CloudServiceRoleInstancesClient.Reimage", "", resp, client.pl)
 	if err != nil {
 		return CloudServiceRoleInstancesClientReimagePollerResponse{}, err
@@ -503,9 +497,7 @@ func (client *CloudServiceRoleInstancesClient) BeginRestart(ctx context.Context,
 	if err != nil {
 		return CloudServiceRoleInstancesClientRestartPollerResponse{}, err
 	}
-	result := CloudServiceRoleInstancesClientRestartPollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudServiceRoleInstancesClientRestartPollerResponse{}
 	pt, err := armruntime.NewPoller("CloudServiceRoleInstancesClient.Restart", "", resp, client.pl)
 	if err != nil {
 		return CloudServiceRoleInstancesClientRestartPollerResponse{}, err

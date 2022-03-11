@@ -61,9 +61,7 @@ func (client *EnvironmentsClient) BeginApproveOrRejectPrivateEndpointConnection(
 	if err != nil {
 		return EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPollerResponse{}, err
 	}
-	result := EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPollerResponse{
-		RawResponse: resp,
-	}
+	result := EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPollerResponse{}
 	pt, err := armruntime.NewPoller("EnvironmentsClient.ApproveOrRejectPrivateEndpointConnection", "", resp, client.pl)
 	if err != nil {
 		return EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPollerResponse{}, err
@@ -133,9 +131,7 @@ func (client *EnvironmentsClient) BeginChangeVnet(ctx context.Context, resourceG
 	if err != nil {
 		return EnvironmentsClientChangeVnetPollerResponse{}, err
 	}
-	result := EnvironmentsClientChangeVnetPollerResponse{
-		RawResponse: resp,
-	}
+	result := EnvironmentsClientChangeVnetPollerResponse{}
 	pt, err := armruntime.NewPoller("EnvironmentsClient.ChangeVnet", "", resp, client.pl)
 	if err != nil {
 		return EnvironmentsClientChangeVnetPollerResponse{}, err
@@ -192,7 +188,7 @@ func (client *EnvironmentsClient) changeVnetCreateRequest(ctx context.Context, r
 
 // changeVnetHandleResponse handles the ChangeVnet response.
 func (client *EnvironmentsClient) changeVnetHandleResponse(resp *http.Response) (EnvironmentsClientChangeVnetResponse, error) {
-	result := EnvironmentsClientChangeVnetResponse{RawResponse: resp}
+	result := EnvironmentsClientChangeVnetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebAppCollection); err != nil {
 		return EnvironmentsClientChangeVnetResponse{}, err
 	}
@@ -211,9 +207,7 @@ func (client *EnvironmentsClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return EnvironmentsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := EnvironmentsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := EnvironmentsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("EnvironmentsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return EnvironmentsClientCreateOrUpdatePollerResponse{}, err
@@ -279,9 +273,7 @@ func (client *EnvironmentsClient) BeginCreateOrUpdateMultiRolePool(ctx context.C
 	if err != nil {
 		return EnvironmentsClientCreateOrUpdateMultiRolePoolPollerResponse{}, err
 	}
-	result := EnvironmentsClientCreateOrUpdateMultiRolePoolPollerResponse{
-		RawResponse: resp,
-	}
+	result := EnvironmentsClientCreateOrUpdateMultiRolePoolPollerResponse{}
 	pt, err := armruntime.NewPoller("EnvironmentsClient.CreateOrUpdateMultiRolePool", "", resp, client.pl)
 	if err != nil {
 		return EnvironmentsClientCreateOrUpdateMultiRolePoolPollerResponse{}, err
@@ -348,9 +340,7 @@ func (client *EnvironmentsClient) BeginCreateOrUpdateWorkerPool(ctx context.Cont
 	if err != nil {
 		return EnvironmentsClientCreateOrUpdateWorkerPoolPollerResponse{}, err
 	}
-	result := EnvironmentsClientCreateOrUpdateWorkerPoolPollerResponse{
-		RawResponse: resp,
-	}
+	result := EnvironmentsClientCreateOrUpdateWorkerPoolPollerResponse{}
 	pt, err := armruntime.NewPoller("EnvironmentsClient.CreateOrUpdateWorkerPool", "", resp, client.pl)
 	if err != nil {
 		return EnvironmentsClientCreateOrUpdateWorkerPoolPollerResponse{}, err
@@ -419,9 +409,7 @@ func (client *EnvironmentsClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return EnvironmentsClientDeletePollerResponse{}, err
 	}
-	result := EnvironmentsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := EnvironmentsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("EnvironmentsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return EnvironmentsClientDeletePollerResponse{}, err
@@ -489,9 +477,7 @@ func (client *EnvironmentsClient) BeginDeletePrivateEndpointConnection(ctx conte
 	if err != nil {
 		return EnvironmentsClientDeletePrivateEndpointConnectionPollerResponse{}, err
 	}
-	result := EnvironmentsClientDeletePrivateEndpointConnectionPollerResponse{
-		RawResponse: resp,
-	}
+	result := EnvironmentsClientDeletePrivateEndpointConnectionPollerResponse{}
 	pt, err := armruntime.NewPoller("EnvironmentsClient.DeletePrivateEndpointConnection", "", resp, client.pl)
 	if err != nil {
 		return EnvironmentsClientDeletePrivateEndpointConnectionPollerResponse{}, err
@@ -597,7 +583,7 @@ func (client *EnvironmentsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *EnvironmentsClient) getHandleResponse(resp *http.Response) (EnvironmentsClientGetResponse, error) {
-	result := EnvironmentsClientGetResponse{RawResponse: resp}
+	result := EnvironmentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EnvironmentResource); err != nil {
 		return EnvironmentsClientGetResponse{}, err
 	}
@@ -653,7 +639,7 @@ func (client *EnvironmentsClient) getAseV3NetworkingConfigurationCreateRequest(c
 
 // getAseV3NetworkingConfigurationHandleResponse handles the GetAseV3NetworkingConfiguration response.
 func (client *EnvironmentsClient) getAseV3NetworkingConfigurationHandleResponse(resp *http.Response) (EnvironmentsClientGetAseV3NetworkingConfigurationResponse, error) {
-	result := EnvironmentsClientGetAseV3NetworkingConfigurationResponse{RawResponse: resp}
+	result := EnvironmentsClientGetAseV3NetworkingConfigurationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AseV3NetworkingConfiguration); err != nil {
 		return EnvironmentsClientGetAseV3NetworkingConfigurationResponse{}, err
 	}
@@ -714,7 +700,7 @@ func (client *EnvironmentsClient) getDiagnosticsItemCreateRequest(ctx context.Co
 
 // getDiagnosticsItemHandleResponse handles the GetDiagnosticsItem response.
 func (client *EnvironmentsClient) getDiagnosticsItemHandleResponse(resp *http.Response) (EnvironmentsClientGetDiagnosticsItemResponse, error) {
-	result := EnvironmentsClientGetDiagnosticsItemResponse{RawResponse: resp}
+	result := EnvironmentsClientGetDiagnosticsItemResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostingEnvironmentDiagnostics); err != nil {
 		return EnvironmentsClientGetDiagnosticsItemResponse{}, err
 	}
@@ -768,7 +754,7 @@ func (client *EnvironmentsClient) getInboundNetworkDependenciesEndpointsCreateRe
 
 // getInboundNetworkDependenciesEndpointsHandleResponse handles the GetInboundNetworkDependenciesEndpoints response.
 func (client *EnvironmentsClient) getInboundNetworkDependenciesEndpointsHandleResponse(resp *http.Response) (EnvironmentsClientGetInboundNetworkDependenciesEndpointsResponse, error) {
-	result := EnvironmentsClientGetInboundNetworkDependenciesEndpointsResponse{RawResponse: resp}
+	result := EnvironmentsClientGetInboundNetworkDependenciesEndpointsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InboundEnvironmentEndpointCollection); err != nil {
 		return EnvironmentsClientGetInboundNetworkDependenciesEndpointsResponse{}, err
 	}
@@ -824,7 +810,7 @@ func (client *EnvironmentsClient) getMultiRolePoolCreateRequest(ctx context.Cont
 
 // getMultiRolePoolHandleResponse handles the GetMultiRolePool response.
 func (client *EnvironmentsClient) getMultiRolePoolHandleResponse(resp *http.Response) (EnvironmentsClientGetMultiRolePoolResponse, error) {
-	result := EnvironmentsClientGetMultiRolePoolResponse{RawResponse: resp}
+	result := EnvironmentsClientGetMultiRolePoolResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkerPoolResource); err != nil {
 		return EnvironmentsClientGetMultiRolePoolResponse{}, err
 	}
@@ -878,7 +864,7 @@ func (client *EnvironmentsClient) getOutboundNetworkDependenciesEndpointsCreateR
 
 // getOutboundNetworkDependenciesEndpointsHandleResponse handles the GetOutboundNetworkDependenciesEndpoints response.
 func (client *EnvironmentsClient) getOutboundNetworkDependenciesEndpointsHandleResponse(resp *http.Response) (EnvironmentsClientGetOutboundNetworkDependenciesEndpointsResponse, error) {
-	result := EnvironmentsClientGetOutboundNetworkDependenciesEndpointsResponse{RawResponse: resp}
+	result := EnvironmentsClientGetOutboundNetworkDependenciesEndpointsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OutboundEnvironmentEndpointCollection); err != nil {
 		return EnvironmentsClientGetOutboundNetworkDependenciesEndpointsResponse{}, err
 	}
@@ -939,7 +925,7 @@ func (client *EnvironmentsClient) getPrivateEndpointConnectionCreateRequest(ctx 
 
 // getPrivateEndpointConnectionHandleResponse handles the GetPrivateEndpointConnection response.
 func (client *EnvironmentsClient) getPrivateEndpointConnectionHandleResponse(resp *http.Response) (EnvironmentsClientGetPrivateEndpointConnectionResponse, error) {
-	result := EnvironmentsClientGetPrivateEndpointConnectionResponse{RawResponse: resp}
+	result := EnvironmentsClientGetPrivateEndpointConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemotePrivateEndpointConnectionARMResource); err != nil {
 		return EnvironmentsClientGetPrivateEndpointConnectionResponse{}, err
 	}
@@ -992,7 +978,7 @@ func (client *EnvironmentsClient) getPrivateEndpointConnectionListCreateRequest(
 
 // getPrivateEndpointConnectionListHandleResponse handles the GetPrivateEndpointConnectionList response.
 func (client *EnvironmentsClient) getPrivateEndpointConnectionListHandleResponse(resp *http.Response) (EnvironmentsClientGetPrivateEndpointConnectionListResponse, error) {
-	result := EnvironmentsClientGetPrivateEndpointConnectionListResponse{RawResponse: resp}
+	result := EnvironmentsClientGetPrivateEndpointConnectionListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionCollection); err != nil {
 		return EnvironmentsClientGetPrivateEndpointConnectionListResponse{}, err
 	}
@@ -1048,7 +1034,7 @@ func (client *EnvironmentsClient) getPrivateLinkResourcesCreateRequest(ctx conte
 
 // getPrivateLinkResourcesHandleResponse handles the GetPrivateLinkResources response.
 func (client *EnvironmentsClient) getPrivateLinkResourcesHandleResponse(resp *http.Response) (EnvironmentsClientGetPrivateLinkResourcesResponse, error) {
-	result := EnvironmentsClientGetPrivateLinkResourcesResponse{RawResponse: resp}
+	result := EnvironmentsClientGetPrivateLinkResourcesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourcesWrapper); err != nil {
 		return EnvironmentsClientGetPrivateLinkResourcesResponse{}, err
 	}
@@ -1103,7 +1089,7 @@ func (client *EnvironmentsClient) getVipInfoCreateRequest(ctx context.Context, r
 
 // getVipInfoHandleResponse handles the GetVipInfo response.
 func (client *EnvironmentsClient) getVipInfoHandleResponse(resp *http.Response) (EnvironmentsClientGetVipInfoResponse, error) {
-	result := EnvironmentsClientGetVipInfoResponse{RawResponse: resp}
+	result := EnvironmentsClientGetVipInfoResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AddressResponse); err != nil {
 		return EnvironmentsClientGetVipInfoResponse{}, err
 	}
@@ -1164,7 +1150,7 @@ func (client *EnvironmentsClient) getWorkerPoolCreateRequest(ctx context.Context
 
 // getWorkerPoolHandleResponse handles the GetWorkerPool response.
 func (client *EnvironmentsClient) getWorkerPoolHandleResponse(resp *http.Response) (EnvironmentsClientGetWorkerPoolResponse, error) {
-	result := EnvironmentsClientGetWorkerPoolResponse{RawResponse: resp}
+	result := EnvironmentsClientGetWorkerPoolResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkerPoolResource); err != nil {
 		return EnvironmentsClientGetWorkerPoolResponse{}, err
 	}
@@ -1206,7 +1192,7 @@ func (client *EnvironmentsClient) listCreateRequest(ctx context.Context, options
 
 // listHandleResponse handles the List response.
 func (client *EnvironmentsClient) listHandleResponse(resp *http.Response) (EnvironmentsClientListResponse, error) {
-	result := EnvironmentsClientListResponse{RawResponse: resp}
+	result := EnvironmentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EnvironmentCollection); err != nil {
 		return EnvironmentsClientListResponse{}, err
 	}
@@ -1259,7 +1245,7 @@ func (client *EnvironmentsClient) listAppServicePlansCreateRequest(ctx context.C
 
 // listAppServicePlansHandleResponse handles the ListAppServicePlans response.
 func (client *EnvironmentsClient) listAppServicePlansHandleResponse(resp *http.Response) (EnvironmentsClientListAppServicePlansResponse, error) {
-	result := EnvironmentsClientListAppServicePlansResponse{RawResponse: resp}
+	result := EnvironmentsClientListAppServicePlansResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PlanCollection); err != nil {
 		return EnvironmentsClientListAppServicePlansResponse{}, err
 	}
@@ -1307,7 +1293,7 @@ func (client *EnvironmentsClient) listByResourceGroupCreateRequest(ctx context.C
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *EnvironmentsClient) listByResourceGroupHandleResponse(resp *http.Response) (EnvironmentsClientListByResourceGroupResponse, error) {
-	result := EnvironmentsClientListByResourceGroupResponse{RawResponse: resp}
+	result := EnvironmentsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EnvironmentCollection); err != nil {
 		return EnvironmentsClientListByResourceGroupResponse{}, err
 	}
@@ -1360,7 +1346,7 @@ func (client *EnvironmentsClient) listCapacitiesCreateRequest(ctx context.Contex
 
 // listCapacitiesHandleResponse handles the ListCapacities response.
 func (client *EnvironmentsClient) listCapacitiesHandleResponse(resp *http.Response) (EnvironmentsClientListCapacitiesResponse, error) {
-	result := EnvironmentsClientListCapacitiesResponse{RawResponse: resp}
+	result := EnvironmentsClientListCapacitiesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StampCapacityCollection); err != nil {
 		return EnvironmentsClientListCapacitiesResponse{}, err
 	}
@@ -1416,7 +1402,7 @@ func (client *EnvironmentsClient) listDiagnosticsCreateRequest(ctx context.Conte
 
 // listDiagnosticsHandleResponse handles the ListDiagnostics response.
 func (client *EnvironmentsClient) listDiagnosticsHandleResponse(resp *http.Response) (EnvironmentsClientListDiagnosticsResponse, error) {
-	result := EnvironmentsClientListDiagnosticsResponse{RawResponse: resp}
+	result := EnvironmentsClientListDiagnosticsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostingEnvironmentDiagnosticsArray); err != nil {
 		return EnvironmentsClientListDiagnosticsResponse{}, err
 	}
@@ -1469,7 +1455,7 @@ func (client *EnvironmentsClient) listMultiRoleMetricDefinitionsCreateRequest(ct
 
 // listMultiRoleMetricDefinitionsHandleResponse handles the ListMultiRoleMetricDefinitions response.
 func (client *EnvironmentsClient) listMultiRoleMetricDefinitionsHandleResponse(resp *http.Response) (EnvironmentsClientListMultiRoleMetricDefinitionsResponse, error) {
-	result := EnvironmentsClientListMultiRoleMetricDefinitionsResponse{RawResponse: resp}
+	result := EnvironmentsClientListMultiRoleMetricDefinitionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceMetricDefinitionCollection); err != nil {
 		return EnvironmentsClientListMultiRoleMetricDefinitionsResponse{}, err
 	}
@@ -1528,7 +1514,7 @@ func (client *EnvironmentsClient) listMultiRolePoolInstanceMetricDefinitionsCrea
 
 // listMultiRolePoolInstanceMetricDefinitionsHandleResponse handles the ListMultiRolePoolInstanceMetricDefinitions response.
 func (client *EnvironmentsClient) listMultiRolePoolInstanceMetricDefinitionsHandleResponse(resp *http.Response) (EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsResponse, error) {
-	result := EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsResponse{RawResponse: resp}
+	result := EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceMetricDefinitionCollection); err != nil {
 		return EnvironmentsClientListMultiRolePoolInstanceMetricDefinitionsResponse{}, err
 	}
@@ -1581,7 +1567,7 @@ func (client *EnvironmentsClient) listMultiRolePoolSKUsCreateRequest(ctx context
 
 // listMultiRolePoolSKUsHandleResponse handles the ListMultiRolePoolSKUs response.
 func (client *EnvironmentsClient) listMultiRolePoolSKUsHandleResponse(resp *http.Response) (EnvironmentsClientListMultiRolePoolSKUsResponse, error) {
-	result := EnvironmentsClientListMultiRolePoolSKUsResponse{RawResponse: resp}
+	result := EnvironmentsClientListMultiRolePoolSKUsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUInfoCollection); err != nil {
 		return EnvironmentsClientListMultiRolePoolSKUsResponse{}, err
 	}
@@ -1634,7 +1620,7 @@ func (client *EnvironmentsClient) listMultiRolePoolsCreateRequest(ctx context.Co
 
 // listMultiRolePoolsHandleResponse handles the ListMultiRolePools response.
 func (client *EnvironmentsClient) listMultiRolePoolsHandleResponse(resp *http.Response) (EnvironmentsClientListMultiRolePoolsResponse, error) {
-	result := EnvironmentsClientListMultiRolePoolsResponse{RawResponse: resp}
+	result := EnvironmentsClientListMultiRolePoolsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkerPoolCollection); err != nil {
 		return EnvironmentsClientListMultiRolePoolsResponse{}, err
 	}
@@ -1687,7 +1673,7 @@ func (client *EnvironmentsClient) listMultiRoleUsagesCreateRequest(ctx context.C
 
 // listMultiRoleUsagesHandleResponse handles the ListMultiRoleUsages response.
 func (client *EnvironmentsClient) listMultiRoleUsagesHandleResponse(resp *http.Response) (EnvironmentsClientListMultiRoleUsagesResponse, error) {
-	result := EnvironmentsClientListMultiRoleUsagesResponse{RawResponse: resp}
+	result := EnvironmentsClientListMultiRoleUsagesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UsageCollection); err != nil {
 		return EnvironmentsClientListMultiRoleUsagesResponse{}, err
 	}
@@ -1743,7 +1729,7 @@ func (client *EnvironmentsClient) listOperationsCreateRequest(ctx context.Contex
 
 // listOperationsHandleResponse handles the ListOperations response.
 func (client *EnvironmentsClient) listOperationsHandleResponse(resp *http.Response) (EnvironmentsClientListOperationsResponse, error) {
-	result := EnvironmentsClientListOperationsResponse{RawResponse: resp}
+	result := EnvironmentsClientListOperationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OperationArray); err != nil {
 		return EnvironmentsClientListOperationsResponse{}, err
 	}
@@ -1800,7 +1786,7 @@ func (client *EnvironmentsClient) listUsagesCreateRequest(ctx context.Context, r
 
 // listUsagesHandleResponse handles the ListUsages response.
 func (client *EnvironmentsClient) listUsagesHandleResponse(resp *http.Response) (EnvironmentsClientListUsagesResponse, error) {
-	result := EnvironmentsClientListUsagesResponse{RawResponse: resp}
+	result := EnvironmentsClientListUsagesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CsmUsageQuotaCollection); err != nil {
 		return EnvironmentsClientListUsagesResponse{}, err
 	}
@@ -1856,7 +1842,7 @@ func (client *EnvironmentsClient) listWebAppsCreateRequest(ctx context.Context, 
 
 // listWebAppsHandleResponse handles the ListWebApps response.
 func (client *EnvironmentsClient) listWebAppsHandleResponse(resp *http.Response) (EnvironmentsClientListWebAppsResponse, error) {
-	result := EnvironmentsClientListWebAppsResponse{RawResponse: resp}
+	result := EnvironmentsClientListWebAppsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebAppCollection); err != nil {
 		return EnvironmentsClientListWebAppsResponse{}, err
 	}
@@ -1914,7 +1900,7 @@ func (client *EnvironmentsClient) listWebWorkerMetricDefinitionsCreateRequest(ct
 
 // listWebWorkerMetricDefinitionsHandleResponse handles the ListWebWorkerMetricDefinitions response.
 func (client *EnvironmentsClient) listWebWorkerMetricDefinitionsHandleResponse(resp *http.Response) (EnvironmentsClientListWebWorkerMetricDefinitionsResponse, error) {
-	result := EnvironmentsClientListWebWorkerMetricDefinitionsResponse{RawResponse: resp}
+	result := EnvironmentsClientListWebWorkerMetricDefinitionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceMetricDefinitionCollection); err != nil {
 		return EnvironmentsClientListWebWorkerMetricDefinitionsResponse{}, err
 	}
@@ -1972,7 +1958,7 @@ func (client *EnvironmentsClient) listWebWorkerUsagesCreateRequest(ctx context.C
 
 // listWebWorkerUsagesHandleResponse handles the ListWebWorkerUsages response.
 func (client *EnvironmentsClient) listWebWorkerUsagesHandleResponse(resp *http.Response) (EnvironmentsClientListWebWorkerUsagesResponse, error) {
-	result := EnvironmentsClientListWebWorkerUsagesResponse{RawResponse: resp}
+	result := EnvironmentsClientListWebWorkerUsagesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UsageCollection); err != nil {
 		return EnvironmentsClientListWebWorkerUsagesResponse{}, err
 	}
@@ -2036,7 +2022,7 @@ func (client *EnvironmentsClient) listWorkerPoolInstanceMetricDefinitionsCreateR
 
 // listWorkerPoolInstanceMetricDefinitionsHandleResponse handles the ListWorkerPoolInstanceMetricDefinitions response.
 func (client *EnvironmentsClient) listWorkerPoolInstanceMetricDefinitionsHandleResponse(resp *http.Response) (EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsResponse, error) {
-	result := EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsResponse{RawResponse: resp}
+	result := EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceMetricDefinitionCollection); err != nil {
 		return EnvironmentsClientListWorkerPoolInstanceMetricDefinitionsResponse{}, err
 	}
@@ -2094,7 +2080,7 @@ func (client *EnvironmentsClient) listWorkerPoolSKUsCreateRequest(ctx context.Co
 
 // listWorkerPoolSKUsHandleResponse handles the ListWorkerPoolSKUs response.
 func (client *EnvironmentsClient) listWorkerPoolSKUsHandleResponse(resp *http.Response) (EnvironmentsClientListWorkerPoolSKUsResponse, error) {
-	result := EnvironmentsClientListWorkerPoolSKUsResponse{RawResponse: resp}
+	result := EnvironmentsClientListWorkerPoolSKUsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUInfoCollection); err != nil {
 		return EnvironmentsClientListWorkerPoolSKUsResponse{}, err
 	}
@@ -2147,7 +2133,7 @@ func (client *EnvironmentsClient) listWorkerPoolsCreateRequest(ctx context.Conte
 
 // listWorkerPoolsHandleResponse handles the ListWorkerPools response.
 func (client *EnvironmentsClient) listWorkerPoolsHandleResponse(resp *http.Response) (EnvironmentsClientListWorkerPoolsResponse, error) {
-	result := EnvironmentsClientListWorkerPoolsResponse{RawResponse: resp}
+	result := EnvironmentsClientListWorkerPoolsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkerPoolCollection); err != nil {
 		return EnvironmentsClientListWorkerPoolsResponse{}, err
 	}
@@ -2171,7 +2157,7 @@ func (client *EnvironmentsClient) Reboot(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusAccepted) {
 		return EnvironmentsClientRebootResponse{}, runtime.NewResponseError(resp)
 	}
-	return EnvironmentsClientRebootResponse{RawResponse: resp}, nil
+	return EnvironmentsClientRebootResponse{}, nil
 }
 
 // rebootCreateRequest creates the Reboot request.
@@ -2211,9 +2197,7 @@ func (client *EnvironmentsClient) BeginResume(ctx context.Context, resourceGroup
 	if err != nil {
 		return EnvironmentsClientResumePollerResponse{}, err
 	}
-	result := EnvironmentsClientResumePollerResponse{
-		RawResponse: resp,
-	}
+	result := EnvironmentsClientResumePollerResponse{}
 	pt, err := armruntime.NewPoller("EnvironmentsClient.Resume", "", resp, client.pl)
 	if err != nil {
 		return EnvironmentsClientResumePollerResponse{}, err
@@ -2270,7 +2254,7 @@ func (client *EnvironmentsClient) resumeCreateRequest(ctx context.Context, resou
 
 // resumeHandleResponse handles the Resume response.
 func (client *EnvironmentsClient) resumeHandleResponse(resp *http.Response) (EnvironmentsClientResumeResponse, error) {
-	result := EnvironmentsClientResumeResponse{RawResponse: resp}
+	result := EnvironmentsClientResumeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebAppCollection); err != nil {
 		return EnvironmentsClientResumeResponse{}, err
 	}
@@ -2288,9 +2272,7 @@ func (client *EnvironmentsClient) BeginSuspend(ctx context.Context, resourceGrou
 	if err != nil {
 		return EnvironmentsClientSuspendPollerResponse{}, err
 	}
-	result := EnvironmentsClientSuspendPollerResponse{
-		RawResponse: resp,
-	}
+	result := EnvironmentsClientSuspendPollerResponse{}
 	pt, err := armruntime.NewPoller("EnvironmentsClient.Suspend", "", resp, client.pl)
 	if err != nil {
 		return EnvironmentsClientSuspendPollerResponse{}, err
@@ -2347,7 +2329,7 @@ func (client *EnvironmentsClient) suspendCreateRequest(ctx context.Context, reso
 
 // suspendHandleResponse handles the Suspend response.
 func (client *EnvironmentsClient) suspendHandleResponse(resp *http.Response) (EnvironmentsClientSuspendResponse, error) {
-	result := EnvironmentsClientSuspendResponse{RawResponse: resp}
+	result := EnvironmentsClientSuspendResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebAppCollection); err != nil {
 		return EnvironmentsClientSuspendResponse{}, err
 	}
@@ -2403,7 +2385,7 @@ func (client *EnvironmentsClient) updateCreateRequest(ctx context.Context, resou
 
 // updateHandleResponse handles the Update response.
 func (client *EnvironmentsClient) updateHandleResponse(resp *http.Response) (EnvironmentsClientUpdateResponse, error) {
-	result := EnvironmentsClientUpdateResponse{RawResponse: resp}
+	result := EnvironmentsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EnvironmentResource); err != nil {
 		return EnvironmentsClientUpdateResponse{}, err
 	}
@@ -2459,7 +2441,7 @@ func (client *EnvironmentsClient) updateAseNetworkingConfigurationCreateRequest(
 
 // updateAseNetworkingConfigurationHandleResponse handles the UpdateAseNetworkingConfiguration response.
 func (client *EnvironmentsClient) updateAseNetworkingConfigurationHandleResponse(resp *http.Response) (EnvironmentsClientUpdateAseNetworkingConfigurationResponse, error) {
-	result := EnvironmentsClientUpdateAseNetworkingConfigurationResponse{RawResponse: resp}
+	result := EnvironmentsClientUpdateAseNetworkingConfigurationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AseV3NetworkingConfiguration); err != nil {
 		return EnvironmentsClientUpdateAseNetworkingConfigurationResponse{}, err
 	}
@@ -2516,7 +2498,7 @@ func (client *EnvironmentsClient) updateMultiRolePoolCreateRequest(ctx context.C
 
 // updateMultiRolePoolHandleResponse handles the UpdateMultiRolePool response.
 func (client *EnvironmentsClient) updateMultiRolePoolHandleResponse(resp *http.Response) (EnvironmentsClientUpdateMultiRolePoolResponse, error) {
-	result := EnvironmentsClientUpdateMultiRolePoolResponse{RawResponse: resp}
+	result := EnvironmentsClientUpdateMultiRolePoolResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkerPoolResource); err != nil {
 		return EnvironmentsClientUpdateMultiRolePoolResponse{}, err
 	}
@@ -2578,7 +2560,7 @@ func (client *EnvironmentsClient) updateWorkerPoolCreateRequest(ctx context.Cont
 
 // updateWorkerPoolHandleResponse handles the UpdateWorkerPool response.
 func (client *EnvironmentsClient) updateWorkerPoolHandleResponse(resp *http.Response) (EnvironmentsClientUpdateWorkerPoolResponse, error) {
-	result := EnvironmentsClientUpdateWorkerPoolResponse{RawResponse: resp}
+	result := EnvironmentsClientUpdateWorkerPoolResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkerPoolResource); err != nil {
 		return EnvironmentsClientUpdateWorkerPoolResponse{}, err
 	}

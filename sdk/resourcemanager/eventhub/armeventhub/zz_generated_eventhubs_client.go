@@ -36,17 +36,17 @@ type EventHubsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewEventHubsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *EventHubsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &EventHubsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -106,7 +106,7 @@ func (client *EventHubsClient) createOrUpdateCreateRequest(ctx context.Context, 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *EventHubsClient) createOrUpdateHandleResponse(resp *http.Response) (EventHubsClientCreateOrUpdateResponse, error) {
-	result := EventHubsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := EventHubsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Eventhub); err != nil {
 		return EventHubsClientCreateOrUpdateResponse{}, err
 	}
@@ -174,7 +174,7 @@ func (client *EventHubsClient) createOrUpdateAuthorizationRuleCreateRequest(ctx 
 
 // createOrUpdateAuthorizationRuleHandleResponse handles the CreateOrUpdateAuthorizationRule response.
 func (client *EventHubsClient) createOrUpdateAuthorizationRuleHandleResponse(resp *http.Response) (EventHubsClientCreateOrUpdateAuthorizationRuleResponse, error) {
-	result := EventHubsClientCreateOrUpdateAuthorizationRuleResponse{RawResponse: resp}
+	result := EventHubsClientCreateOrUpdateAuthorizationRuleResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AuthorizationRule); err != nil {
 		return EventHubsClientCreateOrUpdateAuthorizationRuleResponse{}, err
 	}
@@ -199,7 +199,7 @@ func (client *EventHubsClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return EventHubsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return EventHubsClientDeleteResponse{RawResponse: resp}, nil
+	return EventHubsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -252,7 +252,7 @@ func (client *EventHubsClient) DeleteAuthorizationRule(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return EventHubsClientDeleteAuthorizationRuleResponse{}, runtime.NewResponseError(resp)
 	}
-	return EventHubsClientDeleteAuthorizationRuleResponse{RawResponse: resp}, nil
+	return EventHubsClientDeleteAuthorizationRuleResponse{}, nil
 }
 
 // deleteAuthorizationRuleCreateRequest creates the DeleteAuthorizationRule request.
@@ -342,7 +342,7 @@ func (client *EventHubsClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *EventHubsClient) getHandleResponse(resp *http.Response) (EventHubsClientGetResponse, error) {
-	result := EventHubsClientGetResponse{RawResponse: resp}
+	result := EventHubsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Eventhub); err != nil {
 		return EventHubsClientGetResponse{}, err
 	}
@@ -408,7 +408,7 @@ func (client *EventHubsClient) getAuthorizationRuleCreateRequest(ctx context.Con
 
 // getAuthorizationRuleHandleResponse handles the GetAuthorizationRule response.
 func (client *EventHubsClient) getAuthorizationRuleHandleResponse(resp *http.Response) (EventHubsClientGetAuthorizationRuleResponse, error) {
-	result := EventHubsClientGetAuthorizationRuleResponse{RawResponse: resp}
+	result := EventHubsClientGetAuthorizationRuleResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AuthorizationRule); err != nil {
 		return EventHubsClientGetAuthorizationRuleResponse{}, err
 	}
@@ -466,7 +466,7 @@ func (client *EventHubsClient) listAuthorizationRulesCreateRequest(ctx context.C
 
 // listAuthorizationRulesHandleResponse handles the ListAuthorizationRules response.
 func (client *EventHubsClient) listAuthorizationRulesHandleResponse(resp *http.Response) (EventHubsClientListAuthorizationRulesResponse, error) {
-	result := EventHubsClientListAuthorizationRulesResponse{RawResponse: resp}
+	result := EventHubsClientListAuthorizationRulesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AuthorizationRuleListResult); err != nil {
 		return EventHubsClientListAuthorizationRulesResponse{}, err
 	}
@@ -525,7 +525,7 @@ func (client *EventHubsClient) listByNamespaceCreateRequest(ctx context.Context,
 
 // listByNamespaceHandleResponse handles the ListByNamespace response.
 func (client *EventHubsClient) listByNamespaceHandleResponse(resp *http.Response) (EventHubsClientListByNamespaceResponse, error) {
-	result := EventHubsClientListByNamespaceResponse{RawResponse: resp}
+	result := EventHubsClientListByNamespaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListResult); err != nil {
 		return EventHubsClientListByNamespaceResponse{}, err
 	}
@@ -590,7 +590,7 @@ func (client *EventHubsClient) listKeysCreateRequest(ctx context.Context, resour
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *EventHubsClient) listKeysHandleResponse(resp *http.Response) (EventHubsClientListKeysResponse, error) {
-	result := EventHubsClientListKeysResponse{RawResponse: resp}
+	result := EventHubsClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessKeys); err != nil {
 		return EventHubsClientListKeysResponse{}, err
 	}
@@ -657,7 +657,7 @@ func (client *EventHubsClient) regenerateKeysCreateRequest(ctx context.Context, 
 
 // regenerateKeysHandleResponse handles the RegenerateKeys response.
 func (client *EventHubsClient) regenerateKeysHandleResponse(resp *http.Response) (EventHubsClientRegenerateKeysResponse, error) {
-	result := EventHubsClientRegenerateKeysResponse{RawResponse: resp}
+	result := EventHubsClientRegenerateKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessKeys); err != nil {
 		return EventHubsClientRegenerateKeysResponse{}, err
 	}

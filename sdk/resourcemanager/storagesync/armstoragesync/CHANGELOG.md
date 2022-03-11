@@ -1,5 +1,274 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ServerEndpointsClient.ListBySyncGroup` parameter(s) have been changed from `(context.Context, string, string, string, *ServerEndpointsClientListBySyncGroupOptions)` to `(string, string, string, *ServerEndpointsClientListBySyncGroupOptions)`
+- Function `*ServerEndpointsClient.ListBySyncGroup` return value(s) have been changed from `(ServerEndpointsClientListBySyncGroupResponse, error)` to `(*ServerEndpointsClientListBySyncGroupPager)`
+- Function `*PrivateEndpointConnectionsClient.ListByStorageSyncService` parameter(s) have been changed from `(context.Context, string, string, *PrivateEndpointConnectionsClientListByStorageSyncServiceOptions)` to `(string, string, *PrivateEndpointConnectionsClientListByStorageSyncServiceOptions)`
+- Function `*PrivateEndpointConnectionsClient.ListByStorageSyncService` return value(s) have been changed from `(PrivateEndpointConnectionsClientListByStorageSyncServiceResponse, error)` to `(*PrivateEndpointConnectionsClientListByStorageSyncServicePager)`
+- Function `*ServicesClient.ListBySubscription` parameter(s) have been changed from `(context.Context, *ServicesClientListBySubscriptionOptions)` to `(*ServicesClientListBySubscriptionOptions)`
+- Function `*ServicesClient.ListBySubscription` return value(s) have been changed from `(ServicesClientListBySubscriptionResponse, error)` to `(*ServicesClientListBySubscriptionPager)`
+- Function `*ServicesClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *ServicesClientListByResourceGroupOptions)` to `(string, *ServicesClientListByResourceGroupOptions)`
+- Function `*ServicesClient.ListByResourceGroup` return value(s) have been changed from `(ServicesClientListByResourceGroupResponse, error)` to `(*ServicesClientListByResourceGroupPager)`
+- Function `*SyncGroupsClient.ListByStorageSyncService` parameter(s) have been changed from `(context.Context, string, string, *SyncGroupsClientListByStorageSyncServiceOptions)` to `(string, string, *SyncGroupsClientListByStorageSyncServiceOptions)`
+- Function `*SyncGroupsClient.ListByStorageSyncService` return value(s) have been changed from `(SyncGroupsClientListByStorageSyncServiceResponse, error)` to `(*SyncGroupsClientListByStorageSyncServicePager)`
+- Function `*WorkflowsClient.ListByStorageSyncService` parameter(s) have been changed from `(context.Context, string, string, *WorkflowsClientListByStorageSyncServiceOptions)` to `(string, string, *WorkflowsClientListByStorageSyncServiceOptions)`
+- Function `*WorkflowsClient.ListByStorageSyncService` return value(s) have been changed from `(WorkflowsClientListByStorageSyncServiceResponse, error)` to `(*WorkflowsClientListByStorageSyncServicePager)`
+- Function `*CloudEndpointsClient.ListBySyncGroup` parameter(s) have been changed from `(context.Context, string, string, string, *CloudEndpointsClientListBySyncGroupOptions)` to `(string, string, string, *CloudEndpointsClientListBySyncGroupOptions)`
+- Function `*CloudEndpointsClient.ListBySyncGroup` return value(s) have been changed from `(CloudEndpointsClientListBySyncGroupResponse, error)` to `(*CloudEndpointsClientListBySyncGroupPager)`
+- Function `*RegisteredServersClient.ListByStorageSyncService` parameter(s) have been changed from `(context.Context, string, string, *RegisteredServersClientListByStorageSyncServiceOptions)` to `(string, string, *RegisteredServersClientListByStorageSyncServiceOptions)`
+- Function `*RegisteredServersClient.ListByStorageSyncService` return value(s) have been changed from `(RegisteredServersClientListByStorageSyncServiceResponse, error)` to `(*RegisteredServersClientListByStorageSyncServicePager)`
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Struct `CloudEndpointsClientCreateResult` has been removed
+- Struct `CloudEndpointsClientGetResult` has been removed
+- Struct `CloudEndpointsClientListBySyncGroupResult` has been removed
+- Struct `CloudEndpointsClientPostBackupResult` has been removed
+- Struct `CloudEndpointsClientRestoreheartbeatResult` has been removed
+- Struct `MicrosoftStorageSyncClientLocationOperationStatusResult` has been removed
+- Struct `OperationStatusClientGetResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientCreateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListByStorageSyncServiceResult` has been removed
+- Struct `PrivateLinkResourcesClientListByStorageSyncServiceResult` has been removed
+- Struct `RegisteredServersClientCreateResult` has been removed
+- Struct `RegisteredServersClientGetResult` has been removed
+- Struct `RegisteredServersClientListByStorageSyncServiceResult` has been removed
+- Struct `ServerEndpointsClientCreateResult` has been removed
+- Struct `ServerEndpointsClientGetResult` has been removed
+- Struct `ServerEndpointsClientListBySyncGroupResult` has been removed
+- Struct `ServerEndpointsClientUpdateResult` has been removed
+- Struct `ServicesClientCheckNameAvailabilityResult` has been removed
+- Struct `ServicesClientCreateResult` has been removed
+- Struct `ServicesClientGetResult` has been removed
+- Struct `ServicesClientListByResourceGroupResult` has been removed
+- Struct `ServicesClientListBySubscriptionResult` has been removed
+- Struct `ServicesClientUpdateResult` has been removed
+- Struct `SyncGroupsClientCreateResult` has been removed
+- Struct `SyncGroupsClientDeleteResult` has been removed
+- Struct `SyncGroupsClientGetResult` has been removed
+- Struct `SyncGroupsClientListByStorageSyncServiceResult` has been removed
+- Struct `WorkflowsClientAbortResult` has been removed
+- Struct `WorkflowsClientGetResult` has been removed
+- Struct `WorkflowsClientListByStorageSyncServiceResult` has been removed
+- Field `WorkflowsClientAbortResult` of struct `WorkflowsClientAbortResponse` has been removed
+- Field `RawResponse` of struct `WorkflowsClientAbortResponse` has been removed
+- Field `RawResponse` of struct `RegisteredServersClientCreatePollerResponse` has been removed
+- Field `ServicesClientUpdateResult` of struct `ServicesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientUpdateResponse` has been removed
+- Field `CloudEndpointsClientPostBackupResult` of struct `CloudEndpointsClientPostBackupResponse` has been removed
+- Field `RawResponse` of struct `CloudEndpointsClientPostBackupResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeletePollerResponse` has been removed
+- Field `WorkflowsClientGetResult` of struct `WorkflowsClientGetResponse` has been removed
+- Field `RawResponse` of struct `WorkflowsClientGetResponse` has been removed
+- Field `RawResponse` of struct `RegisteredServersClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `CloudEndpointsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `CloudEndpointsClientTriggerChangeDetectionPollerResponse` has been removed
+- Field `RawResponse` of struct `CloudEndpointsClientPreRestoreResponse` has been removed
+- Field `RawResponse` of struct `CloudEndpointsClientDeleteResponse` has been removed
+- Field `SyncGroupsClientCreateResult` of struct `SyncGroupsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `SyncGroupsClientCreateResponse` has been removed
+- Field `OperationStatusClientGetResult` of struct `OperationStatusClientGetResponse` has been removed
+- Field `RawResponse` of struct `OperationStatusClientGetResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `ServicesClientCreateResult` of struct `ServicesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ServerEndpointsClientDeleteResponse` has been removed
+- Field `RegisteredServersClientGetResult` of struct `RegisteredServersClientGetResponse` has been removed
+- Field `RawResponse` of struct `RegisteredServersClientGetResponse` has been removed
+- Field `RawResponse` of struct `CloudEndpointsClientPostRestorePollerResponse` has been removed
+- Field `ServerEndpointsClientListBySyncGroupResult` of struct `ServerEndpointsClientListBySyncGroupResponse` has been removed
+- Field `RawResponse` of struct `ServerEndpointsClientListBySyncGroupResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `MicrosoftStorageSyncClientLocationOperationStatusResult` of struct `MicrosoftStorageSyncClientLocationOperationStatusResponse` has been removed
+- Field `RawResponse` of struct `MicrosoftStorageSyncClientLocationOperationStatusResponse` has been removed
+- Field `PrivateEndpointConnectionsClientCreateResult` of struct `PrivateEndpointConnectionsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `CloudEndpointsClientTriggerChangeDetectionResponse` has been removed
+- Field `ServerEndpointsClientGetResult` of struct `ServerEndpointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServerEndpointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `RegisteredServersClientTriggerRolloverPollerResponse` has been removed
+- Field `ServicesClientGetResult` of struct `ServicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServerEndpointsClientRecallActionPollerResponse` has been removed
+- Field `RawResponse` of struct `RegisteredServersClientTriggerRolloverResponse` has been removed
+- Field `WorkflowsClientListByStorageSyncServiceResult` of struct `WorkflowsClientListByStorageSyncServiceResponse` has been removed
+- Field `RawResponse` of struct `WorkflowsClientListByStorageSyncServiceResponse` has been removed
+- Field `RawResponse` of struct `CloudEndpointsClientCreatePollerResponse` has been removed
+- Field `RegisteredServersClientCreateResult` of struct `RegisteredServersClientCreateResponse` has been removed
+- Field `RawResponse` of struct `RegisteredServersClientCreateResponse` has been removed
+- Field `CloudEndpointsClientListBySyncGroupResult` of struct `CloudEndpointsClientListBySyncGroupResponse` has been removed
+- Field `RawResponse` of struct `CloudEndpointsClientListBySyncGroupResponse` has been removed
+- Field `RawResponse` of struct `CloudEndpointsClientPostBackupPollerResponse` has been removed
+- Field `RawResponse` of struct `CloudEndpointsClientPreRestorePollerResponse` has been removed
+- Field `CloudEndpointsClientGetResult` of struct `CloudEndpointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `CloudEndpointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `CloudEndpointsClientPreBackupResponse` has been removed
+- Field `RawResponse` of struct `ServerEndpointsClientCreatePollerResponse` has been removed
+- Field `CloudEndpointsClientRestoreheartbeatResult` of struct `CloudEndpointsClientRestoreheartbeatResponse` has been removed
+- Field `RawResponse` of struct `CloudEndpointsClientRestoreheartbeatResponse` has been removed
+- Field `ServicesClientListBySubscriptionResult` of struct `ServicesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `CloudEndpointsClientPostRestoreResponse` has been removed
+- Field `CloudEndpointsClientCreateResult` of struct `CloudEndpointsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `CloudEndpointsClientCreateResponse` has been removed
+- Field `ServerEndpointsClientUpdateResult` of struct `ServerEndpointsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServerEndpointsClientUpdateResponse` has been removed
+- Field `ServicesClientCheckNameAvailabilityResult` of struct `ServicesClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCheckNameAvailabilityResponse` has been removed
+- Field `SyncGroupsClientGetResult` of struct `SyncGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SyncGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `CloudEndpointsClientPreBackupPollerResponse` has been removed
+- Field `RegisteredServersClientListByStorageSyncServiceResult` of struct `RegisteredServersClientListByStorageSyncServiceResponse` has been removed
+- Field `RawResponse` of struct `RegisteredServersClientListByStorageSyncServiceResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCreatePollerResponse` has been removed
+- Field `RawResponse` of struct `ServerEndpointsClientRecallActionResponse` has been removed
+- Field `ServicesClientListByResourceGroupResult` of struct `ServicesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ServerEndpointsClientUpdatePollerResponse` has been removed
+- Field `PrivateLinkResourcesClientListByStorageSyncServiceResult` of struct `PrivateLinkResourcesClientListByStorageSyncServiceResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListByStorageSyncServiceResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientUpdatePollerResponse` has been removed
+- Field `SyncGroupsClientDeleteResult` of struct `SyncGroupsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `SyncGroupsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `RegisteredServersClientDeletePollerResponse` has been removed
+- Field `ServerEndpointsClientCreateResult` of struct `ServerEndpointsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ServerEndpointsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ServerEndpointsClientDeletePollerResponse` has been removed
+- Field `SyncGroupsClientListByStorageSyncServiceResult` of struct `SyncGroupsClientListByStorageSyncServiceResponse` has been removed
+- Field `RawResponse` of struct `SyncGroupsClientListByStorageSyncServiceResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListByStorageSyncServiceResult` of struct `PrivateEndpointConnectionsClientListByStorageSyncServiceResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListByStorageSyncServiceResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreatePollerResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New function `*ServerEndpointsClientListBySyncGroupPager.More() bool`
+- New function `*ServerEndpointsClientListBySyncGroupPager.NextPage(context.Context) (ServerEndpointsClientListBySyncGroupResponse, error)`
+- New function `*SyncGroupsClientListByStorageSyncServicePager.NextPage(context.Context) (SyncGroupsClientListByStorageSyncServiceResponse, error)`
+- New function `*WorkflowsClientListByStorageSyncServicePager.NextPage(context.Context) (WorkflowsClientListByStorageSyncServiceResponse, error)`
+- New function `*CloudEndpointsClientListBySyncGroupPager.More() bool`
+- New function `ResourcesMoveInfo.MarshalJSON() ([]byte, error)`
+- New function `*RegisteredServersClientListByStorageSyncServicePager.NextPage(context.Context) (RegisteredServersClientListByStorageSyncServiceResponse, error)`
+- New function `*PrivateEndpointConnectionsClientListByStorageSyncServicePager.NextPage(context.Context) (PrivateEndpointConnectionsClientListByStorageSyncServiceResponse, error)`
+- New function `*ServicesClientListBySubscriptionPager.More() bool`
+- New function `*RegisteredServersClientListByStorageSyncServicePager.More() bool`
+- New function `*ServicesClientListByResourceGroupPager.NextPage(context.Context) (ServicesClientListByResourceGroupResponse, error)`
+- New function `*ServicesClientListByResourceGroupPager.More() bool`
+- New function `*ServicesClientListBySubscriptionPager.NextPage(context.Context) (ServicesClientListBySubscriptionResponse, error)`
+- New function `*WorkflowsClientListByStorageSyncServicePager.More() bool`
+- New function `*PrivateEndpointConnectionsClientListByStorageSyncServicePager.More() bool`
+- New function `*CloudEndpointsClientListBySyncGroupPager.NextPage(context.Context) (CloudEndpointsClientListBySyncGroupResponse, error)`
+- New function `*SyncGroupsClientListByStorageSyncServicePager.More() bool`
+- New struct `CloudEndpointsClientListBySyncGroupPager`
+- New struct `Error`
+- New struct `OperationDisplayResource`
+- New struct `PrivateEndpointConnectionsClientListByStorageSyncServicePager`
+- New struct `RegisteredServersClientListByStorageSyncServicePager`
+- New struct `ResourcesMoveInfo`
+- New struct `ServerEndpointsClientListBySyncGroupPager`
+- New struct `ServicesClientListByResourceGroupPager`
+- New struct `ServicesClientListBySubscriptionPager`
+- New struct `SubscriptionState`
+- New struct `SyncGroupsClientListByStorageSyncServicePager`
+- New struct `WorkflowsClientListByStorageSyncServicePager`
+- New anonymous field `PrivateLinkResourceListResult` in struct `PrivateLinkResourcesClientListByStorageSyncServiceResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `LocationOperationStatus` in struct `MicrosoftStorageSyncClientLocationOperationStatusResponse`
+- New field `XMSCorrelationRequestID` in struct `MicrosoftStorageSyncClientLocationOperationStatusResponse`
+- New field `XMSRequestID` in struct `MicrosoftStorageSyncClientLocationOperationStatusResponse`
+- New anonymous field `CloudEndpoint` in struct `CloudEndpointsClientGetResponse`
+- New field `XMSCorrelationRequestID` in struct `CloudEndpointsClientGetResponse`
+- New field `XMSRequestID` in struct `CloudEndpointsClientGetResponse`
+- New anonymous field `CloudEndpoint` in struct `CloudEndpointsClientCreateResponse`
+- New anonymous field `ServerEndpoint` in struct `ServerEndpointsClientCreateResponse`
+- New anonymous field `SyncGroup` in struct `SyncGroupsClientGetResponse`
+- New field `XMSCorrelationRequestID` in struct `SyncGroupsClientGetResponse`
+- New field `XMSRequestID` in struct `SyncGroupsClientGetResponse`
+- New anonymous field `OperationStatus` in struct `OperationStatusClientGetResponse`
+- New field `XMSCorrelationRequestID` in struct `OperationStatusClientGetResponse`
+- New field `XMSRequestID` in struct `OperationStatusClientGetResponse`
+- New anonymous field `ServerEndpointArray` in struct `ServerEndpointsClientListBySyncGroupResponse`
+- New field `XMSCorrelationRequestID` in struct `ServerEndpointsClientListBySyncGroupResponse`
+- New field `XMSRequestID` in struct `ServerEndpointsClientListBySyncGroupResponse`
+- New field `Location` in struct `ServerEndpointsClientListBySyncGroupResponse`
+- New anonymous field `Service` in struct `ServicesClientCreateResponse`
+- New anonymous field `ServerEndpoint` in struct `ServerEndpointsClientGetResponse`
+- New field `XMSRequestID` in struct `ServerEndpointsClientGetResponse`
+- New field `XMSCorrelationRequestID` in struct `ServerEndpointsClientGetResponse`
+- New anonymous field `RegisteredServer` in struct `RegisteredServersClientCreateResponse`
+- New anonymous field `Service` in struct `ServicesClientGetResponse`
+- New field `XMSCorrelationRequestID` in struct `ServicesClientGetResponse`
+- New field `XMSRequestID` in struct `ServicesClientGetResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientCreateResponse`
+- New anonymous field `SyncGroupArray` in struct `SyncGroupsClientListByStorageSyncServiceResponse`
+- New field `XMSCorrelationRequestID` in struct `SyncGroupsClientListByStorageSyncServiceResponse`
+- New field `XMSRequestID` in struct `SyncGroupsClientListByStorageSyncServiceResponse`
+- New anonymous field `WorkflowArray` in struct `WorkflowsClientListByStorageSyncServiceResponse`
+- New field `XMSCorrelationRequestID` in struct `WorkflowsClientListByStorageSyncServiceResponse`
+- New field `XMSRequestID` in struct `WorkflowsClientListByStorageSyncServiceResponse`
+- New anonymous field `RegisteredServerArray` in struct `RegisteredServersClientListByStorageSyncServiceResponse`
+- New field `XMSCorrelationRequestID` in struct `RegisteredServersClientListByStorageSyncServiceResponse`
+- New field `XMSRequestID` in struct `RegisteredServersClientListByStorageSyncServiceResponse`
+- New anonymous field `OperationEntityListResult` in struct `OperationsClientListResponse`
+- New field `XMSCorrelationRequestID` in struct `OperationsClientListResponse`
+- New field `XMSRequestID` in struct `OperationsClientListResponse`
+- New anonymous field `RegisteredServer` in struct `RegisteredServersClientGetResponse`
+- New field `XMSCorrelationRequestID` in struct `RegisteredServersClientGetResponse`
+- New field `XMSRequestID` in struct `RegisteredServersClientGetResponse`
+- New field `XMSCorrelationRequestID` in struct `CloudEndpointsClientRestoreheartbeatResponse`
+- New field `XMSRequestID` in struct `CloudEndpointsClientRestoreheartbeatResponse`
+- New field `XMSRequestID` in struct `WorkflowsClientAbortResponse`
+- New field `XMSCorrelationRequestID` in struct `WorkflowsClientAbortResponse`
+- New anonymous field `ServiceArray` in struct `ServicesClientListByResourceGroupResponse`
+- New field `XMSRequestID` in struct `ServicesClientListByResourceGroupResponse`
+- New field `XMSCorrelationRequestID` in struct `ServicesClientListByResourceGroupResponse`
+- New field `XMSRequestID` in struct `SyncGroupsClientDeleteResponse`
+- New field `XMSCorrelationRequestID` in struct `SyncGroupsClientDeleteResponse`
+- New anonymous field `SyncGroup` in struct `SyncGroupsClientCreateResponse`
+- New field `XMSCorrelationRequestID` in struct `SyncGroupsClientCreateResponse`
+- New field `XMSRequestID` in struct `SyncGroupsClientCreateResponse`
+- New anonymous field `Service` in struct `ServicesClientUpdateResponse`
+- New anonymous field `PostBackupResponse` in struct `CloudEndpointsClientPostBackupResponse`
+- New anonymous field `Workflow` in struct `WorkflowsClientGetResponse`
+- New field `XMSCorrelationRequestID` in struct `WorkflowsClientGetResponse`
+- New field `XMSRequestID` in struct `WorkflowsClientGetResponse`
+- New anonymous field `CheckNameAvailabilityResult` in struct `ServicesClientCheckNameAvailabilityResponse`
+- New anonymous field `ServerEndpoint` in struct `ServerEndpointsClientUpdateResponse`
+- New anonymous field `ServiceArray` in struct `ServicesClientListBySubscriptionResponse`
+- New field `XMSCorrelationRequestID` in struct `ServicesClientListBySubscriptionResponse`
+- New field `XMSRequestID` in struct `ServicesClientListBySubscriptionResponse`
+- New anonymous field `CloudEndpointArray` in struct `CloudEndpointsClientListBySyncGroupResponse`
+- New field `XMSCorrelationRequestID` in struct `CloudEndpointsClientListBySyncGroupResponse`
+- New field `XMSRequestID` in struct `CloudEndpointsClientListBySyncGroupResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListByStorageSyncServiceResponse`
+- New field `XMSCorrelationRequestID` in struct `PrivateEndpointConnectionsClientListByStorageSyncServiceResponse`
+- New field `XMSRequestID` in struct `PrivateEndpointConnectionsClientListByStorageSyncServiceResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `SyncGroupCreateParameters.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Function `ResourcesMoveInfo.MarshalJSON` has been removed
+- Struct `Error` has been removed
+- Struct `OperationDisplayResource` has been removed
+- Struct `ResourcesMoveInfo` has been removed
+- Struct `SubscriptionState` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

@@ -1,5 +1,73 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*PipelinesClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(PipelinesClientListBySubscriptionResponse, error)`
+- Function `*PipelinesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(PipelinesClientListByResourceGroupResponse, error)`
+- Function `*PipelineTemplateDefinitionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PipelineTemplateDefinitionsClientListResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*PipelinesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*PipelinesClientListBySubscriptionPager.Err` has been removed
+- Function `*PipelinesClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*PipelineTemplateDefinitionsClientListPager.PageResponse` has been removed
+- Function `*PipelinesClientListByResourceGroupPager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*PipelineTemplateDefinitionsClientListPager.Err` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PipelineTemplateDefinitionsClientListResult` has been removed
+- Struct `PipelinesClientCreateOrUpdateResult` has been removed
+- Struct `PipelinesClientGetResult` has been removed
+- Struct `PipelinesClientListByResourceGroupResult` has been removed
+- Struct `PipelinesClientListBySubscriptionResult` has been removed
+- Struct `PipelinesClientUpdateResult` has been removed
+- Field `PipelinesClientGetResult` of struct `PipelinesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PipelinesClientGetResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `PipelinesClientCreateOrUpdateResult` of struct `PipelinesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PipelinesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PipelinesClientDeleteResponse` has been removed
+- Field `PipelinesClientUpdateResult` of struct `PipelinesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PipelinesClientUpdateResponse` has been removed
+- Field `PipelineTemplateDefinitionsClientListResult` of struct `PipelineTemplateDefinitionsClientListResponse` has been removed
+- Field `RawResponse` of struct `PipelineTemplateDefinitionsClientListResponse` has been removed
+- Field `RawResponse` of struct `PipelinesClientCreateOrUpdatePollerResponse` has been removed
+- Field `PipelinesClientListBySubscriptionResult` of struct `PipelinesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `PipelinesClientListBySubscriptionResponse` has been removed
+- Field `PipelinesClientListByResourceGroupResult` of struct `PipelinesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `PipelinesClientListByResourceGroupResponse` has been removed
+
+### Features Added
+
+- New function `*PipelinesClientListBySubscriptionPager.More() bool`
+- New function `*PipelinesClientListByResourceGroupPager.More() bool`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*PipelineTemplateDefinitionsClientListPager.More() bool`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New anonymous field `PipelineListResult` in struct `PipelinesClientListBySubscriptionResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `Pipeline` in struct `PipelinesClientUpdateResponse`
+- New anonymous field `Pipeline` in struct `PipelinesClientGetResponse`
+- New anonymous field `Pipeline` in struct `PipelinesClientCreateOrUpdateResponse`
+- New anonymous field `PipelineListResult` in struct `PipelinesClientListByResourceGroupResponse`
+- New anonymous field `PipelineTemplateDefinitionListResult` in struct `PipelineTemplateDefinitionsClientListResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

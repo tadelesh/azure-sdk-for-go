@@ -34,17 +34,17 @@ type AuthorizationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAuthorizationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AuthorizationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AuthorizationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *AuthorizationsClient) BeginCreateOrUpdate(ctx context.Context, res
 	if err != nil {
 		return AuthorizationsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := AuthorizationsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AuthorizationsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AuthorizationsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return AuthorizationsClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *AuthorizationsClient) BeginDelete(ctx context.Context, resourceGro
 	if err != nil {
 		return AuthorizationsClientDeletePollerResponse{}, err
 	}
-	result := AuthorizationsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AuthorizationsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AuthorizationsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return AuthorizationsClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *AuthorizationsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *AuthorizationsClient) getHandleResponse(resp *http.Response) (AuthorizationsClientGetResponse, error) {
-	result := AuthorizationsClientGetResponse{RawResponse: resp}
+	result := AuthorizationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExpressRouteAuthorization); err != nil {
 		return AuthorizationsClientGetResponse{}, err
 	}
@@ -299,7 +295,7 @@ func (client *AuthorizationsClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *AuthorizationsClient) listHandleResponse(resp *http.Response) (AuthorizationsClientListResponse, error) {
-	result := AuthorizationsClientListResponse{RawResponse: resp}
+	result := AuthorizationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExpressRouteAuthorizationList); err != nil {
 		return AuthorizationsClientListResponse{}, err
 	}

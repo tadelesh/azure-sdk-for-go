@@ -43,11 +43,10 @@ func (p *APISClientManageInventoryMetadataPoller) Poll(ctx context.Context) (*ht
 // If the final GET succeeded then the final APISClientManageInventoryMetadataResponse will be returned.
 func (p *APISClientManageInventoryMetadataPoller) FinalResponse(ctx context.Context) (APISClientManageInventoryMetadataResponse, error) {
 	respType := APISClientManageInventoryMetadataResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return APISClientManageInventoryMetadataResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

@@ -34,17 +34,17 @@ type PackagesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPackagesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PackagesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PackagesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *PackagesClient) BeginCreate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return PackagesClientCreatePollerResponse{}, err
 	}
-	result := PackagesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PackagesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("PackagesClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return PackagesClientCreatePollerResponse{}, err
@@ -132,9 +130,7 @@ func (client *PackagesClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return PackagesClientDeletePollerResponse{}, err
 	}
-	result := PackagesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PackagesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PackagesClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return PackagesClientDeletePollerResponse{}, err
@@ -245,7 +241,7 @@ func (client *PackagesClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *PackagesClient) getHandleResponse(resp *http.Response) (PackagesClientGetResponse, error) {
-	result := PackagesClientGetResponse{RawResponse: resp}
+	result := PackagesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PackageResource); err != nil {
 		return PackagesClientGetResponse{}, err
 	}
@@ -305,7 +301,7 @@ func (client *PackagesClient) getDownloadURLCreateRequest(ctx context.Context, r
 
 // getDownloadURLHandleResponse handles the GetDownloadURL response.
 func (client *PackagesClient) getDownloadURLHandleResponse(resp *http.Response) (PackagesClientGetDownloadURLResponse, error) {
-	result := PackagesClientGetDownloadURLResponse{RawResponse: resp}
+	result := PackagesClientGetDownloadURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DownloadURLResponse); err != nil {
 		return PackagesClientGetDownloadURLResponse{}, err
 	}
@@ -324,9 +320,7 @@ func (client *PackagesClient) BeginHardDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return PackagesClientHardDeletePollerResponse{}, err
 	}
-	result := PackagesClientHardDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PackagesClientHardDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PackagesClient.HardDelete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return PackagesClientHardDeletePollerResponse{}, err
@@ -430,7 +424,7 @@ func (client *PackagesClient) listByTestBaseAccountCreateRequest(ctx context.Con
 
 // listByTestBaseAccountHandleResponse handles the ListByTestBaseAccount response.
 func (client *PackagesClient) listByTestBaseAccountHandleResponse(resp *http.Response) (PackagesClientListByTestBaseAccountResponse, error) {
-	result := PackagesClientListByTestBaseAccountResponse{RawResponse: resp}
+	result := PackagesClientListByTestBaseAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PackageListResult); err != nil {
 		return PackagesClientListByTestBaseAccountResponse{}, err
 	}
@@ -449,9 +443,7 @@ func (client *PackagesClient) BeginUpdate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return PackagesClientUpdatePollerResponse{}, err
 	}
-	result := PackagesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PackagesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PackagesClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return PackagesClientUpdatePollerResponse{}, err

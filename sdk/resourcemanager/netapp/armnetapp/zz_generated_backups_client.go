@@ -35,17 +35,17 @@ type BackupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBackupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BackupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BackupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *BackupsClient) BeginCreate(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return BackupsClientCreatePollerResponse{}, err
 	}
-	result := BackupsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := BackupsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("BackupsClient.Create", "location", resp, client.pl)
 	if err != nil {
 		return BackupsClientCreatePollerResponse{}, err
@@ -145,9 +143,7 @@ func (client *BackupsClient) BeginDelete(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return BackupsClientDeletePollerResponse{}, err
 	}
-	result := BackupsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := BackupsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("BackupsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return BackupsClientDeletePollerResponse{}, err
@@ -275,7 +271,7 @@ func (client *BackupsClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *BackupsClient) getHandleResponse(resp *http.Response) (BackupsClientGetResponse, error) {
-	result := BackupsClientGetResponse{RawResponse: resp}
+	result := BackupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Backup); err != nil {
 		return BackupsClientGetResponse{}, err
 	}
@@ -340,7 +336,7 @@ func (client *BackupsClient) getStatusCreateRequest(ctx context.Context, resourc
 
 // getStatusHandleResponse handles the GetStatus response.
 func (client *BackupsClient) getStatusHandleResponse(resp *http.Response) (BackupsClientGetStatusResponse, error) {
-	result := BackupsClientGetStatusResponse{RawResponse: resp}
+	result := BackupsClientGetStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupStatus); err != nil {
 		return BackupsClientGetStatusResponse{}, err
 	}
@@ -406,7 +402,7 @@ func (client *BackupsClient) getVolumeRestoreStatusCreateRequest(ctx context.Con
 
 // getVolumeRestoreStatusHandleResponse handles the GetVolumeRestoreStatus response.
 func (client *BackupsClient) getVolumeRestoreStatusHandleResponse(resp *http.Response) (BackupsClientGetVolumeRestoreStatusResponse, error) {
-	result := BackupsClientGetVolumeRestoreStatusResponse{RawResponse: resp}
+	result := BackupsClientGetVolumeRestoreStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestoreStatus); err != nil {
 		return BackupsClientGetVolumeRestoreStatusResponse{}, err
 	}
@@ -420,19 +416,13 @@ func (client *BackupsClient) getVolumeRestoreStatusHandleResponse(resp *http.Res
 // poolName - The name of the capacity pool
 // volumeName - The name of the volume
 // options - BackupsClientListOptions contains the optional parameters for the BackupsClient.List method.
-func (client *BackupsClient) List(ctx context.Context, resourceGroupName string, accountName string, poolName string, volumeName string, options *BackupsClientListOptions) (BackupsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, poolName, volumeName, options)
-	if err != nil {
-		return BackupsClientListResponse{}, err
+func (client *BackupsClient) List(resourceGroupName string, accountName string, poolName string, volumeName string, options *BackupsClientListOptions) *BackupsClientListPager {
+	return &BackupsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, accountName, poolName, volumeName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return BackupsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return BackupsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -471,7 +461,7 @@ func (client *BackupsClient) listCreateRequest(ctx context.Context, resourceGrou
 
 // listHandleResponse handles the List response.
 func (client *BackupsClient) listHandleResponse(resp *http.Response) (BackupsClientListResponse, error) {
-	result := BackupsClientListResponse{RawResponse: resp}
+	result := BackupsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupsList); err != nil {
 		return BackupsClientListResponse{}, err
 	}
@@ -491,9 +481,7 @@ func (client *BackupsClient) BeginUpdate(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return BackupsClientUpdatePollerResponse{}, err
 	}
-	result := BackupsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := BackupsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("BackupsClient.Update", "location", resp, client.pl)
 	if err != nil {
 		return BackupsClientUpdatePollerResponse{}, err

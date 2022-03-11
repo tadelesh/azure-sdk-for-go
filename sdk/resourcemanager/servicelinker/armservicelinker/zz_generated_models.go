@@ -8,12 +8,7 @@
 
 package armservicelinker
 
-import (
-	"encoding/json"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
-	"reflect"
-	"time"
-)
+import "time"
 
 // AuthInfoBaseClassification provides polymorphic access to related types.
 // Call the interface's GetAuthInfoBase() method to access the common type.
@@ -31,13 +26,10 @@ type AuthInfoBase struct {
 	AuthType *AuthType `json:"authType,omitempty"`
 }
 
-// GetAuthInfoBase implements the AuthInfoBaseClassification interface for type AuthInfoBase.
-func (a *AuthInfoBase) GetAuthInfoBase() *AuthInfoBase { return a }
-
 // ErrorAdditionalInfo - The resource management error additional info.
 type ErrorAdditionalInfo struct {
 	// READ-ONLY; The additional info.
-	Info map[string]interface{} `json:"info,omitempty" azure:"ro"`
+	Info interface{} `json:"info,omitempty" azure:"ro"`
 
 	// READ-ONLY; The additional info type.
 	Type *string `json:"type,omitempty" azure:"ro"`
@@ -59,17 +51,6 @@ type ErrorDetail struct {
 
 	// READ-ONLY; The error target.
 	Target *string `json:"target,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type ErrorDetail.
-func (e ErrorDetail) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "additionalInfo", e.AdditionalInfo)
-	populate(objectMap, "code", e.Code)
-	populate(objectMap, "details", e.Details)
-	populate(objectMap, "message", e.Message)
-	populate(objectMap, "target", e.Target)
-	return json.Marshal(objectMap)
 }
 
 // ErrorResponse - Common error response for all Azure Resource Manager APIs to return error details for failed operations.
@@ -123,25 +104,10 @@ type LinkerList struct {
 	Value []*LinkerResource `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type LinkerList.
-func (l LinkerList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", l.NextLink)
-	populate(objectMap, "value", l.Value)
-	return json.Marshal(objectMap)
-}
-
 // LinkerPatch - A linker to be updated.
 type LinkerPatch struct {
 	// Linker properties
 	Properties *LinkerProperties `json:"properties,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type LinkerPatch.
-func (l LinkerPatch) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "properties", l.Properties)
-	return json.Marshal(objectMap)
 }
 
 // LinkerProperties - The properties of the linker.
@@ -157,45 +123,6 @@ type LinkerProperties struct {
 
 	// READ-ONLY; The provisioning state.
 	ProvisioningState *string `json:"provisioningState,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type LinkerProperties.
-func (l LinkerProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "authInfo", l.AuthInfo)
-	populate(objectMap, "clientType", l.ClientType)
-	populate(objectMap, "provisioningState", l.ProvisioningState)
-	populate(objectMap, "targetId", l.TargetID)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type LinkerProperties.
-func (l *LinkerProperties) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "authInfo":
-			l.AuthInfo, err = unmarshalAuthInfoBaseClassification(val)
-			delete(rawMsg, key)
-		case "clientType":
-			err = unpopulate(val, &l.ClientType)
-			delete(rawMsg, key)
-		case "provisioningState":
-			err = unpopulate(val, &l.ProvisioningState)
-			delete(rawMsg, key)
-		case "targetId":
-			err = unpopulate(val, &l.TargetID)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // LinkerResource - Linker of source and target resource
@@ -265,14 +192,6 @@ type OperationListResult struct {
 	Value []*Operation `json:"value,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type OperationListResult.
-func (o OperationListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", o.NextLink)
-	populate(objectMap, "value", o.Value)
-	return json.Marshal(objectMap)
-}
-
 // OperationsClientListOptions contains the optional parameters for the OperationsClient.List method.
 type OperationsClientListOptions struct {
 	// placeholder for future optional parameters
@@ -315,48 +234,6 @@ type SecretAuthInfo struct {
 	Secret *string `json:"secret,omitempty"`
 }
 
-// GetAuthInfoBase implements the AuthInfoBaseClassification interface for type SecretAuthInfo.
-func (s *SecretAuthInfo) GetAuthInfoBase() *AuthInfoBase {
-	return &AuthInfoBase{
-		AuthType: s.AuthType,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type SecretAuthInfo.
-func (s SecretAuthInfo) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	objectMap["authType"] = AuthTypeSecret
-	populate(objectMap, "name", s.Name)
-	populate(objectMap, "secret", s.Secret)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type SecretAuthInfo.
-func (s *SecretAuthInfo) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "authType":
-			err = unpopulate(val, &s.AuthType)
-			delete(rawMsg, key)
-		case "name":
-			err = unpopulate(val, &s.Name)
-			delete(rawMsg, key)
-		case "secret":
-			err = unpopulate(val, &s.Secret)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // ServicePrincipalCertificateAuthInfo - The authentication info when authType is servicePrincipal certificate
 type ServicePrincipalCertificateAuthInfo struct {
 	// REQUIRED; The authentication type.
@@ -370,52 +247,6 @@ type ServicePrincipalCertificateAuthInfo struct {
 
 	// REQUIRED; Principal Id for servicePrincipal auth.
 	PrincipalID *string `json:"principalId,omitempty"`
-}
-
-// GetAuthInfoBase implements the AuthInfoBaseClassification interface for type ServicePrincipalCertificateAuthInfo.
-func (s *ServicePrincipalCertificateAuthInfo) GetAuthInfoBase() *AuthInfoBase {
-	return &AuthInfoBase{
-		AuthType: s.AuthType,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type ServicePrincipalCertificateAuthInfo.
-func (s ServicePrincipalCertificateAuthInfo) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	objectMap["authType"] = AuthTypeServicePrincipalCertificate
-	populate(objectMap, "certificate", s.Certificate)
-	populate(objectMap, "clientId", s.ClientID)
-	populate(objectMap, "principalId", s.PrincipalID)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type ServicePrincipalCertificateAuthInfo.
-func (s *ServicePrincipalCertificateAuthInfo) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "authType":
-			err = unpopulate(val, &s.AuthType)
-			delete(rawMsg, key)
-		case "certificate":
-			err = unpopulate(val, &s.Certificate)
-			delete(rawMsg, key)
-		case "clientId":
-			err = unpopulate(val, &s.ClientID)
-			delete(rawMsg, key)
-		case "principalId":
-			err = unpopulate(val, &s.PrincipalID)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // ServicePrincipalSecretAuthInfo - The authentication info when authType is servicePrincipal secret
@@ -433,52 +264,6 @@ type ServicePrincipalSecretAuthInfo struct {
 	Secret *string `json:"secret,omitempty"`
 }
 
-// GetAuthInfoBase implements the AuthInfoBaseClassification interface for type ServicePrincipalSecretAuthInfo.
-func (s *ServicePrincipalSecretAuthInfo) GetAuthInfoBase() *AuthInfoBase {
-	return &AuthInfoBase{
-		AuthType: s.AuthType,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type ServicePrincipalSecretAuthInfo.
-func (s ServicePrincipalSecretAuthInfo) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	objectMap["authType"] = AuthTypeServicePrincipalSecret
-	populate(objectMap, "clientId", s.ClientID)
-	populate(objectMap, "principalId", s.PrincipalID)
-	populate(objectMap, "secret", s.Secret)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type ServicePrincipalSecretAuthInfo.
-func (s *ServicePrincipalSecretAuthInfo) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "authType":
-			err = unpopulate(val, &s.AuthType)
-			delete(rawMsg, key)
-		case "clientId":
-			err = unpopulate(val, &s.ClientID)
-			delete(rawMsg, key)
-		case "principalId":
-			err = unpopulate(val, &s.PrincipalID)
-			delete(rawMsg, key)
-		case "secret":
-			err = unpopulate(val, &s.Secret)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // SourceConfiguration - A configuration item for source resource
 type SourceConfiguration struct {
 	// The name of setting.
@@ -494,51 +279,10 @@ type SourceConfigurationResult struct {
 	Configurations []*SourceConfiguration `json:"configurations,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type SourceConfigurationResult.
-func (s SourceConfigurationResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "configurations", s.Configurations)
-	return json.Marshal(objectMap)
-}
-
 // SystemAssignedIdentityAuthInfo - The authentication info when authType is systemAssignedIdentity
 type SystemAssignedIdentityAuthInfo struct {
 	// REQUIRED; The authentication type.
 	AuthType *AuthType `json:"authType,omitempty"`
-}
-
-// GetAuthInfoBase implements the AuthInfoBaseClassification interface for type SystemAssignedIdentityAuthInfo.
-func (s *SystemAssignedIdentityAuthInfo) GetAuthInfoBase() *AuthInfoBase {
-	return &AuthInfoBase{
-		AuthType: s.AuthType,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type SystemAssignedIdentityAuthInfo.
-func (s SystemAssignedIdentityAuthInfo) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	objectMap["authType"] = AuthTypeSystemAssignedIdentity
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type SystemAssignedIdentityAuthInfo.
-func (s *SystemAssignedIdentityAuthInfo) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "authType":
-			err = unpopulate(val, &s.AuthType)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // SystemData - Metadata pertaining to creation and last modification of the resource.
@@ -562,53 +306,6 @@ type SystemData struct {
 	LastModifiedByType *CreatedByType `json:"lastModifiedByType,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type SystemData.
-func (s SystemData) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populateTimeRFC3339(objectMap, "createdAt", s.CreatedAt)
-	populate(objectMap, "createdBy", s.CreatedBy)
-	populate(objectMap, "createdByType", s.CreatedByType)
-	populateTimeRFC3339(objectMap, "lastModifiedAt", s.LastModifiedAt)
-	populate(objectMap, "lastModifiedBy", s.LastModifiedBy)
-	populate(objectMap, "lastModifiedByType", s.LastModifiedByType)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type SystemData.
-func (s *SystemData) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "createdAt":
-			err = unpopulateTimeRFC3339(val, &s.CreatedAt)
-			delete(rawMsg, key)
-		case "createdBy":
-			err = unpopulate(val, &s.CreatedBy)
-			delete(rawMsg, key)
-		case "createdByType":
-			err = unpopulate(val, &s.CreatedByType)
-			delete(rawMsg, key)
-		case "lastModifiedAt":
-			err = unpopulateTimeRFC3339(val, &s.LastModifiedAt)
-			delete(rawMsg, key)
-		case "lastModifiedBy":
-			err = unpopulate(val, &s.LastModifiedBy)
-			delete(rawMsg, key)
-		case "lastModifiedByType":
-			err = unpopulate(val, &s.LastModifiedByType)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // UserAssignedIdentityAuthInfo - The authentication info when authType is userAssignedIdentity
 type UserAssignedIdentityAuthInfo struct {
 	// REQUIRED; The authentication type.
@@ -619,48 +316,6 @@ type UserAssignedIdentityAuthInfo struct {
 
 	// REQUIRED; Subscription id for userAssignedIdentity.
 	SubscriptionID *string `json:"subscriptionId,omitempty"`
-}
-
-// GetAuthInfoBase implements the AuthInfoBaseClassification interface for type UserAssignedIdentityAuthInfo.
-func (u *UserAssignedIdentityAuthInfo) GetAuthInfoBase() *AuthInfoBase {
-	return &AuthInfoBase{
-		AuthType: u.AuthType,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type UserAssignedIdentityAuthInfo.
-func (u UserAssignedIdentityAuthInfo) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	objectMap["authType"] = AuthTypeUserAssignedIdentity
-	populate(objectMap, "clientId", u.ClientID)
-	populate(objectMap, "subscriptionId", u.SubscriptionID)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type UserAssignedIdentityAuthInfo.
-func (u *UserAssignedIdentityAuthInfo) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "authType":
-			err = unpopulate(val, &u.AuthType)
-			delete(rawMsg, key)
-		case "clientId":
-			err = unpopulate(val, &u.ClientID)
-			delete(rawMsg, key)
-		case "subscriptionId":
-			err = unpopulate(val, &u.SubscriptionID)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // ValidateResult - The validation result for a linker.
@@ -685,72 +340,4 @@ type ValidateResult struct {
 
 	// The resource Id of target service.
 	TargetID *string `json:"targetId,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type ValidateResult.
-func (v ValidateResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "authType", v.AuthType)
-	populate(objectMap, "linkerStatus", v.LinkerStatus)
-	populate(objectMap, "name", v.Name)
-	populate(objectMap, "reason", v.Reason)
-	populateTimeRFC3339(objectMap, "reportEndTimeUtc", v.ReportEndTimeUTC)
-	populateTimeRFC3339(objectMap, "reportStartTimeUtc", v.ReportStartTimeUTC)
-	populate(objectMap, "targetId", v.TargetID)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type ValidateResult.
-func (v *ValidateResult) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "authType":
-			err = unpopulate(val, &v.AuthType)
-			delete(rawMsg, key)
-		case "linkerStatus":
-			err = unpopulate(val, &v.LinkerStatus)
-			delete(rawMsg, key)
-		case "name":
-			err = unpopulate(val, &v.Name)
-			delete(rawMsg, key)
-		case "reason":
-			err = unpopulate(val, &v.Reason)
-			delete(rawMsg, key)
-		case "reportEndTimeUtc":
-			err = unpopulateTimeRFC3339(val, &v.ReportEndTimeUTC)
-			delete(rawMsg, key)
-		case "reportStartTimeUtc":
-			err = unpopulateTimeRFC3339(val, &v.ReportStartTimeUTC)
-			delete(rawMsg, key)
-		case "targetId":
-			err = unpopulate(val, &v.TargetID)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func populate(m map[string]interface{}, k string, v interface{}) {
-	if v == nil {
-		return
-	} else if azcore.IsNullValue(v) {
-		m[k] = nil
-	} else if !reflect.ValueOf(v).IsNil() {
-		m[k] = v
-	}
-}
-
-func unpopulate(data json.RawMessage, v interface{}) error {
-	if data == nil {
-		return nil
-	}
-	return json.Unmarshal(data, v)
 }

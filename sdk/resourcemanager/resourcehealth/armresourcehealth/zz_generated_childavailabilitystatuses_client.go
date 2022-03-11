@@ -30,16 +30,16 @@ type ChildAvailabilityStatusesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewChildAvailabilityStatusesClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ChildAvailabilityStatusesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ChildAvailabilityStatusesClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -89,7 +89,7 @@ func (client *ChildAvailabilityStatusesClient) getByResourceCreateRequest(ctx co
 
 // getByResourceHandleResponse handles the GetByResource response.
 func (client *ChildAvailabilityStatusesClient) getByResourceHandleResponse(resp *http.Response) (ChildAvailabilityStatusesClientGetByResourceResponse, error) {
-	result := ChildAvailabilityStatusesClientGetByResourceResponse{RawResponse: resp}
+	result := ChildAvailabilityStatusesClientGetByResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AvailabilityStatus); err != nil {
 		return ChildAvailabilityStatusesClientGetByResourceResponse{}, err
 	}
@@ -139,7 +139,7 @@ func (client *ChildAvailabilityStatusesClient) listCreateRequest(ctx context.Con
 
 // listHandleResponse handles the List response.
 func (client *ChildAvailabilityStatusesClient) listHandleResponse(resp *http.Response) (ChildAvailabilityStatusesClientListResponse, error) {
-	result := ChildAvailabilityStatusesClientListResponse{RawResponse: resp}
+	result := ChildAvailabilityStatusesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AvailabilityStatusListResult); err != nil {
 		return ChildAvailabilityStatusesClientListResponse{}, err
 	}

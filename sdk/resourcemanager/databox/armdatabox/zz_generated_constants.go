@@ -10,7 +10,7 @@ package armdatabox
 
 const (
 	moduleName    = "armdatabox"
-	moduleVersion = "v0.2.0"
+	moduleVersion = "v0.3.0"
 )
 
 type AccessProtocol string
@@ -249,6 +249,7 @@ const (
 	DataCenterCodeBL20    DataCenterCode = "BL20"
 	DataCenterCodeBL7     DataCenterCode = "BL7"
 	DataCenterCodeBN1     DataCenterCode = "BN1"
+	DataCenterCodeBN7     DataCenterCode = "BN7"
 	DataCenterCodeBOM01   DataCenterCode = "BOM01"
 	DataCenterCodeBY1     DataCenterCode = "BY1"
 	DataCenterCodeBY2     DataCenterCode = "BY2"
@@ -273,6 +274,7 @@ const (
 	DataCenterCodeMWH01   DataCenterCode = "MWH01"
 	DataCenterCodeORK70   DataCenterCode = "ORK70"
 	DataCenterCodeOSA20   DataCenterCode = "OSA20"
+	DataCenterCodePAR22   DataCenterCode = "PAR22"
 	DataCenterCodePUS20   DataCenterCode = "PUS20"
 	DataCenterCodeSEL20   DataCenterCode = "SEL20"
 	DataCenterCodeSEL21   DataCenterCode = "SEL21"
@@ -280,6 +282,7 @@ const (
 	DataCenterCodeSHA03   DataCenterCode = "SHA03"
 	DataCenterCodeSIN20   DataCenterCode = "SIN20"
 	DataCenterCodeSN5     DataCenterCode = "SN5"
+	DataCenterCodeSN6     DataCenterCode = "SN6"
 	DataCenterCodeSN8     DataCenterCode = "SN8"
 	DataCenterCodeSSE90   DataCenterCode = "SSE90"
 	DataCenterCodeSYD03   DataCenterCode = "SYD03"
@@ -304,6 +307,7 @@ func PossibleDataCenterCodeValues() []DataCenterCode {
 		DataCenterCodeBL20,
 		DataCenterCodeBL7,
 		DataCenterCodeBN1,
+		DataCenterCodeBN7,
 		DataCenterCodeBOM01,
 		DataCenterCodeBY1,
 		DataCenterCodeBY2,
@@ -328,6 +332,7 @@ func PossibleDataCenterCodeValues() []DataCenterCode {
 		DataCenterCodeMWH01,
 		DataCenterCodeORK70,
 		DataCenterCodeOSA20,
+		DataCenterCodePAR22,
 		DataCenterCodePUS20,
 		DataCenterCodeSEL20,
 		DataCenterCodeSEL21,
@@ -335,6 +340,7 @@ func PossibleDataCenterCodeValues() []DataCenterCode {
 		DataCenterCodeSHA03,
 		DataCenterCodeSIN20,
 		DataCenterCodeSN5,
+		DataCenterCodeSN6,
 		DataCenterCodeSN8,
 		DataCenterCodeSSE90,
 		DataCenterCodeSYD03,

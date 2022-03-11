@@ -35,17 +35,17 @@ type ContentTypeClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewContentTypeClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ContentTypeClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ContentTypeClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *ContentTypeClient) createOrUpdateCreateRequest(ctx context.Context
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ContentTypeClient) createOrUpdateHandleResponse(resp *http.Response) (ContentTypeClientCreateOrUpdateResponse, error) {
-	result := ContentTypeClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ContentTypeClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -141,7 +141,7 @@ func (client *ContentTypeClient) Delete(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ContentTypeClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ContentTypeClientDeleteResponse{RawResponse: resp}, nil
+	return ContentTypeClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -229,7 +229,7 @@ func (client *ContentTypeClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *ContentTypeClient) getHandleResponse(resp *http.Response) (ContentTypeClientGetResponse, error) {
-	result := ContentTypeClientGetResponse{RawResponse: resp}
+	result := ContentTypeClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -286,7 +286,7 @@ func (client *ContentTypeClient) listByServiceCreateRequest(ctx context.Context,
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *ContentTypeClient) listByServiceHandleResponse(resp *http.Response) (ContentTypeClientListByServiceResponse, error) {
-	result := ContentTypeClientListByServiceResponse{RawResponse: resp}
+	result := ContentTypeClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContentTypeCollection); err != nil {
 		return ContentTypeClientListByServiceResponse{}, err
 	}

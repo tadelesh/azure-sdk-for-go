@@ -34,17 +34,17 @@ type WorkflowRunActionScopeRepetitionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkflowRunActionScopeRepetitionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkflowRunActionScopeRepetitionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkflowRunActionScopeRepetitionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -113,7 +113,7 @@ func (client *WorkflowRunActionScopeRepetitionsClient) getCreateRequest(ctx cont
 
 // getHandleResponse handles the Get response.
 func (client *WorkflowRunActionScopeRepetitionsClient) getHandleResponse(resp *http.Response) (WorkflowRunActionScopeRepetitionsClientGetResponse, error) {
-	result := WorkflowRunActionScopeRepetitionsClientGetResponse{RawResponse: resp}
+	result := WorkflowRunActionScopeRepetitionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowRunActionRepetitionDefinition); err != nil {
 		return WorkflowRunActionScopeRepetitionsClientGetResponse{}, err
 	}
@@ -128,19 +128,13 @@ func (client *WorkflowRunActionScopeRepetitionsClient) getHandleResponse(resp *h
 // actionName - The workflow action name.
 // options - WorkflowRunActionScopeRepetitionsClientListOptions contains the optional parameters for the WorkflowRunActionScopeRepetitionsClient.List
 // method.
-func (client *WorkflowRunActionScopeRepetitionsClient) List(ctx context.Context, resourceGroupName string, workflowName string, runName string, actionName string, options *WorkflowRunActionScopeRepetitionsClientListOptions) (WorkflowRunActionScopeRepetitionsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, workflowName, runName, actionName, options)
-	if err != nil {
-		return WorkflowRunActionScopeRepetitionsClientListResponse{}, err
+func (client *WorkflowRunActionScopeRepetitionsClient) List(resourceGroupName string, workflowName string, runName string, actionName string, options *WorkflowRunActionScopeRepetitionsClientListOptions) *WorkflowRunActionScopeRepetitionsClientListPager {
+	return &WorkflowRunActionScopeRepetitionsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, workflowName, runName, actionName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return WorkflowRunActionScopeRepetitionsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return WorkflowRunActionScopeRepetitionsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -179,7 +173,7 @@ func (client *WorkflowRunActionScopeRepetitionsClient) listCreateRequest(ctx con
 
 // listHandleResponse handles the List response.
 func (client *WorkflowRunActionScopeRepetitionsClient) listHandleResponse(resp *http.Response) (WorkflowRunActionScopeRepetitionsClientListResponse, error) {
-	result := WorkflowRunActionScopeRepetitionsClientListResponse{RawResponse: resp}
+	result := WorkflowRunActionScopeRepetitionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowRunActionRepetitionDefinitionCollection); err != nil {
 		return WorkflowRunActionScopeRepetitionsClientListResponse{}, err
 	}

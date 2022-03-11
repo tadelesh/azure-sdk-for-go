@@ -97,7 +97,7 @@ func (client *ServiceClient) listAvailableSKUsByResourceGroupCreateRequest(ctx c
 
 // listAvailableSKUsByResourceGroupHandleResponse handles the ListAvailableSKUsByResourceGroup response.
 func (client *ServiceClient) listAvailableSKUsByResourceGroupHandleResponse(resp *http.Response) (ServiceClientListAvailableSKUsByResourceGroupResponse, error) {
-	result := ServiceClientListAvailableSKUsByResourceGroupResponse{RawResponse: resp}
+	result := ServiceClientListAvailableSKUsByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AvailableSKUsResult); err != nil {
 		return ServiceClientListAvailableSKUsByResourceGroupResponse{}, err
 	}
@@ -149,7 +149,7 @@ func (client *ServiceClient) regionConfigurationCreateRequest(ctx context.Contex
 
 // regionConfigurationHandleResponse handles the RegionConfiguration response.
 func (client *ServiceClient) regionConfigurationHandleResponse(resp *http.Response) (ServiceClientRegionConfigurationResponse, error) {
-	result := ServiceClientRegionConfigurationResponse{RawResponse: resp}
+	result := ServiceClientRegionConfigurationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegionConfigurationResponse); err != nil {
 		return ServiceClientRegionConfigurationResponse{}, err
 	}
@@ -207,7 +207,7 @@ func (client *ServiceClient) regionConfigurationByResourceGroupCreateRequest(ctx
 
 // regionConfigurationByResourceGroupHandleResponse handles the RegionConfigurationByResourceGroup response.
 func (client *ServiceClient) regionConfigurationByResourceGroupHandleResponse(resp *http.Response) (ServiceClientRegionConfigurationByResourceGroupResponse, error) {
-	result := ServiceClientRegionConfigurationByResourceGroupResponse{RawResponse: resp}
+	result := ServiceClientRegionConfigurationByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegionConfigurationResponse); err != nil {
 		return ServiceClientRegionConfigurationByResourceGroupResponse{}, err
 	}
@@ -259,7 +259,7 @@ func (client *ServiceClient) validateAddressCreateRequest(ctx context.Context, l
 
 // validateAddressHandleResponse handles the ValidateAddress response.
 func (client *ServiceClient) validateAddressHandleResponse(resp *http.Response) (ServiceClientValidateAddressResponse, error) {
-	result := ServiceClientValidateAddressResponse{RawResponse: resp}
+	result := ServiceClientValidateAddressResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AddressValidationOutput); err != nil {
 		return ServiceClientValidateAddressResponse{}, err
 	}
@@ -310,7 +310,7 @@ func (client *ServiceClient) validateInputsCreateRequest(ctx context.Context, lo
 
 // validateInputsHandleResponse handles the ValidateInputs response.
 func (client *ServiceClient) validateInputsHandleResponse(resp *http.Response) (ServiceClientValidateInputsResponse, error) {
-	result := ServiceClientValidateInputsResponse{RawResponse: resp}
+	result := ServiceClientValidateInputsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ValidationResponse); err != nil {
 		return ServiceClientValidateInputsResponse{}, err
 	}
@@ -367,7 +367,7 @@ func (client *ServiceClient) validateInputsByResourceGroupCreateRequest(ctx cont
 
 // validateInputsByResourceGroupHandleResponse handles the ValidateInputsByResourceGroup response.
 func (client *ServiceClient) validateInputsByResourceGroupHandleResponse(resp *http.Response) (ServiceClientValidateInputsByResourceGroupResponse, error) {
-	result := ServiceClientValidateInputsByResourceGroupResponse{RawResponse: resp}
+	result := ServiceClientValidateInputsByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ValidationResponse); err != nil {
 		return ServiceClientValidateInputsByResourceGroupResponse{}, err
 	}

@@ -34,17 +34,17 @@ type DatabaseTablesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDatabaseTablesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DatabaseTablesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DatabaseTablesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -113,7 +113,7 @@ func (client *DatabaseTablesClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *DatabaseTablesClient) getHandleResponse(resp *http.Response) (DatabaseTablesClientGetResponse, error) {
-	result := DatabaseTablesClientGetResponse{RawResponse: resp}
+	result := DatabaseTablesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseTable); err != nil {
 		return DatabaseTablesClientGetResponse{}, err
 	}
@@ -180,7 +180,7 @@ func (client *DatabaseTablesClient) listBySchemaCreateRequest(ctx context.Contex
 
 // listBySchemaHandleResponse handles the ListBySchema response.
 func (client *DatabaseTablesClient) listBySchemaHandleResponse(resp *http.Response) (DatabaseTablesClientListBySchemaResponse, error) {
-	result := DatabaseTablesClientListBySchemaResponse{RawResponse: resp}
+	result := DatabaseTablesClientListBySchemaResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseTableListResult); err != nil {
 		return DatabaseTablesClientListBySchemaResponse{}, err
 	}

@@ -34,17 +34,17 @@ type DataConnectorsCheckRequirementsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataConnectorsCheckRequirementsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataConnectorsCheckRequirementsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataConnectorsCheckRequirementsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *DataConnectorsCheckRequirementsClient) postCreateRequest(ctx conte
 
 // postHandleResponse handles the Post response.
 func (client *DataConnectorsCheckRequirementsClient) postHandleResponse(resp *http.Response) (DataConnectorsCheckRequirementsClientPostResponse, error) {
-	result := DataConnectorsCheckRequirementsClientPostResponse{RawResponse: resp}
+	result := DataConnectorsCheckRequirementsClientPostResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataConnectorRequirementsState); err != nil {
 		return DataConnectorsCheckRequirementsClientPostResponse{}, err
 	}

@@ -34,17 +34,17 @@ type LocationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLocationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LocationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LocationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -93,7 +93,7 @@ func (client *LocationsClient) checkQuotaAvailabilityCreateRequest(ctx context.C
 
 // checkQuotaAvailabilityHandleResponse handles the CheckQuotaAvailability response.
 func (client *LocationsClient) checkQuotaAvailabilityHandleResponse(resp *http.Response) (LocationsClientCheckQuotaAvailabilityResponse, error) {
-	result := LocationsClientCheckQuotaAvailabilityResponse{RawResponse: resp}
+	result := LocationsClientCheckQuotaAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Quota); err != nil {
 		return LocationsClientCheckQuotaAvailabilityResponse{}, err
 	}
@@ -144,7 +144,7 @@ func (client *LocationsClient) checkTrialAvailabilityCreateRequest(ctx context.C
 
 // checkTrialAvailabilityHandleResponse handles the CheckTrialAvailability response.
 func (client *LocationsClient) checkTrialAvailabilityHandleResponse(resp *http.Response) (LocationsClientCheckTrialAvailabilityResponse, error) {
-	result := LocationsClientCheckTrialAvailabilityResponse{RawResponse: resp}
+	result := LocationsClientCheckTrialAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Trial); err != nil {
 		return LocationsClientCheckTrialAvailabilityResponse{}, err
 	}

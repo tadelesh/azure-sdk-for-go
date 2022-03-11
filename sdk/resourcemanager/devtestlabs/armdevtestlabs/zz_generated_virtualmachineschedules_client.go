@@ -35,17 +35,17 @@ type VirtualMachineSchedulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualMachineSchedulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualMachineSchedulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualMachineSchedulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -110,7 +110,7 @@ func (client *VirtualMachineSchedulesClient) createOrUpdateCreateRequest(ctx con
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *VirtualMachineSchedulesClient) createOrUpdateHandleResponse(resp *http.Response) (VirtualMachineSchedulesClientCreateOrUpdateResponse, error) {
-	result := VirtualMachineSchedulesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := VirtualMachineSchedulesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Schedule); err != nil {
 		return VirtualMachineSchedulesClientCreateOrUpdateResponse{}, err
 	}
@@ -137,7 +137,7 @@ func (client *VirtualMachineSchedulesClient) Delete(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return VirtualMachineSchedulesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return VirtualMachineSchedulesClientDeleteResponse{RawResponse: resp}, nil
+	return VirtualMachineSchedulesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -187,9 +187,7 @@ func (client *VirtualMachineSchedulesClient) BeginExecute(ctx context.Context, r
 	if err != nil {
 		return VirtualMachineSchedulesClientExecutePollerResponse{}, err
 	}
-	result := VirtualMachineSchedulesClientExecutePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachineSchedulesClientExecutePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachineSchedulesClient.Execute", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachineSchedulesClientExecutePollerResponse{}, err
@@ -313,7 +311,7 @@ func (client *VirtualMachineSchedulesClient) getCreateRequest(ctx context.Contex
 
 // getHandleResponse handles the Get response.
 func (client *VirtualMachineSchedulesClient) getHandleResponse(resp *http.Response) (VirtualMachineSchedulesClientGetResponse, error) {
-	result := VirtualMachineSchedulesClientGetResponse{RawResponse: resp}
+	result := VirtualMachineSchedulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Schedule); err != nil {
 		return VirtualMachineSchedulesClientGetResponse{}, err
 	}
@@ -383,7 +381,7 @@ func (client *VirtualMachineSchedulesClient) listCreateRequest(ctx context.Conte
 
 // listHandleResponse handles the List response.
 func (client *VirtualMachineSchedulesClient) listHandleResponse(resp *http.Response) (VirtualMachineSchedulesClientListResponse, error) {
-	result := VirtualMachineSchedulesClientListResponse{RawResponse: resp}
+	result := VirtualMachineSchedulesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScheduleList); err != nil {
 		return VirtualMachineSchedulesClientListResponse{}, err
 	}
@@ -450,7 +448,7 @@ func (client *VirtualMachineSchedulesClient) updateCreateRequest(ctx context.Con
 
 // updateHandleResponse handles the Update response.
 func (client *VirtualMachineSchedulesClient) updateHandleResponse(resp *http.Response) (VirtualMachineSchedulesClientUpdateResponse, error) {
-	result := VirtualMachineSchedulesClientUpdateResponse{RawResponse: resp}
+	result := VirtualMachineSchedulesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Schedule); err != nil {
 		return VirtualMachineSchedulesClientUpdateResponse{}, err
 	}

@@ -35,17 +35,17 @@ type MetadataClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMetadataClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MetadataClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MetadataClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *MetadataClient) createCreateRequest(ctx context.Context, resourceG
 
 // createHandleResponse handles the Create response.
 func (client *MetadataClient) createHandleResponse(resp *http.Response) (MetadataClientCreateResponse, error) {
-	result := MetadataClientCreateResponse{RawResponse: resp}
+	result := MetadataClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetadataModel); err != nil {
 		return MetadataClientCreateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *MetadataClient) Delete(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return MetadataClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return MetadataClientDeleteResponse{RawResponse: resp}, nil
+	return MetadataClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *MetadataClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *MetadataClient) getHandleResponse(resp *http.Response) (MetadataClientGetResponse, error) {
-	result := MetadataClientGetResponse{RawResponse: resp}
+	result := MetadataClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetadataModel); err != nil {
 		return MetadataClientGetResponse{}, err
 	}
@@ -279,7 +279,7 @@ func (client *MetadataClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *MetadataClient) listHandleResponse(resp *http.Response) (MetadataClientListResponse, error) {
-	result := MetadataClientListResponse{RawResponse: resp}
+	result := MetadataClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetadataList); err != nil {
 		return MetadataClientListResponse{}, err
 	}
@@ -340,7 +340,7 @@ func (client *MetadataClient) updateCreateRequest(ctx context.Context, resourceG
 
 // updateHandleResponse handles the Update response.
 func (client *MetadataClient) updateHandleResponse(resp *http.Response) (MetadataClientUpdateResponse, error) {
-	result := MetadataClientUpdateResponse{RawResponse: resp}
+	result := MetadataClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetadataModel); err != nil {
 		return MetadataClientUpdateResponse{}, err
 	}

@@ -43,11 +43,10 @@ func (p *JobsClientCreatePoller) Poll(ctx context.Context) (*http.Response, erro
 // If the final GET succeeded then the final JobsClientCreateResponse will be returned.
 func (p *JobsClientCreatePoller) FinalResponse(ctx context.Context) (JobsClientCreateResponse, error) {
 	respType := JobsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.JobResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.JobResource)
 	if err != nil {
 		return JobsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *JobsClientDeletePoller) Poll(ctx context.Context) (*http.Response, erro
 // If the final GET succeeded then the final JobsClientDeleteResponse will be returned.
 func (p *JobsClientDeletePoller) FinalResponse(ctx context.Context) (JobsClientDeleteResponse, error) {
 	respType := JobsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return JobsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *JobsClientUpdatePoller) Poll(ctx context.Context) (*http.Response, erro
 // If the final GET succeeded then the final JobsClientUpdateResponse will be returned.
 func (p *JobsClientUpdatePoller) FinalResponse(ctx context.Context) (JobsClientUpdateResponse, error) {
 	respType := JobsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.JobResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.JobResource)
 	if err != nil {
 		return JobsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

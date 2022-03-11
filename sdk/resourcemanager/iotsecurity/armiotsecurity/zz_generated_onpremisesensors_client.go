@@ -34,17 +34,17 @@ type OnPremiseSensorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewOnPremiseSensorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *OnPremiseSensorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &OnPremiseSensorsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -93,7 +93,7 @@ func (client *OnPremiseSensorsClient) createOrUpdateCreateRequest(ctx context.Co
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *OnPremiseSensorsClient) createOrUpdateHandleResponse(resp *http.Response) (OnPremiseSensorsClientCreateOrUpdateResponse, error) {
-	result := OnPremiseSensorsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := OnPremiseSensorsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OnPremiseSensor); err != nil {
 		return OnPremiseSensorsClientCreateOrUpdateResponse{}, err
 	}
@@ -116,7 +116,7 @@ func (client *OnPremiseSensorsClient) Delete(ctx context.Context, onPremiseSenso
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return OnPremiseSensorsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return OnPremiseSensorsClientDeleteResponse{RawResponse: resp}, nil
+	return OnPremiseSensorsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -158,7 +158,7 @@ func (client *OnPremiseSensorsClient) DownloadActivation(ctx context.Context, on
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return OnPremiseSensorsClientDownloadActivationResponse{}, runtime.NewResponseError(resp)
 	}
-	return OnPremiseSensorsClientDownloadActivationResponse{RawResponse: resp}, nil
+	return OnPremiseSensorsClientDownloadActivationResponse{Body: resp.Body}, nil
 }
 
 // downloadActivationCreateRequest creates the DownloadActivation request.
@@ -202,7 +202,7 @@ func (client *OnPremiseSensorsClient) DownloadResetPassword(ctx context.Context,
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return OnPremiseSensorsClientDownloadResetPasswordResponse{}, runtime.NewResponseError(resp)
 	}
-	return OnPremiseSensorsClientDownloadResetPasswordResponse{RawResponse: resp}, nil
+	return OnPremiseSensorsClientDownloadResetPasswordResponse{Body: resp.Body}, nil
 }
 
 // downloadResetPasswordCreateRequest creates the DownloadResetPassword request.
@@ -271,7 +271,7 @@ func (client *OnPremiseSensorsClient) getCreateRequest(ctx context.Context, onPr
 
 // getHandleResponse handles the Get response.
 func (client *OnPremiseSensorsClient) getHandleResponse(resp *http.Response) (OnPremiseSensorsClientGetResponse, error) {
-	result := OnPremiseSensorsClientGetResponse{RawResponse: resp}
+	result := OnPremiseSensorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OnPremiseSensor); err != nil {
 		return OnPremiseSensorsClientGetResponse{}, err
 	}
@@ -316,7 +316,7 @@ func (client *OnPremiseSensorsClient) listCreateRequest(ctx context.Context, opt
 
 // listHandleResponse handles the List response.
 func (client *OnPremiseSensorsClient) listHandleResponse(resp *http.Response) (OnPremiseSensorsClientListResponse, error) {
-	result := OnPremiseSensorsClientListResponse{RawResponse: resp}
+	result := OnPremiseSensorsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OnPremiseSensorsList); err != nil {
 		return OnPremiseSensorsClientListResponse{}, err
 	}

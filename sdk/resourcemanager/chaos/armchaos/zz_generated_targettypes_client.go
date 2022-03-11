@@ -34,17 +34,17 @@ type TargetTypesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTargetTypesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TargetTypesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TargetTypesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -97,7 +97,7 @@ func (client *TargetTypesClient) getCreateRequest(ctx context.Context, locationN
 
 // getHandleResponse handles the Get response.
 func (client *TargetTypesClient) getHandleResponse(resp *http.Response) (TargetTypesClientGetResponse, error) {
-	result := TargetTypesClientGetResponse{RawResponse: resp}
+	result := TargetTypesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TargetType); err != nil {
 		return TargetTypesClientGetResponse{}, err
 	}
@@ -147,7 +147,7 @@ func (client *TargetTypesClient) listCreateRequest(ctx context.Context, location
 
 // listHandleResponse handles the List response.
 func (client *TargetTypesClient) listHandleResponse(resp *http.Response) (TargetTypesClientListResponse, error) {
-	result := TargetTypesClientListResponse{RawResponse: resp}
+	result := TargetTypesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TargetTypeListResult); err != nil {
 		return TargetTypesClientListResponse{}, err
 	}

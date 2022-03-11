@@ -34,17 +34,17 @@ type DatabasesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDatabasesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DatabasesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DatabasesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *DatabasesClient) BeginCreateOrUpdate(ctx context.Context, resource
 	if err != nil {
 		return DatabasesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DatabasesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DatabasesClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *DatabasesClient) BeginDelete(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DatabasesClientDeletePollerResponse{}, err
 	}
-	result := DatabasesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DatabasesClientDeletePollerResponse{}, err
@@ -207,9 +203,7 @@ func (client *DatabasesClient) BeginExport(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DatabasesClientExportPollerResponse{}, err
 	}
-	result := DatabasesClientExportPollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientExportPollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.Export", "", resp, client.pl)
 	if err != nil {
 		return DatabasesClientExportPollerResponse{}, err
@@ -279,9 +273,7 @@ func (client *DatabasesClient) BeginFailover(ctx context.Context, resourceGroupN
 	if err != nil {
 		return DatabasesClientFailoverPollerResponse{}, err
 	}
-	result := DatabasesClientFailoverPollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientFailoverPollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.Failover", "", resp, client.pl)
 	if err != nil {
 		return DatabasesClientFailoverPollerResponse{}, err
@@ -395,7 +387,7 @@ func (client *DatabasesClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *DatabasesClient) getHandleResponse(resp *http.Response) (DatabasesClientGetResponse, error) {
-	result := DatabasesClientGetResponse{RawResponse: resp}
+	result := DatabasesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Database); err != nil {
 		return DatabasesClientGetResponse{}, err
 	}
@@ -415,9 +407,7 @@ func (client *DatabasesClient) BeginImport(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DatabasesClientImportPollerResponse{}, err
 	}
-	result := DatabasesClientImportPollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientImportPollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.Import", "", resp, client.pl)
 	if err != nil {
 		return DatabasesClientImportPollerResponse{}, err
@@ -527,7 +517,7 @@ func (client *DatabasesClient) listByElasticPoolCreateRequest(ctx context.Contex
 
 // listByElasticPoolHandleResponse handles the ListByElasticPool response.
 func (client *DatabasesClient) listByElasticPoolHandleResponse(resp *http.Response) (DatabasesClientListByElasticPoolResponse, error) {
-	result := DatabasesClientListByElasticPoolResponse{RawResponse: resp}
+	result := DatabasesClientListByElasticPoolResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseListResult); err != nil {
 		return DatabasesClientListByElasticPoolResponse{}, err
 	}
@@ -583,7 +573,7 @@ func (client *DatabasesClient) listByServerCreateRequest(ctx context.Context, re
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *DatabasesClient) listByServerHandleResponse(resp *http.Response) (DatabasesClientListByServerResponse, error) {
-	result := DatabasesClientListByServerResponse{RawResponse: resp}
+	result := DatabasesClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseListResult); err != nil {
 		return DatabasesClientListByServerResponse{}, err
 	}
@@ -637,7 +627,7 @@ func (client *DatabasesClient) listInaccessibleByServerCreateRequest(ctx context
 
 // listInaccessibleByServerHandleResponse handles the ListInaccessibleByServer response.
 func (client *DatabasesClient) listInaccessibleByServerHandleResponse(resp *http.Response) (DatabasesClientListInaccessibleByServerResponse, error) {
-	result := DatabasesClientListInaccessibleByServerResponse{RawResponse: resp}
+	result := DatabasesClientListInaccessibleByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseListResult); err != nil {
 		return DatabasesClientListInaccessibleByServerResponse{}, err
 	}
@@ -652,19 +642,13 @@ func (client *DatabasesClient) listInaccessibleByServerHandleResponse(resp *http
 // databaseName - The name of the database.
 // options - DatabasesClientListMetricDefinitionsOptions contains the optional parameters for the DatabasesClient.ListMetricDefinitions
 // method.
-func (client *DatabasesClient) ListMetricDefinitions(ctx context.Context, resourceGroupName string, serverName string, databaseName string, options *DatabasesClientListMetricDefinitionsOptions) (DatabasesClientListMetricDefinitionsResponse, error) {
-	req, err := client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
-	if err != nil {
-		return DatabasesClientListMetricDefinitionsResponse{}, err
+func (client *DatabasesClient) ListMetricDefinitions(resourceGroupName string, serverName string, databaseName string, options *DatabasesClientListMetricDefinitionsOptions) *DatabasesClientListMetricDefinitionsPager {
+	return &DatabasesClientListMetricDefinitionsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DatabasesClientListMetricDefinitionsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DatabasesClientListMetricDefinitionsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listMetricDefinitionsHandleResponse(resp)
 }
 
 // listMetricDefinitionsCreateRequest creates the ListMetricDefinitions request.
@@ -699,7 +683,7 @@ func (client *DatabasesClient) listMetricDefinitionsCreateRequest(ctx context.Co
 
 // listMetricDefinitionsHandleResponse handles the ListMetricDefinitions response.
 func (client *DatabasesClient) listMetricDefinitionsHandleResponse(resp *http.Response) (DatabasesClientListMetricDefinitionsResponse, error) {
-	result := DatabasesClientListMetricDefinitionsResponse{RawResponse: resp}
+	result := DatabasesClientListMetricDefinitionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetricDefinitionListResult); err != nil {
 		return DatabasesClientListMetricDefinitionsResponse{}, err
 	}
@@ -714,19 +698,13 @@ func (client *DatabasesClient) listMetricDefinitionsHandleResponse(resp *http.Re
 // databaseName - The name of the database.
 // filter - An OData filter expression that describes a subset of metrics to return.
 // options - DatabasesClientListMetricsOptions contains the optional parameters for the DatabasesClient.ListMetrics method.
-func (client *DatabasesClient) ListMetrics(ctx context.Context, resourceGroupName string, serverName string, databaseName string, filter string, options *DatabasesClientListMetricsOptions) (DatabasesClientListMetricsResponse, error) {
-	req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, serverName, databaseName, filter, options)
-	if err != nil {
-		return DatabasesClientListMetricsResponse{}, err
+func (client *DatabasesClient) ListMetrics(resourceGroupName string, serverName string, databaseName string, filter string, options *DatabasesClientListMetricsOptions) *DatabasesClientListMetricsPager {
+	return &DatabasesClientListMetricsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listMetricsCreateRequest(ctx, resourceGroupName, serverName, databaseName, filter, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DatabasesClientListMetricsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DatabasesClientListMetricsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listMetricsHandleResponse(resp)
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.
@@ -762,7 +740,7 @@ func (client *DatabasesClient) listMetricsCreateRequest(ctx context.Context, res
 
 // listMetricsHandleResponse handles the ListMetrics response.
 func (client *DatabasesClient) listMetricsHandleResponse(resp *http.Response) (DatabasesClientListMetricsResponse, error) {
-	result := DatabasesClientListMetricsResponse{RawResponse: resp}
+	result := DatabasesClientListMetricsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetricListResult); err != nil {
 		return DatabasesClientListMetricsResponse{}, err
 	}
@@ -781,9 +759,7 @@ func (client *DatabasesClient) BeginPause(ctx context.Context, resourceGroupName
 	if err != nil {
 		return DatabasesClientPausePollerResponse{}, err
 	}
-	result := DatabasesClientPausePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientPausePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.Pause", "", resp, client.pl)
 	if err != nil {
 		return DatabasesClientPausePollerResponse{}, err
@@ -861,7 +837,7 @@ func (client *DatabasesClient) Rename(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return DatabasesClientRenameResponse{}, runtime.NewResponseError(resp)
 	}
-	return DatabasesClientRenameResponse{RawResponse: resp}, nil
+	return DatabasesClientRenameResponse{}, nil
 }
 
 // renameCreateRequest creates the Rename request.
@@ -905,9 +881,7 @@ func (client *DatabasesClient) BeginResume(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DatabasesClientResumePollerResponse{}, err
 	}
-	result := DatabasesClientResumePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientResumePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.Resume", "", resp, client.pl)
 	if err != nil {
 		return DatabasesClientResumePollerResponse{}, err
@@ -978,9 +952,7 @@ func (client *DatabasesClient) BeginUpdate(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DatabasesClientUpdatePollerResponse{}, err
 	}
-	result := DatabasesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return DatabasesClientUpdatePollerResponse{}, err
@@ -1051,9 +1023,7 @@ func (client *DatabasesClient) BeginUpgradeDataWarehouse(ctx context.Context, re
 	if err != nil {
 		return DatabasesClientUpgradeDataWarehousePollerResponse{}, err
 	}
-	result := DatabasesClientUpgradeDataWarehousePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientUpgradeDataWarehousePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.UpgradeDataWarehouse", "", resp, client.pl)
 	if err != nil {
 		return DatabasesClientUpgradeDataWarehousePollerResponse{}, err

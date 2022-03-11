@@ -35,17 +35,17 @@ type WorkflowsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkflowsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkflowsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkflowsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *WorkflowsClient) createOrUpdateCreateRequest(ctx context.Context, 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *WorkflowsClient) createOrUpdateHandleResponse(resp *http.Response) (WorkflowsClientCreateOrUpdateResponse, error) {
-	result := WorkflowsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := WorkflowsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Workflow); err != nil {
 		return WorkflowsClientCreateOrUpdateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *WorkflowsClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WorkflowsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return WorkflowsClientDeleteResponse{RawResponse: resp}, nil
+	return WorkflowsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -170,7 +170,7 @@ func (client *WorkflowsClient) Disable(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WorkflowsClientDisableResponse{}, runtime.NewResponseError(resp)
 	}
-	return WorkflowsClientDisableResponse{RawResponse: resp}, nil
+	return WorkflowsClientDisableResponse{}, nil
 }
 
 // disableCreateRequest creates the Disable request.
@@ -216,7 +216,7 @@ func (client *WorkflowsClient) Enable(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WorkflowsClientEnableResponse{}, runtime.NewResponseError(resp)
 	}
-	return WorkflowsClientEnableResponse{RawResponse: resp}, nil
+	return WorkflowsClientEnableResponse{}, nil
 }
 
 // enableCreateRequest creates the Enable request.
@@ -295,8 +295,8 @@ func (client *WorkflowsClient) generateUpgradedDefinitionCreateRequest(ctx conte
 
 // generateUpgradedDefinitionHandleResponse handles the GenerateUpgradedDefinition response.
 func (client *WorkflowsClient) generateUpgradedDefinitionHandleResponse(resp *http.Response) (WorkflowsClientGenerateUpgradedDefinitionResponse, error) {
-	result := WorkflowsClientGenerateUpgradedDefinitionResponse{RawResponse: resp}
-	if err := runtime.UnmarshalAsJSON(resp, &result.Object); err != nil {
+	result := WorkflowsClientGenerateUpgradedDefinitionResponse{}
+	if err := runtime.UnmarshalAsJSON(resp, &result.Interface); err != nil {
 		return WorkflowsClientGenerateUpgradedDefinitionResponse{}, err
 	}
 	return result, nil
@@ -350,7 +350,7 @@ func (client *WorkflowsClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *WorkflowsClient) getHandleResponse(resp *http.Response) (WorkflowsClientGetResponse, error) {
-	result := WorkflowsClientGetResponse{RawResponse: resp}
+	result := WorkflowsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Workflow); err != nil {
 		return WorkflowsClientGetResponse{}, err
 	}
@@ -404,7 +404,7 @@ func (client *WorkflowsClient) listByResourceGroupCreateRequest(ctx context.Cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *WorkflowsClient) listByResourceGroupHandleResponse(resp *http.Response) (WorkflowsClientListByResourceGroupResponse, error) {
-	result := WorkflowsClientListByResourceGroupResponse{RawResponse: resp}
+	result := WorkflowsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowListResult); err != nil {
 		return WorkflowsClientListByResourceGroupResponse{}, err
 	}
@@ -453,7 +453,7 @@ func (client *WorkflowsClient) listBySubscriptionCreateRequest(ctx context.Conte
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *WorkflowsClient) listBySubscriptionHandleResponse(resp *http.Response) (WorkflowsClientListBySubscriptionResponse, error) {
-	result := WorkflowsClientListBySubscriptionResponse{RawResponse: resp}
+	result := WorkflowsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowListResult); err != nil {
 		return WorkflowsClientListBySubscriptionResponse{}, err
 	}
@@ -510,7 +510,7 @@ func (client *WorkflowsClient) listCallbackURLCreateRequest(ctx context.Context,
 
 // listCallbackURLHandleResponse handles the ListCallbackURL response.
 func (client *WorkflowsClient) listCallbackURLHandleResponse(resp *http.Response) (WorkflowsClientListCallbackURLResponse, error) {
-	result := WorkflowsClientListCallbackURLResponse{RawResponse: resp}
+	result := WorkflowsClientListCallbackURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowTriggerCallbackURL); err != nil {
 		return WorkflowsClientListCallbackURLResponse{}, err
 	}
@@ -565,8 +565,8 @@ func (client *WorkflowsClient) listSwaggerCreateRequest(ctx context.Context, res
 
 // listSwaggerHandleResponse handles the ListSwagger response.
 func (client *WorkflowsClient) listSwaggerHandleResponse(resp *http.Response) (WorkflowsClientListSwaggerResponse, error) {
-	result := WorkflowsClientListSwaggerResponse{RawResponse: resp}
-	if err := runtime.UnmarshalAsJSON(resp, &result.Object); err != nil {
+	result := WorkflowsClientListSwaggerResponse{}
+	if err := runtime.UnmarshalAsJSON(resp, &result.Interface); err != nil {
 		return WorkflowsClientListSwaggerResponse{}, err
 	}
 	return result, nil
@@ -583,9 +583,7 @@ func (client *WorkflowsClient) BeginMove(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return WorkflowsClientMovePollerResponse{}, err
 	}
-	result := WorkflowsClientMovePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkflowsClientMovePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkflowsClient.Move", "", resp, client.pl)
 	if err != nil {
 		return WorkflowsClientMovePollerResponse{}, err
@@ -658,7 +656,7 @@ func (client *WorkflowsClient) RegenerateAccessKey(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WorkflowsClientRegenerateAccessKeyResponse{}, runtime.NewResponseError(resp)
 	}
-	return WorkflowsClientRegenerateAccessKeyResponse{RawResponse: resp}, nil
+	return WorkflowsClientRegenerateAccessKeyResponse{}, nil
 }
 
 // regenerateAccessKeyCreateRequest creates the RegenerateAccessKey request.
@@ -735,7 +733,7 @@ func (client *WorkflowsClient) updateCreateRequest(ctx context.Context, resource
 
 // updateHandleResponse handles the Update response.
 func (client *WorkflowsClient) updateHandleResponse(resp *http.Response) (WorkflowsClientUpdateResponse, error) {
-	result := WorkflowsClientUpdateResponse{RawResponse: resp}
+	result := WorkflowsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Workflow); err != nil {
 		return WorkflowsClientUpdateResponse{}, err
 	}
@@ -762,7 +760,7 @@ func (client *WorkflowsClient) ValidateByLocation(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WorkflowsClientValidateByLocationResponse{}, runtime.NewResponseError(resp)
 	}
-	return WorkflowsClientValidateByLocationResponse{RawResponse: resp}, nil
+	return WorkflowsClientValidateByLocationResponse{}, nil
 }
 
 // validateByLocationCreateRequest creates the ValidateByLocation request.
@@ -814,7 +812,7 @@ func (client *WorkflowsClient) ValidateByResourceGroup(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WorkflowsClientValidateByResourceGroupResponse{}, runtime.NewResponseError(resp)
 	}
-	return WorkflowsClientValidateByResourceGroupResponse{RawResponse: resp}, nil
+	return WorkflowsClientValidateByResourceGroupResponse{}, nil
 }
 
 // validateByResourceGroupCreateRequest creates the ValidateByResourceGroup request.

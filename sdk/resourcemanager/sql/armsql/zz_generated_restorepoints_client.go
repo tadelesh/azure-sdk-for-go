@@ -34,17 +34,17 @@ type RestorePointsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRestorePointsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RestorePointsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RestorePointsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *RestorePointsClient) BeginCreate(ctx context.Context, resourceGrou
 	if err != nil {
 		return RestorePointsClientCreatePollerResponse{}, err
 	}
-	result := RestorePointsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := RestorePointsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("RestorePointsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return RestorePointsClientCreatePollerResponse{}, err
@@ -143,7 +141,7 @@ func (client *RestorePointsClient) Delete(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return RestorePointsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return RestorePointsClientDeleteResponse{RawResponse: resp}, nil
+	return RestorePointsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -238,7 +236,7 @@ func (client *RestorePointsClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *RestorePointsClient) getHandleResponse(resp *http.Response) (RestorePointsClientGetResponse, error) {
-	result := RestorePointsClientGetResponse{RawResponse: resp}
+	result := RestorePointsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorePoint); err != nil {
 		return RestorePointsClientGetResponse{}, err
 	}
@@ -297,7 +295,7 @@ func (client *RestorePointsClient) listByDatabaseCreateRequest(ctx context.Conte
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *RestorePointsClient) listByDatabaseHandleResponse(resp *http.Response) (RestorePointsClientListByDatabaseResponse, error) {
-	result := RestorePointsClientListByDatabaseResponse{RawResponse: resp}
+	result := RestorePointsClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorePointListResult); err != nil {
 		return RestorePointsClientListByDatabaseResponse{}, err
 	}

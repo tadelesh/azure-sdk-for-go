@@ -34,17 +34,17 @@ type KeyValuesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewKeyValuesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *KeyValuesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &KeyValuesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *KeyValuesClient) createOrUpdateCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-03-01-preview")
+	reqQP.Set("api-version", "2021-10-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	if options != nil && options.KeyValueParameters != nil {
@@ -106,7 +106,7 @@ func (client *KeyValuesClient) createOrUpdateCreateRequest(ctx context.Context, 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *KeyValuesClient) createOrUpdateHandleResponse(resp *http.Response) (KeyValuesClientCreateOrUpdateResponse, error) {
-	result := KeyValuesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := KeyValuesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KeyValue); err != nil {
 		return KeyValuesClientCreateOrUpdateResponse{}, err
 	}
@@ -124,9 +124,7 @@ func (client *KeyValuesClient) BeginDelete(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return KeyValuesClientDeletePollerResponse{}, err
 	}
-	result := KeyValuesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := KeyValuesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("KeyValuesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return KeyValuesClientDeletePollerResponse{}, err
@@ -178,7 +176,7 @@ func (client *KeyValuesClient) deleteCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-03-01-preview")
+	reqQP.Set("api-version", "2021-10-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -229,7 +227,7 @@ func (client *KeyValuesClient) getCreateRequest(ctx context.Context, resourceGro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-03-01-preview")
+	reqQP.Set("api-version", "2021-10-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -237,7 +235,7 @@ func (client *KeyValuesClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *KeyValuesClient) getHandleResponse(resp *http.Response) (KeyValuesClientGetResponse, error) {
-	result := KeyValuesClientGetResponse{RawResponse: resp}
+	result := KeyValuesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KeyValue); err != nil {
 		return KeyValuesClientGetResponse{}, err
 	}
@@ -282,7 +280,7 @@ func (client *KeyValuesClient) listByConfigurationStoreCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-03-01-preview")
+	reqQP.Set("api-version", "2021-10-01-preview")
 	if options != nil && options.SkipToken != nil {
 		reqQP.Set("$skipToken", *options.SkipToken)
 	}
@@ -293,7 +291,7 @@ func (client *KeyValuesClient) listByConfigurationStoreCreateRequest(ctx context
 
 // listByConfigurationStoreHandleResponse handles the ListByConfigurationStore response.
 func (client *KeyValuesClient) listByConfigurationStoreHandleResponse(resp *http.Response) (KeyValuesClientListByConfigurationStoreResponse, error) {
-	result := KeyValuesClientListByConfigurationStoreResponse{RawResponse: resp}
+	result := KeyValuesClientListByConfigurationStoreResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KeyValueListResult); err != nil {
 		return KeyValuesClientListByConfigurationStoreResponse{}, err
 	}

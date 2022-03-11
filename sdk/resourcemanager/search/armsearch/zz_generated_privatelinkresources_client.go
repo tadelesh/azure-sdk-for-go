@@ -35,17 +35,17 @@ type PrivateLinkResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateLinkResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateLinkResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateLinkResourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -56,19 +56,13 @@ func NewPrivateLinkResourcesClient(subscriptionID string, credential azcore.Toke
 // Azure Resource Manager API or the portal.
 // searchServiceName - The name of the Azure Cognitive Search service associated with the specified resource group.
 // options - SearchManagementRequestOptions contains a group of parameters for the AdminKeysClient.Get method.
-func (client *PrivateLinkResourcesClient) ListSupported(ctx context.Context, resourceGroupName string, searchServiceName string, options *SearchManagementRequestOptions) (PrivateLinkResourcesClientListSupportedResponse, error) {
-	req, err := client.listSupportedCreateRequest(ctx, resourceGroupName, searchServiceName, options)
-	if err != nil {
-		return PrivateLinkResourcesClientListSupportedResponse{}, err
+func (client *PrivateLinkResourcesClient) ListSupported(resourceGroupName string, searchServiceName string, options *SearchManagementRequestOptions) *PrivateLinkResourcesClientListSupportedPager {
+	return &PrivateLinkResourcesClientListSupportedPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listSupportedCreateRequest(ctx, resourceGroupName, searchServiceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return PrivateLinkResourcesClientListSupportedResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return PrivateLinkResourcesClientListSupportedResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listSupportedHandleResponse(resp)
 }
 
 // listSupportedCreateRequest creates the ListSupported request.
@@ -102,7 +96,7 @@ func (client *PrivateLinkResourcesClient) listSupportedCreateRequest(ctx context
 
 // listSupportedHandleResponse handles the ListSupported response.
 func (client *PrivateLinkResourcesClient) listSupportedHandleResponse(resp *http.Response) (PrivateLinkResourcesClientListSupportedResponse, error) {
-	result := PrivateLinkResourcesClientListSupportedResponse{RawResponse: resp}
+	result := PrivateLinkResourcesClientListSupportedResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourcesResult); err != nil {
 		return PrivateLinkResourcesClientListSupportedResponse{}, err
 	}

@@ -35,17 +35,17 @@ type IncidentRelationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIncidentRelationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IncidentRelationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IncidentRelationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -110,7 +110,7 @@ func (client *IncidentRelationsClient) createOrUpdateCreateRequest(ctx context.C
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *IncidentRelationsClient) createOrUpdateHandleResponse(resp *http.Response) (IncidentRelationsClientCreateOrUpdateResponse, error) {
-	result := IncidentRelationsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := IncidentRelationsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Relation); err != nil {
 		return IncidentRelationsClientCreateOrUpdateResponse{}, err
 	}
@@ -137,7 +137,7 @@ func (client *IncidentRelationsClient) Delete(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return IncidentRelationsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return IncidentRelationsClientDeleteResponse{RawResponse: resp}, nil
+	return IncidentRelationsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -232,7 +232,7 @@ func (client *IncidentRelationsClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *IncidentRelationsClient) getHandleResponse(resp *http.Response) (IncidentRelationsClientGetResponse, error) {
-	result := IncidentRelationsClientGetResponse{RawResponse: resp}
+	result := IncidentRelationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Relation); err != nil {
 		return IncidentRelationsClientGetResponse{}, err
 	}
@@ -301,7 +301,7 @@ func (client *IncidentRelationsClient) listCreateRequest(ctx context.Context, re
 
 // listHandleResponse handles the List response.
 func (client *IncidentRelationsClient) listHandleResponse(resp *http.Response) (IncidentRelationsClientListResponse, error) {
-	result := IncidentRelationsClientListResponse{RawResponse: resp}
+	result := IncidentRelationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RelationList); err != nil {
 		return IncidentRelationsClientListResponse{}, err
 	}

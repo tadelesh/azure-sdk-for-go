@@ -41,20 +41,20 @@ type ManagementAssociationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagementAssociationsClient(subscriptionID string, providerName string, resourceType string, resourceName string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagementAssociationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagementAssociationsClient{
 		subscriptionID: subscriptionID,
 		providerName:   providerName,
 		resourceType:   resourceType,
 		resourceName:   resourceName,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -121,7 +121,7 @@ func (client *ManagementAssociationsClient) createOrUpdateCreateRequest(ctx cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ManagementAssociationsClient) createOrUpdateHandleResponse(resp *http.Response) (ManagementAssociationsClientCreateOrUpdateResponse, error) {
-	result := ManagementAssociationsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ManagementAssociationsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagementAssociation); err != nil {
 		return ManagementAssociationsClientCreateOrUpdateResponse{}, err
 	}
@@ -146,7 +146,7 @@ func (client *ManagementAssociationsClient) Delete(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ManagementAssociationsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ManagementAssociationsClientDeleteResponse{RawResponse: resp}, nil
+	return ManagementAssociationsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -248,7 +248,7 @@ func (client *ManagementAssociationsClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *ManagementAssociationsClient) getHandleResponse(resp *http.Response) (ManagementAssociationsClientGetResponse, error) {
-	result := ManagementAssociationsClientGetResponse{RawResponse: resp}
+	result := ManagementAssociationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagementAssociation); err != nil {
 		return ManagementAssociationsClientGetResponse{}, err
 	}
@@ -294,7 +294,7 @@ func (client *ManagementAssociationsClient) listBySubscriptionCreateRequest(ctx 
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *ManagementAssociationsClient) listBySubscriptionHandleResponse(resp *http.Response) (ManagementAssociationsClientListBySubscriptionResponse, error) {
-	result := ManagementAssociationsClientListBySubscriptionResponse{RawResponse: resp}
+	result := ManagementAssociationsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagementAssociationPropertiesList); err != nil {
 		return ManagementAssociationsClientListBySubscriptionResponse{}, err
 	}

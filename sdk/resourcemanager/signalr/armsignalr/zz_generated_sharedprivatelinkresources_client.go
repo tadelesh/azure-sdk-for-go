@@ -24,9 +24,9 @@ import (
 // SharedPrivateLinkResourcesClient contains the methods for the SignalRSharedPrivateLinkResources group.
 // Don't use this type directly, use NewSharedPrivateLinkResourcesClient() instead.
 type SharedPrivateLinkResourcesClient struct {
-	host string
+	host           string
 	subscriptionID string
-	pl runtime.Pipeline
+	pl             runtime.Pipeline
 }
 
 // NewSharedPrivateLinkResourcesClient creates a new instance of SharedPrivateLinkResourcesClient with the specified values.
@@ -44,8 +44,8 @@ func NewSharedPrivateLinkResourcesClient(subscriptionID string, credential azcor
 	}
 	client := &SharedPrivateLinkResourcesClient{
 		subscriptionID: subscriptionID,
-		host: string(ep),
-		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,14 +64,12 @@ func (client *SharedPrivateLinkResourcesClient) BeginCreateOrUpdate(ctx context.
 	if err != nil {
 		return SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SharedPrivateLinkResourcesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result.Poller = &SharedPrivateLinkResourcesClientCreateOrUpdatePoller {
+	result.Poller = &SharedPrivateLinkResourcesClientCreateOrUpdatePoller{
 		pt: pt,
 	}
 	return result, nil
@@ -91,7 +89,7 @@ func (client *SharedPrivateLinkResourcesClient) createOrUpdate(ctx context.Conte
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	 return resp, nil
+	return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -118,7 +116,7 @@ func (client *SharedPrivateLinkResourcesClient) createOrUpdateCreateRequest(ctx 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-01-preview")
+	reqQP.Set("api-version", "2021-10-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -137,14 +135,12 @@ func (client *SharedPrivateLinkResourcesClient) BeginDelete(ctx context.Context,
 	if err != nil {
 		return SharedPrivateLinkResourcesClientDeletePollerResponse{}, err
 	}
-	result := SharedPrivateLinkResourcesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SharedPrivateLinkResourcesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SharedPrivateLinkResourcesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return SharedPrivateLinkResourcesClientDeletePollerResponse{}, err
 	}
-	result.Poller = &SharedPrivateLinkResourcesClientDeletePoller {
+	result.Poller = &SharedPrivateLinkResourcesClientDeletePoller{
 		pt: pt,
 	}
 	return result, nil
@@ -164,7 +160,7 @@ func (client *SharedPrivateLinkResourcesClient) deleteOperation(ctx context.Cont
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	 return resp, nil
+	return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -191,7 +187,7 @@ func (client *SharedPrivateLinkResourcesClient) deleteCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-01-preview")
+	reqQP.Set("api-version", "2021-10-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -244,7 +240,7 @@ func (client *SharedPrivateLinkResourcesClient) getCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-01-preview")
+	reqQP.Set("api-version", "2021-10-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -252,7 +248,7 @@ func (client *SharedPrivateLinkResourcesClient) getCreateRequest(ctx context.Con
 
 // getHandleResponse handles the Get response.
 func (client *SharedPrivateLinkResourcesClient) getHandleResponse(resp *http.Response) (SharedPrivateLinkResourcesClientGetResponse, error) {
-	result := SharedPrivateLinkResourcesClientGetResponse{RawResponse: resp}
+	result := SharedPrivateLinkResourcesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedPrivateLinkResource); err != nil {
 		return SharedPrivateLinkResourcesClientGetResponse{}, err
 	}
@@ -266,7 +262,7 @@ func (client *SharedPrivateLinkResourcesClient) getHandleResponse(resp *http.Res
 // resourceName - The name of the resource.
 // options - SharedPrivateLinkResourcesClientListOptions contains the optional parameters for the SharedPrivateLinkResourcesClient.List
 // method.
-func (client *SharedPrivateLinkResourcesClient) List(resourceGroupName string, resourceName string, options *SharedPrivateLinkResourcesClientListOptions) (*SharedPrivateLinkResourcesClientListPager) {
+func (client *SharedPrivateLinkResourcesClient) List(resourceGroupName string, resourceName string, options *SharedPrivateLinkResourcesClientListOptions) *SharedPrivateLinkResourcesClientListPager {
 	return &SharedPrivateLinkResourcesClientListPager{
 		client: client,
 		requester: func(ctx context.Context) (*policy.Request, error) {
@@ -298,7 +294,7 @@ func (client *SharedPrivateLinkResourcesClient) listCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-01-preview")
+	reqQP.Set("api-version", "2021-10-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -306,10 +302,9 @@ func (client *SharedPrivateLinkResourcesClient) listCreateRequest(ctx context.Co
 
 // listHandleResponse handles the List response.
 func (client *SharedPrivateLinkResourcesClient) listHandleResponse(resp *http.Response) (SharedPrivateLinkResourcesClientListResponse, error) {
-	result := SharedPrivateLinkResourcesClientListResponse{RawResponse: resp}
+	result := SharedPrivateLinkResourcesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedPrivateLinkResourceList); err != nil {
 		return SharedPrivateLinkResourcesClientListResponse{}, err
 	}
 	return result, nil
 }
-

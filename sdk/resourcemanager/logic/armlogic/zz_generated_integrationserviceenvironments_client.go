@@ -35,17 +35,17 @@ type IntegrationServiceEnvironmentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIntegrationServiceEnvironmentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IntegrationServiceEnvironmentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IntegrationServiceEnvironmentsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *IntegrationServiceEnvironmentsClient) BeginCreateOrUpdate(ctx cont
 	if err != nil {
 		return IntegrationServiceEnvironmentsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := IntegrationServiceEnvironmentsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := IntegrationServiceEnvironmentsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("IntegrationServiceEnvironmentsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return IntegrationServiceEnvironmentsClientCreateOrUpdatePollerResponse{}, err
@@ -136,7 +134,7 @@ func (client *IntegrationServiceEnvironmentsClient) Delete(ctx context.Context, 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return IntegrationServiceEnvironmentsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return IntegrationServiceEnvironmentsClientDeleteResponse{RawResponse: resp}, nil
+	return IntegrationServiceEnvironmentsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -214,7 +212,7 @@ func (client *IntegrationServiceEnvironmentsClient) getCreateRequest(ctx context
 
 // getHandleResponse handles the Get response.
 func (client *IntegrationServiceEnvironmentsClient) getHandleResponse(resp *http.Response) (IntegrationServiceEnvironmentsClientGetResponse, error) {
-	result := IntegrationServiceEnvironmentsClientGetResponse{RawResponse: resp}
+	result := IntegrationServiceEnvironmentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationServiceEnvironment); err != nil {
 		return IntegrationServiceEnvironmentsClientGetResponse{}, err
 	}
@@ -265,7 +263,7 @@ func (client *IntegrationServiceEnvironmentsClient) listByResourceGroupCreateReq
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *IntegrationServiceEnvironmentsClient) listByResourceGroupHandleResponse(resp *http.Response) (IntegrationServiceEnvironmentsClientListByResourceGroupResponse, error) {
-	result := IntegrationServiceEnvironmentsClientListByResourceGroupResponse{RawResponse: resp}
+	result := IntegrationServiceEnvironmentsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationServiceEnvironmentListResult); err != nil {
 		return IntegrationServiceEnvironmentsClientListByResourceGroupResponse{}, err
 	}
@@ -311,7 +309,7 @@ func (client *IntegrationServiceEnvironmentsClient) listBySubscriptionCreateRequ
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *IntegrationServiceEnvironmentsClient) listBySubscriptionHandleResponse(resp *http.Response) (IntegrationServiceEnvironmentsClientListBySubscriptionResponse, error) {
-	result := IntegrationServiceEnvironmentsClientListBySubscriptionResponse{RawResponse: resp}
+	result := IntegrationServiceEnvironmentsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationServiceEnvironmentListResult); err != nil {
 		return IntegrationServiceEnvironmentsClientListBySubscriptionResponse{}, err
 	}
@@ -336,7 +334,7 @@ func (client *IntegrationServiceEnvironmentsClient) Restart(ctx context.Context,
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return IntegrationServiceEnvironmentsClientRestartResponse{}, runtime.NewResponseError(resp)
 	}
-	return IntegrationServiceEnvironmentsClientRestartResponse{RawResponse: resp}, nil
+	return IntegrationServiceEnvironmentsClientRestartResponse{}, nil
 }
 
 // restartCreateRequest creates the Restart request.
@@ -377,9 +375,7 @@ func (client *IntegrationServiceEnvironmentsClient) BeginUpdate(ctx context.Cont
 	if err != nil {
 		return IntegrationServiceEnvironmentsClientUpdatePollerResponse{}, err
 	}
-	result := IntegrationServiceEnvironmentsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := IntegrationServiceEnvironmentsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("IntegrationServiceEnvironmentsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return IntegrationServiceEnvironmentsClientUpdatePollerResponse{}, err

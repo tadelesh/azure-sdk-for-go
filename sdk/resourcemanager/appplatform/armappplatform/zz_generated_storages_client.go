@@ -35,17 +35,17 @@ type StoragesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewStoragesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *StoragesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &StoragesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *StoragesClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return StoragesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := StoragesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := StoragesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("StoragesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return StoragesClientCreateOrUpdatePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *StoragesClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return StoragesClientDeletePollerResponse{}, err
 	}
-	result := StoragesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := StoragesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("StoragesClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return StoragesClientDeletePollerResponse{}, err
@@ -250,7 +246,7 @@ func (client *StoragesClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *StoragesClient) getHandleResponse(resp *http.Response) (StoragesClientGetResponse, error) {
-	result := StoragesClientGetResponse{RawResponse: resp}
+	result := StoragesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StorageResource); err != nil {
 		return StoragesClientGetResponse{}, err
 	}
@@ -303,7 +299,7 @@ func (client *StoragesClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *StoragesClient) listHandleResponse(resp *http.Response) (StoragesClientListResponse, error) {
-	result := StoragesClientListResponse{RawResponse: resp}
+	result := StoragesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StorageResourceCollection); err != nil {
 		return StoragesClientListResponse{}, err
 	}

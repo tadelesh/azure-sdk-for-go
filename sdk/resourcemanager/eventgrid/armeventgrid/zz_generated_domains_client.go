@@ -36,17 +36,17 @@ type DomainsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDomainsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DomainsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DomainsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *DomainsClient) BeginCreateOrUpdate(ctx context.Context, resourceGr
 	if err != nil {
 		return DomainsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DomainsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DomainsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DomainsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DomainsClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *DomainsClient) BeginDelete(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return DomainsClientDeletePollerResponse{}, err
 	}
-	result := DomainsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DomainsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DomainsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DomainsClientDeletePollerResponse{}, err
@@ -232,7 +228,7 @@ func (client *DomainsClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *DomainsClient) getHandleResponse(resp *http.Response) (DomainsClientGetResponse, error) {
-	result := DomainsClientGetResponse{RawResponse: resp}
+	result := DomainsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Domain); err != nil {
 		return DomainsClientGetResponse{}, err
 	}
@@ -286,7 +282,7 @@ func (client *DomainsClient) listByResourceGroupCreateRequest(ctx context.Contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *DomainsClient) listByResourceGroupHandleResponse(resp *http.Response) (DomainsClientListByResourceGroupResponse, error) {
-	result := DomainsClientListByResourceGroupResponse{RawResponse: resp}
+	result := DomainsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainsListResult); err != nil {
 		return DomainsClientListByResourceGroupResponse{}, err
 	}
@@ -335,7 +331,7 @@ func (client *DomainsClient) listBySubscriptionCreateRequest(ctx context.Context
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *DomainsClient) listBySubscriptionHandleResponse(resp *http.Response) (DomainsClientListBySubscriptionResponse, error) {
-	result := DomainsClientListBySubscriptionResponse{RawResponse: resp}
+	result := DomainsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainsListResult); err != nil {
 		return DomainsClientListBySubscriptionResponse{}, err
 	}
@@ -391,7 +387,7 @@ func (client *DomainsClient) listSharedAccessKeysCreateRequest(ctx context.Conte
 
 // listSharedAccessKeysHandleResponse handles the ListSharedAccessKeys response.
 func (client *DomainsClient) listSharedAccessKeysHandleResponse(resp *http.Response) (DomainsClientListSharedAccessKeysResponse, error) {
-	result := DomainsClientListSharedAccessKeysResponse{RawResponse: resp}
+	result := DomainsClientListSharedAccessKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainSharedAccessKeys); err != nil {
 		return DomainsClientListSharedAccessKeysResponse{}, err
 	}
@@ -447,7 +443,7 @@ func (client *DomainsClient) regenerateKeyCreateRequest(ctx context.Context, res
 
 // regenerateKeyHandleResponse handles the RegenerateKey response.
 func (client *DomainsClient) regenerateKeyHandleResponse(resp *http.Response) (DomainsClientRegenerateKeyResponse, error) {
-	result := DomainsClientRegenerateKeyResponse{RawResponse: resp}
+	result := DomainsClientRegenerateKeyResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainSharedAccessKeys); err != nil {
 		return DomainsClientRegenerateKeyResponse{}, err
 	}
@@ -465,9 +461,7 @@ func (client *DomainsClient) BeginUpdate(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return DomainsClientUpdatePollerResponse{}, err
 	}
-	result := DomainsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DomainsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DomainsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return DomainsClientUpdatePollerResponse{}, err

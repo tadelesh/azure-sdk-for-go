@@ -1,5 +1,245 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*SecretsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SecretsClientListResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*VaultsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(VaultsClientListBySubscriptionResponse, error)`
+- Function `*VaultsClientListDeletedPager.NextPage` return value(s) have been changed from `(bool)` to `(VaultsClientListDeletedResponse, error)`
+- Function `*VaultsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(VaultsClientListResponse, error)`
+- Function `*MHSMPrivateEndpointConnectionsClientListByResourcePager.NextPage` return value(s) have been changed from `(bool)` to `(MHSMPrivateEndpointConnectionsClientListByResourceResponse, error)`
+- Function `*KeysClientListVersionsPager.NextPage` return value(s) have been changed from `(bool)` to `(KeysClientListVersionsResponse, error)`
+- Function `*ManagedHsmsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagedHsmsClientListBySubscriptionResponse, error)`
+- Function `*ManagedHsmsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagedHsmsClientListByResourceGroupResponse, error)`
+- Function `*PrivateEndpointConnectionsClientListByResourcePager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateEndpointConnectionsClientListByResourceResponse, error)`
+- Function `*ManagedHsmsClientListDeletedPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagedHsmsClientListDeletedResponse, error)`
+- Function `*KeysClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(KeysClientListResponse, error)`
+- Function `*VaultsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(VaultsClientListByResourceGroupResponse, error)`
+- Function `*VaultsClientListBySubscriptionPager.Err` has been removed
+- Function `*SecretsClientListPager.Err` has been removed
+- Function `*ManagedHsmsClientListDeletedPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*ManagedHsmsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*ManagedHsmsClientListDeletedPager.Err` has been removed
+- Function `*VaultsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*PrivateEndpointConnectionsClientListByResourcePager.Err` has been removed
+- Function `*VaultsClientListDeletedPager.PageResponse` has been removed
+- Function `*KeysClientListPager.PageResponse` has been removed
+- Function `*KeysClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*KeysClientListVersionsPager.PageResponse` has been removed
+- Function `*VaultsClientListByResourceGroupPager.Err` has been removed
+- Function `*MHSMPrivateEndpointConnectionsClientListByResourcePager.Err` has been removed
+- Function `*VaultsClientListPager.PageResponse` has been removed
+- Function `*PrivateEndpointConnectionsClientListByResourcePager.PageResponse` has been removed
+- Function `*VaultsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*KeysClientListVersionsPager.Err` has been removed
+- Function `*VaultsClientListPager.Err` has been removed
+- Function `*MHSMPrivateEndpointConnectionsClientListByResourcePager.PageResponse` has been removed
+- Function `*ManagedHsmsClientListByResourceGroupPager.Err` has been removed
+- Function `*ManagedHsmsClientListBySubscriptionPager.Err` has been removed
+- Function `*SecretsClientListPager.PageResponse` has been removed
+- Function `*VaultsClientListDeletedPager.Err` has been removed
+- Function `*ManagedHsmsClientListByResourceGroupPager.PageResponse` has been removed
+- Struct `KeysClientCreateIfNotExistResult` has been removed
+- Struct `KeysClientGetResult` has been removed
+- Struct `KeysClientGetVersionResult` has been removed
+- Struct `KeysClientListResult` has been removed
+- Struct `KeysClientListVersionsResult` has been removed
+- Struct `MHSMPrivateEndpointConnectionsClientDeleteResult` has been removed
+- Struct `MHSMPrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `MHSMPrivateEndpointConnectionsClientListByResourceResult` has been removed
+- Struct `MHSMPrivateEndpointConnectionsClientPutResult` has been removed
+- Struct `MHSMPrivateLinkResourcesClientListByMHSMResourceResult` has been removed
+- Struct `ManagedHsmsClientCreateOrUpdateResult` has been removed
+- Struct `ManagedHsmsClientGetDeletedResult` has been removed
+- Struct `ManagedHsmsClientGetResult` has been removed
+- Struct `ManagedHsmsClientListByResourceGroupResult` has been removed
+- Struct `ManagedHsmsClientListBySubscriptionResult` has been removed
+- Struct `ManagedHsmsClientListDeletedResult` has been removed
+- Struct `ManagedHsmsClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientDeleteResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListByResourceResult` has been removed
+- Struct `PrivateEndpointConnectionsClientPutResult` has been removed
+- Struct `PrivateLinkResourcesClientListByVaultResult` has been removed
+- Struct `SecretsClientCreateOrUpdateResult` has been removed
+- Struct `SecretsClientGetResult` has been removed
+- Struct `SecretsClientListResult` has been removed
+- Struct `SecretsClientUpdateResult` has been removed
+- Struct `VaultsClientCheckNameAvailabilityResult` has been removed
+- Struct `VaultsClientCreateOrUpdateResult` has been removed
+- Struct `VaultsClientGetDeletedResult` has been removed
+- Struct `VaultsClientGetResult` has been removed
+- Struct `VaultsClientListByResourceGroupResult` has been removed
+- Struct `VaultsClientListBySubscriptionResult` has been removed
+- Struct `VaultsClientListDeletedResult` has been removed
+- Struct `VaultsClientListResult` has been removed
+- Struct `VaultsClientUpdateAccessPolicyResult` has been removed
+- Struct `VaultsClientUpdateResult` has been removed
+- Field `ManagedHsmsClientListDeletedResult` of struct `ManagedHsmsClientListDeletedResponse` has been removed
+- Field `RawResponse` of struct `ManagedHsmsClientListDeletedResponse` has been removed
+- Field `RawResponse` of struct `ManagedHsmsClientDeleteResponse` has been removed
+- Field `SecretsClientUpdateResult` of struct `SecretsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SecretsClientUpdateResponse` has been removed
+- Field `VaultsClientCreateOrUpdateResult` of struct `VaultsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VaultsClientCreateOrUpdateResponse` has been removed
+- Field `PrivateEndpointConnectionsClientDeleteResult` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `PrivateLinkResourcesClientListByVaultResult` of struct `PrivateLinkResourcesClientListByVaultResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListByVaultResponse` has been removed
+- Field `RawResponse` of struct `ManagedHsmsClientDeletePollerResponse` has been removed
+- Field `VaultsClientUpdateResult` of struct `VaultsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VaultsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ManagedHsmsClientPurgeDeletedPollerResponse` has been removed
+- Field `MHSMPrivateEndpointConnectionsClientGetResult` of struct `MHSMPrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `MHSMPrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VaultsClientCreateOrUpdatePollerResponse` has been removed
+- Field `KeysClientCreateIfNotExistResult` of struct `KeysClientCreateIfNotExistResponse` has been removed
+- Field `RawResponse` of struct `KeysClientCreateIfNotExistResponse` has been removed
+- Field `VaultsClientUpdateAccessPolicyResult` of struct `VaultsClientUpdateAccessPolicyResponse` has been removed
+- Field `RawResponse` of struct `VaultsClientUpdateAccessPolicyResponse` has been removed
+- Field `VaultsClientListDeletedResult` of struct `VaultsClientListDeletedResponse` has been removed
+- Field `RawResponse` of struct `VaultsClientListDeletedResponse` has been removed
+- Field `RawResponse` of struct `VaultsClientPurgeDeletedPollerResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListByResourceResult` of struct `PrivateEndpointConnectionsClientListByResourceResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListByResourceResponse` has been removed
+- Field `ManagedHsmsClientGetResult` of struct `ManagedHsmsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ManagedHsmsClientGetResponse` has been removed
+- Field `VaultsClientListBySubscriptionResult` of struct `VaultsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `VaultsClientListBySubscriptionResponse` has been removed
+- Field `VaultsClientListResult` of struct `VaultsClientListResponse` has been removed
+- Field `RawResponse` of struct `VaultsClientListResponse` has been removed
+- Field `SecretsClientGetResult` of struct `SecretsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SecretsClientGetResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `KeysClientGetResult` of struct `KeysClientGetResponse` has been removed
+- Field `RawResponse` of struct `KeysClientGetResponse` has been removed
+- Field `VaultsClientListByResourceGroupResult` of struct `VaultsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `VaultsClientListByResourceGroupResponse` has been removed
+- Field `ManagedHsmsClientListBySubscriptionResult` of struct `ManagedHsmsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ManagedHsmsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ManagedHsmsClientCreateOrUpdatePollerResponse` has been removed
+- Field `VaultsClientGetDeletedResult` of struct `VaultsClientGetDeletedResponse` has been removed
+- Field `RawResponse` of struct `VaultsClientGetDeletedResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeletePollerResponse` has been removed
+- Field `VaultsClientCheckNameAvailabilityResult` of struct `VaultsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `VaultsClientCheckNameAvailabilityResponse` has been removed
+- Field `MHSMPrivateEndpointConnectionsClientPutResult` of struct `MHSMPrivateEndpointConnectionsClientPutResponse` has been removed
+- Field `RawResponse` of struct `MHSMPrivateEndpointConnectionsClientPutResponse` has been removed
+- Field `SecretsClientCreateOrUpdateResult` of struct `SecretsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SecretsClientCreateOrUpdateResponse` has been removed
+- Field `ManagedHsmsClientCreateOrUpdateResult` of struct `ManagedHsmsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ManagedHsmsClientCreateOrUpdateResponse` has been removed
+- Field `MHSMPrivateEndpointConnectionsClientDeleteResult` of struct `MHSMPrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `MHSMPrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VaultsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ManagedHsmsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VaultsClientPurgeDeletedResponse` has been removed
+- Field `VaultsClientGetResult` of struct `VaultsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VaultsClientGetResponse` has been removed
+- Field `SecretsClientListResult` of struct `SecretsClientListResponse` has been removed
+- Field `RawResponse` of struct `SecretsClientListResponse` has been removed
+- Field `PrivateEndpointConnectionsClientPutResult` of struct `PrivateEndpointConnectionsClientPutResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientPutResponse` has been removed
+- Field `KeysClientListVersionsResult` of struct `KeysClientListVersionsResponse` has been removed
+- Field `RawResponse` of struct `KeysClientListVersionsResponse` has been removed
+- Field `RawResponse` of struct `ManagedHsmsClientPurgeDeletedResponse` has been removed
+- Field `KeysClientGetVersionResult` of struct `KeysClientGetVersionResponse` has been removed
+- Field `RawResponse` of struct `KeysClientGetVersionResponse` has been removed
+- Field `ManagedHsmsClientUpdateResult` of struct `ManagedHsmsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ManagedHsmsClientUpdateResponse` has been removed
+- Field `ManagedHsmsClientGetDeletedResult` of struct `ManagedHsmsClientGetDeletedResponse` has been removed
+- Field `RawResponse` of struct `ManagedHsmsClientGetDeletedResponse` has been removed
+- Field `KeysClientListResult` of struct `KeysClientListResponse` has been removed
+- Field `RawResponse` of struct `KeysClientListResponse` has been removed
+- Field `RawResponse` of struct `MHSMPrivateEndpointConnectionsClientDeletePollerResponse` has been removed
+- Field `MHSMPrivateEndpointConnectionsClientListByResourceResult` of struct `MHSMPrivateEndpointConnectionsClientListByResourceResponse` has been removed
+- Field `RawResponse` of struct `MHSMPrivateEndpointConnectionsClientListByResourceResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `ManagedHsmsClientListByResourceGroupResult` of struct `ManagedHsmsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ManagedHsmsClientListByResourceGroupResponse` has been removed
+- Field `MHSMPrivateLinkResourcesClientListByMHSMResourceResult` of struct `MHSMPrivateLinkResourcesClientListByMHSMResourceResponse` has been removed
+- Field `RawResponse` of struct `MHSMPrivateLinkResourcesClientListByMHSMResourceResponse` has been removed
+
+### Features Added
+
+- New function `*SecretsClientListPager.More() bool`
+- New function `*VaultsClientListDeletedPager.More() bool`
+- New function `*ManagedHsmsClientListByResourceGroupPager.More() bool`
+- New function `*KeysClientListVersionsPager.More() bool`
+- New function `*VaultsClientListPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*PrivateEndpointConnectionsClientListByResourcePager.More() bool`
+- New function `*VaultsClientListByResourceGroupPager.More() bool`
+- New function `*ManagedHsmsClientListDeletedPager.More() bool`
+- New function `*MHSMPrivateEndpointConnectionsClientListByResourcePager.More() bool`
+- New function `*ManagedHsmsClientListBySubscriptionPager.More() bool`
+- New function `*KeysClientListPager.More() bool`
+- New function `*VaultsClientListBySubscriptionPager.More() bool`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New struct `Error`
+- New struct `ManagedHsmError`
+- New anonymous field `SecretListResult` in struct `SecretsClientListResponse`
+- New anonymous field `MHSMPrivateEndpointConnection` in struct `MHSMPrivateEndpointConnectionsClientPutResponse`
+- New field `AzureAsyncOperation` in struct `MHSMPrivateEndpointConnectionsClientPutResponse`
+- New field `RetryAfter` in struct `MHSMPrivateEndpointConnectionsClientPutResponse`
+- New anonymous field `ManagedHsm` in struct `ManagedHsmsClientGetResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `ManagedHsm` in struct `ManagedHsmsClientCreateOrUpdateResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `PrivateLinkResourcesClientListByVaultResponse`
+- New anonymous field `MHSMPrivateEndpointConnection` in struct `MHSMPrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `VaultListResult` in struct `VaultsClientListByResourceGroupResponse`
+- New anonymous field `Vault` in struct `VaultsClientUpdateResponse`
+- New anonymous field `DeletedManagedHsmListResult` in struct `ManagedHsmsClientListDeletedResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientPutResponse`
+- New field `AzureAsyncOperation` in struct `PrivateEndpointConnectionsClientPutResponse`
+- New field `RetryAfter` in struct `PrivateEndpointConnectionsClientPutResponse`
+- New anonymous field `MHSMPrivateEndpointConnection` in struct `MHSMPrivateEndpointConnectionsClientDeleteResponse`
+- New anonymous field `MHSMPrivateLinkResourceListResult` in struct `MHSMPrivateLinkResourcesClientListByMHSMResourceResponse`
+- New anonymous field `VaultAccessPolicyParameters` in struct `VaultsClientUpdateAccessPolicyResponse`
+- New anonymous field `ManagedHsm` in struct `ManagedHsmsClientUpdateResponse`
+- New anonymous field `Key` in struct `KeysClientGetVersionResponse`
+- New anonymous field `Secret` in struct `SecretsClientGetResponse`
+- New anonymous field `Key` in struct `KeysClientCreateIfNotExistResponse`
+- New anonymous field `Secret` in struct `SecretsClientUpdateResponse`
+- New anonymous field `KeyListResult` in struct `KeysClientListVersionsResponse`
+- New anonymous field `CheckNameAvailabilityResult` in struct `VaultsClientCheckNameAvailabilityResponse`
+- New anonymous field `Secret` in struct `SecretsClientCreateOrUpdateResponse`
+- New anonymous field `DeletedManagedHsm` in struct `ManagedHsmsClientGetDeletedResponse`
+- New anonymous field `Key` in struct `KeysClientGetResponse`
+- New anonymous field `Vault` in struct `VaultsClientGetResponse`
+- New anonymous field `KeyListResult` in struct `KeysClientListResponse`
+- New anonymous field `ManagedHsmListResult` in struct `ManagedHsmsClientListBySubscriptionResponse`
+- New anonymous field `DeletedVault` in struct `VaultsClientGetDeletedResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListByResourceResponse`
+- New anonymous field `VaultListResult` in struct `VaultsClientListBySubscriptionResponse`
+- New anonymous field `ManagedHsmListResult` in struct `ManagedHsmsClientListByResourceGroupResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientDeleteResponse`
+- New anonymous field `DeletedVaultListResult` in struct `VaultsClientListDeletedResponse`
+- New anonymous field `Vault` in struct `VaultsClientCreateOrUpdateResponse`
+- New anonymous field `ResourceListResult` in struct `VaultsClientListResponse`
+- New anonymous field `MHSMPrivateEndpointConnectionsListResult` in struct `MHSMPrivateEndpointConnectionsClientListByResourceResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+- Struct `Error` has been removed
+- Struct `ManagedHsmError` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

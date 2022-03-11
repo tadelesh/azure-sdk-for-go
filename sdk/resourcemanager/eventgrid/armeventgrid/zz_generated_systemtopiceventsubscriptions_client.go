@@ -36,17 +36,17 @@ type SystemTopicEventSubscriptionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSystemTopicEventSubscriptionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SystemTopicEventSubscriptionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SystemTopicEventSubscriptionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -66,9 +66,7 @@ func (client *SystemTopicEventSubscriptionsClient) BeginCreateOrUpdate(ctx conte
 	if err != nil {
 		return SystemTopicEventSubscriptionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := SystemTopicEventSubscriptionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SystemTopicEventSubscriptionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SystemTopicEventSubscriptionsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return SystemTopicEventSubscriptionsClientCreateOrUpdatePollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *SystemTopicEventSubscriptionsClient) BeginDelete(ctx context.Conte
 	if err != nil {
 		return SystemTopicEventSubscriptionsClientDeletePollerResponse{}, err
 	}
-	result := SystemTopicEventSubscriptionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SystemTopicEventSubscriptionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SystemTopicEventSubscriptionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return SystemTopicEventSubscriptionsClientDeletePollerResponse{}, err
@@ -254,7 +250,7 @@ func (client *SystemTopicEventSubscriptionsClient) getCreateRequest(ctx context.
 
 // getHandleResponse handles the Get response.
 func (client *SystemTopicEventSubscriptionsClient) getHandleResponse(resp *http.Response) (SystemTopicEventSubscriptionsClientGetResponse, error) {
-	result := SystemTopicEventSubscriptionsClientGetResponse{RawResponse: resp}
+	result := SystemTopicEventSubscriptionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscription); err != nil {
 		return SystemTopicEventSubscriptionsClientGetResponse{}, err
 	}
@@ -316,7 +312,7 @@ func (client *SystemTopicEventSubscriptionsClient) getDeliveryAttributesCreateRe
 
 // getDeliveryAttributesHandleResponse handles the GetDeliveryAttributes response.
 func (client *SystemTopicEventSubscriptionsClient) getDeliveryAttributesHandleResponse(resp *http.Response) (SystemTopicEventSubscriptionsClientGetDeliveryAttributesResponse, error) {
-	result := SystemTopicEventSubscriptionsClientGetDeliveryAttributesResponse{RawResponse: resp}
+	result := SystemTopicEventSubscriptionsClientGetDeliveryAttributesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeliveryAttributeListResult); err != nil {
 		return SystemTopicEventSubscriptionsClientGetDeliveryAttributesResponse{}, err
 	}
@@ -378,7 +374,7 @@ func (client *SystemTopicEventSubscriptionsClient) getFullURLCreateRequest(ctx c
 
 // getFullURLHandleResponse handles the GetFullURL response.
 func (client *SystemTopicEventSubscriptionsClient) getFullURLHandleResponse(resp *http.Response) (SystemTopicEventSubscriptionsClientGetFullURLResponse, error) {
-	result := SystemTopicEventSubscriptionsClientGetFullURLResponse{RawResponse: resp}
+	result := SystemTopicEventSubscriptionsClientGetFullURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionFullURL); err != nil {
 		return SystemTopicEventSubscriptionsClientGetFullURLResponse{}, err
 	}
@@ -437,7 +433,7 @@ func (client *SystemTopicEventSubscriptionsClient) listBySystemTopicCreateReques
 
 // listBySystemTopicHandleResponse handles the ListBySystemTopic response.
 func (client *SystemTopicEventSubscriptionsClient) listBySystemTopicHandleResponse(resp *http.Response) (SystemTopicEventSubscriptionsClientListBySystemTopicResponse, error) {
-	result := SystemTopicEventSubscriptionsClientListBySystemTopicResponse{RawResponse: resp}
+	result := SystemTopicEventSubscriptionsClientListBySystemTopicResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionsListResult); err != nil {
 		return SystemTopicEventSubscriptionsClientListBySystemTopicResponse{}, err
 	}
@@ -458,9 +454,7 @@ func (client *SystemTopicEventSubscriptionsClient) BeginUpdate(ctx context.Conte
 	if err != nil {
 		return SystemTopicEventSubscriptionsClientUpdatePollerResponse{}, err
 	}
-	result := SystemTopicEventSubscriptionsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SystemTopicEventSubscriptionsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SystemTopicEventSubscriptionsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return SystemTopicEventSubscriptionsClientUpdatePollerResponse{}, err

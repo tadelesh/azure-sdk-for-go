@@ -32,16 +32,16 @@ type PublishedBlueprintsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPublishedBlueprintsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *PublishedBlueprintsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PublishedBlueprintsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *PublishedBlueprintsClient) createCreateRequest(ctx context.Context
 
 // createHandleResponse handles the Create response.
 func (client *PublishedBlueprintsClient) createHandleResponse(resp *http.Response) (PublishedBlueprintsClientCreateResponse, error) {
-	result := PublishedBlueprintsClientCreateResponse{RawResponse: resp}
+	result := PublishedBlueprintsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublishedBlueprint); err != nil {
 		return PublishedBlueprintsClientCreateResponse{}, err
 	}
@@ -153,7 +153,7 @@ func (client *PublishedBlueprintsClient) deleteCreateRequest(ctx context.Context
 
 // deleteHandleResponse handles the Delete response.
 func (client *PublishedBlueprintsClient) deleteHandleResponse(resp *http.Response) (PublishedBlueprintsClientDeleteResponse, error) {
-	result := PublishedBlueprintsClientDeleteResponse{RawResponse: resp}
+	result := PublishedBlueprintsClientDeleteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublishedBlueprint); err != nil {
 		return PublishedBlueprintsClientDeleteResponse{}, err
 	}
@@ -207,7 +207,7 @@ func (client *PublishedBlueprintsClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *PublishedBlueprintsClient) getHandleResponse(resp *http.Response) (PublishedBlueprintsClientGetResponse, error) {
-	result := PublishedBlueprintsClientGetResponse{RawResponse: resp}
+	result := PublishedBlueprintsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublishedBlueprint); err != nil {
 		return PublishedBlueprintsClientGetResponse{}, err
 	}
@@ -254,7 +254,7 @@ func (client *PublishedBlueprintsClient) listCreateRequest(ctx context.Context, 
 
 // listHandleResponse handles the List response.
 func (client *PublishedBlueprintsClient) listHandleResponse(resp *http.Response) (PublishedBlueprintsClientListResponse, error) {
-	result := PublishedBlueprintsClientListResponse{RawResponse: resp}
+	result := PublishedBlueprintsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublishedBlueprintList); err != nil {
 		return PublishedBlueprintsClientListResponse{}, err
 	}

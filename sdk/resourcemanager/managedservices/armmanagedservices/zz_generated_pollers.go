@@ -43,11 +43,10 @@ func (p *RegistrationAssignmentsClientCreateOrUpdatePoller) Poll(ctx context.Con
 // If the final GET succeeded then the final RegistrationAssignmentsClientCreateOrUpdateResponse will be returned.
 func (p *RegistrationAssignmentsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (RegistrationAssignmentsClientCreateOrUpdateResponse, error) {
 	respType := RegistrationAssignmentsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RegistrationAssignment)
+	_, err := p.pt.FinalResponse(ctx, &respType.RegistrationAssignment)
 	if err != nil {
 		return RegistrationAssignmentsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *RegistrationAssignmentsClientDeletePoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final RegistrationAssignmentsClientDeleteResponse will be returned.
 func (p *RegistrationAssignmentsClientDeletePoller) FinalResponse(ctx context.Context) (RegistrationAssignmentsClientDeleteResponse, error) {
 	respType := RegistrationAssignmentsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return RegistrationAssignmentsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *RegistrationDefinitionsClientCreateOrUpdatePoller) Poll(ctx context.Con
 // If the final GET succeeded then the final RegistrationDefinitionsClientCreateOrUpdateResponse will be returned.
 func (p *RegistrationDefinitionsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (RegistrationDefinitionsClientCreateOrUpdateResponse, error) {
 	respType := RegistrationDefinitionsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RegistrationDefinition)
+	_, err := p.pt.FinalResponse(ctx, &respType.RegistrationDefinition)
 	if err != nil {
 		return RegistrationDefinitionsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

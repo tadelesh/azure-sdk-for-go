@@ -99,7 +99,7 @@ func (client *IotSecuritySolutionClient) createOrUpdateCreateRequest(ctx context
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *IotSecuritySolutionClient) createOrUpdateHandleResponse(resp *http.Response) (IotSecuritySolutionClientCreateOrUpdateResponse, error) {
-	result := IotSecuritySolutionClientCreateOrUpdateResponse{RawResponse: resp}
+	result := IotSecuritySolutionClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IoTSecuritySolutionModel); err != nil {
 		return IotSecuritySolutionClientCreateOrUpdateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *IotSecuritySolutionClient) Delete(ctx context.Context, resourceGro
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return IotSecuritySolutionClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return IotSecuritySolutionClientDeleteResponse{RawResponse: resp}, nil
+	return IotSecuritySolutionClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -201,7 +201,7 @@ func (client *IotSecuritySolutionClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *IotSecuritySolutionClient) getHandleResponse(resp *http.Response) (IotSecuritySolutionClientGetResponse, error) {
-	result := IotSecuritySolutionClientGetResponse{RawResponse: resp}
+	result := IotSecuritySolutionClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IoTSecuritySolutionModel); err != nil {
 		return IotSecuritySolutionClientGetResponse{}, err
 	}
@@ -252,7 +252,7 @@ func (client *IotSecuritySolutionClient) listByResourceGroupCreateRequest(ctx co
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *IotSecuritySolutionClient) listByResourceGroupHandleResponse(resp *http.Response) (IotSecuritySolutionClientListByResourceGroupResponse, error) {
-	result := IotSecuritySolutionClientListByResourceGroupResponse{RawResponse: resp}
+	result := IotSecuritySolutionClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IoTSecuritySolutionsList); err != nil {
 		return IotSecuritySolutionClientListByResourceGroupResponse{}, err
 	}
@@ -298,7 +298,7 @@ func (client *IotSecuritySolutionClient) listBySubscriptionCreateRequest(ctx con
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *IotSecuritySolutionClient) listBySubscriptionHandleResponse(resp *http.Response) (IotSecuritySolutionClientListBySubscriptionResponse, error) {
-	result := IotSecuritySolutionClientListBySubscriptionResponse{RawResponse: resp}
+	result := IotSecuritySolutionClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IoTSecuritySolutionsList); err != nil {
 		return IotSecuritySolutionClientListBySubscriptionResponse{}, err
 	}
@@ -356,7 +356,7 @@ func (client *IotSecuritySolutionClient) updateCreateRequest(ctx context.Context
 
 // updateHandleResponse handles the Update response.
 func (client *IotSecuritySolutionClient) updateHandleResponse(resp *http.Response) (IotSecuritySolutionClientUpdateResponse, error) {
-	result := IotSecuritySolutionClientUpdateResponse{RawResponse: resp}
+	result := IotSecuritySolutionClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IoTSecuritySolutionModel); err != nil {
 		return IotSecuritySolutionClientUpdateResponse{}, err
 	}

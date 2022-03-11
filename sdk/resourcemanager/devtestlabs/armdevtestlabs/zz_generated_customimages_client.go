@@ -35,17 +35,17 @@ type CustomImagesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCustomImagesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CustomImagesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CustomImagesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *CustomImagesClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return CustomImagesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := CustomImagesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CustomImagesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("CustomImagesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return CustomImagesClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *CustomImagesClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return CustomImagesClientDeletePollerResponse{}, err
 	}
-	result := CustomImagesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CustomImagesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CustomImagesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return CustomImagesClientDeletePollerResponse{}, err
@@ -251,7 +247,7 @@ func (client *CustomImagesClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *CustomImagesClient) getHandleResponse(resp *http.Response) (CustomImagesClientGetResponse, error) {
-	result := CustomImagesClientGetResponse{RawResponse: resp}
+	result := CustomImagesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomImage); err != nil {
 		return CustomImagesClientGetResponse{}, err
 	}
@@ -315,7 +311,7 @@ func (client *CustomImagesClient) listCreateRequest(ctx context.Context, resourc
 
 // listHandleResponse handles the List response.
 func (client *CustomImagesClient) listHandleResponse(resp *http.Response) (CustomImagesClientListResponse, error) {
-	result := CustomImagesClientListResponse{RawResponse: resp}
+	result := CustomImagesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomImageList); err != nil {
 		return CustomImagesClientListResponse{}, err
 	}
@@ -376,7 +372,7 @@ func (client *CustomImagesClient) updateCreateRequest(ctx context.Context, resou
 
 // updateHandleResponse handles the Update response.
 func (client *CustomImagesClient) updateHandleResponse(resp *http.Response) (CustomImagesClientUpdateResponse, error) {
-	result := CustomImagesClientUpdateResponse{RawResponse: resp}
+	result := CustomImagesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomImage); err != nil {
 		return CustomImagesClientUpdateResponse{}, err
 	}

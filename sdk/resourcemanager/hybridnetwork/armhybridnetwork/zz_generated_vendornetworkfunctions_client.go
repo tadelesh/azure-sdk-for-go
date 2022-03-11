@@ -34,17 +34,17 @@ type VendorNetworkFunctionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVendorNetworkFunctionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VendorNetworkFunctionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VendorNetworkFunctionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *VendorNetworkFunctionsClient) BeginCreateOrUpdate(ctx context.Cont
 	if err != nil {
 		return VendorNetworkFunctionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VendorNetworkFunctionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VendorNetworkFunctionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VendorNetworkFunctionsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VendorNetworkFunctionsClientCreateOrUpdatePollerResponse{}, err
@@ -178,7 +176,7 @@ func (client *VendorNetworkFunctionsClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *VendorNetworkFunctionsClient) getHandleResponse(resp *http.Response) (VendorNetworkFunctionsClientGetResponse, error) {
-	result := VendorNetworkFunctionsClientGetResponse{RawResponse: resp}
+	result := VendorNetworkFunctionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VendorNetworkFunction); err != nil {
 		return VendorNetworkFunctionsClientGetResponse{}, err
 	}
@@ -234,7 +232,7 @@ func (client *VendorNetworkFunctionsClient) listCreateRequest(ctx context.Contex
 
 // listHandleResponse handles the List response.
 func (client *VendorNetworkFunctionsClient) listHandleResponse(resp *http.Response) (VendorNetworkFunctionsClientListResponse, error) {
-	result := VendorNetworkFunctionsClientListResponse{RawResponse: resp}
+	result := VendorNetworkFunctionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VendorNetworkFunctionListResult); err != nil {
 		return VendorNetworkFunctionsClientListResponse{}, err
 	}

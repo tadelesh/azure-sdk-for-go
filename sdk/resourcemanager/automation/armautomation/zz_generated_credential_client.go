@@ -35,17 +35,17 @@ type CredentialClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCredentialClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CredentialClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CredentialClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *CredentialClient) createOrUpdateCreateRequest(ctx context.Context,
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *CredentialClient) createOrUpdateHandleResponse(resp *http.Response) (CredentialClientCreateOrUpdateResponse, error) {
-	result := CredentialClientCreateOrUpdateResponse{RawResponse: resp}
+	result := CredentialClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Credential); err != nil {
 		return CredentialClientCreateOrUpdateResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *CredentialClient) Delete(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return CredentialClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return CredentialClientDeleteResponse{RawResponse: resp}, nil
+	return CredentialClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -216,7 +216,7 @@ func (client *CredentialClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *CredentialClient) getHandleResponse(resp *http.Response) (CredentialClientGetResponse, error) {
-	result := CredentialClientGetResponse{RawResponse: resp}
+	result := CredentialClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Credential); err != nil {
 		return CredentialClientGetResponse{}, err
 	}
@@ -269,7 +269,7 @@ func (client *CredentialClient) listByAutomationAccountCreateRequest(ctx context
 
 // listByAutomationAccountHandleResponse handles the ListByAutomationAccount response.
 func (client *CredentialClient) listByAutomationAccountHandleResponse(resp *http.Response) (CredentialClientListByAutomationAccountResponse, error) {
-	result := CredentialClientListByAutomationAccountResponse{RawResponse: resp}
+	result := CredentialClientListByAutomationAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CredentialListResult); err != nil {
 		return CredentialClientListByAutomationAccountResponse{}, err
 	}
@@ -330,7 +330,7 @@ func (client *CredentialClient) updateCreateRequest(ctx context.Context, resourc
 
 // updateHandleResponse handles the Update response.
 func (client *CredentialClient) updateHandleResponse(resp *http.Response) (CredentialClientUpdateResponse, error) {
-	result := CredentialClientUpdateResponse{RawResponse: resp}
+	result := CredentialClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Credential); err != nil {
 		return CredentialClientUpdateResponse{}, err
 	}

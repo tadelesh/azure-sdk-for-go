@@ -34,17 +34,17 @@ type ManagedDatabaseSchemasClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedDatabaseSchemasClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedDatabaseSchemasClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedDatabaseSchemasClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *ManagedDatabaseSchemasClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *ManagedDatabaseSchemasClient) getHandleResponse(resp *http.Response) (ManagedDatabaseSchemasClientGetResponse, error) {
-	result := ManagedDatabaseSchemasClientGetResponse{RawResponse: resp}
+	result := ManagedDatabaseSchemasClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseSchema); err != nil {
 		return ManagedDatabaseSchemasClientGetResponse{}, err
 	}
@@ -171,7 +171,7 @@ func (client *ManagedDatabaseSchemasClient) listByDatabaseCreateRequest(ctx cont
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *ManagedDatabaseSchemasClient) listByDatabaseHandleResponse(resp *http.Response) (ManagedDatabaseSchemasClientListByDatabaseResponse, error) {
-	result := ManagedDatabaseSchemasClientListByDatabaseResponse{RawResponse: resp}
+	result := ManagedDatabaseSchemasClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseSchemaListResult); err != nil {
 		return ManagedDatabaseSchemasClientListByDatabaseResponse{}, err
 	}

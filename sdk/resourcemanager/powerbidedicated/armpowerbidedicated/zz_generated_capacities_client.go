@@ -35,17 +35,17 @@ type CapacitiesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCapacitiesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CapacitiesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CapacitiesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *CapacitiesClient) checkNameAvailabilityCreateRequest(ctx context.C
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *CapacitiesClient) checkNameAvailabilityHandleResponse(resp *http.Response) (CapacitiesClientCheckNameAvailabilityResponse, error) {
-	result := CapacitiesClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := CapacitiesClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckCapacityNameAvailabilityResult); err != nil {
 		return CapacitiesClientCheckNameAvailabilityResponse{}, err
 	}
@@ -114,9 +114,7 @@ func (client *CapacitiesClient) BeginCreate(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return CapacitiesClientCreatePollerResponse{}, err
 	}
-	result := CapacitiesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CapacitiesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("CapacitiesClient.Create", "", resp, client.pl)
 	if err != nil {
 		return CapacitiesClientCreatePollerResponse{}, err
@@ -182,9 +180,7 @@ func (client *CapacitiesClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return CapacitiesClientDeletePollerResponse{}, err
 	}
-	result := CapacitiesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CapacitiesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CapacitiesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return CapacitiesClientDeletePollerResponse{}, err
@@ -287,7 +283,7 @@ func (client *CapacitiesClient) getDetailsCreateRequest(ctx context.Context, res
 
 // getDetailsHandleResponse handles the GetDetails response.
 func (client *CapacitiesClient) getDetailsHandleResponse(resp *http.Response) (CapacitiesClientGetDetailsResponse, error) {
-	result := CapacitiesClientGetDetailsResponse{RawResponse: resp}
+	result := CapacitiesClientGetDetailsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DedicatedCapacity); err != nil {
 		return CapacitiesClientGetDetailsResponse{}, err
 	}
@@ -297,19 +293,13 @@ func (client *CapacitiesClient) getDetailsHandleResponse(resp *http.Response) (C
 // List - Lists all the Dedicated capacities for the given subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - CapacitiesClientListOptions contains the optional parameters for the CapacitiesClient.List method.
-func (client *CapacitiesClient) List(ctx context.Context, options *CapacitiesClientListOptions) (CapacitiesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, options)
-	if err != nil {
-		return CapacitiesClientListResponse{}, err
+func (client *CapacitiesClient) List(options *CapacitiesClientListOptions) *CapacitiesClientListPager {
+	return &CapacitiesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return CapacitiesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return CapacitiesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -332,7 +322,7 @@ func (client *CapacitiesClient) listCreateRequest(ctx context.Context, options *
 
 // listHandleResponse handles the List response.
 func (client *CapacitiesClient) listHandleResponse(resp *http.Response) (CapacitiesClientListResponse, error) {
-	result := CapacitiesClientListResponse{RawResponse: resp}
+	result := CapacitiesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DedicatedCapacities); err != nil {
 		return CapacitiesClientListResponse{}, err
 	}
@@ -345,19 +335,13 @@ func (client *CapacitiesClient) listHandleResponse(resp *http.Response) (Capacit
 // must be at least 1 character in length, and no more than 90.
 // options - CapacitiesClientListByResourceGroupOptions contains the optional parameters for the CapacitiesClient.ListByResourceGroup
 // method.
-func (client *CapacitiesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, options *CapacitiesClientListByResourceGroupOptions) (CapacitiesClientListByResourceGroupResponse, error) {
-	req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-	if err != nil {
-		return CapacitiesClientListByResourceGroupResponse{}, err
+func (client *CapacitiesClient) ListByResourceGroup(resourceGroupName string, options *CapacitiesClientListByResourceGroupOptions) *CapacitiesClientListByResourceGroupPager {
+	return &CapacitiesClientListByResourceGroupPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return CapacitiesClientListByResourceGroupResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return CapacitiesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByResourceGroupHandleResponse(resp)
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -384,7 +368,7 @@ func (client *CapacitiesClient) listByResourceGroupCreateRequest(ctx context.Con
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *CapacitiesClient) listByResourceGroupHandleResponse(resp *http.Response) (CapacitiesClientListByResourceGroupResponse, error) {
-	result := CapacitiesClientListByResourceGroupResponse{RawResponse: resp}
+	result := CapacitiesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DedicatedCapacities); err != nil {
 		return CapacitiesClientListByResourceGroupResponse{}, err
 	}
@@ -429,7 +413,7 @@ func (client *CapacitiesClient) listSKUsCreateRequest(ctx context.Context, optio
 
 // listSKUsHandleResponse handles the ListSKUs response.
 func (client *CapacitiesClient) listSKUsHandleResponse(resp *http.Response) (CapacitiesClientListSKUsResponse, error) {
-	result := CapacitiesClientListSKUsResponse{RawResponse: resp}
+	result := CapacitiesClientListSKUsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUEnumerationForNewResourceResult); err != nil {
 		return CapacitiesClientListSKUsResponse{}, err
 	}
@@ -487,7 +471,7 @@ func (client *CapacitiesClient) listSKUsForCapacityCreateRequest(ctx context.Con
 
 // listSKUsForCapacityHandleResponse handles the ListSKUsForCapacity response.
 func (client *CapacitiesClient) listSKUsForCapacityHandleResponse(resp *http.Response) (CapacitiesClientListSKUsForCapacityResponse, error) {
-	result := CapacitiesClientListSKUsForCapacityResponse{RawResponse: resp}
+	result := CapacitiesClientListSKUsForCapacityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUEnumerationForExistingResourceResult); err != nil {
 		return CapacitiesClientListSKUsForCapacityResponse{}, err
 	}
@@ -506,9 +490,7 @@ func (client *CapacitiesClient) BeginResume(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return CapacitiesClientResumePollerResponse{}, err
 	}
-	result := CapacitiesClientResumePollerResponse{
-		RawResponse: resp,
-	}
+	result := CapacitiesClientResumePollerResponse{}
 	pt, err := armruntime.NewPoller("CapacitiesClient.Resume", "", resp, client.pl)
 	if err != nil {
 		return CapacitiesClientResumePollerResponse{}, err
@@ -574,9 +556,7 @@ func (client *CapacitiesClient) BeginSuspend(ctx context.Context, resourceGroupN
 	if err != nil {
 		return CapacitiesClientSuspendPollerResponse{}, err
 	}
-	result := CapacitiesClientSuspendPollerResponse{
-		RawResponse: resp,
-	}
+	result := CapacitiesClientSuspendPollerResponse{}
 	pt, err := armruntime.NewPoller("CapacitiesClient.Suspend", "", resp, client.pl)
 	if err != nil {
 		return CapacitiesClientSuspendPollerResponse{}, err
@@ -643,9 +623,7 @@ func (client *CapacitiesClient) BeginUpdate(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return CapacitiesClientUpdatePollerResponse{}, err
 	}
-	result := CapacitiesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CapacitiesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("CapacitiesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return CapacitiesClientUpdatePollerResponse{}, err

@@ -38,19 +38,19 @@ type ReplicationRecoveryPlansClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReplicationRecoveryPlansClient(resourceName string, resourceGroupName string, subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReplicationRecoveryPlansClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReplicationRecoveryPlansClient{
 		resourceName:      resourceName,
 		resourceGroupName: resourceGroupName,
 		subscriptionID:    subscriptionID,
-		host:              string(cp.Endpoint),
-		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:              string(ep),
+		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -66,9 +66,7 @@ func (client *ReplicationRecoveryPlansClient) BeginCreate(ctx context.Context, r
 	if err != nil {
 		return ReplicationRecoveryPlansClientCreatePollerResponse{}, err
 	}
-	result := ReplicationRecoveryPlansClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationRecoveryPlansClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationRecoveryPlansClient.Create", "", resp, client.pl)
 	if err != nil {
 		return ReplicationRecoveryPlansClientCreatePollerResponse{}, err
@@ -120,7 +118,7 @@ func (client *ReplicationRecoveryPlansClient) createCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, input)
@@ -136,9 +134,7 @@ func (client *ReplicationRecoveryPlansClient) BeginDelete(ctx context.Context, r
 	if err != nil {
 		return ReplicationRecoveryPlansClientDeletePollerResponse{}, err
 	}
-	result := ReplicationRecoveryPlansClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationRecoveryPlansClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationRecoveryPlansClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ReplicationRecoveryPlansClientDeletePollerResponse{}, err
@@ -190,7 +186,7 @@ func (client *ReplicationRecoveryPlansClient) deleteCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	return req, nil
 }
@@ -205,9 +201,7 @@ func (client *ReplicationRecoveryPlansClient) BeginFailoverCancel(ctx context.Co
 	if err != nil {
 		return ReplicationRecoveryPlansClientFailoverCancelPollerResponse{}, err
 	}
-	result := ReplicationRecoveryPlansClientFailoverCancelPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationRecoveryPlansClientFailoverCancelPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationRecoveryPlansClient.FailoverCancel", "", resp, client.pl)
 	if err != nil {
 		return ReplicationRecoveryPlansClientFailoverCancelPollerResponse{}, err
@@ -259,7 +253,7 @@ func (client *ReplicationRecoveryPlansClient) failoverCancelCreateRequest(ctx co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -275,9 +269,7 @@ func (client *ReplicationRecoveryPlansClient) BeginFailoverCommit(ctx context.Co
 	if err != nil {
 		return ReplicationRecoveryPlansClientFailoverCommitPollerResponse{}, err
 	}
-	result := ReplicationRecoveryPlansClientFailoverCommitPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationRecoveryPlansClientFailoverCommitPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationRecoveryPlansClient.FailoverCommit", "", resp, client.pl)
 	if err != nil {
 		return ReplicationRecoveryPlansClientFailoverCommitPollerResponse{}, err
@@ -329,7 +321,7 @@ func (client *ReplicationRecoveryPlansClient) failoverCommitCreateRequest(ctx co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -379,7 +371,7 @@ func (client *ReplicationRecoveryPlansClient) getCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -387,7 +379,7 @@ func (client *ReplicationRecoveryPlansClient) getCreateRequest(ctx context.Conte
 
 // getHandleResponse handles the Get response.
 func (client *ReplicationRecoveryPlansClient) getHandleResponse(resp *http.Response) (ReplicationRecoveryPlansClientGetResponse, error) {
-	result := ReplicationRecoveryPlansClientGetResponse{RawResponse: resp}
+	result := ReplicationRecoveryPlansClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecoveryPlan); err != nil {
 		return ReplicationRecoveryPlansClientGetResponse{}, err
 	}
@@ -430,7 +422,7 @@ func (client *ReplicationRecoveryPlansClient) listCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -438,7 +430,7 @@ func (client *ReplicationRecoveryPlansClient) listCreateRequest(ctx context.Cont
 
 // listHandleResponse handles the List response.
 func (client *ReplicationRecoveryPlansClient) listHandleResponse(resp *http.Response) (ReplicationRecoveryPlansClientListResponse, error) {
-	result := ReplicationRecoveryPlansClientListResponse{RawResponse: resp}
+	result := ReplicationRecoveryPlansClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecoveryPlanCollection); err != nil {
 		return ReplicationRecoveryPlansClientListResponse{}, err
 	}
@@ -456,9 +448,7 @@ func (client *ReplicationRecoveryPlansClient) BeginPlannedFailover(ctx context.C
 	if err != nil {
 		return ReplicationRecoveryPlansClientPlannedFailoverPollerResponse{}, err
 	}
-	result := ReplicationRecoveryPlansClientPlannedFailoverPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationRecoveryPlansClientPlannedFailoverPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationRecoveryPlansClient.PlannedFailover", "", resp, client.pl)
 	if err != nil {
 		return ReplicationRecoveryPlansClientPlannedFailoverPollerResponse{}, err
@@ -510,7 +500,7 @@ func (client *ReplicationRecoveryPlansClient) plannedFailoverCreateRequest(ctx c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, input)
@@ -526,9 +516,7 @@ func (client *ReplicationRecoveryPlansClient) BeginReprotect(ctx context.Context
 	if err != nil {
 		return ReplicationRecoveryPlansClientReprotectPollerResponse{}, err
 	}
-	result := ReplicationRecoveryPlansClientReprotectPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationRecoveryPlansClientReprotectPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationRecoveryPlansClient.Reprotect", "", resp, client.pl)
 	if err != nil {
 		return ReplicationRecoveryPlansClientReprotectPollerResponse{}, err
@@ -580,7 +568,7 @@ func (client *ReplicationRecoveryPlansClient) reprotectCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -597,9 +585,7 @@ func (client *ReplicationRecoveryPlansClient) BeginTestFailover(ctx context.Cont
 	if err != nil {
 		return ReplicationRecoveryPlansClientTestFailoverPollerResponse{}, err
 	}
-	result := ReplicationRecoveryPlansClientTestFailoverPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationRecoveryPlansClientTestFailoverPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationRecoveryPlansClient.TestFailover", "", resp, client.pl)
 	if err != nil {
 		return ReplicationRecoveryPlansClientTestFailoverPollerResponse{}, err
@@ -651,7 +637,7 @@ func (client *ReplicationRecoveryPlansClient) testFailoverCreateRequest(ctx cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, input)
@@ -668,9 +654,7 @@ func (client *ReplicationRecoveryPlansClient) BeginTestFailoverCleanup(ctx conte
 	if err != nil {
 		return ReplicationRecoveryPlansClientTestFailoverCleanupPollerResponse{}, err
 	}
-	result := ReplicationRecoveryPlansClientTestFailoverCleanupPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationRecoveryPlansClientTestFailoverCleanupPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationRecoveryPlansClient.TestFailoverCleanup", "", resp, client.pl)
 	if err != nil {
 		return ReplicationRecoveryPlansClientTestFailoverCleanupPollerResponse{}, err
@@ -722,7 +706,7 @@ func (client *ReplicationRecoveryPlansClient) testFailoverCleanupCreateRequest(c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, input)
@@ -739,9 +723,7 @@ func (client *ReplicationRecoveryPlansClient) BeginUnplannedFailover(ctx context
 	if err != nil {
 		return ReplicationRecoveryPlansClientUnplannedFailoverPollerResponse{}, err
 	}
-	result := ReplicationRecoveryPlansClientUnplannedFailoverPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationRecoveryPlansClientUnplannedFailoverPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationRecoveryPlansClient.UnplannedFailover", "", resp, client.pl)
 	if err != nil {
 		return ReplicationRecoveryPlansClientUnplannedFailoverPollerResponse{}, err
@@ -793,7 +775,7 @@ func (client *ReplicationRecoveryPlansClient) unplannedFailoverCreateRequest(ctx
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, input)
@@ -810,9 +792,7 @@ func (client *ReplicationRecoveryPlansClient) BeginUpdate(ctx context.Context, r
 	if err != nil {
 		return ReplicationRecoveryPlansClientUpdatePollerResponse{}, err
 	}
-	result := ReplicationRecoveryPlansClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationRecoveryPlansClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationRecoveryPlansClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ReplicationRecoveryPlansClientUpdatePollerResponse{}, err
@@ -864,7 +844,7 @@ func (client *ReplicationRecoveryPlansClient) updateCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, input)

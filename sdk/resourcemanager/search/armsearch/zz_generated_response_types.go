@@ -11,145 +11,66 @@ package armsearch
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // AdminKeysClientGetResponse contains the response from method AdminKeysClient.Get.
 type AdminKeysClientGetResponse struct {
-	AdminKeysClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AdminKeysClientGetResult contains the result from method AdminKeysClient.Get.
-type AdminKeysClientGetResult struct {
 	AdminKeyResult
 }
 
 // AdminKeysClientRegenerateResponse contains the response from method AdminKeysClient.Regenerate.
 type AdminKeysClientRegenerateResponse struct {
-	AdminKeysClientRegenerateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AdminKeysClientRegenerateResult contains the result from method AdminKeysClient.Regenerate.
-type AdminKeysClientRegenerateResult struct {
 	AdminKeyResult
 }
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	OperationListResult
 }
 
 // PrivateEndpointConnectionsClientDeleteResponse contains the response from method PrivateEndpointConnectionsClient.Delete.
 type PrivateEndpointConnectionsClientDeleteResponse struct {
-	PrivateEndpointConnectionsClientDeleteResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateEndpointConnectionsClientDeleteResult contains the result from method PrivateEndpointConnectionsClient.Delete.
-type PrivateEndpointConnectionsClientDeleteResult struct {
 	PrivateEndpointConnection
 }
 
 // PrivateEndpointConnectionsClientGetResponse contains the response from method PrivateEndpointConnectionsClient.Get.
 type PrivateEndpointConnectionsClientGetResponse struct {
-	PrivateEndpointConnectionsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateEndpointConnectionsClientGetResult contains the result from method PrivateEndpointConnectionsClient.Get.
-type PrivateEndpointConnectionsClientGetResult struct {
 	PrivateEndpointConnection
 }
 
 // PrivateEndpointConnectionsClientListByServiceResponse contains the response from method PrivateEndpointConnectionsClient.ListByService.
 type PrivateEndpointConnectionsClientListByServiceResponse struct {
-	PrivateEndpointConnectionsClientListByServiceResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateEndpointConnectionsClientListByServiceResult contains the result from method PrivateEndpointConnectionsClient.ListByService.
-type PrivateEndpointConnectionsClientListByServiceResult struct {
 	PrivateEndpointConnectionListResult
 }
 
 // PrivateEndpointConnectionsClientUpdateResponse contains the response from method PrivateEndpointConnectionsClient.Update.
 type PrivateEndpointConnectionsClientUpdateResponse struct {
-	PrivateEndpointConnectionsClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateEndpointConnectionsClientUpdateResult contains the result from method PrivateEndpointConnectionsClient.Update.
-type PrivateEndpointConnectionsClientUpdateResult struct {
 	PrivateEndpointConnection
 }
 
 // PrivateLinkResourcesClientListSupportedResponse contains the response from method PrivateLinkResourcesClient.ListSupported.
 type PrivateLinkResourcesClientListSupportedResponse struct {
-	PrivateLinkResourcesClientListSupportedResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateLinkResourcesClientListSupportedResult contains the result from method PrivateLinkResourcesClient.ListSupported.
-type PrivateLinkResourcesClientListSupportedResult struct {
 	PrivateLinkResourcesResult
 }
 
 // QueryKeysClientCreateResponse contains the response from method QueryKeysClient.Create.
 type QueryKeysClientCreateResponse struct {
-	QueryKeysClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// QueryKeysClientCreateResult contains the result from method QueryKeysClient.Create.
-type QueryKeysClientCreateResult struct {
 	QueryKey
 }
 
 // QueryKeysClientDeleteResponse contains the response from method QueryKeysClient.Delete.
 type QueryKeysClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // QueryKeysClientListBySearchServiceResponse contains the response from method QueryKeysClient.ListBySearchService.
 type QueryKeysClientListBySearchServiceResponse struct {
-	QueryKeysClientListBySearchServiceResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// QueryKeysClientListBySearchServiceResult contains the result from method QueryKeysClient.ListBySearchService.
-type QueryKeysClientListBySearchServiceResult struct {
 	ListQueryKeysResult
 }
 
 // ServicesClientCheckNameAvailabilityResponse contains the response from method ServicesClient.CheckNameAvailability.
 type ServicesClientCheckNameAvailabilityResponse struct {
-	ServicesClientCheckNameAvailabilityResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ServicesClientCheckNameAvailabilityResult contains the result from method ServicesClient.CheckNameAvailability.
-type ServicesClientCheckNameAvailabilityResult struct {
 	CheckNameAvailabilityOutput
 }
 
@@ -157,9 +78,6 @@ type ServicesClientCheckNameAvailabilityResult struct {
 type ServicesClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ServicesClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -167,11 +85,10 @@ type ServicesClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ServicesClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ServicesClientCreateOrUpdateResponse, error) {
 	respType := ServicesClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Service)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Service)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -184,78 +101,41 @@ func (l *ServicesClientCreateOrUpdatePollerResponse) Resume(ctx context.Context,
 	poller := &ServicesClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ServicesClientCreateOrUpdateResponse contains the response from method ServicesClient.CreateOrUpdate.
 type ServicesClientCreateOrUpdateResponse struct {
-	ServicesClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ServicesClientCreateOrUpdateResult contains the result from method ServicesClient.CreateOrUpdate.
-type ServicesClientCreateOrUpdateResult struct {
 	Service
 }
 
 // ServicesClientDeleteResponse contains the response from method ServicesClient.Delete.
 type ServicesClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // ServicesClientGetResponse contains the response from method ServicesClient.Get.
 type ServicesClientGetResponse struct {
-	ServicesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ServicesClientGetResult contains the result from method ServicesClient.Get.
-type ServicesClientGetResult struct {
 	Service
 }
 
 // ServicesClientListByResourceGroupResponse contains the response from method ServicesClient.ListByResourceGroup.
 type ServicesClientListByResourceGroupResponse struct {
-	ServicesClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ServicesClientListByResourceGroupResult contains the result from method ServicesClient.ListByResourceGroup.
-type ServicesClientListByResourceGroupResult struct {
 	ServiceListResult
 }
 
 // ServicesClientListBySubscriptionResponse contains the response from method ServicesClient.ListBySubscription.
 type ServicesClientListBySubscriptionResponse struct {
-	ServicesClientListBySubscriptionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ServicesClientListBySubscriptionResult contains the result from method ServicesClient.ListBySubscription.
-type ServicesClientListBySubscriptionResult struct {
 	ServiceListResult
 }
 
 // ServicesClientUpdateResponse contains the response from method ServicesClient.Update.
 type ServicesClientUpdateResponse struct {
-	ServicesClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ServicesClientUpdateResult contains the result from method ServicesClient.Update.
-type ServicesClientUpdateResult struct {
 	Service
 }
 
@@ -263,9 +143,6 @@ type ServicesClientUpdateResult struct {
 type SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *SharedPrivateLinkResourcesClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -273,11 +150,10 @@ type SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SharedPrivateLinkResourcesClientCreateOrUpdateResponse, error) {
 	respType := SharedPrivateLinkResourcesClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.SharedPrivateLinkResource)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.SharedPrivateLinkResource)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -290,24 +166,16 @@ func (l *SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse) Resume(ct
 	poller := &SharedPrivateLinkResourcesClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // SharedPrivateLinkResourcesClientCreateOrUpdateResponse contains the response from method SharedPrivateLinkResourcesClient.CreateOrUpdate.
 type SharedPrivateLinkResourcesClientCreateOrUpdateResponse struct {
-	SharedPrivateLinkResourcesClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// SharedPrivateLinkResourcesClientCreateOrUpdateResult contains the result from method SharedPrivateLinkResourcesClient.CreateOrUpdate.
-type SharedPrivateLinkResourcesClientCreateOrUpdateResult struct {
 	SharedPrivateLinkResource
 }
 
@@ -315,9 +183,6 @@ type SharedPrivateLinkResourcesClientCreateOrUpdateResult struct {
 type SharedPrivateLinkResourcesClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *SharedPrivateLinkResourcesClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -325,11 +190,10 @@ type SharedPrivateLinkResourcesClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l SharedPrivateLinkResourcesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SharedPrivateLinkResourcesClientDeleteResponse, error) {
 	respType := SharedPrivateLinkResourcesClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -342,41 +206,25 @@ func (l *SharedPrivateLinkResourcesClientDeletePollerResponse) Resume(ctx contex
 	poller := &SharedPrivateLinkResourcesClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // SharedPrivateLinkResourcesClientDeleteResponse contains the response from method SharedPrivateLinkResourcesClient.Delete.
 type SharedPrivateLinkResourcesClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // SharedPrivateLinkResourcesClientGetResponse contains the response from method SharedPrivateLinkResourcesClient.Get.
 type SharedPrivateLinkResourcesClientGetResponse struct {
-	SharedPrivateLinkResourcesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// SharedPrivateLinkResourcesClientGetResult contains the result from method SharedPrivateLinkResourcesClient.Get.
-type SharedPrivateLinkResourcesClientGetResult struct {
 	SharedPrivateLinkResource
 }
 
 // SharedPrivateLinkResourcesClientListByServiceResponse contains the response from method SharedPrivateLinkResourcesClient.ListByService.
 type SharedPrivateLinkResourcesClientListByServiceResponse struct {
-	SharedPrivateLinkResourcesClientListByServiceResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// SharedPrivateLinkResourcesClientListByServiceResult contains the result from method SharedPrivateLinkResourcesClient.ListByService.
-type SharedPrivateLinkResourcesClientListByServiceResult struct {
 	SharedPrivateLinkResourceListResult
 }

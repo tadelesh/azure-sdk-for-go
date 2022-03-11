@@ -34,17 +34,17 @@ type ProactiveDetectionConfigurationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProactiveDetectionConfigurationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ProactiveDetectionConfigurationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProactiveDetectionConfigurationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *ProactiveDetectionConfigurationsClient) getCreateRequest(ctx conte
 
 // getHandleResponse handles the Get response.
 func (client *ProactiveDetectionConfigurationsClient) getHandleResponse(resp *http.Response) (ProactiveDetectionConfigurationsClientGetResponse, error) {
-	result := ProactiveDetectionConfigurationsClientGetResponse{RawResponse: resp}
+	result := ProactiveDetectionConfigurationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentProactiveDetectionConfiguration); err != nil {
 		return ProactiveDetectionConfigurationsClientGetResponse{}, err
 	}
@@ -159,7 +159,7 @@ func (client *ProactiveDetectionConfigurationsClient) listCreateRequest(ctx cont
 
 // listHandleResponse handles the List response.
 func (client *ProactiveDetectionConfigurationsClient) listHandleResponse(resp *http.Response) (ProactiveDetectionConfigurationsClientListResponse, error) {
-	result := ProactiveDetectionConfigurationsClientListResponse{RawResponse: resp}
+	result := ProactiveDetectionConfigurationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentProactiveDetectionConfigurationArray); err != nil {
 		return ProactiveDetectionConfigurationsClientListResponse{}, err
 	}
@@ -221,7 +221,7 @@ func (client *ProactiveDetectionConfigurationsClient) updateCreateRequest(ctx co
 
 // updateHandleResponse handles the Update response.
 func (client *ProactiveDetectionConfigurationsClient) updateHandleResponse(resp *http.Response) (ProactiveDetectionConfigurationsClientUpdateResponse, error) {
-	result := ProactiveDetectionConfigurationsClientUpdateResponse{RawResponse: resp}
+	result := ProactiveDetectionConfigurationsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentProactiveDetectionConfiguration); err != nil {
 		return ProactiveDetectionConfigurationsClientUpdateResponse{}, err
 	}

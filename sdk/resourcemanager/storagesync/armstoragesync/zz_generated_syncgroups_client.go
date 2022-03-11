@@ -34,17 +34,17 @@ type SyncGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSyncGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SyncGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SyncGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *SyncGroupsClient) createCreateRequest(ctx context.Context, resourc
 
 // createHandleResponse handles the Create response.
 func (client *SyncGroupsClient) createHandleResponse(resp *http.Response) (SyncGroupsClientCreateResponse, error) {
-	result := SyncGroupsClientCreateResponse{RawResponse: resp}
+	result := SyncGroupsClientCreateResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -169,7 +169,7 @@ func (client *SyncGroupsClient) deleteCreateRequest(ctx context.Context, resourc
 
 // deleteHandleResponse handles the Delete response.
 func (client *SyncGroupsClient) deleteHandleResponse(resp *http.Response) (SyncGroupsClientDeleteResponse, error) {
-	result := SyncGroupsClientDeleteResponse{RawResponse: resp}
+	result := SyncGroupsClientDeleteResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -232,7 +232,7 @@ func (client *SyncGroupsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *SyncGroupsClient) getHandleResponse(resp *http.Response) (SyncGroupsClientGetResponse, error) {
-	result := SyncGroupsClientGetResponse{RawResponse: resp}
+	result := SyncGroupsClientGetResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -251,19 +251,13 @@ func (client *SyncGroupsClient) getHandleResponse(resp *http.Response) (SyncGrou
 // storageSyncServiceName - Name of Storage Sync Service resource.
 // options - SyncGroupsClientListByStorageSyncServiceOptions contains the optional parameters for the SyncGroupsClient.ListByStorageSyncService
 // method.
-func (client *SyncGroupsClient) ListByStorageSyncService(ctx context.Context, resourceGroupName string, storageSyncServiceName string, options *SyncGroupsClientListByStorageSyncServiceOptions) (SyncGroupsClientListByStorageSyncServiceResponse, error) {
-	req, err := client.listByStorageSyncServiceCreateRequest(ctx, resourceGroupName, storageSyncServiceName, options)
-	if err != nil {
-		return SyncGroupsClientListByStorageSyncServiceResponse{}, err
+func (client *SyncGroupsClient) ListByStorageSyncService(resourceGroupName string, storageSyncServiceName string, options *SyncGroupsClientListByStorageSyncServiceOptions) *SyncGroupsClientListByStorageSyncServicePager {
+	return &SyncGroupsClientListByStorageSyncServicePager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByStorageSyncServiceCreateRequest(ctx, resourceGroupName, storageSyncServiceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return SyncGroupsClientListByStorageSyncServiceResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return SyncGroupsClientListByStorageSyncServiceResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByStorageSyncServiceHandleResponse(resp)
 }
 
 // listByStorageSyncServiceCreateRequest creates the ListByStorageSyncService request.
@@ -294,7 +288,7 @@ func (client *SyncGroupsClient) listByStorageSyncServiceCreateRequest(ctx contex
 
 // listByStorageSyncServiceHandleResponse handles the ListByStorageSyncService response.
 func (client *SyncGroupsClient) listByStorageSyncServiceHandleResponse(resp *http.Response) (SyncGroupsClientListByStorageSyncServiceResponse, error) {
-	result := SyncGroupsClientListByStorageSyncServiceResponse{RawResponse: resp}
+	result := SyncGroupsClientListByStorageSyncServiceResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}

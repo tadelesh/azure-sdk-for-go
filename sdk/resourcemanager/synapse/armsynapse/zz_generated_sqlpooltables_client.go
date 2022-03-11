@@ -34,17 +34,17 @@ type SQLPoolTablesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLPoolTablesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLPoolTablesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLPoolTablesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -112,7 +112,7 @@ func (client *SQLPoolTablesClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *SQLPoolTablesClient) getHandleResponse(resp *http.Response) (SQLPoolTablesClientGetResponse, error) {
-	result := SQLPoolTablesClientGetResponse{RawResponse: resp}
+	result := SQLPoolTablesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLPoolTable); err != nil {
 		return SQLPoolTablesClientGetResponse{}, err
 	}
@@ -178,7 +178,7 @@ func (client *SQLPoolTablesClient) listBySchemaCreateRequest(ctx context.Context
 
 // listBySchemaHandleResponse handles the ListBySchema response.
 func (client *SQLPoolTablesClient) listBySchemaHandleResponse(resp *http.Response) (SQLPoolTablesClientListBySchemaResponse, error) {
-	result := SQLPoolTablesClientListBySchemaResponse{RawResponse: resp}
+	result := SQLPoolTablesClientListBySchemaResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLPoolTableListResult); err != nil {
 		return SQLPoolTablesClientListBySchemaResponse{}, err
 	}

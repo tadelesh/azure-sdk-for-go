@@ -34,17 +34,17 @@ type ServiceClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServiceClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServiceClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServiceClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -97,7 +97,7 @@ func (client *ServiceClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *ServiceClient) getHandleResponse(resp *http.Response) (ServiceClientGetResponse, error) {
-	result := ServiceClientGetResponse{RawResponse: resp}
+	result := ServiceClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceResourceDescription); err != nil {
 		return ServiceClientGetResponse{}, err
 	}
@@ -147,7 +147,7 @@ func (client *ServiceClient) listCreateRequest(ctx context.Context, resourceGrou
 
 // listHandleResponse handles the List response.
 func (client *ServiceClient) listHandleResponse(resp *http.Response) (ServiceClientListResponse, error) {
-	result := ServiceClientListResponse{RawResponse: resp}
+	result := ServiceClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceResourceDescriptionList); err != nil {
 		return ServiceClientListResponse{}, err
 	}

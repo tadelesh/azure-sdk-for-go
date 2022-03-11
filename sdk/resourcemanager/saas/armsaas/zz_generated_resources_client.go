@@ -32,16 +32,16 @@ type ResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewResourcesClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ResourcesClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -77,7 +77,7 @@ func (client *ResourcesClient) listCreateRequest(ctx context.Context, options *R
 
 // listHandleResponse handles the List response.
 func (client *ResourcesClient) listHandleResponse(resp *http.Response) (ResourcesClientListResponse, error) {
-	result := ResourcesClientListResponse{RawResponse: resp}
+	result := ResourcesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceResponseWithContinuation); err != nil {
 		return ResourcesClientListResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *ResourcesClient) listAccessTokenCreateRequest(ctx context.Context,
 
 // listAccessTokenHandleResponse handles the ListAccessToken response.
 func (client *ResourcesClient) listAccessTokenHandleResponse(resp *http.Response) (ResourcesClientListAccessTokenResponse, error) {
-	result := ResourcesClientListAccessTokenResponse{RawResponse: resp}
+	result := ResourcesClientListAccessTokenResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessTokenResult); err != nil {
 		return ResourcesClientListAccessTokenResponse{}, err
 	}

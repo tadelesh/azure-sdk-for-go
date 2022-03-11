@@ -35,17 +35,17 @@ type ElasticPoolsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewElasticPoolsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ElasticPoolsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ElasticPoolsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *ElasticPoolsClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return ElasticPoolsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ElasticPoolsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ElasticPoolsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ElasticPoolsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ElasticPoolsClientCreateOrUpdatePollerResponse{}, err
@@ -118,7 +116,7 @@ func (client *ElasticPoolsClient) createOrUpdateCreateRequest(ctx context.Contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-11-01-preview")
+	reqQP.Set("api-version", "2021-08-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -137,9 +135,7 @@ func (client *ElasticPoolsClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return ElasticPoolsClientDeletePollerResponse{}, err
 	}
-	result := ElasticPoolsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ElasticPoolsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ElasticPoolsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ElasticPoolsClientDeletePollerResponse{}, err
@@ -191,7 +187,7 @@ func (client *ElasticPoolsClient) deleteCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-11-01-preview")
+	reqQP.Set("api-version", "2021-08-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	return req, nil
 }
@@ -209,9 +205,7 @@ func (client *ElasticPoolsClient) BeginFailover(ctx context.Context, resourceGro
 	if err != nil {
 		return ElasticPoolsClientFailoverPollerResponse{}, err
 	}
-	result := ElasticPoolsClientFailoverPollerResponse{
-		RawResponse: resp,
-	}
+	result := ElasticPoolsClientFailoverPollerResponse{}
 	pt, err := armruntime.NewPoller("ElasticPoolsClient.Failover", "", resp, client.pl)
 	if err != nil {
 		return ElasticPoolsClientFailoverPollerResponse{}, err
@@ -263,7 +257,7 @@ func (client *ElasticPoolsClient) failoverCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-11-01-preview")
+	reqQP.Set("api-version", "2021-08-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	return req, nil
 }
@@ -314,7 +308,7 @@ func (client *ElasticPoolsClient) getCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-11-01-preview")
+	reqQP.Set("api-version", "2021-08-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -322,7 +316,7 @@ func (client *ElasticPoolsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *ElasticPoolsClient) getHandleResponse(resp *http.Response) (ElasticPoolsClientGetResponse, error) {
-	result := ElasticPoolsClientGetResponse{RawResponse: resp}
+	result := ElasticPoolsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ElasticPool); err != nil {
 		return ElasticPoolsClientGetResponse{}, err
 	}
@@ -369,9 +363,9 @@ func (client *ElasticPoolsClient) listByServerCreateRequest(ctx context.Context,
 	}
 	reqQP := req.Raw().URL.Query()
 	if options != nil && options.Skip != nil {
-		reqQP.Set("$skip", strconv.FormatInt(int64(*options.Skip), 10))
+		reqQP.Set("$skip", strconv.FormatInt(*options.Skip, 10))
 	}
-	reqQP.Set("api-version", "2020-11-01-preview")
+	reqQP.Set("api-version", "2021-08-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -379,7 +373,7 @@ func (client *ElasticPoolsClient) listByServerCreateRequest(ctx context.Context,
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *ElasticPoolsClient) listByServerHandleResponse(resp *http.Response) (ElasticPoolsClientListByServerResponse, error) {
-	result := ElasticPoolsClientListByServerResponse{RawResponse: resp}
+	result := ElasticPoolsClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ElasticPoolListResult); err != nil {
 		return ElasticPoolsClientListByServerResponse{}, err
 	}
@@ -394,19 +388,13 @@ func (client *ElasticPoolsClient) listByServerHandleResponse(resp *http.Response
 // elasticPoolName - The name of the elastic pool.
 // options - ElasticPoolsClientListMetricDefinitionsOptions contains the optional parameters for the ElasticPoolsClient.ListMetricDefinitions
 // method.
-func (client *ElasticPoolsClient) ListMetricDefinitions(ctx context.Context, resourceGroupName string, serverName string, elasticPoolName string, options *ElasticPoolsClientListMetricDefinitionsOptions) (ElasticPoolsClientListMetricDefinitionsResponse, error) {
-	req, err := client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, serverName, elasticPoolName, options)
-	if err != nil {
-		return ElasticPoolsClientListMetricDefinitionsResponse{}, err
+func (client *ElasticPoolsClient) ListMetricDefinitions(resourceGroupName string, serverName string, elasticPoolName string, options *ElasticPoolsClientListMetricDefinitionsOptions) *ElasticPoolsClientListMetricDefinitionsPager {
+	return &ElasticPoolsClientListMetricDefinitionsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, serverName, elasticPoolName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ElasticPoolsClientListMetricDefinitionsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ElasticPoolsClientListMetricDefinitionsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listMetricDefinitionsHandleResponse(resp)
 }
 
 // listMetricDefinitionsCreateRequest creates the ListMetricDefinitions request.
@@ -441,7 +429,7 @@ func (client *ElasticPoolsClient) listMetricDefinitionsCreateRequest(ctx context
 
 // listMetricDefinitionsHandleResponse handles the ListMetricDefinitions response.
 func (client *ElasticPoolsClient) listMetricDefinitionsHandleResponse(resp *http.Response) (ElasticPoolsClientListMetricDefinitionsResponse, error) {
-	result := ElasticPoolsClientListMetricDefinitionsResponse{RawResponse: resp}
+	result := ElasticPoolsClientListMetricDefinitionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetricDefinitionListResult); err != nil {
 		return ElasticPoolsClientListMetricDefinitionsResponse{}, err
 	}
@@ -457,19 +445,13 @@ func (client *ElasticPoolsClient) listMetricDefinitionsHandleResponse(resp *http
 // filter - An OData filter expression that describes a subset of metrics to return.
 // options - ElasticPoolsClientListMetricsOptions contains the optional parameters for the ElasticPoolsClient.ListMetrics
 // method.
-func (client *ElasticPoolsClient) ListMetrics(ctx context.Context, resourceGroupName string, serverName string, elasticPoolName string, filter string, options *ElasticPoolsClientListMetricsOptions) (ElasticPoolsClientListMetricsResponse, error) {
-	req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, serverName, elasticPoolName, filter, options)
-	if err != nil {
-		return ElasticPoolsClientListMetricsResponse{}, err
+func (client *ElasticPoolsClient) ListMetrics(resourceGroupName string, serverName string, elasticPoolName string, filter string, options *ElasticPoolsClientListMetricsOptions) *ElasticPoolsClientListMetricsPager {
+	return &ElasticPoolsClientListMetricsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listMetricsCreateRequest(ctx, resourceGroupName, serverName, elasticPoolName, filter, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ElasticPoolsClientListMetricsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ElasticPoolsClientListMetricsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listMetricsHandleResponse(resp)
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.
@@ -505,7 +487,7 @@ func (client *ElasticPoolsClient) listMetricsCreateRequest(ctx context.Context, 
 
 // listMetricsHandleResponse handles the ListMetrics response.
 func (client *ElasticPoolsClient) listMetricsHandleResponse(resp *http.Response) (ElasticPoolsClientListMetricsResponse, error) {
-	result := ElasticPoolsClientListMetricsResponse{RawResponse: resp}
+	result := ElasticPoolsClientListMetricsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetricListResult); err != nil {
 		return ElasticPoolsClientListMetricsResponse{}, err
 	}
@@ -526,9 +508,7 @@ func (client *ElasticPoolsClient) BeginUpdate(ctx context.Context, resourceGroup
 	if err != nil {
 		return ElasticPoolsClientUpdatePollerResponse{}, err
 	}
-	result := ElasticPoolsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ElasticPoolsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ElasticPoolsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ElasticPoolsClientUpdatePollerResponse{}, err
@@ -580,7 +560,7 @@ func (client *ElasticPoolsClient) updateCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-11-01-preview")
+	reqQP.Set("api-version", "2021-08-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)

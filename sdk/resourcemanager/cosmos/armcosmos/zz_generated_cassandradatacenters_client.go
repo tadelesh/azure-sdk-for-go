@@ -34,17 +34,17 @@ type CassandraDataCentersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCassandraDataCentersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CassandraDataCentersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CassandraDataCentersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *CassandraDataCentersClient) BeginCreateUpdate(ctx context.Context,
 	if err != nil {
 		return CassandraDataCentersClientCreateUpdatePollerResponse{}, err
 	}
-	result := CassandraDataCentersClientCreateUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CassandraDataCentersClientCreateUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("CassandraDataCentersClient.CreateUpdate", "", resp, client.pl)
 	if err != nil {
 		return CassandraDataCentersClientCreateUpdatePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *CassandraDataCentersClient) BeginDelete(ctx context.Context, resou
 	if err != nil {
 		return CassandraDataCentersClientDeletePollerResponse{}, err
 	}
-	result := CassandraDataCentersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CassandraDataCentersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CassandraDataCentersClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return CassandraDataCentersClientDeletePollerResponse{}, err
@@ -250,7 +246,7 @@ func (client *CassandraDataCentersClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *CassandraDataCentersClient) getHandleResponse(resp *http.Response) (CassandraDataCentersClientGetResponse, error) {
-	result := CassandraDataCentersClientGetResponse{RawResponse: resp}
+	result := CassandraDataCentersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataCenterResource); err != nil {
 		return CassandraDataCentersClientGetResponse{}, err
 	}
@@ -263,19 +259,13 @@ func (client *CassandraDataCentersClient) getHandleResponse(resp *http.Response)
 // clusterName - Managed Cassandra cluster name.
 // options - CassandraDataCentersClientListOptions contains the optional parameters for the CassandraDataCentersClient.List
 // method.
-func (client *CassandraDataCentersClient) List(ctx context.Context, resourceGroupName string, clusterName string, options *CassandraDataCentersClientListOptions) (CassandraDataCentersClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, clusterName, options)
-	if err != nil {
-		return CassandraDataCentersClientListResponse{}, err
+func (client *CassandraDataCentersClient) List(resourceGroupName string, clusterName string, options *CassandraDataCentersClientListOptions) *CassandraDataCentersClientListPager {
+	return &CassandraDataCentersClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, clusterName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return CassandraDataCentersClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return CassandraDataCentersClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -306,7 +296,7 @@ func (client *CassandraDataCentersClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *CassandraDataCentersClient) listHandleResponse(resp *http.Response) (CassandraDataCentersClientListResponse, error) {
-	result := CassandraDataCentersClientListResponse{RawResponse: resp}
+	result := CassandraDataCentersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListDataCenters); err != nil {
 		return CassandraDataCentersClientListResponse{}, err
 	}
@@ -326,9 +316,7 @@ func (client *CassandraDataCentersClient) BeginUpdate(ctx context.Context, resou
 	if err != nil {
 		return CassandraDataCentersClientUpdatePollerResponse{}, err
 	}
-	result := CassandraDataCentersClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CassandraDataCentersClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("CassandraDataCentersClient.Update", "", resp, client.pl)
 	if err != nil {
 		return CassandraDataCentersClientUpdatePollerResponse{}, err

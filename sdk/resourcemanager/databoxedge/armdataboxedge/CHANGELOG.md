@@ -1,5 +1,383 @@
 # Release History
 
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*AlertsClientListByDataBoxEdgeDevicePager.NextPage` return value(s) have been changed from `(bool)` to `(AlertsClientListByDataBoxEdgeDeviceResponse, error)`
+- Function `*UsersClientListByDataBoxEdgeDevicePager.NextPage` return value(s) have been changed from `(bool)` to `(UsersClientListByDataBoxEdgeDeviceResponse, error)`
+- Function `*BandwidthSchedulesClientListByDataBoxEdgeDevicePager.NextPage` return value(s) have been changed from `(bool)` to `(BandwidthSchedulesClientListByDataBoxEdgeDeviceResponse, error)`
+- Function `*RolesClientListByDataBoxEdgeDevicePager.NextPage` return value(s) have been changed from `(bool)` to `(RolesClientListByDataBoxEdgeDeviceResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*StorageAccountCredentialsClientListByDataBoxEdgeDevicePager.NextPage` return value(s) have been changed from `(bool)` to `(StorageAccountCredentialsClientListByDataBoxEdgeDeviceResponse, error)`
+- Function `*AvailableSKUsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(AvailableSKUsClientListResponse, error)`
+- Function `*MonitoringConfigClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(MonitoringConfigClientListResponse, error)`
+- Function `*TriggersClientListByDataBoxEdgeDevicePager.NextPage` return value(s) have been changed from `(bool)` to `(TriggersClientListByDataBoxEdgeDeviceResponse, error)`
+- Function `*StorageAccountsClientListByDataBoxEdgeDevicePager.NextPage` return value(s) have been changed from `(bool)` to `(StorageAccountsClientListByDataBoxEdgeDeviceResponse, error)`
+- Function `*OrdersClientListByDataBoxEdgeDevicePager.NextPage` return value(s) have been changed from `(bool)` to `(OrdersClientListByDataBoxEdgeDeviceResponse, error)`
+- Function `*SharesClientListByDataBoxEdgeDevicePager.NextPage` return value(s) have been changed from `(bool)` to `(SharesClientListByDataBoxEdgeDeviceResponse, error)`
+- Function `*ContainersClientListByStorageAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(ContainersClientListByStorageAccountResponse, error)`
+- Function `*AddonsClientListByRolePager.NextPage` return value(s) have been changed from `(bool)` to `(AddonsClientListByRoleResponse, error)`
+- Function `*DevicesClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(DevicesClientListBySubscriptionResponse, error)`
+- Function `*DevicesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(DevicesClientListByResourceGroupResponse, error)`
+- Function `*NodesClientListByDataBoxEdgeDevicePager.NextPage` return value(s) have been changed from `(bool)` to `(NodesClientListByDataBoxEdgeDeviceResponse, error)`
+- Function `*SharesClientListByDataBoxEdgeDevicePager.Err` has been removed
+- Function `*BandwidthSchedulesClientListByDataBoxEdgeDevicePager.PageResponse` has been removed
+- Function `*DevicesClientListBySubscriptionPager.Err` has been removed
+- Function `*NodesClientListByDataBoxEdgeDevicePager.Err` has been removed
+- Function `*RolesClientCreateOrUpdateResult.UnmarshalJSON` has been removed
+- Function `*TriggersClientListByDataBoxEdgeDevicePager.Err` has been removed
+- Function `*StorageAccountsClientListByDataBoxEdgeDevicePager.Err` has been removed
+- Function `*MonitoringConfigClientListPager.PageResponse` has been removed
+- Function `*BandwidthSchedulesClientListByDataBoxEdgeDevicePager.Err` has been removed
+- Function `*AddonsClientCreateOrUpdateResult.UnmarshalJSON` has been removed
+- Function `*NodesClientListByDataBoxEdgeDevicePager.PageResponse` has been removed
+- Function `*UsersClientListByDataBoxEdgeDevicePager.Err` has been removed
+- Function `*DevicesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*RolesClientGetResult.UnmarshalJSON` has been removed
+- Function `*OrdersClientListByDataBoxEdgeDevicePager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*AddonsClientListByRolePager.Err` has been removed
+- Function `*MonitoringConfigClientListPager.Err` has been removed
+- Function `*TriggersClientCreateOrUpdateResult.UnmarshalJSON` has been removed
+- Function `*DevicesClientListByResourceGroupPager.Err` has been removed
+- Function `*AlertsClientListByDataBoxEdgeDevicePager.Err` has been removed
+- Function `*UsersClientListByDataBoxEdgeDevicePager.PageResponse` has been removed
+- Function `*StorageAccountCredentialsClientListByDataBoxEdgeDevicePager.PageResponse` has been removed
+- Function `*AddonsClientGetResult.UnmarshalJSON` has been removed
+- Function `*RolesClientListByDataBoxEdgeDevicePager.PageResponse` has been removed
+- Function `*AvailableSKUsClientListPager.PageResponse` has been removed
+- Function `*ContainersClientListByStorageAccountPager.Err` has been removed
+- Function `*AlertsClientListByDataBoxEdgeDevicePager.PageResponse` has been removed
+- Function `*StorageAccountCredentialsClientListByDataBoxEdgeDevicePager.Err` has been removed
+- Function `*AvailableSKUsClientListPager.Err` has been removed
+- Function `*TriggersClientGetResult.UnmarshalJSON` has been removed
+- Function `*AddonsClientListByRolePager.PageResponse` has been removed
+- Function `*DevicesClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*OrdersClientListByDataBoxEdgeDevicePager.Err` has been removed
+- Function `*ContainersClientListByStorageAccountPager.PageResponse` has been removed
+- Function `*TriggersClientListByDataBoxEdgeDevicePager.PageResponse` has been removed
+- Function `*StorageAccountsClientListByDataBoxEdgeDevicePager.PageResponse` has been removed
+- Function `*RolesClientListByDataBoxEdgeDevicePager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*SharesClientListByDataBoxEdgeDevicePager.PageResponse` has been removed
+- Struct `AddonsClientCreateOrUpdateResult` has been removed
+- Struct `AddonsClientGetResult` has been removed
+- Struct `AddonsClientListByRoleResult` has been removed
+- Struct `AlertsClientGetResult` has been removed
+- Struct `AlertsClientListByDataBoxEdgeDeviceResult` has been removed
+- Struct `AvailableSKUsClientListResult` has been removed
+- Struct `BandwidthSchedulesClientCreateOrUpdateResult` has been removed
+- Struct `BandwidthSchedulesClientGetResult` has been removed
+- Struct `BandwidthSchedulesClientListByDataBoxEdgeDeviceResult` has been removed
+- Struct `ContainersClientCreateOrUpdateResult` has been removed
+- Struct `ContainersClientGetResult` has been removed
+- Struct `ContainersClientListByStorageAccountResult` has been removed
+- Struct `DevicesClientCreateOrUpdateResult` has been removed
+- Struct `DevicesClientGenerateCertificateResult` has been removed
+- Struct `DevicesClientGetExtendedInformationResult` has been removed
+- Struct `DevicesClientGetNetworkSettingsResult` has been removed
+- Struct `DevicesClientGetResult` has been removed
+- Struct `DevicesClientGetUpdateSummaryResult` has been removed
+- Struct `DevicesClientListByResourceGroupResult` has been removed
+- Struct `DevicesClientListBySubscriptionResult` has been removed
+- Struct `DevicesClientUpdateExtendedInformationResult` has been removed
+- Struct `DevicesClientUpdateResult` has been removed
+- Struct `DevicesClientUploadCertificateResult` has been removed
+- Struct `DiagnosticSettingsClientGetDiagnosticProactiveLogCollectionSettingsResult` has been removed
+- Struct `DiagnosticSettingsClientGetDiagnosticRemoteSupportSettingsResult` has been removed
+- Struct `DiagnosticSettingsClientUpdateDiagnosticProactiveLogCollectionSettingsResult` has been removed
+- Struct `DiagnosticSettingsClientUpdateDiagnosticRemoteSupportSettingsResult` has been removed
+- Struct `JobsClientGetResult` has been removed
+- Struct `MonitoringConfigClientCreateOrUpdateResult` has been removed
+- Struct `MonitoringConfigClientGetResult` has been removed
+- Struct `MonitoringConfigClientListResult` has been removed
+- Struct `NodesClientListByDataBoxEdgeDeviceResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `OperationsStatusClientGetResult` has been removed
+- Struct `OrdersClientCreateOrUpdateResult` has been removed
+- Struct `OrdersClientGetResult` has been removed
+- Struct `OrdersClientListByDataBoxEdgeDeviceResult` has been removed
+- Struct `OrdersClientListDCAccessCodeResult` has been removed
+- Struct `RolesClientCreateOrUpdateResult` has been removed
+- Struct `RolesClientGetResult` has been removed
+- Struct `RolesClientListByDataBoxEdgeDeviceResult` has been removed
+- Struct `SharesClientCreateOrUpdateResult` has been removed
+- Struct `SharesClientGetResult` has been removed
+- Struct `SharesClientListByDataBoxEdgeDeviceResult` has been removed
+- Struct `StorageAccountCredentialsClientCreateOrUpdateResult` has been removed
+- Struct `StorageAccountCredentialsClientGetResult` has been removed
+- Struct `StorageAccountCredentialsClientListByDataBoxEdgeDeviceResult` has been removed
+- Struct `StorageAccountsClientCreateOrUpdateResult` has been removed
+- Struct `StorageAccountsClientGetResult` has been removed
+- Struct `StorageAccountsClientListByDataBoxEdgeDeviceResult` has been removed
+- Struct `TriggersClientCreateOrUpdateResult` has been removed
+- Struct `TriggersClientGetResult` has been removed
+- Struct `TriggersClientListByDataBoxEdgeDeviceResult` has been removed
+- Struct `UsersClientCreateOrUpdateResult` has been removed
+- Struct `UsersClientGetResult` has been removed
+- Struct `UsersClientListByDataBoxEdgeDeviceResult` has been removed
+- Field `StorageAccountsClientCreateOrUpdateResult` of struct `StorageAccountsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticSettingsClientUpdateDiagnosticProactiveLogCollectionSettingsPollerResponse` has been removed
+- Field `DevicesClientGenerateCertificateResult` of struct `DevicesClientGenerateCertificateResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientGenerateCertificateResponse` has been removed
+- Field `DiagnosticSettingsClientGetDiagnosticRemoteSupportSettingsResult` of struct `DiagnosticSettingsClientGetDiagnosticRemoteSupportSettingsResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticSettingsClientGetDiagnosticRemoteSupportSettingsResponse` has been removed
+- Field `TriggersClientListByDataBoxEdgeDeviceResult` of struct `TriggersClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `RawResponse` of struct `TriggersClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientCreateOrUpdateSecuritySettingsPollerResponse` has been removed
+- Field `DiagnosticSettingsClientUpdateDiagnosticRemoteSupportSettingsResult` of struct `DiagnosticSettingsClientUpdateDiagnosticRemoteSupportSettingsResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticSettingsClientUpdateDiagnosticRemoteSupportSettingsResponse` has been removed
+- Field `DevicesClientGetNetworkSettingsResult` of struct `DevicesClientGetNetworkSettingsResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientGetNetworkSettingsResponse` has been removed
+- Field `StorageAccountsClientGetResult` of struct `StorageAccountsClientGetResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountsClientGetResponse` has been removed
+- Field `RawResponse` of struct `TriggersClientDeleteResponse` has been removed
+- Field `BandwidthSchedulesClientListByDataBoxEdgeDeviceResult` of struct `BandwidthSchedulesClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `RawResponse` of struct `BandwidthSchedulesClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `ContainersClientListByStorageAccountResult` of struct `ContainersClientListByStorageAccountResponse` has been removed
+- Field `RawResponse` of struct `ContainersClientListByStorageAccountResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `UsersClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `BandwidthSchedulesClientCreateOrUpdatePollerResponse` has been removed
+- Field `DevicesClientUpdateResult` of struct `DevicesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ContainersClientRefreshPollerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientDownloadUpdatesPollerResponse` has been removed
+- Field `DevicesClientGetUpdateSummaryResult` of struct `DevicesClientGetUpdateSummaryResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientGetUpdateSummaryResponse` has been removed
+- Field `DevicesClientUploadCertificateResult` of struct `DevicesClientUploadCertificateResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientUploadCertificateResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `BandwidthSchedulesClientDeletePollerResponse` has been removed
+- Field `OperationsStatusClientGetResult` of struct `OperationsStatusClientGetResponse` has been removed
+- Field `RawResponse` of struct `OperationsStatusClientGetResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientDeleteResponse` has been removed
+- Field `AddonsClientCreateOrUpdateResult` of struct `AddonsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AddonsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SharesClientRefreshResponse` has been removed
+- Field `DevicesClientCreateOrUpdateResult` of struct `DevicesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientCreateOrUpdateResponse` has been removed
+- Field `BandwidthSchedulesClientGetResult` of struct `BandwidthSchedulesClientGetResponse` has been removed
+- Field `RawResponse` of struct `BandwidthSchedulesClientGetResponse` has been removed
+- Field `MonitoringConfigClientGetResult` of struct `MonitoringConfigClientGetResponse` has been removed
+- Field `RawResponse` of struct `MonitoringConfigClientGetResponse` has been removed
+- Field `RawResponse` of struct `TriggersClientCreateOrUpdatePollerResponse` has been removed
+- Field `SharesClientListByDataBoxEdgeDeviceResult` of struct `SharesClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `RawResponse` of struct `SharesClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `StorageAccountCredentialsClientGetResult` of struct `StorageAccountCredentialsClientGetResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientGetResponse` has been removed
+- Field `DevicesClientUpdateExtendedInformationResult` of struct `DevicesClientUpdateExtendedInformationResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientUpdateExtendedInformationResponse` has been removed
+- Field `RawResponse` of struct `OrdersClientDeletePollerResponse` has been removed
+- Field `DiagnosticSettingsClientUpdateDiagnosticProactiveLogCollectionSettingsResult` of struct `DiagnosticSettingsClientUpdateDiagnosticProactiveLogCollectionSettingsResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticSettingsClientUpdateDiagnosticProactiveLogCollectionSettingsResponse` has been removed
+- Field `RawResponse` of struct `UsersClientCreateOrUpdatePollerResponse` has been removed
+- Field `UsersClientListByDataBoxEdgeDeviceResult` of struct `UsersClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `RawResponse` of struct `UsersClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `RawResponse` of struct `SharesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `SharesClientCreateOrUpdatePollerResponse` has been removed
+- Field `AvailableSKUsClientListResult` of struct `AvailableSKUsClientListResponse` has been removed
+- Field `RawResponse` of struct `AvailableSKUsClientListResponse` has been removed
+- Field `ContainersClientGetResult` of struct `ContainersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ContainersClientGetResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `DevicesClientGetResult` of struct `DevicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `AddonsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `MonitoringConfigClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `MonitoringConfigClientCreateOrUpdatePollerResponse` has been removed
+- Field `NodesClientListByDataBoxEdgeDeviceResult` of struct `NodesClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `RawResponse` of struct `NodesClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `AddonsClientListByRoleResult` of struct `AddonsClientListByRoleResponse` has been removed
+- Field `RawResponse` of struct `AddonsClientListByRoleResponse` has been removed
+- Field `SharesClientGetResult` of struct `SharesClientGetResponse` has been removed
+- Field `RawResponse` of struct `SharesClientGetResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountsClientDeleteResponse` has been removed
+- Field `OrdersClientListDCAccessCodeResult` of struct `OrdersClientListDCAccessCodeResponse` has been removed
+- Field `RawResponse` of struct `OrdersClientListDCAccessCodeResponse` has been removed
+- Field `RawResponse` of struct `ContainersClientCreateOrUpdatePollerResponse` has been removed
+- Field `DiagnosticSettingsClientGetDiagnosticProactiveLogCollectionSettingsResult` of struct `DiagnosticSettingsClientGetDiagnosticProactiveLogCollectionSettingsResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticSettingsClientGetDiagnosticProactiveLogCollectionSettingsResponse` has been removed
+- Field `RawResponse` of struct `ContainersClientRefreshResponse` has been removed
+- Field `RawResponse` of struct `RolesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `MonitoringConfigClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticSettingsClientUpdateDiagnosticRemoteSupportSettingsPollerResponse` has been removed
+- Field `RolesClientListByDataBoxEdgeDeviceResult` of struct `RolesClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `RawResponse` of struct `RolesClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `RawResponse` of struct `SupportPackagesClientTriggerSupportPackageResponse` has been removed
+- Field `RolesClientGetResult` of struct `RolesClientGetResponse` has been removed
+- Field `RawResponse` of struct `RolesClientGetResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `SharesClientRefreshPollerResponse` has been removed
+- Field `RawResponse` of struct `ContainersClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientInstallUpdatesResponse` has been removed
+- Field `AddonsClientGetResult` of struct `AddonsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AddonsClientGetResponse` has been removed
+- Field `OrdersClientListByDataBoxEdgeDeviceResult` of struct `OrdersClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `RawResponse` of struct `OrdersClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `RawResponse` of struct `RolesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientScanForUpdatesPollerResponse` has been removed
+- Field `UsersClientGetResult` of struct `UsersClientGetResponse` has been removed
+- Field `RawResponse` of struct `UsersClientGetResponse` has been removed
+- Field `DevicesClientGetExtendedInformationResult` of struct `DevicesClientGetExtendedInformationResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientGetExtendedInformationResponse` has been removed
+- Field `RawResponse` of struct `OrdersClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientScanForUpdatesResponse` has been removed
+- Field `OrdersClientCreateOrUpdateResult` of struct `OrdersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `OrdersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `BandwidthSchedulesClientDeleteResponse` has been removed
+- Field `SharesClientCreateOrUpdateResult` of struct `SharesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SharesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientDownloadUpdatesResponse` has been removed
+- Field `TriggersClientCreateOrUpdateResult` of struct `TriggersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `TriggersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `OrdersClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `RolesClientCreateOrUpdatePollerResponse` has been removed
+- Field `StorageAccountCredentialsClientListByDataBoxEdgeDeviceResult` of struct `StorageAccountCredentialsClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `RawResponse` of struct `TriggersClientDeletePollerResponse` has been removed
+- Field `AlertsClientListByDataBoxEdgeDeviceResult` of struct `AlertsClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `RawResponse` of struct `AlertsClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `RawResponse` of struct `AddonsClientDeleteResponse` has been removed
+- Field `TriggersClientGetResult` of struct `TriggersClientGetResponse` has been removed
+- Field `RawResponse` of struct `TriggersClientGetResponse` has been removed
+- Field `RawResponse` of struct `UsersClientDeleteResponse` has been removed
+- Field `ContainersClientCreateOrUpdateResult` of struct `ContainersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ContainersClientCreateOrUpdateResponse` has been removed
+- Field `BandwidthSchedulesClientCreateOrUpdateResult` of struct `BandwidthSchedulesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `BandwidthSchedulesClientCreateOrUpdateResponse` has been removed
+- Field `StorageAccountCredentialsClientCreateOrUpdateResult` of struct `StorageAccountCredentialsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientCreateOrUpdateResponse` has been removed
+- Field `AlertsClientGetResult` of struct `AlertsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AlertsClientGetResponse` has been removed
+- Field `MonitoringConfigClientListResult` of struct `MonitoringConfigClientListResponse` has been removed
+- Field `RawResponse` of struct `MonitoringConfigClientListResponse` has been removed
+- Field `MonitoringConfigClientCreateOrUpdateResult` of struct `MonitoringConfigClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `MonitoringConfigClientCreateOrUpdateResponse` has been removed
+- Field `OrdersClientGetResult` of struct `OrdersClientGetResponse` has been removed
+- Field `RawResponse` of struct `OrdersClientGetResponse` has been removed
+- Field `RawResponse` of struct `AddonsClientCreateOrUpdatePollerResponse` has been removed
+- Field `DevicesClientListBySubscriptionResult` of struct `DevicesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientListBySubscriptionResponse` has been removed
+- Field `StorageAccountsClientListByDataBoxEdgeDeviceResult` of struct `StorageAccountsClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountsClientListByDataBoxEdgeDeviceResponse` has been removed
+- Field `RawResponse` of struct `SharesClientDeleteResponse` has been removed
+- Field `UsersClientCreateOrUpdateResult` of struct `UsersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `UsersClientCreateOrUpdateResponse` has been removed
+- Field `RolesClientCreateOrUpdateResult` of struct `RolesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `RolesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SupportPackagesClientTriggerSupportPackagePollerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientInstallUpdatesPollerResponse` has been removed
+- Field `RawResponse` of struct `ContainersClientDeleteResponse` has been removed
+- Field `JobsClientGetResult` of struct `JobsClientGetResponse` has been removed
+- Field `RawResponse` of struct `JobsClientGetResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientCreateOrUpdateSecuritySettingsResponse` has been removed
+- Field `DevicesClientListByResourceGroupResult` of struct `DevicesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientListByResourceGroupResponse` has been removed
+
+### Features Added
+
+- New function `MoveRequest.MarshalJSON() ([]byte, error)`
+- New function `*RolesClientGetResponse.UnmarshalJSON([]byte) error`
+- New function `*MonitoringConfigClientListPager.More() bool`
+- New function `SKUInformation.MarshalJSON() ([]byte, error)`
+- New function `*BandwidthSchedulesClientListByDataBoxEdgeDevicePager.More() bool`
+- New function `*TriggersClientGetResponse.UnmarshalJSON([]byte) error`
+- New function `*AddonsClientCreateOrUpdateResponse.UnmarshalJSON([]byte) error`
+- New function `*RolesClientCreateOrUpdateResponse.UnmarshalJSON([]byte) error`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*DevicesClientListByResourceGroupPager.More() bool`
+- New function `*StorageAccountsClientListByDataBoxEdgeDevicePager.More() bool`
+- New function `*StorageAccountCredentialsClientListByDataBoxEdgeDevicePager.More() bool`
+- New function `*OrdersClientListByDataBoxEdgeDevicePager.More() bool`
+- New function `*TriggersClientListByDataBoxEdgeDevicePager.More() bool`
+- New function `*NodesClientListByDataBoxEdgeDevicePager.More() bool`
+- New function `*AlertsClientListByDataBoxEdgeDevicePager.More() bool`
+- New function `ResourceTypeSKU.MarshalJSON() ([]byte, error)`
+- New function `*RolesClientListByDataBoxEdgeDevicePager.More() bool`
+- New function `*TriggersClientCreateOrUpdateResponse.UnmarshalJSON([]byte) error`
+- New function `*AddonsClientGetResponse.UnmarshalJSON([]byte) error`
+- New function `*AddonsClientListByRolePager.More() bool`
+- New function `*ContainersClientListByStorageAccountPager.More() bool`
+- New function `SKUInformationList.MarshalJSON() ([]byte, error)`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*AvailableSKUsClientListPager.More() bool`
+- New function `*UsersClientListByDataBoxEdgeDevicePager.More() bool`
+- New function `*DevicesClientListBySubscriptionPager.More() bool`
+- New function `*SharesClientListByDataBoxEdgeDevicePager.More() bool`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New struct `MoveRequest`
+- New struct `ResourceTypeSKU`
+- New struct `SKUInformation`
+- New struct `SKUInformationList`
+- New anonymous field `TriggerClassification` in struct `TriggersClientCreateOrUpdateResponse`
+- New anonymous field `OrderList` in struct `OrdersClientListByDataBoxEdgeDeviceResponse`
+- New anonymous field `Order` in struct `OrdersClientCreateOrUpdateResponse`
+- New anonymous field `BandwidthSchedulesList` in struct `BandwidthSchedulesClientListByDataBoxEdgeDeviceResponse`
+- New anonymous field `AddonClassification` in struct `AddonsClientCreateOrUpdateResponse`
+- New anonymous field `OperationsList` in struct `OperationsClientListResponse`
+- New anonymous field `GenerateCertResponse` in struct `DevicesClientGenerateCertificateResponse`
+- New anonymous field `DCAccessCode` in struct `OrdersClientListDCAccessCodeResponse`
+- New anonymous field `DiagnosticRemoteSupportSettings` in struct `DiagnosticSettingsClientGetDiagnosticRemoteSupportSettingsResponse`
+- New anonymous field `User` in struct `UsersClientGetResponse`
+- New anonymous field `Share` in struct `SharesClientCreateOrUpdateResponse`
+- New anonymous field `Job` in struct `OperationsStatusClientGetResponse`
+- New anonymous field `Device` in struct `DevicesClientUpdateResponse`
+- New anonymous field `DiagnosticProactiveLogCollectionSettings` in struct `DiagnosticSettingsClientUpdateDiagnosticProactiveLogCollectionSettingsResponse`
+- New anonymous field `Alert` in struct `AlertsClientGetResponse`
+- New anonymous field `RoleClassification` in struct `RolesClientGetResponse`
+- New anonymous field `Job` in struct `JobsClientGetResponse`
+- New anonymous field `ContainerList` in struct `ContainersClientListByStorageAccountResponse`
+- New anonymous field `Container` in struct `ContainersClientCreateOrUpdateResponse`
+- New anonymous field `SKUList` in struct `AvailableSKUsClientListResponse`
+- New anonymous field `MonitoringMetricConfiguration` in struct `MonitoringConfigClientCreateOrUpdateResponse`
+- New anonymous field `RoleClassification` in struct `RolesClientCreateOrUpdateResponse`
+- New anonymous field `NodeList` in struct `NodesClientListByDataBoxEdgeDeviceResponse`
+- New anonymous field `Share` in struct `SharesClientGetResponse`
+- New anonymous field `DeviceList` in struct `DevicesClientListBySubscriptionResponse`
+- New anonymous field `AddonList` in struct `AddonsClientListByRoleResponse`
+- New anonymous field `StorageAccount` in struct `StorageAccountsClientGetResponse`
+- New anonymous field `StorageAccountCredential` in struct `StorageAccountCredentialsClientCreateOrUpdateResponse`
+- New anonymous field `DeviceList` in struct `DevicesClientListByResourceGroupResponse`
+- New anonymous field `TriggerClassification` in struct `TriggersClientGetResponse`
+- New anonymous field `StorageAccountCredentialList` in struct `StorageAccountCredentialsClientListByDataBoxEdgeDeviceResponse`
+- New anonymous field `UserList` in struct `UsersClientListByDataBoxEdgeDeviceResponse`
+- New anonymous field `Order` in struct `OrdersClientGetResponse`
+- New anonymous field `DeviceExtendedInfo` in struct `DevicesClientUpdateExtendedInformationResponse`
+- New anonymous field `StorageAccountCredential` in struct `StorageAccountCredentialsClientGetResponse`
+- New anonymous field `AddonClassification` in struct `AddonsClientGetResponse`
+- New anonymous field `UploadCertificateResponse` in struct `DevicesClientUploadCertificateResponse`
+- New anonymous field `DeviceExtendedInfo` in struct `DevicesClientGetExtendedInformationResponse`
+- New anonymous field `Device` in struct `DevicesClientCreateOrUpdateResponse`
+- New anonymous field `BandwidthSchedule` in struct `BandwidthSchedulesClientGetResponse`
+- New anonymous field `DiagnosticProactiveLogCollectionSettings` in struct `DiagnosticSettingsClientGetDiagnosticProactiveLogCollectionSettingsResponse`
+- New anonymous field `Device` in struct `DevicesClientGetResponse`
+- New anonymous field `MonitoringMetricConfiguration` in struct `MonitoringConfigClientGetResponse`
+- New anonymous field `TriggerList` in struct `TriggersClientListByDataBoxEdgeDeviceResponse`
+- New anonymous field `BandwidthSchedule` in struct `BandwidthSchedulesClientCreateOrUpdateResponse`
+- New anonymous field `DiagnosticRemoteSupportSettings` in struct `DiagnosticSettingsClientUpdateDiagnosticRemoteSupportSettingsResponse`
+- New anonymous field `ShareList` in struct `SharesClientListByDataBoxEdgeDeviceResponse`
+- New anonymous field `RoleList` in struct `RolesClientListByDataBoxEdgeDeviceResponse`
+- New anonymous field `Container` in struct `ContainersClientGetResponse`
+- New anonymous field `StorageAccount` in struct `StorageAccountsClientCreateOrUpdateResponse`
+- New anonymous field `UpdateSummary` in struct `DevicesClientGetUpdateSummaryResponse`
+- New anonymous field `StorageAccountList` in struct `StorageAccountsClientListByDataBoxEdgeDeviceResponse`
+- New anonymous field `NetworkSettings` in struct `DevicesClientGetNetworkSettingsResponse`
+- New anonymous field `MonitoringMetricConfigurationList` in struct `MonitoringConfigClientListResponse`
+- New anonymous field `AlertList` in struct `AlertsClientListByDataBoxEdgeDeviceResponse`
+- New anonymous field `User` in struct `UsersClientCreateOrUpdateResponse`
+
+
+## 0.2.1 (2022-03-10)
+### Other Changes
+
+
 ## 0.2.0 (2022-01-21)
 ### Breaking Changes
 

@@ -34,17 +34,17 @@ type CapabilitiesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCapabilitiesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CapabilitiesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CapabilitiesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -119,7 +119,7 @@ func (client *CapabilitiesClient) createOrUpdateCreateRequest(ctx context.Contex
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *CapabilitiesClient) createOrUpdateHandleResponse(resp *http.Response) (CapabilitiesClientCreateOrUpdateResponse, error) {
-	result := CapabilitiesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := CapabilitiesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Capability); err != nil {
 		return CapabilitiesClientCreateOrUpdateResponse{}, err
 	}
@@ -147,7 +147,7 @@ func (client *CapabilitiesClient) Delete(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return CapabilitiesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return CapabilitiesClientDeleteResponse{RawResponse: resp}, nil
+	return CapabilitiesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -260,7 +260,7 @@ func (client *CapabilitiesClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *CapabilitiesClient) getHandleResponse(resp *http.Response) (CapabilitiesClientGetResponse, error) {
-	result := CapabilitiesClientGetResponse{RawResponse: resp}
+	result := CapabilitiesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Capability); err != nil {
 		return CapabilitiesClientGetResponse{}, err
 	}
@@ -330,7 +330,7 @@ func (client *CapabilitiesClient) listCreateRequest(ctx context.Context, resourc
 
 // listHandleResponse handles the List response.
 func (client *CapabilitiesClient) listHandleResponse(resp *http.Response) (CapabilitiesClientListResponse, error) {
-	result := CapabilitiesClientListResponse{RawResponse: resp}
+	result := CapabilitiesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CapabilityListResult); err != nil {
 		return CapabilitiesClientListResponse{}, err
 	}

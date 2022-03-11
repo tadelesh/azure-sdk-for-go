@@ -35,17 +35,17 @@ type AutoScaleVCoresClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAutoScaleVCoresClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AutoScaleVCoresClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AutoScaleVCoresClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *AutoScaleVCoresClient) createCreateRequest(ctx context.Context, re
 
 // createHandleResponse handles the Create response.
 func (client *AutoScaleVCoresClient) createHandleResponse(resp *http.Response) (AutoScaleVCoresClientCreateResponse, error) {
-	result := AutoScaleVCoresClientCreateResponse{RawResponse: resp}
+	result := AutoScaleVCoresClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AutoScaleVCore); err != nil {
 		return AutoScaleVCoresClientCreateResponse{}, err
 	}
@@ -125,7 +125,7 @@ func (client *AutoScaleVCoresClient) Delete(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return AutoScaleVCoresClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AutoScaleVCoresClientDeleteResponse{RawResponse: resp}, nil
+	return AutoScaleVCoresClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -203,7 +203,7 @@ func (client *AutoScaleVCoresClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *AutoScaleVCoresClient) getHandleResponse(resp *http.Response) (AutoScaleVCoresClientGetResponse, error) {
-	result := AutoScaleVCoresClientGetResponse{RawResponse: resp}
+	result := AutoScaleVCoresClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AutoScaleVCore); err != nil {
 		return AutoScaleVCoresClientGetResponse{}, err
 	}
@@ -216,19 +216,13 @@ func (client *AutoScaleVCoresClient) getHandleResponse(resp *http.Response) (Aut
 // must be at least 1 character in length, and no more than 90.
 // options - AutoScaleVCoresClientListByResourceGroupOptions contains the optional parameters for the AutoScaleVCoresClient.ListByResourceGroup
 // method.
-func (client *AutoScaleVCoresClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, options *AutoScaleVCoresClientListByResourceGroupOptions) (AutoScaleVCoresClientListByResourceGroupResponse, error) {
-	req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-	if err != nil {
-		return AutoScaleVCoresClientListByResourceGroupResponse{}, err
+func (client *AutoScaleVCoresClient) ListByResourceGroup(resourceGroupName string, options *AutoScaleVCoresClientListByResourceGroupOptions) *AutoScaleVCoresClientListByResourceGroupPager {
+	return &AutoScaleVCoresClientListByResourceGroupPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return AutoScaleVCoresClientListByResourceGroupResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return AutoScaleVCoresClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByResourceGroupHandleResponse(resp)
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -255,7 +249,7 @@ func (client *AutoScaleVCoresClient) listByResourceGroupCreateRequest(ctx contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *AutoScaleVCoresClient) listByResourceGroupHandleResponse(resp *http.Response) (AutoScaleVCoresClientListByResourceGroupResponse, error) {
-	result := AutoScaleVCoresClientListByResourceGroupResponse{RawResponse: resp}
+	result := AutoScaleVCoresClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AutoScaleVCoreListResult); err != nil {
 		return AutoScaleVCoresClientListByResourceGroupResponse{}, err
 	}
@@ -266,19 +260,13 @@ func (client *AutoScaleVCoresClient) listByResourceGroupHandleResponse(resp *htt
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AutoScaleVCoresClientListBySubscriptionOptions contains the optional parameters for the AutoScaleVCoresClient.ListBySubscription
 // method.
-func (client *AutoScaleVCoresClient) ListBySubscription(ctx context.Context, options *AutoScaleVCoresClientListBySubscriptionOptions) (AutoScaleVCoresClientListBySubscriptionResponse, error) {
-	req, err := client.listBySubscriptionCreateRequest(ctx, options)
-	if err != nil {
-		return AutoScaleVCoresClientListBySubscriptionResponse{}, err
+func (client *AutoScaleVCoresClient) ListBySubscription(options *AutoScaleVCoresClientListBySubscriptionOptions) *AutoScaleVCoresClientListBySubscriptionPager {
+	return &AutoScaleVCoresClientListBySubscriptionPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listBySubscriptionCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return AutoScaleVCoresClientListBySubscriptionResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return AutoScaleVCoresClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listBySubscriptionHandleResponse(resp)
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -301,7 +289,7 @@ func (client *AutoScaleVCoresClient) listBySubscriptionCreateRequest(ctx context
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *AutoScaleVCoresClient) listBySubscriptionHandleResponse(resp *http.Response) (AutoScaleVCoresClientListBySubscriptionResponse, error) {
-	result := AutoScaleVCoresClientListBySubscriptionResponse{RawResponse: resp}
+	result := AutoScaleVCoresClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AutoScaleVCoreListResult); err != nil {
 		return AutoScaleVCoresClientListBySubscriptionResponse{}, err
 	}
@@ -358,7 +346,7 @@ func (client *AutoScaleVCoresClient) updateCreateRequest(ctx context.Context, re
 
 // updateHandleResponse handles the Update response.
 func (client *AutoScaleVCoresClient) updateHandleResponse(resp *http.Response) (AutoScaleVCoresClientUpdateResponse, error) {
-	result := AutoScaleVCoresClientUpdateResponse{RawResponse: resp}
+	result := AutoScaleVCoresClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AutoScaleVCore); err != nil {
 		return AutoScaleVCoresClientUpdateResponse{}, err
 	}

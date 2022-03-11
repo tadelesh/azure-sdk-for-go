@@ -1,5 +1,61 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*RequestsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(RequestsClientListResponse, error)`
+- Function `*RequestsClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*RequestsClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Struct `GetClientTenantOptedInResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `RequestsClientGetResult` has been removed
+- Struct `RequestsClientListResult` has been removed
+- Struct `RequestsClientUpdateStatusResult` has been removed
+- Field `RequestsClientListResult` of struct `RequestsClientListResponse` has been removed
+- Field `RawResponse` of struct `RequestsClientListResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `PostClientDisableLockboxResponse` has been removed
+- Field `RawResponse` of struct `PostClientEnableLockboxResponse` has been removed
+- Field `RequestsClientGetResult` of struct `RequestsClientGetResponse` has been removed
+- Field `RawResponse` of struct `RequestsClientGetResponse` has been removed
+- Field `RequestsClientUpdateStatusResult` of struct `RequestsClientUpdateStatusResponse` has been removed
+- Field `RawResponse` of struct `RequestsClientUpdateStatusResponse` has been removed
+- Field `GetClientTenantOptedInResult` of struct `GetClientTenantOptedInResponse` has been removed
+- Field `RawResponse` of struct `GetClientTenantOptedInResponse` has been removed
+
+### Features Added
+
+- New function `ErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*RequestsClientListPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorAdditionalInfoInfo`
+- New struct `ErrorBody`
+- New struct `ErrorResponse`
+- New anonymous field `RequestListResult` in struct `RequestsClientListResponse`
+- New anonymous field `LockboxRequestResponse` in struct `RequestsClientGetResponse`
+- New anonymous field `Approval` in struct `RequestsClientUpdateStatusResponse`
+- New anonymous field `TenantOptInResponse` in struct `GetClientTenantOptedInResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorBody.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorAdditionalInfoInfo` has been removed
+- Struct `ErrorBody` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

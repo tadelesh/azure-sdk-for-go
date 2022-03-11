@@ -1,5 +1,155 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Struct `ApplicationTypeVersionsClientCreateOrUpdateResult` has been removed
+- Struct `ApplicationTypeVersionsClientGetResult` has been removed
+- Struct `ApplicationTypeVersionsClientListResult` has been removed
+- Struct `ApplicationTypesClientCreateOrUpdateResult` has been removed
+- Struct `ApplicationTypesClientGetResult` has been removed
+- Struct `ApplicationTypesClientListResult` has been removed
+- Struct `ApplicationsClientCreateOrUpdateResult` has been removed
+- Struct `ApplicationsClientGetResult` has been removed
+- Struct `ApplicationsClientListResult` has been removed
+- Struct `ApplicationsClientUpdateResult` has been removed
+- Struct `ClusterVersionsClientGetByEnvironmentResult` has been removed
+- Struct `ClusterVersionsClientGetResult` has been removed
+- Struct `ClusterVersionsClientListByEnvironmentResult` has been removed
+- Struct `ClusterVersionsClientListResult` has been removed
+- Struct `ClustersClientCreateOrUpdateResult` has been removed
+- Struct `ClustersClientGetResult` has been removed
+- Struct `ClustersClientListByResourceGroupResult` has been removed
+- Struct `ClustersClientListResult` has been removed
+- Struct `ClustersClientListUpgradableVersionsResult` has been removed
+- Struct `ClustersClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `ServicesClientCreateOrUpdateResult` has been removed
+- Struct `ServicesClientGetResult` has been removed
+- Struct `ServicesClientListResult` has been removed
+- Struct `ServicesClientUpdateResult` has been removed
+- Field `RawResponse` of struct `ServicesClientDeletePollerResponse` has been removed
+- Field `ServicesClientGetResult` of struct `ServicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientGetResponse` has been removed
+- Field `ServicesClientCreateOrUpdateResult` of struct `ServicesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCreateOrUpdateResponse` has been removed
+- Field `ClustersClientListUpgradableVersionsResult` of struct `ClustersClientListUpgradableVersionsResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListUpgradableVersionsResponse` has been removed
+- Field `RawResponse` of struct `ApplicationTypeVersionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientCreateOrUpdatePollerResponse` has been removed
+- Field `ClustersClientUpdateResult` of struct `ClustersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdateResponse` has been removed
+- Field `ApplicationsClientGetResult` of struct `ApplicationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientUpdatePollerResponse` has been removed
+- Field `ClusterVersionsClientGetByEnvironmentResult` of struct `ClusterVersionsClientGetByEnvironmentResponse` has been removed
+- Field `RawResponse` of struct `ClusterVersionsClientGetByEnvironmentResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientDeletePollerResponse` has been removed
+- Field `ClustersClientListResult` of struct `ClustersClientListResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListResponse` has been removed
+- Field `ServicesClientUpdateResult` of struct `ServicesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientUpdateResponse` has been removed
+- Field `ApplicationTypesClientCreateOrUpdateResult` of struct `ApplicationTypesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationTypesClientCreateOrUpdateResponse` has been removed
+- Field `ApplicationTypeVersionsClientCreateOrUpdateResult` of struct `ApplicationTypeVersionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationTypeVersionsClientCreateOrUpdateResponse` has been removed
+- Field `ApplicationsClientUpdateResult` of struct `ApplicationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationTypesClientDeleteResponse` has been removed
+- Field `ApplicationTypeVersionsClientGetResult` of struct `ApplicationTypeVersionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ApplicationTypeVersionsClientGetResponse` has been removed
+- Field `ClustersClientListByResourceGroupResult` of struct `ClustersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ApplicationTypesClientDeletePollerResponse` has been removed
+- Field `ClusterVersionsClientGetResult` of struct `ClusterVersionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClusterVersionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ApplicationTypeVersionsClientDeletePollerResponse` has been removed
+- Field `ApplicationTypesClientGetResult` of struct `ApplicationTypesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ApplicationTypesClientGetResponse` has been removed
+- Field `ServicesClientListResult` of struct `ServicesClientListResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientListResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientDeleteResponse` has been removed
+- Field `ClustersClientGetResult` of struct `ClustersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientGetResponse` has been removed
+- Field `ClusterVersionsClientListByEnvironmentResult` of struct `ClusterVersionsClientListByEnvironmentResponse` has been removed
+- Field `RawResponse` of struct `ClusterVersionsClientListByEnvironmentResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCreateOrUpdatePollerResponse` has been removed
+- Field `ClustersClientCreateOrUpdateResult` of struct `ClustersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientCreateOrUpdatePollerResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `ApplicationTypeVersionsClientListResult` of struct `ApplicationTypeVersionsClientListResponse` has been removed
+- Field `RawResponse` of struct `ApplicationTypeVersionsClientListResponse` has been removed
+- Field `ApplicationsClientCreateOrUpdateResult` of struct `ApplicationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientCreateOrUpdateResponse` has been removed
+- Field `ClusterVersionsClientListResult` of struct `ClusterVersionsClientListResponse` has been removed
+- Field `RawResponse` of struct `ClusterVersionsClientListResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdatePollerResponse` has been removed
+- Field `ApplicationsClientListResult` of struct `ApplicationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientListResponse` has been removed
+- Field `ApplicationTypesClientListResult` of struct `ApplicationTypesClientListResponse` has been removed
+- Field `RawResponse` of struct `ApplicationTypesClientListResponse` has been removed
+- Field `RawResponse` of struct `ApplicationTypeVersionsClientCreateOrUpdatePollerResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New struct `ErrorModel`
+- New struct `ErrorModelError`
+- New anonymous field `Cluster` in struct `ClustersClientGetResponse`
+- New anonymous field `ApplicationTypeVersionResource` in struct `ApplicationTypeVersionsClientCreateOrUpdateResponse`
+- New anonymous field `ClusterCodeVersionsListResult` in struct `ClusterVersionsClientListByEnvironmentResponse`
+- New anonymous field `ClusterListResult` in struct `ClustersClientListResponse`
+- New anonymous field `ClusterCodeVersionsListResult` in struct `ClusterVersionsClientGetByEnvironmentResponse`
+- New anonymous field `ServiceResource` in struct `ServicesClientUpdateResponse`
+- New anonymous field `ApplicationResourceList` in struct `ApplicationsClientListResponse`
+- New anonymous field `ApplicationResource` in struct `ApplicationsClientCreateOrUpdateResponse`
+- New anonymous field `ClusterCodeVersionsListResult` in struct `ClusterVersionsClientListResponse`
+- New anonymous field `ServiceResource` in struct `ServicesClientGetResponse`
+- New anonymous field `ClusterCodeVersionsListResult` in struct `ClusterVersionsClientGetResponse`
+- New anonymous field `UpgradableVersionPathResult` in struct `ClustersClientListUpgradableVersionsResponse`
+- New anonymous field `ApplicationResource` in struct `ApplicationsClientUpdateResponse`
+- New anonymous field `Cluster` in struct `ClustersClientUpdateResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `ApplicationTypeVersionResourceList` in struct `ApplicationTypeVersionsClientListResponse`
+- New anonymous field `ApplicationTypeVersionResource` in struct `ApplicationTypeVersionsClientGetResponse`
+- New anonymous field `Cluster` in struct `ClustersClientCreateOrUpdateResponse`
+- New anonymous field `ServiceResourceList` in struct `ServicesClientListResponse`
+- New anonymous field `ApplicationTypeResource` in struct `ApplicationTypesClientGetResponse`
+- New anonymous field `ApplicationResource` in struct `ApplicationsClientGetResponse`
+- New anonymous field `ServiceResource` in struct `ServicesClientCreateOrUpdateResponse`
+- New anonymous field `ClusterListResult` in struct `ClustersClientListByResourceGroupResponse`
+- New anonymous field `ApplicationTypeResource` in struct `ApplicationTypesClientCreateOrUpdateResponse`
+- New anonymous field `ApplicationTypeResourceList` in struct `ApplicationTypesClientListResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ClusterVersionsClient.ListByEnvironment` parameter(s) have been changed from `(context.Context, string, Enum14, *ClusterVersionsClientListByEnvironmentOptions)` to `(context.Context, string, ClusterVersionsEnvironment, *ClusterVersionsClientListByEnvironmentOptions)`
+- Function `*ClusterVersionsClient.GetByEnvironment` parameter(s) have been changed from `(context.Context, string, Enum14, string, *ClusterVersionsClientGetByEnvironmentOptions)` to `(context.Context, string, ClusterVersionsEnvironment, string, *ClusterVersionsClientGetByEnvironmentOptions)`
+- Const `Enum14Linux` has been removed
+- Const `Enum14Windows` has been removed
+- Function `PossibleEnum14Values` has been removed
+- Function `Enum14.ToPtr` has been removed
+- Struct `ErrorModel` has been removed
+- Struct `ErrorModelError` has been removed
+
+### Features Added
+
+- New const `ClusterVersionsEnvironmentLinux`
+- New const `ClusterVersionsEnvironmentWindows`
+- New function `ClusterVersionsEnvironment.ToPtr() *ClusterVersionsEnvironment`
+- New function `PossibleClusterVersionsEnvironmentValues() []ClusterVersionsEnvironment`
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

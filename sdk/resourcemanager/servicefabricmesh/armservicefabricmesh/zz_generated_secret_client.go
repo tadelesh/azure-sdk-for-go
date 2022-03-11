@@ -34,17 +34,17 @@ type SecretClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSecretClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SecretClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SecretClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -96,7 +96,7 @@ func (client *SecretClient) createCreateRequest(ctx context.Context, resourceGro
 
 // createHandleResponse handles the Create response.
 func (client *SecretClient) createHandleResponse(resp *http.Response) (SecretClientCreateResponse, error) {
-	result := SecretClientCreateResponse{RawResponse: resp}
+	result := SecretClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecretResourceDescription); err != nil {
 		return SecretClientCreateResponse{}, err
 	}
@@ -120,7 +120,7 @@ func (client *SecretClient) Delete(ctx context.Context, resourceGroupName string
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return SecretClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SecretClientDeleteResponse{RawResponse: resp}, nil
+	return SecretClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -192,7 +192,7 @@ func (client *SecretClient) getCreateRequest(ctx context.Context, resourceGroupN
 
 // getHandleResponse handles the Get response.
 func (client *SecretClient) getHandleResponse(resp *http.Response) (SecretClientGetResponse, error) {
-	result := SecretClientGetResponse{RawResponse: resp}
+	result := SecretClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecretResourceDescription); err != nil {
 		return SecretClientGetResponse{}, err
 	}
@@ -241,7 +241,7 @@ func (client *SecretClient) listByResourceGroupCreateRequest(ctx context.Context
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *SecretClient) listByResourceGroupHandleResponse(resp *http.Response) (SecretClientListByResourceGroupResponse, error) {
-	result := SecretClientListByResourceGroupResponse{RawResponse: resp}
+	result := SecretClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecretResourceDescriptionList); err != nil {
 		return SecretClientListByResourceGroupResponse{}, err
 	}
@@ -285,7 +285,7 @@ func (client *SecretClient) listBySubscriptionCreateRequest(ctx context.Context,
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *SecretClient) listBySubscriptionHandleResponse(resp *http.Response) (SecretClientListBySubscriptionResponse, error) {
-	result := SecretClientListBySubscriptionResponse{RawResponse: resp}
+	result := SecretClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecretResourceDescriptionList); err != nil {
 		return SecretClientListBySubscriptionResponse{}, err
 	}

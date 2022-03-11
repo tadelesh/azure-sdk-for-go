@@ -34,17 +34,17 @@ type NotebookWorkspacesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewNotebookWorkspacesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *NotebookWorkspacesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &NotebookWorkspacesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *NotebookWorkspacesClient) BeginCreateOrUpdate(ctx context.Context,
 	if err != nil {
 		return NotebookWorkspacesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := NotebookWorkspacesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := NotebookWorkspacesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("NotebookWorkspacesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return NotebookWorkspacesClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *NotebookWorkspacesClient) BeginDelete(ctx context.Context, resourc
 	if err != nil {
 		return NotebookWorkspacesClientDeletePollerResponse{}, err
 	}
-	result := NotebookWorkspacesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := NotebookWorkspacesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("NotebookWorkspacesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return NotebookWorkspacesClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *NotebookWorkspacesClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *NotebookWorkspacesClient) getHandleResponse(resp *http.Response) (NotebookWorkspacesClientGetResponse, error) {
-	result := NotebookWorkspacesClientGetResponse{RawResponse: resp}
+	result := NotebookWorkspacesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotebookWorkspace); err != nil {
 		return NotebookWorkspacesClientGetResponse{}, err
 	}
@@ -260,19 +256,13 @@ func (client *NotebookWorkspacesClient) getHandleResponse(resp *http.Response) (
 // accountName - Cosmos DB database account name.
 // options - NotebookWorkspacesClientListByDatabaseAccountOptions contains the optional parameters for the NotebookWorkspacesClient.ListByDatabaseAccount
 // method.
-func (client *NotebookWorkspacesClient) ListByDatabaseAccount(ctx context.Context, resourceGroupName string, accountName string, options *NotebookWorkspacesClientListByDatabaseAccountOptions) (NotebookWorkspacesClientListByDatabaseAccountResponse, error) {
-	req, err := client.listByDatabaseAccountCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return NotebookWorkspacesClientListByDatabaseAccountResponse{}, err
+func (client *NotebookWorkspacesClient) ListByDatabaseAccount(resourceGroupName string, accountName string, options *NotebookWorkspacesClientListByDatabaseAccountOptions) *NotebookWorkspacesClientListByDatabaseAccountPager {
+	return &NotebookWorkspacesClientListByDatabaseAccountPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByDatabaseAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return NotebookWorkspacesClientListByDatabaseAccountResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return NotebookWorkspacesClientListByDatabaseAccountResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByDatabaseAccountHandleResponse(resp)
 }
 
 // listByDatabaseAccountCreateRequest creates the ListByDatabaseAccount request.
@@ -303,7 +293,7 @@ func (client *NotebookWorkspacesClient) listByDatabaseAccountCreateRequest(ctx c
 
 // listByDatabaseAccountHandleResponse handles the ListByDatabaseAccount response.
 func (client *NotebookWorkspacesClient) listByDatabaseAccountHandleResponse(resp *http.Response) (NotebookWorkspacesClientListByDatabaseAccountResponse, error) {
-	result := NotebookWorkspacesClientListByDatabaseAccountResponse{RawResponse: resp}
+	result := NotebookWorkspacesClientListByDatabaseAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotebookWorkspaceListResult); err != nil {
 		return NotebookWorkspacesClientListByDatabaseAccountResponse{}, err
 	}
@@ -364,7 +354,7 @@ func (client *NotebookWorkspacesClient) listConnectionInfoCreateRequest(ctx cont
 
 // listConnectionInfoHandleResponse handles the ListConnectionInfo response.
 func (client *NotebookWorkspacesClient) listConnectionInfoHandleResponse(resp *http.Response) (NotebookWorkspacesClientListConnectionInfoResponse, error) {
-	result := NotebookWorkspacesClientListConnectionInfoResponse{RawResponse: resp}
+	result := NotebookWorkspacesClientListConnectionInfoResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotebookWorkspaceConnectionInfoResult); err != nil {
 		return NotebookWorkspacesClientListConnectionInfoResponse{}, err
 	}
@@ -383,9 +373,7 @@ func (client *NotebookWorkspacesClient) BeginRegenerateAuthToken(ctx context.Con
 	if err != nil {
 		return NotebookWorkspacesClientRegenerateAuthTokenPollerResponse{}, err
 	}
-	result := NotebookWorkspacesClientRegenerateAuthTokenPollerResponse{
-		RawResponse: resp,
-	}
+	result := NotebookWorkspacesClientRegenerateAuthTokenPollerResponse{}
 	pt, err := armruntime.NewPoller("NotebookWorkspacesClient.RegenerateAuthToken", "", resp, client.pl)
 	if err != nil {
 		return NotebookWorkspacesClientRegenerateAuthTokenPollerResponse{}, err
@@ -455,9 +443,7 @@ func (client *NotebookWorkspacesClient) BeginStart(ctx context.Context, resource
 	if err != nil {
 		return NotebookWorkspacesClientStartPollerResponse{}, err
 	}
-	result := NotebookWorkspacesClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := NotebookWorkspacesClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("NotebookWorkspacesClient.Start", "", resp, client.pl)
 	if err != nil {
 		return NotebookWorkspacesClientStartPollerResponse{}, err

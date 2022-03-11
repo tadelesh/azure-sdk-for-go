@@ -34,17 +34,17 @@ type CommitmentPlansClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCommitmentPlansClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CommitmentPlansClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CommitmentPlansClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *CommitmentPlansClient) createOrUpdateCreateRequest(ctx context.Con
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *CommitmentPlansClient) createOrUpdateHandleResponse(resp *http.Response) (CommitmentPlansClientCreateOrUpdateResponse, error) {
-	result := CommitmentPlansClientCreateOrUpdateResponse{RawResponse: resp}
+	result := CommitmentPlansClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CommitmentPlan); err != nil {
 		return CommitmentPlansClientCreateOrUpdateResponse{}, err
 	}
@@ -123,9 +123,7 @@ func (client *CommitmentPlansClient) BeginDelete(ctx context.Context, resourceGr
 	if err != nil {
 		return CommitmentPlansClientDeletePollerResponse{}, err
 	}
-	result := CommitmentPlansClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CommitmentPlansClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CommitmentPlansClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return CommitmentPlansClientDeletePollerResponse{}, err
@@ -236,7 +234,7 @@ func (client *CommitmentPlansClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *CommitmentPlansClient) getHandleResponse(resp *http.Response) (CommitmentPlansClientGetResponse, error) {
-	result := CommitmentPlansClientGetResponse{RawResponse: resp}
+	result := CommitmentPlansClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CommitmentPlan); err != nil {
 		return CommitmentPlansClientGetResponse{}, err
 	}
@@ -288,7 +286,7 @@ func (client *CommitmentPlansClient) listCreateRequest(ctx context.Context, reso
 
 // listHandleResponse handles the List response.
 func (client *CommitmentPlansClient) listHandleResponse(resp *http.Response) (CommitmentPlansClientListResponse, error) {
-	result := CommitmentPlansClientListResponse{RawResponse: resp}
+	result := CommitmentPlansClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CommitmentPlanListResult); err != nil {
 		return CommitmentPlansClientListResponse{}, err
 	}

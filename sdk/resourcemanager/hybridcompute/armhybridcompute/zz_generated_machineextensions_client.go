@@ -34,17 +34,17 @@ type MachineExtensionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMachineExtensionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MachineExtensionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MachineExtensionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *MachineExtensionsClient) BeginCreateOrUpdate(ctx context.Context, 
 	if err != nil {
 		return MachineExtensionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := MachineExtensionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := MachineExtensionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("MachineExtensionsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return MachineExtensionsClientCreateOrUpdatePollerResponse{}, err
@@ -116,7 +114,7 @@ func (client *MachineExtensionsClient) createOrUpdateCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-10-preview")
+	reqQP.Set("api-version", "2021-12-10-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, extensionParameters)
@@ -134,9 +132,7 @@ func (client *MachineExtensionsClient) BeginDelete(ctx context.Context, resource
 	if err != nil {
 		return MachineExtensionsClientDeletePollerResponse{}, err
 	}
-	result := MachineExtensionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := MachineExtensionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("MachineExtensionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return MachineExtensionsClientDeletePollerResponse{}, err
@@ -188,7 +184,7 @@ func (client *MachineExtensionsClient) deleteCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-10-preview")
+	reqQP.Set("api-version", "2021-12-10-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -239,7 +235,7 @@ func (client *MachineExtensionsClient) getCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-10-preview")
+	reqQP.Set("api-version", "2021-12-10-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -247,7 +243,7 @@ func (client *MachineExtensionsClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *MachineExtensionsClient) getHandleResponse(resp *http.Response) (MachineExtensionsClientGetResponse, error) {
-	result := MachineExtensionsClientGetResponse{RawResponse: resp}
+	result := MachineExtensionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MachineExtension); err != nil {
 		return MachineExtensionsClientGetResponse{}, err
 	}
@@ -294,7 +290,7 @@ func (client *MachineExtensionsClient) listCreateRequest(ctx context.Context, re
 	if options != nil && options.Expand != nil {
 		reqQP.Set("$expand", *options.Expand)
 	}
-	reqQP.Set("api-version", "2021-06-10-preview")
+	reqQP.Set("api-version", "2021-12-10-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -302,7 +298,7 @@ func (client *MachineExtensionsClient) listCreateRequest(ctx context.Context, re
 
 // listHandleResponse handles the List response.
 func (client *MachineExtensionsClient) listHandleResponse(resp *http.Response) (MachineExtensionsClientListResponse, error) {
-	result := MachineExtensionsClientListResponse{RawResponse: resp}
+	result := MachineExtensionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MachineExtensionsListResult); err != nil {
 		return MachineExtensionsClientListResponse{}, err
 	}
@@ -322,9 +318,7 @@ func (client *MachineExtensionsClient) BeginUpdate(ctx context.Context, resource
 	if err != nil {
 		return MachineExtensionsClientUpdatePollerResponse{}, err
 	}
-	result := MachineExtensionsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := MachineExtensionsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("MachineExtensionsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return MachineExtensionsClientUpdatePollerResponse{}, err
@@ -376,7 +370,7 @@ func (client *MachineExtensionsClient) updateCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-10-preview")
+	reqQP.Set("api-version", "2021-12-10-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, extensionParameters)

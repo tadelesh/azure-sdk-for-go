@@ -35,17 +35,17 @@ type LiveEventsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLiveEventsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LiveEventsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LiveEventsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *LiveEventsClient) BeginAllocate(ctx context.Context, resourceGroup
 	if err != nil {
 		return LiveEventsClientAllocatePollerResponse{}, err
 	}
-	result := LiveEventsClientAllocatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LiveEventsClientAllocatePollerResponse{}
 	pt, err := armruntime.NewPoller("LiveEventsClient.Allocate", "", resp, client.pl)
 	if err != nil {
 		return LiveEventsClientAllocatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *LiveEventsClient) BeginCreate(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return LiveEventsClientCreatePollerResponse{}, err
 	}
-	result := LiveEventsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LiveEventsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("LiveEventsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return LiveEventsClientCreatePollerResponse{}, err
@@ -208,9 +204,7 @@ func (client *LiveEventsClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return LiveEventsClientDeletePollerResponse{}, err
 	}
-	result := LiveEventsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := LiveEventsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("LiveEventsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return LiveEventsClientDeletePollerResponse{}, err
@@ -321,7 +315,7 @@ func (client *LiveEventsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *LiveEventsClient) getHandleResponse(resp *http.Response) (LiveEventsClientGetResponse, error) {
-	result := LiveEventsClientGetResponse{RawResponse: resp}
+	result := LiveEventsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LiveEvent); err != nil {
 		return LiveEventsClientGetResponse{}, err
 	}
@@ -373,7 +367,7 @@ func (client *LiveEventsClient) listCreateRequest(ctx context.Context, resourceG
 
 // listHandleResponse handles the List response.
 func (client *LiveEventsClient) listHandleResponse(resp *http.Response) (LiveEventsClientListResponse, error) {
-	result := LiveEventsClientListResponse{RawResponse: resp}
+	result := LiveEventsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LiveEventListResult); err != nil {
 		return LiveEventsClientListResponse{}, err
 	}
@@ -393,9 +387,7 @@ func (client *LiveEventsClient) BeginReset(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return LiveEventsClientResetPollerResponse{}, err
 	}
-	result := LiveEventsClientResetPollerResponse{
-		RawResponse: resp,
-	}
+	result := LiveEventsClientResetPollerResponse{}
 	pt, err := armruntime.NewPoller("LiveEventsClient.Reset", "", resp, client.pl)
 	if err != nil {
 		return LiveEventsClientResetPollerResponse{}, err
@@ -466,9 +458,7 @@ func (client *LiveEventsClient) BeginStart(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return LiveEventsClientStartPollerResponse{}, err
 	}
-	result := LiveEventsClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := LiveEventsClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("LiveEventsClient.Start", "", resp, client.pl)
 	if err != nil {
 		return LiveEventsClientStartPollerResponse{}, err
@@ -538,9 +528,7 @@ func (client *LiveEventsClient) BeginStop(ctx context.Context, resourceGroupName
 	if err != nil {
 		return LiveEventsClientStopPollerResponse{}, err
 	}
-	result := LiveEventsClientStopPollerResponse{
-		RawResponse: resp,
-	}
+	result := LiveEventsClientStopPollerResponse{}
 	pt, err := armruntime.NewPoller("LiveEventsClient.Stop", "", resp, client.pl)
 	if err != nil {
 		return LiveEventsClientStopPollerResponse{}, err
@@ -610,9 +598,7 @@ func (client *LiveEventsClient) BeginUpdate(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return LiveEventsClientUpdatePollerResponse{}, err
 	}
-	result := LiveEventsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LiveEventsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("LiveEventsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return LiveEventsClientUpdatePollerResponse{}, err

@@ -34,17 +34,17 @@ type SQLPoolWorkloadGroupClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLPoolWorkloadGroupClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLPoolWorkloadGroupClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLPoolWorkloadGroupClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *SQLPoolWorkloadGroupClient) BeginCreateOrUpdate(ctx context.Contex
 	if err != nil {
 		return SQLPoolWorkloadGroupClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := SQLPoolWorkloadGroupClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLPoolWorkloadGroupClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLPoolWorkloadGroupClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return SQLPoolWorkloadGroupClientCreateOrUpdatePollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *SQLPoolWorkloadGroupClient) BeginDelete(ctx context.Context, resou
 	if err != nil {
 		return SQLPoolWorkloadGroupClientDeletePollerResponse{}, err
 	}
-	result := SQLPoolWorkloadGroupClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLPoolWorkloadGroupClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLPoolWorkloadGroupClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return SQLPoolWorkloadGroupClientDeletePollerResponse{}, err
@@ -262,7 +258,7 @@ func (client *SQLPoolWorkloadGroupClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *SQLPoolWorkloadGroupClient) getHandleResponse(resp *http.Response) (SQLPoolWorkloadGroupClientGetResponse, error) {
-	result := SQLPoolWorkloadGroupClientGetResponse{RawResponse: resp}
+	result := SQLPoolWorkloadGroupClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadGroup); err != nil {
 		return SQLPoolWorkloadGroupClientGetResponse{}, err
 	}
@@ -320,7 +316,7 @@ func (client *SQLPoolWorkloadGroupClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *SQLPoolWorkloadGroupClient) listHandleResponse(resp *http.Response) (SQLPoolWorkloadGroupClientListResponse, error) {
-	result := SQLPoolWorkloadGroupClientListResponse{RawResponse: resp}
+	result := SQLPoolWorkloadGroupClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadGroupListResult); err != nil {
 		return SQLPoolWorkloadGroupClientListResponse{}, err
 	}

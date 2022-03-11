@@ -34,17 +34,17 @@ type RecoverableManagedDatabasesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRecoverableManagedDatabasesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RecoverableManagedDatabasesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RecoverableManagedDatabasesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *RecoverableManagedDatabasesClient) getCreateRequest(ctx context.Co
 
 // getHandleResponse handles the Get response.
 func (client *RecoverableManagedDatabasesClient) getHandleResponse(resp *http.Response) (RecoverableManagedDatabasesClientGetResponse, error) {
-	result := RecoverableManagedDatabasesClientGetResponse{RawResponse: resp}
+	result := RecoverableManagedDatabasesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecoverableManagedDatabase); err != nil {
 		return RecoverableManagedDatabasesClientGetResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *RecoverableManagedDatabasesClient) listByInstanceCreateRequest(ctx
 
 // listByInstanceHandleResponse handles the ListByInstance response.
 func (client *RecoverableManagedDatabasesClient) listByInstanceHandleResponse(resp *http.Response) (RecoverableManagedDatabasesClientListByInstanceResponse, error) {
-	result := RecoverableManagedDatabasesClientListByInstanceResponse{RawResponse: resp}
+	result := RecoverableManagedDatabasesClientListByInstanceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecoverableManagedDatabaseListResult); err != nil {
 		return RecoverableManagedDatabasesClientListByInstanceResponse{}, err
 	}

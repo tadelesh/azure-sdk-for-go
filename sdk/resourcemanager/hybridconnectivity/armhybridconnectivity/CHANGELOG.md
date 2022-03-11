@@ -1,5 +1,62 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*EndpointsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(EndpointsClientListResponse, error)`
+- Function `*EndpointsClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*EndpointsClientListPager.Err` has been removed
+- Struct `EndpointsClientCreateOrUpdateResult` has been removed
+- Struct `EndpointsClientGetResult` has been removed
+- Struct `EndpointsClientListCredentialsResult` has been removed
+- Struct `EndpointsClientListResult` has been removed
+- Struct `EndpointsClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `EndpointsClientUpdateResult` of struct `EndpointsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `EndpointsClientUpdateResponse` has been removed
+- Field `EndpointsClientListResult` of struct `EndpointsClientListResponse` has been removed
+- Field `RawResponse` of struct `EndpointsClientListResponse` has been removed
+- Field `EndpointsClientListCredentialsResult` of struct `EndpointsClientListCredentialsResponse` has been removed
+- Field `RawResponse` of struct `EndpointsClientListCredentialsResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `EndpointsClientCreateOrUpdateResult` of struct `EndpointsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `EndpointsClientCreateOrUpdateResponse` has been removed
+- Field `EndpointsClientGetResult` of struct `EndpointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `EndpointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `EndpointsClientDeleteResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*EndpointsClientListPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `EndpointResource` in struct `EndpointsClientCreateOrUpdateResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `EndpointResource` in struct `EndpointsClientGetResponse`
+- New anonymous field `EndpointsList` in struct `EndpointsClientListResponse`
+- New anonymous field `EndpointAccessResource` in struct `EndpointsClientListCredentialsResponse`
+- New anonymous field `EndpointResource` in struct `EndpointsClientUpdateResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

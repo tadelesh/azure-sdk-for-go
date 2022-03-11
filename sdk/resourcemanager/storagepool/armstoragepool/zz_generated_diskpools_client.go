@@ -34,17 +34,17 @@ type DiskPoolsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDiskPoolsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DiskPoolsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DiskPoolsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *DiskPoolsClient) BeginCreateOrUpdate(ctx context.Context, resource
 	if err != nil {
 		return DiskPoolsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DiskPoolsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DiskPoolsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DiskPoolsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DiskPoolsClientCreateOrUpdatePollerResponse{}, err
@@ -132,9 +130,7 @@ func (client *DiskPoolsClient) BeginDeallocate(ctx context.Context, resourceGrou
 	if err != nil {
 		return DiskPoolsClientDeallocatePollerResponse{}, err
 	}
-	result := DiskPoolsClientDeallocatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DiskPoolsClientDeallocatePollerResponse{}
 	pt, err := armruntime.NewPoller("DiskPoolsClient.Deallocate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DiskPoolsClientDeallocatePollerResponse{}, err
@@ -201,9 +197,7 @@ func (client *DiskPoolsClient) BeginDelete(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DiskPoolsClientDeletePollerResponse{}, err
 	}
-	result := DiskPoolsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DiskPoolsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DiskPoolsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DiskPoolsClientDeletePollerResponse{}, err
@@ -306,7 +300,7 @@ func (client *DiskPoolsClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *DiskPoolsClient) getHandleResponse(resp *http.Response) (DiskPoolsClientGetResponse, error) {
-	result := DiskPoolsClientGetResponse{RawResponse: resp}
+	result := DiskPoolsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiskPool); err != nil {
 		return DiskPoolsClientGetResponse{}, err
 	}
@@ -354,7 +348,7 @@ func (client *DiskPoolsClient) listByResourceGroupCreateRequest(ctx context.Cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *DiskPoolsClient) listByResourceGroupHandleResponse(resp *http.Response) (DiskPoolsClientListByResourceGroupResponse, error) {
-	result := DiskPoolsClientListByResourceGroupResponse{RawResponse: resp}
+	result := DiskPoolsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiskPoolListResult); err != nil {
 		return DiskPoolsClientListByResourceGroupResponse{}, err
 	}
@@ -397,7 +391,7 @@ func (client *DiskPoolsClient) listBySubscriptionCreateRequest(ctx context.Conte
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *DiskPoolsClient) listBySubscriptionHandleResponse(resp *http.Response) (DiskPoolsClientListBySubscriptionResponse, error) {
-	result := DiskPoolsClientListBySubscriptionResponse{RawResponse: resp}
+	result := DiskPoolsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiskPoolListResult); err != nil {
 		return DiskPoolsClientListBySubscriptionResponse{}, err
 	}
@@ -450,7 +444,7 @@ func (client *DiskPoolsClient) listOutboundNetworkDependenciesEndpointsCreateReq
 
 // listOutboundNetworkDependenciesEndpointsHandleResponse handles the ListOutboundNetworkDependenciesEndpoints response.
 func (client *DiskPoolsClient) listOutboundNetworkDependenciesEndpointsHandleResponse(resp *http.Response) (DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse, error) {
-	result := DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse{RawResponse: resp}
+	result := DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OutboundEnvironmentEndpointList); err != nil {
 		return DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse{}, err
 	}
@@ -468,9 +462,7 @@ func (client *DiskPoolsClient) BeginStart(ctx context.Context, resourceGroupName
 	if err != nil {
 		return DiskPoolsClientStartPollerResponse{}, err
 	}
-	result := DiskPoolsClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := DiskPoolsClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("DiskPoolsClient.Start", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DiskPoolsClientStartPollerResponse{}, err
@@ -536,9 +528,7 @@ func (client *DiskPoolsClient) BeginUpdate(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DiskPoolsClientUpdatePollerResponse{}, err
 	}
-	result := DiskPoolsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DiskPoolsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DiskPoolsClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DiskPoolsClientUpdatePollerResponse{}, err
@@ -603,9 +593,7 @@ func (client *DiskPoolsClient) BeginUpgrade(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return DiskPoolsClientUpgradePollerResponse{}, err
 	}
-	result := DiskPoolsClientUpgradePollerResponse{
-		RawResponse: resp,
-	}
+	result := DiskPoolsClientUpgradePollerResponse{}
 	pt, err := armruntime.NewPoller("DiskPoolsClient.Upgrade", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DiskPoolsClientUpgradePollerResponse{}, err

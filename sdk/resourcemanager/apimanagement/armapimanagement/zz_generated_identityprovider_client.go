@@ -35,17 +35,17 @@ type IdentityProviderClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIdentityProviderClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IdentityProviderClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IdentityProviderClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *IdentityProviderClient) createOrUpdateCreateRequest(ctx context.Co
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *IdentityProviderClient) createOrUpdateHandleResponse(resp *http.Response) (IdentityProviderClientCreateOrUpdateResponse, error) {
-	result := IdentityProviderClientCreateOrUpdateResponse{RawResponse: resp}
+	result := IdentityProviderClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -138,7 +138,7 @@ func (client *IdentityProviderClient) Delete(ctx context.Context, resourceGroupN
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return IdentityProviderClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return IdentityProviderClientDeleteResponse{RawResponse: resp}, nil
+	return IdentityProviderClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -225,7 +225,7 @@ func (client *IdentityProviderClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *IdentityProviderClient) getHandleResponse(resp *http.Response) (IdentityProviderClientGetResponse, error) {
-	result := IdentityProviderClientGetResponse{RawResponse: resp}
+	result := IdentityProviderClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -285,7 +285,7 @@ func (client *IdentityProviderClient) getEntityTagCreateRequest(ctx context.Cont
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *IdentityProviderClient) getEntityTagHandleResponse(resp *http.Response) (IdentityProviderClientGetEntityTagResponse, error) {
-	result := IdentityProviderClientGetEntityTagResponse{RawResponse: resp}
+	result := IdentityProviderClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -341,7 +341,7 @@ func (client *IdentityProviderClient) listByServiceCreateRequest(ctx context.Con
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *IdentityProviderClient) listByServiceHandleResponse(resp *http.Response) (IdentityProviderClientListByServiceResponse, error) {
-	result := IdentityProviderClientListByServiceResponse{RawResponse: resp}
+	result := IdentityProviderClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IdentityProviderList); err != nil {
 		return IdentityProviderClientListByServiceResponse{}, err
 	}
@@ -402,7 +402,7 @@ func (client *IdentityProviderClient) listSecretsCreateRequest(ctx context.Conte
 
 // listSecretsHandleResponse handles the ListSecrets response.
 func (client *IdentityProviderClient) listSecretsHandleResponse(resp *http.Response) (IdentityProviderClientListSecretsResponse, error) {
-	result := IdentityProviderClientListSecretsResponse{RawResponse: resp}
+	result := IdentityProviderClientListSecretsResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -469,7 +469,7 @@ func (client *IdentityProviderClient) updateCreateRequest(ctx context.Context, r
 
 // updateHandleResponse handles the Update response.
 func (client *IdentityProviderClient) updateHandleResponse(resp *http.Response) (IdentityProviderClientUpdateResponse, error) {
-	result := IdentityProviderClientUpdateResponse{RawResponse: resp}
+	result := IdentityProviderClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

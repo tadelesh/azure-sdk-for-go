@@ -35,17 +35,17 @@ type CloudServiceOperatingSystemsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCloudServiceOperatingSystemsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CloudServiceOperatingSystemsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CloudServiceOperatingSystemsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *CloudServiceOperatingSystemsClient) getOSFamilyCreateRequest(ctx c
 
 // getOSFamilyHandleResponse handles the GetOSFamily response.
 func (client *CloudServiceOperatingSystemsClient) getOSFamilyHandleResponse(resp *http.Response) (CloudServiceOperatingSystemsClientGetOSFamilyResponse, error) {
-	result := CloudServiceOperatingSystemsClientGetOSFamilyResponse{RawResponse: resp}
+	result := CloudServiceOperatingSystemsClientGetOSFamilyResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OSFamily); err != nil {
 		return CloudServiceOperatingSystemsClientGetOSFamilyResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *CloudServiceOperatingSystemsClient) getOSVersionCreateRequest(ctx 
 
 // getOSVersionHandleResponse handles the GetOSVersion response.
 func (client *CloudServiceOperatingSystemsClient) getOSVersionHandleResponse(resp *http.Response) (CloudServiceOperatingSystemsClientGetOSVersionResponse, error) {
-	result := CloudServiceOperatingSystemsClientGetOSVersionResponse{RawResponse: resp}
+	result := CloudServiceOperatingSystemsClientGetOSVersionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OSVersion); err != nil {
 		return CloudServiceOperatingSystemsClientGetOSVersionResponse{}, err
 	}
@@ -207,7 +207,7 @@ func (client *CloudServiceOperatingSystemsClient) listOSFamiliesCreateRequest(ct
 
 // listOSFamiliesHandleResponse handles the ListOSFamilies response.
 func (client *CloudServiceOperatingSystemsClient) listOSFamiliesHandleResponse(resp *http.Response) (CloudServiceOperatingSystemsClientListOSFamiliesResponse, error) {
-	result := CloudServiceOperatingSystemsClientListOSFamiliesResponse{RawResponse: resp}
+	result := CloudServiceOperatingSystemsClientListOSFamiliesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OSFamilyListResult); err != nil {
 		return CloudServiceOperatingSystemsClientListOSFamiliesResponse{}, err
 	}
@@ -257,7 +257,7 @@ func (client *CloudServiceOperatingSystemsClient) listOSVersionsCreateRequest(ct
 
 // listOSVersionsHandleResponse handles the ListOSVersions response.
 func (client *CloudServiceOperatingSystemsClient) listOSVersionsHandleResponse(resp *http.Response) (CloudServiceOperatingSystemsClientListOSVersionsResponse, error) {
-	result := CloudServiceOperatingSystemsClientListOSVersionsResponse{RawResponse: resp}
+	result := CloudServiceOperatingSystemsClientListOSVersionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OSVersionListResult); err != nil {
 		return CloudServiceOperatingSystemsClientListOSVersionsResponse{}, err
 	}

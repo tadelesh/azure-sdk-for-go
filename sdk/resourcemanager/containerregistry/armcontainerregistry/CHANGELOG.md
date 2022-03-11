@@ -1,5 +1,874 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*TaskRunsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(TaskRunsClientListResponse, error)`
+- Function `*AgentPoolsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(AgentPoolsClientListResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ScopeMapsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ScopeMapsClientListResponse, error)`
+- Function `*ReplicationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ReplicationsClientListResponse, error)`
+- Function `*TokensClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(TokensClientListResponse, error)`
+- Function `*WebhooksClientListEventsPager.NextPage` return value(s) have been changed from `(bool)` to `(WebhooksClientListEventsResponse, error)`
+- Function `*ExportPipelinesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ExportPipelinesClientListResponse, error)`
+- Function `*RegistriesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(RegistriesClientListByResourceGroupResponse, error)`
+- Function `*PipelineRunsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PipelineRunsClientListResponse, error)`
+- Function `*RegistriesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(RegistriesClientListResponse, error)`
+- Function `*RegistriesClientListPrivateLinkResourcesPager.NextPage` return value(s) have been changed from `(bool)` to `(RegistriesClientListPrivateLinkResourcesResponse, error)`
+- Function `*PrivateEndpointConnectionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateEndpointConnectionsClientListResponse, error)`
+- Function `*WebhooksClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(WebhooksClientListResponse, error)`
+- Function `*TasksClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(TasksClientListResponse, error)`
+- Function `*ImportPipelinesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ImportPipelinesClientListResponse, error)`
+- Function `*RunsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(RunsClientListResponse, error)`
+- Function `*ConnectedRegistriesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ConnectedRegistriesClientListResponse, error)`
+- Function `*PrivateEndpointConnectionsClientListPager.PageResponse` has been removed
+- Function `*WebhooksClientListEventsPager.Err` has been removed
+- Function `*AgentPoolsClientListPager.PageResponse` has been removed
+- Function `*TasksClientListPager.Err` has been removed
+- Function `*PrivateEndpointConnectionsClientListPager.Err` has been removed
+- Function `*AgentPoolsClientListPager.Err` has been removed
+- Function `*PipelineRunsClientListPager.Err` has been removed
+- Function `*ScopeMapsClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*RegistriesClientListPrivateLinkResourcesPager.PageResponse` has been removed
+- Function `*RegistriesClientListPager.Err` has been removed
+- Function `*ConnectedRegistriesClientListPager.PageResponse` has been removed
+- Function `*ImportPipelinesClientListPager.PageResponse` has been removed
+- Function `*WebhooksClientListPager.PageResponse` has been removed
+- Function `*WebhooksClientListEventsPager.PageResponse` has been removed
+- Function `*ExportPipelinesClientListPager.Err` has been removed
+- Function `*ReplicationsClientListPager.Err` has been removed
+- Function `*TokensClientListPager.Err` has been removed
+- Function `*PipelineRunsClientListPager.PageResponse` has been removed
+- Function `*RegistriesClientListPager.PageResponse` has been removed
+- Function `*ConnectedRegistriesClientListPager.Err` has been removed
+- Function `*RunsClientListPager.Err` has been removed
+- Function `*TasksClientListPager.PageResponse` has been removed
+- Function `*ExportPipelinesClientListPager.PageResponse` has been removed
+- Function `*RegistriesClientListByResourceGroupPager.Err` has been removed
+- Function `*WebhooksClientListPager.Err` has been removed
+- Function `*ReplicationsClientListPager.PageResponse` has been removed
+- Function `*RunsClientListPager.PageResponse` has been removed
+- Function `*TokensClientListPager.PageResponse` has been removed
+- Function `*TaskRunsClientListPager.PageResponse` has been removed
+- Function `*RegistriesClientListPrivateLinkResourcesPager.Err` has been removed
+- Function `*ImportPipelinesClientListPager.Err` has been removed
+- Function `*TaskRunsClientListPager.Err` has been removed
+- Function `*RegistriesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ScopeMapsClientListPager.Err` has been removed
+- Struct `AgentPoolsClientCreateResult` has been removed
+- Struct `AgentPoolsClientGetQueueStatusResult` has been removed
+- Struct `AgentPoolsClientGetResult` has been removed
+- Struct `AgentPoolsClientListResult` has been removed
+- Struct `AgentPoolsClientUpdateResult` has been removed
+- Struct `ConnectedRegistriesClientCreateResult` has been removed
+- Struct `ConnectedRegistriesClientGetResult` has been removed
+- Struct `ConnectedRegistriesClientListResult` has been removed
+- Struct `ConnectedRegistriesClientUpdateResult` has been removed
+- Struct `ExportPipelinesClientCreateResult` has been removed
+- Struct `ExportPipelinesClientGetResult` has been removed
+- Struct `ExportPipelinesClientListResult` has been removed
+- Struct `ImportPipelinesClientCreateResult` has been removed
+- Struct `ImportPipelinesClientGetResult` has been removed
+- Struct `ImportPipelinesClientListResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PipelineRunsClientCreateResult` has been removed
+- Struct `PipelineRunsClientGetResult` has been removed
+- Struct `PipelineRunsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientCreateOrUpdateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListResult` has been removed
+- Struct `RegistriesClientCheckNameAvailabilityResult` has been removed
+- Struct `RegistriesClientCreateResult` has been removed
+- Struct `RegistriesClientGenerateCredentialsResult` has been removed
+- Struct `RegistriesClientGetBuildSourceUploadURLResult` has been removed
+- Struct `RegistriesClientGetPrivateLinkResourceResult` has been removed
+- Struct `RegistriesClientGetResult` has been removed
+- Struct `RegistriesClientListByResourceGroupResult` has been removed
+- Struct `RegistriesClientListCredentialsResult` has been removed
+- Struct `RegistriesClientListPrivateLinkResourcesResult` has been removed
+- Struct `RegistriesClientListResult` has been removed
+- Struct `RegistriesClientListUsagesResult` has been removed
+- Struct `RegistriesClientRegenerateCredentialResult` has been removed
+- Struct `RegistriesClientScheduleRunResult` has been removed
+- Struct `RegistriesClientUpdateResult` has been removed
+- Struct `ReplicationsClientCreateResult` has been removed
+- Struct `ReplicationsClientGetResult` has been removed
+- Struct `ReplicationsClientListResult` has been removed
+- Struct `ReplicationsClientUpdateResult` has been removed
+- Struct `RunsClientGetLogSasURLResult` has been removed
+- Struct `RunsClientGetResult` has been removed
+- Struct `RunsClientListResult` has been removed
+- Struct `RunsClientUpdateResult` has been removed
+- Struct `ScopeMapsClientCreateResult` has been removed
+- Struct `ScopeMapsClientGetResult` has been removed
+- Struct `ScopeMapsClientListResult` has been removed
+- Struct `ScopeMapsClientUpdateResult` has been removed
+- Struct `TaskRunsClientCreateResult` has been removed
+- Struct `TaskRunsClientGetDetailsResult` has been removed
+- Struct `TaskRunsClientGetResult` has been removed
+- Struct `TaskRunsClientListResult` has been removed
+- Struct `TaskRunsClientUpdateResult` has been removed
+- Struct `TasksClientCreateResult` has been removed
+- Struct `TasksClientGetDetailsResult` has been removed
+- Struct `TasksClientGetResult` has been removed
+- Struct `TasksClientListResult` has been removed
+- Struct `TasksClientUpdateResult` has been removed
+- Struct `TokensClientCreateResult` has been removed
+- Struct `TokensClientGetResult` has been removed
+- Struct `TokensClientListResult` has been removed
+- Struct `TokensClientUpdateResult` has been removed
+- Struct `WebhooksClientCreateResult` has been removed
+- Struct `WebhooksClientGetCallbackConfigResult` has been removed
+- Struct `WebhooksClientGetResult` has been removed
+- Struct `WebhooksClientListEventsResult` has been removed
+- Struct `WebhooksClientListResult` has been removed
+- Struct `WebhooksClientPingResult` has been removed
+- Struct `WebhooksClientUpdateResult` has been removed
+- Field `TaskRunsClientCreateResult` of struct `TaskRunsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `TaskRunsClientCreateResponse` has been removed
+- Field `TaskRunsClientGetResult` of struct `TaskRunsClientGetResponse` has been removed
+- Field `RawResponse` of struct `TaskRunsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `WebhooksClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientScheduleRunPollerResponse` has been removed
+- Field `RawResponse` of struct `PipelineRunsClientCreatePollerResponse` has been removed
+- Field `TaskRunsClientListResult` of struct `TaskRunsClientListResponse` has been removed
+- Field `RawResponse` of struct `TaskRunsClientListResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListResult` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `ExportPipelinesClientGetResult` of struct `ExportPipelinesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ExportPipelinesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConnectedRegistriesClientDeactivateResponse` has been removed
+- Field `WebhooksClientListResult` of struct `WebhooksClientListResponse` has been removed
+- Field `RawResponse` of struct `WebhooksClientListResponse` has been removed
+- Field `RawResponse` of struct `ConnectedRegistriesClientDeletePollerResponse` has been removed
+- Field `RunsClientListResult` of struct `RunsClientListResponse` has been removed
+- Field `RawResponse` of struct `RunsClientListResponse` has been removed
+- Field `RegistriesClientListCredentialsResult` of struct `RegistriesClientListCredentialsResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientListCredentialsResponse` has been removed
+- Field `TasksClientListResult` of struct `TasksClientListResponse` has been removed
+- Field `RawResponse` of struct `TasksClientListResponse` has been removed
+- Field `RawResponse` of struct `TaskRunsClientCreatePollerResponse` has been removed
+- Field `RegistriesClientGetResult` of struct `RegistriesClientGetResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientGetResponse` has been removed
+- Field `WebhooksClientGetResult` of struct `WebhooksClientGetResponse` has been removed
+- Field `RawResponse` of struct `WebhooksClientGetResponse` has been removed
+- Field `RawResponse` of struct `ExportPipelinesClientCreatePollerResponse` has been removed
+- Field `RegistriesClientGetPrivateLinkResourceResult` of struct `RegistriesClientGetPrivateLinkResourceResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientGetPrivateLinkResourceResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RegistriesClientCheckNameAvailabilityResult` of struct `RegistriesClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientCheckNameAvailabilityResponse` has been removed
+- Field `TokensClientUpdateResult` of struct `TokensClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `TokensClientUpdateResponse` has been removed
+- Field `TasksClientCreateResult` of struct `TasksClientCreateResponse` has been removed
+- Field `RawResponse` of struct `TasksClientCreateResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `TokensClientGetResult` of struct `TokensClientGetResponse` has been removed
+- Field `RawResponse` of struct `TokensClientGetResponse` has been removed
+- Field `TaskRunsClientGetDetailsResult` of struct `TaskRunsClientGetDetailsResponse` has been removed
+- Field `RawResponse` of struct `TaskRunsClientGetDetailsResponse` has been removed
+- Field `ExportPipelinesClientListResult` of struct `ExportPipelinesClientListResponse` has been removed
+- Field `RawResponse` of struct `ExportPipelinesClientListResponse` has been removed
+- Field `TasksClientGetResult` of struct `TasksClientGetResponse` has been removed
+- Field `RawResponse` of struct `TasksClientGetResponse` has been removed
+- Field `RegistriesClientRegenerateCredentialResult` of struct `RegistriesClientRegenerateCredentialResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientRegenerateCredentialResponse` has been removed
+- Field `RawResponse` of struct `ConnectedRegistriesClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ReplicationsClientDeleteResponse` has been removed
+- Field `AgentPoolsClientCreateResult` of struct `AgentPoolsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientCreateResponse` has been removed
+- Field `RunsClientGetResult` of struct `RunsClientGetResponse` has been removed
+- Field `RawResponse` of struct `RunsClientGetResponse` has been removed
+- Field `RawResponse` of struct `TasksClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `WebhooksClientCreatePollerResponse` has been removed
+- Field `ConnectedRegistriesClientGetResult` of struct `ConnectedRegistriesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConnectedRegistriesClientGetResponse` has been removed
+- Field `TasksClientGetDetailsResult` of struct `TasksClientGetDetailsResponse` has been removed
+- Field `RawResponse` of struct `TasksClientGetDetailsResponse` has been removed
+- Field `RawResponse` of struct `TokensClientDeletePollerResponse` has been removed
+- Field `TokensClientListResult` of struct `TokensClientListResponse` has been removed
+- Field `RawResponse` of struct `TokensClientListResponse` has been removed
+- Field `AgentPoolsClientUpdateResult` of struct `AgentPoolsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `TaskRunsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientUpdatePollerResponse` has been removed
+- Field `TokensClientCreateResult` of struct `TokensClientCreateResponse` has been removed
+- Field `RawResponse` of struct `TokensClientCreateResponse` has been removed
+- Field `ImportPipelinesClientCreateResult` of struct `ImportPipelinesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ImportPipelinesClientCreateResponse` has been removed
+- Field `RegistriesClientListByResourceGroupResult` of struct `RegistriesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientListByResourceGroupResponse` has been removed
+- Field `RegistriesClientGetBuildSourceUploadURLResult` of struct `RegistriesClientGetBuildSourceUploadURLResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientGetBuildSourceUploadURLResponse` has been removed
+- Field `ConnectedRegistriesClientUpdateResult` of struct `ConnectedRegistriesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ConnectedRegistriesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ReplicationsClientCreatePollerResponse` has been removed
+- Field `ImportPipelinesClientGetResult` of struct `ImportPipelinesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ImportPipelinesClientGetResponse` has been removed
+- Field `WebhooksClientListEventsResult` of struct `WebhooksClientListEventsResponse` has been removed
+- Field `RawResponse` of struct `WebhooksClientListEventsResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ImportPipelinesClientCreatePollerResponse` has been removed
+- Field `RawResponse` of struct `TasksClientDeletePollerResponse` has been removed
+- Field `ReplicationsClientUpdateResult` of struct `ReplicationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ReplicationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ScopeMapsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ScopeMapsClientCreatePollerResponse` has been removed
+- Field `ImportPipelinesClientListResult` of struct `ImportPipelinesClientListResponse` has been removed
+- Field `RawResponse` of struct `ImportPipelinesClientListResponse` has been removed
+- Field `WebhooksClientUpdateResult` of struct `WebhooksClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `WebhooksClientUpdateResponse` has been removed
+- Field `PipelineRunsClientCreateResult` of struct `PipelineRunsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `PipelineRunsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientImportImageResponse` has been removed
+- Field `RawResponse` of struct `ExportPipelinesClientDeleteResponse` has been removed
+- Field `ScopeMapsClientCreateResult` of struct `ScopeMapsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ScopeMapsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `TokensClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `TokensClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `PipelineRunsClientDeletePollerResponse` has been removed
+- Field `RegistriesClientListUsagesResult` of struct `RegistriesClientListUsagesResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientListUsagesResponse` has been removed
+- Field `RawResponse` of struct `TaskRunsClientDeletePollerResponse` has been removed
+- Field `WebhooksClientPingResult` of struct `WebhooksClientPingResponse` has been removed
+- Field `RawResponse` of struct `WebhooksClientPingResponse` has been removed
+- Field `RegistriesClientListPrivateLinkResourcesResult` of struct `RegistriesClientListPrivateLinkResourcesResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientListPrivateLinkResourcesResponse` has been removed
+- Field `TasksClientUpdateResult` of struct `TasksClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `TasksClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ReplicationsClientDeletePollerResponse` has been removed
+- Field `ReplicationsClientListResult` of struct `ReplicationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ReplicationsClientListResponse` has been removed
+- Field `RegistriesClientGenerateCredentialsResult` of struct `RegistriesClientGenerateCredentialsResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientGenerateCredentialsResponse` has been removed
+- Field `RawResponse` of struct `ReplicationsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ImportPipelinesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ScopeMapsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `WebhooksClientDeleteResponse` has been removed
+- Field `ConnectedRegistriesClientCreateResult` of struct `ConnectedRegistriesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ConnectedRegistriesClientCreateResponse` has been removed
+- Field `PipelineRunsClientGetResult` of struct `PipelineRunsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PipelineRunsClientGetResponse` has been removed
+- Field `RunsClientGetLogSasURLResult` of struct `RunsClientGetLogSasURLResponse` has been removed
+- Field `RawResponse` of struct `RunsClientGetLogSasURLResponse` has been removed
+- Field `RawResponse` of struct `ExportPipelinesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ConnectedRegistriesClientCreatePollerResponse` has been removed
+- Field `RawResponse` of struct `ConnectedRegistriesClientDeactivatePollerResponse` has been removed
+- Field `AgentPoolsClientGetResult` of struct `AgentPoolsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConnectedRegistriesClientDeleteResponse` has been removed
+- Field `ReplicationsClientGetResult` of struct `ReplicationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ReplicationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `RunsClientCancelResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientDeleteResponse` has been removed
+- Field `RegistriesClientScheduleRunResult` of struct `RegistriesClientScheduleRunResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientScheduleRunResponse` has been removed
+- Field `ScopeMapsClientUpdateResult` of struct `ScopeMapsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ScopeMapsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `WebhooksClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `RunsClientCancelPollerResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientCreatePollerResponse` has been removed
+- Field `AgentPoolsClientListResult` of struct `AgentPoolsClientListResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientListResponse` has been removed
+- Field `ExportPipelinesClientCreateResult` of struct `ExportPipelinesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ExportPipelinesClientCreateResponse` has been removed
+- Field `ReplicationsClientCreateResult` of struct `ReplicationsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ReplicationsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientGenerateCredentialsPollerResponse` has been removed
+- Field `WebhooksClientCreateResult` of struct `WebhooksClientCreateResponse` has been removed
+- Field `RawResponse` of struct `WebhooksClientCreateResponse` has been removed
+- Field `RegistriesClientListResult` of struct `RegistriesClientListResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientListResponse` has been removed
+- Field `AgentPoolsClientGetQueueStatusResult` of struct `AgentPoolsClientGetQueueStatusResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientGetQueueStatusResponse` has been removed
+- Field `WebhooksClientGetCallbackConfigResult` of struct `WebhooksClientGetCallbackConfigResponse` has been removed
+- Field `RawResponse` of struct `WebhooksClientGetCallbackConfigResponse` has been removed
+- Field `RunsClientUpdateResult` of struct `RunsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `RunsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientImportImagePollerResponse` has been removed
+- Field `RawResponse` of struct `RunsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientCreatePollerResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ImportPipelinesClientDeletePollerResponse` has been removed
+- Field `RegistriesClientCreateResult` of struct `RegistriesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientCreateResponse` has been removed
+- Field `ScopeMapsClientListResult` of struct `ScopeMapsClientListResponse` has been removed
+- Field `RawResponse` of struct `ScopeMapsClientListResponse` has been removed
+- Field `ScopeMapsClientGetResult` of struct `ScopeMapsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ScopeMapsClientGetResponse` has been removed
+- Field `PipelineRunsClientListResult` of struct `PipelineRunsClientListResponse` has been removed
+- Field `RawResponse` of struct `PipelineRunsClientListResponse` has been removed
+- Field `PrivateEndpointConnectionsClientCreateOrUpdateResult` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PipelineRunsClientDeleteResponse` has been removed
+- Field `ConnectedRegistriesClientListResult` of struct `ConnectedRegistriesClientListResponse` has been removed
+- Field `RawResponse` of struct `ConnectedRegistriesClientListResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `TokensClientCreatePollerResponse` has been removed
+- Field `RawResponse` of struct `TasksClientCreatePollerResponse` has been removed
+- Field `RawResponse` of struct `TasksClientUpdatePollerResponse` has been removed
+- Field `TaskRunsClientUpdateResult` of struct `TaskRunsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `TaskRunsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ScopeMapsClientDeletePollerResponse` has been removed
+- Field `RegistriesClientUpdateResult` of struct `RegistriesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `RegistriesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `TaskRunsClientUpdatePollerResponse` has been removed
+
+### Features Added
+
+- New function `*ReplicationsClientListPager.More() bool`
+- New function `*WebhooksClientListPager.More() bool`
+- New function `*TaskRunsClientListPager.More() bool`
+- New function `*RegistriesClientListByResourceGroupPager.More() bool`
+- New function `*WebhooksClientListEventsPager.More() bool`
+- New function `*ExportPipelinesClientListPager.More() bool`
+- New function `*RegistriesClientListPager.More() bool`
+- New function `*ScopeMapsClientListPager.More() bool`
+- New function `*ImportPipelinesClientListPager.More() bool`
+- New function `*RunFilter.UnmarshalJSON([]byte) error`
+- New function `*OperationsClientListPager.More() bool`
+- New function `RunFilter.MarshalJSON() ([]byte, error)`
+- New function `*TokensClientListPager.More() bool`
+- New function `*RegistriesClientListPrivateLinkResourcesPager.More() bool`
+- New function `*PipelineRunsClientListPager.More() bool`
+- New function `*AgentPoolsClientListPager.More() bool`
+- New function `*ConnectedRegistriesClientListPager.More() bool`
+- New function `ErrorResponseBody.MarshalJSON() ([]byte, error)`
+- New function `*TasksClientListPager.More() bool`
+- New function `*RunsClientListPager.More() bool`
+- New function `*PrivateEndpointConnectionsClientListPager.More() bool`
+- New struct `ActiveDirectoryObject`
+- New struct `ErrorResponse`
+- New struct `ErrorResponseBody`
+- New struct `InnerErrorDescription`
+- New struct `RunFilter`
+- New anonymous field `Run` in struct `RunsClientGetResponse`
+- New anonymous field `ScopeMap` in struct `ScopeMapsClientGetResponse`
+- New anonymous field `EventListResult` in struct `WebhooksClientListEventsResponse`
+- New anonymous field `ExportPipelineListResult` in struct `ExportPipelinesClientListResponse`
+- New anonymous field `Token` in struct `TokensClientCreateResponse`
+- New anonymous field `ImportPipeline` in struct `ImportPipelinesClientCreateResponse`
+- New anonymous field `Replication` in struct `ReplicationsClientCreateResponse`
+- New anonymous field `Webhook` in struct `WebhooksClientGetResponse`
+- New anonymous field `TokenListResult` in struct `TokensClientListResponse`
+- New anonymous field `Run` in struct `RegistriesClientScheduleRunResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListResponse`
+- New anonymous field `TaskRunListResult` in struct `TaskRunsClientListResponse`
+- New anonymous field `ScopeMapListResult` in struct `ScopeMapsClientListResponse`
+- New anonymous field `RegistryUsageListResult` in struct `RegistriesClientListUsagesResponse`
+- New anonymous field `WebhookListResult` in struct `WebhooksClientListResponse`
+- New anonymous field `ConnectedRegistryListResult` in struct `ConnectedRegistriesClientListResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `RegistryListCredentialsResult` in struct `RegistriesClientListCredentialsResponse`
+- New anonymous field `Task` in struct `TasksClientGetDetailsResponse`
+- New anonymous field `Registry` in struct `RegistriesClientUpdateResponse`
+- New anonymous field `TaskRun` in struct `TaskRunsClientCreateResponse`
+- New anonymous field `AgentPoolQueueStatus` in struct `AgentPoolsClientGetQueueStatusResponse`
+- New anonymous field `Registry` in struct `RegistriesClientCreateResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `RegistriesClientListPrivateLinkResourcesResponse`
+- New anonymous field `TaskRun` in struct `TaskRunsClientUpdateResponse`
+- New anonymous field `ScopeMap` in struct `ScopeMapsClientCreateResponse`
+- New anonymous field `ImportPipelineListResult` in struct `ImportPipelinesClientListResponse`
+- New anonymous field `AgentPool` in struct `AgentPoolsClientCreateResponse`
+- New anonymous field `Token` in struct `TokensClientGetResponse`
+- New anonymous field `AgentPool` in struct `AgentPoolsClientUpdateResponse`
+- New anonymous field `RegistryNameStatus` in struct `RegistriesClientCheckNameAvailabilityResponse`
+- New anonymous field `Registry` in struct `RegistriesClientGetResponse`
+- New anonymous field `ExportPipeline` in struct `ExportPipelinesClientCreateResponse`
+- New anonymous field `Webhook` in struct `WebhooksClientUpdateResponse`
+- New anonymous field `ConnectedRegistry` in struct `ConnectedRegistriesClientGetResponse`
+- New anonymous field `TaskRun` in struct `TaskRunsClientGetResponse`
+- New anonymous field `ReplicationListResult` in struct `ReplicationsClientListResponse`
+- New anonymous field `AgentPool` in struct `AgentPoolsClientGetResponse`
+- New anonymous field `TaskListResult` in struct `TasksClientListResponse`
+- New anonymous field `RegistryListResult` in struct `RegistriesClientListByResourceGroupResponse`
+- New anonymous field `CallbackConfig` in struct `WebhooksClientGetCallbackConfigResponse`
+- New anonymous field `PipelineRun` in struct `PipelineRunsClientCreateResponse`
+- New anonymous field `PipelineRun` in struct `PipelineRunsClientGetResponse`
+- New anonymous field `Task` in struct `TasksClientCreateResponse`
+- New anonymous field `Task` in struct `TasksClientUpdateResponse`
+- New anonymous field `RunGetLogResult` in struct `RunsClientGetLogSasURLResponse`
+- New anonymous field `GenerateCredentialsResult` in struct `RegistriesClientGenerateCredentialsResponse`
+- New anonymous field `Replication` in struct `ReplicationsClientUpdateResponse`
+- New anonymous field `Webhook` in struct `WebhooksClientCreateResponse`
+- New anonymous field `RegistryListCredentialsResult` in struct `RegistriesClientRegenerateCredentialResponse`
+- New anonymous field `Token` in struct `TokensClientUpdateResponse`
+- New anonymous field `ConnectedRegistry` in struct `ConnectedRegistriesClientUpdateResponse`
+- New anonymous field `RunListResult` in struct `RunsClientListResponse`
+- New anonymous field `RegistryListResult` in struct `RegistriesClientListResponse`
+- New anonymous field `Replication` in struct `ReplicationsClientGetResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `PipelineRunListResult` in struct `PipelineRunsClientListResponse`
+- New anonymous field `ScopeMap` in struct `ScopeMapsClientUpdateResponse`
+- New anonymous field `AgentPoolListResult` in struct `AgentPoolsClientListResponse`
+- New anonymous field `ImportPipeline` in struct `ImportPipelinesClientGetResponse`
+- New anonymous field `EventInfo` in struct `WebhooksClientPingResponse`
+- New anonymous field `ConnectedRegistry` in struct `ConnectedRegistriesClientCreateResponse`
+- New anonymous field `ExportPipeline` in struct `ExportPipelinesClientGetResponse`
+- New anonymous field `Task` in struct `TasksClientGetResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse`
+- New anonymous field `PrivateLinkResource` in struct `RegistriesClientGetPrivateLinkResourceResponse`
+- New anonymous field `TaskRun` in struct `TaskRunsClientGetDetailsResponse`
+- New anonymous field `Run` in struct `RunsClientUpdateResponse`
+- New anonymous field `SourceUploadDefinition` in struct `RegistriesClientGetBuildSourceUploadURLResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `RunFilter.MarshalJSON` has been removed
+- Function `*RunFilter.UnmarshalJSON` has been removed
+- Function `ErrorResponseBody.MarshalJSON` has been removed
+- Struct `ErrorResponse` has been removed
+- Struct `ErrorResponseBody` has been removed
+- Struct `InnerErrorDescription` has been removed
+- Struct `PackageType` has been removed
+- Struct `RunFilter` has been removed
+- Struct `StorageAccountProperties` has been removed
+
+### Features Added
+
+- New const `TokenPasswordNamePassword2`
+- New const `PipelineRunSourceTypeAzureStorageBlob`
+- New const `ActivationStatusInactive`
+- New const `PipelineOptionsDeleteSourceBlobOnSuccess`
+- New const `PipelineOptionsOverwriteBlobs`
+- New const `TokenStatusDisabled`
+- New const `LogLevelWarning`
+- New const `AuditLogStatusDisabled`
+- New const `TokenPasswordNamePassword1`
+- New const `PipelineOptionsContinueOnErrors`
+- New const `TLSStatusDisabled`
+- New const `ConnectionStateUnhealthy`
+- New const `LogLevelNone`
+- New const `ActivationStatusActive`
+- New const `LogLevelError`
+- New const `PipelineRunTargetTypeAzureStorageBlob`
+- New const `ConnectionStateSyncing`
+- New const `ConnectedRegistryModeReadOnly`
+- New const `TokenCertificateNameCertificate1`
+- New const `PipelineSourceTypeAzureStorageBlobContainer`
+- New const `ConnectedRegistryModeReadWrite`
+- New const `ConnectionStateOffline`
+- New const `ConnectedRegistryModeMirror`
+- New const `ConnectedRegistryModeRegistry`
+- New const `TokenStatusEnabled`
+- New const `LogLevelInformation`
+- New const `PipelineOptionsOverwriteTags`
+- New const `TokenCertificateNameCertificate2`
+- New const `AuditLogStatusEnabled`
+- New const `CertificateTypeLocalDirectory`
+- New const `LogLevelDebug`
+- New const `ConnectionStateOnline`
+- New const `TLSStatusEnabled`
+- New function `*ConnectedRegistriesClientDeactivatePoller.Poll(context.Context) (*http.Response, error)`
+- New function `*ExportPipelinesClientCreatePoller.ResumeToken() (string, error)`
+- New function `NewPipelineRunsClient(string, azcore.TokenCredential, *arm.ClientOptions) *PipelineRunsClient`
+- New function `*TokensClient.BeginCreate(context.Context, string, string, string, Token, *TokensClientBeginCreateOptions) (TokensClientCreatePollerResponse, error)`
+- New function `ConnectedRegistriesClientCreatePollerResponse.PollUntilDone(context.Context, time.Duration) (ConnectedRegistriesClientCreateResponse, error)`
+- New function `*TokensClientCreatePoller.ResumeToken() (string, error)`
+- New function `CertificateType.ToPtr() *CertificateType`
+- New function `ScopeMapProperties.MarshalJSON() ([]byte, error)`
+- New function `TokenUpdateParameters.MarshalJSON() ([]byte, error)`
+- New function `*ImportPipelinesClientCreatePoller.ResumeToken() (string, error)`
+- New function `*ConnectedRegistriesClientDeletePoller.FinalResponse(context.Context) (ConnectedRegistriesClientDeleteResponse, error)`
+- New function `*ConnectedRegistriesClientListPager.PageResponse() ConnectedRegistriesClientListResponse`
+- New function `ConnectedRegistryListResult.MarshalJSON() ([]byte, error)`
+- New function `*ImportPipelinesClientListPager.PageResponse() ImportPipelinesClientListResponse`
+- New function `*ImportPipelinesClient.List(string, string, *ImportPipelinesClientListOptions) *ImportPipelinesClientListPager`
+- New function `*ConnectedRegistriesClientCreatePoller.ResumeToken() (string, error)`
+- New function `ScopeMapsClientDeletePollerResponse.PollUntilDone(context.Context, time.Duration) (ScopeMapsClientDeleteResponse, error)`
+- New function `*ScopeMapsClientDeletePoller.Done() bool`
+- New function `*ScopeMapsClientListPager.Err() error`
+- New function `*ImportPipelinesClientListPager.Err() error`
+- New function `*PipelineRunsClientCreatePoller.Done() bool`
+- New function `*ConnectedRegistriesClientCreatePoller.Done() bool`
+- New function `*ImportPipelinesClient.BeginCreate(context.Context, string, string, string, ImportPipeline, *ImportPipelinesClientBeginCreateOptions) (ImportPipelinesClientCreatePollerResponse, error)`
+- New function `NewConnectedRegistriesClient(string, azcore.TokenCredential, *arm.ClientOptions) *ConnectedRegistriesClient`
+- New function `*TokensClientCreatePoller.Poll(context.Context) (*http.Response, error)`
+- New function `ImportPipelineProperties.MarshalJSON() ([]byte, error)`
+- New function `PipelineRunsClientCreatePollerResponse.PollUntilDone(context.Context, time.Duration) (PipelineRunsClientCreateResponse, error)`
+- New function `*ExportPipelinesClientListPager.Err() error`
+- New function `LogLevel.ToPtr() *LogLevel`
+- New function `*ConnectedRegistriesClientDeactivatePoller.FinalResponse(context.Context) (ConnectedRegistriesClientDeactivateResponse, error)`
+- New function `*PipelineRunsClientListPager.NextPage(context.Context) bool`
+- New function `*ImportPipelinesClientDeletePollerResponse.Resume(context.Context, *ImportPipelinesClient, string) error`
+- New function `*TokensClient.BeginDelete(context.Context, string, string, string, *TokensClientBeginDeleteOptions) (TokensClientDeletePollerResponse, error)`
+- New function `*TokensClientCreatePoller.Done() bool`
+- New function `*PipelineRunsClientDeletePoller.ResumeToken() (string, error)`
+- New function `*ImportPipelinesClientCreatePollerResponse.Resume(context.Context, *ImportPipelinesClient, string) error`
+- New function `*ScopeMapsClientCreatePoller.Done() bool`
+- New function `*ConnectedRegistryProperties.UnmarshalJSON([]byte) error`
+- New function `*ImportPipelinesClientCreatePoller.Poll(context.Context) (*http.Response, error)`
+- New function `PossibleLogLevelValues() []LogLevel`
+- New function `ImportPipelineListResult.MarshalJSON() ([]byte, error)`
+- New function `*StatusDetailProperties.UnmarshalJSON([]byte) error`
+- New function `ConnectedRegistryUpdateProperties.MarshalJSON() ([]byte, error)`
+- New function `*ExportPipelinesClientDeletePollerResponse.Resume(context.Context, *ExportPipelinesClient, string) error`
+- New function `PossibleAuditLogStatusValues() []AuditLogStatus`
+- New function `AuditLogStatus.ToPtr() *AuditLogStatus`
+- New function `*TokensClient.Get(context.Context, string, string, string, *TokensClientGetOptions) (TokensClientGetResponse, error)`
+- New function `*ImportPipelinesClientDeletePoller.Poll(context.Context) (*http.Response, error)`
+- New function `*ExportPipelinesClientCreatePollerResponse.Resume(context.Context, *ExportPipelinesClient, string) error`
+- New function `*ExportPipelinesClientDeletePoller.FinalResponse(context.Context) (ExportPipelinesClientDeleteResponse, error)`
+- New function `PossibleActivationStatusValues() []ActivationStatus`
+- New function `PossiblePipelineRunSourceTypeValues() []PipelineRunSourceType`
+- New function `ConnectedRegistryProperties.MarshalJSON() ([]byte, error)`
+- New function `*ScopeMapsClientListPager.PageResponse() ScopeMapsClientListResponse`
+- New function `ScopeMapsClientUpdatePollerResponse.PollUntilDone(context.Context, time.Duration) (ScopeMapsClientUpdateResponse, error)`
+- New function `*PipelineRunsClientDeletePoller.FinalResponse(context.Context) (PipelineRunsClientDeleteResponse, error)`
+- New function `*PipelineRunsClientListPager.PageResponse() PipelineRunsClientListResponse`
+- New function `*ConnectedRegistriesClient.List(string, string, *ConnectedRegistriesClientListOptions) *ConnectedRegistriesClientListPager`
+- New function `*ExportPipelinesClientDeletePoller.ResumeToken() (string, error)`
+- New function `PossiblePipelineRunTargetTypeValues() []PipelineRunTargetType`
+- New function `TokensClientCreatePollerResponse.PollUntilDone(context.Context, time.Duration) (TokensClientCreateResponse, error)`
+- New function `*ConnectedRegistriesClientDeletePoller.ResumeToken() (string, error)`
+- New function `ConnectionState.ToPtr() *ConnectionState`
+- New function `*ScopeMapsClientListPager.NextPage(context.Context) bool`
+- New function `TokenCredentialsProperties.MarshalJSON() ([]byte, error)`
+- New function `*ExportPipelinesClientCreatePoller.Done() bool`
+- New function `GenerateCredentialsParameters.MarshalJSON() ([]byte, error)`
+- New function `*TokensClientUpdatePollerResponse.Resume(context.Context, *TokensClient, string) error`
+- New function `*ScopeMapsClientDeletePoller.Poll(context.Context) (*http.Response, error)`
+- New function `*SyncProperties.UnmarshalJSON([]byte) error`
+- New function `*TokensClientListPager.PageResponse() TokensClientListResponse`
+- New function `*ImportPipelinesClientDeletePoller.ResumeToken() (string, error)`
+- New function `NewTokensClient(string, azcore.TokenCredential, *arm.ClientOptions) *TokensClient`
+- New function `*PipelineRunsClient.BeginCreate(context.Context, string, string, string, PipelineRun, *PipelineRunsClientBeginCreateOptions) (PipelineRunsClientCreatePollerResponse, error)`
+- New function `*RegistriesClientGenerateCredentialsPoller.Done() bool`
+- New function `*ExportPipelinesClient.Get(context.Context, string, string, string, *ExportPipelinesClientGetOptions) (ExportPipelinesClientGetResponse, error)`
+- New function `ActivationStatus.ToPtr() *ActivationStatus`
+- New function `*ScopeMapsClient.BeginUpdate(context.Context, string, string, string, ScopeMapUpdateParameters, *ScopeMapsClientBeginUpdateOptions) (ScopeMapsClientUpdatePollerResponse, error)`
+- New function `*ScopeMapsClient.List(string, string, *ScopeMapsClientListOptions) *ScopeMapsClientListPager`
+- New function `*ScopeMapsClientUpdatePoller.ResumeToken() (string, error)`
+- New function `*PipelineRunsClientDeletePollerResponse.Resume(context.Context, *PipelineRunsClient, string) error`
+- New function `*ImportPipelinesClientListPager.NextPage(context.Context) bool`
+- New function `*ImportPipelinesClient.Get(context.Context, string, string, string, *ImportPipelinesClientGetOptions) (ImportPipelinesClientGetResponse, error)`
+- New function `PipelineSourceType.ToPtr() *PipelineSourceType`
+- New function `TLSStatus.ToPtr() *TLSStatus`
+- New function `*PipelineRunsClientListPager.Err() error`
+- New function `ScopeMapsClientCreatePollerResponse.PollUntilDone(context.Context, time.Duration) (ScopeMapsClientCreateResponse, error)`
+- New function `*ExportPipelinesClientDeletePoller.Done() bool`
+- New function `*TokensClient.BeginUpdate(context.Context, string, string, string, TokenUpdateParameters, *TokensClientBeginUpdateOptions) (TokensClientUpdatePollerResponse, error)`
+- New function `*PipelineRunsClient.BeginDelete(context.Context, string, string, string, *PipelineRunsClientBeginDeleteOptions) (PipelineRunsClientDeletePollerResponse, error)`
+- New function `*ScopeMapsClientDeletePoller.ResumeToken() (string, error)`
+- New function `*ConnectedRegistriesClientDeletePoller.Poll(context.Context) (*http.Response, error)`
+- New function `PipelineRunsClientDeletePollerResponse.PollUntilDone(context.Context, time.Duration) (PipelineRunsClientDeleteResponse, error)`
+- New function `*ImportPipelinesClientCreatePoller.FinalResponse(context.Context) (ImportPipelinesClientCreateResponse, error)`
+- New function `*RegistriesClientGenerateCredentialsPoller.ResumeToken() (string, error)`
+- New function `PossibleTokenPasswordNameValues() []TokenPasswordName`
+- New function `*TokensClientDeletePoller.FinalResponse(context.Context) (TokensClientDeleteResponse, error)`
+- New function `*ScopeMapsClientUpdatePoller.Done() bool`
+- New function `*RegistriesClientGenerateCredentialsPollerResponse.Resume(context.Context, *RegistriesClient, string) error`
+- New function `PossibleTokenCertificateNameValues() []TokenCertificateName`
+- New function `*ScopeMapsClientCreatePoller.Poll(context.Context) (*http.Response, error)`
+- New function `TokenListResult.MarshalJSON() ([]byte, error)`
+- New function `*PipelineRunsClient.List(string, string, *PipelineRunsClientListOptions) *PipelineRunsClientListPager`
+- New function `*ImportPipelinesClient.BeginDelete(context.Context, string, string, string, *ImportPipelinesClientBeginDeleteOptions) (ImportPipelinesClientDeletePollerResponse, error)`
+- New function `TokenPassword.MarshalJSON() ([]byte, error)`
+- New function `*PipelineRunsClientCreatePoller.ResumeToken() (string, error)`
+- New function `*TokensClientListPager.Err() error`
+- New function `*TokensClientUpdatePoller.Done() bool`
+- New function `*ConnectedRegistriesClientListPager.Err() error`
+- New function `PipelineSourceTriggerDescriptor.MarshalJSON() ([]byte, error)`
+- New function `*TokenProperties.UnmarshalJSON([]byte) error`
+- New function `*ConnectedRegistriesClientUpdatePoller.ResumeToken() (string, error)`
+- New function `TokenCertificateName.ToPtr() *TokenCertificateName`
+- New function `*ConnectedRegistriesClientUpdatePoller.Done() bool`
+- New function `*ConnectedRegistriesClientDeactivatePollerResponse.Resume(context.Context, *ConnectedRegistriesClient, string) error`
+- New function `TokensClientDeletePollerResponse.PollUntilDone(context.Context, time.Duration) (TokensClientDeleteResponse, error)`
+- New function `ScopeMapUpdateParameters.MarshalJSON() ([]byte, error)`
+- New function `PossibleConnectionStateValues() []ConnectionState`
+- New function `ExportPipelinesClientCreatePollerResponse.PollUntilDone(context.Context, time.Duration) (ExportPipelinesClientCreateResponse, error)`
+- New function `*RegistriesClientGenerateCredentialsPoller.Poll(context.Context) (*http.Response, error)`
+- New function `*ScopeMapProperties.UnmarshalJSON([]byte) error`
+- New function `*TokensClientCreatePoller.FinalResponse(context.Context) (TokensClientCreateResponse, error)`
+- New function `*ConnectedRegistriesClientUpdatePoller.Poll(context.Context) (*http.Response, error)`
+- New function `*ExportPipelinesClient.BeginCreate(context.Context, string, string, string, ExportPipeline, *ExportPipelinesClientBeginCreateOptions) (ExportPipelinesClientCreatePollerResponse, error)`
+- New function `PossibleCertificateTypeValues() []CertificateType`
+- New function `*RegistriesClientGenerateCredentialsPoller.FinalResponse(context.Context) (RegistriesClientGenerateCredentialsResponse, error)`
+- New function `*ScopeMapsClientDeletePoller.FinalResponse(context.Context) (ScopeMapsClientDeleteResponse, error)`
+- New function `NewExportPipelinesClient(string, azcore.TokenCredential, *arm.ClientOptions) *ExportPipelinesClient`
+- New function `*ScopeMapsClient.BeginCreate(context.Context, string, string, string, ScopeMap, *ScopeMapsClientBeginCreateOptions) (ScopeMapsClientCreatePollerResponse, error)`
+- New function `*ConnectedRegistriesClientCreatePollerResponse.Resume(context.Context, *ConnectedRegistriesClient, string) error`
+- New function `ExportPipelineProperties.MarshalJSON() ([]byte, error)`
+- New function `*ScopeMapsClient.Get(context.Context, string, string, string, *ScopeMapsClientGetOptions) (ScopeMapsClientGetResponse, error)`
+- New function `*ScopeMapsClientCreatePoller.ResumeToken() (string, error)`
+- New function `*ExportPipelinesClientDeletePoller.Poll(context.Context) (*http.Response, error)`
+- New function `*ScopeMapsClient.BeginDelete(context.Context, string, string, string, *ScopeMapsClientBeginDeleteOptions) (ScopeMapsClientDeletePollerResponse, error)`
+- New function `PossiblePipelineOptionsValues() []PipelineOptions`
+- New function `*ScopeMapsClientDeletePollerResponse.Resume(context.Context, *ScopeMapsClient, string) error`
+- New function `*TokensClientUpdatePoller.Poll(context.Context) (*http.Response, error)`
+- New function `ImportPipelinesClientDeletePollerResponse.PollUntilDone(context.Context, time.Duration) (ImportPipelinesClientDeleteResponse, error)`
+- New function `*PipelineRunsClientCreatePoller.FinalResponse(context.Context) (PipelineRunsClientCreateResponse, error)`
+- New function `*ConnectedRegistriesClient.BeginDelete(context.Context, string, string, string, *ConnectedRegistriesClientBeginDeleteOptions) (ConnectedRegistriesClientDeletePollerResponse, error)`
+- New function `*ConnectedRegistriesClientCreatePoller.Poll(context.Context) (*http.Response, error)`
+- New function `NewScopeMapsClient(string, azcore.TokenCredential, *arm.ClientOptions) *ScopeMapsClient`
+- New function `*ExportPipelinesClientCreatePoller.Poll(context.Context) (*http.Response, error)`
+- New function `*TokensClientDeletePoller.Done() bool`
+- New function `*TokenPassword.UnmarshalJSON([]byte) error`
+- New function `*PipelineRunsClientDeletePoller.Done() bool`
+- New function `ConnectedRegistriesClientDeactivatePollerResponse.PollUntilDone(context.Context, time.Duration) (ConnectedRegistriesClientDeactivateResponse, error)`
+- New function `PipelineRunResponse.MarshalJSON() ([]byte, error)`
+- New function `ConnectedRegistryMode.ToPtr() *ConnectedRegistryMode`
+- New function `*ScopeMapsClientUpdatePollerResponse.Resume(context.Context, *ScopeMapsClient, string) error`
+- New function `*ConnectedRegistriesClient.BeginUpdate(context.Context, string, string, string, ConnectedRegistryUpdateParameters, *ConnectedRegistriesClientBeginUpdateOptions) (ConnectedRegistriesClientUpdatePollerResponse, error)`
+- New function `TokenPasswordName.ToPtr() *TokenPasswordName`
+- New function `*ExportPipelinesClientCreatePoller.FinalResponse(context.Context) (ExportPipelinesClientCreateResponse, error)`
+- New function `SyncProperties.MarshalJSON() ([]byte, error)`
+- New function `ExportPipelinesClientDeletePollerResponse.PollUntilDone(context.Context, time.Duration) (ExportPipelinesClientDeleteResponse, error)`
+- New function `*ConnectedRegistriesClientDeletePollerResponse.Resume(context.Context, *ConnectedRegistriesClient, string) error`
+- New function `TokenStatus.ToPtr() *TokenStatus`
+- New function `TokensClientUpdatePollerResponse.PollUntilDone(context.Context, time.Duration) (TokensClientUpdateResponse, error)`
+- New function `ExportPipelineListResult.MarshalJSON() ([]byte, error)`
+- New function `StatusDetailProperties.MarshalJSON() ([]byte, error)`
+- New function `ImportPipelinesClientCreatePollerResponse.PollUntilDone(context.Context, time.Duration) (ImportPipelinesClientCreateResponse, error)`
+- New function `*ConnectedRegistriesClientUpdatePollerResponse.Resume(context.Context, *ConnectedRegistriesClient, string) error`
+- New function `*TokenCertificate.UnmarshalJSON([]byte) error`
+- New function `ConnectedRegistriesClientUpdatePollerResponse.PollUntilDone(context.Context, time.Duration) (ConnectedRegistriesClientUpdateResponse, error)`
+- New function `*ExportPipelinesClientListPager.PageResponse() ExportPipelinesClientListResponse`
+- New function `*ConnectedRegistriesClientDeactivatePoller.ResumeToken() (string, error)`
+- New function `*TokensClientDeletePollerResponse.Resume(context.Context, *TokensClient, string) error`
+- New function `*ImportPipelinesClientCreatePoller.Done() bool`
+- New function `ConnectedRegistriesClientDeletePollerResponse.PollUntilDone(context.Context, time.Duration) (ConnectedRegistriesClientDeleteResponse, error)`
+- New function `PossibleConnectedRegistryModeValues() []ConnectedRegistryMode`
+- New function `*ScopeMapsClientCreatePoller.FinalResponse(context.Context) (ScopeMapsClientCreateResponse, error)`
+- New function `*ScopeMapsClientCreatePollerResponse.Resume(context.Context, *ScopeMapsClient, string) error`
+- New function `PipelineRunTargetType.ToPtr() *PipelineRunTargetType`
+- New function `*PipelineRunsClientCreatePoller.Poll(context.Context) (*http.Response, error)`
+- New function `*ConnectedRegistriesClientDeactivatePoller.Done() bool`
+- New function `*ExportPipelinesClientListPager.NextPage(context.Context) bool`
+- New function `*PipelineRunResponse.UnmarshalJSON([]byte) error`
+- New function `*ConnectedRegistriesClientDeletePoller.Done() bool`
+- New function `*RegistriesClient.BeginGenerateCredentials(context.Context, string, string, GenerateCredentialsParameters, *RegistriesClientBeginGenerateCredentialsOptions) (RegistriesClientGenerateCredentialsPollerResponse, error)`
+- New function `*TokensClientListPager.NextPage(context.Context) bool`
+- New function `RegistriesClientGenerateCredentialsPollerResponse.PollUntilDone(context.Context, time.Duration) (RegistriesClientGenerateCredentialsResponse, error)`
+- New function `*ConnectedRegistriesClient.BeginDeactivate(context.Context, string, string, string, *ConnectedRegistriesClientBeginDeactivateOptions) (ConnectedRegistriesClientDeactivatePollerResponse, error)`
+- New function `*TokensClientUpdatePoller.ResumeToken() (string, error)`
+- New function `*ImportPipelinesClientDeletePoller.Done() bool`
+- New function `*ConnectedRegistriesClient.BeginCreate(context.Context, string, string, string, ConnectedRegistry, *ConnectedRegistriesClientBeginCreateOptions) (ConnectedRegistriesClientCreatePollerResponse, error)`
+- New function `ScopeMapListResult.MarshalJSON() ([]byte, error)`
+- New function `NewImportPipelinesClient(string, azcore.TokenCredential, *arm.ClientOptions) *ImportPipelinesClient`
+- New function `*ScopeMapsClientUpdatePoller.Poll(context.Context) (*http.Response, error)`
+- New function `*ConnectedRegistriesClientUpdatePoller.FinalResponse(context.Context) (ConnectedRegistriesClientUpdateResponse, error)`
+- New function `*ConnectedRegistriesClientCreatePoller.FinalResponse(context.Context) (ConnectedRegistriesClientCreateResponse, error)`
+- New function `*PipelineRunsClient.Get(context.Context, string, string, string, *PipelineRunsClientGetOptions) (PipelineRunsClientGetResponse, error)`
+- New function `*ImportPipelinesClientDeletePoller.FinalResponse(context.Context) (ImportPipelinesClientDeleteResponse, error)`
+- New function `TokenCertificate.MarshalJSON() ([]byte, error)`
+- New function `TokenProperties.MarshalJSON() ([]byte, error)`
+- New function `*ExportPipelinesClient.List(string, string, *ExportPipelinesClientListOptions) *ExportPipelinesClientListPager`
+- New function `*TokensClientDeletePoller.Poll(context.Context) (*http.Response, error)`
+- New function `PipelineRunRequest.MarshalJSON() ([]byte, error)`
+- New function `*TokensClient.List(string, string, *TokensClientListOptions) *TokensClientListPager`
+- New function `*ConnectedRegistriesClient.Get(context.Context, string, string, string, *ConnectedRegistriesClientGetOptions) (ConnectedRegistriesClientGetResponse, error)`
+- New function `*ScopeMapsClientUpdatePoller.FinalResponse(context.Context) (ScopeMapsClientUpdateResponse, error)`
+- New function `PossiblePipelineSourceTypeValues() []PipelineSourceType`
+- New function `GenerateCredentialsResult.MarshalJSON() ([]byte, error)`
+- New function `PipelineRunListResult.MarshalJSON() ([]byte, error)`
+- New function `*ConnectedRegistriesClientListPager.NextPage(context.Context) bool`
+- New function `PossibleTokenStatusValues() []TokenStatus`
+- New function `PipelineRunSourceType.ToPtr() *PipelineRunSourceType`
+- New function `PossibleTLSStatusValues() []TLSStatus`
+- New function `*ExportPipelinesClient.BeginDelete(context.Context, string, string, string, *ExportPipelinesClientBeginDeleteOptions) (ExportPipelinesClientDeletePollerResponse, error)`
+- New function `*TokensClientDeletePoller.ResumeToken() (string, error)`
+- New function `*PipelineRunsClientDeletePoller.Poll(context.Context) (*http.Response, error)`
+- New function `*PipelineRunsClientCreatePollerResponse.Resume(context.Context, *PipelineRunsClient, string) error`
+- New function `*PipelineSourceTriggerDescriptor.UnmarshalJSON([]byte) error`
+- New function `*TokensClientUpdatePoller.FinalResponse(context.Context) (TokensClientUpdateResponse, error)`
+- New function `ScopeMapPropertiesUpdateParameters.MarshalJSON() ([]byte, error)`
+- New function `PipelineOptions.ToPtr() *PipelineOptions`
+- New function `*TokensClientCreatePollerResponse.Resume(context.Context, *TokensClient, string) error`
+- New function `ConnectedRegistryUpdateParameters.MarshalJSON() ([]byte, error)`
+- New function `*GenerateCredentialsParameters.UnmarshalJSON([]byte) error`
+- New struct `ActivationProperties`
+- New struct `ConnectedRegistriesClient`
+- New struct `ConnectedRegistriesClientBeginCreateOptions`
+- New struct `ConnectedRegistriesClientBeginDeactivateOptions`
+- New struct `ConnectedRegistriesClientBeginDeleteOptions`
+- New struct `ConnectedRegistriesClientBeginUpdateOptions`
+- New struct `ConnectedRegistriesClientCreatePoller`
+- New struct `ConnectedRegistriesClientCreatePollerResponse`
+- New struct `ConnectedRegistriesClientCreateResponse`
+- New struct `ConnectedRegistriesClientCreateResult`
+- New struct `ConnectedRegistriesClientDeactivatePoller`
+- New struct `ConnectedRegistriesClientDeactivatePollerResponse`
+- New struct `ConnectedRegistriesClientDeactivateResponse`
+- New struct `ConnectedRegistriesClientDeletePoller`
+- New struct `ConnectedRegistriesClientDeletePollerResponse`
+- New struct `ConnectedRegistriesClientDeleteResponse`
+- New struct `ConnectedRegistriesClientGetOptions`
+- New struct `ConnectedRegistriesClientGetResponse`
+- New struct `ConnectedRegistriesClientGetResult`
+- New struct `ConnectedRegistriesClientListOptions`
+- New struct `ConnectedRegistriesClientListPager`
+- New struct `ConnectedRegistriesClientListResponse`
+- New struct `ConnectedRegistriesClientListResult`
+- New struct `ConnectedRegistriesClientUpdatePoller`
+- New struct `ConnectedRegistriesClientUpdatePollerResponse`
+- New struct `ConnectedRegistriesClientUpdateResponse`
+- New struct `ConnectedRegistriesClientUpdateResult`
+- New struct `ConnectedRegistry`
+- New struct `ConnectedRegistryListResult`
+- New struct `ConnectedRegistryProperties`
+- New struct `ConnectedRegistryUpdateParameters`
+- New struct `ConnectedRegistryUpdateProperties`
+- New struct `ExportPipeline`
+- New struct `ExportPipelineListResult`
+- New struct `ExportPipelineProperties`
+- New struct `ExportPipelineTargetProperties`
+- New struct `ExportPipelinesClient`
+- New struct `ExportPipelinesClientBeginCreateOptions`
+- New struct `ExportPipelinesClientBeginDeleteOptions`
+- New struct `ExportPipelinesClientCreatePoller`
+- New struct `ExportPipelinesClientCreatePollerResponse`
+- New struct `ExportPipelinesClientCreateResponse`
+- New struct `ExportPipelinesClientCreateResult`
+- New struct `ExportPipelinesClientDeletePoller`
+- New struct `ExportPipelinesClientDeletePollerResponse`
+- New struct `ExportPipelinesClientDeleteResponse`
+- New struct `ExportPipelinesClientGetOptions`
+- New struct `ExportPipelinesClientGetResponse`
+- New struct `ExportPipelinesClientGetResult`
+- New struct `ExportPipelinesClientListOptions`
+- New struct `ExportPipelinesClientListPager`
+- New struct `ExportPipelinesClientListResponse`
+- New struct `ExportPipelinesClientListResult`
+- New struct `GenerateCredentialsParameters`
+- New struct `GenerateCredentialsResult`
+- New struct `ImportPipeline`
+- New struct `ImportPipelineListResult`
+- New struct `ImportPipelineProperties`
+- New struct `ImportPipelineSourceProperties`
+- New struct `ImportPipelinesClient`
+- New struct `ImportPipelinesClientBeginCreateOptions`
+- New struct `ImportPipelinesClientBeginDeleteOptions`
+- New struct `ImportPipelinesClientCreatePoller`
+- New struct `ImportPipelinesClientCreatePollerResponse`
+- New struct `ImportPipelinesClientCreateResponse`
+- New struct `ImportPipelinesClientCreateResult`
+- New struct `ImportPipelinesClientDeletePoller`
+- New struct `ImportPipelinesClientDeletePollerResponse`
+- New struct `ImportPipelinesClientDeleteResponse`
+- New struct `ImportPipelinesClientGetOptions`
+- New struct `ImportPipelinesClientGetResponse`
+- New struct `ImportPipelinesClientGetResult`
+- New struct `ImportPipelinesClientListOptions`
+- New struct `ImportPipelinesClientListPager`
+- New struct `ImportPipelinesClientListResponse`
+- New struct `ImportPipelinesClientListResult`
+- New struct `LoggingProperties`
+- New struct `LoginServerProperties`
+- New struct `ParentProperties`
+- New struct `PipelineRun`
+- New struct `PipelineRunListResult`
+- New struct `PipelineRunProperties`
+- New struct `PipelineRunRequest`
+- New struct `PipelineRunResponse`
+- New struct `PipelineRunSourceProperties`
+- New struct `PipelineRunTargetProperties`
+- New struct `PipelineRunsClient`
+- New struct `PipelineRunsClientBeginCreateOptions`
+- New struct `PipelineRunsClientBeginDeleteOptions`
+- New struct `PipelineRunsClientCreatePoller`
+- New struct `PipelineRunsClientCreatePollerResponse`
+- New struct `PipelineRunsClientCreateResponse`
+- New struct `PipelineRunsClientCreateResult`
+- New struct `PipelineRunsClientDeletePoller`
+- New struct `PipelineRunsClientDeletePollerResponse`
+- New struct `PipelineRunsClientDeleteResponse`
+- New struct `PipelineRunsClientGetOptions`
+- New struct `PipelineRunsClientGetResponse`
+- New struct `PipelineRunsClientGetResult`
+- New struct `PipelineRunsClientListOptions`
+- New struct `PipelineRunsClientListPager`
+- New struct `PipelineRunsClientListResponse`
+- New struct `PipelineRunsClientListResult`
+- New struct `PipelineSourceTriggerDescriptor`
+- New struct `PipelineSourceTriggerProperties`
+- New struct `PipelineTriggerDescriptor`
+- New struct `PipelineTriggerProperties`
+- New struct `ProgressProperties`
+- New struct `RegistriesClientBeginGenerateCredentialsOptions`
+- New struct `RegistriesClientGenerateCredentialsPoller`
+- New struct `RegistriesClientGenerateCredentialsPollerResponse`
+- New struct `RegistriesClientGenerateCredentialsResponse`
+- New struct `RegistriesClientGenerateCredentialsResult`
+- New struct `ScopeMap`
+- New struct `ScopeMapListResult`
+- New struct `ScopeMapProperties`
+- New struct `ScopeMapPropertiesUpdateParameters`
+- New struct `ScopeMapUpdateParameters`
+- New struct `ScopeMapsClient`
+- New struct `ScopeMapsClientBeginCreateOptions`
+- New struct `ScopeMapsClientBeginDeleteOptions`
+- New struct `ScopeMapsClientBeginUpdateOptions`
+- New struct `ScopeMapsClientCreatePoller`
+- New struct `ScopeMapsClientCreatePollerResponse`
+- New struct `ScopeMapsClientCreateResponse`
+- New struct `ScopeMapsClientCreateResult`
+- New struct `ScopeMapsClientDeletePoller`
+- New struct `ScopeMapsClientDeletePollerResponse`
+- New struct `ScopeMapsClientDeleteResponse`
+- New struct `ScopeMapsClientGetOptions`
+- New struct `ScopeMapsClientGetResponse`
+- New struct `ScopeMapsClientGetResult`
+- New struct `ScopeMapsClientListOptions`
+- New struct `ScopeMapsClientListPager`
+- New struct `ScopeMapsClientListResponse`
+- New struct `ScopeMapsClientListResult`
+- New struct `ScopeMapsClientUpdatePoller`
+- New struct `ScopeMapsClientUpdatePollerResponse`
+- New struct `ScopeMapsClientUpdateResponse`
+- New struct `ScopeMapsClientUpdateResult`
+- New struct `StatusDetailProperties`
+- New struct `SyncProperties`
+- New struct `SyncUpdateProperties`
+- New struct `TLSCertificateProperties`
+- New struct `TLSProperties`
+- New struct `Token`
+- New struct `TokenCertificate`
+- New struct `TokenCredentialsProperties`
+- New struct `TokenListResult`
+- New struct `TokenPassword`
+- New struct `TokenProperties`
+- New struct `TokenUpdateParameters`
+- New struct `TokenUpdateProperties`
+- New struct `TokensClient`
+- New struct `TokensClientBeginCreateOptions`
+- New struct `TokensClientBeginDeleteOptions`
+- New struct `TokensClientBeginUpdateOptions`
+- New struct `TokensClientCreatePoller`
+- New struct `TokensClientCreatePollerResponse`
+- New struct `TokensClientCreateResponse`
+- New struct `TokensClientCreateResult`
+- New struct `TokensClientDeletePoller`
+- New struct `TokensClientDeletePollerResponse`
+- New struct `TokensClientDeleteResponse`
+- New struct `TokensClientGetOptions`
+- New struct `TokensClientGetResponse`
+- New struct `TokensClientGetResult`
+- New struct `TokensClientListOptions`
+- New struct `TokensClientListPager`
+- New struct `TokensClientListResponse`
+- New struct `TokensClientListResult`
+- New struct `TokensClientUpdatePoller`
+- New struct `TokensClientUpdatePollerResponse`
+- New struct `TokensClientUpdateResponse`
+- New struct `TokensClientUpdateResult`
+- New struct `VirtualNetworkRule`
+- New field `VirtualNetworkRules` in struct `NetworkRuleSet`
+- New field `AnonymousPullEnabled` in struct `RegistryPropertiesUpdateParameters`
+- New field `AnonymousPullEnabled` in struct `RegistryProperties`
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

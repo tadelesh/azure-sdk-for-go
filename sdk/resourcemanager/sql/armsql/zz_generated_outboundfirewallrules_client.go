@@ -34,17 +34,17 @@ type OutboundFirewallRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewOutboundFirewallRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *OutboundFirewallRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &OutboundFirewallRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *OutboundFirewallRulesClient) BeginCreateOrUpdate(ctx context.Conte
 	if err != nil {
 		return OutboundFirewallRulesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := OutboundFirewallRulesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := OutboundFirewallRulesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("OutboundFirewallRulesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return OutboundFirewallRulesClientCreateOrUpdatePollerResponse{}, err
@@ -133,9 +131,7 @@ func (client *OutboundFirewallRulesClient) BeginDelete(ctx context.Context, reso
 	if err != nil {
 		return OutboundFirewallRulesClientDeletePollerResponse{}, err
 	}
-	result := OutboundFirewallRulesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := OutboundFirewallRulesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("OutboundFirewallRulesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return OutboundFirewallRulesClientDeletePollerResponse{}, err
@@ -246,7 +242,7 @@ func (client *OutboundFirewallRulesClient) getCreateRequest(ctx context.Context,
 
 // getHandleResponse handles the Get response.
 func (client *OutboundFirewallRulesClient) getHandleResponse(resp *http.Response) (OutboundFirewallRulesClientGetResponse, error) {
-	result := OutboundFirewallRulesClientGetResponse{RawResponse: resp}
+	result := OutboundFirewallRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OutboundFirewallRule); err != nil {
 		return OutboundFirewallRulesClientGetResponse{}, err
 	}
@@ -300,7 +296,7 @@ func (client *OutboundFirewallRulesClient) listByServerCreateRequest(ctx context
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *OutboundFirewallRulesClient) listByServerHandleResponse(resp *http.Response) (OutboundFirewallRulesClientListByServerResponse, error) {
-	result := OutboundFirewallRulesClientListByServerResponse{RawResponse: resp}
+	result := OutboundFirewallRulesClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OutboundFirewallRuleListResult); err != nil {
 		return OutboundFirewallRulesClientListByServerResponse{}, err
 	}

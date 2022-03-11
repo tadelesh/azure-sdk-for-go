@@ -35,17 +35,17 @@ type CustomIPPrefixesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCustomIPPrefixesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CustomIPPrefixesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CustomIPPrefixesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *CustomIPPrefixesClient) BeginCreateOrUpdate(ctx context.Context, r
 	if err != nil {
 		return CustomIPPrefixesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := CustomIPPrefixesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CustomIPPrefixesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("CustomIPPrefixesClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return CustomIPPrefixesClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *CustomIPPrefixesClient) BeginDelete(ctx context.Context, resourceG
 	if err != nil {
 		return CustomIPPrefixesClientDeletePollerResponse{}, err
 	}
-	result := CustomIPPrefixesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CustomIPPrefixesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CustomIPPrefixesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return CustomIPPrefixesClientDeletePollerResponse{}, err
@@ -236,7 +232,7 @@ func (client *CustomIPPrefixesClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *CustomIPPrefixesClient) getHandleResponse(resp *http.Response) (CustomIPPrefixesClientGetResponse, error) {
-	result := CustomIPPrefixesClientGetResponse{RawResponse: resp}
+	result := CustomIPPrefixesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomIPPrefix); err != nil {
 		return CustomIPPrefixesClientGetResponse{}, err
 	}
@@ -283,7 +279,7 @@ func (client *CustomIPPrefixesClient) listCreateRequest(ctx context.Context, res
 
 // listHandleResponse handles the List response.
 func (client *CustomIPPrefixesClient) listHandleResponse(resp *http.Response) (CustomIPPrefixesClientListResponse, error) {
-	result := CustomIPPrefixesClientListResponse{RawResponse: resp}
+	result := CustomIPPrefixesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomIPPrefixListResult); err != nil {
 		return CustomIPPrefixesClientListResponse{}, err
 	}
@@ -326,7 +322,7 @@ func (client *CustomIPPrefixesClient) listAllCreateRequest(ctx context.Context, 
 
 // listAllHandleResponse handles the ListAll response.
 func (client *CustomIPPrefixesClient) listAllHandleResponse(resp *http.Response) (CustomIPPrefixesClientListAllResponse, error) {
-	result := CustomIPPrefixesClientListAllResponse{RawResponse: resp}
+	result := CustomIPPrefixesClientListAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomIPPrefixListResult); err != nil {
 		return CustomIPPrefixesClientListAllResponse{}, err
 	}
@@ -383,7 +379,7 @@ func (client *CustomIPPrefixesClient) updateTagsCreateRequest(ctx context.Contex
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *CustomIPPrefixesClient) updateTagsHandleResponse(resp *http.Response) (CustomIPPrefixesClientUpdateTagsResponse, error) {
-	result := CustomIPPrefixesClientUpdateTagsResponse{RawResponse: resp}
+	result := CustomIPPrefixesClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomIPPrefix); err != nil {
 		return CustomIPPrefixesClientUpdateTagsResponse{}, err
 	}

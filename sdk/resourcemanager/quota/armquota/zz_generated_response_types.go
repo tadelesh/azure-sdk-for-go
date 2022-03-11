@@ -11,7 +11,6 @@ package armquota
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
@@ -19,9 +18,6 @@ import (
 type ClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -29,11 +25,10 @@ type ClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ClientCreateOrUpdateResponse, error) {
 	respType := ClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.CurrentQuotaLimitBase)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.CurrentQuotaLimitBase)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -46,36 +41,21 @@ func (l *ClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, client 
 	poller := &ClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ClientCreateOrUpdateResponse contains the response from method Client.CreateOrUpdate.
 type ClientCreateOrUpdateResponse struct {
-	ClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ClientCreateOrUpdateResult contains the result from method Client.CreateOrUpdate.
-type ClientCreateOrUpdateResult struct {
 	CurrentQuotaLimitBase
 }
 
 // ClientGetResponse contains the response from method Client.Get.
 type ClientGetResponse struct {
-	ClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ClientGetResult contains the result from method Client.Get.
-type ClientGetResult struct {
 	CurrentQuotaLimitBase
 	// ETag contains the information returned from the ETag header response.
 	ETag *string
@@ -83,13 +63,6 @@ type ClientGetResult struct {
 
 // ClientListResponse contains the response from method Client.List.
 type ClientListResponse struct {
-	ClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ClientListResult contains the result from method Client.List.
-type ClientListResult struct {
 	Limits
 	// ETag contains the information returned from the ETag header response.
 	ETag *string
@@ -99,9 +72,6 @@ type ClientListResult struct {
 type ClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -109,11 +79,10 @@ type ClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ClientUpdateResponse, error) {
 	respType := ClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.CurrentQuotaLimitBase)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.CurrentQuotaLimitBase)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -126,72 +95,36 @@ func (l *ClientUpdatePollerResponse) Resume(ctx context.Context, client *Client,
 	poller := &ClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ClientUpdateResponse contains the response from method Client.Update.
 type ClientUpdateResponse struct {
-	ClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ClientUpdateResult contains the result from method Client.Update.
-type ClientUpdateResult struct {
 	CurrentQuotaLimitBase
 }
 
 // OperationClientListResponse contains the response from method OperationClient.List.
 type OperationClientListResponse struct {
-	OperationClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationClientListResult contains the result from method OperationClient.List.
-type OperationClientListResult struct {
 	OperationList
 }
 
 // RequestStatusClientGetResponse contains the response from method RequestStatusClient.Get.
 type RequestStatusClientGetResponse struct {
-	RequestStatusClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// RequestStatusClientGetResult contains the result from method RequestStatusClient.Get.
-type RequestStatusClientGetResult struct {
 	RequestDetails
 }
 
 // RequestStatusClientListResponse contains the response from method RequestStatusClient.List.
 type RequestStatusClientListResponse struct {
-	RequestStatusClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// RequestStatusClientListResult contains the result from method RequestStatusClient.List.
-type RequestStatusClientListResult struct {
 	RequestDetailsList
 }
 
 // UsagesClientGetResponse contains the response from method UsagesClient.Get.
 type UsagesClientGetResponse struct {
-	UsagesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// UsagesClientGetResult contains the result from method UsagesClient.Get.
-type UsagesClientGetResult struct {
 	CurrentUsagesBase
 	// ETag contains the information returned from the ETag header response.
 	ETag *string
@@ -199,13 +132,6 @@ type UsagesClientGetResult struct {
 
 // UsagesClientListResponse contains the response from method UsagesClient.List.
 type UsagesClientListResponse struct {
-	UsagesClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// UsagesClientListResult contains the result from method UsagesClient.List.
-type UsagesClientListResult struct {
 	UsagesLimits
 	// ETag contains the information returned from the ETag header response.
 	ETag *string

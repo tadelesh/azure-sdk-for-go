@@ -34,17 +34,17 @@ type VendorSKUPreviewClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVendorSKUPreviewClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VendorSKUPreviewClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VendorSKUPreviewClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *VendorSKUPreviewClient) BeginCreateOrUpdate(ctx context.Context, v
 	if err != nil {
 		return VendorSKUPreviewClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VendorSKUPreviewClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VendorSKUPreviewClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VendorSKUPreviewClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VendorSKUPreviewClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *VendorSKUPreviewClient) BeginDelete(ctx context.Context, vendorNam
 	if err != nil {
 		return VendorSKUPreviewClientDeletePollerResponse{}, err
 	}
-	result := VendorSKUPreviewClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VendorSKUPreviewClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VendorSKUPreviewClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return VendorSKUPreviewClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *VendorSKUPreviewClient) getCreateRequest(ctx context.Context, vend
 
 // getHandleResponse handles the Get response.
 func (client *VendorSKUPreviewClient) getHandleResponse(resp *http.Response) (VendorSKUPreviewClientGetResponse, error) {
-	result := VendorSKUPreviewClientGetResponse{RawResponse: resp}
+	result := VendorSKUPreviewClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PreviewSubscription); err != nil {
 		return VendorSKUPreviewClientGetResponse{}, err
 	}
@@ -299,7 +295,7 @@ func (client *VendorSKUPreviewClient) listCreateRequest(ctx context.Context, ven
 
 // listHandleResponse handles the List response.
 func (client *VendorSKUPreviewClient) listHandleResponse(resp *http.Response) (VendorSKUPreviewClientListResponse, error) {
-	result := VendorSKUPreviewClientListResponse{RawResponse: resp}
+	result := VendorSKUPreviewClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PreviewSubscriptionsList); err != nil {
 		return VendorSKUPreviewClientListResponse{}, err
 	}

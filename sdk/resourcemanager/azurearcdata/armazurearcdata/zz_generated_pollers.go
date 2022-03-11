@@ -43,11 +43,10 @@ func (p *DataControllersClientDeleteDataControllerPoller) Poll(ctx context.Conte
 // If the final GET succeeded then the final DataControllersClientDeleteDataControllerResponse will be returned.
 func (p *DataControllersClientDeleteDataControllerPoller) FinalResponse(ctx context.Context) (DataControllersClientDeleteDataControllerResponse, error) {
 	respType := DataControllersClientDeleteDataControllerResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DataControllersClientDeleteDataControllerResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *DataControllersClientPutDataControllerPoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final DataControllersClientPutDataControllerResponse will be returned.
 func (p *DataControllersClientPutDataControllerPoller) FinalResponse(ctx context.Context) (DataControllersClientPutDataControllerResponse, error) {
 	respType := DataControllersClientPutDataControllerResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DataControllerResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.DataControllerResource)
 	if err != nil {
 		return DataControllersClientPutDataControllerResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *SQLManagedInstancesClientCreatePoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final SQLManagedInstancesClientCreateResponse will be returned.
 func (p *SQLManagedInstancesClientCreatePoller) FinalResponse(ctx context.Context) (SQLManagedInstancesClientCreateResponse, error) {
 	respType := SQLManagedInstancesClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SQLManagedInstance)
+	_, err := p.pt.FinalResponse(ctx, &respType.SQLManagedInstance)
 	if err != nil {
 		return SQLManagedInstancesClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *SQLManagedInstancesClientDeletePoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final SQLManagedInstancesClientDeleteResponse will be returned.
 func (p *SQLManagedInstancesClientDeletePoller) FinalResponse(ctx context.Context) (SQLManagedInstancesClientDeleteResponse, error) {
 	respType := SQLManagedInstancesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SQLManagedInstancesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *SQLServerInstancesClientCreatePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final SQLServerInstancesClientCreateResponse will be returned.
 func (p *SQLServerInstancesClientCreatePoller) FinalResponse(ctx context.Context) (SQLServerInstancesClientCreateResponse, error) {
 	respType := SQLServerInstancesClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SQLServerInstance)
+	_, err := p.pt.FinalResponse(ctx, &respType.SQLServerInstance)
 	if err != nil {
 		return SQLServerInstancesClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *SQLServerInstancesClientDeletePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final SQLServerInstancesClientDeleteResponse will be returned.
 func (p *SQLServerInstancesClientDeletePoller) FinalResponse(ctx context.Context) (SQLServerInstancesClientDeleteResponse, error) {
 	respType := SQLServerInstancesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SQLServerInstancesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

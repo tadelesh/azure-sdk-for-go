@@ -35,17 +35,17 @@ type ExpressRouteGatewaysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewExpressRouteGatewaysClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ExpressRouteGatewaysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ExpressRouteGatewaysClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *ExpressRouteGatewaysClient) BeginCreateOrUpdate(ctx context.Contex
 	if err != nil {
 		return ExpressRouteGatewaysClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ExpressRouteGatewaysClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ExpressRouteGatewaysClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ExpressRouteGatewaysClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ExpressRouteGatewaysClientCreateOrUpdatePollerResponse{}, err
@@ -130,9 +128,7 @@ func (client *ExpressRouteGatewaysClient) BeginDelete(ctx context.Context, resou
 	if err != nil {
 		return ExpressRouteGatewaysClientDeletePollerResponse{}, err
 	}
-	result := ExpressRouteGatewaysClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ExpressRouteGatewaysClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ExpressRouteGatewaysClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return ExpressRouteGatewaysClientDeletePollerResponse{}, err
@@ -236,7 +232,7 @@ func (client *ExpressRouteGatewaysClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *ExpressRouteGatewaysClient) getHandleResponse(resp *http.Response) (ExpressRouteGatewaysClientGetResponse, error) {
-	result := ExpressRouteGatewaysClientGetResponse{RawResponse: resp}
+	result := ExpressRouteGatewaysClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExpressRouteGateway); err != nil {
 		return ExpressRouteGatewaysClientGetResponse{}, err
 	}
@@ -287,7 +283,7 @@ func (client *ExpressRouteGatewaysClient) listByResourceGroupCreateRequest(ctx c
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ExpressRouteGatewaysClient) listByResourceGroupHandleResponse(resp *http.Response) (ExpressRouteGatewaysClientListByResourceGroupResponse, error) {
-	result := ExpressRouteGatewaysClientListByResourceGroupResponse{RawResponse: resp}
+	result := ExpressRouteGatewaysClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExpressRouteGatewayList); err != nil {
 		return ExpressRouteGatewaysClientListByResourceGroupResponse{}, err
 	}
@@ -333,7 +329,7 @@ func (client *ExpressRouteGatewaysClient) listBySubscriptionCreateRequest(ctx co
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *ExpressRouteGatewaysClient) listBySubscriptionHandleResponse(resp *http.Response) (ExpressRouteGatewaysClientListBySubscriptionResponse, error) {
-	result := ExpressRouteGatewaysClientListBySubscriptionResponse{RawResponse: resp}
+	result := ExpressRouteGatewaysClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExpressRouteGatewayList); err != nil {
 		return ExpressRouteGatewaysClientListBySubscriptionResponse{}, err
 	}
@@ -352,9 +348,7 @@ func (client *ExpressRouteGatewaysClient) BeginUpdateTags(ctx context.Context, r
 	if err != nil {
 		return ExpressRouteGatewaysClientUpdateTagsPollerResponse{}, err
 	}
-	result := ExpressRouteGatewaysClientUpdateTagsPollerResponse{
-		RawResponse: resp,
-	}
+	result := ExpressRouteGatewaysClientUpdateTagsPollerResponse{}
 	pt, err := armruntime.NewPoller("ExpressRouteGatewaysClient.UpdateTags", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ExpressRouteGatewaysClientUpdateTagsPollerResponse{}, err

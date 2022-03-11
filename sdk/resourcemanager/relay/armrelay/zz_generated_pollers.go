@@ -43,11 +43,10 @@ func (p *NamespacesClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final NamespacesClientCreateOrUpdateResponse will be returned.
 func (p *NamespacesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (NamespacesClientCreateOrUpdateResponse, error) {
 	respType := NamespacesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Namespace)
+	_, err := p.pt.FinalResponse(ctx, &respType.Namespace)
 	if err != nil {
 		return NamespacesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *NamespacesClientDeletePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final NamespacesClientDeleteResponse will be returned.
 func (p *NamespacesClientDeletePoller) FinalResponse(ctx context.Context) (NamespacesClientDeleteResponse, error) {
 	respType := NamespacesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return NamespacesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

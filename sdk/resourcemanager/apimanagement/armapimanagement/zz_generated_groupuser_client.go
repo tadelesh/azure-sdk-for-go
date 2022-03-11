@@ -36,17 +36,17 @@ type GroupUserClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGroupUserClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *GroupUserClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GroupUserClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -67,7 +67,7 @@ func (client *GroupUserClient) CheckEntityExists(ctx context.Context, resourceGr
 	if err != nil {
 		return GroupUserClientCheckEntityExistsResponse{}, err
 	}
-	result := GroupUserClientCheckEntityExistsResponse{RawResponse: resp}
+	result := GroupUserClientCheckEntityExistsResponse{}
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		result.Success = true
 	}
@@ -166,7 +166,7 @@ func (client *GroupUserClient) createCreateRequest(ctx context.Context, resource
 
 // createHandleResponse handles the Create response.
 func (client *GroupUserClient) createHandleResponse(resp *http.Response) (GroupUserClientCreateResponse, error) {
-	result := GroupUserClientCreateResponse{RawResponse: resp}
+	result := GroupUserClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UserContract); err != nil {
 		return GroupUserClientCreateResponse{}, err
 	}
@@ -192,7 +192,7 @@ func (client *GroupUserClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return GroupUserClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return GroupUserClientDeleteResponse{RawResponse: resp}, nil
+	return GroupUserClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -288,7 +288,7 @@ func (client *GroupUserClient) listCreateRequest(ctx context.Context, resourceGr
 
 // listHandleResponse handles the List response.
 func (client *GroupUserClient) listHandleResponse(resp *http.Response) (GroupUserClientListResponse, error) {
-	result := GroupUserClientListResponse{RawResponse: resp}
+	result := GroupUserClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UserCollection); err != nil {
 		return GroupUserClientListResponse{}, err
 	}

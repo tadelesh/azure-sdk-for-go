@@ -35,17 +35,17 @@ type VolumesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVolumesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VolumesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VolumesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *VolumesClient) BeginAuthorizeReplication(ctx context.Context, reso
 	if err != nil {
 		return VolumesClientAuthorizeReplicationPollerResponse{}, err
 	}
-	result := VolumesClientAuthorizeReplicationPollerResponse{
-		RawResponse: resp,
-	}
+	result := VolumesClientAuthorizeReplicationPollerResponse{}
 	pt, err := armruntime.NewPoller("VolumesClient.AuthorizeReplication", "location", resp, client.pl)
 	if err != nil {
 		return VolumesClientAuthorizeReplicationPollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *VolumesClient) BeginBreakReplication(ctx context.Context, resource
 	if err != nil {
 		return VolumesClientBreakReplicationPollerResponse{}, err
 	}
-	result := VolumesClientBreakReplicationPollerResponse{
-		RawResponse: resp,
-	}
+	result := VolumesClientBreakReplicationPollerResponse{}
 	pt, err := armruntime.NewPoller("VolumesClient.BreakReplication", "location", resp, client.pl)
 	if err != nil {
 		return VolumesClientBreakReplicationPollerResponse{}, err
@@ -220,9 +216,7 @@ func (client *VolumesClient) BeginCreateOrUpdate(ctx context.Context, resourceGr
 	if err != nil {
 		return VolumesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VolumesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VolumesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VolumesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VolumesClientCreateOrUpdatePollerResponse{}, err
@@ -296,9 +290,7 @@ func (client *VolumesClient) BeginDelete(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return VolumesClientDeletePollerResponse{}, err
 	}
-	result := VolumesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VolumesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VolumesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return VolumesClientDeletePollerResponse{}, err
@@ -372,9 +364,7 @@ func (client *VolumesClient) BeginDeleteReplication(ctx context.Context, resourc
 	if err != nil {
 		return VolumesClientDeleteReplicationPollerResponse{}, err
 	}
-	result := VolumesClientDeleteReplicationPollerResponse{
-		RawResponse: resp,
-	}
+	result := VolumesClientDeleteReplicationPollerResponse{}
 	pt, err := armruntime.NewPoller("VolumesClient.DeleteReplication", "location", resp, client.pl)
 	if err != nil {
 		return VolumesClientDeleteReplicationPollerResponse{}, err
@@ -493,7 +483,7 @@ func (client *VolumesClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *VolumesClient) getHandleResponse(resp *http.Response) (VolumesClientGetResponse, error) {
-	result := VolumesClientGetResponse{RawResponse: resp}
+	result := VolumesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Volume); err != nil {
 		return VolumesClientGetResponse{}, err
 	}
@@ -550,7 +540,7 @@ func (client *VolumesClient) listCreateRequest(ctx context.Context, resourceGrou
 
 // listHandleResponse handles the List response.
 func (client *VolumesClient) listHandleResponse(resp *http.Response) (VolumesClientListResponse, error) {
-	result := VolumesClientListResponse{RawResponse: resp}
+	result := VolumesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VolumeList); err != nil {
 		return VolumesClientListResponse{}, err
 	}
@@ -570,9 +560,7 @@ func (client *VolumesClient) BeginPoolChange(ctx context.Context, resourceGroupN
 	if err != nil {
 		return VolumesClientPoolChangePollerResponse{}, err
 	}
-	result := VolumesClientPoolChangePollerResponse{
-		RawResponse: resp,
-	}
+	result := VolumesClientPoolChangePollerResponse{}
 	pt, err := armruntime.NewPoller("VolumesClient.PoolChange", "location", resp, client.pl)
 	if err != nil {
 		return VolumesClientPoolChangePollerResponse{}, err
@@ -646,9 +634,7 @@ func (client *VolumesClient) BeginReInitializeReplication(ctx context.Context, r
 	if err != nil {
 		return VolumesClientReInitializeReplicationPollerResponse{}, err
 	}
-	result := VolumesClientReInitializeReplicationPollerResponse{
-		RawResponse: resp,
-	}
+	result := VolumesClientReInitializeReplicationPollerResponse{}
 	pt, err := armruntime.NewPoller("VolumesClient.ReInitializeReplication", "location", resp, client.pl)
 	if err != nil {
 		return VolumesClientReInitializeReplicationPollerResponse{}, err
@@ -768,7 +754,7 @@ func (client *VolumesClient) replicationStatusCreateRequest(ctx context.Context,
 
 // replicationStatusHandleResponse handles the ReplicationStatus response.
 func (client *VolumesClient) replicationStatusHandleResponse(resp *http.Response) (VolumesClientReplicationStatusResponse, error) {
-	result := VolumesClientReplicationStatusResponse{RawResponse: resp}
+	result := VolumesClientReplicationStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReplicationStatus); err != nil {
 		return VolumesClientReplicationStatusResponse{}, err
 	}
@@ -789,9 +775,7 @@ func (client *VolumesClient) BeginResyncReplication(ctx context.Context, resourc
 	if err != nil {
 		return VolumesClientResyncReplicationPollerResponse{}, err
 	}
-	result := VolumesClientResyncReplicationPollerResponse{
-		RawResponse: resp,
-	}
+	result := VolumesClientResyncReplicationPollerResponse{}
 	pt, err := armruntime.NewPoller("VolumesClient.ResyncReplication", "location", resp, client.pl)
 	if err != nil {
 		return VolumesClientResyncReplicationPollerResponse{}, err
@@ -866,9 +850,7 @@ func (client *VolumesClient) BeginRevert(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return VolumesClientRevertPollerResponse{}, err
 	}
-	result := VolumesClientRevertPollerResponse{
-		RawResponse: resp,
-	}
+	result := VolumesClientRevertPollerResponse{}
 	pt, err := armruntime.NewPoller("VolumesClient.Revert", "location", resp, client.pl)
 	if err != nil {
 		return VolumesClientRevertPollerResponse{}, err
@@ -942,9 +924,7 @@ func (client *VolumesClient) BeginUpdate(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return VolumesClientUpdatePollerResponse{}, err
 	}
-	result := VolumesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VolumesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VolumesClient.Update", "location", resp, client.pl)
 	if err != nil {
 		return VolumesClientUpdatePollerResponse{}, err

@@ -99,7 +99,7 @@ func (client *CustomEntityStoreAssignmentsClient) createCreateRequest(ctx contex
 
 // createHandleResponse handles the Create response.
 func (client *CustomEntityStoreAssignmentsClient) createHandleResponse(resp *http.Response) (CustomEntityStoreAssignmentsClientCreateResponse, error) {
-	result := CustomEntityStoreAssignmentsClientCreateResponse{RawResponse: resp}
+	result := CustomEntityStoreAssignmentsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomEntityStoreAssignment); err != nil {
 		return CustomEntityStoreAssignmentsClientCreateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *CustomEntityStoreAssignmentsClient) Delete(ctx context.Context, re
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return CustomEntityStoreAssignmentsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return CustomEntityStoreAssignmentsClientDeleteResponse{RawResponse: resp}, nil
+	return CustomEntityStoreAssignmentsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -202,7 +202,7 @@ func (client *CustomEntityStoreAssignmentsClient) getCreateRequest(ctx context.C
 
 // getHandleResponse handles the Get response.
 func (client *CustomEntityStoreAssignmentsClient) getHandleResponse(resp *http.Response) (CustomEntityStoreAssignmentsClientGetResponse, error) {
-	result := CustomEntityStoreAssignmentsClientGetResponse{RawResponse: resp}
+	result := CustomEntityStoreAssignmentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomEntityStoreAssignment); err != nil {
 		return CustomEntityStoreAssignmentsClientGetResponse{}, err
 	}
@@ -250,7 +250,7 @@ func (client *CustomEntityStoreAssignmentsClient) listByResourceGroupCreateReque
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *CustomEntityStoreAssignmentsClient) listByResourceGroupHandleResponse(resp *http.Response) (CustomEntityStoreAssignmentsClientListByResourceGroupResponse, error) {
-	result := CustomEntityStoreAssignmentsClientListByResourceGroupResponse{RawResponse: resp}
+	result := CustomEntityStoreAssignmentsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomEntityStoreAssignmentsListResult); err != nil {
 		return CustomEntityStoreAssignmentsClientListByResourceGroupResponse{}, err
 	}
@@ -293,7 +293,7 @@ func (client *CustomEntityStoreAssignmentsClient) listBySubscriptionCreateReques
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *CustomEntityStoreAssignmentsClient) listBySubscriptionHandleResponse(resp *http.Response) (CustomEntityStoreAssignmentsClientListBySubscriptionResponse, error) {
-	result := CustomEntityStoreAssignmentsClientListBySubscriptionResponse{RawResponse: resp}
+	result := CustomEntityStoreAssignmentsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomEntityStoreAssignmentsListResult); err != nil {
 		return CustomEntityStoreAssignmentsClientListBySubscriptionResponse{}, err
 	}

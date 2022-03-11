@@ -37,18 +37,18 @@ type DedicatedCloudNodesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDedicatedCloudNodesClient(subscriptionID string, referer string, credential azcore.TokenCredential, options *arm.ClientOptions) *DedicatedCloudNodesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DedicatedCloudNodesClient{
 		subscriptionID: subscriptionID,
 		referer:        referer,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -65,9 +65,7 @@ func (client *DedicatedCloudNodesClient) BeginCreateOrUpdate(ctx context.Context
 	if err != nil {
 		return DedicatedCloudNodesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DedicatedCloudNodesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DedicatedCloudNodesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DedicatedCloudNodesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DedicatedCloudNodesClientCreateOrUpdatePollerResponse{}, err
@@ -140,7 +138,7 @@ func (client *DedicatedCloudNodesClient) Delete(ctx context.Context, resourceGro
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return DedicatedCloudNodesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DedicatedCloudNodesClientDeleteResponse{RawResponse: resp}, nil
+	return DedicatedCloudNodesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -217,7 +215,7 @@ func (client *DedicatedCloudNodesClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *DedicatedCloudNodesClient) getHandleResponse(resp *http.Response) (DedicatedCloudNodesClientGetResponse, error) {
-	result := DedicatedCloudNodesClientGetResponse{RawResponse: resp}
+	result := DedicatedCloudNodesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DedicatedCloudNode); err != nil {
 		return DedicatedCloudNodesClientGetResponse{}, err
 	}
@@ -274,7 +272,7 @@ func (client *DedicatedCloudNodesClient) listByResourceGroupCreateRequest(ctx co
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *DedicatedCloudNodesClient) listByResourceGroupHandleResponse(resp *http.Response) (DedicatedCloudNodesClientListByResourceGroupResponse, error) {
-	result := DedicatedCloudNodesClientListByResourceGroupResponse{RawResponse: resp}
+	result := DedicatedCloudNodesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DedicatedCloudNodeListResponse); err != nil {
 		return DedicatedCloudNodesClientListByResourceGroupResponse{}, err
 	}
@@ -326,7 +324,7 @@ func (client *DedicatedCloudNodesClient) listBySubscriptionCreateRequest(ctx con
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *DedicatedCloudNodesClient) listBySubscriptionHandleResponse(resp *http.Response) (DedicatedCloudNodesClientListBySubscriptionResponse, error) {
-	result := DedicatedCloudNodesClientListBySubscriptionResponse{RawResponse: resp}
+	result := DedicatedCloudNodesClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DedicatedCloudNodeListResponse); err != nil {
 		return DedicatedCloudNodesClientListBySubscriptionResponse{}, err
 	}
@@ -383,7 +381,7 @@ func (client *DedicatedCloudNodesClient) updateCreateRequest(ctx context.Context
 
 // updateHandleResponse handles the Update response.
 func (client *DedicatedCloudNodesClient) updateHandleResponse(resp *http.Response) (DedicatedCloudNodesClientUpdateResponse, error) {
-	result := DedicatedCloudNodesClientUpdateResponse{RawResponse: resp}
+	result := DedicatedCloudNodesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DedicatedCloudNode); err != nil {
 		return DedicatedCloudNodesClientUpdateResponse{}, err
 	}

@@ -34,17 +34,17 @@ type MoveResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMoveResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MoveResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MoveResourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *MoveResourcesClient) BeginCreate(ctx context.Context, resourceGrou
 	if err != nil {
 		return MoveResourcesClientCreatePollerResponse{}, err
 	}
-	result := MoveResourcesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := MoveResourcesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("MoveResourcesClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return MoveResourcesClientCreatePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *MoveResourcesClient) BeginDelete(ctx context.Context, resourceGrou
 	if err != nil {
 		return MoveResourcesClientDeletePollerResponse{}, err
 	}
-	result := MoveResourcesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := MoveResourcesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("MoveResourcesClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return MoveResourcesClientDeletePollerResponse{}, err
@@ -249,7 +245,7 @@ func (client *MoveResourcesClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *MoveResourcesClient) getHandleResponse(resp *http.Response) (MoveResourcesClientGetResponse, error) {
-	result := MoveResourcesClientGetResponse{RawResponse: resp}
+	result := MoveResourcesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MoveResource); err != nil {
 		return MoveResourcesClientGetResponse{}, err
 	}
@@ -304,7 +300,7 @@ func (client *MoveResourcesClient) listCreateRequest(ctx context.Context, resour
 
 // listHandleResponse handles the List response.
 func (client *MoveResourcesClient) listHandleResponse(resp *http.Response) (MoveResourcesClientListResponse, error) {
-	result := MoveResourcesClientListResponse{RawResponse: resp}
+	result := MoveResourcesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MoveResourceCollection); err != nil {
 		return MoveResourcesClientListResponse{}, err
 	}

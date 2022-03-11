@@ -35,17 +35,17 @@ type UpdatesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewUpdatesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *UpdatesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &UpdatesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -57,19 +57,13 @@ func NewUpdatesClient(subscriptionID string, credential azcore.TokenCredential, 
 // resourceType - Resource type
 // resourceName - Resource identifier
 // options - UpdatesClientListOptions contains the optional parameters for the UpdatesClient.List method.
-func (client *UpdatesClient) List(ctx context.Context, resourceGroupName string, providerName string, resourceType string, resourceName string, options *UpdatesClientListOptions) (UpdatesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, providerName, resourceType, resourceName, options)
-	if err != nil {
-		return UpdatesClientListResponse{}, err
+func (client *UpdatesClient) List(resourceGroupName string, providerName string, resourceType string, resourceName string, options *UpdatesClientListOptions) *UpdatesClientListPager {
+	return &UpdatesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, providerName, resourceType, resourceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return UpdatesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return UpdatesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -108,7 +102,7 @@ func (client *UpdatesClient) listCreateRequest(ctx context.Context, resourceGrou
 
 // listHandleResponse handles the List response.
 func (client *UpdatesClient) listHandleResponse(resp *http.Response) (UpdatesClientListResponse, error) {
-	result := UpdatesClientListResponse{RawResponse: resp}
+	result := UpdatesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListUpdatesResult); err != nil {
 		return UpdatesClientListResponse{}, err
 	}
@@ -124,19 +118,13 @@ func (client *UpdatesClient) listHandleResponse(resp *http.Response) (UpdatesCli
 // resourceType - Resource type
 // resourceName - Resource identifier
 // options - UpdatesClientListParentOptions contains the optional parameters for the UpdatesClient.ListParent method.
-func (client *UpdatesClient) ListParent(ctx context.Context, resourceGroupName string, providerName string, resourceParentType string, resourceParentName string, resourceType string, resourceName string, options *UpdatesClientListParentOptions) (UpdatesClientListParentResponse, error) {
-	req, err := client.listParentCreateRequest(ctx, resourceGroupName, providerName, resourceParentType, resourceParentName, resourceType, resourceName, options)
-	if err != nil {
-		return UpdatesClientListParentResponse{}, err
+func (client *UpdatesClient) ListParent(resourceGroupName string, providerName string, resourceParentType string, resourceParentName string, resourceType string, resourceName string, options *UpdatesClientListParentOptions) *UpdatesClientListParentPager {
+	return &UpdatesClientListParentPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listParentCreateRequest(ctx, resourceGroupName, providerName, resourceParentType, resourceParentName, resourceType, resourceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return UpdatesClientListParentResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return UpdatesClientListParentResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listParentHandleResponse(resp)
 }
 
 // listParentCreateRequest creates the ListParent request.
@@ -183,7 +171,7 @@ func (client *UpdatesClient) listParentCreateRequest(ctx context.Context, resour
 
 // listParentHandleResponse handles the ListParent response.
 func (client *UpdatesClient) listParentHandleResponse(resp *http.Response) (UpdatesClientListParentResponse, error) {
-	result := UpdatesClientListParentResponse{RawResponse: resp}
+	result := UpdatesClientListParentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListUpdatesResult); err != nil {
 		return UpdatesClientListParentResponse{}, err
 	}

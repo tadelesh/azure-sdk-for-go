@@ -101,7 +101,7 @@ func (client *QueueServicesClient) getServicePropertiesCreateRequest(ctx context
 
 // getServicePropertiesHandleResponse handles the GetServiceProperties response.
 func (client *QueueServicesClient) getServicePropertiesHandleResponse(resp *http.Response) (QueueServicesClientGetServicePropertiesResponse, error) {
-	result := QueueServicesClientGetServicePropertiesResponse{RawResponse: resp}
+	result := QueueServicesClientGetServicePropertiesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QueueServiceProperties); err != nil {
 		return QueueServicesClientGetServicePropertiesResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *QueueServicesClient) listCreateRequest(ctx context.Context, resour
 
 // listHandleResponse handles the List response.
 func (client *QueueServicesClient) listHandleResponse(resp *http.Response) (QueueServicesClientListResponse, error) {
-	result := QueueServicesClientListResponse{RawResponse: resp}
+	result := QueueServicesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListQueueServices); err != nil {
 		return QueueServicesClientListResponse{}, err
 	}
@@ -218,7 +218,7 @@ func (client *QueueServicesClient) setServicePropertiesCreateRequest(ctx context
 
 // setServicePropertiesHandleResponse handles the SetServiceProperties response.
 func (client *QueueServicesClient) setServicePropertiesHandleResponse(resp *http.Response) (QueueServicesClientSetServicePropertiesResponse, error) {
-	result := QueueServicesClientSetServicePropertiesResponse{RawResponse: resp}
+	result := QueueServicesClientSetServicePropertiesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QueueServiceProperties); err != nil {
 		return QueueServicesClientSetServicePropertiesResponse{}, err
 	}

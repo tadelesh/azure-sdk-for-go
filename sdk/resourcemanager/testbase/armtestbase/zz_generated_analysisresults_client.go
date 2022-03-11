@@ -34,17 +34,17 @@ type AnalysisResultsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAnalysisResultsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AnalysisResultsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AnalysisResultsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -112,7 +112,7 @@ func (client *AnalysisResultsClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *AnalysisResultsClient) getHandleResponse(resp *http.Response) (AnalysisResultsClientGetResponse, error) {
-	result := AnalysisResultsClientGetResponse{RawResponse: resp}
+	result := AnalysisResultsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AnalysisResultSingletonResource); err != nil {
 		return AnalysisResultsClientGetResponse{}, err
 	}
@@ -128,19 +128,13 @@ func (client *AnalysisResultsClient) getHandleResponse(resp *http.Response) (Ana
 // testResultName - The Test Result Name. It equals to {osName}-{TestResultId} string.
 // analysisResultType - The type of the Analysis Result of a Test Result.
 // options - AnalysisResultsClientListOptions contains the optional parameters for the AnalysisResultsClient.List method.
-func (client *AnalysisResultsClient) List(ctx context.Context, resourceGroupName string, testBaseAccountName string, packageName string, testResultName string, analysisResultType AnalysisResultType, options *AnalysisResultsClientListOptions) (AnalysisResultsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, testBaseAccountName, packageName, testResultName, analysisResultType, options)
-	if err != nil {
-		return AnalysisResultsClientListResponse{}, err
+func (client *AnalysisResultsClient) List(resourceGroupName string, testBaseAccountName string, packageName string, testResultName string, analysisResultType AnalysisResultType, options *AnalysisResultsClientListOptions) *AnalysisResultsClientListPager {
+	return &AnalysisResultsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, testBaseAccountName, packageName, testResultName, analysisResultType, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return AnalysisResultsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return AnalysisResultsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -180,7 +174,7 @@ func (client *AnalysisResultsClient) listCreateRequest(ctx context.Context, reso
 
 // listHandleResponse handles the List response.
 func (client *AnalysisResultsClient) listHandleResponse(resp *http.Response) (AnalysisResultsClientListResponse, error) {
-	result := AnalysisResultsClientListResponse{RawResponse: resp}
+	result := AnalysisResultsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AnalysisResultListResult); err != nil {
 		return AnalysisResultsClientListResponse{}, err
 	}

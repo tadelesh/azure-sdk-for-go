@@ -43,11 +43,10 @@ func (p *ClientCreateResourcePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ClientCreateResourceResponse will be returned.
 func (p *ClientCreateResourcePoller) FinalResponse(ctx context.Context) (ClientCreateResourceResponse, error) {
 	respType := ClientCreateResourceResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Resource)
+	_, err := p.pt.FinalResponse(ctx, &respType.Resource)
 	if err != nil {
 		return ClientCreateResourceResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ClientDeletePoller) Poll(ctx context.Context) (*http.Response, error) {
 // If the final GET succeeded then the final ClientDeleteResponse will be returned.
 func (p *ClientDeletePoller) FinalResponse(ctx context.Context) (ClientDeleteResponse, error) {
 	respType := ClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ClientUpdateResourcePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ClientUpdateResourceResponse will be returned.
 func (p *ClientUpdateResourcePoller) FinalResponse(ctx context.Context) (ClientUpdateResourceResponse, error) {
 	respType := ClientUpdateResourceResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Resource)
+	_, err := p.pt.FinalResponse(ctx, &respType.Resource)
 	if err != nil {
 		return ClientUpdateResourceResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *OperationClientGetPoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final OperationClientGetResponse will be returned.
 func (p *OperationClientGetPoller) FinalResponse(ctx context.Context) (OperationClientGetResponse, error) {
 	respType := OperationClientGetResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Resource)
+	_, err := p.pt.FinalResponse(ctx, &respType.Resource)
 	if err != nil {
 		return OperationClientGetResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *SubscriptionLevelClientCreateOrUpdatePoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final SubscriptionLevelClientCreateOrUpdateResponse will be returned.
 func (p *SubscriptionLevelClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (SubscriptionLevelClientCreateOrUpdateResponse, error) {
 	respType := SubscriptionLevelClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Resource)
+	_, err := p.pt.FinalResponse(ctx, &respType.Resource)
 	if err != nil {
 		return SubscriptionLevelClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *SubscriptionLevelClientDeletePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final SubscriptionLevelClientDeleteResponse will be returned.
 func (p *SubscriptionLevelClientDeletePoller) FinalResponse(ctx context.Context) (SubscriptionLevelClientDeleteResponse, error) {
 	respType := SubscriptionLevelClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SubscriptionLevelClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *SubscriptionLevelClientMoveResourcesPoller) Poll(ctx context.Context) (
 // If the final GET succeeded then the final SubscriptionLevelClientMoveResourcesResponse will be returned.
 func (p *SubscriptionLevelClientMoveResourcesPoller) FinalResponse(ctx context.Context) (SubscriptionLevelClientMoveResourcesResponse, error) {
 	respType := SubscriptionLevelClientMoveResourcesResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SubscriptionLevelClientMoveResourcesResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *SubscriptionLevelClientUpdatePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final SubscriptionLevelClientUpdateResponse will be returned.
 func (p *SubscriptionLevelClientUpdatePoller) FinalResponse(ctx context.Context) (SubscriptionLevelClientUpdateResponse, error) {
 	respType := SubscriptionLevelClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Resource)
+	_, err := p.pt.FinalResponse(ctx, &respType.Resource)
 	if err != nil {
 		return SubscriptionLevelClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *SubscriptionLevelClientUpdateToUnsubscribedPoller) Poll(ctx context.Con
 // If the final GET succeeded then the final SubscriptionLevelClientUpdateToUnsubscribedResponse will be returned.
 func (p *SubscriptionLevelClientUpdateToUnsubscribedPoller) FinalResponse(ctx context.Context) (SubscriptionLevelClientUpdateToUnsubscribedResponse, error) {
 	respType := SubscriptionLevelClientUpdateToUnsubscribedResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SubscriptionLevelClientUpdateToUnsubscribedResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

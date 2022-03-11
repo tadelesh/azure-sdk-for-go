@@ -63,9 +63,7 @@ func (client *AFDOriginsClient) BeginCreate(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return AFDOriginsClientCreatePollerResponse{}, err
 	}
-	result := AFDOriginsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AFDOriginsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("AFDOriginsClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AFDOriginsClientCreatePollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *AFDOriginsClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return AFDOriginsClientDeletePollerResponse{}, err
 	}
-	result := AFDOriginsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AFDOriginsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AFDOriginsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AFDOriginsClientDeletePollerResponse{}, err
@@ -263,7 +259,7 @@ func (client *AFDOriginsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *AFDOriginsClient) getHandleResponse(resp *http.Response) (AFDOriginsClientGetResponse, error) {
-	result := AFDOriginsClientGetResponse{RawResponse: resp}
+	result := AFDOriginsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AFDOrigin); err != nil {
 		return AFDOriginsClientGetResponse{}, err
 	}
@@ -322,7 +318,7 @@ func (client *AFDOriginsClient) listByOriginGroupCreateRequest(ctx context.Conte
 
 // listByOriginGroupHandleResponse handles the ListByOriginGroup response.
 func (client *AFDOriginsClient) listByOriginGroupHandleResponse(resp *http.Response) (AFDOriginsClientListByOriginGroupResponse, error) {
-	result := AFDOriginsClientListByOriginGroupResponse{RawResponse: resp}
+	result := AFDOriginsClientListByOriginGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AFDOriginListResult); err != nil {
 		return AFDOriginsClientListByOriginGroupResponse{}, err
 	}
@@ -343,9 +339,7 @@ func (client *AFDOriginsClient) BeginUpdate(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return AFDOriginsClientUpdatePollerResponse{}, err
 	}
-	result := AFDOriginsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AFDOriginsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AFDOriginsClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AFDOriginsClientUpdatePollerResponse{}, err

@@ -34,17 +34,17 @@ type ResourceTypeRegistrationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewResourceTypeRegistrationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ResourceTypeRegistrationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ResourceTypeRegistrationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *ResourceTypeRegistrationsClient) BeginCreateOrUpdate(ctx context.C
 	if err != nil {
 		return ResourceTypeRegistrationsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ResourceTypeRegistrationsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ResourceTypeRegistrationsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ResourceTypeRegistrationsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ResourceTypeRegistrationsClientCreateOrUpdatePollerResponse{}, err
@@ -135,7 +133,7 @@ func (client *ResourceTypeRegistrationsClient) Delete(ctx context.Context, provi
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ResourceTypeRegistrationsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ResourceTypeRegistrationsClientDeleteResponse{RawResponse: resp}, nil
+	return ResourceTypeRegistrationsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -213,7 +211,7 @@ func (client *ResourceTypeRegistrationsClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *ResourceTypeRegistrationsClient) getHandleResponse(resp *http.Response) (ResourceTypeRegistrationsClientGetResponse, error) {
-	result := ResourceTypeRegistrationsClientGetResponse{RawResponse: resp}
+	result := ResourceTypeRegistrationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceTypeRegistration); err != nil {
 		return ResourceTypeRegistrationsClientGetResponse{}, err
 	}
@@ -261,7 +259,7 @@ func (client *ResourceTypeRegistrationsClient) listByProviderRegistrationCreateR
 
 // listByProviderRegistrationHandleResponse handles the ListByProviderRegistration response.
 func (client *ResourceTypeRegistrationsClient) listByProviderRegistrationHandleResponse(resp *http.Response) (ResourceTypeRegistrationsClientListByProviderRegistrationResponse, error) {
-	result := ResourceTypeRegistrationsClientListByProviderRegistrationResponse{RawResponse: resp}
+	result := ResourceTypeRegistrationsClientListByProviderRegistrationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceTypeRegistrationArrayResponseWithContinuation); err != nil {
 		return ResourceTypeRegistrationsClientListByProviderRegistrationResponse{}, err
 	}

@@ -38,19 +38,19 @@ type ReplicationPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReplicationPoliciesClient(resourceName string, resourceGroupName string, subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReplicationPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReplicationPoliciesClient{
 		resourceName:      resourceName,
 		resourceGroupName: resourceGroupName,
 		subscriptionID:    subscriptionID,
-		host:              string(cp.Endpoint),
-		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:              string(ep),
+		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -66,9 +66,7 @@ func (client *ReplicationPoliciesClient) BeginCreate(ctx context.Context, policy
 	if err != nil {
 		return ReplicationPoliciesClientCreatePollerResponse{}, err
 	}
-	result := ReplicationPoliciesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationPoliciesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationPoliciesClient.Create", "", resp, client.pl)
 	if err != nil {
 		return ReplicationPoliciesClientCreatePollerResponse{}, err
@@ -120,7 +118,7 @@ func (client *ReplicationPoliciesClient) createCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, input)
@@ -136,9 +134,7 @@ func (client *ReplicationPoliciesClient) BeginDelete(ctx context.Context, policy
 	if err != nil {
 		return ReplicationPoliciesClientDeletePollerResponse{}, err
 	}
-	result := ReplicationPoliciesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationPoliciesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationPoliciesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ReplicationPoliciesClientDeletePollerResponse{}, err
@@ -190,7 +186,7 @@ func (client *ReplicationPoliciesClient) deleteCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	return req, nil
 }
@@ -238,7 +234,7 @@ func (client *ReplicationPoliciesClient) getCreateRequest(ctx context.Context, p
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -246,7 +242,7 @@ func (client *ReplicationPoliciesClient) getCreateRequest(ctx context.Context, p
 
 // getHandleResponse handles the Get response.
 func (client *ReplicationPoliciesClient) getHandleResponse(resp *http.Response) (ReplicationPoliciesClientGetResponse, error) {
-	result := ReplicationPoliciesClientGetResponse{RawResponse: resp}
+	result := ReplicationPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Policy); err != nil {
 		return ReplicationPoliciesClientGetResponse{}, err
 	}
@@ -289,7 +285,7 @@ func (client *ReplicationPoliciesClient) listCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -297,7 +293,7 @@ func (client *ReplicationPoliciesClient) listCreateRequest(ctx context.Context, 
 
 // listHandleResponse handles the List response.
 func (client *ReplicationPoliciesClient) listHandleResponse(resp *http.Response) (ReplicationPoliciesClientListResponse, error) {
-	result := ReplicationPoliciesClientListResponse{RawResponse: resp}
+	result := ReplicationPoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyCollection); err != nil {
 		return ReplicationPoliciesClientListResponse{}, err
 	}
@@ -315,9 +311,7 @@ func (client *ReplicationPoliciesClient) BeginUpdate(ctx context.Context, policy
 	if err != nil {
 		return ReplicationPoliciesClientUpdatePollerResponse{}, err
 	}
-	result := ReplicationPoliciesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationPoliciesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationPoliciesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ReplicationPoliciesClientUpdatePollerResponse{}, err
@@ -369,7 +363,7 @@ func (client *ReplicationPoliciesClient) updateCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, input)

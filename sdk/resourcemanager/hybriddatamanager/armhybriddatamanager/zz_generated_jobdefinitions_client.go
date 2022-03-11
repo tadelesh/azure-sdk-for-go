@@ -34,17 +34,17 @@ type JobDefinitionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewJobDefinitionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *JobDefinitionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &JobDefinitionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *JobDefinitionsClient) BeginCreateOrUpdate(ctx context.Context, dat
 	if err != nil {
 		return JobDefinitionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := JobDefinitionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := JobDefinitionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("JobDefinitionsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return JobDefinitionsClientCreateOrUpdatePollerResponse{}, err
@@ -142,9 +140,7 @@ func (client *JobDefinitionsClient) BeginDelete(ctx context.Context, dataService
 	if err != nil {
 		return JobDefinitionsClientDeletePollerResponse{}, err
 	}
-	result := JobDefinitionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := JobDefinitionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("JobDefinitionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return JobDefinitionsClientDeletePollerResponse{}, err
@@ -264,7 +260,7 @@ func (client *JobDefinitionsClient) getCreateRequest(ctx context.Context, dataSe
 
 // getHandleResponse handles the Get response.
 func (client *JobDefinitionsClient) getHandleResponse(resp *http.Response) (JobDefinitionsClientGetResponse, error) {
-	result := JobDefinitionsClientGetResponse{RawResponse: resp}
+	result := JobDefinitionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobDefinition); err != nil {
 		return JobDefinitionsClientGetResponse{}, err
 	}
@@ -321,7 +317,7 @@ func (client *JobDefinitionsClient) listByDataManagerCreateRequest(ctx context.C
 
 // listByDataManagerHandleResponse handles the ListByDataManager response.
 func (client *JobDefinitionsClient) listByDataManagerHandleResponse(resp *http.Response) (JobDefinitionsClientListByDataManagerResponse, error) {
-	result := JobDefinitionsClientListByDataManagerResponse{RawResponse: resp}
+	result := JobDefinitionsClientListByDataManagerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobDefinitionList); err != nil {
 		return JobDefinitionsClientListByDataManagerResponse{}, err
 	}
@@ -383,7 +379,7 @@ func (client *JobDefinitionsClient) listByDataServiceCreateRequest(ctx context.C
 
 // listByDataServiceHandleResponse handles the ListByDataService response.
 func (client *JobDefinitionsClient) listByDataServiceHandleResponse(resp *http.Response) (JobDefinitionsClientListByDataServiceResponse, error) {
-	result := JobDefinitionsClientListByDataServiceResponse{RawResponse: resp}
+	result := JobDefinitionsClientListByDataServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobDefinitionList); err != nil {
 		return JobDefinitionsClientListByDataServiceResponse{}, err
 	}
@@ -404,9 +400,7 @@ func (client *JobDefinitionsClient) BeginRun(ctx context.Context, dataServiceNam
 	if err != nil {
 		return JobDefinitionsClientRunPollerResponse{}, err
 	}
-	result := JobDefinitionsClientRunPollerResponse{
-		RawResponse: resp,
-	}
+	result := JobDefinitionsClientRunPollerResponse{}
 	pt, err := armruntime.NewPoller("JobDefinitionsClient.Run", "", resp, client.pl)
 	if err != nil {
 		return JobDefinitionsClientRunPollerResponse{}, err

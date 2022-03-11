@@ -35,17 +35,17 @@ type FrontDoorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFrontDoorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FrontDoorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FrontDoorsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *FrontDoorsClient) BeginCreateOrUpdate(ctx context.Context, resourc
 	if err != nil {
 		return FrontDoorsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := FrontDoorsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := FrontDoorsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("FrontDoorsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return FrontDoorsClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *FrontDoorsClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return FrontDoorsClientDeletePollerResponse{}, err
 	}
-	result := FrontDoorsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := FrontDoorsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("FrontDoorsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return FrontDoorsClientDeletePollerResponse{}, err
@@ -232,7 +228,7 @@ func (client *FrontDoorsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *FrontDoorsClient) getHandleResponse(resp *http.Response) (FrontDoorsClientGetResponse, error) {
-	result := FrontDoorsClientGetResponse{RawResponse: resp}
+	result := FrontDoorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FrontDoor); err != nil {
 		return FrontDoorsClientGetResponse{}, err
 	}
@@ -274,7 +270,7 @@ func (client *FrontDoorsClient) listCreateRequest(ctx context.Context, options *
 
 // listHandleResponse handles the List response.
 func (client *FrontDoorsClient) listHandleResponse(resp *http.Response) (FrontDoorsClientListResponse, error) {
-	result := FrontDoorsClientListResponse{RawResponse: resp}
+	result := FrontDoorsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListResult); err != nil {
 		return FrontDoorsClientListResponse{}, err
 	}
@@ -322,7 +318,7 @@ func (client *FrontDoorsClient) listByResourceGroupCreateRequest(ctx context.Con
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *FrontDoorsClient) listByResourceGroupHandleResponse(resp *http.Response) (FrontDoorsClientListByResourceGroupResponse, error) {
-	result := FrontDoorsClientListByResourceGroupResponse{RawResponse: resp}
+	result := FrontDoorsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListResult); err != nil {
 		return FrontDoorsClientListByResourceGroupResponse{}, err
 	}
@@ -379,7 +375,7 @@ func (client *FrontDoorsClient) validateCustomDomainCreateRequest(ctx context.Co
 
 // validateCustomDomainHandleResponse handles the ValidateCustomDomain response.
 func (client *FrontDoorsClient) validateCustomDomainHandleResponse(resp *http.Response) (FrontDoorsClientValidateCustomDomainResponse, error) {
-	result := FrontDoorsClientValidateCustomDomainResponse{RawResponse: resp}
+	result := FrontDoorsClientValidateCustomDomainResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ValidateCustomDomainOutput); err != nil {
 		return FrontDoorsClientValidateCustomDomainResponse{}, err
 	}

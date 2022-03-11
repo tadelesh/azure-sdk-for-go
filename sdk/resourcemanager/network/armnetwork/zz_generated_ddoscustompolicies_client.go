@@ -35,17 +35,17 @@ type DdosCustomPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDdosCustomPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DdosCustomPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DdosCustomPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *DdosCustomPoliciesClient) BeginCreateOrUpdate(ctx context.Context,
 	if err != nil {
 		return DdosCustomPoliciesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DdosCustomPoliciesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DdosCustomPoliciesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DdosCustomPoliciesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DdosCustomPoliciesClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *DdosCustomPoliciesClient) BeginDelete(ctx context.Context, resourc
 	if err != nil {
 		return DdosCustomPoliciesClientDeletePollerResponse{}, err
 	}
-	result := DdosCustomPoliciesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DdosCustomPoliciesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DdosCustomPoliciesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return DdosCustomPoliciesClientDeletePollerResponse{}, err
@@ -233,7 +229,7 @@ func (client *DdosCustomPoliciesClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *DdosCustomPoliciesClient) getHandleResponse(resp *http.Response) (DdosCustomPoliciesClientGetResponse, error) {
-	result := DdosCustomPoliciesClientGetResponse{RawResponse: resp}
+	result := DdosCustomPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DdosCustomPolicy); err != nil {
 		return DdosCustomPoliciesClientGetResponse{}, err
 	}
@@ -290,7 +286,7 @@ func (client *DdosCustomPoliciesClient) updateTagsCreateRequest(ctx context.Cont
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *DdosCustomPoliciesClient) updateTagsHandleResponse(resp *http.Response) (DdosCustomPoliciesClientUpdateTagsResponse, error) {
-	result := DdosCustomPoliciesClientUpdateTagsResponse{RawResponse: resp}
+	result := DdosCustomPoliciesClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DdosCustomPolicy); err != nil {
 		return DdosCustomPoliciesClientUpdateTagsResponse{}, err
 	}

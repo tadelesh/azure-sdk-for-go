@@ -34,17 +34,17 @@ type SecretValueClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSecretValueClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SecretValueClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SecretValueClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *SecretValueClient) createCreateRequest(ctx context.Context, resour
 
 // createHandleResponse handles the Create response.
 func (client *SecretValueClient) createHandleResponse(resp *http.Response) (SecretValueClientCreateResponse, error) {
-	result := SecretValueClientCreateResponse{RawResponse: resp}
+	result := SecretValueClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecretValueResourceDescription); err != nil {
 		return SecretValueClientCreateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *SecretValueClient) Delete(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return SecretValueClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SecretValueClientDeleteResponse{RawResponse: resp}, nil
+	return SecretValueClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -199,7 +199,7 @@ func (client *SecretValueClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *SecretValueClient) getHandleResponse(resp *http.Response) (SecretValueClientGetResponse, error) {
-	result := SecretValueClientGetResponse{RawResponse: resp}
+	result := SecretValueClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecretValueResourceDescription); err != nil {
 		return SecretValueClientGetResponse{}, err
 	}
@@ -249,7 +249,7 @@ func (client *SecretValueClient) listCreateRequest(ctx context.Context, resource
 
 // listHandleResponse handles the List response.
 func (client *SecretValueClient) listHandleResponse(resp *http.Response) (SecretValueClientListResponse, error) {
-	result := SecretValueClientListResponse{RawResponse: resp}
+	result := SecretValueClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecretValueResourceDescriptionList); err != nil {
 		return SecretValueClientListResponse{}, err
 	}
@@ -303,7 +303,7 @@ func (client *SecretValueClient) listValueCreateRequest(ctx context.Context, res
 
 // listValueHandleResponse handles the ListValue response.
 func (client *SecretValueClient) listValueHandleResponse(resp *http.Response) (SecretValueClientListValueResponse, error) {
-	result := SecretValueClientListValueResponse{RawResponse: resp}
+	result := SecretValueClientListValueResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecretValue); err != nil {
 		return SecretValueClientListValueResponse{}, err
 	}

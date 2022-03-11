@@ -36,17 +36,17 @@ type APIClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAPIClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *APIClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &APIClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *APIClient) BeginCreateOrUpdate(ctx context.Context, resourceGroupN
 	if err != nil {
 		return APIClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := APIClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := APIClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("APIClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return APIClientCreateOrUpdatePollerResponse{}, err
@@ -148,7 +146,7 @@ func (client *APIClient) Delete(ctx context.Context, resourceGroupName string, s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return APIClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return APIClientDeleteResponse{RawResponse: resp}, nil
+	return APIClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -239,7 +237,7 @@ func (client *APIClient) getCreateRequest(ctx context.Context, resourceGroupName
 
 // getHandleResponse handles the Get response.
 func (client *APIClient) getHandleResponse(resp *http.Response) (APIClientGetResponse, error) {
-	result := APIClientGetResponse{RawResponse: resp}
+	result := APIClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -299,7 +297,7 @@ func (client *APIClient) getEntityTagCreateRequest(ctx context.Context, resource
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *APIClient) getEntityTagHandleResponse(resp *http.Response) (APIClientGetEntityTagResponse, error) {
-	result := APIClientGetEntityTagResponse{RawResponse: resp}
+	result := APIClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -369,7 +367,7 @@ func (client *APIClient) listByServiceCreateRequest(ctx context.Context, resourc
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *APIClient) listByServiceHandleResponse(resp *http.Response) (APIClientListByServiceResponse, error) {
-	result := APIClientListByServiceResponse{RawResponse: resp}
+	result := APIClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APICollection); err != nil {
 		return APIClientListByServiceResponse{}, err
 	}
@@ -433,7 +431,7 @@ func (client *APIClient) listByTagsCreateRequest(ctx context.Context, resourceGr
 
 // listByTagsHandleResponse handles the ListByTags response.
 func (client *APIClient) listByTagsHandleResponse(resp *http.Response) (APIClientListByTagsResponse, error) {
-	result := APIClientListByTagsResponse{RawResponse: resp}
+	result := APIClientListByTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TagResourceCollection); err != nil {
 		return APIClientListByTagsResponse{}, err
 	}
@@ -498,7 +496,7 @@ func (client *APIClient) updateCreateRequest(ctx context.Context, resourceGroupN
 
 // updateHandleResponse handles the Update response.
 func (client *APIClient) updateHandleResponse(resp *http.Response) (APIClientUpdateResponse, error) {
-	result := APIClientUpdateResponse{RawResponse: resp}
+	result := APIClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

@@ -99,7 +99,7 @@ func (client *PrivateLinkResourcesClient) listByStorageAccountCreateRequest(ctx 
 
 // listByStorageAccountHandleResponse handles the ListByStorageAccount response.
 func (client *PrivateLinkResourcesClient) listByStorageAccountHandleResponse(resp *http.Response) (PrivateLinkResourcesClientListByStorageAccountResponse, error) {
-	result := PrivateLinkResourcesClientListByStorageAccountResponse{RawResponse: resp}
+	result := PrivateLinkResourcesClientListByStorageAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourceListResult); err != nil {
 		return PrivateLinkResourcesClientListByStorageAccountResponse{}, err
 	}

@@ -1,5 +1,40 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClient.List` parameter(s) have been changed from `(context.Context, *OperationsClientListOptions)` to `(*OperationsClientListOptions)`
+- Function `*OperationsClient.List` return value(s) have been changed from `(OperationsClientListResponse, error)` to `(*OperationsClientListPager)`
+- Struct `ClientResourcesHistoryResult` has been removed
+- Struct `ClientResourcesResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `ClientResourcesHistoryResult` of struct `ClientResourcesHistoryResponse` has been removed
+- Field `RawResponse` of struct `ClientResourcesHistoryResponse` has been removed
+- Field `ClientResourcesResult` of struct `ClientResourcesResponse` has been removed
+- Field `RawResponse` of struct `ClientResourcesResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+
+### Features Added
+
+- New function `Table.MarshalJSON() ([]byte, error)`
+- New function `Error.MarshalJSON() ([]byte, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*OperationsClientListPager.NextPage(context.Context) (OperationsClientListResponse, error)`
+- New struct `Column`
+- New struct `Error`
+- New struct `ErrorResponse`
+- New struct `OperationsClientListPager`
+- New struct `Table`
+- New field `Interface` in struct `ClientResourcesHistoryResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `QueryResponse` in struct `ClientResourcesResponse`
+
+
+## 0.3.1 (2022-03-10)
+### Other Changes
+
+
 ## 0.3.0 (2022-01-20)
 ### Breaking Changes
 

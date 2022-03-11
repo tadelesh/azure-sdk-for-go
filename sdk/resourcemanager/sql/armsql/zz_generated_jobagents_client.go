@@ -34,17 +34,17 @@ type JobAgentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewJobAgentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *JobAgentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &JobAgentsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *JobAgentsClient) BeginCreateOrUpdate(ctx context.Context, resource
 	if err != nil {
 		return JobAgentsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := JobAgentsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := JobAgentsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("JobAgentsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return JobAgentsClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *JobAgentsClient) BeginDelete(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return JobAgentsClientDeletePollerResponse{}, err
 	}
-	result := JobAgentsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := JobAgentsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("JobAgentsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return JobAgentsClientDeletePollerResponse{}, err
@@ -248,7 +244,7 @@ func (client *JobAgentsClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *JobAgentsClient) getHandleResponse(resp *http.Response) (JobAgentsClientGetResponse, error) {
-	result := JobAgentsClientGetResponse{RawResponse: resp}
+	result := JobAgentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobAgent); err != nil {
 		return JobAgentsClientGetResponse{}, err
 	}
@@ -301,7 +297,7 @@ func (client *JobAgentsClient) listByServerCreateRequest(ctx context.Context, re
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *JobAgentsClient) listByServerHandleResponse(resp *http.Response) (JobAgentsClientListByServerResponse, error) {
-	result := JobAgentsClientListByServerResponse{RawResponse: resp}
+	result := JobAgentsClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobAgentListResult); err != nil {
 		return JobAgentsClientListByServerResponse{}, err
 	}
@@ -321,9 +317,7 @@ func (client *JobAgentsClient) BeginUpdate(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return JobAgentsClientUpdatePollerResponse{}, err
 	}
-	result := JobAgentsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := JobAgentsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("JobAgentsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return JobAgentsClientUpdatePollerResponse{}, err

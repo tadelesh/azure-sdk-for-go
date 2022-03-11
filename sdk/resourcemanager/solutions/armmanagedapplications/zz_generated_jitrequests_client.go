@@ -34,17 +34,17 @@ type JitRequestsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewJitRequestsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *JitRequestsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &JitRequestsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *JitRequestsClient) BeginCreateOrUpdate(ctx context.Context, resour
 	if err != nil {
 		return JitRequestsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := JitRequestsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := JitRequestsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("JitRequestsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return JitRequestsClientCreateOrUpdatePollerResponse{}, err
@@ -134,7 +132,7 @@ func (client *JitRequestsClient) Delete(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return JitRequestsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return JitRequestsClientDeleteResponse{RawResponse: resp}, nil
+	return JitRequestsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -211,7 +209,7 @@ func (client *JitRequestsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *JitRequestsClient) getHandleResponse(resp *http.Response) (JitRequestsClientGetResponse, error) {
-	result := JitRequestsClientGetResponse{RawResponse: resp}
+	result := JitRequestsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JitRequestDefinition); err != nil {
 		return JitRequestsClientGetResponse{}, err
 	}
@@ -262,7 +260,7 @@ func (client *JitRequestsClient) listByResourceGroupCreateRequest(ctx context.Co
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *JitRequestsClient) listByResourceGroupHandleResponse(resp *http.Response) (JitRequestsClientListByResourceGroupResponse, error) {
-	result := JitRequestsClientListByResourceGroupResponse{RawResponse: resp}
+	result := JitRequestsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JitRequestDefinitionListResult); err != nil {
 		return JitRequestsClientListByResourceGroupResponse{}, err
 	}
@@ -308,7 +306,7 @@ func (client *JitRequestsClient) listBySubscriptionCreateRequest(ctx context.Con
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *JitRequestsClient) listBySubscriptionHandleResponse(resp *http.Response) (JitRequestsClientListBySubscriptionResponse, error) {
-	result := JitRequestsClientListBySubscriptionResponse{RawResponse: resp}
+	result := JitRequestsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JitRequestDefinitionListResult); err != nil {
 		return JitRequestsClientListBySubscriptionResponse{}, err
 	}
@@ -364,7 +362,7 @@ func (client *JitRequestsClient) updateCreateRequest(ctx context.Context, resour
 
 // updateHandleResponse handles the Update response.
 func (client *JitRequestsClient) updateHandleResponse(resp *http.Response) (JitRequestsClientUpdateResponse, error) {
-	result := JitRequestsClientUpdateResponse{RawResponse: resp}
+	result := JitRequestsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JitRequestDefinition); err != nil {
 		return JitRequestsClientUpdateResponse{}, err
 	}

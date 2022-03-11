@@ -32,16 +32,16 @@ type AliasClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAliasClient(credential azcore.TokenCredential, options *arm.ClientOptions) *AliasClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AliasClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -57,9 +57,7 @@ func (client *AliasClient) BeginCreate(ctx context.Context, aliasName string, bo
 	if err != nil {
 		return AliasClientCreatePollerResponse{}, err
 	}
-	result := AliasClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AliasClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("AliasClient.Create", "", resp, client.pl)
 	if err != nil {
 		return AliasClientCreatePollerResponse{}, err
@@ -123,7 +121,7 @@ func (client *AliasClient) Delete(ctx context.Context, aliasName string, options
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return AliasClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AliasClientDeleteResponse{RawResponse: resp}, nil
+	return AliasClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -185,7 +183,7 @@ func (client *AliasClient) getCreateRequest(ctx context.Context, aliasName strin
 
 // getHandleResponse handles the Get response.
 func (client *AliasClient) getHandleResponse(resp *http.Response) (AliasClientGetResponse, error) {
-	result := AliasClientGetResponse{RawResponse: resp}
+	result := AliasClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AliasResponse); err != nil {
 		return AliasClientGetResponse{}, err
 	}
@@ -226,7 +224,7 @@ func (client *AliasClient) listCreateRequest(ctx context.Context, options *Alias
 
 // listHandleResponse handles the List response.
 func (client *AliasClient) listHandleResponse(resp *http.Response) (AliasClientListResponse, error) {
-	result := AliasClientListResponse{RawResponse: resp}
+	result := AliasClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AliasListResult); err != nil {
 		return AliasClientListResponse{}, err
 	}

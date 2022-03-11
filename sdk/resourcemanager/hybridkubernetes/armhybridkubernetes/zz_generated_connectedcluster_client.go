@@ -34,17 +34,17 @@ type ConnectedClusterClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewConnectedClusterClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ConnectedClusterClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ConnectedClusterClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *ConnectedClusterClient) BeginCreate(ctx context.Context, resourceG
 	if err != nil {
 		return ConnectedClusterClientCreatePollerResponse{}, err
 	}
-	result := ConnectedClusterClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ConnectedClusterClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ConnectedClusterClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ConnectedClusterClientCreatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *ConnectedClusterClient) BeginDelete(ctx context.Context, resourceG
 	if err != nil {
 		return ConnectedClusterClientDeletePollerResponse{}, err
 	}
-	result := ConnectedClusterClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ConnectedClusterClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ConnectedClusterClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return ConnectedClusterClientDeletePollerResponse{}, err
@@ -233,7 +229,7 @@ func (client *ConnectedClusterClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *ConnectedClusterClient) getHandleResponse(resp *http.Response) (ConnectedClusterClientGetResponse, error) {
-	result := ConnectedClusterClientGetResponse{RawResponse: resp}
+	result := ConnectedClusterClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConnectedCluster); err != nil {
 		return ConnectedClusterClientGetResponse{}, err
 	}
@@ -281,7 +277,7 @@ func (client *ConnectedClusterClient) listByResourceGroupCreateRequest(ctx conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ConnectedClusterClient) listByResourceGroupHandleResponse(resp *http.Response) (ConnectedClusterClientListByResourceGroupResponse, error) {
-	result := ConnectedClusterClientListByResourceGroupResponse{RawResponse: resp}
+	result := ConnectedClusterClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConnectedClusterList); err != nil {
 		return ConnectedClusterClientListByResourceGroupResponse{}, err
 	}
@@ -324,7 +320,7 @@ func (client *ConnectedClusterClient) listBySubscriptionCreateRequest(ctx contex
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *ConnectedClusterClient) listBySubscriptionHandleResponse(resp *http.Response) (ConnectedClusterClientListBySubscriptionResponse, error) {
-	result := ConnectedClusterClientListBySubscriptionResponse{RawResponse: resp}
+	result := ConnectedClusterClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConnectedClusterList); err != nil {
 		return ConnectedClusterClientListBySubscriptionResponse{}, err
 	}
@@ -382,7 +378,7 @@ func (client *ConnectedClusterClient) listClusterUserCredentialCreateRequest(ctx
 
 // listClusterUserCredentialHandleResponse handles the ListClusterUserCredential response.
 func (client *ConnectedClusterClient) listClusterUserCredentialHandleResponse(resp *http.Response) (ConnectedClusterClientListClusterUserCredentialResponse, error) {
-	result := ConnectedClusterClientListClusterUserCredentialResponse{RawResponse: resp}
+	result := ConnectedClusterClientListClusterUserCredentialResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CredentialResults); err != nil {
 		return ConnectedClusterClientListClusterUserCredentialResponse{}, err
 	}
@@ -438,7 +434,7 @@ func (client *ConnectedClusterClient) updateCreateRequest(ctx context.Context, r
 
 // updateHandleResponse handles the Update response.
 func (client *ConnectedClusterClient) updateHandleResponse(resp *http.Response) (ConnectedClusterClientUpdateResponse, error) {
-	result := ConnectedClusterClientUpdateResponse{RawResponse: resp}
+	result := ConnectedClusterClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConnectedCluster); err != nil {
 		return ConnectedClusterClientUpdateResponse{}, err
 	}

@@ -34,17 +34,17 @@ type IotDpsResourceClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIotDpsResourceClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IotDpsResourceClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IotDpsResourceClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -82,7 +82,7 @@ func (client *IotDpsResourceClient) checkProvisioningServiceNameAvailabilityCrea
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, arguments)
@@ -90,7 +90,7 @@ func (client *IotDpsResourceClient) checkProvisioningServiceNameAvailabilityCrea
 
 // checkProvisioningServiceNameAvailabilityHandleResponse handles the CheckProvisioningServiceNameAvailability response.
 func (client *IotDpsResourceClient) checkProvisioningServiceNameAvailabilityHandleResponse(resp *http.Response) (IotDpsResourceClientCheckProvisioningServiceNameAvailabilityResponse, error) {
-	result := IotDpsResourceClientCheckProvisioningServiceNameAvailabilityResponse{RawResponse: resp}
+	result := IotDpsResourceClientCheckProvisioningServiceNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NameAvailabilityInfo); err != nil {
 		return IotDpsResourceClientCheckProvisioningServiceNameAvailabilityResponse{}, err
 	}
@@ -111,9 +111,7 @@ func (client *IotDpsResourceClient) BeginCreateOrUpdate(ctx context.Context, res
 	if err != nil {
 		return IotDpsResourceClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := IotDpsResourceClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := IotDpsResourceClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("IotDpsResourceClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return IotDpsResourceClientCreateOrUpdatePollerResponse{}, err
@@ -163,7 +161,7 @@ func (client *IotDpsResourceClient) createOrUpdateCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, iotDpsDescription)
@@ -183,9 +181,7 @@ func (client *IotDpsResourceClient) BeginCreateOrUpdatePrivateEndpointConnection
 	if err != nil {
 		return IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionPollerResponse{}, err
 	}
-	result := IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionPollerResponse{
-		RawResponse: resp,
-	}
+	result := IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionPollerResponse{}
 	pt, err := armruntime.NewPoller("IotDpsResourceClient.CreateOrUpdatePrivateEndpointConnection", "", resp, client.pl)
 	if err != nil {
 		return IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionPollerResponse{}, err
@@ -238,7 +234,7 @@ func (client *IotDpsResourceClient) createOrUpdatePrivateEndpointConnectionCreat
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, privateEndpointConnection)
@@ -255,9 +251,7 @@ func (client *IotDpsResourceClient) BeginDelete(ctx context.Context, provisionin
 	if err != nil {
 		return IotDpsResourceClientDeletePollerResponse{}, err
 	}
-	result := IotDpsResourceClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := IotDpsResourceClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("IotDpsResourceClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return IotDpsResourceClientDeletePollerResponse{}, err
@@ -305,7 +299,7 @@ func (client *IotDpsResourceClient) deleteCreateRequest(ctx context.Context, pro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -323,9 +317,7 @@ func (client *IotDpsResourceClient) BeginDeletePrivateEndpointConnection(ctx con
 	if err != nil {
 		return IotDpsResourceClientDeletePrivateEndpointConnectionPollerResponse{}, err
 	}
-	result := IotDpsResourceClientDeletePrivateEndpointConnectionPollerResponse{
-		RawResponse: resp,
-	}
+	result := IotDpsResourceClientDeletePrivateEndpointConnectionPollerResponse{}
 	pt, err := armruntime.NewPoller("IotDpsResourceClient.DeletePrivateEndpointConnection", "", resp, client.pl)
 	if err != nil {
 		return IotDpsResourceClientDeletePrivateEndpointConnectionPollerResponse{}, err
@@ -377,7 +369,7 @@ func (client *IotDpsResourceClient) deletePrivateEndpointConnectionCreateRequest
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -423,7 +415,7 @@ func (client *IotDpsResourceClient) getCreateRequest(ctx context.Context, provis
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -431,7 +423,7 @@ func (client *IotDpsResourceClient) getCreateRequest(ctx context.Context, provis
 
 // getHandleResponse handles the Get response.
 func (client *IotDpsResourceClient) getHandleResponse(resp *http.Response) (IotDpsResourceClientGetResponse, error) {
-	result := IotDpsResourceClientGetResponse{RawResponse: resp}
+	result := IotDpsResourceClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProvisioningServiceDescription); err != nil {
 		return IotDpsResourceClientGetResponse{}, err
 	}
@@ -486,7 +478,7 @@ func (client *IotDpsResourceClient) getOperationResultCreateRequest(ctx context.
 	}
 	reqQP := req.Raw().URL.Query()
 	reqQP.Set("asyncinfo", asyncinfo)
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -494,7 +486,7 @@ func (client *IotDpsResourceClient) getOperationResultCreateRequest(ctx context.
 
 // getOperationResultHandleResponse handles the GetOperationResult response.
 func (client *IotDpsResourceClient) getOperationResultHandleResponse(resp *http.Response) (IotDpsResourceClientGetOperationResultResponse, error) {
-	result := IotDpsResourceClientGetOperationResultResponse{RawResponse: resp}
+	result := IotDpsResourceClientGetOperationResultResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AsyncOperationResult); err != nil {
 		return IotDpsResourceClientGetOperationResultResponse{}, err
 	}
@@ -547,7 +539,7 @@ func (client *IotDpsResourceClient) getPrivateEndpointConnectionCreateRequest(ct
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -555,7 +547,7 @@ func (client *IotDpsResourceClient) getPrivateEndpointConnectionCreateRequest(ct
 
 // getPrivateEndpointConnectionHandleResponse handles the GetPrivateEndpointConnection response.
 func (client *IotDpsResourceClient) getPrivateEndpointConnectionHandleResponse(resp *http.Response) (IotDpsResourceClientGetPrivateEndpointConnectionResponse, error) {
-	result := IotDpsResourceClientGetPrivateEndpointConnectionResponse{RawResponse: resp}
+	result := IotDpsResourceClientGetPrivateEndpointConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnection); err != nil {
 		return IotDpsResourceClientGetPrivateEndpointConnectionResponse{}, err
 	}
@@ -608,7 +600,7 @@ func (client *IotDpsResourceClient) getPrivateLinkResourcesCreateRequest(ctx con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -616,7 +608,7 @@ func (client *IotDpsResourceClient) getPrivateLinkResourcesCreateRequest(ctx con
 
 // getPrivateLinkResourcesHandleResponse handles the GetPrivateLinkResources response.
 func (client *IotDpsResourceClient) getPrivateLinkResourcesHandleResponse(resp *http.Response) (IotDpsResourceClientGetPrivateLinkResourcesResponse, error) {
-	result := IotDpsResourceClientGetPrivateLinkResourcesResponse{RawResponse: resp}
+	result := IotDpsResourceClientGetPrivateLinkResourcesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GroupIDInformation); err != nil {
 		return IotDpsResourceClientGetPrivateLinkResourcesResponse{}, err
 	}
@@ -656,7 +648,7 @@ func (client *IotDpsResourceClient) listByResourceGroupCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -664,7 +656,7 @@ func (client *IotDpsResourceClient) listByResourceGroupCreateRequest(ctx context
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *IotDpsResourceClient) listByResourceGroupHandleResponse(resp *http.Response) (IotDpsResourceClientListByResourceGroupResponse, error) {
-	result := IotDpsResourceClientListByResourceGroupResponse{RawResponse: resp}
+	result := IotDpsResourceClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProvisioningServiceDescriptionListResult); err != nil {
 		return IotDpsResourceClientListByResourceGroupResponse{}, err
 	}
@@ -699,7 +691,7 @@ func (client *IotDpsResourceClient) listBySubscriptionCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -707,7 +699,7 @@ func (client *IotDpsResourceClient) listBySubscriptionCreateRequest(ctx context.
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *IotDpsResourceClient) listBySubscriptionHandleResponse(resp *http.Response) (IotDpsResourceClientListBySubscriptionResponse, error) {
-	result := IotDpsResourceClientListBySubscriptionResponse{RawResponse: resp}
+	result := IotDpsResourceClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProvisioningServiceDescriptionListResult); err != nil {
 		return IotDpsResourceClientListBySubscriptionResponse{}, err
 	}
@@ -751,7 +743,7 @@ func (client *IotDpsResourceClient) listKeysCreateRequest(ctx context.Context, p
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -759,7 +751,7 @@ func (client *IotDpsResourceClient) listKeysCreateRequest(ctx context.Context, p
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *IotDpsResourceClient) listKeysHandleResponse(resp *http.Response) (IotDpsResourceClientListKeysResponse, error) {
-	result := IotDpsResourceClientListKeysResponse{RawResponse: resp}
+	result := IotDpsResourceClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedAccessSignatureAuthorizationRuleListResult); err != nil {
 		return IotDpsResourceClientListKeysResponse{}, err
 	}
@@ -812,7 +804,7 @@ func (client *IotDpsResourceClient) listKeysForKeyNameCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -820,7 +812,7 @@ func (client *IotDpsResourceClient) listKeysForKeyNameCreateRequest(ctx context.
 
 // listKeysForKeyNameHandleResponse handles the ListKeysForKeyName response.
 func (client *IotDpsResourceClient) listKeysForKeyNameHandleResponse(resp *http.Response) (IotDpsResourceClientListKeysForKeyNameResponse, error) {
-	result := IotDpsResourceClientListKeysForKeyNameResponse{RawResponse: resp}
+	result := IotDpsResourceClientListKeysForKeyNameResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedAccessSignatureAuthorizationRuleAccessRightsDescription); err != nil {
 		return IotDpsResourceClientListKeysForKeyNameResponse{}, err
 	}
@@ -868,7 +860,7 @@ func (client *IotDpsResourceClient) listPrivateEndpointConnectionsCreateRequest(
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -876,7 +868,7 @@ func (client *IotDpsResourceClient) listPrivateEndpointConnectionsCreateRequest(
 
 // listPrivateEndpointConnectionsHandleResponse handles the ListPrivateEndpointConnections response.
 func (client *IotDpsResourceClient) listPrivateEndpointConnectionsHandleResponse(resp *http.Response) (IotDpsResourceClientListPrivateEndpointConnectionsResponse, error) {
-	result := IotDpsResourceClientListPrivateEndpointConnectionsResponse{RawResponse: resp}
+	result := IotDpsResourceClientListPrivateEndpointConnectionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionArray); err != nil {
 		return IotDpsResourceClientListPrivateEndpointConnectionsResponse{}, err
 	}
@@ -924,7 +916,7 @@ func (client *IotDpsResourceClient) listPrivateLinkResourcesCreateRequest(ctx co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -932,7 +924,7 @@ func (client *IotDpsResourceClient) listPrivateLinkResourcesCreateRequest(ctx co
 
 // listPrivateLinkResourcesHandleResponse handles the ListPrivateLinkResources response.
 func (client *IotDpsResourceClient) listPrivateLinkResourcesHandleResponse(resp *http.Response) (IotDpsResourceClientListPrivateLinkResourcesResponse, error) {
-	result := IotDpsResourceClientListPrivateLinkResourcesResponse{RawResponse: resp}
+	result := IotDpsResourceClientListPrivateLinkResourcesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResources); err != nil {
 		return IotDpsResourceClientListPrivateLinkResourcesResponse{}, err
 	}
@@ -977,7 +969,7 @@ func (client *IotDpsResourceClient) listValidSKUsCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -985,7 +977,7 @@ func (client *IotDpsResourceClient) listValidSKUsCreateRequest(ctx context.Conte
 
 // listValidSKUsHandleResponse handles the ListValidSKUs response.
 func (client *IotDpsResourceClient) listValidSKUsHandleResponse(resp *http.Response) (IotDpsResourceClientListValidSKUsResponse, error) {
-	result := IotDpsResourceClientListValidSKUsResponse{RawResponse: resp}
+	result := IotDpsResourceClientListValidSKUsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IotDpsSKUDefinitionListResult); err != nil {
 		return IotDpsResourceClientListValidSKUsResponse{}, err
 	}
@@ -1004,9 +996,7 @@ func (client *IotDpsResourceClient) BeginUpdate(ctx context.Context, resourceGro
 	if err != nil {
 		return IotDpsResourceClientUpdatePollerResponse{}, err
 	}
-	result := IotDpsResourceClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := IotDpsResourceClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("IotDpsResourceClient.Update", "", resp, client.pl)
 	if err != nil {
 		return IotDpsResourceClientUpdatePollerResponse{}, err
@@ -1054,7 +1044,7 @@ func (client *IotDpsResourceClient) updateCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, provisioningServiceTags)

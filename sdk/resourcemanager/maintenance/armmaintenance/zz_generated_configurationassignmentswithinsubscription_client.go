@@ -35,17 +35,17 @@ type ConfigurationAssignmentsWithinSubscriptionClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewConfigurationAssignmentsWithinSubscriptionClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ConfigurationAssignmentsWithinSubscriptionClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ConfigurationAssignmentsWithinSubscriptionClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -54,19 +54,13 @@ func NewConfigurationAssignmentsWithinSubscriptionClient(subscriptionID string, 
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ConfigurationAssignmentsWithinSubscriptionClientListOptions contains the optional parameters for the ConfigurationAssignmentsWithinSubscriptionClient.List
 // method.
-func (client *ConfigurationAssignmentsWithinSubscriptionClient) List(ctx context.Context, options *ConfigurationAssignmentsWithinSubscriptionClientListOptions) (ConfigurationAssignmentsWithinSubscriptionClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, options)
-	if err != nil {
-		return ConfigurationAssignmentsWithinSubscriptionClientListResponse{}, err
+func (client *ConfigurationAssignmentsWithinSubscriptionClient) List(options *ConfigurationAssignmentsWithinSubscriptionClientListOptions) *ConfigurationAssignmentsWithinSubscriptionClientListPager {
+	return &ConfigurationAssignmentsWithinSubscriptionClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ConfigurationAssignmentsWithinSubscriptionClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ConfigurationAssignmentsWithinSubscriptionClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -89,7 +83,7 @@ func (client *ConfigurationAssignmentsWithinSubscriptionClient) listCreateReques
 
 // listHandleResponse handles the List response.
 func (client *ConfigurationAssignmentsWithinSubscriptionClient) listHandleResponse(resp *http.Response) (ConfigurationAssignmentsWithinSubscriptionClientListResponse, error) {
-	result := ConfigurationAssignmentsWithinSubscriptionClientListResponse{RawResponse: resp}
+	result := ConfigurationAssignmentsWithinSubscriptionClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListConfigurationAssignmentsResult); err != nil {
 		return ConfigurationAssignmentsWithinSubscriptionClientListResponse{}, err
 	}

@@ -1,13 +1,13 @@
 Param(
     [string] $sdkPath,
     [string] $specPath,
-    [bool] $generateSDK = $false,
+    [bool] $generateSDK = $true,
     [bool] $generateTest = $false,
-    [bool] $executeMockTest = $true
+    [bool] $executeMockTest = $false
 )
 
 $AUTOREST_TEST_PACKAGE_URL = "D:\Workspace\Azure\azure-sdk-tools\tools\sdk-testgen\packages\autorest.gotest"
-$AUTOREST_GO_VERSION = "D:\Workspace\tadelesh\autorest.go"
+$AUTOREST_GO_VERSION = "@autorest/go@4.0.0-preview.37"
 $AUTOREST_CONFIG_FILE = "autorest.md"
 $AUTOREST_CORE_VERSION = "3.6.2"
 

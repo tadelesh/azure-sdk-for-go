@@ -34,17 +34,17 @@ type ExtendedServerBlobAuditingPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewExtendedServerBlobAuditingPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ExtendedServerBlobAuditingPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ExtendedServerBlobAuditingPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *ExtendedServerBlobAuditingPoliciesClient) BeginCreateOrUpdate(ctx 
 	if err != nil {
 		return ExtendedServerBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ExtendedServerBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ExtendedServerBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ExtendedServerBlobAuditingPoliciesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ExtendedServerBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{}, err
@@ -170,7 +168,7 @@ func (client *ExtendedServerBlobAuditingPoliciesClient) getCreateRequest(ctx con
 
 // getHandleResponse handles the Get response.
 func (client *ExtendedServerBlobAuditingPoliciesClient) getHandleResponse(resp *http.Response) (ExtendedServerBlobAuditingPoliciesClientGetResponse, error) {
-	result := ExtendedServerBlobAuditingPoliciesClientGetResponse{RawResponse: resp}
+	result := ExtendedServerBlobAuditingPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExtendedServerBlobAuditingPolicy); err != nil {
 		return ExtendedServerBlobAuditingPoliciesClientGetResponse{}, err
 	}
@@ -224,7 +222,7 @@ func (client *ExtendedServerBlobAuditingPoliciesClient) listByServerCreateReques
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *ExtendedServerBlobAuditingPoliciesClient) listByServerHandleResponse(resp *http.Response) (ExtendedServerBlobAuditingPoliciesClientListByServerResponse, error) {
-	result := ExtendedServerBlobAuditingPoliciesClientListByServerResponse{RawResponse: resp}
+	result := ExtendedServerBlobAuditingPoliciesClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExtendedServerBlobAuditingPolicyListResult); err != nil {
 		return ExtendedServerBlobAuditingPoliciesClientListByServerResponse{}, err
 	}

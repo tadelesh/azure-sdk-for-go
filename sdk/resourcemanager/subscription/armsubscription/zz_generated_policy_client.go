@@ -29,16 +29,16 @@ type PolicyClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPolicyClient(credential azcore.TokenCredential, options *arm.ClientOptions) *PolicyClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PolicyClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -78,7 +78,7 @@ func (client *PolicyClient) addUpdatePolicyForTenantCreateRequest(ctx context.Co
 
 // addUpdatePolicyForTenantHandleResponse handles the AddUpdatePolicyForTenant response.
 func (client *PolicyClient) addUpdatePolicyForTenantHandleResponse(resp *http.Response) (PolicyClientAddUpdatePolicyForTenantResponse, error) {
-	result := PolicyClientAddUpdatePolicyForTenantResponse{RawResponse: resp}
+	result := PolicyClientAddUpdatePolicyForTenantResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GetTenantPolicyResponse); err != nil {
 		return PolicyClientAddUpdatePolicyForTenantResponse{}, err
 	}
@@ -120,7 +120,7 @@ func (client *PolicyClient) getPolicyForTenantCreateRequest(ctx context.Context,
 
 // getPolicyForTenantHandleResponse handles the GetPolicyForTenant response.
 func (client *PolicyClient) getPolicyForTenantHandleResponse(resp *http.Response) (PolicyClientGetPolicyForTenantResponse, error) {
-	result := PolicyClientGetPolicyForTenantResponse{RawResponse: resp}
+	result := PolicyClientGetPolicyForTenantResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GetTenantPolicyResponse); err != nil {
 		return PolicyClientGetPolicyForTenantResponse{}, err
 	}
@@ -159,7 +159,7 @@ func (client *PolicyClient) listPolicyForTenantCreateRequest(ctx context.Context
 
 // listPolicyForTenantHandleResponse handles the ListPolicyForTenant response.
 func (client *PolicyClient) listPolicyForTenantHandleResponse(resp *http.Response) (PolicyClientListPolicyForTenantResponse, error) {
-	result := PolicyClientListPolicyForTenantResponse{RawResponse: resp}
+	result := PolicyClientListPolicyForTenantResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GetTenantPolicyListResponse); err != nil {
 		return PolicyClientListPolicyForTenantResponse{}, err
 	}

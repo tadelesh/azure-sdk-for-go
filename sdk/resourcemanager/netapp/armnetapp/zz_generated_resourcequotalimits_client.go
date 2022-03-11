@@ -35,17 +35,17 @@ type ResourceQuotaLimitsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewResourceQuotaLimitsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ResourceQuotaLimitsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ResourceQuotaLimitsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *ResourceQuotaLimitsClient) getCreateRequest(ctx context.Context, l
 
 // getHandleResponse handles the Get response.
 func (client *ResourceQuotaLimitsClient) getHandleResponse(resp *http.Response) (ResourceQuotaLimitsClientGetResponse, error) {
-	result := ResourceQuotaLimitsClientGetResponse{RawResponse: resp}
+	result := ResourceQuotaLimitsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SubscriptionQuotaItem); err != nil {
 		return ResourceQuotaLimitsClientGetResponse{}, err
 	}
@@ -110,19 +110,13 @@ func (client *ResourceQuotaLimitsClient) getHandleResponse(resp *http.Response) 
 // location - The location
 // options - ResourceQuotaLimitsClientListOptions contains the optional parameters for the ResourceQuotaLimitsClient.List
 // method.
-func (client *ResourceQuotaLimitsClient) List(ctx context.Context, location string, options *ResourceQuotaLimitsClientListOptions) (ResourceQuotaLimitsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, location, options)
-	if err != nil {
-		return ResourceQuotaLimitsClientListResponse{}, err
+func (client *ResourceQuotaLimitsClient) List(location string, options *ResourceQuotaLimitsClientListOptions) *ResourceQuotaLimitsClientListPager {
+	return &ResourceQuotaLimitsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, location, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ResourceQuotaLimitsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ResourceQuotaLimitsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -149,7 +143,7 @@ func (client *ResourceQuotaLimitsClient) listCreateRequest(ctx context.Context, 
 
 // listHandleResponse handles the List response.
 func (client *ResourceQuotaLimitsClient) listHandleResponse(resp *http.Response) (ResourceQuotaLimitsClientListResponse, error) {
-	result := ResourceQuotaLimitsClientListResponse{RawResponse: resp}
+	result := ResourceQuotaLimitsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SubscriptionQuotaItemList); err != nil {
 		return ResourceQuotaLimitsClientListResponse{}, err
 	}

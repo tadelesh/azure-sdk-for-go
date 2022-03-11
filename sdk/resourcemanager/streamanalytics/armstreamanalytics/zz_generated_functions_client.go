@@ -34,17 +34,17 @@ type FunctionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFunctionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FunctionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FunctionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -111,7 +111,7 @@ func (client *FunctionsClient) createOrReplaceCreateRequest(ctx context.Context,
 
 // createOrReplaceHandleResponse handles the CreateOrReplace response.
 func (client *FunctionsClient) createOrReplaceHandleResponse(resp *http.Response) (FunctionsClientCreateOrReplaceResponse, error) {
-	result := FunctionsClientCreateOrReplaceResponse{RawResponse: resp}
+	result := FunctionsClientCreateOrReplaceResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -139,7 +139,7 @@ func (client *FunctionsClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return FunctionsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return FunctionsClientDeleteResponse{RawResponse: resp}, nil
+	return FunctionsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -225,7 +225,7 @@ func (client *FunctionsClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *FunctionsClient) getHandleResponse(resp *http.Response) (FunctionsClientGetResponse, error) {
-	result := FunctionsClientGetResponse{RawResponse: resp}
+	result := FunctionsClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -284,7 +284,7 @@ func (client *FunctionsClient) listByStreamingJobCreateRequest(ctx context.Conte
 
 // listByStreamingJobHandleResponse handles the ListByStreamingJob response.
 func (client *FunctionsClient) listByStreamingJobHandleResponse(resp *http.Response) (FunctionsClientListByStreamingJobResponse, error) {
-	result := FunctionsClientListByStreamingJobResponse{RawResponse: resp}
+	result := FunctionsClientListByStreamingJobResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FunctionListResult); err != nil {
 		return FunctionsClientListByStreamingJobResponse{}, err
 	}
@@ -348,7 +348,7 @@ func (client *FunctionsClient) retrieveDefaultDefinitionCreateRequest(ctx contex
 
 // retrieveDefaultDefinitionHandleResponse handles the RetrieveDefaultDefinition response.
 func (client *FunctionsClient) retrieveDefaultDefinitionHandleResponse(resp *http.Response) (FunctionsClientRetrieveDefaultDefinitionResponse, error) {
-	result := FunctionsClientRetrieveDefaultDefinitionResponse{RawResponse: resp}
+	result := FunctionsClientRetrieveDefaultDefinitionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Function); err != nil {
 		return FunctionsClientRetrieveDefaultDefinitionResponse{}, err
 	}
@@ -368,9 +368,7 @@ func (client *FunctionsClient) BeginTest(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return FunctionsClientTestPollerResponse{}, err
 	}
-	result := FunctionsClientTestPollerResponse{
-		RawResponse: resp,
-	}
+	result := FunctionsClientTestPollerResponse{}
 	pt, err := armruntime.NewPoller("FunctionsClient.Test", "", resp, client.pl)
 	if err != nil {
 		return FunctionsClientTestPollerResponse{}, err
@@ -495,7 +493,7 @@ func (client *FunctionsClient) updateCreateRequest(ctx context.Context, resource
 
 // updateHandleResponse handles the Update response.
 func (client *FunctionsClient) updateHandleResponse(resp *http.Response) (FunctionsClientUpdateResponse, error) {
-	result := FunctionsClientUpdateResponse{RawResponse: resp}
+	result := FunctionsClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

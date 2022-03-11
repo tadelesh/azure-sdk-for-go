@@ -43,11 +43,10 @@ func (p *AppsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final AppsClientCreateOrUpdateResponse will be returned.
 func (p *AppsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (AppsClientCreateOrUpdateResponse, error) {
 	respType := AppsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.App)
+	_, err := p.pt.FinalResponse(ctx, &respType.App)
 	if err != nil {
 		return AppsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *AppsClientDeletePoller) Poll(ctx context.Context) (*http.Response, erro
 // If the final GET succeeded then the final AppsClientDeleteResponse will be returned.
 func (p *AppsClientDeletePoller) FinalResponse(ctx context.Context) (AppsClientDeleteResponse, error) {
 	respType := AppsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return AppsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *AppsClientUpdatePoller) Poll(ctx context.Context) (*http.Response, erro
 // If the final GET succeeded then the final AppsClientUpdateResponse will be returned.
 func (p *AppsClientUpdatePoller) FinalResponse(ctx context.Context) (AppsClientUpdateResponse, error) {
 	respType := AppsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.App)
+	_, err := p.pt.FinalResponse(ctx, &respType.App)
 	if err != nil {
 		return AppsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

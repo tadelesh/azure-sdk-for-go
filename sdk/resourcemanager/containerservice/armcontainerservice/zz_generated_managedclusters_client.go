@@ -35,17 +35,17 @@ type ManagedClustersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedClustersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedClustersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedClustersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *ManagedClustersClient) BeginCreateOrUpdate(ctx context.Context, re
 	if err != nil {
 		return ManagedClustersClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ManagedClustersClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedClustersClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedClustersClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ManagedClustersClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *ManagedClustersClient) BeginDelete(ctx context.Context, resourceGr
 	if err != nil {
 		return ManagedClustersClientDeletePollerResponse{}, err
 	}
-	result := ManagedClustersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedClustersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedClustersClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ManagedClustersClientDeletePollerResponse{}, err
@@ -233,7 +229,7 @@ func (client *ManagedClustersClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *ManagedClustersClient) getHandleResponse(resp *http.Response) (ManagedClustersClientGetResponse, error) {
-	result := ManagedClustersClientGetResponse{RawResponse: resp}
+	result := ManagedClustersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedCluster); err != nil {
 		return ManagedClustersClientGetResponse{}, err
 	}
@@ -296,7 +292,7 @@ func (client *ManagedClustersClient) getAccessProfileCreateRequest(ctx context.C
 
 // getAccessProfileHandleResponse handles the GetAccessProfile response.
 func (client *ManagedClustersClient) getAccessProfileHandleResponse(resp *http.Response) (ManagedClustersClientGetAccessProfileResponse, error) {
-	result := ManagedClustersClientGetAccessProfileResponse{RawResponse: resp}
+	result := ManagedClustersClientGetAccessProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedClusterAccessProfile); err != nil {
 		return ManagedClustersClientGetAccessProfileResponse{}, err
 	}
@@ -357,7 +353,7 @@ func (client *ManagedClustersClient) getCommandResultCreateRequest(ctx context.C
 
 // getCommandResultHandleResponse handles the GetCommandResult response.
 func (client *ManagedClustersClient) getCommandResultHandleResponse(resp *http.Response) (ManagedClustersClientGetCommandResultResponse, error) {
-	result := ManagedClustersClientGetCommandResultResponse{RawResponse: resp}
+	result := ManagedClustersClientGetCommandResultResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RunCommandResult); err != nil {
 		return ManagedClustersClientGetCommandResultResponse{}, err
 	}
@@ -411,7 +407,7 @@ func (client *ManagedClustersClient) getOSOptionsCreateRequest(ctx context.Conte
 
 // getOSOptionsHandleResponse handles the GetOSOptions response.
 func (client *ManagedClustersClient) getOSOptionsHandleResponse(resp *http.Response) (ManagedClustersClientGetOSOptionsResponse, error) {
-	result := ManagedClustersClientGetOSOptionsResponse{RawResponse: resp}
+	result := ManagedClustersClientGetOSOptionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OSOptionProfile); err != nil {
 		return ManagedClustersClientGetOSOptionsResponse{}, err
 	}
@@ -467,7 +463,7 @@ func (client *ManagedClustersClient) getUpgradeProfileCreateRequest(ctx context.
 
 // getUpgradeProfileHandleResponse handles the GetUpgradeProfile response.
 func (client *ManagedClustersClient) getUpgradeProfileHandleResponse(resp *http.Response) (ManagedClustersClientGetUpgradeProfileResponse, error) {
-	result := ManagedClustersClientGetUpgradeProfileResponse{RawResponse: resp}
+	result := ManagedClustersClientGetUpgradeProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedClusterUpgradeProfile); err != nil {
 		return ManagedClustersClientGetUpgradeProfileResponse{}, err
 	}
@@ -509,7 +505,7 @@ func (client *ManagedClustersClient) listCreateRequest(ctx context.Context, opti
 
 // listHandleResponse handles the List response.
 func (client *ManagedClustersClient) listHandleResponse(resp *http.Response) (ManagedClustersClientListResponse, error) {
-	result := ManagedClustersClientListResponse{RawResponse: resp}
+	result := ManagedClustersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedClusterListResult); err != nil {
 		return ManagedClustersClientListResponse{}, err
 	}
@@ -557,7 +553,7 @@ func (client *ManagedClustersClient) listByResourceGroupCreateRequest(ctx contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ManagedClustersClient) listByResourceGroupHandleResponse(resp *http.Response) (ManagedClustersClientListByResourceGroupResponse, error) {
-	result := ManagedClustersClientListByResourceGroupResponse{RawResponse: resp}
+	result := ManagedClustersClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedClusterListResult); err != nil {
 		return ManagedClustersClientListByResourceGroupResponse{}, err
 	}
@@ -616,7 +612,7 @@ func (client *ManagedClustersClient) listClusterAdminCredentialsCreateRequest(ct
 
 // listClusterAdminCredentialsHandleResponse handles the ListClusterAdminCredentials response.
 func (client *ManagedClustersClient) listClusterAdminCredentialsHandleResponse(resp *http.Response) (ManagedClustersClientListClusterAdminCredentialsResponse, error) {
-	result := ManagedClustersClientListClusterAdminCredentialsResponse{RawResponse: resp}
+	result := ManagedClustersClientListClusterAdminCredentialsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CredentialResults); err != nil {
 		return ManagedClustersClientListClusterAdminCredentialsResponse{}, err
 	}
@@ -675,7 +671,7 @@ func (client *ManagedClustersClient) listClusterMonitoringUserCredentialsCreateR
 
 // listClusterMonitoringUserCredentialsHandleResponse handles the ListClusterMonitoringUserCredentials response.
 func (client *ManagedClustersClient) listClusterMonitoringUserCredentialsHandleResponse(resp *http.Response) (ManagedClustersClientListClusterMonitoringUserCredentialsResponse, error) {
-	result := ManagedClustersClientListClusterMonitoringUserCredentialsResponse{RawResponse: resp}
+	result := ManagedClustersClientListClusterMonitoringUserCredentialsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CredentialResults); err != nil {
 		return ManagedClustersClientListClusterMonitoringUserCredentialsResponse{}, err
 	}
@@ -734,7 +730,7 @@ func (client *ManagedClustersClient) listClusterUserCredentialsCreateRequest(ctx
 
 // listClusterUserCredentialsHandleResponse handles the ListClusterUserCredentials response.
 func (client *ManagedClustersClient) listClusterUserCredentialsHandleResponse(resp *http.Response) (ManagedClustersClientListClusterUserCredentialsResponse, error) {
-	result := ManagedClustersClientListClusterUserCredentialsResponse{RawResponse: resp}
+	result := ManagedClustersClientListClusterUserCredentialsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CredentialResults); err != nil {
 		return ManagedClustersClientListClusterUserCredentialsResponse{}, err
 	}
@@ -788,7 +784,7 @@ func (client *ManagedClustersClient) listOutboundNetworkDependenciesEndpointsCre
 
 // listOutboundNetworkDependenciesEndpointsHandleResponse handles the ListOutboundNetworkDependenciesEndpoints response.
 func (client *ManagedClustersClient) listOutboundNetworkDependenciesEndpointsHandleResponse(resp *http.Response) (ManagedClustersClientListOutboundNetworkDependenciesEndpointsResponse, error) {
-	result := ManagedClustersClientListOutboundNetworkDependenciesEndpointsResponse{RawResponse: resp}
+	result := ManagedClustersClientListOutboundNetworkDependenciesEndpointsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OutboundEnvironmentEndpointCollection); err != nil {
 		return ManagedClustersClientListOutboundNetworkDependenciesEndpointsResponse{}, err
 	}
@@ -807,9 +803,7 @@ func (client *ManagedClustersClient) BeginResetAADProfile(ctx context.Context, r
 	if err != nil {
 		return ManagedClustersClientResetAADProfilePollerResponse{}, err
 	}
-	result := ManagedClustersClientResetAADProfilePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedClustersClientResetAADProfilePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedClustersClient.ResetAADProfile", "", resp, client.pl)
 	if err != nil {
 		return ManagedClustersClientResetAADProfilePollerResponse{}, err
@@ -875,9 +869,7 @@ func (client *ManagedClustersClient) BeginResetServicePrincipalProfile(ctx conte
 	if err != nil {
 		return ManagedClustersClientResetServicePrincipalProfilePollerResponse{}, err
 	}
-	result := ManagedClustersClientResetServicePrincipalProfilePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedClustersClientResetServicePrincipalProfilePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedClustersClient.ResetServicePrincipalProfile", "", resp, client.pl)
 	if err != nil {
 		return ManagedClustersClientResetServicePrincipalProfilePollerResponse{}, err
@@ -943,9 +935,7 @@ func (client *ManagedClustersClient) BeginRotateClusterCertificates(ctx context.
 	if err != nil {
 		return ManagedClustersClientRotateClusterCertificatesPollerResponse{}, err
 	}
-	result := ManagedClustersClientRotateClusterCertificatesPollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedClustersClientRotateClusterCertificatesPollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedClustersClient.RotateClusterCertificates", "", resp, client.pl)
 	if err != nil {
 		return ManagedClustersClientRotateClusterCertificatesPollerResponse{}, err
@@ -1014,9 +1004,7 @@ func (client *ManagedClustersClient) BeginRunCommand(ctx context.Context, resour
 	if err != nil {
 		return ManagedClustersClientRunCommandPollerResponse{}, err
 	}
-	result := ManagedClustersClientRunCommandPollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedClustersClientRunCommandPollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedClustersClient.RunCommand", "", resp, client.pl)
 	if err != nil {
 		return ManagedClustersClientRunCommandPollerResponse{}, err
@@ -1084,9 +1072,7 @@ func (client *ManagedClustersClient) BeginStart(ctx context.Context, resourceGro
 	if err != nil {
 		return ManagedClustersClientStartPollerResponse{}, err
 	}
-	result := ManagedClustersClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedClustersClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedClustersClient.Start", "", resp, client.pl)
 	if err != nil {
 		return ManagedClustersClientStartPollerResponse{}, err
@@ -1155,9 +1141,7 @@ func (client *ManagedClustersClient) BeginStop(ctx context.Context, resourceGrou
 	if err != nil {
 		return ManagedClustersClientStopPollerResponse{}, err
 	}
-	result := ManagedClustersClientStopPollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedClustersClientStopPollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedClustersClient.Stop", "", resp, client.pl)
 	if err != nil {
 		return ManagedClustersClientStopPollerResponse{}, err
@@ -1226,9 +1210,7 @@ func (client *ManagedClustersClient) BeginUpdateTags(ctx context.Context, resour
 	if err != nil {
 		return ManagedClustersClientUpdateTagsPollerResponse{}, err
 	}
-	result := ManagedClustersClientUpdateTagsPollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedClustersClientUpdateTagsPollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedClustersClient.UpdateTags", "", resp, client.pl)
 	if err != nil {
 		return ManagedClustersClientUpdateTagsPollerResponse{}, err

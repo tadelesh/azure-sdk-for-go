@@ -35,17 +35,17 @@ type TenantConfigurationClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTenantConfigurationClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TenantConfigurationClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TenantConfigurationClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *TenantConfigurationClient) BeginDeploy(ctx context.Context, resour
 	if err != nil {
 		return TenantConfigurationClientDeployPollerResponse{}, err
 	}
-	result := TenantConfigurationClientDeployPollerResponse{
-		RawResponse: resp,
-	}
+	result := TenantConfigurationClientDeployPollerResponse{}
 	pt, err := armruntime.NewPoller("TenantConfigurationClient.Deploy", "location", resp, client.pl)
 	if err != nil {
 		return TenantConfigurationClientDeployPollerResponse{}, err
@@ -179,7 +177,7 @@ func (client *TenantConfigurationClient) getSyncStateCreateRequest(ctx context.C
 
 // getSyncStateHandleResponse handles the GetSyncState response.
 func (client *TenantConfigurationClient) getSyncStateHandleResponse(resp *http.Response) (TenantConfigurationClientGetSyncStateResponse, error) {
-	result := TenantConfigurationClientGetSyncStateResponse{RawResponse: resp}
+	result := TenantConfigurationClientGetSyncStateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TenantConfigurationSyncStateContract); err != nil {
 		return TenantConfigurationClientGetSyncStateResponse{}, err
 	}
@@ -200,9 +198,7 @@ func (client *TenantConfigurationClient) BeginSave(ctx context.Context, resource
 	if err != nil {
 		return TenantConfigurationClientSavePollerResponse{}, err
 	}
-	result := TenantConfigurationClientSavePollerResponse{
-		RawResponse: resp,
-	}
+	result := TenantConfigurationClientSavePollerResponse{}
 	pt, err := armruntime.NewPoller("TenantConfigurationClient.Save", "location", resp, client.pl)
 	if err != nil {
 		return TenantConfigurationClientSavePollerResponse{}, err
@@ -275,9 +271,7 @@ func (client *TenantConfigurationClient) BeginValidate(ctx context.Context, reso
 	if err != nil {
 		return TenantConfigurationClientValidatePollerResponse{}, err
 	}
-	result := TenantConfigurationClientValidatePollerResponse{
-		RawResponse: resp,
-	}
+	result := TenantConfigurationClientValidatePollerResponse{}
 	pt, err := armruntime.NewPoller("TenantConfigurationClient.Validate", "location", resp, client.pl)
 	if err != nil {
 		return TenantConfigurationClientValidatePollerResponse{}, err

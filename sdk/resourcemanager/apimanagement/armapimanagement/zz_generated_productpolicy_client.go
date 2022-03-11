@@ -35,17 +35,17 @@ type ProductPolicyClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProductPolicyClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ProductPolicyClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProductPolicyClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -113,7 +113,7 @@ func (client *ProductPolicyClient) createOrUpdateCreateRequest(ctx context.Conte
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ProductPolicyClient) createOrUpdateHandleResponse(resp *http.Response) (ProductPolicyClientCreateOrUpdateResponse, error) {
-	result := ProductPolicyClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ProductPolicyClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -144,7 +144,7 @@ func (client *ProductPolicyClient) Delete(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ProductPolicyClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ProductPolicyClientDeleteResponse{RawResponse: resp}, nil
+	return ProductPolicyClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -243,7 +243,7 @@ func (client *ProductPolicyClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *ProductPolicyClient) getHandleResponse(resp *http.Response) (ProductPolicyClientGetResponse, error) {
-	result := ProductPolicyClientGetResponse{RawResponse: resp}
+	result := ProductPolicyClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -308,7 +308,7 @@ func (client *ProductPolicyClient) getEntityTagCreateRequest(ctx context.Context
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *ProductPolicyClient) getEntityTagHandleResponse(resp *http.Response) (ProductPolicyClientGetEntityTagResponse, error) {
-	result := ProductPolicyClientGetEntityTagResponse{RawResponse: resp}
+	result := ProductPolicyClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -372,7 +372,7 @@ func (client *ProductPolicyClient) listByProductCreateRequest(ctx context.Contex
 
 // listByProductHandleResponse handles the ListByProduct response.
 func (client *ProductPolicyClient) listByProductHandleResponse(resp *http.Response) (ProductPolicyClientListByProductResponse, error) {
-	result := ProductPolicyClientListByProductResponse{RawResponse: resp}
+	result := ProductPolicyClientListByProductResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyCollection); err != nil {
 		return ProductPolicyClientListByProductResponse{}, err
 	}

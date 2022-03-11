@@ -38,19 +38,19 @@ type ReplicationProtectableItemsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReplicationProtectableItemsClient(resourceName string, resourceGroupName string, subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReplicationProtectableItemsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReplicationProtectableItemsClient{
 		resourceName:      resourceName,
 		resourceGroupName: resourceGroupName,
 		subscriptionID:    subscriptionID,
-		host:              string(cp.Endpoint),
-		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:              string(ep),
+		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *ReplicationProtectableItemsClient) getCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -117,7 +117,7 @@ func (client *ReplicationProtectableItemsClient) getCreateRequest(ctx context.Co
 
 // getHandleResponse handles the Get response.
 func (client *ReplicationProtectableItemsClient) getHandleResponse(resp *http.Response) (ReplicationProtectableItemsClientGetResponse, error) {
-	result := ReplicationProtectableItemsClientGetResponse{RawResponse: resp}
+	result := ReplicationProtectableItemsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProtectableItem); err != nil {
 		return ReplicationProtectableItemsClientGetResponse{}, err
 	}
@@ -170,7 +170,7 @@ func (client *ReplicationProtectableItemsClient) listByReplicationProtectionCont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	if options != nil && options.Filter != nil {
 		reqQP.Set("$filter", *options.Filter)
 	}
@@ -187,7 +187,7 @@ func (client *ReplicationProtectableItemsClient) listByReplicationProtectionCont
 
 // listByReplicationProtectionContainersHandleResponse handles the ListByReplicationProtectionContainers response.
 func (client *ReplicationProtectableItemsClient) listByReplicationProtectionContainersHandleResponse(resp *http.Response) (ReplicationProtectableItemsClientListByReplicationProtectionContainersResponse, error) {
-	result := ReplicationProtectableItemsClientListByReplicationProtectionContainersResponse{RawResponse: resp}
+	result := ReplicationProtectableItemsClientListByReplicationProtectionContainersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProtectableItemCollection); err != nil {
 		return ReplicationProtectableItemsClientListByReplicationProtectionContainersResponse{}, err
 	}

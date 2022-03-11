@@ -43,11 +43,10 @@ func (p *DataManagersClientCreatePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final DataManagersClientCreateResponse will be returned.
 func (p *DataManagersClientCreatePoller) FinalResponse(ctx context.Context) (DataManagersClientCreateResponse, error) {
 	respType := DataManagersClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DataManager)
+	_, err := p.pt.FinalResponse(ctx, &respType.DataManager)
 	if err != nil {
 		return DataManagersClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *DataManagersClientDeletePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final DataManagersClientDeleteResponse will be returned.
 func (p *DataManagersClientDeletePoller) FinalResponse(ctx context.Context) (DataManagersClientDeleteResponse, error) {
 	respType := DataManagersClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DataManagersClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *DataManagersClientUpdatePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final DataManagersClientUpdateResponse will be returned.
 func (p *DataManagersClientUpdatePoller) FinalResponse(ctx context.Context) (DataManagersClientUpdateResponse, error) {
 	respType := DataManagersClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DataManager)
+	_, err := p.pt.FinalResponse(ctx, &respType.DataManager)
 	if err != nil {
 		return DataManagersClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *DataStoresClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final DataStoresClientCreateOrUpdateResponse will be returned.
 func (p *DataStoresClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (DataStoresClientCreateOrUpdateResponse, error) {
 	respType := DataStoresClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DataStore)
+	_, err := p.pt.FinalResponse(ctx, &respType.DataStore)
 	if err != nil {
 		return DataStoresClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *DataStoresClientDeletePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final DataStoresClientDeleteResponse will be returned.
 func (p *DataStoresClientDeletePoller) FinalResponse(ctx context.Context) (DataStoresClientDeleteResponse, error) {
 	respType := DataStoresClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DataStoresClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *JobDefinitionsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*h
 // If the final GET succeeded then the final JobDefinitionsClientCreateOrUpdateResponse will be returned.
 func (p *JobDefinitionsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (JobDefinitionsClientCreateOrUpdateResponse, error) {
 	respType := JobDefinitionsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.JobDefinition)
+	_, err := p.pt.FinalResponse(ctx, &respType.JobDefinition)
 	if err != nil {
 		return JobDefinitionsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *JobDefinitionsClientDeletePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final JobDefinitionsClientDeleteResponse will be returned.
 func (p *JobDefinitionsClientDeletePoller) FinalResponse(ctx context.Context) (JobDefinitionsClientDeleteResponse, error) {
 	respType := JobDefinitionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return JobDefinitionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *JobDefinitionsClientRunPoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final JobDefinitionsClientRunResponse will be returned.
 func (p *JobDefinitionsClientRunPoller) FinalResponse(ctx context.Context) (JobDefinitionsClientRunResponse, error) {
 	respType := JobDefinitionsClientRunResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return JobDefinitionsClientRunResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *JobsClientCancelPoller) Poll(ctx context.Context) (*http.Response, erro
 // If the final GET succeeded then the final JobsClientCancelResponse will be returned.
 func (p *JobsClientCancelPoller) FinalResponse(ctx context.Context) (JobsClientCancelResponse, error) {
 	respType := JobsClientCancelResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return JobsClientCancelResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -430,11 +421,10 @@ func (p *JobsClientResumePoller) Poll(ctx context.Context) (*http.Response, erro
 // If the final GET succeeded then the final JobsClientResumeResponse will be returned.
 func (p *JobsClientResumePoller) FinalResponse(ctx context.Context) (JobsClientResumeResponse, error) {
 	respType := JobsClientResumeResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return JobsClientResumeResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

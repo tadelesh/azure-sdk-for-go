@@ -35,17 +35,17 @@ type VPNLinkConnectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVPNLinkConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VPNLinkConnectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VPNLinkConnectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *VPNLinkConnectionsClient) BeginGetIkeSas(ctx context.Context, reso
 	if err != nil {
 		return VPNLinkConnectionsClientGetIkeSasPollerResponse{}, err
 	}
-	result := VPNLinkConnectionsClientGetIkeSasPollerResponse{
-		RawResponse: resp,
-	}
+	result := VPNLinkConnectionsClientGetIkeSasPollerResponse{}
 	pt, err := armruntime.NewPoller("VPNLinkConnectionsClient.GetIkeSas", "location", resp, client.pl)
 	if err != nil {
 		return VPNLinkConnectionsClientGetIkeSasPollerResponse{}, err
@@ -178,7 +176,7 @@ func (client *VPNLinkConnectionsClient) listByVPNConnectionCreateRequest(ctx con
 
 // listByVPNConnectionHandleResponse handles the ListByVPNConnection response.
 func (client *VPNLinkConnectionsClient) listByVPNConnectionHandleResponse(resp *http.Response) (VPNLinkConnectionsClientListByVPNConnectionResponse, error) {
-	result := VPNLinkConnectionsClientListByVPNConnectionResponse{RawResponse: resp}
+	result := VPNLinkConnectionsClientListByVPNConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListVPNSiteLinkConnectionsResult); err != nil {
 		return VPNLinkConnectionsClientListByVPNConnectionResponse{}, err
 	}
@@ -198,9 +196,7 @@ func (client *VPNLinkConnectionsClient) BeginResetConnection(ctx context.Context
 	if err != nil {
 		return VPNLinkConnectionsClientResetConnectionPollerResponse{}, err
 	}
-	result := VPNLinkConnectionsClientResetConnectionPollerResponse{
-		RawResponse: resp,
-	}
+	result := VPNLinkConnectionsClientResetConnectionPollerResponse{}
 	pt, err := armruntime.NewPoller("VPNLinkConnectionsClient.ResetConnection", "location", resp, client.pl)
 	if err != nil {
 		return VPNLinkConnectionsClientResetConnectionPollerResponse{}, err

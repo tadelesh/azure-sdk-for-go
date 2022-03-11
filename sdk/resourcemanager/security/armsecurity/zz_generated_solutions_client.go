@@ -104,7 +104,7 @@ func (client *SolutionsClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *SolutionsClient) getHandleResponse(resp *http.Response) (SolutionsClientGetResponse, error) {
-	result := SolutionsClientGetResponse{RawResponse: resp}
+	result := SolutionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Solution); err != nil {
 		return SolutionsClientGetResponse{}, err
 	}
@@ -146,7 +146,7 @@ func (client *SolutionsClient) listCreateRequest(ctx context.Context, options *S
 
 // listHandleResponse handles the List response.
 func (client *SolutionsClient) listHandleResponse(resp *http.Response) (SolutionsClientListResponse, error) {
-	result := SolutionsClientListResponse{RawResponse: resp}
+	result := SolutionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SolutionList); err != nil {
 		return SolutionsClientListResponse{}, err
 	}

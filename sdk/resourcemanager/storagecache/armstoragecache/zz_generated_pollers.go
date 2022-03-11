@@ -43,11 +43,10 @@ func (p *CachesClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final CachesClientCreateOrUpdateResponse will be returned.
 func (p *CachesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (CachesClientCreateOrUpdateResponse, error) {
 	respType := CachesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Cache)
+	_, err := p.pt.FinalResponse(ctx, &respType.Cache)
 	if err != nil {
 		return CachesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *CachesClientDebugInfoPoller) Poll(ctx context.Context) (*http.Response,
 // If the final GET succeeded then the final CachesClientDebugInfoResponse will be returned.
 func (p *CachesClientDebugInfoPoller) FinalResponse(ctx context.Context) (CachesClientDebugInfoResponse, error) {
 	respType := CachesClientDebugInfoResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CachesClientDebugInfoResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *CachesClientDeletePoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final CachesClientDeleteResponse will be returned.
 func (p *CachesClientDeletePoller) FinalResponse(ctx context.Context) (CachesClientDeleteResponse, error) {
 	respType := CachesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CachesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *CachesClientFlushPoller) Poll(ctx context.Context) (*http.Response, err
 // If the final GET succeeded then the final CachesClientFlushResponse will be returned.
 func (p *CachesClientFlushPoller) FinalResponse(ctx context.Context) (CachesClientFlushResponse, error) {
 	respType := CachesClientFlushResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CachesClientFlushResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *CachesClientStartPoller) Poll(ctx context.Context) (*http.Response, err
 // If the final GET succeeded then the final CachesClientStartResponse will be returned.
 func (p *CachesClientStartPoller) FinalResponse(ctx context.Context) (CachesClientStartResponse, error) {
 	respType := CachesClientStartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CachesClientStartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *CachesClientStopPoller) Poll(ctx context.Context) (*http.Response, erro
 // If the final GET succeeded then the final CachesClientStopResponse will be returned.
 func (p *CachesClientStopPoller) FinalResponse(ctx context.Context) (CachesClientStopResponse, error) {
 	respType := CachesClientStopResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CachesClientStopResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *CachesClientUpgradeFirmwarePoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final CachesClientUpgradeFirmwareResponse will be returned.
 func (p *CachesClientUpgradeFirmwarePoller) FinalResponse(ctx context.Context) (CachesClientUpgradeFirmwareResponse, error) {
 	respType := CachesClientUpgradeFirmwareResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CachesClientUpgradeFirmwareResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *StorageTargetClientFlushPoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final StorageTargetClientFlushResponse will be returned.
 func (p *StorageTargetClientFlushPoller) FinalResponse(ctx context.Context) (StorageTargetClientFlushResponse, error) {
 	respType := StorageTargetClientFlushResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StorageTargetClientFlushResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *StorageTargetClientResumePoller) Poll(ctx context.Context) (*http.Respo
 // If the final GET succeeded then the final StorageTargetClientResumeResponse will be returned.
 func (p *StorageTargetClientResumePoller) FinalResponse(ctx context.Context) (StorageTargetClientResumeResponse, error) {
 	respType := StorageTargetClientResumeResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StorageTargetClientResumeResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -430,11 +421,10 @@ func (p *StorageTargetClientSuspendPoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final StorageTargetClientSuspendResponse will be returned.
 func (p *StorageTargetClientSuspendPoller) FinalResponse(ctx context.Context) (StorageTargetClientSuspendResponse, error) {
 	respType := StorageTargetClientSuspendResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StorageTargetClientSuspendResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -473,11 +463,10 @@ func (p *StorageTargetsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*h
 // If the final GET succeeded then the final StorageTargetsClientCreateOrUpdateResponse will be returned.
 func (p *StorageTargetsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (StorageTargetsClientCreateOrUpdateResponse, error) {
 	respType := StorageTargetsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.StorageTarget)
+	_, err := p.pt.FinalResponse(ctx, &respType.StorageTarget)
 	if err != nil {
 		return StorageTargetsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -516,11 +505,10 @@ func (p *StorageTargetsClientDNSRefreshPoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final StorageTargetsClientDNSRefreshResponse will be returned.
 func (p *StorageTargetsClientDNSRefreshPoller) FinalResponse(ctx context.Context) (StorageTargetsClientDNSRefreshResponse, error) {
 	respType := StorageTargetsClientDNSRefreshResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StorageTargetsClientDNSRefreshResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -559,11 +547,10 @@ func (p *StorageTargetsClientDeletePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final StorageTargetsClientDeleteResponse will be returned.
 func (p *StorageTargetsClientDeletePoller) FinalResponse(ctx context.Context) (StorageTargetsClientDeleteResponse, error) {
 	respType := StorageTargetsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StorageTargetsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

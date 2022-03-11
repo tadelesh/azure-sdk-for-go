@@ -1,5 +1,80 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*WorkspacesClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(WorkspacesClientListBySubscriptionResponse, error)`
+- Function `*WorkspacesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(WorkspacesClientListByResourceGroupResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*OfferingsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OfferingsClientListResponse, error)`
+- Function `*WorkspacesClientListByResourceGroupPager.Err` has been removed
+- Function `*WorkspacesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*OfferingsClientListPager.Err` has been removed
+- Function `*WorkspacesClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*OfferingsClientListPager.PageResponse` has been removed
+- Function `*WorkspacesClientListBySubscriptionPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Struct `OfferingsClientListResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `WorkspaceClientCheckNameAvailabilityResult` has been removed
+- Struct `WorkspacesClientCreateOrUpdateResult` has been removed
+- Struct `WorkspacesClientGetResult` has been removed
+- Struct `WorkspacesClientListByResourceGroupResult` has been removed
+- Struct `WorkspacesClientListBySubscriptionResult` has been removed
+- Struct `WorkspacesClientUpdateTagsResult` has been removed
+- Field `WorkspacesClientListBySubscriptionResult` of struct `WorkspacesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientListBySubscriptionResponse` has been removed
+- Field `WorkspacesClientCreateOrUpdateResult` of struct `WorkspacesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientDeletePollerResponse` has been removed
+- Field `WorkspaceClientCheckNameAvailabilityResult` of struct `WorkspaceClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `WorkspaceClientCheckNameAvailabilityResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `WorkspacesClientListByResourceGroupResult` of struct `WorkspacesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientListByResourceGroupResponse` has been removed
+- Field `WorkspacesClientUpdateTagsResult` of struct `WorkspacesClientUpdateTagsResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientUpdateTagsResponse` has been removed
+- Field `OfferingsClientListResult` of struct `OfferingsClientListResponse` has been removed
+- Field `RawResponse` of struct `OfferingsClientListResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientDeleteResponse` has been removed
+- Field `WorkspacesClientGetResult` of struct `WorkspacesClientGetResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientGetResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New function `*WorkspacesClientListByResourceGroupPager.More() bool`
+- New function `*WorkspacesClientListBySubscriptionPager.More() bool`
+- New function `*OfferingsClientListPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `Workspace` in struct `WorkspacesClientCreateOrUpdateResponse`
+- New anonymous field `WorkspaceListResult` in struct `WorkspacesClientListBySubscriptionResponse`
+- New anonymous field `Workspace` in struct `WorkspacesClientUpdateTagsResponse`
+- New anonymous field `OfferingsListResult` in struct `OfferingsClientListResponse`
+- New anonymous field `Workspace` in struct `WorkspacesClientGetResponse`
+- New anonymous field `OperationsList` in struct `OperationsClientListResponse`
+- New anonymous field `CheckNameAvailabilityResult` in struct `WorkspaceClientCheckNameAvailabilityResponse`
+- New anonymous field `WorkspaceListResult` in struct `WorkspacesClientListByResourceGroupResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

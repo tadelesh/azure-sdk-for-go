@@ -35,17 +35,17 @@ type IncidentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIncidentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IncidentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IncidentsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *IncidentsClient) createOrUpdateCreateRequest(ctx context.Context, 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *IncidentsClient) createOrUpdateHandleResponse(resp *http.Response) (IncidentsClientCreateOrUpdateResponse, error) {
-	result := IncidentsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := IncidentsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Incident); err != nil {
 		return IncidentsClientCreateOrUpdateResponse{}, err
 	}
@@ -166,7 +166,7 @@ func (client *IncidentsClient) createTeamCreateRequest(ctx context.Context, reso
 
 // createTeamHandleResponse handles the CreateTeam response.
 func (client *IncidentsClient) createTeamHandleResponse(resp *http.Response) (IncidentsClientCreateTeamResponse, error) {
-	result := IncidentsClientCreateTeamResponse{RawResponse: resp}
+	result := IncidentsClientCreateTeamResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TeamInformation); err != nil {
 		return IncidentsClientCreateTeamResponse{}, err
 	}
@@ -191,7 +191,7 @@ func (client *IncidentsClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return IncidentsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return IncidentsClientDeleteResponse{RawResponse: resp}, nil
+	return IncidentsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -277,7 +277,7 @@ func (client *IncidentsClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *IncidentsClient) getHandleResponse(resp *http.Response) (IncidentsClientGetResponse, error) {
-	result := IncidentsClientGetResponse{RawResponse: resp}
+	result := IncidentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Incident); err != nil {
 		return IncidentsClientGetResponse{}, err
 	}
@@ -341,7 +341,7 @@ func (client *IncidentsClient) listCreateRequest(ctx context.Context, resourceGr
 
 // listHandleResponse handles the List response.
 func (client *IncidentsClient) listHandleResponse(resp *http.Response) (IncidentsClientListResponse, error) {
-	result := IncidentsClientListResponse{RawResponse: resp}
+	result := IncidentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IncidentList); err != nil {
 		return IncidentsClientListResponse{}, err
 	}
@@ -401,7 +401,7 @@ func (client *IncidentsClient) listAlertsCreateRequest(ctx context.Context, reso
 
 // listAlertsHandleResponse handles the ListAlerts response.
 func (client *IncidentsClient) listAlertsHandleResponse(resp *http.Response) (IncidentsClientListAlertsResponse, error) {
-	result := IncidentsClientListAlertsResponse{RawResponse: resp}
+	result := IncidentsClientListAlertsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IncidentAlertList); err != nil {
 		return IncidentsClientListAlertsResponse{}, err
 	}
@@ -461,7 +461,7 @@ func (client *IncidentsClient) listBookmarksCreateRequest(ctx context.Context, r
 
 // listBookmarksHandleResponse handles the ListBookmarks response.
 func (client *IncidentsClient) listBookmarksHandleResponse(resp *http.Response) (IncidentsClientListBookmarksResponse, error) {
-	result := IncidentsClientListBookmarksResponse{RawResponse: resp}
+	result := IncidentsClientListBookmarksResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IncidentBookmarkList); err != nil {
 		return IncidentsClientListBookmarksResponse{}, err
 	}
@@ -521,7 +521,7 @@ func (client *IncidentsClient) listEntitiesCreateRequest(ctx context.Context, re
 
 // listEntitiesHandleResponse handles the ListEntities response.
 func (client *IncidentsClient) listEntitiesHandleResponse(resp *http.Response) (IncidentsClientListEntitiesResponse, error) {
-	result := IncidentsClientListEntitiesResponse{RawResponse: resp}
+	result := IncidentsClientListEntitiesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IncidentEntitiesResponse); err != nil {
 		return IncidentsClientListEntitiesResponse{}, err
 	}

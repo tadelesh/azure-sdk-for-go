@@ -35,17 +35,17 @@ type ModuleClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewModuleClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ModuleClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ModuleClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *ModuleClient) createOrUpdateCreateRequest(ctx context.Context, res
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ModuleClient) createOrUpdateHandleResponse(resp *http.Response) (ModuleClientCreateOrUpdateResponse, error) {
-	result := ModuleClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ModuleClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Module); err != nil {
 		return ModuleClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *ModuleClient) Delete(ctx context.Context, resourceGroupName string
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ModuleClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ModuleClientDeleteResponse{RawResponse: resp}, nil
+	return ModuleClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *ModuleClient) getCreateRequest(ctx context.Context, resourceGroupN
 
 // getHandleResponse handles the Get response.
 func (client *ModuleClient) getHandleResponse(resp *http.Response) (ModuleClientGetResponse, error) {
-	result := ModuleClientGetResponse{RawResponse: resp}
+	result := ModuleClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Module); err != nil {
 		return ModuleClientGetResponse{}, err
 	}
@@ -268,7 +268,7 @@ func (client *ModuleClient) listByAutomationAccountCreateRequest(ctx context.Con
 
 // listByAutomationAccountHandleResponse handles the ListByAutomationAccount response.
 func (client *ModuleClient) listByAutomationAccountHandleResponse(resp *http.Response) (ModuleClientListByAutomationAccountResponse, error) {
-	result := ModuleClientListByAutomationAccountResponse{RawResponse: resp}
+	result := ModuleClientListByAutomationAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ModuleListResult); err != nil {
 		return ModuleClientListByAutomationAccountResponse{}, err
 	}
@@ -329,7 +329,7 @@ func (client *ModuleClient) updateCreateRequest(ctx context.Context, resourceGro
 
 // updateHandleResponse handles the Update response.
 func (client *ModuleClient) updateHandleResponse(resp *http.Response) (ModuleClientUpdateResponse, error) {
-	result := ModuleClientUpdateResponse{RawResponse: resp}
+	result := ModuleClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Module); err != nil {
 		return ModuleClientUpdateResponse{}, err
 	}

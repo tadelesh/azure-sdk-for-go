@@ -34,17 +34,17 @@ type AutoscaleSettingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAutoscaleSettingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AutoscaleSettingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AutoscaleSettingsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *AutoscaleSettingsClient) createOrUpdateCreateRequest(ctx context.C
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *AutoscaleSettingsClient) createOrUpdateHandleResponse(resp *http.Response) (AutoscaleSettingsClientCreateOrUpdateResponse, error) {
-	result := AutoscaleSettingsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := AutoscaleSettingsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AutoscaleSettingResource); err != nil {
 		return AutoscaleSettingsClientCreateOrUpdateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *AutoscaleSettingsClient) Delete(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return AutoscaleSettingsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AutoscaleSettingsClientDeleteResponse{RawResponse: resp}, nil
+	return AutoscaleSettingsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -201,7 +201,7 @@ func (client *AutoscaleSettingsClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *AutoscaleSettingsClient) getHandleResponse(resp *http.Response) (AutoscaleSettingsClientGetResponse, error) {
-	result := AutoscaleSettingsClientGetResponse{RawResponse: resp}
+	result := AutoscaleSettingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AutoscaleSettingResource); err != nil {
 		return AutoscaleSettingsClientGetResponse{}, err
 	}
@@ -249,7 +249,7 @@ func (client *AutoscaleSettingsClient) listByResourceGroupCreateRequest(ctx cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *AutoscaleSettingsClient) listByResourceGroupHandleResponse(resp *http.Response) (AutoscaleSettingsClientListByResourceGroupResponse, error) {
-	result := AutoscaleSettingsClientListByResourceGroupResponse{RawResponse: resp}
+	result := AutoscaleSettingsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AutoscaleSettingResourceCollection); err != nil {
 		return AutoscaleSettingsClientListByResourceGroupResponse{}, err
 	}
@@ -292,7 +292,7 @@ func (client *AutoscaleSettingsClient) listBySubscriptionCreateRequest(ctx conte
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *AutoscaleSettingsClient) listBySubscriptionHandleResponse(resp *http.Response) (AutoscaleSettingsClientListBySubscriptionResponse, error) {
-	result := AutoscaleSettingsClientListBySubscriptionResponse{RawResponse: resp}
+	result := AutoscaleSettingsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AutoscaleSettingResourceCollection); err != nil {
 		return AutoscaleSettingsClientListBySubscriptionResponse{}, err
 	}
@@ -349,7 +349,7 @@ func (client *AutoscaleSettingsClient) updateCreateRequest(ctx context.Context, 
 
 // updateHandleResponse handles the Update response.
 func (client *AutoscaleSettingsClient) updateHandleResponse(resp *http.Response) (AutoscaleSettingsClientUpdateResponse, error) {
-	result := AutoscaleSettingsClientUpdateResponse{RawResponse: resp}
+	result := AutoscaleSettingsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AutoscaleSettingResource); err != nil {
 		return AutoscaleSettingsClientUpdateResponse{}, err
 	}

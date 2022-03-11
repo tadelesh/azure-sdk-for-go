@@ -34,17 +34,17 @@ type PrivateLinkServicesForM365ComplianceCenterClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateLinkServicesForM365ComplianceCenterClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateLinkServicesForM365ComplianceCenterClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateLinkServicesForM365ComplianceCenterClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *PrivateLinkServicesForM365ComplianceCenterClient) BeginCreateOrUpd
 	if err != nil {
 		return PrivateLinkServicesForM365ComplianceCenterClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PrivateLinkServicesForM365ComplianceCenterClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateLinkServicesForM365ComplianceCenterClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateLinkServicesForM365ComplianceCenterClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return PrivateLinkServicesForM365ComplianceCenterClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *PrivateLinkServicesForM365ComplianceCenterClient) BeginDelete(ctx 
 	if err != nil {
 		return PrivateLinkServicesForM365ComplianceCenterClientDeletePollerResponse{}, err
 	}
-	result := PrivateLinkServicesForM365ComplianceCenterClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateLinkServicesForM365ComplianceCenterClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateLinkServicesForM365ComplianceCenterClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return PrivateLinkServicesForM365ComplianceCenterClientDeletePollerResponse{}, err
@@ -233,7 +229,7 @@ func (client *PrivateLinkServicesForM365ComplianceCenterClient) getCreateRequest
 
 // getHandleResponse handles the Get response.
 func (client *PrivateLinkServicesForM365ComplianceCenterClient) getHandleResponse(resp *http.Response) (PrivateLinkServicesForM365ComplianceCenterClientGetResponse, error) {
-	result := PrivateLinkServicesForM365ComplianceCenterClientGetResponse{RawResponse: resp}
+	result := PrivateLinkServicesForM365ComplianceCenterClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkServicesForM365ComplianceCenterDescription); err != nil {
 		return PrivateLinkServicesForM365ComplianceCenterClientGetResponse{}, err
 	}
@@ -276,7 +272,7 @@ func (client *PrivateLinkServicesForM365ComplianceCenterClient) listCreateReques
 
 // listHandleResponse handles the List response.
 func (client *PrivateLinkServicesForM365ComplianceCenterClient) listHandleResponse(resp *http.Response) (PrivateLinkServicesForM365ComplianceCenterClientListResponse, error) {
-	result := PrivateLinkServicesForM365ComplianceCenterClientListResponse{RawResponse: resp}
+	result := PrivateLinkServicesForM365ComplianceCenterClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkServicesForM365ComplianceCenterDescriptionListResult); err != nil {
 		return PrivateLinkServicesForM365ComplianceCenterClientListResponse{}, err
 	}
@@ -324,7 +320,7 @@ func (client *PrivateLinkServicesForM365ComplianceCenterClient) listByResourceGr
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *PrivateLinkServicesForM365ComplianceCenterClient) listByResourceGroupHandleResponse(resp *http.Response) (PrivateLinkServicesForM365ComplianceCenterClientListByResourceGroupResponse, error) {
-	result := PrivateLinkServicesForM365ComplianceCenterClientListByResourceGroupResponse{RawResponse: resp}
+	result := PrivateLinkServicesForM365ComplianceCenterClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkServicesForM365ComplianceCenterDescriptionListResult); err != nil {
 		return PrivateLinkServicesForM365ComplianceCenterClientListByResourceGroupResponse{}, err
 	}
@@ -343,9 +339,7 @@ func (client *PrivateLinkServicesForM365ComplianceCenterClient) BeginUpdate(ctx 
 	if err != nil {
 		return PrivateLinkServicesForM365ComplianceCenterClientUpdatePollerResponse{}, err
 	}
-	result := PrivateLinkServicesForM365ComplianceCenterClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateLinkServicesForM365ComplianceCenterClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateLinkServicesForM365ComplianceCenterClient.Update", "location", resp, client.pl)
 	if err != nil {
 		return PrivateLinkServicesForM365ComplianceCenterClientUpdatePollerResponse{}, err

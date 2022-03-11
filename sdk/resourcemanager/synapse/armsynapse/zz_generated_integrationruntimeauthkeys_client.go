@@ -34,17 +34,17 @@ type IntegrationRuntimeAuthKeysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIntegrationRuntimeAuthKeysClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IntegrationRuntimeAuthKeysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IntegrationRuntimeAuthKeysClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *IntegrationRuntimeAuthKeysClient) listCreateRequest(ctx context.Co
 
 // listHandleResponse handles the List response.
 func (client *IntegrationRuntimeAuthKeysClient) listHandleResponse(resp *http.Response) (IntegrationRuntimeAuthKeysClientListResponse, error) {
-	result := IntegrationRuntimeAuthKeysClientListResponse{RawResponse: resp}
+	result := IntegrationRuntimeAuthKeysClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationRuntimeAuthKeys); err != nil {
 		return IntegrationRuntimeAuthKeysClientListResponse{}, err
 	}
@@ -165,7 +165,7 @@ func (client *IntegrationRuntimeAuthKeysClient) regenerateCreateRequest(ctx cont
 
 // regenerateHandleResponse handles the Regenerate response.
 func (client *IntegrationRuntimeAuthKeysClient) regenerateHandleResponse(resp *http.Response) (IntegrationRuntimeAuthKeysClientRegenerateResponse, error) {
-	result := IntegrationRuntimeAuthKeysClientRegenerateResponse{RawResponse: resp}
+	result := IntegrationRuntimeAuthKeysClientRegenerateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationRuntimeAuthKeys); err != nil {
 		return IntegrationRuntimeAuthKeysClientRegenerateResponse{}, err
 	}

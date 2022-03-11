@@ -36,17 +36,17 @@ type ConsumerGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewConsumerGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ConsumerGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ConsumerGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -111,7 +111,7 @@ func (client *ConsumerGroupsClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ConsumerGroupsClient) createOrUpdateHandleResponse(resp *http.Response) (ConsumerGroupsClientCreateOrUpdateResponse, error) {
-	result := ConsumerGroupsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ConsumerGroupsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConsumerGroup); err != nil {
 		return ConsumerGroupsClientCreateOrUpdateResponse{}, err
 	}
@@ -137,7 +137,7 @@ func (client *ConsumerGroupsClient) Delete(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ConsumerGroupsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ConsumerGroupsClientDeleteResponse{RawResponse: resp}, nil
+	return ConsumerGroupsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -232,7 +232,7 @@ func (client *ConsumerGroupsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *ConsumerGroupsClient) getHandleResponse(resp *http.Response) (ConsumerGroupsClientGetResponse, error) {
-	result := ConsumerGroupsClientGetResponse{RawResponse: resp}
+	result := ConsumerGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConsumerGroup); err != nil {
 		return ConsumerGroupsClientGetResponse{}, err
 	}
@@ -297,7 +297,7 @@ func (client *ConsumerGroupsClient) listByEventHubCreateRequest(ctx context.Cont
 
 // listByEventHubHandleResponse handles the ListByEventHub response.
 func (client *ConsumerGroupsClient) listByEventHubHandleResponse(resp *http.Response) (ConsumerGroupsClientListByEventHubResponse, error) {
-	result := ConsumerGroupsClientListByEventHubResponse{RawResponse: resp}
+	result := ConsumerGroupsClientListByEventHubResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConsumerGroupListResult); err != nil {
 		return ConsumerGroupsClientListByEventHubResponse{}, err
 	}

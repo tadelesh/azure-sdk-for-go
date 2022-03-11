@@ -35,17 +35,17 @@ type LoadBalancerOutboundRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLoadBalancerOutboundRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LoadBalancerOutboundRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LoadBalancerOutboundRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *LoadBalancerOutboundRulesClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *LoadBalancerOutboundRulesClient) getHandleResponse(resp *http.Response) (LoadBalancerOutboundRulesClientGetResponse, error) {
-	result := LoadBalancerOutboundRulesClientGetResponse{RawResponse: resp}
+	result := LoadBalancerOutboundRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OutboundRule); err != nil {
 		return LoadBalancerOutboundRulesClientGetResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *LoadBalancerOutboundRulesClient) listCreateRequest(ctx context.Con
 
 // listHandleResponse handles the List response.
 func (client *LoadBalancerOutboundRulesClient) listHandleResponse(resp *http.Response) (LoadBalancerOutboundRulesClientListResponse, error) {
-	result := LoadBalancerOutboundRulesClientListResponse{RawResponse: resp}
+	result := LoadBalancerOutboundRulesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LoadBalancerOutboundRuleListResult); err != nil {
 		return LoadBalancerOutboundRulesClientListResponse{}, err
 	}

@@ -64,9 +64,7 @@ func (client *SharedPrivateLinkResourcesClient) BeginCreateOrUpdate(ctx context.
 	if err != nil {
 		return SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SharedPrivateLinkResourcesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{}, err
@@ -137,9 +135,7 @@ func (client *SharedPrivateLinkResourcesClient) BeginDelete(ctx context.Context,
 	if err != nil {
 		return SharedPrivateLinkResourcesClientDeletePollerResponse{}, err
 	}
-	result := SharedPrivateLinkResourcesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SharedPrivateLinkResourcesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SharedPrivateLinkResourcesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return SharedPrivateLinkResourcesClientDeletePollerResponse{}, err
@@ -252,7 +248,7 @@ func (client *SharedPrivateLinkResourcesClient) getCreateRequest(ctx context.Con
 
 // getHandleResponse handles the Get response.
 func (client *SharedPrivateLinkResourcesClient) getHandleResponse(resp *http.Response) (SharedPrivateLinkResourcesClientGetResponse, error) {
-	result := SharedPrivateLinkResourcesClientGetResponse{RawResponse: resp}
+	result := SharedPrivateLinkResourcesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedPrivateLinkResource); err != nil {
 		return SharedPrivateLinkResourcesClientGetResponse{}, err
 	}
@@ -306,7 +302,7 @@ func (client *SharedPrivateLinkResourcesClient) listCreateRequest(ctx context.Co
 
 // listHandleResponse handles the List response.
 func (client *SharedPrivateLinkResourcesClient) listHandleResponse(resp *http.Response) (SharedPrivateLinkResourcesClientListResponse, error) {
-	result := SharedPrivateLinkResourcesClientListResponse{RawResponse: resp}
+	result := SharedPrivateLinkResourcesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedPrivateLinkResourceList); err != nil {
 		return SharedPrivateLinkResourcesClientListResponse{}, err
 	}

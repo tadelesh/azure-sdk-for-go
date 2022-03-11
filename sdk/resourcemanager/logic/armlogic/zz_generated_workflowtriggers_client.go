@@ -35,17 +35,17 @@ type WorkflowTriggersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkflowTriggersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkflowTriggersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkflowTriggersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *WorkflowTriggersClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *WorkflowTriggersClient) getHandleResponse(resp *http.Response) (WorkflowTriggersClientGetResponse, error) {
-	result := WorkflowTriggersClientGetResponse{RawResponse: resp}
+	result := WorkflowTriggersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowTrigger); err != nil {
 		return WorkflowTriggersClientGetResponse{}, err
 	}
@@ -164,7 +164,7 @@ func (client *WorkflowTriggersClient) getSchemaJSONCreateRequest(ctx context.Con
 
 // getSchemaJSONHandleResponse handles the GetSchemaJSON response.
 func (client *WorkflowTriggersClient) getSchemaJSONHandleResponse(resp *http.Response) (WorkflowTriggersClientGetSchemaJSONResponse, error) {
-	result := WorkflowTriggersClientGetSchemaJSONResponse{RawResponse: resp}
+	result := WorkflowTriggersClientGetSchemaJSONResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JSONSchema); err != nil {
 		return WorkflowTriggersClientGetSchemaJSONResponse{}, err
 	}
@@ -222,7 +222,7 @@ func (client *WorkflowTriggersClient) listCreateRequest(ctx context.Context, res
 
 // listHandleResponse handles the List response.
 func (client *WorkflowTriggersClient) listHandleResponse(resp *http.Response) (WorkflowTriggersClientListResponse, error) {
-	result := WorkflowTriggersClientListResponse{RawResponse: resp}
+	result := WorkflowTriggersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowTriggerListResult); err != nil {
 		return WorkflowTriggersClientListResponse{}, err
 	}
@@ -283,7 +283,7 @@ func (client *WorkflowTriggersClient) listCallbackURLCreateRequest(ctx context.C
 
 // listCallbackURLHandleResponse handles the ListCallbackURL response.
 func (client *WorkflowTriggersClient) listCallbackURLHandleResponse(resp *http.Response) (WorkflowTriggersClientListCallbackURLResponse, error) {
-	result := WorkflowTriggersClientListCallbackURLResponse{RawResponse: resp}
+	result := WorkflowTriggersClientListCallbackURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowTriggerCallbackURL); err != nil {
 		return WorkflowTriggersClientListCallbackURLResponse{}, err
 	}
@@ -308,7 +308,7 @@ func (client *WorkflowTriggersClient) Reset(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WorkflowTriggersClientResetResponse{}, runtime.NewResponseError(resp)
 	}
-	return WorkflowTriggersClientResetResponse{RawResponse: resp}, nil
+	return WorkflowTriggersClientResetResponse{}, nil
 }
 
 // resetCreateRequest creates the Reset request.
@@ -359,7 +359,7 @@ func (client *WorkflowTriggersClient) Run(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return WorkflowTriggersClientRunResponse{}, runtime.NewResponseError(resp)
 	}
-	return WorkflowTriggersClientRunResponse{RawResponse: resp}, nil
+	return WorkflowTriggersClientRunResponse{}, nil
 }
 
 // runCreateRequest creates the Run request.
@@ -412,7 +412,7 @@ func (client *WorkflowTriggersClient) SetState(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WorkflowTriggersClientSetStateResponse{}, runtime.NewResponseError(resp)
 	}
-	return WorkflowTriggersClientSetStateResponse{RawResponse: resp}, nil
+	return WorkflowTriggersClientSetStateResponse{}, nil
 }
 
 // setStateCreateRequest creates the SetState request.

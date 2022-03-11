@@ -1,5 +1,117 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ContainerGroupsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ContainerGroupsClientListByResourceGroupResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*LocationClientListCachedImagesPager.NextPage` return value(s) have been changed from `(bool)` to `(LocationClientListCachedImagesResponse, error)`
+- Function `*ContainerGroupsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ContainerGroupsClientListResponse, error)`
+- Function `*LocationClientListCapabilitiesPager.NextPage` return value(s) have been changed from `(bool)` to `(LocationClientListCapabilitiesResponse, error)`
+- Function `*LocationClient.ListUsage` parameter(s) have been changed from `(context.Context, string, *LocationClientListUsageOptions)` to `(string, *LocationClientListUsageOptions)`
+- Function `*LocationClient.ListUsage` return value(s) have been changed from `(LocationClientListUsageResponse, error)` to `(*LocationClientListUsagePager)`
+- Function `*LocationClientListCapabilitiesPager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*LocationClientListCachedImagesPager.Err` has been removed
+- Function `*ContainerGroupsClientListByResourceGroupPager.Err` has been removed
+- Function `*ContainerGroupsClientListPager.Err` has been removed
+- Function `*LocationClientListCachedImagesPager.PageResponse` has been removed
+- Function `*LocationClientListCapabilitiesPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*ContainerGroupsClientListPager.PageResponse` has been removed
+- Function `*ContainerGroupsClientListByResourceGroupPager.PageResponse` has been removed
+- Struct `ContainerGroupsClientCreateOrUpdateResult` has been removed
+- Struct `ContainerGroupsClientDeleteResult` has been removed
+- Struct `ContainerGroupsClientGetOutboundNetworkDependenciesEndpointsResult` has been removed
+- Struct `ContainerGroupsClientGetResult` has been removed
+- Struct `ContainerGroupsClientListByResourceGroupResult` has been removed
+- Struct `ContainerGroupsClientListResult` has been removed
+- Struct `ContainerGroupsClientUpdateResult` has been removed
+- Struct `ContainersClientAttachResult` has been removed
+- Struct `ContainersClientExecuteCommandResult` has been removed
+- Struct `ContainersClientListLogsResult` has been removed
+- Struct `LocationClientListCachedImagesResult` has been removed
+- Struct `LocationClientListCapabilitiesResult` has been removed
+- Struct `LocationClientListUsageResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `RawResponse` of struct `ContainerGroupsClientRestartResponse` has been removed
+- Field `ContainerGroupsClientDeleteResult` of struct `ContainerGroupsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ContainerGroupsClientDeleteResponse` has been removed
+- Field `ContainersClientAttachResult` of struct `ContainersClientAttachResponse` has been removed
+- Field `RawResponse` of struct `ContainersClientAttachResponse` has been removed
+- Field `ContainerGroupsClientListResult` of struct `ContainerGroupsClientListResponse` has been removed
+- Field `RawResponse` of struct `ContainerGroupsClientListResponse` has been removed
+- Field `RawResponse` of struct `ContainerGroupsClientRestartPollerResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `LocationClientListUsageResult` of struct `LocationClientListUsageResponse` has been removed
+- Field `RawResponse` of struct `LocationClientListUsageResponse` has been removed
+- Field `ContainerGroupsClientGetOutboundNetworkDependenciesEndpointsResult` of struct `ContainerGroupsClientGetOutboundNetworkDependenciesEndpointsResponse` has been removed
+- Field `RawResponse` of struct `ContainerGroupsClientGetOutboundNetworkDependenciesEndpointsResponse` has been removed
+- Field `RawResponse` of struct `ContainerGroupsClientStartResponse` has been removed
+- Field `ContainerGroupsClientCreateOrUpdateResult` of struct `ContainerGroupsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ContainerGroupsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ContainerGroupsClientCreateOrUpdatePollerResponse` has been removed
+- Field `ContainersClientListLogsResult` of struct `ContainersClientListLogsResponse` has been removed
+- Field `RawResponse` of struct `ContainersClientListLogsResponse` has been removed
+- Field `RawResponse` of struct `ContainerGroupsClientStartPollerResponse` has been removed
+- Field `ContainerGroupsClientListByResourceGroupResult` of struct `ContainerGroupsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ContainerGroupsClientListByResourceGroupResponse` has been removed
+- Field `ContainersClientExecuteCommandResult` of struct `ContainersClientExecuteCommandResponse` has been removed
+- Field `RawResponse` of struct `ContainersClientExecuteCommandResponse` has been removed
+- Field `RawResponse` of struct `ContainerGroupsClientStopResponse` has been removed
+- Field `ContainerGroupsClientGetResult` of struct `ContainerGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ContainerGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ContainerGroupsClientDeletePollerResponse` has been removed
+- Field `LocationClientListCachedImagesResult` of struct `LocationClientListCachedImagesResponse` has been removed
+- Field `RawResponse` of struct `LocationClientListCachedImagesResponse` has been removed
+- Field `LocationClientListCapabilitiesResult` of struct `LocationClientListCapabilitiesResponse` has been removed
+- Field `RawResponse` of struct `LocationClientListCapabilitiesResponse` has been removed
+- Field `ContainerGroupsClientUpdateResult` of struct `ContainerGroupsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ContainerGroupsClientUpdateResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New function `*ContainerGroupsClientListByResourceGroupPager.More() bool`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*LocationClientListUsagePager.More() bool`
+- New function `*LocationClientListCapabilitiesPager.More() bool`
+- New function `*ContainerGroupsClientListPager.More() bool`
+- New function `*LocationClientListCachedImagesPager.More() bool`
+- New function `*LocationClientListUsagePager.NextPage(context.Context) (LocationClientListUsageResponse, error)`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New struct `LocationClientListUsagePager`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `ContainerGroupListResult` in struct `ContainerGroupsClientListResponse`
+- New anonymous field `ContainerExecResponse` in struct `ContainersClientExecuteCommandResponse`
+- New anonymous field `CapabilitiesListResult` in struct `LocationClientListCapabilitiesResponse`
+- New anonymous field `UsageListResult` in struct `LocationClientListUsageResponse`
+- New anonymous field `Logs` in struct `ContainersClientListLogsResponse`
+- New anonymous field `ContainerGroup` in struct `ContainerGroupsClientDeleteResponse`
+- New anonymous field `ContainerGroupListResult` in struct `ContainerGroupsClientListByResourceGroupResponse`
+- New anonymous field `ContainerGroup` in struct `ContainerGroupsClientCreateOrUpdateResponse`
+- New anonymous field `ContainerGroup` in struct `ContainerGroupsClientGetResponse`
+- New anonymous field `ContainerGroup` in struct `ContainerGroupsClientUpdateResponse`
+- New anonymous field `CachedImagesListResult` in struct `LocationClientListCachedImagesResponse`
+- New anonymous field `ContainerAttachResponse` in struct `ContainersClientAttachResponse`
+- New field `StringArray` in struct `ContainerGroupsClientGetOutboundNetworkDependenciesEndpointsResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `Operation.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `Volume.EmptyDir` has been changed from `map[string]interface{}` to `interface{}`
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

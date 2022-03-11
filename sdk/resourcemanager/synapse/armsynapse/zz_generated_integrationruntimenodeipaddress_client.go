@@ -34,17 +34,17 @@ type IntegrationRuntimeNodeIPAddressClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIntegrationRuntimeNodeIPAddressClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IntegrationRuntimeNodeIPAddressClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IntegrationRuntimeNodeIPAddressClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *IntegrationRuntimeNodeIPAddressClient) getCreateRequest(ctx contex
 
 // getHandleResponse handles the Get response.
 func (client *IntegrationRuntimeNodeIPAddressClient) getHandleResponse(resp *http.Response) (IntegrationRuntimeNodeIPAddressClientGetResponse, error) {
-	result := IntegrationRuntimeNodeIPAddressClientGetResponse{RawResponse: resp}
+	result := IntegrationRuntimeNodeIPAddressClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationRuntimeNodeIPAddress); err != nil {
 		return IntegrationRuntimeNodeIPAddressClientGetResponse{}, err
 	}

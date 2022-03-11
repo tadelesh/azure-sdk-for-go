@@ -1,5 +1,225 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*AgentPoolsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(AgentPoolsClientListResponse, error)`
+- Function `*ManagedClustersClientListOutboundNetworkDependenciesEndpointsPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagedClustersClientListOutboundNetworkDependenciesEndpointsResponse, error)`
+- Function `*ManagedClustersClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagedClustersClientListByResourceGroupResponse, error)`
+- Function `*OperationsClient.List` parameter(s) have been changed from `(context.Context, *OperationsClientListOptions)` to `(*OperationsClientListOptions)`
+- Function `*OperationsClient.List` return value(s) have been changed from `(OperationsClientListResponse, error)` to `(*OperationsClientListPager)`
+- Function `*SnapshotsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SnapshotsClientListResponse, error)`
+- Function `*ManagedClustersClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagedClustersClientListResponse, error)`
+- Function `*SnapshotsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(SnapshotsClientListByResourceGroupResponse, error)`
+- Function `*MaintenanceConfigurationsClientListByManagedClusterPager.NextPage` return value(s) have been changed from `(bool)` to `(MaintenanceConfigurationsClientListByManagedClusterResponse, error)`
+- Function `*AgentPoolsClientListPager.Err` has been removed
+- Function `*SnapshotsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*MaintenanceConfigurationsClientListByManagedClusterPager.PageResponse` has been removed
+- Function `*AgentPoolsClientListPager.PageResponse` has been removed
+- Function `*ManagedClustersClientListPager.PageResponse` has been removed
+- Function `*ManagedClustersClientListPager.Err` has been removed
+- Function `*SnapshotsClientListByResourceGroupPager.Err` has been removed
+- Function `*MaintenanceConfigurationsClientListByManagedClusterPager.Err` has been removed
+- Function `*SnapshotsClientListPager.Err` has been removed
+- Function `*SnapshotsClientListPager.PageResponse` has been removed
+- Function `*ManagedClustersClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ManagedClustersClientListOutboundNetworkDependenciesEndpointsPager.Err` has been removed
+- Function `*ManagedClustersClientListOutboundNetworkDependenciesEndpointsPager.PageResponse` has been removed
+- Function `*ManagedClustersClientListByResourceGroupPager.Err` has been removed
+- Struct `AgentPoolsClientCreateOrUpdateResult` has been removed
+- Struct `AgentPoolsClientGetAvailableAgentPoolVersionsResult` has been removed
+- Struct `AgentPoolsClientGetResult` has been removed
+- Struct `AgentPoolsClientGetUpgradeProfileResult` has been removed
+- Struct `AgentPoolsClientListResult` has been removed
+- Struct `AgentPoolsClientUpgradeNodeImageVersionResult` has been removed
+- Struct `MaintenanceConfigurationsClientCreateOrUpdateResult` has been removed
+- Struct `MaintenanceConfigurationsClientGetResult` has been removed
+- Struct `MaintenanceConfigurationsClientListByManagedClusterResult` has been removed
+- Struct `ManagedClustersClientCreateOrUpdateResult` has been removed
+- Struct `ManagedClustersClientGetAccessProfileResult` has been removed
+- Struct `ManagedClustersClientGetCommandResultResult` has been removed
+- Struct `ManagedClustersClientGetOSOptionsResult` has been removed
+- Struct `ManagedClustersClientGetResult` has been removed
+- Struct `ManagedClustersClientGetUpgradeProfileResult` has been removed
+- Struct `ManagedClustersClientListByResourceGroupResult` has been removed
+- Struct `ManagedClustersClientListClusterAdminCredentialsResult` has been removed
+- Struct `ManagedClustersClientListClusterMonitoringUserCredentialsResult` has been removed
+- Struct `ManagedClustersClientListClusterUserCredentialsResult` has been removed
+- Struct `ManagedClustersClientListOutboundNetworkDependenciesEndpointsResult` has been removed
+- Struct `ManagedClustersClientListResult` has been removed
+- Struct `ManagedClustersClientRunCommandResult` has been removed
+- Struct `ManagedClustersClientUpdateTagsResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientUpdateResult` has been removed
+- Struct `PrivateLinkResourcesClientListResult` has been removed
+- Struct `ResolvePrivateLinkServiceIDClientPOSTResult` has been removed
+- Struct `SnapshotsClientCreateOrUpdateResult` has been removed
+- Struct `SnapshotsClientGetResult` has been removed
+- Struct `SnapshotsClientListByResourceGroupResult` has been removed
+- Struct `SnapshotsClientListResult` has been removed
+- Struct `SnapshotsClientUpdateTagsResult` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientRunCommandPollerResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientUpgradeNodeImageVersionPollerResponse` has been removed
+- Field `ManagedClustersClientListOutboundNetworkDependenciesEndpointsResult` of struct `ManagedClustersClientListOutboundNetworkDependenciesEndpointsResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientListOutboundNetworkDependenciesEndpointsResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientRotateClusterCertificatesPollerResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientStartResponse` has been removed
+- Field `AgentPoolsClientUpgradeNodeImageVersionResult` of struct `AgentPoolsClientUpgradeNodeImageVersionResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientUpgradeNodeImageVersionResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientStopResponse` has been removed
+- Field `ManagedClustersClientCreateOrUpdateResult` of struct `ManagedClustersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientCreateOrUpdateResponse` has been removed
+- Field `AgentPoolsClientListResult` of struct `AgentPoolsClientListResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientListResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientDeleteResponse` has been removed
+- Field `SnapshotsClientListResult` of struct `SnapshotsClientListResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientListResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientStartPollerResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientStopPollerResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientResetServicePrincipalProfilePollerResponse` has been removed
+- Field `MaintenanceConfigurationsClientCreateOrUpdateResult` of struct `MaintenanceConfigurationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `MaintenanceConfigurationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientCreateOrUpdatePollerResponse` has been removed
+- Field `ManagedClustersClientListClusterMonitoringUserCredentialsResult` of struct `ManagedClustersClientListClusterMonitoringUserCredentialsResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientListClusterMonitoringUserCredentialsResponse` has been removed
+- Field `SnapshotsClientListByResourceGroupResult` of struct `SnapshotsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientListByResourceGroupResponse` has been removed
+- Field `ManagedClustersClientGetOSOptionsResult` of struct `ManagedClustersClientGetOSOptionsResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientGetOSOptionsResponse` has been removed
+- Field `SnapshotsClientCreateOrUpdateResult` of struct `SnapshotsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientCreateOrUpdateResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListResult` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientDeleteResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `AgentPoolsClientGetAvailableAgentPoolVersionsResult` of struct `AgentPoolsClientGetAvailableAgentPoolVersionsResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientGetAvailableAgentPoolVersionsResponse` has been removed
+- Field `ManagedClustersClientGetResult` of struct `ManagedClustersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientGetResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientRotateClusterCertificatesResponse` has been removed
+- Field `MaintenanceConfigurationsClientGetResult` of struct `MaintenanceConfigurationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `MaintenanceConfigurationsClientGetResponse` has been removed
+- Field `ResolvePrivateLinkServiceIDClientPOSTResult` of struct `ResolvePrivateLinkServiceIDClientPOSTResponse` has been removed
+- Field `RawResponse` of struct `ResolvePrivateLinkServiceIDClientPOSTResponse` has been removed
+- Field `AgentPoolsClientGetUpgradeProfileResult` of struct `AgentPoolsClientGetUpgradeProfileResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientGetUpgradeProfileResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientResetAADProfileResponse` has been removed
+- Field `ManagedClustersClientGetCommandResultResult` of struct `ManagedClustersClientGetCommandResultResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientGetCommandResultResponse` has been removed
+- Field `AgentPoolsClientGetResult` of struct `AgentPoolsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeletePollerResponse` has been removed
+- Field `PrivateEndpointConnectionsClientUpdateResult` of struct `PrivateEndpointConnectionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientUpdateResponse` has been removed
+- Field `ManagedClustersClientGetAccessProfileResult` of struct `ManagedClustersClientGetAccessProfileResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientGetAccessProfileResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientResetAADProfilePollerResponse` has been removed
+- Field `ManagedClustersClientGetUpgradeProfileResult` of struct `ManagedClustersClientGetUpgradeProfileResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientGetUpgradeProfileResponse` has been removed
+- Field `MaintenanceConfigurationsClientListByManagedClusterResult` of struct `MaintenanceConfigurationsClientListByManagedClusterResponse` has been removed
+- Field `RawResponse` of struct `MaintenanceConfigurationsClientListByManagedClusterResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientUpdateTagsPollerResponse` has been removed
+- Field `ManagedClustersClientRunCommandResult` of struct `ManagedClustersClientRunCommandResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientRunCommandResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientDeleteResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `SnapshotsClientUpdateTagsResult` of struct `SnapshotsClientUpdateTagsResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientUpdateTagsResponse` has been removed
+- Field `SnapshotsClientGetResult` of struct `SnapshotsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientResetServicePrincipalProfileResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientDeletePollerResponse` has been removed
+- Field `ManagedClustersClientUpdateTagsResult` of struct `ManagedClustersClientUpdateTagsResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientUpdateTagsResponse` has been removed
+- Field `RawResponse` of struct `MaintenanceConfigurationsClientDeleteResponse` has been removed
+- Field `ManagedClustersClientListResult` of struct `ManagedClustersClientListResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientListResponse` has been removed
+- Field `ManagedClustersClientListClusterUserCredentialsResult` of struct `ManagedClustersClientListClusterUserCredentialsResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientListClusterUserCredentialsResponse` has been removed
+- Field `PrivateLinkResourcesClientListResult` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `ManagedClustersClientListByResourceGroupResult` of struct `ManagedClustersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientCreateOrUpdatePollerResponse` has been removed
+- Field `AgentPoolsClientCreateOrUpdateResult` of struct `AgentPoolsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AgentPoolsClientCreateOrUpdateResponse` has been removed
+- Field `ManagedClustersClientListClusterAdminCredentialsResult` of struct `ManagedClustersClientListClusterAdminCredentialsResponse` has been removed
+- Field `RawResponse` of struct `ManagedClustersClientListClusterAdminCredentialsResponse` has been removed
+
+### Features Added
+
+- New function `*SnapshotsClientListByResourceGroupPager.More() bool`
+- New function `*ManagedClustersClientListPager.More() bool`
+- New function `*ManagedClustersClientListOutboundNetworkDependenciesEndpointsPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*AgentPoolsClientListPager.More() bool`
+- New function `*ManagedClustersClientListByResourceGroupPager.More() bool`
+- New function `*SnapshotsClientListPager.More() bool`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*MaintenanceConfigurationsClientListByManagedClusterPager.More() bool`
+- New function `*OperationsClientListPager.NextPage(context.Context) (OperationsClientListResponse, error)`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New struct `DiagnosticsProfile`
+- New struct `MasterProfile`
+- New struct `OperationsClientListPager`
+- New struct `VMDiagnostics`
+- New anonymous field `AgentPool` in struct `AgentPoolsClientCreateOrUpdateResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListResponse`
+- New anonymous field `PrivateLinkResource` in struct `ResolvePrivateLinkServiceIDClientPOSTResponse`
+- New anonymous field `Snapshot` in struct `SnapshotsClientCreateOrUpdateResponse`
+- New anonymous field `MaintenanceConfigurationListResult` in struct `MaintenanceConfigurationsClientListByManagedClusterResponse`
+- New anonymous field `AgentPoolListResult` in struct `AgentPoolsClientListResponse`
+- New anonymous field `RunCommandResult` in struct `ManagedClustersClientGetCommandResultResponse`
+- New anonymous field `ManagedClusterListResult` in struct `ManagedClustersClientListResponse`
+- New anonymous field `MaintenanceConfiguration` in struct `MaintenanceConfigurationsClientGetResponse`
+- New anonymous field `CredentialResults` in struct `ManagedClustersClientListClusterMonitoringUserCredentialsResponse`
+- New anonymous field `ManagedCluster` in struct `ManagedClustersClientGetResponse`
+- New anonymous field `ManagedCluster` in struct `ManagedClustersClientUpdateTagsResponse`
+- New anonymous field `AgentPoolAvailableVersions` in struct `AgentPoolsClientGetAvailableAgentPoolVersionsResponse`
+- New anonymous field `ManagedClusterListResult` in struct `ManagedClustersClientListByResourceGroupResponse`
+- New anonymous field `ManagedClusterAccessProfile` in struct `ManagedClustersClientGetAccessProfileResponse`
+- New anonymous field `PrivateLinkResourcesListResult` in struct `PrivateLinkResourcesClientListResponse`
+- New anonymous field `SnapshotListResult` in struct `SnapshotsClientListByResourceGroupResponse`
+- New anonymous field `MaintenanceConfiguration` in struct `MaintenanceConfigurationsClientCreateOrUpdateResponse`
+- New anonymous field `OSOptionProfile` in struct `ManagedClustersClientGetOSOptionsResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientUpdateResponse`
+- New anonymous field `CredentialResults` in struct `ManagedClustersClientListClusterAdminCredentialsResponse`
+- New anonymous field `Snapshot` in struct `SnapshotsClientUpdateTagsResponse`
+- New anonymous field `CredentialResults` in struct `ManagedClustersClientListClusterUserCredentialsResponse`
+- New anonymous field `OutboundEnvironmentEndpointCollection` in struct `ManagedClustersClientListOutboundNetworkDependenciesEndpointsResponse`
+- New anonymous field `Snapshot` in struct `SnapshotsClientGetResponse`
+- New anonymous field `ManagedCluster` in struct `ManagedClustersClientCreateOrUpdateResponse`
+- New anonymous field `AgentPool` in struct `AgentPoolsClientGetResponse`
+- New anonymous field `AgentPoolUpgradeProfile` in struct `AgentPoolsClientGetUpgradeProfileResponse`
+- New anonymous field `AgentPool` in struct `AgentPoolsClientUpgradeNodeImageVersionResponse`
+- New anonymous field `RunCommandResult` in struct `ManagedClustersClientRunCommandResponse`
+- New anonymous field `SnapshotListResult` in struct `SnapshotsClientListResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `ManagedClusterUpgradeProfile` in struct `ManagedClustersClientGetUpgradeProfileResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+- Struct `DiagnosticsProfile` has been removed
+- Struct `MasterProfile` has been removed
+- Struct `VMDiagnostics` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

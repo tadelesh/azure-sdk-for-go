@@ -36,18 +36,18 @@ type BitLockerKeysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBitLockerKeysClient(subscriptionID string, acceptLanguage *string, credential azcore.TokenCredential, options *arm.ClientOptions) *BitLockerKeysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BitLockerKeysClient{
 		subscriptionID: subscriptionID,
 		acceptLanguage: acceptLanguage,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -57,19 +57,13 @@ func NewBitLockerKeysClient(subscriptionID string, acceptLanguage *string, crede
 // jobName - The name of the import/export job.
 // resourceGroupName - The resource group name uniquely identifies the resource group within the user subscription.
 // options - BitLockerKeysClientListOptions contains the optional parameters for the BitLockerKeysClient.List method.
-func (client *BitLockerKeysClient) List(ctx context.Context, jobName string, resourceGroupName string, options *BitLockerKeysClientListOptions) (BitLockerKeysClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, jobName, resourceGroupName, options)
-	if err != nil {
-		return BitLockerKeysClientListResponse{}, err
+func (client *BitLockerKeysClient) List(jobName string, resourceGroupName string, options *BitLockerKeysClientListOptions) *BitLockerKeysClientListPager {
+	return &BitLockerKeysClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, jobName, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return BitLockerKeysClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return BitLockerKeysClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -103,7 +97,7 @@ func (client *BitLockerKeysClient) listCreateRequest(ctx context.Context, jobNam
 
 // listHandleResponse handles the List response.
 func (client *BitLockerKeysClient) listHandleResponse(resp *http.Response) (BitLockerKeysClientListResponse, error) {
-	result := BitLockerKeysClientListResponse{RawResponse: resp}
+	result := BitLockerKeysClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GetBitLockerKeysResponse); err != nil {
 		return BitLockerKeysClientListResponse{}, err
 	}

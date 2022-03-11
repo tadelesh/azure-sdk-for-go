@@ -34,17 +34,17 @@ type OSUpdatesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewOSUpdatesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *OSUpdatesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &OSUpdatesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -107,7 +107,7 @@ func (client *OSUpdatesClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *OSUpdatesClient) getHandleResponse(resp *http.Response) (OSUpdatesClientGetResponse, error) {
-	result := OSUpdatesClientGetResponse{RawResponse: resp}
+	result := OSUpdatesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OSUpdateResource); err != nil {
 		return OSUpdatesClientGetResponse{}, err
 	}
@@ -166,7 +166,7 @@ func (client *OSUpdatesClient) listCreateRequest(ctx context.Context, resourceGr
 
 // listHandleResponse handles the List response.
 func (client *OSUpdatesClient) listHandleResponse(resp *http.Response) (OSUpdatesClientListResponse, error) {
-	result := OSUpdatesClientListResponse{RawResponse: resp}
+	result := OSUpdatesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OSUpdateListResult); err != nil {
 		return OSUpdatesClientListResponse{}, err
 	}

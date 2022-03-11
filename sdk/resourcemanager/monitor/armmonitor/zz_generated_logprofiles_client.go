@@ -34,17 +34,17 @@ type LogProfilesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLogProfilesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LogProfilesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LogProfilesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -94,7 +94,7 @@ func (client *LogProfilesClient) createOrUpdateCreateRequest(ctx context.Context
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *LogProfilesClient) createOrUpdateHandleResponse(resp *http.Response) (LogProfilesClientCreateOrUpdateResponse, error) {
-	result := LogProfilesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := LogProfilesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LogProfileResource); err != nil {
 		return LogProfilesClientCreateOrUpdateResponse{}, err
 	}
@@ -117,7 +117,7 @@ func (client *LogProfilesClient) Delete(ctx context.Context, logProfileName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return LogProfilesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return LogProfilesClientDeleteResponse{RawResponse: resp}, nil
+	return LogProfilesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -184,7 +184,7 @@ func (client *LogProfilesClient) getCreateRequest(ctx context.Context, logProfil
 
 // getHandleResponse handles the Get response.
 func (client *LogProfilesClient) getHandleResponse(resp *http.Response) (LogProfilesClientGetResponse, error) {
-	result := LogProfilesClientGetResponse{RawResponse: resp}
+	result := LogProfilesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LogProfileResource); err != nil {
 		return LogProfilesClientGetResponse{}, err
 	}
@@ -194,19 +194,13 @@ func (client *LogProfilesClient) getHandleResponse(resp *http.Response) (LogProf
 // List - List the log profiles.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - LogProfilesClientListOptions contains the optional parameters for the LogProfilesClient.List method.
-func (client *LogProfilesClient) List(ctx context.Context, options *LogProfilesClientListOptions) (LogProfilesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, options)
-	if err != nil {
-		return LogProfilesClientListResponse{}, err
+func (client *LogProfilesClient) List(options *LogProfilesClientListOptions) *LogProfilesClientListPager {
+	return &LogProfilesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return LogProfilesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return LogProfilesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -229,7 +223,7 @@ func (client *LogProfilesClient) listCreateRequest(ctx context.Context, options 
 
 // listHandleResponse handles the List response.
 func (client *LogProfilesClient) listHandleResponse(resp *http.Response) (LogProfilesClientListResponse, error) {
-	result := LogProfilesClientListResponse{RawResponse: resp}
+	result := LogProfilesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LogProfileCollection); err != nil {
 		return LogProfilesClientListResponse{}, err
 	}
@@ -280,7 +274,7 @@ func (client *LogProfilesClient) updateCreateRequest(ctx context.Context, logPro
 
 // updateHandleResponse handles the Update response.
 func (client *LogProfilesClient) updateHandleResponse(resp *http.Response) (LogProfilesClientUpdateResponse, error) {
-	result := LogProfilesClientUpdateResponse{RawResponse: resp}
+	result := LogProfilesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LogProfileResource); err != nil {
 		return LogProfilesClientUpdateResponse{}, err
 	}

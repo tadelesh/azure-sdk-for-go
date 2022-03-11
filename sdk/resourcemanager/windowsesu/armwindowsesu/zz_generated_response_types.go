@@ -11,7 +11,6 @@ package armwindowsesu
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
@@ -19,9 +18,6 @@ import (
 type MultipleActivationKeysClientCreatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *MultipleActivationKeysClientCreatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -29,11 +25,10 @@ type MultipleActivationKeysClientCreatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l MultipleActivationKeysClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (MultipleActivationKeysClientCreateResponse, error) {
 	respType := MultipleActivationKeysClientCreateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.MultipleActivationKey)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.MultipleActivationKey)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -46,89 +41,45 @@ func (l *MultipleActivationKeysClientCreatePollerResponse) Resume(ctx context.Co
 	poller := &MultipleActivationKeysClientCreatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // MultipleActivationKeysClientCreateResponse contains the response from method MultipleActivationKeysClient.Create.
 type MultipleActivationKeysClientCreateResponse struct {
-	MultipleActivationKeysClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MultipleActivationKeysClientCreateResult contains the result from method MultipleActivationKeysClient.Create.
-type MultipleActivationKeysClientCreateResult struct {
 	MultipleActivationKey
 }
 
 // MultipleActivationKeysClientDeleteResponse contains the response from method MultipleActivationKeysClient.Delete.
 type MultipleActivationKeysClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // MultipleActivationKeysClientGetResponse contains the response from method MultipleActivationKeysClient.Get.
 type MultipleActivationKeysClientGetResponse struct {
-	MultipleActivationKeysClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MultipleActivationKeysClientGetResult contains the result from method MultipleActivationKeysClient.Get.
-type MultipleActivationKeysClientGetResult struct {
 	MultipleActivationKey
 }
 
 // MultipleActivationKeysClientListByResourceGroupResponse contains the response from method MultipleActivationKeysClient.ListByResourceGroup.
 type MultipleActivationKeysClientListByResourceGroupResponse struct {
-	MultipleActivationKeysClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MultipleActivationKeysClientListByResourceGroupResult contains the result from method MultipleActivationKeysClient.ListByResourceGroup.
-type MultipleActivationKeysClientListByResourceGroupResult struct {
 	MultipleActivationKeyList
 }
 
 // MultipleActivationKeysClientListResponse contains the response from method MultipleActivationKeysClient.List.
 type MultipleActivationKeysClientListResponse struct {
-	MultipleActivationKeysClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MultipleActivationKeysClientListResult contains the result from method MultipleActivationKeysClient.List.
-type MultipleActivationKeysClientListResult struct {
 	MultipleActivationKeyList
 }
 
 // MultipleActivationKeysClientUpdateResponse contains the response from method MultipleActivationKeysClient.Update.
 type MultipleActivationKeysClientUpdateResponse struct {
-	MultipleActivationKeysClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MultipleActivationKeysClientUpdateResult contains the result from method MultipleActivationKeysClient.Update.
-type MultipleActivationKeysClientUpdateResult struct {
 	MultipleActivationKey
 }
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	OperationList
 }

@@ -35,17 +35,17 @@ type VirtualHubBgpConnectionClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualHubBgpConnectionClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualHubBgpConnectionClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualHubBgpConnectionClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *VirtualHubBgpConnectionClient) BeginCreateOrUpdate(ctx context.Con
 	if err != nil {
 		return VirtualHubBgpConnectionClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VirtualHubBgpConnectionClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualHubBgpConnectionClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualHubBgpConnectionClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VirtualHubBgpConnectionClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *VirtualHubBgpConnectionClient) BeginDelete(ctx context.Context, re
 	if err != nil {
 		return VirtualHubBgpConnectionClientDeletePollerResponse{}, err
 	}
-	result := VirtualHubBgpConnectionClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualHubBgpConnectionClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualHubBgpConnectionClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return VirtualHubBgpConnectionClientDeletePollerResponse{}, err
@@ -249,7 +245,7 @@ func (client *VirtualHubBgpConnectionClient) getCreateRequest(ctx context.Contex
 
 // getHandleResponse handles the Get response.
 func (client *VirtualHubBgpConnectionClient) getHandleResponse(resp *http.Response) (VirtualHubBgpConnectionClientGetResponse, error) {
-	result := VirtualHubBgpConnectionClientGetResponse{RawResponse: resp}
+	result := VirtualHubBgpConnectionClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BgpConnection); err != nil {
 		return VirtualHubBgpConnectionClientGetResponse{}, err
 	}

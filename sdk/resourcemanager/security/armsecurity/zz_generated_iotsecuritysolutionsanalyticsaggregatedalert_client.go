@@ -69,7 +69,7 @@ func (client *IotSecuritySolutionsAnalyticsAggregatedAlertClient) Dismiss(ctx co
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return IotSecuritySolutionsAnalyticsAggregatedAlertClientDismissResponse{}, runtime.NewResponseError(resp)
 	}
-	return IotSecuritySolutionsAnalyticsAggregatedAlertClientDismissResponse{RawResponse: resp}, nil
+	return IotSecuritySolutionsAnalyticsAggregatedAlertClientDismissResponse{}, nil
 }
 
 // dismissCreateRequest creates the Dismiss request.
@@ -157,7 +157,7 @@ func (client *IotSecuritySolutionsAnalyticsAggregatedAlertClient) getCreateReque
 
 // getHandleResponse handles the Get response.
 func (client *IotSecuritySolutionsAnalyticsAggregatedAlertClient) getHandleResponse(resp *http.Response) (IotSecuritySolutionsAnalyticsAggregatedAlertClientGetResponse, error) {
-	result := IotSecuritySolutionsAnalyticsAggregatedAlertClientGetResponse{RawResponse: resp}
+	result := IotSecuritySolutionsAnalyticsAggregatedAlertClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IoTSecurityAggregatedAlert); err != nil {
 		return IotSecuritySolutionsAnalyticsAggregatedAlertClientGetResponse{}, err
 	}
@@ -213,7 +213,7 @@ func (client *IotSecuritySolutionsAnalyticsAggregatedAlertClient) listCreateRequ
 
 // listHandleResponse handles the List response.
 func (client *IotSecuritySolutionsAnalyticsAggregatedAlertClient) listHandleResponse(resp *http.Response) (IotSecuritySolutionsAnalyticsAggregatedAlertClientListResponse, error) {
-	result := IotSecuritySolutionsAnalyticsAggregatedAlertClientListResponse{RawResponse: resp}
+	result := IotSecuritySolutionsAnalyticsAggregatedAlertClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IoTSecurityAggregatedAlertList); err != nil {
 		return IotSecuritySolutionsAnalyticsAggregatedAlertClientListResponse{}, err
 	}

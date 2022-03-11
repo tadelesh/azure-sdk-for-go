@@ -35,17 +35,17 @@ type SensitivityLabelsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSensitivityLabelsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SensitivityLabelsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SensitivityLabelsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -122,7 +122,7 @@ func (client *SensitivityLabelsClient) createOrUpdateCreateRequest(ctx context.C
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *SensitivityLabelsClient) createOrUpdateHandleResponse(resp *http.Response) (SensitivityLabelsClientCreateOrUpdateResponse, error) {
-	result := SensitivityLabelsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := SensitivityLabelsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SensitivityLabel); err != nil {
 		return SensitivityLabelsClientCreateOrUpdateResponse{}, err
 	}
@@ -152,7 +152,7 @@ func (client *SensitivityLabelsClient) Delete(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return SensitivityLabelsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SensitivityLabelsClientDeleteResponse{RawResponse: resp}, nil
+	return SensitivityLabelsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -220,7 +220,7 @@ func (client *SensitivityLabelsClient) DisableRecommendation(ctx context.Context
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return SensitivityLabelsClientDisableRecommendationResponse{}, runtime.NewResponseError(resp)
 	}
-	return SensitivityLabelsClientDisableRecommendationResponse{RawResponse: resp}, nil
+	return SensitivityLabelsClientDisableRecommendationResponse{}, nil
 }
 
 // disableRecommendationCreateRequest creates the DisableRecommendation request.
@@ -289,7 +289,7 @@ func (client *SensitivityLabelsClient) EnableRecommendation(ctx context.Context,
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return SensitivityLabelsClientEnableRecommendationResponse{}, runtime.NewResponseError(resp)
 	}
-	return SensitivityLabelsClientEnableRecommendationResponse{RawResponse: resp}, nil
+	return SensitivityLabelsClientEnableRecommendationResponse{}, nil
 }
 
 // enableRecommendationCreateRequest creates the EnableRecommendation request.
@@ -408,7 +408,7 @@ func (client *SensitivityLabelsClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *SensitivityLabelsClient) getHandleResponse(resp *http.Response) (SensitivityLabelsClientGetResponse, error) {
-	result := SensitivityLabelsClientGetResponse{RawResponse: resp}
+	result := SensitivityLabelsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SensitivityLabel); err != nil {
 		return SensitivityLabelsClientGetResponse{}, err
 	}
@@ -476,7 +476,7 @@ func (client *SensitivityLabelsClient) listCurrentByDatabaseCreateRequest(ctx co
 
 // listCurrentByDatabaseHandleResponse handles the ListCurrentByDatabase response.
 func (client *SensitivityLabelsClient) listCurrentByDatabaseHandleResponse(resp *http.Response) (SensitivityLabelsClientListCurrentByDatabaseResponse, error) {
-	result := SensitivityLabelsClientListCurrentByDatabaseResponse{RawResponse: resp}
+	result := SensitivityLabelsClientListCurrentByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SensitivityLabelListResult); err != nil {
 		return SensitivityLabelsClientListCurrentByDatabaseResponse{}, err
 	}
@@ -544,7 +544,7 @@ func (client *SensitivityLabelsClient) listRecommendedByDatabaseCreateRequest(ct
 
 // listRecommendedByDatabaseHandleResponse handles the ListRecommendedByDatabase response.
 func (client *SensitivityLabelsClient) listRecommendedByDatabaseHandleResponse(resp *http.Response) (SensitivityLabelsClientListRecommendedByDatabaseResponse, error) {
-	result := SensitivityLabelsClientListRecommendedByDatabaseResponse{RawResponse: resp}
+	result := SensitivityLabelsClientListRecommendedByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SensitivityLabelListResult); err != nil {
 		return SensitivityLabelsClientListRecommendedByDatabaseResponse{}, err
 	}
@@ -571,7 +571,7 @@ func (client *SensitivityLabelsClient) Update(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return SensitivityLabelsClientUpdateResponse{}, runtime.NewResponseError(resp)
 	}
-	return SensitivityLabelsClientUpdateResponse{RawResponse: resp}, nil
+	return SensitivityLabelsClientUpdateResponse{}, nil
 }
 
 // updateCreateRequest creates the Update request.

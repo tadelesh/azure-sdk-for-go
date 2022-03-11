@@ -43,11 +43,10 @@ func (p *AttestationsClientCreateOrUpdateAtResourceGroupPoller) Poll(ctx context
 // If the final GET succeeded then the final AttestationsClientCreateOrUpdateAtResourceGroupResponse will be returned.
 func (p *AttestationsClientCreateOrUpdateAtResourceGroupPoller) FinalResponse(ctx context.Context) (AttestationsClientCreateOrUpdateAtResourceGroupResponse, error) {
 	respType := AttestationsClientCreateOrUpdateAtResourceGroupResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Attestation)
+	_, err := p.pt.FinalResponse(ctx, &respType.Attestation)
 	if err != nil {
 		return AttestationsClientCreateOrUpdateAtResourceGroupResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *AttestationsClientCreateOrUpdateAtResourcePoller) Poll(ctx context.Cont
 // If the final GET succeeded then the final AttestationsClientCreateOrUpdateAtResourceResponse will be returned.
 func (p *AttestationsClientCreateOrUpdateAtResourcePoller) FinalResponse(ctx context.Context) (AttestationsClientCreateOrUpdateAtResourceResponse, error) {
 	respType := AttestationsClientCreateOrUpdateAtResourceResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Attestation)
+	_, err := p.pt.FinalResponse(ctx, &respType.Attestation)
 	if err != nil {
 		return AttestationsClientCreateOrUpdateAtResourceResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *AttestationsClientCreateOrUpdateAtSubscriptionPoller) Poll(ctx context.
 // If the final GET succeeded then the final AttestationsClientCreateOrUpdateAtSubscriptionResponse will be returned.
 func (p *AttestationsClientCreateOrUpdateAtSubscriptionPoller) FinalResponse(ctx context.Context) (AttestationsClientCreateOrUpdateAtSubscriptionResponse, error) {
 	respType := AttestationsClientCreateOrUpdateAtSubscriptionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Attestation)
+	_, err := p.pt.FinalResponse(ctx, &respType.Attestation)
 	if err != nil {
 		return AttestationsClientCreateOrUpdateAtSubscriptionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *PolicyStatesClientTriggerResourceGroupEvaluationPoller) Poll(ctx contex
 // If the final GET succeeded then the final PolicyStatesClientTriggerResourceGroupEvaluationResponse will be returned.
 func (p *PolicyStatesClientTriggerResourceGroupEvaluationPoller) FinalResponse(ctx context.Context) (PolicyStatesClientTriggerResourceGroupEvaluationResponse, error) {
 	respType := PolicyStatesClientTriggerResourceGroupEvaluationResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PolicyStatesClientTriggerResourceGroupEvaluationResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *PolicyStatesClientTriggerSubscriptionEvaluationPoller) Poll(ctx context
 // If the final GET succeeded then the final PolicyStatesClientTriggerSubscriptionEvaluationResponse will be returned.
 func (p *PolicyStatesClientTriggerSubscriptionEvaluationPoller) FinalResponse(ctx context.Context) (PolicyStatesClientTriggerSubscriptionEvaluationResponse, error) {
 	respType := PolicyStatesClientTriggerSubscriptionEvaluationResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PolicyStatesClientTriggerSubscriptionEvaluationResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

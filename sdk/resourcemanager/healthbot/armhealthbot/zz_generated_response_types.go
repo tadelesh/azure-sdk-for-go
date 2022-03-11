@@ -11,7 +11,6 @@ package armhealthbot
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
@@ -19,9 +18,6 @@ import (
 type BotsClientCreatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *BotsClientCreatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -29,11 +25,10 @@ type BotsClientCreatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l BotsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (BotsClientCreateResponse, error) {
 	respType := BotsClientCreateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.HealthBot)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.HealthBot)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -46,24 +41,16 @@ func (l *BotsClientCreatePollerResponse) Resume(ctx context.Context, client *Bot
 	poller := &BotsClientCreatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // BotsClientCreateResponse contains the response from method BotsClient.Create.
 type BotsClientCreateResponse struct {
-	BotsClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// BotsClientCreateResult contains the result from method BotsClient.Create.
-type BotsClientCreateResult struct {
 	HealthBot
 }
 
@@ -71,9 +58,6 @@ type BotsClientCreateResult struct {
 type BotsClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *BotsClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -81,11 +65,10 @@ type BotsClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l BotsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (BotsClientDeleteResponse, error) {
 	respType := BotsClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -98,77 +81,40 @@ func (l *BotsClientDeletePollerResponse) Resume(ctx context.Context, client *Bot
 	poller := &BotsClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // BotsClientDeleteResponse contains the response from method BotsClient.Delete.
 type BotsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // BotsClientGetResponse contains the response from method BotsClient.Get.
 type BotsClientGetResponse struct {
-	BotsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// BotsClientGetResult contains the result from method BotsClient.Get.
-type BotsClientGetResult struct {
 	HealthBot
 }
 
 // BotsClientListByResourceGroupResponse contains the response from method BotsClient.ListByResourceGroup.
 type BotsClientListByResourceGroupResponse struct {
-	BotsClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// BotsClientListByResourceGroupResult contains the result from method BotsClient.ListByResourceGroup.
-type BotsClientListByResourceGroupResult struct {
 	BotResponseList
 }
 
 // BotsClientListResponse contains the response from method BotsClient.List.
 type BotsClientListResponse struct {
-	BotsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// BotsClientListResult contains the result from method BotsClient.List.
-type BotsClientListResult struct {
 	BotResponseList
 }
 
 // BotsClientUpdateResponse contains the response from method BotsClient.Update.
 type BotsClientUpdateResponse struct {
-	BotsClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// BotsClientUpdateResult contains the result from method BotsClient.Update.
-type BotsClientUpdateResult struct {
 	HealthBot
 }
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	AvailableOperations
 }

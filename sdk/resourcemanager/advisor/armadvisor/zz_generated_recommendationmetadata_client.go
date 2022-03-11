@@ -32,16 +32,16 @@ type RecommendationMetadataClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRecommendationMetadataClient(credential azcore.TokenCredential, options *arm.ClientOptions) *RecommendationMetadataClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RecommendationMetadataClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -86,7 +86,7 @@ func (client *RecommendationMetadataClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *RecommendationMetadataClient) getHandleResponse(resp *http.Response) (RecommendationMetadataClientGetResponse, error) {
-	result := RecommendationMetadataClientGetResponse{RawResponse: resp}
+	result := RecommendationMetadataClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetadataEntity); err != nil {
 		return RecommendationMetadataClientGetResponse{}, err
 	}
@@ -125,7 +125,7 @@ func (client *RecommendationMetadataClient) listCreateRequest(ctx context.Contex
 
 // listHandleResponse handles the List response.
 func (client *RecommendationMetadataClient) listHandleResponse(resp *http.Response) (RecommendationMetadataClientListResponse, error) {
-	result := RecommendationMetadataClientListResponse{RawResponse: resp}
+	result := RecommendationMetadataClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetadataEntityListResult); err != nil {
 		return RecommendationMetadataClientListResponse{}, err
 	}

@@ -35,17 +35,17 @@ type PoolsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPoolsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PoolsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PoolsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *PoolsClient) BeginCreateOrUpdate(ctx context.Context, resourceGrou
 	if err != nil {
 		return PoolsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PoolsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PoolsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PoolsClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return PoolsClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *PoolsClient) BeginDelete(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return PoolsClientDeletePollerResponse{}, err
 	}
-	result := PoolsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PoolsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PoolsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return PoolsClientDeletePollerResponse{}, err
@@ -246,7 +242,7 @@ func (client *PoolsClient) getCreateRequest(ctx context.Context, resourceGroupNa
 
 // getHandleResponse handles the Get response.
 func (client *PoolsClient) getHandleResponse(resp *http.Response) (PoolsClientGetResponse, error) {
-	result := PoolsClientGetResponse{RawResponse: resp}
+	result := PoolsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CapacityPool); err != nil {
 		return PoolsClientGetResponse{}, err
 	}
@@ -298,7 +294,7 @@ func (client *PoolsClient) listCreateRequest(ctx context.Context, resourceGroupN
 
 // listHandleResponse handles the List response.
 func (client *PoolsClient) listHandleResponse(resp *http.Response) (PoolsClientListResponse, error) {
-	result := PoolsClientListResponse{RawResponse: resp}
+	result := PoolsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CapacityPoolList); err != nil {
 		return PoolsClientListResponse{}, err
 	}
@@ -317,9 +313,7 @@ func (client *PoolsClient) BeginUpdate(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return PoolsClientUpdatePollerResponse{}, err
 	}
-	result := PoolsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PoolsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PoolsClient.Update", "location", resp, client.pl)
 	if err != nil {
 		return PoolsClientUpdatePollerResponse{}, err

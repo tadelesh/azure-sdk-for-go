@@ -35,17 +35,17 @@ type PoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *PoliciesClient) createOrUpdateCreateRequest(ctx context.Context, r
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *PoliciesClient) createOrUpdateHandleResponse(resp *http.Response) (PoliciesClientCreateOrUpdateResponse, error) {
-	result := PoliciesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := PoliciesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Policy); err != nil {
 		return PoliciesClientCreateOrUpdateResponse{}, err
 	}
@@ -135,7 +135,7 @@ func (client *PoliciesClient) Delete(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return PoliciesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return PoliciesClientDeleteResponse{RawResponse: resp}, nil
+	return PoliciesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -233,7 +233,7 @@ func (client *PoliciesClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *PoliciesClient) getHandleResponse(resp *http.Response) (PoliciesClientGetResponse, error) {
-	result := PoliciesClientGetResponse{RawResponse: resp}
+	result := PoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Policy); err != nil {
 		return PoliciesClientGetResponse{}, err
 	}
@@ -302,7 +302,7 @@ func (client *PoliciesClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *PoliciesClient) listHandleResponse(resp *http.Response) (PoliciesClientListResponse, error) {
-	result := PoliciesClientListResponse{RawResponse: resp}
+	result := PoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyList); err != nil {
 		return PoliciesClientListResponse{}, err
 	}
@@ -368,7 +368,7 @@ func (client *PoliciesClient) updateCreateRequest(ctx context.Context, resourceG
 
 // updateHandleResponse handles the Update response.
 func (client *PoliciesClient) updateHandleResponse(resp *http.Response) (PoliciesClientUpdateResponse, error) {
-	result := PoliciesClientUpdateResponse{RawResponse: resp}
+	result := PoliciesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Policy); err != nil {
 		return PoliciesClientUpdateResponse{}, err
 	}

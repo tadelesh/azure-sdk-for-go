@@ -34,17 +34,17 @@ type CustomResourceProviderClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCustomResourceProviderClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CustomResourceProviderClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CustomResourceProviderClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *CustomResourceProviderClient) BeginCreateOrUpdate(ctx context.Cont
 	if err != nil {
 		return CustomResourceProviderClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := CustomResourceProviderClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CustomResourceProviderClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("CustomResourceProviderClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return CustomResourceProviderClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *CustomResourceProviderClient) BeginDelete(ctx context.Context, res
 	if err != nil {
 		return CustomResourceProviderClientDeletePollerResponse{}, err
 	}
-	result := CustomResourceProviderClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CustomResourceProviderClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CustomResourceProviderClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return CustomResourceProviderClientDeletePollerResponse{}, err
@@ -233,7 +229,7 @@ func (client *CustomResourceProviderClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *CustomResourceProviderClient) getHandleResponse(resp *http.Response) (CustomResourceProviderClientGetResponse, error) {
-	result := CustomResourceProviderClientGetResponse{RawResponse: resp}
+	result := CustomResourceProviderClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomRPManifest); err != nil {
 		return CustomResourceProviderClientGetResponse{}, err
 	}
@@ -281,7 +277,7 @@ func (client *CustomResourceProviderClient) listByResourceGroupCreateRequest(ctx
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *CustomResourceProviderClient) listByResourceGroupHandleResponse(resp *http.Response) (CustomResourceProviderClientListByResourceGroupResponse, error) {
-	result := CustomResourceProviderClientListByResourceGroupResponse{RawResponse: resp}
+	result := CustomResourceProviderClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListByCustomRPManifest); err != nil {
 		return CustomResourceProviderClientListByResourceGroupResponse{}, err
 	}
@@ -324,7 +320,7 @@ func (client *CustomResourceProviderClient) listBySubscriptionCreateRequest(ctx 
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *CustomResourceProviderClient) listBySubscriptionHandleResponse(resp *http.Response) (CustomResourceProviderClientListBySubscriptionResponse, error) {
-	result := CustomResourceProviderClientListBySubscriptionResponse{RawResponse: resp}
+	result := CustomResourceProviderClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListByCustomRPManifest); err != nil {
 		return CustomResourceProviderClientListBySubscriptionResponse{}, err
 	}
@@ -381,7 +377,7 @@ func (client *CustomResourceProviderClient) updateCreateRequest(ctx context.Cont
 
 // updateHandleResponse handles the Update response.
 func (client *CustomResourceProviderClient) updateHandleResponse(resp *http.Response) (CustomResourceProviderClientUpdateResponse, error) {
-	result := CustomResourceProviderClientUpdateResponse{RawResponse: resp}
+	result := CustomResourceProviderClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomRPManifest); err != nil {
 		return CustomResourceProviderClientUpdateResponse{}, err
 	}

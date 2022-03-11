@@ -10,7 +10,7 @@ package armappconfiguration
 
 const (
 	moduleName    = "armappconfiguration"
-	moduleVersion = "v0.2.0"
+	moduleVersion = "v0.3.0"
 )
 
 // ActionsRequired - Any action that is required beyond basic workflow (approve/ reject/ disconnect)
@@ -75,6 +75,27 @@ func PossibleConnectionStatusValues() []ConnectionStatus {
 
 // ToPtr returns a *ConnectionStatus pointing to the current value.
 func (c ConnectionStatus) ToPtr() *ConnectionStatus {
+	return &c
+}
+
+// CreateMode - Indicates whether the configuration store need to be recovered.
+type CreateMode string
+
+const (
+	CreateModeRecover CreateMode = "Recover"
+	CreateModeDefault CreateMode = "Default"
+)
+
+// PossibleCreateModeValues returns the possible values for the CreateMode const type.
+func PossibleCreateModeValues() []CreateMode {
+	return []CreateMode{
+		CreateModeRecover,
+		CreateModeDefault,
+	}
+}
+
+// ToPtr returns a *CreateMode pointing to the current value.
+func (c CreateMode) ToPtr() *CreateMode {
 	return &c
 }
 

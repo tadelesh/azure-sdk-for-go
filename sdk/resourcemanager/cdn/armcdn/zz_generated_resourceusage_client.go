@@ -84,7 +84,7 @@ func (client *ResourceUsageClient) listCreateRequest(ctx context.Context, option
 
 // listHandleResponse handles the List response.
 func (client *ResourceUsageClient) listHandleResponse(resp *http.Response) (ResourceUsageClientListResponse, error) {
-	result := ResourceUsageClientListResponse{RawResponse: resp}
+	result := ResourceUsageClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceUsageListResult); err != nil {
 		return ResourceUsageClientListResponse{}, err
 	}

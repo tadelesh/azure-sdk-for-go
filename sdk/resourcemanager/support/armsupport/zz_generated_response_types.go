@@ -11,19 +11,11 @@ package armsupport
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // CommunicationsClientCheckNameAvailabilityResponse contains the response from method CommunicationsClient.CheckNameAvailability.
 type CommunicationsClientCheckNameAvailabilityResponse struct {
-	CommunicationsClientCheckNameAvailabilityResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CommunicationsClientCheckNameAvailabilityResult contains the result from method CommunicationsClient.CheckNameAvailability.
-type CommunicationsClientCheckNameAvailabilityResult struct {
 	CheckNameAvailabilityOutput
 }
 
@@ -31,9 +23,6 @@ type CommunicationsClientCheckNameAvailabilityResult struct {
 type CommunicationsClientCreatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *CommunicationsClientCreatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -41,11 +30,10 @@ type CommunicationsClientCreatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l CommunicationsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CommunicationsClientCreateResponse, error) {
 	respType := CommunicationsClientCreateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.CommunicationDetails)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.CommunicationDetails)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -58,120 +46,56 @@ func (l *CommunicationsClientCreatePollerResponse) Resume(ctx context.Context, c
 	poller := &CommunicationsClientCreatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // CommunicationsClientCreateResponse contains the response from method CommunicationsClient.Create.
 type CommunicationsClientCreateResponse struct {
-	CommunicationsClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CommunicationsClientCreateResult contains the result from method CommunicationsClient.Create.
-type CommunicationsClientCreateResult struct {
 	CommunicationDetails
 }
 
 // CommunicationsClientGetResponse contains the response from method CommunicationsClient.Get.
 type CommunicationsClientGetResponse struct {
-	CommunicationsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CommunicationsClientGetResult contains the result from method CommunicationsClient.Get.
-type CommunicationsClientGetResult struct {
 	CommunicationDetails
 }
 
 // CommunicationsClientListResponse contains the response from method CommunicationsClient.List.
 type CommunicationsClientListResponse struct {
-	CommunicationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CommunicationsClientListResult contains the result from method CommunicationsClient.List.
-type CommunicationsClientListResult struct {
 	CommunicationsListResult
 }
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	OperationsListResult
 }
 
 // ProblemClassificationsClientGetResponse contains the response from method ProblemClassificationsClient.Get.
 type ProblemClassificationsClientGetResponse struct {
-	ProblemClassificationsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ProblemClassificationsClientGetResult contains the result from method ProblemClassificationsClient.Get.
-type ProblemClassificationsClientGetResult struct {
 	ProblemClassification
 }
 
 // ProblemClassificationsClientListResponse contains the response from method ProblemClassificationsClient.List.
 type ProblemClassificationsClientListResponse struct {
-	ProblemClassificationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ProblemClassificationsClientListResult contains the result from method ProblemClassificationsClient.List.
-type ProblemClassificationsClientListResult struct {
 	ProblemClassificationsListResult
 }
 
 // ServicesClientGetResponse contains the response from method ServicesClient.Get.
 type ServicesClientGetResponse struct {
-	ServicesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ServicesClientGetResult contains the result from method ServicesClient.Get.
-type ServicesClientGetResult struct {
 	Service
 }
 
 // ServicesClientListResponse contains the response from method ServicesClient.List.
 type ServicesClientListResponse struct {
-	ServicesClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ServicesClientListResult contains the result from method ServicesClient.List.
-type ServicesClientListResult struct {
 	ServicesListResult
 }
 
 // TicketsClientCheckNameAvailabilityResponse contains the response from method TicketsClient.CheckNameAvailability.
 type TicketsClientCheckNameAvailabilityResponse struct {
-	TicketsClientCheckNameAvailabilityResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// TicketsClientCheckNameAvailabilityResult contains the result from method TicketsClient.CheckNameAvailability.
-type TicketsClientCheckNameAvailabilityResult struct {
 	CheckNameAvailabilityOutput
 }
 
@@ -179,9 +103,6 @@ type TicketsClientCheckNameAvailabilityResult struct {
 type TicketsClientCreatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *TicketsClientCreatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -189,11 +110,10 @@ type TicketsClientCreatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l TicketsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (TicketsClientCreateResponse, error) {
 	respType := TicketsClientCreateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.TicketDetails)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.TicketDetails)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -206,59 +126,30 @@ func (l *TicketsClientCreatePollerResponse) Resume(ctx context.Context, client *
 	poller := &TicketsClientCreatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // TicketsClientCreateResponse contains the response from method TicketsClient.Create.
 type TicketsClientCreateResponse struct {
-	TicketsClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// TicketsClientCreateResult contains the result from method TicketsClient.Create.
-type TicketsClientCreateResult struct {
 	TicketDetails
 }
 
 // TicketsClientGetResponse contains the response from method TicketsClient.Get.
 type TicketsClientGetResponse struct {
-	TicketsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// TicketsClientGetResult contains the result from method TicketsClient.Get.
-type TicketsClientGetResult struct {
 	TicketDetails
 }
 
 // TicketsClientListResponse contains the response from method TicketsClient.List.
 type TicketsClientListResponse struct {
-	TicketsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// TicketsClientListResult contains the result from method TicketsClient.List.
-type TicketsClientListResult struct {
 	TicketsListResult
 }
 
 // TicketsClientUpdateResponse contains the response from method TicketsClient.Update.
 type TicketsClientUpdateResponse struct {
-	TicketsClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// TicketsClientUpdateResult contains the result from method TicketsClient.Update.
-type TicketsClientUpdateResult struct {
 	TicketDetails
 }

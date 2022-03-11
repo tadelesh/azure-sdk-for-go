@@ -35,17 +35,17 @@ type PipelineRunsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPipelineRunsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PipelineRunsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PipelineRunsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -68,7 +68,7 @@ func (client *PipelineRunsClient) Cancel(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return PipelineRunsClientCancelResponse{}, runtime.NewResponseError(resp)
 	}
-	return PipelineRunsClientCancelResponse{RawResponse: resp}, nil
+	return PipelineRunsClientCancelResponse{}, nil
 }
 
 // cancelCreateRequest creates the Cancel request.
@@ -157,7 +157,7 @@ func (client *PipelineRunsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *PipelineRunsClient) getHandleResponse(resp *http.Response) (PipelineRunsClientGetResponse, error) {
-	result := PipelineRunsClientGetResponse{RawResponse: resp}
+	result := PipelineRunsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PipelineRun); err != nil {
 		return PipelineRunsClientGetResponse{}, err
 	}
@@ -214,7 +214,7 @@ func (client *PipelineRunsClient) queryByFactoryCreateRequest(ctx context.Contex
 
 // queryByFactoryHandleResponse handles the QueryByFactory response.
 func (client *PipelineRunsClient) queryByFactoryHandleResponse(resp *http.Response) (PipelineRunsClientQueryByFactoryResponse, error) {
-	result := PipelineRunsClientQueryByFactoryResponse{RawResponse: resp}
+	result := PipelineRunsClientQueryByFactoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PipelineRunsQueryResponse); err != nil {
 		return PipelineRunsClientQueryByFactoryResponse{}, err
 	}

@@ -35,17 +35,17 @@ type UsagesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewUsagesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *UsagesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &UsagesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -56,19 +56,13 @@ func NewUsagesClient(subscriptionID string, credential azcore.TokenCredential, o
 // automationAccountName - The name of the automation account.
 // options - UsagesClientListByAutomationAccountOptions contains the optional parameters for the UsagesClient.ListByAutomationAccount
 // method.
-func (client *UsagesClient) ListByAutomationAccount(ctx context.Context, resourceGroupName string, automationAccountName string, options *UsagesClientListByAutomationAccountOptions) (UsagesClientListByAutomationAccountResponse, error) {
-	req, err := client.listByAutomationAccountCreateRequest(ctx, resourceGroupName, automationAccountName, options)
-	if err != nil {
-		return UsagesClientListByAutomationAccountResponse{}, err
+func (client *UsagesClient) ListByAutomationAccount(resourceGroupName string, automationAccountName string, options *UsagesClientListByAutomationAccountOptions) *UsagesClientListByAutomationAccountPager {
+	return &UsagesClientListByAutomationAccountPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByAutomationAccountCreateRequest(ctx, resourceGroupName, automationAccountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return UsagesClientListByAutomationAccountResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return UsagesClientListByAutomationAccountResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByAutomationAccountHandleResponse(resp)
 }
 
 // listByAutomationAccountCreateRequest creates the ListByAutomationAccount request.
@@ -99,7 +93,7 @@ func (client *UsagesClient) listByAutomationAccountCreateRequest(ctx context.Con
 
 // listByAutomationAccountHandleResponse handles the ListByAutomationAccount response.
 func (client *UsagesClient) listByAutomationAccountHandleResponse(resp *http.Response) (UsagesClientListByAutomationAccountResponse, error) {
-	result := UsagesClientListByAutomationAccountResponse{RawResponse: resp}
+	result := UsagesClientListByAutomationAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UsageListResult); err != nil {
 		return UsagesClientListByAutomationAccountResponse{}, err
 	}

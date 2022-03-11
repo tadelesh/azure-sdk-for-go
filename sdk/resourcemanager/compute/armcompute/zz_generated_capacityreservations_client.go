@@ -35,17 +35,17 @@ type CapacityReservationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCapacityReservationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CapacityReservationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CapacityReservationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -65,9 +65,7 @@ func (client *CapacityReservationsClient) BeginCreateOrUpdate(ctx context.Contex
 	if err != nil {
 		return CapacityReservationsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := CapacityReservationsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CapacityReservationsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("CapacityReservationsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return CapacityReservationsClientCreateOrUpdatePollerResponse{}, err
@@ -121,7 +119,7 @@ func (client *CapacityReservationsClient) createOrUpdateCreateRequest(ctx contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -141,9 +139,7 @@ func (client *CapacityReservationsClient) BeginDelete(ctx context.Context, resou
 	if err != nil {
 		return CapacityReservationsClientDeletePollerResponse{}, err
 	}
-	result := CapacityReservationsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CapacityReservationsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CapacityReservationsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return CapacityReservationsClientDeletePollerResponse{}, err
@@ -197,7 +193,7 @@ func (client *CapacityReservationsClient) deleteCreateRequest(ctx context.Contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -252,7 +248,7 @@ func (client *CapacityReservationsClient) getCreateRequest(ctx context.Context, 
 	if options != nil && options.Expand != nil {
 		reqQP.Set("$expand", string(*options.Expand))
 	}
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -260,7 +256,7 @@ func (client *CapacityReservationsClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *CapacityReservationsClient) getHandleResponse(resp *http.Response) (CapacityReservationsClientGetResponse, error) {
-	result := CapacityReservationsClientGetResponse{RawResponse: resp}
+	result := CapacityReservationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CapacityReservation); err != nil {
 		return CapacityReservationsClientGetResponse{}, err
 	}
@@ -306,7 +302,7 @@ func (client *CapacityReservationsClient) listByCapacityReservationGroupCreateRe
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -314,7 +310,7 @@ func (client *CapacityReservationsClient) listByCapacityReservationGroupCreateRe
 
 // listByCapacityReservationGroupHandleResponse handles the ListByCapacityReservationGroup response.
 func (client *CapacityReservationsClient) listByCapacityReservationGroupHandleResponse(resp *http.Response) (CapacityReservationsClientListByCapacityReservationGroupResponse, error) {
-	result := CapacityReservationsClientListByCapacityReservationGroupResponse{RawResponse: resp}
+	result := CapacityReservationsClientListByCapacityReservationGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CapacityReservationListResult); err != nil {
 		return CapacityReservationsClientListByCapacityReservationGroupResponse{}, err
 	}
@@ -334,9 +330,7 @@ func (client *CapacityReservationsClient) BeginUpdate(ctx context.Context, resou
 	if err != nil {
 		return CapacityReservationsClientUpdatePollerResponse{}, err
 	}
-	result := CapacityReservationsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CapacityReservationsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("CapacityReservationsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return CapacityReservationsClientUpdatePollerResponse{}, err
@@ -388,7 +382,7 @@ func (client *CapacityReservationsClient) updateCreateRequest(ctx context.Contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)

@@ -35,17 +35,17 @@ type InterfacesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewInterfacesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *InterfacesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &InterfacesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *InterfacesClient) BeginCreateOrUpdate(ctx context.Context, resourc
 	if err != nil {
 		return InterfacesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := InterfacesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := InterfacesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("InterfacesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return InterfacesClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *InterfacesClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return InterfacesClientDeletePollerResponse{}, err
 	}
-	result := InterfacesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := InterfacesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("InterfacesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return InterfacesClientDeletePollerResponse{}, err
@@ -235,7 +231,7 @@ func (client *InterfacesClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *InterfacesClient) getHandleResponse(resp *http.Response) (InterfacesClientGetResponse, error) {
-	result := InterfacesClientGetResponse{RawResponse: resp}
+	result := InterfacesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Interface); err != nil {
 		return InterfacesClientGetResponse{}, err
 	}
@@ -304,7 +300,7 @@ func (client *InterfacesClient) getCloudServiceNetworkInterfaceCreateRequest(ctx
 
 // getCloudServiceNetworkInterfaceHandleResponse handles the GetCloudServiceNetworkInterface response.
 func (client *InterfacesClient) getCloudServiceNetworkInterfaceHandleResponse(resp *http.Response) (InterfacesClientGetCloudServiceNetworkInterfaceResponse, error) {
-	result := InterfacesClientGetCloudServiceNetworkInterfaceResponse{RawResponse: resp}
+	result := InterfacesClientGetCloudServiceNetworkInterfaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Interface); err != nil {
 		return InterfacesClientGetCloudServiceNetworkInterfaceResponse{}, err
 	}
@@ -322,9 +318,7 @@ func (client *InterfacesClient) BeginGetEffectiveRouteTable(ctx context.Context,
 	if err != nil {
 		return InterfacesClientGetEffectiveRouteTablePollerResponse{}, err
 	}
-	result := InterfacesClientGetEffectiveRouteTablePollerResponse{
-		RawResponse: resp,
-	}
+	result := InterfacesClientGetEffectiveRouteTablePollerResponse{}
 	pt, err := armruntime.NewPoller("InterfacesClient.GetEffectiveRouteTable", "location", resp, client.pl)
 	if err != nil {
 		return InterfacesClientGetEffectiveRouteTablePollerResponse{}, err
@@ -446,7 +440,7 @@ func (client *InterfacesClient) getVirtualMachineScaleSetIPConfigurationCreateRe
 
 // getVirtualMachineScaleSetIPConfigurationHandleResponse handles the GetVirtualMachineScaleSetIPConfiguration response.
 func (client *InterfacesClient) getVirtualMachineScaleSetIPConfigurationHandleResponse(resp *http.Response) (InterfacesClientGetVirtualMachineScaleSetIPConfigurationResponse, error) {
-	result := InterfacesClientGetVirtualMachineScaleSetIPConfigurationResponse{RawResponse: resp}
+	result := InterfacesClientGetVirtualMachineScaleSetIPConfigurationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InterfaceIPConfiguration); err != nil {
 		return InterfacesClientGetVirtualMachineScaleSetIPConfigurationResponse{}, err
 	}
@@ -515,7 +509,7 @@ func (client *InterfacesClient) getVirtualMachineScaleSetNetworkInterfaceCreateR
 
 // getVirtualMachineScaleSetNetworkInterfaceHandleResponse handles the GetVirtualMachineScaleSetNetworkInterface response.
 func (client *InterfacesClient) getVirtualMachineScaleSetNetworkInterfaceHandleResponse(resp *http.Response) (InterfacesClientGetVirtualMachineScaleSetNetworkInterfaceResponse, error) {
-	result := InterfacesClientGetVirtualMachineScaleSetNetworkInterfaceResponse{RawResponse: resp}
+	result := InterfacesClientGetVirtualMachineScaleSetNetworkInterfaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Interface); err != nil {
 		return InterfacesClientGetVirtualMachineScaleSetNetworkInterfaceResponse{}, err
 	}
@@ -562,7 +556,7 @@ func (client *InterfacesClient) listCreateRequest(ctx context.Context, resourceG
 
 // listHandleResponse handles the List response.
 func (client *InterfacesClient) listHandleResponse(resp *http.Response) (InterfacesClientListResponse, error) {
-	result := InterfacesClientListResponse{RawResponse: resp}
+	result := InterfacesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InterfaceListResult); err != nil {
 		return InterfacesClientListResponse{}, err
 	}
@@ -604,7 +598,7 @@ func (client *InterfacesClient) listAllCreateRequest(ctx context.Context, option
 
 // listAllHandleResponse handles the ListAll response.
 func (client *InterfacesClient) listAllHandleResponse(resp *http.Response) (InterfacesClientListAllResponse, error) {
-	result := InterfacesClientListAllResponse{RawResponse: resp}
+	result := InterfacesClientListAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InterfaceListResult); err != nil {
 		return InterfacesClientListAllResponse{}, err
 	}
@@ -657,7 +651,7 @@ func (client *InterfacesClient) listCloudServiceNetworkInterfacesCreateRequest(c
 
 // listCloudServiceNetworkInterfacesHandleResponse handles the ListCloudServiceNetworkInterfaces response.
 func (client *InterfacesClient) listCloudServiceNetworkInterfacesHandleResponse(resp *http.Response) (InterfacesClientListCloudServiceNetworkInterfacesResponse, error) {
-	result := InterfacesClientListCloudServiceNetworkInterfacesResponse{RawResponse: resp}
+	result := InterfacesClientListCloudServiceNetworkInterfacesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InterfaceListResult); err != nil {
 		return InterfacesClientListCloudServiceNetworkInterfacesResponse{}, err
 	}
@@ -716,7 +710,7 @@ func (client *InterfacesClient) listCloudServiceRoleInstanceNetworkInterfacesCre
 
 // listCloudServiceRoleInstanceNetworkInterfacesHandleResponse handles the ListCloudServiceRoleInstanceNetworkInterfaces response.
 func (client *InterfacesClient) listCloudServiceRoleInstanceNetworkInterfacesHandleResponse(resp *http.Response) (InterfacesClientListCloudServiceRoleInstanceNetworkInterfacesResponse, error) {
-	result := InterfacesClientListCloudServiceRoleInstanceNetworkInterfacesResponse{RawResponse: resp}
+	result := InterfacesClientListCloudServiceRoleInstanceNetworkInterfacesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InterfaceListResult); err != nil {
 		return InterfacesClientListCloudServiceRoleInstanceNetworkInterfacesResponse{}, err
 	}
@@ -734,9 +728,7 @@ func (client *InterfacesClient) BeginListEffectiveNetworkSecurityGroups(ctx cont
 	if err != nil {
 		return InterfacesClientListEffectiveNetworkSecurityGroupsPollerResponse{}, err
 	}
-	result := InterfacesClientListEffectiveNetworkSecurityGroupsPollerResponse{
-		RawResponse: resp,
-	}
+	result := InterfacesClientListEffectiveNetworkSecurityGroupsPollerResponse{}
 	pt, err := armruntime.NewPoller("InterfacesClient.ListEffectiveNetworkSecurityGroups", "location", resp, client.pl)
 	if err != nil {
 		return InterfacesClientListEffectiveNetworkSecurityGroupsPollerResponse{}, err
@@ -850,7 +842,7 @@ func (client *InterfacesClient) listVirtualMachineScaleSetIPConfigurationsCreate
 
 // listVirtualMachineScaleSetIPConfigurationsHandleResponse handles the ListVirtualMachineScaleSetIPConfigurations response.
 func (client *InterfacesClient) listVirtualMachineScaleSetIPConfigurationsHandleResponse(resp *http.Response) (InterfacesClientListVirtualMachineScaleSetIPConfigurationsResponse, error) {
-	result := InterfacesClientListVirtualMachineScaleSetIPConfigurationsResponse{RawResponse: resp}
+	result := InterfacesClientListVirtualMachineScaleSetIPConfigurationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InterfaceIPConfigurationListResult); err != nil {
 		return InterfacesClientListVirtualMachineScaleSetIPConfigurationsResponse{}, err
 	}
@@ -903,7 +895,7 @@ func (client *InterfacesClient) listVirtualMachineScaleSetNetworkInterfacesCreat
 
 // listVirtualMachineScaleSetNetworkInterfacesHandleResponse handles the ListVirtualMachineScaleSetNetworkInterfaces response.
 func (client *InterfacesClient) listVirtualMachineScaleSetNetworkInterfacesHandleResponse(resp *http.Response) (InterfacesClientListVirtualMachineScaleSetNetworkInterfacesResponse, error) {
-	result := InterfacesClientListVirtualMachineScaleSetNetworkInterfacesResponse{RawResponse: resp}
+	result := InterfacesClientListVirtualMachineScaleSetNetworkInterfacesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InterfaceListResult); err != nil {
 		return InterfacesClientListVirtualMachineScaleSetNetworkInterfacesResponse{}, err
 	}
@@ -962,7 +954,7 @@ func (client *InterfacesClient) listVirtualMachineScaleSetVMNetworkInterfacesCre
 
 // listVirtualMachineScaleSetVMNetworkInterfacesHandleResponse handles the ListVirtualMachineScaleSetVMNetworkInterfaces response.
 func (client *InterfacesClient) listVirtualMachineScaleSetVMNetworkInterfacesHandleResponse(resp *http.Response) (InterfacesClientListVirtualMachineScaleSetVMNetworkInterfacesResponse, error) {
-	result := InterfacesClientListVirtualMachineScaleSetVMNetworkInterfacesResponse{RawResponse: resp}
+	result := InterfacesClientListVirtualMachineScaleSetVMNetworkInterfacesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InterfaceListResult); err != nil {
 		return InterfacesClientListVirtualMachineScaleSetVMNetworkInterfacesResponse{}, err
 	}
@@ -1018,7 +1010,7 @@ func (client *InterfacesClient) updateTagsCreateRequest(ctx context.Context, res
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *InterfacesClient) updateTagsHandleResponse(resp *http.Response) (InterfacesClientUpdateTagsResponse, error) {
-	result := InterfacesClientUpdateTagsResponse{RawResponse: resp}
+	result := InterfacesClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Interface); err != nil {
 		return InterfacesClientUpdateTagsResponse{}, err
 	}

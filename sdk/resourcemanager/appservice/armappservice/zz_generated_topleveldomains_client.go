@@ -92,7 +92,7 @@ func (client *TopLevelDomainsClient) getCreateRequest(ctx context.Context, name 
 
 // getHandleResponse handles the Get response.
 func (client *TopLevelDomainsClient) getHandleResponse(resp *http.Response) (TopLevelDomainsClientGetResponse, error) {
-	result := TopLevelDomainsClientGetResponse{RawResponse: resp}
+	result := TopLevelDomainsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TopLevelDomain); err != nil {
 		return TopLevelDomainsClientGetResponse{}, err
 	}
@@ -134,7 +134,7 @@ func (client *TopLevelDomainsClient) listCreateRequest(ctx context.Context, opti
 
 // listHandleResponse handles the List response.
 func (client *TopLevelDomainsClient) listHandleResponse(resp *http.Response) (TopLevelDomainsClientListResponse, error) {
-	result := TopLevelDomainsClientListResponse{RawResponse: resp}
+	result := TopLevelDomainsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TopLevelDomainCollection); err != nil {
 		return TopLevelDomainsClientListResponse{}, err
 	}
@@ -183,7 +183,7 @@ func (client *TopLevelDomainsClient) listAgreementsCreateRequest(ctx context.Con
 
 // listAgreementsHandleResponse handles the ListAgreements response.
 func (client *TopLevelDomainsClient) listAgreementsHandleResponse(resp *http.Response) (TopLevelDomainsClientListAgreementsResponse, error) {
-	result := TopLevelDomainsClientListAgreementsResponse{RawResponse: resp}
+	result := TopLevelDomainsClientListAgreementsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TldLegalAgreementCollection); err != nil {
 		return TopLevelDomainsClientListAgreementsResponse{}, err
 	}

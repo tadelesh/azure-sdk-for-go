@@ -1,5 +1,246 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*LocationClientListSupportedVirtualMachineSKUsPager.NextPage` return value(s) have been changed from `(bool)` to `(LocationClientListSupportedVirtualMachineSKUsResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ApplicationPackageClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ApplicationPackageClientListResponse, error)`
+- Function `*CertificateClientListByBatchAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(CertificateClientListByBatchAccountResponse, error)`
+- Function `*AccountClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(AccountClientListByResourceGroupResponse, error)`
+- Function `*LocationClientListSupportedCloudServiceSKUsPager.NextPage` return value(s) have been changed from `(bool)` to `(LocationClientListSupportedCloudServiceSKUsResponse, error)`
+- Function `*ApplicationClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ApplicationClientListResponse, error)`
+- Function `*PrivateEndpointConnectionClientListByBatchAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateEndpointConnectionClientListByBatchAccountResponse, error)`
+- Function `*AccountClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(AccountClientListResponse, error)`
+- Function `*AccountClientListOutboundNetworkDependenciesEndpointsPager.NextPage` return value(s) have been changed from `(bool)` to `(AccountClientListOutboundNetworkDependenciesEndpointsResponse, error)`
+- Function `*PoolClientListByBatchAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(PoolClientListByBatchAccountResponse, error)`
+- Function `*PrivateLinkResourceClientListByBatchAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateLinkResourceClientListByBatchAccountResponse, error)`
+- Function `*AccountClientListOutboundNetworkDependenciesEndpointsPager.PageResponse` has been removed
+- Function `*PrivateEndpointConnectionClientListByBatchAccountPager.Err` has been removed
+- Function `*PoolClientListByBatchAccountPager.PageResponse` has been removed
+- Function `*LocationClientListSupportedVirtualMachineSKUsPager.Err` has been removed
+- Function `*ApplicationPackageClientListPager.PageResponse` has been removed
+- Function `*LocationClientListSupportedCloudServiceSKUsPager.PageResponse` has been removed
+- Function `*LocationClientListSupportedCloudServiceSKUsPager.Err` has been removed
+- Function `*ApplicationClientListPager.PageResponse` has been removed
+- Function `*LocationClientListSupportedVirtualMachineSKUsPager.PageResponse` has been removed
+- Function `*CertificateClientListByBatchAccountPager.Err` has been removed
+- Function `*PrivateLinkResourceClientListByBatchAccountPager.Err` has been removed
+- Function `*AccountClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*AccountClientListByResourceGroupPager.Err` has been removed
+- Function `*AccountClientListPager.PageResponse` has been removed
+- Function `*ApplicationPackageClientListPager.Err` has been removed
+- Function `*AccountClientListPager.Err` has been removed
+- Function `*AccountClientListOutboundNetworkDependenciesEndpointsPager.Err` has been removed
+- Function `*CertificateClientListByBatchAccountPager.PageResponse` has been removed
+- Function `*PoolClientListByBatchAccountPager.Err` has been removed
+- Function `*PrivateLinkResourceClientListByBatchAccountPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*PrivateEndpointConnectionClientListByBatchAccountPager.PageResponse` has been removed
+- Function `*ApplicationClientListPager.Err` has been removed
+- Struct `AccountClientCreateResult` has been removed
+- Struct `AccountClientGetKeysResult` has been removed
+- Struct `AccountClientGetResult` has been removed
+- Struct `AccountClientListByResourceGroupResult` has been removed
+- Struct `AccountClientListOutboundNetworkDependenciesEndpointsResult` has been removed
+- Struct `AccountClientListResult` has been removed
+- Struct `AccountClientRegenerateKeyResult` has been removed
+- Struct `AccountClientUpdateResult` has been removed
+- Struct `ApplicationClientCreateResult` has been removed
+- Struct `ApplicationClientGetResult` has been removed
+- Struct `ApplicationClientListResult` has been removed
+- Struct `ApplicationClientUpdateResult` has been removed
+- Struct `ApplicationPackageClientActivateResult` has been removed
+- Struct `ApplicationPackageClientCreateResult` has been removed
+- Struct `ApplicationPackageClientGetResult` has been removed
+- Struct `ApplicationPackageClientListResult` has been removed
+- Struct `CertificateClientCancelDeletionResult` has been removed
+- Struct `CertificateClientCreateResult` has been removed
+- Struct `CertificateClientGetResult` has been removed
+- Struct `CertificateClientListByBatchAccountResult` has been removed
+- Struct `CertificateClientUpdateResult` has been removed
+- Struct `LocationClientCheckNameAvailabilityResult` has been removed
+- Struct `LocationClientGetQuotasResult` has been removed
+- Struct `LocationClientListSupportedCloudServiceSKUsResult` has been removed
+- Struct `LocationClientListSupportedVirtualMachineSKUsResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PoolClientCreateResult` has been removed
+- Struct `PoolClientDisableAutoScaleResult` has been removed
+- Struct `PoolClientGetResult` has been removed
+- Struct `PoolClientListByBatchAccountResult` has been removed
+- Struct `PoolClientStopResizeResult` has been removed
+- Struct `PoolClientUpdateResult` has been removed
+- Struct `PrivateEndpointConnectionClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionClientListByBatchAccountResult` has been removed
+- Struct `PrivateEndpointConnectionClientUpdateResult` has been removed
+- Struct `PrivateLinkResourceClientGetResult` has been removed
+- Struct `PrivateLinkResourceClientListByBatchAccountResult` has been removed
+- Field `PoolClientCreateResult` of struct `PoolClientCreateResponse` has been removed
+- Field `RawResponse` of struct `PoolClientCreateResponse` has been removed
+- Field `RawResponse` of struct `CertificateClientDeleteResponse` has been removed
+- Field `ApplicationClientGetResult` of struct `ApplicationClientGetResponse` has been removed
+- Field `RawResponse` of struct `ApplicationClientGetResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `CertificateClientDeletePollerResponse` has been removed
+- Field `AccountClientListByResourceGroupResult` of struct `AccountClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `AccountClientListByResourceGroupResponse` has been removed
+- Field `PrivateLinkResourceClientGetResult` of struct `PrivateLinkResourceClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourceClientGetResponse` has been removed
+- Field `ApplicationClientListResult` of struct `ApplicationClientListResponse` has been removed
+- Field `RawResponse` of struct `ApplicationClientListResponse` has been removed
+- Field `CertificateClientListByBatchAccountResult` of struct `CertificateClientListByBatchAccountResponse` has been removed
+- Field `RawResponse` of struct `CertificateClientListByBatchAccountResponse` has been removed
+- Field `AccountClientGetResult` of struct `AccountClientGetResponse` has been removed
+- Field `RawResponse` of struct `AccountClientGetResponse` has been removed
+- Field `CertificateClientGetResult` of struct `CertificateClientGetResponse` has been removed
+- Field `RawResponse` of struct `CertificateClientGetResponse` has been removed
+- Field `PrivateEndpointConnectionClientUpdateResult` of struct `PrivateEndpointConnectionClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientUpdateResponse` has been removed
+- Field `LocationClientListSupportedVirtualMachineSKUsResult` of struct `LocationClientListSupportedVirtualMachineSKUsResponse` has been removed
+- Field `RawResponse` of struct `LocationClientListSupportedVirtualMachineSKUsResponse` has been removed
+- Field `AccountClientUpdateResult` of struct `AccountClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccountClientUpdateResponse` has been removed
+- Field `LocationClientGetQuotasResult` of struct `LocationClientGetQuotasResponse` has been removed
+- Field `RawResponse` of struct `LocationClientGetQuotasResponse` has been removed
+- Field `PoolClientGetResult` of struct `PoolClientGetResponse` has been removed
+- Field `RawResponse` of struct `PoolClientGetResponse` has been removed
+- Field `LocationClientListSupportedCloudServiceSKUsResult` of struct `LocationClientListSupportedCloudServiceSKUsResponse` has been removed
+- Field `RawResponse` of struct `LocationClientListSupportedCloudServiceSKUsResponse` has been removed
+- Field `CertificateClientCancelDeletionResult` of struct `CertificateClientCancelDeletionResponse` has been removed
+- Field `RawResponse` of struct `CertificateClientCancelDeletionResponse` has been removed
+- Field `AccountClientGetKeysResult` of struct `AccountClientGetKeysResponse` has been removed
+- Field `RawResponse` of struct `AccountClientGetKeysResponse` has been removed
+- Field `PrivateEndpointConnectionClientListByBatchAccountResult` of struct `PrivateEndpointConnectionClientListByBatchAccountResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientListByBatchAccountResponse` has been removed
+- Field `RawResponse` of struct `PoolClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ApplicationClientDeleteResponse` has been removed
+- Field `ApplicationPackageClientGetResult` of struct `ApplicationPackageClientGetResponse` has been removed
+- Field `RawResponse` of struct `ApplicationPackageClientGetResponse` has been removed
+- Field `LocationClientCheckNameAvailabilityResult` of struct `LocationClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `LocationClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ApplicationPackageClientDeleteResponse` has been removed
+- Field `AccountClientListResult` of struct `AccountClientListResponse` has been removed
+- Field `RawResponse` of struct `AccountClientListResponse` has been removed
+- Field `ApplicationClientCreateResult` of struct `ApplicationClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationClientCreateResponse` has been removed
+- Field `ApplicationClientUpdateResult` of struct `ApplicationClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `AccountClientCreatePollerResponse` has been removed
+- Field `PrivateLinkResourceClientListByBatchAccountResult` of struct `PrivateLinkResourceClientListByBatchAccountResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourceClientListByBatchAccountResponse` has been removed
+- Field `ApplicationPackageClientActivateResult` of struct `ApplicationPackageClientActivateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationPackageClientActivateResponse` has been removed
+- Field `PoolClientStopResizeResult` of struct `PoolClientStopResizeResponse` has been removed
+- Field `RawResponse` of struct `PoolClientStopResizeResponse` has been removed
+- Field `PoolClientUpdateResult` of struct `PoolClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PoolClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccountClientDeleteResponse` has been removed
+- Field `PrivateEndpointConnectionClientGetResult` of struct `PrivateEndpointConnectionClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientGetResponse` has been removed
+- Field `AccountClientCreateResult` of struct `AccountClientCreateResponse` has been removed
+- Field `RawResponse` of struct `AccountClientCreateResponse` has been removed
+- Field `RawResponse` of struct `PoolClientDeleteResponse` has been removed
+- Field `PoolClientListByBatchAccountResult` of struct `PoolClientListByBatchAccountResponse` has been removed
+- Field `RawResponse` of struct `PoolClientListByBatchAccountResponse` has been removed
+- Field `PoolClientDisableAutoScaleResult` of struct `PoolClientDisableAutoScaleResponse` has been removed
+- Field `RawResponse` of struct `PoolClientDisableAutoScaleResponse` has been removed
+- Field `ApplicationPackageClientCreateResult` of struct `ApplicationPackageClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationPackageClientCreateResponse` has been removed
+- Field `RawResponse` of struct `AccountClientSynchronizeAutoStorageKeysResponse` has been removed
+- Field `AccountClientListOutboundNetworkDependenciesEndpointsResult` of struct `AccountClientListOutboundNetworkDependenciesEndpointsResponse` has been removed
+- Field `RawResponse` of struct `AccountClientListOutboundNetworkDependenciesEndpointsResponse` has been removed
+- Field `CertificateClientCreateResult` of struct `CertificateClientCreateResponse` has been removed
+- Field `RawResponse` of struct `CertificateClientCreateResponse` has been removed
+- Field `ApplicationPackageClientListResult` of struct `ApplicationPackageClientListResponse` has been removed
+- Field `RawResponse` of struct `ApplicationPackageClientListResponse` has been removed
+- Field `RawResponse` of struct `AccountClientDeletePollerResponse` has been removed
+- Field `CertificateClientUpdateResult` of struct `CertificateClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `CertificateClientUpdateResponse` has been removed
+- Field `AccountClientRegenerateKeyResult` of struct `AccountClientRegenerateKeyResponse` has been removed
+- Field `RawResponse` of struct `AccountClientRegenerateKeyResponse` has been removed
+
+### Features Added
+
+- New function `*AccountClientListByResourceGroupPager.More() bool`
+- New function `*LocationClientListSupportedVirtualMachineSKUsPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*LocationClientListSupportedCloudServiceSKUsPager.More() bool`
+- New function `*PoolClientListByBatchAccountPager.More() bool`
+- New function `*AccountClientListOutboundNetworkDependenciesEndpointsPager.More() bool`
+- New function `*AccountClientListPager.More() bool`
+- New function `*ApplicationClientListPager.More() bool`
+- New function `*CertificateClientListByBatchAccountPager.More() bool`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*PrivateEndpointConnectionClientListByBatchAccountPager.More() bool`
+- New function `*ApplicationPackageClientListPager.More() bool`
+- New function `*PrivateLinkResourceClientListByBatchAccountPager.More() bool`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New anonymous field `SupportedSKUsResult` in struct `LocationClientListSupportedVirtualMachineSKUsResponse`
+- New anonymous field `Certificate` in struct `CertificateClientUpdateResponse`
+- New field `ETag` in struct `CertificateClientUpdateResponse`
+- New anonymous field `AccountListResult` in struct `AccountClientListResponse`
+- New anonymous field `AccountKeys` in struct `AccountClientRegenerateKeyResponse`
+- New anonymous field `OutboundEnvironmentEndpointCollection` in struct `AccountClientListOutboundNetworkDependenciesEndpointsResponse`
+- New anonymous field `Application` in struct `ApplicationClientUpdateResponse`
+- New anonymous field `SupportedSKUsResult` in struct `LocationClientListSupportedCloudServiceSKUsResponse`
+- New anonymous field `ListPoolsResult` in struct `PoolClientListByBatchAccountResponse`
+- New anonymous field `Certificate` in struct `CertificateClientGetResponse`
+- New field `ETag` in struct `CertificateClientGetResponse`
+- New anonymous field `ListApplicationsResult` in struct `ApplicationClientListResponse`
+- New anonymous field `Certificate` in struct `CertificateClientCancelDeletionResponse`
+- New field `ETag` in struct `CertificateClientCancelDeletionResponse`
+- New anonymous field `ListPrivateEndpointConnectionsResult` in struct `PrivateEndpointConnectionClientListByBatchAccountResponse`
+- New anonymous field `Account` in struct `AccountClientCreateResponse`
+- New anonymous field `Pool` in struct `PoolClientCreateResponse`
+- New field `ETag` in struct `PoolClientCreateResponse`
+- New anonymous field `AccountKeys` in struct `AccountClientGetKeysResponse`
+- New anonymous field `PrivateLinkResource` in struct `PrivateLinkResourceClientGetResponse`
+- New anonymous field `Account` in struct `AccountClientUpdateResponse`
+- New anonymous field `AccountListResult` in struct `AccountClientListByResourceGroupResponse`
+- New anonymous field `ApplicationPackage` in struct `ApplicationPackageClientActivateResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `CheckNameAvailabilityResult` in struct `LocationClientCheckNameAvailabilityResponse`
+- New anonymous field `ListCertificatesResult` in struct `CertificateClientListByBatchAccountResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionClientGetResponse`
+- New anonymous field `ListPrivateLinkResourcesResult` in struct `PrivateLinkResourceClientListByBatchAccountResponse`
+- New anonymous field `ApplicationPackage` in struct `ApplicationPackageClientGetResponse`
+- New anonymous field `ListApplicationPackagesResult` in struct `ApplicationPackageClientListResponse`
+- New anonymous field `Pool` in struct `PoolClientUpdateResponse`
+- New field `ETag` in struct `PoolClientUpdateResponse`
+- New anonymous field `Pool` in struct `PoolClientGetResponse`
+- New field `ETag` in struct `PoolClientGetResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionClientUpdateResponse`
+- New anonymous field `Pool` in struct `PoolClientStopResizeResponse`
+- New field `ETag` in struct `PoolClientStopResizeResponse`
+- New anonymous field `Certificate` in struct `CertificateClientCreateResponse`
+- New field `ETag` in struct `CertificateClientCreateResponse`
+- New anonymous field `Account` in struct `AccountClientGetResponse`
+- New anonymous field `Application` in struct `ApplicationClientGetResponse`
+- New anonymous field `Application` in struct `ApplicationClientCreateResponse`
+- New anonymous field `Pool` in struct `PoolClientDisableAutoScaleResponse`
+- New field `ETag` in struct `PoolClientDisableAutoScaleResponse`
+- New anonymous field `ApplicationPackage` in struct `ApplicationPackageClientCreateResponse`
+- New anonymous field `LocationQuota` in struct `LocationClientGetQuotasResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `VMExtension.Settings` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `VMExtension.ProtectedSettings` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `Operation.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

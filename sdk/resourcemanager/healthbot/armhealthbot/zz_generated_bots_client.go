@@ -34,17 +34,17 @@ type BotsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBotsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BotsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BotsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -60,9 +60,7 @@ func (client *BotsClient) BeginCreate(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return BotsClientCreatePollerResponse{}, err
 	}
-	result := BotsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := BotsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("BotsClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return BotsClientCreatePollerResponse{}, err
@@ -126,9 +124,7 @@ func (client *BotsClient) BeginDelete(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return BotsClientDeletePollerResponse{}, err
 	}
-	result := BotsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := BotsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("BotsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return BotsClientDeletePollerResponse{}, err
@@ -230,7 +226,7 @@ func (client *BotsClient) getCreateRequest(ctx context.Context, resourceGroupNam
 
 // getHandleResponse handles the Get response.
 func (client *BotsClient) getHandleResponse(resp *http.Response) (BotsClientGetResponse, error) {
-	result := BotsClientGetResponse{RawResponse: resp}
+	result := BotsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HealthBot); err != nil {
 		return BotsClientGetResponse{}, err
 	}
@@ -272,7 +268,7 @@ func (client *BotsClient) listCreateRequest(ctx context.Context, options *BotsCl
 
 // listHandleResponse handles the List response.
 func (client *BotsClient) listHandleResponse(resp *http.Response) (BotsClientListResponse, error) {
-	result := BotsClientListResponse{RawResponse: resp}
+	result := BotsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BotResponseList); err != nil {
 		return BotsClientListResponse{}, err
 	}
@@ -320,7 +316,7 @@ func (client *BotsClient) listByResourceGroupCreateRequest(ctx context.Context, 
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *BotsClient) listByResourceGroupHandleResponse(resp *http.Response) (BotsClientListByResourceGroupResponse, error) {
-	result := BotsClientListByResourceGroupResponse{RawResponse: resp}
+	result := BotsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BotResponseList); err != nil {
 		return BotsClientListByResourceGroupResponse{}, err
 	}
@@ -376,7 +372,7 @@ func (client *BotsClient) updateCreateRequest(ctx context.Context, resourceGroup
 
 // updateHandleResponse handles the Update response.
 func (client *BotsClient) updateHandleResponse(resp *http.Response) (BotsClientUpdateResponse, error) {
-	result := BotsClientUpdateResponse{RawResponse: resp}
+	result := BotsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HealthBot); err != nil {
 		return BotsClientUpdateResponse{}, err
 	}

@@ -35,17 +35,17 @@ type VirtualApplianceSKUsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualApplianceSKUsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualApplianceSKUsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualApplianceSKUsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -94,7 +94,7 @@ func (client *VirtualApplianceSKUsClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *VirtualApplianceSKUsClient) getHandleResponse(resp *http.Response) (VirtualApplianceSKUsClientGetResponse, error) {
-	result := VirtualApplianceSKUsClientGetResponse{RawResponse: resp}
+	result := VirtualApplianceSKUsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualApplianceSKU); err != nil {
 		return VirtualApplianceSKUsClientGetResponse{}, err
 	}
@@ -137,7 +137,7 @@ func (client *VirtualApplianceSKUsClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *VirtualApplianceSKUsClient) listHandleResponse(resp *http.Response) (VirtualApplianceSKUsClientListResponse, error) {
-	result := VirtualApplianceSKUsClientListResponse{RawResponse: resp}
+	result := VirtualApplianceSKUsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualApplianceSKUListResult); err != nil {
 		return VirtualApplianceSKUsClientListResponse{}, err
 	}

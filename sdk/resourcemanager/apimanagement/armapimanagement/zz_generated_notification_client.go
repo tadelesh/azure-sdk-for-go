@@ -36,17 +36,17 @@ type NotificationClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewNotificationClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *NotificationClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &NotificationClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *NotificationClient) createOrUpdateCreateRequest(ctx context.Contex
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *NotificationClient) createOrUpdateHandleResponse(resp *http.Response) (NotificationClientCreateOrUpdateResponse, error) {
-	result := NotificationClientCreateOrUpdateResponse{RawResponse: resp}
+	result := NotificationClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotificationContract); err != nil {
 		return NotificationClientCreateOrUpdateResponse{}, err
 	}
@@ -168,7 +168,7 @@ func (client *NotificationClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *NotificationClient) getHandleResponse(resp *http.Response) (NotificationClientGetResponse, error) {
-	result := NotificationClientGetResponse{RawResponse: resp}
+	result := NotificationClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotificationContract); err != nil {
 		return NotificationClientGetResponse{}, err
 	}
@@ -227,7 +227,7 @@ func (client *NotificationClient) listByServiceCreateRequest(ctx context.Context
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *NotificationClient) listByServiceHandleResponse(resp *http.Response) (NotificationClientListByServiceResponse, error) {
-	result := NotificationClientListByServiceResponse{RawResponse: resp}
+	result := NotificationClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotificationCollection); err != nil {
 		return NotificationClientListByServiceResponse{}, err
 	}

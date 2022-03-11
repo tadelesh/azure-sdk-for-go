@@ -35,17 +35,17 @@ type CertificateClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCertificateClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CertificateClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CertificateClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *CertificateClient) cancelDeletionCreateRequest(ctx context.Context
 
 // cancelDeletionHandleResponse handles the CancelDeletion response.
 func (client *CertificateClient) cancelDeletionHandleResponse(resp *http.Response) (CertificateClientCancelDeletionResponse, error) {
-	result := CertificateClientCancelDeletionResponse{RawResponse: resp}
+	result := CertificateClientCancelDeletionResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -180,7 +180,7 @@ func (client *CertificateClient) createCreateRequest(ctx context.Context, resour
 
 // createHandleResponse handles the Create response.
 func (client *CertificateClient) createHandleResponse(resp *http.Response) (CertificateClientCreateResponse, error) {
-	result := CertificateClientCreateResponse{RawResponse: resp}
+	result := CertificateClientCreateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -202,9 +202,7 @@ func (client *CertificateClient) BeginDelete(ctx context.Context, resourceGroupN
 	if err != nil {
 		return CertificateClientDeletePollerResponse{}, err
 	}
-	result := CertificateClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CertificateClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CertificateClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return CertificateClientDeletePollerResponse{}, err
@@ -316,7 +314,7 @@ func (client *CertificateClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *CertificateClient) getHandleResponse(resp *http.Response) (CertificateClientGetResponse, error) {
-	result := CertificateClientGetResponse{RawResponse: resp}
+	result := CertificateClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -381,7 +379,7 @@ func (client *CertificateClient) listByBatchAccountCreateRequest(ctx context.Con
 
 // listByBatchAccountHandleResponse handles the ListByBatchAccount response.
 func (client *CertificateClient) listByBatchAccountHandleResponse(resp *http.Response) (CertificateClientListByBatchAccountResponse, error) {
-	result := CertificateClientListByBatchAccountResponse{RawResponse: resp}
+	result := CertificateClientListByBatchAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListCertificatesResult); err != nil {
 		return CertificateClientListByBatchAccountResponse{}, err
 	}
@@ -446,7 +444,7 @@ func (client *CertificateClient) updateCreateRequest(ctx context.Context, resour
 
 // updateHandleResponse handles the Update response.
 func (client *CertificateClient) updateHandleResponse(resp *http.Response) (CertificateClientUpdateResponse, error) {
-	result := CertificateClientUpdateResponse{RawResponse: resp}
+	result := CertificateClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

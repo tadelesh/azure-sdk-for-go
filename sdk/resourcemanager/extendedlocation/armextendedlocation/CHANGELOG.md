@@ -1,5 +1,76 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*CustomLocationsClientListOperationsPager.NextPage` return value(s) have been changed from `(bool)` to `(CustomLocationsClientListOperationsResponse, error)`
+- Function `*CustomLocationsClientListEnabledResourceTypesPager.NextPage` return value(s) have been changed from `(bool)` to `(CustomLocationsClientListEnabledResourceTypesResponse, error)`
+- Function `*CustomLocationsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(CustomLocationsClientListByResourceGroupResponse, error)`
+- Function `*CustomLocationsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(CustomLocationsClientListBySubscriptionResponse, error)`
+- Function `*CustomLocationsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*CustomLocationsClientListByResourceGroupPager.Err` has been removed
+- Function `*CustomLocationsClientListOperationsPager.PageResponse` has been removed
+- Function `*CustomLocationsClientListEnabledResourceTypesPager.PageResponse` has been removed
+- Function `*CustomLocationsClientListOperationsPager.Err` has been removed
+- Function `*CustomLocationsClientListBySubscriptionPager.Err` has been removed
+- Function `*CustomLocationsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*CustomLocationsClientListEnabledResourceTypesPager.Err` has been removed
+- Struct `CustomLocationsClientCreateOrUpdateResult` has been removed
+- Struct `CustomLocationsClientGetResult` has been removed
+- Struct `CustomLocationsClientListByResourceGroupResult` has been removed
+- Struct `CustomLocationsClientListBySubscriptionResult` has been removed
+- Struct `CustomLocationsClientListEnabledResourceTypesResult` has been removed
+- Struct `CustomLocationsClientListOperationsResult` has been removed
+- Struct `CustomLocationsClientUpdateResult` has been removed
+- Field `RawResponse` of struct `CustomLocationsClientCreateOrUpdatePollerResponse` has been removed
+- Field `CustomLocationsClientUpdateResult` of struct `CustomLocationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `CustomLocationsClientUpdateResponse` has been removed
+- Field `CustomLocationsClientListByResourceGroupResult` of struct `CustomLocationsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `CustomLocationsClientListByResourceGroupResponse` has been removed
+- Field `CustomLocationsClientListBySubscriptionResult` of struct `CustomLocationsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `CustomLocationsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `CustomLocationsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `CustomLocationsClientDeletePollerResponse` has been removed
+- Field `CustomLocationsClientCreateOrUpdateResult` of struct `CustomLocationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `CustomLocationsClientCreateOrUpdateResponse` has been removed
+- Field `CustomLocationsClientListOperationsResult` of struct `CustomLocationsClientListOperationsResponse` has been removed
+- Field `RawResponse` of struct `CustomLocationsClientListOperationsResponse` has been removed
+- Field `CustomLocationsClientGetResult` of struct `CustomLocationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `CustomLocationsClientGetResponse` has been removed
+- Field `CustomLocationsClientListEnabledResourceTypesResult` of struct `CustomLocationsClientListEnabledResourceTypesResponse` has been removed
+- Field `RawResponse` of struct `CustomLocationsClientListEnabledResourceTypesResponse` has been removed
+
+### Features Added
+
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*CustomLocationsClientListOperationsPager.More() bool`
+- New function `*CustomLocationsClientListBySubscriptionPager.More() bool`
+- New function `*CustomLocationsClientListEnabledResourceTypesPager.More() bool`
+- New function `*CustomLocationsClientListByResourceGroupPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `CustomLocationOperationsList` in struct `CustomLocationsClientListOperationsResponse`
+- New anonymous field `CustomLocation` in struct `CustomLocationsClientGetResponse`
+- New anonymous field `CustomLocation` in struct `CustomLocationsClientCreateOrUpdateResponse`
+- New anonymous field `EnabledResourceTypesListResult` in struct `CustomLocationsClientListEnabledResourceTypesResponse`
+- New anonymous field `CustomLocationListResult` in struct `CustomLocationsClientListByResourceGroupResponse`
+- New anonymous field `CustomLocationListResult` in struct `CustomLocationsClientListBySubscriptionResponse`
+- New anonymous field `CustomLocation` in struct `CustomLocationsClientUpdateResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

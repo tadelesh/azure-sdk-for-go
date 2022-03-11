@@ -76,7 +76,7 @@ func (client *CertificateRegistrationProviderClient) listOperationsCreateRequest
 
 // listOperationsHandleResponse handles the ListOperations response.
 func (client *CertificateRegistrationProviderClient) listOperationsHandleResponse(resp *http.Response) (CertificateRegistrationProviderClientListOperationsResponse, error) {
-	result := CertificateRegistrationProviderClientListOperationsResponse{RawResponse: resp}
+	result := CertificateRegistrationProviderClientListOperationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CsmOperationCollection); err != nil {
 		return CertificateRegistrationProviderClientListOperationsResponse{}, err
 	}

@@ -1,5 +1,141 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ServicesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ServicesClientListByResourceGroupResponse, error)`
+- Function `*OperationsClient.List` parameter(s) have been changed from `(context.Context, *OperationsClientListOptions)` to `(*OperationsClientListOptions)`
+- Function `*OperationsClient.List` return value(s) have been changed from `(OperationsClientListResponse, error)` to `(*OperationsClientListPager)`
+- Function `*PrivateEndpointConnectionsClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateEndpointConnectionsClientListByServiceResponse, error)`
+- Function `*ServicesClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ServicesClientListBySubscriptionResponse, error)`
+- Function `*QueryKeysClientListBySearchServicePager.NextPage` return value(s) have been changed from `(bool)` to `(QueryKeysClientListBySearchServiceResponse, error)`
+- Function `*PrivateLinkResourcesClient.ListSupported` parameter(s) have been changed from `(context.Context, string, string, *SearchManagementRequestOptions)` to `(string, string, *SearchManagementRequestOptions)`
+- Function `*PrivateLinkResourcesClient.ListSupported` return value(s) have been changed from `(PrivateLinkResourcesClientListSupportedResponse, error)` to `(*PrivateLinkResourcesClientListSupportedPager)`
+- Function `*SharedPrivateLinkResourcesClientListByServicePager.NextPage` return value(s) have been changed from `(bool)` to `(SharedPrivateLinkResourcesClientListByServiceResponse, error)`
+- Function `*QueryKeysClientListBySearchServicePager.Err` has been removed
+- Function `*ServicesClientListByResourceGroupPager.Err` has been removed
+- Function `*PrivateEndpointConnectionsClientListByServicePager.Err` has been removed
+- Function `*ServicesClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*SharedPrivateLinkResourcesClientListByServicePager.Err` has been removed
+- Function `*QueryKeysClientListBySearchServicePager.PageResponse` has been removed
+- Function `*ServicesClientListBySubscriptionPager.Err` has been removed
+- Function `*PrivateEndpointConnectionsClientListByServicePager.PageResponse` has been removed
+- Function `*SharedPrivateLinkResourcesClientListByServicePager.PageResponse` has been removed
+- Function `*ServicesClientListByResourceGroupPager.PageResponse` has been removed
+- Struct `AdminKeysClientGetResult` has been removed
+- Struct `AdminKeysClientRegenerateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientDeleteResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListByServiceResult` has been removed
+- Struct `PrivateEndpointConnectionsClientUpdateResult` has been removed
+- Struct `PrivateLinkResourcesClientListSupportedResult` has been removed
+- Struct `QueryKeysClientCreateResult` has been removed
+- Struct `QueryKeysClientListBySearchServiceResult` has been removed
+- Struct `ServicesClientCheckNameAvailabilityResult` has been removed
+- Struct `ServicesClientCreateOrUpdateResult` has been removed
+- Struct `ServicesClientGetResult` has been removed
+- Struct `ServicesClientListByResourceGroupResult` has been removed
+- Struct `ServicesClientListBySubscriptionResult` has been removed
+- Struct `ServicesClientUpdateResult` has been removed
+- Struct `SharedPrivateLinkResourcesClientCreateOrUpdateResult` has been removed
+- Struct `SharedPrivateLinkResourcesClientGetResult` has been removed
+- Struct `SharedPrivateLinkResourcesClientListByServiceResult` has been removed
+- Field `ServicesClientCheckNameAvailabilityResult` of struct `ServicesClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCreateOrUpdatePollerResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `SharedPrivateLinkResourcesClientCreateOrUpdateResult` of struct `SharedPrivateLinkResourcesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SharedPrivateLinkResourcesClientCreateOrUpdateResponse` has been removed
+- Field `ServicesClientGetResult` of struct `ServicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientGetResponse` has been removed
+- Field `ServicesClientListByResourceGroupResult` of struct `ServicesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientListByResourceGroupResponse` has been removed
+- Field `PrivateEndpointConnectionsClientUpdateResult` of struct `PrivateEndpointConnectionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientUpdateResponse` has been removed
+- Field `AdminKeysClientGetResult` of struct `AdminKeysClientGetResponse` has been removed
+- Field `RawResponse` of struct `AdminKeysClientGetResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `SharedPrivateLinkResourcesClientGetResult` of struct `SharedPrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `SharedPrivateLinkResourcesClientGetResponse` has been removed
+- Field `PrivateLinkResourcesClientListSupportedResult` of struct `PrivateLinkResourcesClientListSupportedResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListSupportedResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListByServiceResult` of struct `PrivateEndpointConnectionsClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListByServiceResponse` has been removed
+- Field `ServicesClientUpdateResult` of struct `ServicesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientUpdateResponse` has been removed
+- Field `AdminKeysClientRegenerateResult` of struct `AdminKeysClientRegenerateResponse` has been removed
+- Field `RawResponse` of struct `AdminKeysClientRegenerateResponse` has been removed
+- Field `ServicesClientListBySubscriptionResult` of struct `ServicesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientDeleteResponse` has been removed
+- Field `PrivateEndpointConnectionsClientDeleteResult` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `QueryKeysClientListBySearchServiceResult` of struct `QueryKeysClientListBySearchServiceResponse` has been removed
+- Field `RawResponse` of struct `QueryKeysClientListBySearchServiceResponse` has been removed
+- Field `RawResponse` of struct `SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse` has been removed
+- Field `ServicesClientCreateOrUpdateResult` of struct `ServicesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCreateOrUpdateResponse` has been removed
+- Field `SharedPrivateLinkResourcesClientListByServiceResult` of struct `SharedPrivateLinkResourcesClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `SharedPrivateLinkResourcesClientListByServiceResponse` has been removed
+- Field `RawResponse` of struct `QueryKeysClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `SharedPrivateLinkResourcesClientDeleteResponse` has been removed
+- Field `QueryKeysClientCreateResult` of struct `QueryKeysClientCreateResponse` has been removed
+- Field `RawResponse` of struct `QueryKeysClientCreateResponse` has been removed
+- Field `RawResponse` of struct `SharedPrivateLinkResourcesClientDeletePollerResponse` has been removed
+
+### Features Added
+
+- New function `*ServicesClientListBySubscriptionPager.More() bool`
+- New function `*QueryKeysClientListBySearchServicePager.More() bool`
+- New function `*PrivateLinkResourcesClientListSupportedPager.More() bool`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*ServicesClientListByResourceGroupPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*PrivateLinkResourcesClientListSupportedPager.NextPage(context.Context) (PrivateLinkResourcesClientListSupportedResponse, error)`
+- New function `*PrivateEndpointConnectionsClientListByServicePager.More() bool`
+- New function `*OperationsClientListPager.NextPage(context.Context) (OperationsClientListResponse, error)`
+- New function `*SharedPrivateLinkResourcesClientListByServicePager.More() bool`
+- New struct `AsyncOperationResult`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New struct `OperationsClientListPager`
+- New struct `PrivateLinkResourcesClientListSupportedPager`
+- New anonymous field `ServiceListResult` in struct `ServicesClientListByResourceGroupResponse`
+- New anonymous field `QueryKey` in struct `QueryKeysClientCreateResponse`
+- New anonymous field `SharedPrivateLinkResource` in struct `SharedPrivateLinkResourcesClientCreateOrUpdateResponse`
+- New anonymous field `AdminKeyResult` in struct `AdminKeysClientRegenerateResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListByServiceResponse`
+- New anonymous field `Service` in struct `ServicesClientCreateOrUpdateResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientUpdateResponse`
+- New anonymous field `SharedPrivateLinkResource` in struct `SharedPrivateLinkResourcesClientGetResponse`
+- New anonymous field `Service` in struct `ServicesClientUpdateResponse`
+- New anonymous field `AdminKeyResult` in struct `AdminKeysClientGetResponse`
+- New anonymous field `ServiceListResult` in struct `ServicesClientListBySubscriptionResponse`
+- New anonymous field `ListQueryKeysResult` in struct `QueryKeysClientListBySearchServiceResponse`
+- New anonymous field `SharedPrivateLinkResourceListResult` in struct `SharedPrivateLinkResourcesClientListByServiceResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientDeleteResponse`
+- New anonymous field `Service` in struct `ServicesClientGetResponse`
+- New anonymous field `CheckNameAvailabilityOutput` in struct `ServicesClientCheckNameAvailabilityResponse`
+- New anonymous field `PrivateLinkResourcesResult` in struct `PrivateLinkResourcesClientListSupportedResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `AsyncOperationResult` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

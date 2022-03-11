@@ -43,11 +43,10 @@ func (p *LiveEventsClientAllocatePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final LiveEventsClientAllocateResponse will be returned.
 func (p *LiveEventsClientAllocatePoller) FinalResponse(ctx context.Context) (LiveEventsClientAllocateResponse, error) {
 	respType := LiveEventsClientAllocateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return LiveEventsClientAllocateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *LiveEventsClientCreatePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final LiveEventsClientCreateResponse will be returned.
 func (p *LiveEventsClientCreatePoller) FinalResponse(ctx context.Context) (LiveEventsClientCreateResponse, error) {
 	respType := LiveEventsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.LiveEvent)
+	_, err := p.pt.FinalResponse(ctx, &respType.LiveEvent)
 	if err != nil {
 		return LiveEventsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *LiveEventsClientDeletePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final LiveEventsClientDeleteResponse will be returned.
 func (p *LiveEventsClientDeletePoller) FinalResponse(ctx context.Context) (LiveEventsClientDeleteResponse, error) {
 	respType := LiveEventsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return LiveEventsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *LiveEventsClientResetPoller) Poll(ctx context.Context) (*http.Response,
 // If the final GET succeeded then the final LiveEventsClientResetResponse will be returned.
 func (p *LiveEventsClientResetPoller) FinalResponse(ctx context.Context) (LiveEventsClientResetResponse, error) {
 	respType := LiveEventsClientResetResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return LiveEventsClientResetResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *LiveEventsClientStartPoller) Poll(ctx context.Context) (*http.Response,
 // If the final GET succeeded then the final LiveEventsClientStartResponse will be returned.
 func (p *LiveEventsClientStartPoller) FinalResponse(ctx context.Context) (LiveEventsClientStartResponse, error) {
 	respType := LiveEventsClientStartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return LiveEventsClientStartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *LiveEventsClientStopPoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final LiveEventsClientStopResponse will be returned.
 func (p *LiveEventsClientStopPoller) FinalResponse(ctx context.Context) (LiveEventsClientStopResponse, error) {
 	respType := LiveEventsClientStopResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return LiveEventsClientStopResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *LiveEventsClientUpdatePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final LiveEventsClientUpdateResponse will be returned.
 func (p *LiveEventsClientUpdatePoller) FinalResponse(ctx context.Context) (LiveEventsClientUpdateResponse, error) {
 	respType := LiveEventsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.LiveEvent)
+	_, err := p.pt.FinalResponse(ctx, &respType.LiveEvent)
 	if err != nil {
 		return LiveEventsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *LiveOutputsClientCreatePoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final LiveOutputsClientCreateResponse will be returned.
 func (p *LiveOutputsClientCreatePoller) FinalResponse(ctx context.Context) (LiveOutputsClientCreateResponse, error) {
 	respType := LiveOutputsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.LiveOutput)
+	_, err := p.pt.FinalResponse(ctx, &respType.LiveOutput)
 	if err != nil {
 		return LiveOutputsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *LiveOutputsClientDeletePoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final LiveOutputsClientDeleteResponse will be returned.
 func (p *LiveOutputsClientDeletePoller) FinalResponse(ctx context.Context) (LiveOutputsClientDeleteResponse, error) {
 	respType := LiveOutputsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return LiveOutputsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -430,11 +421,10 @@ func (p *StreamingEndpointsClientCreatePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final StreamingEndpointsClientCreateResponse will be returned.
 func (p *StreamingEndpointsClientCreatePoller) FinalResponse(ctx context.Context) (StreamingEndpointsClientCreateResponse, error) {
 	respType := StreamingEndpointsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.StreamingEndpoint)
+	_, err := p.pt.FinalResponse(ctx, &respType.StreamingEndpoint)
 	if err != nil {
 		return StreamingEndpointsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -473,11 +463,10 @@ func (p *StreamingEndpointsClientDeletePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final StreamingEndpointsClientDeleteResponse will be returned.
 func (p *StreamingEndpointsClientDeletePoller) FinalResponse(ctx context.Context) (StreamingEndpointsClientDeleteResponse, error) {
 	respType := StreamingEndpointsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StreamingEndpointsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -516,11 +505,10 @@ func (p *StreamingEndpointsClientScalePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final StreamingEndpointsClientScaleResponse will be returned.
 func (p *StreamingEndpointsClientScalePoller) FinalResponse(ctx context.Context) (StreamingEndpointsClientScaleResponse, error) {
 	respType := StreamingEndpointsClientScaleResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StreamingEndpointsClientScaleResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -559,11 +547,10 @@ func (p *StreamingEndpointsClientStartPoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final StreamingEndpointsClientStartResponse will be returned.
 func (p *StreamingEndpointsClientStartPoller) FinalResponse(ctx context.Context) (StreamingEndpointsClientStartResponse, error) {
 	respType := StreamingEndpointsClientStartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StreamingEndpointsClientStartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -602,11 +589,10 @@ func (p *StreamingEndpointsClientStopPoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final StreamingEndpointsClientStopResponse will be returned.
 func (p *StreamingEndpointsClientStopPoller) FinalResponse(ctx context.Context) (StreamingEndpointsClientStopResponse, error) {
 	respType := StreamingEndpointsClientStopResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StreamingEndpointsClientStopResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -645,11 +631,10 @@ func (p *StreamingEndpointsClientUpdatePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final StreamingEndpointsClientUpdateResponse will be returned.
 func (p *StreamingEndpointsClientUpdatePoller) FinalResponse(ctx context.Context) (StreamingEndpointsClientUpdateResponse, error) {
 	respType := StreamingEndpointsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.StreamingEndpoint)
+	_, err := p.pt.FinalResponse(ctx, &respType.StreamingEndpoint)
 	if err != nil {
 		return StreamingEndpointsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

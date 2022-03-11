@@ -32,16 +32,16 @@ type ConsumerInvitationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewConsumerInvitationsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ConsumerInvitationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ConsumerInvitationsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -90,7 +90,7 @@ func (client *ConsumerInvitationsClient) getCreateRequest(ctx context.Context, l
 
 // getHandleResponse handles the Get response.
 func (client *ConsumerInvitationsClient) getHandleResponse(resp *http.Response) (ConsumerInvitationsClientGetResponse, error) {
-	result := ConsumerInvitationsClientGetResponse{RawResponse: resp}
+	result := ConsumerInvitationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConsumerInvitation); err != nil {
 		return ConsumerInvitationsClientGetResponse{}, err
 	}
@@ -132,7 +132,7 @@ func (client *ConsumerInvitationsClient) listInvitationsCreateRequest(ctx contex
 
 // listInvitationsHandleResponse handles the ListInvitations response.
 func (client *ConsumerInvitationsClient) listInvitationsHandleResponse(resp *http.Response) (ConsumerInvitationsClientListInvitationsResponse, error) {
-	result := ConsumerInvitationsClientListInvitationsResponse{RawResponse: resp}
+	result := ConsumerInvitationsClientListInvitationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConsumerInvitationList); err != nil {
 		return ConsumerInvitationsClientListInvitationsResponse{}, err
 	}
@@ -180,7 +180,7 @@ func (client *ConsumerInvitationsClient) rejectInvitationCreateRequest(ctx conte
 
 // rejectInvitationHandleResponse handles the RejectInvitation response.
 func (client *ConsumerInvitationsClient) rejectInvitationHandleResponse(resp *http.Response) (ConsumerInvitationsClientRejectInvitationResponse, error) {
-	result := ConsumerInvitationsClientRejectInvitationResponse{RawResponse: resp}
+	result := ConsumerInvitationsClientRejectInvitationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConsumerInvitation); err != nil {
 		return ConsumerInvitationsClientRejectInvitationResponse{}, err
 	}

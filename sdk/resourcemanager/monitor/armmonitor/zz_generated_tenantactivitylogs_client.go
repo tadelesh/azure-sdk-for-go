@@ -29,16 +29,16 @@ type TenantActivityLogsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTenantActivityLogsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *TenantActivityLogsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TenantActivityLogsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -83,7 +83,7 @@ func (client *TenantActivityLogsClient) listCreateRequest(ctx context.Context, o
 
 // listHandleResponse handles the List response.
 func (client *TenantActivityLogsClient) listHandleResponse(resp *http.Response) (TenantActivityLogsClientListResponse, error) {
-	result := TenantActivityLogsClientListResponse{RawResponse: resp}
+	result := TenantActivityLogsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventDataCollection); err != nil {
 		return TenantActivityLogsClientListResponse{}, err
 	}

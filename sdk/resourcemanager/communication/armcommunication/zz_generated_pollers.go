@@ -43,11 +43,10 @@ func (p *ServiceClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final ServiceClientCreateOrUpdateResponse will be returned.
 func (p *ServiceClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ServiceClientCreateOrUpdateResponse, error) {
 	respType := ServiceClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ServiceResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.ServiceResource)
 	if err != nil {
 		return ServiceClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ServiceClientDeletePoller) Poll(ctx context.Context) (*http.Response, e
 // If the final GET succeeded then the final ServiceClientDeleteResponse will be returned.
 func (p *ServiceClientDeletePoller) FinalResponse(ctx context.Context) (ServiceClientDeleteResponse, error) {
 	respType := ServiceClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ServiceClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

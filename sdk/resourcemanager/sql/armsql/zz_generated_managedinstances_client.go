@@ -35,17 +35,17 @@ type ManagedInstancesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedInstancesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedInstancesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedInstancesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ManagedInstancesClient) BeginCreateOrUpdate(ctx context.Context, r
 	if err != nil {
 		return ManagedInstancesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ManagedInstancesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedInstancesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedInstancesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ManagedInstancesClientCreateOrUpdatePollerResponse{}, err
@@ -131,9 +129,7 @@ func (client *ManagedInstancesClient) BeginDelete(ctx context.Context, resourceG
 	if err != nil {
 		return ManagedInstancesClientDeletePollerResponse{}, err
 	}
-	result := ManagedInstancesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedInstancesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedInstancesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ManagedInstancesClientDeletePollerResponse{}, err
@@ -198,9 +194,7 @@ func (client *ManagedInstancesClient) BeginFailover(ctx context.Context, resourc
 	if err != nil {
 		return ManagedInstancesClientFailoverPollerResponse{}, err
 	}
-	result := ManagedInstancesClientFailoverPollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedInstancesClientFailoverPollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedInstancesClient.Failover", "", resp, client.pl)
 	if err != nil {
 		return ManagedInstancesClientFailoverPollerResponse{}, err
@@ -308,7 +302,7 @@ func (client *ManagedInstancesClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *ManagedInstancesClient) getHandleResponse(resp *http.Response) (ManagedInstancesClientGetResponse, error) {
-	result := ManagedInstancesClientGetResponse{RawResponse: resp}
+	result := ManagedInstancesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstance); err != nil {
 		return ManagedInstancesClientGetResponse{}, err
 	}
@@ -353,7 +347,7 @@ func (client *ManagedInstancesClient) listCreateRequest(ctx context.Context, opt
 
 // listHandleResponse handles the List response.
 func (client *ManagedInstancesClient) listHandleResponse(resp *http.Response) (ManagedInstancesClientListResponse, error) {
-	result := ManagedInstancesClientListResponse{RawResponse: resp}
+	result := ManagedInstancesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceListResult); err != nil {
 		return ManagedInstancesClientListResponse{}, err
 	}
@@ -410,7 +404,7 @@ func (client *ManagedInstancesClient) listByInstancePoolCreateRequest(ctx contex
 
 // listByInstancePoolHandleResponse handles the ListByInstancePool response.
 func (client *ManagedInstancesClient) listByInstancePoolHandleResponse(resp *http.Response) (ManagedInstancesClientListByInstancePoolResponse, error) {
-	result := ManagedInstancesClientListByInstancePoolResponse{RawResponse: resp}
+	result := ManagedInstancesClientListByInstancePoolResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceListResult); err != nil {
 		return ManagedInstancesClientListByInstancePoolResponse{}, err
 	}
@@ -485,7 +479,7 @@ func (client *ManagedInstancesClient) listByManagedInstanceCreateRequest(ctx con
 
 // listByManagedInstanceHandleResponse handles the ListByManagedInstance response.
 func (client *ManagedInstancesClient) listByManagedInstanceHandleResponse(resp *http.Response) (ManagedInstancesClientListByManagedInstanceResponse, error) {
-	result := ManagedInstancesClientListByManagedInstanceResponse{RawResponse: resp}
+	result := ManagedInstancesClientListByManagedInstanceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TopQueriesListResult); err != nil {
 		return ManagedInstancesClientListByManagedInstanceResponse{}, err
 	}
@@ -537,7 +531,7 @@ func (client *ManagedInstancesClient) listByResourceGroupCreateRequest(ctx conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ManagedInstancesClient) listByResourceGroupHandleResponse(resp *http.Response) (ManagedInstancesClientListByResourceGroupResponse, error) {
-	result := ManagedInstancesClientListByResourceGroupResponse{RawResponse: resp}
+	result := ManagedInstancesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceListResult); err != nil {
 		return ManagedInstancesClientListByResourceGroupResponse{}, err
 	}
@@ -557,9 +551,7 @@ func (client *ManagedInstancesClient) BeginUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return ManagedInstancesClientUpdatePollerResponse{}, err
 	}
-	result := ManagedInstancesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedInstancesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedInstancesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ManagedInstancesClientUpdatePollerResponse{}, err

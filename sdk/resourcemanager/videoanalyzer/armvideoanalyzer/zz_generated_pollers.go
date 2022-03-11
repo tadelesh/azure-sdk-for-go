@@ -43,11 +43,10 @@ func (p *LivePipelinesClientActivatePoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final LivePipelinesClientActivateResponse will be returned.
 func (p *LivePipelinesClientActivatePoller) FinalResponse(ctx context.Context) (LivePipelinesClientActivateResponse, error) {
 	respType := LivePipelinesClientActivateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return LivePipelinesClientActivateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *LivePipelinesClientDeactivatePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final LivePipelinesClientDeactivateResponse will be returned.
 func (p *LivePipelinesClientDeactivatePoller) FinalResponse(ctx context.Context) (LivePipelinesClientDeactivateResponse, error) {
 	respType := LivePipelinesClientDeactivateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return LivePipelinesClientDeactivateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *PipelineJobsClientCancelPoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final PipelineJobsClientCancelResponse will be returned.
 func (p *PipelineJobsClientCancelPoller) FinalResponse(ctx context.Context) (PipelineJobsClientCancelResponse, error) {
 	respType := PipelineJobsClientCancelResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PipelineJobsClientCancelResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *VideoAnalyzersClientCreateOrUpdatePoller) Poll(ctx context.Context) (*h
 // If the final GET succeeded then the final VideoAnalyzersClientCreateOrUpdateResponse will be returned.
 func (p *VideoAnalyzersClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (VideoAnalyzersClientCreateOrUpdateResponse, error) {
 	respType := VideoAnalyzersClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.VideoAnalyzer)
+	_, err := p.pt.FinalResponse(ctx, &respType.VideoAnalyzer)
 	if err != nil {
 		return VideoAnalyzersClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *VideoAnalyzersClientUpdatePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final VideoAnalyzersClientUpdateResponse will be returned.
 func (p *VideoAnalyzersClientUpdatePoller) FinalResponse(ctx context.Context) (VideoAnalyzersClientUpdateResponse, error) {
 	respType := VideoAnalyzersClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.VideoAnalyzer)
+	_, err := p.pt.FinalResponse(ctx, &respType.VideoAnalyzer)
 	if err != nil {
 		return VideoAnalyzersClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

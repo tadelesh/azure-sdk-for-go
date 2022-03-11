@@ -34,17 +34,17 @@ type BackupUsageSummariesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBackupUsageSummariesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BackupUsageSummariesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BackupUsageSummariesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -55,19 +55,13 @@ func NewBackupUsageSummariesClient(subscriptionID string, credential azcore.Toke
 // resourceGroupName - The name of the resource group where the recovery services vault is present.
 // options - BackupUsageSummariesClientListOptions contains the optional parameters for the BackupUsageSummariesClient.List
 // method.
-func (client *BackupUsageSummariesClient) List(ctx context.Context, vaultName string, resourceGroupName string, options *BackupUsageSummariesClientListOptions) (BackupUsageSummariesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, vaultName, resourceGroupName, options)
-	if err != nil {
-		return BackupUsageSummariesClientListResponse{}, err
+func (client *BackupUsageSummariesClient) List(vaultName string, resourceGroupName string, options *BackupUsageSummariesClientListOptions) *BackupUsageSummariesClientListPager {
+	return &BackupUsageSummariesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, vaultName, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return BackupUsageSummariesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return BackupUsageSummariesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -90,7 +84,7 @@ func (client *BackupUsageSummariesClient) listCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-10-01")
+	reqQP.Set("api-version", "2021-12-01")
 	if options != nil && options.Filter != nil {
 		reqQP.Set("$filter", *options.Filter)
 	}
@@ -104,7 +98,7 @@ func (client *BackupUsageSummariesClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *BackupUsageSummariesClient) listHandleResponse(resp *http.Response) (BackupUsageSummariesClientListResponse, error) {
-	result := BackupUsageSummariesClientListResponse{RawResponse: resp}
+	result := BackupUsageSummariesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupManagementUsageList); err != nil {
 		return BackupUsageSummariesClientListResponse{}, err
 	}

@@ -34,17 +34,17 @@ type TagsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTagsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TagsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TagsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -94,7 +94,7 @@ func (client *TagsClient) createOrUpdateCreateRequest(ctx context.Context, tagNa
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *TagsClient) createOrUpdateHandleResponse(resp *http.Response) (TagsClientCreateOrUpdateResponse, error) {
-	result := TagsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := TagsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TagDetails); err != nil {
 		return TagsClientCreateOrUpdateResponse{}, err
 	}
@@ -139,7 +139,7 @@ func (client *TagsClient) createOrUpdateAtScopeCreateRequest(ctx context.Context
 
 // createOrUpdateAtScopeHandleResponse handles the CreateOrUpdateAtScope response.
 func (client *TagsClient) createOrUpdateAtScopeHandleResponse(resp *http.Response) (TagsClientCreateOrUpdateAtScopeResponse, error) {
-	result := TagsClientCreateOrUpdateAtScopeResponse{RawResponse: resp}
+	result := TagsClientCreateOrUpdateAtScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TagsResource); err != nil {
 		return TagsClientCreateOrUpdateAtScopeResponse{}, err
 	}
@@ -196,7 +196,7 @@ func (client *TagsClient) createOrUpdateValueCreateRequest(ctx context.Context, 
 
 // createOrUpdateValueHandleResponse handles the CreateOrUpdateValue response.
 func (client *TagsClient) createOrUpdateValueHandleResponse(resp *http.Response) (TagsClientCreateOrUpdateValueResponse, error) {
-	result := TagsClientCreateOrUpdateValueResponse{RawResponse: resp}
+	result := TagsClientCreateOrUpdateValueResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TagValue); err != nil {
 		return TagsClientCreateOrUpdateValueResponse{}, err
 	}
@@ -221,7 +221,7 @@ func (client *TagsClient) Delete(ctx context.Context, tagName string, options *T
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return TagsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return TagsClientDeleteResponse{RawResponse: resp}, nil
+	return TagsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -262,7 +262,7 @@ func (client *TagsClient) DeleteAtScope(ctx context.Context, scope string, optio
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return TagsClientDeleteAtScopeResponse{}, runtime.NewResponseError(resp)
 	}
-	return TagsClientDeleteAtScopeResponse{RawResponse: resp}, nil
+	return TagsClientDeleteAtScopeResponse{}, nil
 }
 
 // deleteAtScopeCreateRequest creates the DeleteAtScope request.
@@ -299,7 +299,7 @@ func (client *TagsClient) DeleteValue(ctx context.Context, tagName string, tagVa
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return TagsClientDeleteValueResponse{}, runtime.NewResponseError(resp)
 	}
-	return TagsClientDeleteValueResponse{RawResponse: resp}, nil
+	return TagsClientDeleteValueResponse{}, nil
 }
 
 // deleteValueCreateRequest creates the DeleteValue request.
@@ -364,7 +364,7 @@ func (client *TagsClient) getAtScopeCreateRequest(ctx context.Context, scope str
 
 // getAtScopeHandleResponse handles the GetAtScope response.
 func (client *TagsClient) getAtScopeHandleResponse(resp *http.Response) (TagsClientGetAtScopeResponse, error) {
-	result := TagsClientGetAtScopeResponse{RawResponse: resp}
+	result := TagsClientGetAtScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TagsResource); err != nil {
 		return TagsClientGetAtScopeResponse{}, err
 	}
@@ -408,7 +408,7 @@ func (client *TagsClient) listCreateRequest(ctx context.Context, options *TagsCl
 
 // listHandleResponse handles the List response.
 func (client *TagsClient) listHandleResponse(resp *http.Response) (TagsClientListResponse, error) {
-	result := TagsClientListResponse{RawResponse: resp}
+	result := TagsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TagsListResult); err != nil {
 		return TagsClientListResponse{}, err
 	}
@@ -455,7 +455,7 @@ func (client *TagsClient) updateAtScopeCreateRequest(ctx context.Context, scope 
 
 // updateAtScopeHandleResponse handles the UpdateAtScope response.
 func (client *TagsClient) updateAtScopeHandleResponse(resp *http.Response) (TagsClientUpdateAtScopeResponse, error) {
-	result := TagsClientUpdateAtScopeResponse{RawResponse: resp}
+	result := TagsClientUpdateAtScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TagsResource); err != nil {
 		return TagsClientUpdateAtScopeResponse{}, err
 	}

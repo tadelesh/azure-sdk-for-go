@@ -36,17 +36,17 @@ type GatewayCertificateAuthorityClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGatewayCertificateAuthorityClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *GatewayCertificateAuthorityClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GatewayCertificateAuthorityClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -114,7 +114,7 @@ func (client *GatewayCertificateAuthorityClient) createOrUpdateCreateRequest(ctx
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *GatewayCertificateAuthorityClient) createOrUpdateHandleResponse(resp *http.Response) (GatewayCertificateAuthorityClientCreateOrUpdateResponse, error) {
-	result := GatewayCertificateAuthorityClientCreateOrUpdateResponse{RawResponse: resp}
+	result := GatewayCertificateAuthorityClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -147,7 +147,7 @@ func (client *GatewayCertificateAuthorityClient) Delete(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return GatewayCertificateAuthorityClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return GatewayCertificateAuthorityClientDeleteResponse{RawResponse: resp}, nil
+	return GatewayCertificateAuthorityClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -245,7 +245,7 @@ func (client *GatewayCertificateAuthorityClient) getCreateRequest(ctx context.Co
 
 // getHandleResponse handles the Get response.
 func (client *GatewayCertificateAuthorityClient) getHandleResponse(resp *http.Response) (GatewayCertificateAuthorityClientGetResponse, error) {
-	result := GatewayCertificateAuthorityClientGetResponse{RawResponse: resp}
+	result := GatewayCertificateAuthorityClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -311,7 +311,7 @@ func (client *GatewayCertificateAuthorityClient) getEntityTagCreateRequest(ctx c
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *GatewayCertificateAuthorityClient) getEntityTagHandleResponse(resp *http.Response) (GatewayCertificateAuthorityClientGetEntityTagResponse, error) {
-	result := GatewayCertificateAuthorityClientGetEntityTagResponse{RawResponse: resp}
+	result := GatewayCertificateAuthorityClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -382,7 +382,7 @@ func (client *GatewayCertificateAuthorityClient) listByServiceCreateRequest(ctx 
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *GatewayCertificateAuthorityClient) listByServiceHandleResponse(resp *http.Response) (GatewayCertificateAuthorityClientListByServiceResponse, error) {
-	result := GatewayCertificateAuthorityClientListByServiceResponse{RawResponse: resp}
+	result := GatewayCertificateAuthorityClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GatewayCertificateAuthorityCollection); err != nil {
 		return GatewayCertificateAuthorityClientListByServiceResponse{}, err
 	}

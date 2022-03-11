@@ -35,17 +35,17 @@ type GatewaysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGatewaysClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *GatewaysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GatewaysClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *GatewaysClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return GatewaysClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := GatewaysClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := GatewaysClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("GatewaysClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return GatewaysClientCreateOrUpdatePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *GatewaysClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return GatewaysClientDeletePollerResponse{}, err
 	}
-	result := GatewaysClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := GatewaysClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("GatewaysClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return GatewaysClientDeletePollerResponse{}, err
@@ -250,7 +246,7 @@ func (client *GatewaysClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *GatewaysClient) getHandleResponse(resp *http.Response) (GatewaysClientGetResponse, error) {
-	result := GatewaysClientGetResponse{RawResponse: resp}
+	result := GatewaysClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GatewayResource); err != nil {
 		return GatewaysClientGetResponse{}, err
 	}
@@ -303,7 +299,7 @@ func (client *GatewaysClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *GatewaysClient) listHandleResponse(resp *http.Response) (GatewaysClientListResponse, error) {
-	result := GatewaysClientListResponse{RawResponse: resp}
+	result := GatewaysClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GatewayResourceCollection); err != nil {
 		return GatewaysClientListResponse{}, err
 	}
@@ -365,7 +361,7 @@ func (client *GatewaysClient) validateDomainCreateRequest(ctx context.Context, r
 
 // validateDomainHandleResponse handles the ValidateDomain response.
 func (client *GatewaysClient) validateDomainHandleResponse(resp *http.Response) (GatewaysClientValidateDomainResponse, error) {
-	result := GatewaysClientValidateDomainResponse{RawResponse: resp}
+	result := GatewaysClientValidateDomainResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomDomainValidateResult); err != nil {
 		return GatewaysClientValidateDomainResponse{}, err
 	}

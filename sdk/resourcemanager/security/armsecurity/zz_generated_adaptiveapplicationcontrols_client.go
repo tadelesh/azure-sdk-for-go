@@ -70,7 +70,7 @@ func (client *AdaptiveApplicationControlsClient) Delete(ctx context.Context, gro
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return AdaptiveApplicationControlsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AdaptiveApplicationControlsClientDeleteResponse{RawResponse: resp}, nil
+	return AdaptiveApplicationControlsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -147,7 +147,7 @@ func (client *AdaptiveApplicationControlsClient) getCreateRequest(ctx context.Co
 
 // getHandleResponse handles the Get response.
 func (client *AdaptiveApplicationControlsClient) getHandleResponse(resp *http.Response) (AdaptiveApplicationControlsClientGetResponse, error) {
-	result := AdaptiveApplicationControlsClientGetResponse{RawResponse: resp}
+	result := AdaptiveApplicationControlsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdaptiveApplicationControlGroup); err != nil {
 		return AdaptiveApplicationControlsClientGetResponse{}, err
 	}
@@ -199,7 +199,7 @@ func (client *AdaptiveApplicationControlsClient) listCreateRequest(ctx context.C
 
 // listHandleResponse handles the List response.
 func (client *AdaptiveApplicationControlsClient) listHandleResponse(resp *http.Response) (AdaptiveApplicationControlsClientListResponse, error) {
-	result := AdaptiveApplicationControlsClientListResponse{RawResponse: resp}
+	result := AdaptiveApplicationControlsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdaptiveApplicationControlGroups); err != nil {
 		return AdaptiveApplicationControlsClientListResponse{}, err
 	}
@@ -254,7 +254,7 @@ func (client *AdaptiveApplicationControlsClient) putCreateRequest(ctx context.Co
 
 // putHandleResponse handles the Put response.
 func (client *AdaptiveApplicationControlsClient) putHandleResponse(resp *http.Response) (AdaptiveApplicationControlsClientPutResponse, error) {
-	result := AdaptiveApplicationControlsClientPutResponse{RawResponse: resp}
+	result := AdaptiveApplicationControlsClientPutResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdaptiveApplicationControlGroup); err != nil {
 		return AdaptiveApplicationControlsClientPutResponse{}, err
 	}

@@ -35,17 +35,17 @@ type VirtualNetworkRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualNetworkRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualNetworkRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualNetworkRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -106,7 +106,7 @@ func (client *VirtualNetworkRulesClient) createOrUpdateCreateRequest(ctx context
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *VirtualNetworkRulesClient) createOrUpdateHandleResponse(resp *http.Response) (VirtualNetworkRulesClientCreateOrUpdateResponse, error) {
-	result := VirtualNetworkRulesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := VirtualNetworkRulesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkRule); err != nil {
 		return VirtualNetworkRulesClientCreateOrUpdateResponse{}, err
 	}
@@ -132,7 +132,7 @@ func (client *VirtualNetworkRulesClient) Delete(ctx context.Context, resourceGro
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return VirtualNetworkRulesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return VirtualNetworkRulesClientDeleteResponse{RawResponse: resp}, nil
+	return VirtualNetworkRulesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -217,7 +217,7 @@ func (client *VirtualNetworkRulesClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *VirtualNetworkRulesClient) getHandleResponse(resp *http.Response) (VirtualNetworkRulesClientGetResponse, error) {
-	result := VirtualNetworkRulesClientGetResponse{RawResponse: resp}
+	result := VirtualNetworkRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkRule); err != nil {
 		return VirtualNetworkRulesClientGetResponse{}, err
 	}
@@ -270,7 +270,7 @@ func (client *VirtualNetworkRulesClient) listByAccountCreateRequest(ctx context.
 
 // listByAccountHandleResponse handles the ListByAccount response.
 func (client *VirtualNetworkRulesClient) listByAccountHandleResponse(resp *http.Response) (VirtualNetworkRulesClientListByAccountResponse, error) {
-	result := VirtualNetworkRulesClientListByAccountResponse{RawResponse: resp}
+	result := VirtualNetworkRulesClientListByAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkRuleListResult); err != nil {
 		return VirtualNetworkRulesClientListByAccountResponse{}, err
 	}
@@ -334,7 +334,7 @@ func (client *VirtualNetworkRulesClient) updateCreateRequest(ctx context.Context
 
 // updateHandleResponse handles the Update response.
 func (client *VirtualNetworkRulesClient) updateHandleResponse(resp *http.Response) (VirtualNetworkRulesClientUpdateResponse, error) {
-	result := VirtualNetworkRulesClientUpdateResponse{RawResponse: resp}
+	result := VirtualNetworkRulesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkRule); err != nil {
 		return VirtualNetworkRulesClientUpdateResponse{}, err
 	}

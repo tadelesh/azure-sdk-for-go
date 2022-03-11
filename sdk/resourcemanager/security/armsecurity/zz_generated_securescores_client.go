@@ -93,7 +93,7 @@ func (client *SecureScoresClient) getCreateRequest(ctx context.Context, secureSc
 
 // getHandleResponse handles the Get response.
 func (client *SecureScoresClient) getHandleResponse(resp *http.Response) (SecureScoresClientGetResponse, error) {
-	result := SecureScoresClientGetResponse{RawResponse: resp}
+	result := SecureScoresClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecureScoreItem); err != nil {
 		return SecureScoresClientGetResponse{}, err
 	}
@@ -135,7 +135,7 @@ func (client *SecureScoresClient) listCreateRequest(ctx context.Context, options
 
 // listHandleResponse handles the List response.
 func (client *SecureScoresClient) listHandleResponse(resp *http.Response) (SecureScoresClientListResponse, error) {
-	result := SecureScoresClientListResponse{RawResponse: resp}
+	result := SecureScoresClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecureScoresList); err != nil {
 		return SecureScoresClientListResponse{}, err
 	}

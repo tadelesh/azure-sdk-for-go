@@ -1,0 +1,132 @@
+# Release History
+
+## 0.2.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*PrivateLinkResourcesClient.ListSupported` parameter(s) have been changed from `(context.Context, string, string, *PrivateLinkResourcesClientListSupportedOptions)` to `(string, string, *PrivateLinkResourcesClientListSupportedOptions)`
+- Function `*PrivateLinkResourcesClient.ListSupported` return value(s) have been changed from `(PrivateLinkResourcesClientListSupportedResponse, error)` to `(*PrivateLinkResourcesClientListSupportedPager)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*EventSourcesClientGetResult.UnmarshalJSON` has been removed
+- Function `*EnvironmentsClientCreateOrUpdateResult.UnmarshalJSON` has been removed
+- Function `*EnvironmentsClientUpdateResult.UnmarshalJSON` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*EventSourcesClientUpdateResult.UnmarshalJSON` has been removed
+- Function `*EventSourcesClientCreateOrUpdateResult.UnmarshalJSON` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*EnvironmentsClientGetResult.UnmarshalJSON` has been removed
+- Struct `AccessPoliciesClientCreateOrUpdateResult` has been removed
+- Struct `AccessPoliciesClientGetResult` has been removed
+- Struct `AccessPoliciesClientListByEnvironmentResult` has been removed
+- Struct `AccessPoliciesClientUpdateResult` has been removed
+- Struct `EnvironmentsClientCreateOrUpdateResult` has been removed
+- Struct `EnvironmentsClientGetResult` has been removed
+- Struct `EnvironmentsClientListByResourceGroupResult` has been removed
+- Struct `EnvironmentsClientListBySubscriptionResult` has been removed
+- Struct `EnvironmentsClientUpdateResult` has been removed
+- Struct `EventSourcesClientCreateOrUpdateResult` has been removed
+- Struct `EventSourcesClientGetResult` has been removed
+- Struct `EventSourcesClientListByEnvironmentResult` has been removed
+- Struct `EventSourcesClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientCreateOrUpdateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListByEnvironmentResult` has been removed
+- Struct `PrivateLinkResourcesClientListSupportedResult` has been removed
+- Struct `ReferenceDataSetsClientCreateOrUpdateResult` has been removed
+- Struct `ReferenceDataSetsClientGetResult` has been removed
+- Struct `ReferenceDataSetsClientListByEnvironmentResult` has been removed
+- Struct `ReferenceDataSetsClientUpdateResult` has been removed
+- Field `EnvironmentsClientListBySubscriptionResult` of struct `EnvironmentsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `EnvironmentsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `EnvironmentsClientDeleteResponse` has been removed
+- Field `EnvironmentsClientListByResourceGroupResult` of struct `EnvironmentsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `EnvironmentsClientListByResourceGroupResponse` has been removed
+- Field `ReferenceDataSetsClientListByEnvironmentResult` of struct `ReferenceDataSetsClientListByEnvironmentResponse` has been removed
+- Field `RawResponse` of struct `ReferenceDataSetsClientListByEnvironmentResponse` has been removed
+- Field `RawResponse` of struct `ReferenceDataSetsClientDeleteResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `EventSourcesClientCreateOrUpdateResult` of struct `EventSourcesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `EventSourcesClientCreateOrUpdateResponse` has been removed
+- Field `ReferenceDataSetsClientGetResult` of struct `ReferenceDataSetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ReferenceDataSetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `EnvironmentsClientUpdatePollerResponse` has been removed
+- Field `ReferenceDataSetsClientUpdateResult` of struct `ReferenceDataSetsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ReferenceDataSetsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `EnvironmentsClientCreateOrUpdatePollerResponse` has been removed
+- Field `EventSourcesClientListByEnvironmentResult` of struct `EventSourcesClientListByEnvironmentResponse` has been removed
+- Field `RawResponse` of struct `EventSourcesClientListByEnvironmentResponse` has been removed
+- Field `EnvironmentsClientUpdateResult` of struct `EnvironmentsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `EnvironmentsClientUpdateResponse` has been removed
+- Field `PrivateLinkResourcesClientListSupportedResult` of struct `PrivateLinkResourcesClientListSupportedResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListSupportedResponse` has been removed
+- Field `AccessPoliciesClientListByEnvironmentResult` of struct `AccessPoliciesClientListByEnvironmentResponse` has been removed
+- Field `RawResponse` of struct `AccessPoliciesClientListByEnvironmentResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListByEnvironmentResult` of struct `PrivateEndpointConnectionsClientListByEnvironmentResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListByEnvironmentResponse` has been removed
+- Field `AccessPoliciesClientGetResult` of struct `AccessPoliciesClientGetResponse` has been removed
+- Field `RawResponse` of struct `AccessPoliciesClientGetResponse` has been removed
+- Field `EnvironmentsClientCreateOrUpdateResult` of struct `EnvironmentsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `EnvironmentsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `EventSourcesClientDeleteResponse` has been removed
+- Field `ReferenceDataSetsClientCreateOrUpdateResult` of struct `ReferenceDataSetsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ReferenceDataSetsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `AccessPoliciesClientDeleteResponse` has been removed
+- Field `AccessPoliciesClientUpdateResult` of struct `AccessPoliciesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccessPoliciesClientUpdateResponse` has been removed
+- Field `EnvironmentsClientGetResult` of struct `EnvironmentsClientGetResponse` has been removed
+- Field `RawResponse` of struct `EnvironmentsClientGetResponse` has been removed
+- Field `EventSourcesClientGetResult` of struct `EventSourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `EventSourcesClientGetResponse` has been removed
+- Field `PrivateEndpointConnectionsClientCreateOrUpdateResult` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `EventSourcesClientUpdateResult` of struct `EventSourcesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `EventSourcesClientUpdateResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `AccessPoliciesClientCreateOrUpdateResult` of struct `AccessPoliciesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccessPoliciesClientCreateOrUpdateResponse` has been removed
+
+### Features Added
+
+- New function `*EventSourcesClientCreateOrUpdateResponse.UnmarshalJSON([]byte) error`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*PrivateLinkResourcesClientListSupportedPager.More() bool`
+- New function `*EnvironmentsClientGetResponse.UnmarshalJSON([]byte) error`
+- New function `*EventSourcesClientUpdateResponse.UnmarshalJSON([]byte) error`
+- New function `*PrivateLinkResourcesClientListSupportedPager.NextPage(context.Context) (PrivateLinkResourcesClientListSupportedResponse, error)`
+- New function `*EnvironmentsClientUpdateResponse.UnmarshalJSON([]byte) error`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*EnvironmentsClientCreateOrUpdateResponse.UnmarshalJSON([]byte) error`
+- New function `*EventSourcesClientGetResponse.UnmarshalJSON([]byte) error`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New struct `PrivateLinkResourcesClientListSupportedPager`
+- New anonymous field `EventSourceResourceClassification` in struct `EventSourcesClientCreateOrUpdateResponse`
+- New anonymous field `AccessPolicyResource` in struct `AccessPoliciesClientCreateOrUpdateResponse`
+- New anonymous field `EnvironmentListResponse` in struct `EnvironmentsClientListByResourceGroupResponse`
+- New anonymous field `EnvironmentResourceClassification` in struct `EnvironmentsClientCreateOrUpdateResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListByEnvironmentResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `EnvironmentResourceClassification` in struct `EnvironmentsClientUpdateResponse`
+- New anonymous field `ReferenceDataSetResource` in struct `ReferenceDataSetsClientCreateOrUpdateResponse`
+- New anonymous field `EnvironmentListResponse` in struct `EnvironmentsClientListBySubscriptionResponse`
+- New anonymous field `EventSourceResourceClassification` in struct `EventSourcesClientGetResponse`
+- New anonymous field `ReferenceDataSetListResponse` in struct `ReferenceDataSetsClientListByEnvironmentResponse`
+- New anonymous field `AccessPolicyResource` in struct `AccessPoliciesClientUpdateResponse`
+- New anonymous field `ReferenceDataSetResource` in struct `ReferenceDataSetsClientUpdateResponse`
+- New anonymous field `ReferenceDataSetResource` in struct `ReferenceDataSetsClientGetResponse`
+- New anonymous field `AccessPolicyResource` in struct `AccessPoliciesClientGetResponse`
+- New anonymous field `EventSourceResourceClassification` in struct `EventSourcesClientUpdateResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `PrivateLinkResourcesClientListSupportedResponse`
+- New anonymous field `EnvironmentResourceClassification` in struct `EnvironmentsClientGetResponse`
+- New anonymous field `AccessPolicyListResponse` in struct `AccessPoliciesClientListByEnvironmentResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `EventSourceListResponse` in struct `EventSourcesClientListByEnvironmentResponse`
+
+
+## 0.1.0 (2022-03-10)
+
+- Init release.

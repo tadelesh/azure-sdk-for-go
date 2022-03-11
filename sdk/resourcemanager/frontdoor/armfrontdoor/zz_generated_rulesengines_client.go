@@ -35,17 +35,17 @@ type RulesEnginesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRulesEnginesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RulesEnginesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RulesEnginesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *RulesEnginesClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return RulesEnginesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := RulesEnginesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := RulesEnginesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("RulesEnginesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return RulesEnginesClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *RulesEnginesClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return RulesEnginesClientDeletePollerResponse{}, err
 	}
-	result := RulesEnginesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := RulesEnginesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("RulesEnginesClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return RulesEnginesClientDeletePollerResponse{}, err
@@ -248,7 +244,7 @@ func (client *RulesEnginesClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *RulesEnginesClient) getHandleResponse(resp *http.Response) (RulesEnginesClientGetResponse, error) {
-	result := RulesEnginesClientGetResponse{RawResponse: resp}
+	result := RulesEnginesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RulesEngine); err != nil {
 		return RulesEnginesClientGetResponse{}, err
 	}
@@ -301,7 +297,7 @@ func (client *RulesEnginesClient) listByFrontDoorCreateRequest(ctx context.Conte
 
 // listByFrontDoorHandleResponse handles the ListByFrontDoor response.
 func (client *RulesEnginesClient) listByFrontDoorHandleResponse(resp *http.Response) (RulesEnginesClientListByFrontDoorResponse, error) {
-	result := RulesEnginesClientListByFrontDoorResponse{RawResponse: resp}
+	result := RulesEnginesClientListByFrontDoorResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RulesEngineListResult); err != nil {
 		return RulesEnginesClientListByFrontDoorResponse{}, err
 	}

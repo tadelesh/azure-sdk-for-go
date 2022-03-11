@@ -1,5 +1,39 @@
 # Release History
 
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Struct `ADCCatalogsClientCreateOrUpdateResult` has been removed
+- Struct `ADCCatalogsClientGetResult` has been removed
+- Struct `ADCCatalogsClientListtByResourceGroupResult` has been removed
+- Struct `ADCCatalogsClientUpdateResult` has been removed
+- Struct `ADCOperationsClientListResult` has been removed
+- Field `ADCCatalogsClientUpdateResult` of struct `ADCCatalogsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ADCCatalogsClientUpdateResponse` has been removed
+- Field `ADCOperationsClientListResult` of struct `ADCOperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ADCOperationsClientListResponse` has been removed
+- Field `ADCCatalogsClientCreateOrUpdateResult` of struct `ADCCatalogsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ADCCatalogsClientCreateOrUpdateResponse` has been removed
+- Field `ADCCatalogsClientListtByResourceGroupResult` of struct `ADCCatalogsClientListtByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ADCCatalogsClientListtByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ADCCatalogsClientDeleteResponse` has been removed
+- Field `ADCCatalogsClientGetResult` of struct `ADCCatalogsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ADCCatalogsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ADCCatalogsClientDeletePollerResponse` has been removed
+
+### Features Added
+
+- New anonymous field `ADCCatalog` in struct `ADCCatalogsClientUpdateResponse`
+- New anonymous field `OperationEntityListResult` in struct `ADCOperationsClientListResponse`
+- New anonymous field `ADCCatalog` in struct `ADCCatalogsClientGetResponse`
+- New anonymous field `ADCCatalog` in struct `ADCCatalogsClientCreateOrUpdateResponse`
+- New anonymous field `ADCCatalogsListResult` in struct `ADCCatalogsClientListtByResourceGroupResponse`
+
+
+## 0.2.1 (2022-03-10)
+### Other Changes
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

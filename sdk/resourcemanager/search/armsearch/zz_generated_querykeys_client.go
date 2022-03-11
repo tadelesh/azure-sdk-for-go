@@ -35,17 +35,17 @@ type QueryKeysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewQueryKeysClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *QueryKeysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &QueryKeysClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -107,7 +107,7 @@ func (client *QueryKeysClient) createCreateRequest(ctx context.Context, resource
 
 // createHandleResponse handles the Create response.
 func (client *QueryKeysClient) createHandleResponse(resp *http.Response) (QueryKeysClientCreateResponse, error) {
-	result := QueryKeysClientCreateResponse{RawResponse: resp}
+	result := QueryKeysClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QueryKey); err != nil {
 		return QueryKeysClientCreateResponse{}, err
 	}
@@ -134,7 +134,7 @@ func (client *QueryKeysClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent, http.StatusNotFound) {
 		return QueryKeysClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return QueryKeysClientDeleteResponse{RawResponse: resp}, nil
+	return QueryKeysClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -219,7 +219,7 @@ func (client *QueryKeysClient) listBySearchServiceCreateRequest(ctx context.Cont
 
 // listBySearchServiceHandleResponse handles the ListBySearchService response.
 func (client *QueryKeysClient) listBySearchServiceHandleResponse(resp *http.Response) (QueryKeysClientListBySearchServiceResponse, error) {
-	result := QueryKeysClientListBySearchServiceResponse{RawResponse: resp}
+	result := QueryKeysClientListBySearchServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListQueryKeysResult); err != nil {
 		return QueryKeysClientListBySearchServiceResponse{}, err
 	}

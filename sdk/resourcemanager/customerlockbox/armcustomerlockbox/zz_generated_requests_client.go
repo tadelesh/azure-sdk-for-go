@@ -32,16 +32,16 @@ type RequestsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRequestsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *RequestsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RequestsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -90,7 +90,7 @@ func (client *RequestsClient) getCreateRequest(ctx context.Context, requestID st
 
 // getHandleResponse handles the Get response.
 func (client *RequestsClient) getHandleResponse(resp *http.Response) (RequestsClientGetResponse, error) {
-	result := RequestsClientGetResponse{RawResponse: resp}
+	result := RequestsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LockboxRequestResponse); err != nil {
 		return RequestsClientGetResponse{}, err
 	}
@@ -135,7 +135,7 @@ func (client *RequestsClient) listCreateRequest(ctx context.Context, subscriptio
 
 // listHandleResponse handles the List response.
 func (client *RequestsClient) listHandleResponse(resp *http.Response) (RequestsClientListResponse, error) {
-	result := RequestsClientListResponse{RawResponse: resp}
+	result := RequestsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RequestListResult); err != nil {
 		return RequestsClientListResponse{}, err
 	}
@@ -187,7 +187,7 @@ func (client *RequestsClient) updateStatusCreateRequest(ctx context.Context, sub
 
 // updateStatusHandleResponse handles the UpdateStatus response.
 func (client *RequestsClient) updateStatusHandleResponse(resp *http.Response) (RequestsClientUpdateStatusResponse, error) {
-	result := RequestsClientUpdateStatusResponse{RawResponse: resp}
+	result := RequestsClientUpdateStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Approval); err != nil {
 		return RequestsClientUpdateStatusResponse{}, err
 	}

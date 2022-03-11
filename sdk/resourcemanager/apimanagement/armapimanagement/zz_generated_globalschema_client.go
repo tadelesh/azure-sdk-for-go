@@ -36,17 +36,17 @@ type GlobalSchemaClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGlobalSchemaClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *GlobalSchemaClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GlobalSchemaClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *GlobalSchemaClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return GlobalSchemaClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := GlobalSchemaClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := GlobalSchemaClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("GlobalSchemaClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return GlobalSchemaClientCreateOrUpdatePollerResponse{}, err
@@ -147,7 +145,7 @@ func (client *GlobalSchemaClient) Delete(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return GlobalSchemaClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return GlobalSchemaClientDeleteResponse{RawResponse: resp}, nil
+	return GlobalSchemaClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -234,7 +232,7 @@ func (client *GlobalSchemaClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *GlobalSchemaClient) getHandleResponse(resp *http.Response) (GlobalSchemaClientGetResponse, error) {
-	result := GlobalSchemaClientGetResponse{RawResponse: resp}
+	result := GlobalSchemaClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -294,7 +292,7 @@ func (client *GlobalSchemaClient) getEntityTagCreateRequest(ctx context.Context,
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *GlobalSchemaClient) getEntityTagHandleResponse(resp *http.Response) (GlobalSchemaClientGetEntityTagResponse, error) {
-	result := GlobalSchemaClientGetEntityTagResponse{RawResponse: resp}
+	result := GlobalSchemaClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -359,7 +357,7 @@ func (client *GlobalSchemaClient) listByServiceCreateRequest(ctx context.Context
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *GlobalSchemaClient) listByServiceHandleResponse(resp *http.Response) (GlobalSchemaClientListByServiceResponse, error) {
-	result := GlobalSchemaClientListByServiceResponse{RawResponse: resp}
+	result := GlobalSchemaClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GlobalSchemaCollection); err != nil {
 		return GlobalSchemaClientListByServiceResponse{}, err
 	}

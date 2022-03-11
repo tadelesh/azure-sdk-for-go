@@ -34,17 +34,17 @@ type EnergyServicesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewEnergyServicesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *EnergyServicesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &EnergyServicesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -60,9 +60,7 @@ func (client *EnergyServicesClient) BeginCreate(ctx context.Context, resourceGro
 	if err != nil {
 		return EnergyServicesClientCreatePollerResponse{}, err
 	}
-	result := EnergyServicesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := EnergyServicesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("EnergyServicesClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return EnergyServicesClientCreatePollerResponse{}, err
@@ -127,9 +125,7 @@ func (client *EnergyServicesClient) BeginDelete(ctx context.Context, resourceGro
 	if err != nil {
 		return EnergyServicesClientDeletePollerResponse{}, err
 	}
-	result := EnergyServicesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := EnergyServicesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("EnergyServicesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return EnergyServicesClientDeletePollerResponse{}, err
@@ -230,7 +226,7 @@ func (client *EnergyServicesClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *EnergyServicesClient) getHandleResponse(resp *http.Response) (EnergyServicesClientGetResponse, error) {
-	result := EnergyServicesClientGetResponse{RawResponse: resp}
+	result := EnergyServicesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EnergyService); err != nil {
 		return EnergyServicesClientGetResponse{}, err
 	}
@@ -278,7 +274,7 @@ func (client *EnergyServicesClient) listByResourceGroupCreateRequest(ctx context
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *EnergyServicesClient) listByResourceGroupHandleResponse(resp *http.Response) (EnergyServicesClientListByResourceGroupResponse, error) {
-	result := EnergyServicesClientListByResourceGroupResponse{RawResponse: resp}
+	result := EnergyServicesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EnergyServiceList); err != nil {
 		return EnergyServicesClientListByResourceGroupResponse{}, err
 	}
@@ -321,7 +317,7 @@ func (client *EnergyServicesClient) listBySubscriptionCreateRequest(ctx context.
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *EnergyServicesClient) listBySubscriptionHandleResponse(resp *http.Response) (EnergyServicesClientListBySubscriptionResponse, error) {
-	result := EnergyServicesClientListBySubscriptionResponse{RawResponse: resp}
+	result := EnergyServicesClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EnergyServiceList); err != nil {
 		return EnergyServicesClientListBySubscriptionResponse{}, err
 	}
@@ -379,7 +375,7 @@ func (client *EnergyServicesClient) updateCreateRequest(ctx context.Context, res
 
 // updateHandleResponse handles the Update response.
 func (client *EnergyServicesClient) updateHandleResponse(resp *http.Response) (EnergyServicesClientUpdateResponse, error) {
-	result := EnergyServicesClientUpdateResponse{RawResponse: resp}
+	result := EnergyServicesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EnergyService); err != nil {
 		return EnergyServicesClientUpdateResponse{}, err
 	}

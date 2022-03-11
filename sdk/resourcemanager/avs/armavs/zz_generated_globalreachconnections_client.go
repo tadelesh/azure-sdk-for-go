@@ -34,17 +34,17 @@ type GlobalReachConnectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGlobalReachConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *GlobalReachConnectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GlobalReachConnectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *GlobalReachConnectionsClient) BeginCreateOrUpdate(ctx context.Cont
 	if err != nil {
 		return GlobalReachConnectionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := GlobalReachConnectionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := GlobalReachConnectionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("GlobalReachConnectionsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return GlobalReachConnectionsClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *GlobalReachConnectionsClient) BeginDelete(ctx context.Context, res
 	if err != nil {
 		return GlobalReachConnectionsClientDeletePollerResponse{}, err
 	}
-	result := GlobalReachConnectionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := GlobalReachConnectionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("GlobalReachConnectionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return GlobalReachConnectionsClientDeletePollerResponse{}, err
@@ -248,7 +244,7 @@ func (client *GlobalReachConnectionsClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *GlobalReachConnectionsClient) getHandleResponse(resp *http.Response) (GlobalReachConnectionsClientGetResponse, error) {
-	result := GlobalReachConnectionsClientGetResponse{RawResponse: resp}
+	result := GlobalReachConnectionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GlobalReachConnection); err != nil {
 		return GlobalReachConnectionsClientGetResponse{}, err
 	}
@@ -301,7 +297,7 @@ func (client *GlobalReachConnectionsClient) listCreateRequest(ctx context.Contex
 
 // listHandleResponse handles the List response.
 func (client *GlobalReachConnectionsClient) listHandleResponse(resp *http.Response) (GlobalReachConnectionsClientListResponse, error) {
-	result := GlobalReachConnectionsClientListResponse{RawResponse: resp}
+	result := GlobalReachConnectionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GlobalReachConnectionList); err != nil {
 		return GlobalReachConnectionsClientListResponse{}, err
 	}

@@ -35,17 +35,17 @@ type SourceControlSyncJobClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSourceControlSyncJobClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SourceControlSyncJobClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SourceControlSyncJobClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -107,7 +107,7 @@ func (client *SourceControlSyncJobClient) createCreateRequest(ctx context.Contex
 
 // createHandleResponse handles the Create response.
 func (client *SourceControlSyncJobClient) createHandleResponse(resp *http.Response) (SourceControlSyncJobClientCreateResponse, error) {
-	result := SourceControlSyncJobClientCreateResponse{RawResponse: resp}
+	result := SourceControlSyncJobClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceControlSyncJob); err != nil {
 		return SourceControlSyncJobClientCreateResponse{}, err
 	}
@@ -170,7 +170,7 @@ func (client *SourceControlSyncJobClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *SourceControlSyncJobClient) getHandleResponse(resp *http.Response) (SourceControlSyncJobClientGetResponse, error) {
-	result := SourceControlSyncJobClientGetResponse{RawResponse: resp}
+	result := SourceControlSyncJobClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceControlSyncJobByID); err != nil {
 		return SourceControlSyncJobClientGetResponse{}, err
 	}
@@ -231,7 +231,7 @@ func (client *SourceControlSyncJobClient) listByAutomationAccountCreateRequest(c
 
 // listByAutomationAccountHandleResponse handles the ListByAutomationAccount response.
 func (client *SourceControlSyncJobClient) listByAutomationAccountHandleResponse(resp *http.Response) (SourceControlSyncJobClientListByAutomationAccountResponse, error) {
-	result := SourceControlSyncJobClientListByAutomationAccountResponse{RawResponse: resp}
+	result := SourceControlSyncJobClientListByAutomationAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceControlSyncJobListResult); err != nil {
 		return SourceControlSyncJobClientListByAutomationAccountResponse{}, err
 	}

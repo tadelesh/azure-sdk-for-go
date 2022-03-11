@@ -1,5 +1,186 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*QuotaClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(QuotaClientListResponse, error)`
+- Function `*ReservationClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ReservationClientListResponse, error)`
+- Function `*QuotaRequestStatusClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(QuotaRequestStatusClientListResponse, error)`
+- Function `*ReservationClientListRevisionsPager.NextPage` return value(s) have been changed from `(bool)` to `(ReservationClientListRevisionsResponse, error)`
+- Function `*ReservationClientListAllPager.NextPage` return value(s) have been changed from `(bool)` to `(ReservationClientListAllResponse, error)`
+- Function `*OperationClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationClientListResponse, error)`
+- Function `*ReservationOrderClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ReservationOrderClientListResponse, error)`
+- Function `*ReservationClientListRevisionsPager.PageResponse` has been removed
+- Function `*QuotaClientListPager.Err` has been removed
+- Function `*ReservationClientListAllPager.PageResponse` has been removed
+- Function `*ReservationClientListPager.Err` has been removed
+- Function `*QuotaClientListPager.PageResponse` has been removed
+- Function `*ReservationOrderClientListPager.PageResponse` has been removed
+- Function `*QuotaRequestStatusClientListPager.Err` has been removed
+- Function `*ReservationClientListPager.PageResponse` has been removed
+- Function `*QuotaRequestStatusClientListPager.PageResponse` has been removed
+- Function `*ReservationClientListAllPager.Err` has been removed
+- Function `*ReservationClientListRevisionsPager.Err` has been removed
+- Function `*ReservationOrderClientListPager.Err` has been removed
+- Function `*OperationClientListPager.Err` has been removed
+- Function `*OperationClientListPager.PageResponse` has been removed
+- Struct `AzureReservationAPIClientGetAppliedReservationListResult` has been removed
+- Struct `AzureReservationAPIClientGetCatalogResult` has been removed
+- Struct `CalculateExchangeClientPostResult` has been removed
+- Struct `ExchangeClientPostResult` has been removed
+- Struct `OperationClientListResult` has been removed
+- Struct `QuotaClientCreateOrUpdateResult` has been removed
+- Struct `QuotaClientGetResult` has been removed
+- Struct `QuotaClientListResult` has been removed
+- Struct `QuotaClientUpdateResult` has been removed
+- Struct `QuotaRequestStatusClientGetResult` has been removed
+- Struct `QuotaRequestStatusClientListResult` has been removed
+- Struct `ReservationClientAvailableScopesResult` has been removed
+- Struct `ReservationClientGetResult` has been removed
+- Struct `ReservationClientListAllResult` has been removed
+- Struct `ReservationClientListResult` has been removed
+- Struct `ReservationClientListRevisionsResult` has been removed
+- Struct `ReservationClientMergeResult` has been removed
+- Struct `ReservationClientSplitResult` has been removed
+- Struct `ReservationClientUpdateResult` has been removed
+- Struct `ReservationOrderClientCalculateResult` has been removed
+- Struct `ReservationOrderClientChangeDirectoryResult` has been removed
+- Struct `ReservationOrderClientGetResult` has been removed
+- Struct `ReservationOrderClientListResult` has been removed
+- Struct `ReservationOrderClientPurchaseResult` has been removed
+- Field `RawResponse` of struct `ReservationClientUpdatePollerResponse` has been removed
+- Field `AzureReservationAPIClientGetAppliedReservationListResult` of struct `AzureReservationAPIClientGetAppliedReservationListResponse` has been removed
+- Field `RawResponse` of struct `AzureReservationAPIClientGetAppliedReservationListResponse` has been removed
+- Field `QuotaRequestStatusClientListResult` of struct `QuotaRequestStatusClientListResponse` has been removed
+- Field `RawResponse` of struct `QuotaRequestStatusClientListResponse` has been removed
+- Field `ReservationClientSplitResult` of struct `ReservationClientSplitResponse` has been removed
+- Field `RawResponse` of struct `ReservationClientSplitResponse` has been removed
+- Field `RawResponse` of struct `QuotaClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ReservationClientMergePollerResponse` has been removed
+- Field `AzureReservationAPIClientGetCatalogResult` of struct `AzureReservationAPIClientGetCatalogResponse` has been removed
+- Field `RawResponse` of struct `AzureReservationAPIClientGetCatalogResponse` has been removed
+- Field `RawResponse` of struct `CalculateExchangeClientPostPollerResponse` has been removed
+- Field `QuotaClientGetResult` of struct `QuotaClientGetResponse` has been removed
+- Field `RawResponse` of struct `QuotaClientGetResponse` has been removed
+- Field `RawResponse` of struct `ReservationOrderClientPurchasePollerResponse` has been removed
+- Field `QuotaClientUpdateResult` of struct `QuotaClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `QuotaClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ExchangeClientPostPollerResponse` has been removed
+- Field `ReservationClientUpdateResult` of struct `ReservationClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ReservationClientUpdateResponse` has been removed
+- Field `QuotaRequestStatusClientGetResult` of struct `QuotaRequestStatusClientGetResponse` has been removed
+- Field `RawResponse` of struct `QuotaRequestStatusClientGetResponse` has been removed
+- Field `RawResponse` of struct `ReservationClientAvailableScopesPollerResponse` has been removed
+- Field `CalculateExchangeClientPostResult` of struct `CalculateExchangeClientPostResponse` has been removed
+- Field `RawResponse` of struct `CalculateExchangeClientPostResponse` has been removed
+- Field `RawResponse` of struct `QuotaClientCreateOrUpdatePollerResponse` has been removed
+- Field `QuotaClientListResult` of struct `QuotaClientListResponse` has been removed
+- Field `RawResponse` of struct `QuotaClientListResponse` has been removed
+- Field `OperationClientListResult` of struct `OperationClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationClientListResponse` has been removed
+- Field `ReservationClientGetResult` of struct `ReservationClientGetResponse` has been removed
+- Field `RawResponse` of struct `ReservationClientGetResponse` has been removed
+- Field `ReservationClientAvailableScopesResult` of struct `ReservationClientAvailableScopesResponse` has been removed
+- Field `RawResponse` of struct `ReservationClientAvailableScopesResponse` has been removed
+- Field `ReservationOrderClientPurchaseResult` of struct `ReservationOrderClientPurchaseResponse` has been removed
+- Field `RawResponse` of struct `ReservationOrderClientPurchaseResponse` has been removed
+- Field `ReservationClientListRevisionsResult` of struct `ReservationClientListRevisionsResponse` has been removed
+- Field `RawResponse` of struct `ReservationClientListRevisionsResponse` has been removed
+- Field `ReservationOrderClientListResult` of struct `ReservationOrderClientListResponse` has been removed
+- Field `RawResponse` of struct `ReservationOrderClientListResponse` has been removed
+- Field `RawResponse` of struct `ReservationClientSplitPollerResponse` has been removed
+- Field `ReservationOrderClientChangeDirectoryResult` of struct `ReservationOrderClientChangeDirectoryResponse` has been removed
+- Field `RawResponse` of struct `ReservationOrderClientChangeDirectoryResponse` has been removed
+- Field `ReservationOrderClientCalculateResult` of struct `ReservationOrderClientCalculateResponse` has been removed
+- Field `RawResponse` of struct `ReservationOrderClientCalculateResponse` has been removed
+- Field `ReservationClientListAllResult` of struct `ReservationClientListAllResponse` has been removed
+- Field `RawResponse` of struct `ReservationClientListAllResponse` has been removed
+- Field `QuotaClientCreateOrUpdateResult` of struct `QuotaClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `QuotaClientCreateOrUpdateResponse` has been removed
+- Field `ReservationClientListResult` of struct `ReservationClientListResponse` has been removed
+- Field `RawResponse` of struct `ReservationClientListResponse` has been removed
+- Field `ExchangeClientPostResult` of struct `ExchangeClientPostResponse` has been removed
+- Field `RawResponse` of struct `ExchangeClientPostResponse` has been removed
+- Field `ReservationOrderClientGetResult` of struct `ReservationOrderClientGetResponse` has been removed
+- Field `RawResponse` of struct `ReservationOrderClientGetResponse` has been removed
+- Field `ReservationClientMergeResult` of struct `ReservationClientMergeResponse` has been removed
+- Field `RawResponse` of struct `ReservationClientMergeResponse` has been removed
+
+### Features Added
+
+- New function `*ReservationOrderClientListPager.More() bool`
+- New function `*ReservationClientListRevisionsPager.More() bool`
+- New function `*QuotaRequestStatusClientListPager.More() bool`
+- New function `*ReservationClientListAllPager.More() bool`
+- New function `*ReservationClientListPager.More() bool`
+- New function `*QuotaClientListPager.More() bool`
+- New function `ServiceError.MarshalJSON() ([]byte, error)`
+- New function `*OperationClientListPager.More() bool`
+- New function `CreateGenericQuotaRequestParameters.MarshalJSON() ([]byte, error)`
+- New function `QuotaLimitsResponse.MarshalJSON() ([]byte, error)`
+- New struct `CreateGenericQuotaRequestParameters`
+- New struct `CurrentQuotaLimit`
+- New struct `Error`
+- New struct `ErrorDetails`
+- New struct `ErrorResponse`
+- New struct `ExceptionResponse`
+- New struct `ExtendedErrorInfo`
+- New struct `QuotaLimitsResponse`
+- New struct `QuotaRequestSubmitResponse`
+- New struct `ServiceError`
+- New struct `ServiceErrorDetail`
+- New anonymous field `QuotaLimits` in struct `QuotaClientListResponse`
+- New field `ETag` in struct `QuotaClientListResponse`
+- New anonymous field `AvailableScopeProperties` in struct `ReservationClientAvailableScopesResponse`
+- New anonymous field `ReservationOrderResponse` in struct `ReservationOrderClientGetResponse`
+- New anonymous field `ReservationList` in struct `ReservationClientListResponse`
+- New anonymous field `CalculatePriceResponse` in struct `ReservationOrderClientCalculateResponse`
+- New anonymous field `ExchangeOperationResultResponse` in struct `ExchangeClientPostResponse`
+- New anonymous field `AppliedReservations` in struct `AzureReservationAPIClientGetAppliedReservationListResponse`
+- New anonymous field `ListResult` in struct `ReservationClientListAllResponse`
+- New anonymous field `ReservationList` in struct `ReservationClientListRevisionsResponse`
+- New field `CatalogArray` in struct `AzureReservationAPIClientGetCatalogResponse`
+- New anonymous field `ReservationOrderList` in struct `ReservationOrderClientListResponse`
+- New anonymous field `QuotaRequestDetails` in struct `QuotaRequestStatusClientGetResponse`
+- New anonymous field `ReservationResponse` in struct `ReservationClientUpdateResponse`
+- New anonymous field `CalculateExchangeOperationResultResponse` in struct `CalculateExchangeClientPostResponse`
+- New anonymous field `OperationList` in struct `OperationClientListResponse`
+- New anonymous field `ReservationResponse` in struct `ReservationClientGetResponse`
+- New field `ReservationResponseArray` in struct `ReservationClientMergeResponse`
+- New anonymous field `ReservationOrderResponse` in struct `ReservationOrderClientPurchaseResponse`
+- New anonymous field `ChangeDirectoryResponse` in struct `ReservationOrderClientChangeDirectoryResponse`
+- New anonymous field `QuotaRequestOneResourceSubmitResponse` in struct `QuotaClientCreateOrUpdateResponse`
+- New anonymous field `QuotaRequestOneResourceSubmitResponse` in struct `QuotaClientUpdateResponse`
+- New anonymous field `CurrentQuotaLimitBase` in struct `QuotaClientGetResponse`
+- New field `ETag` in struct `QuotaClientGetResponse`
+- New field `ReservationResponseArray` in struct `ReservationClientSplitResponse`
+- New anonymous field `QuotaRequestDetailsList` in struct `QuotaRequestStatusClientListResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `QuotaProperties.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `OperationResponse.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Function `QuotaLimitsResponse.MarshalJSON` has been removed
+- Function `CreateGenericQuotaRequestParameters.MarshalJSON` has been removed
+- Function `ServiceError.MarshalJSON` has been removed
+- Struct `CreateGenericQuotaRequestParameters` has been removed
+- Struct `CurrentQuotaLimit` has been removed
+- Struct `Error` has been removed
+- Struct `ErrorDetails` has been removed
+- Struct `ErrorResponse` has been removed
+- Struct `ExceptionResponse` has been removed
+- Struct `ExtendedErrorInfo` has been removed
+- Struct `QuotaLimitsResponse` has been removed
+- Struct `QuotaRequestSubmitResponse` has been removed
+- Struct `ServiceError` has been removed
+- Struct `ServiceErrorDetail` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

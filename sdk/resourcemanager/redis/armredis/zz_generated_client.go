@@ -67,7 +67,7 @@ func (client *Client) CheckNameAvailability(ctx context.Context, parameters Chec
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ClientCheckNameAvailabilityResponse{}, runtime.NewResponseError(resp)
 	}
-	return ClientCheckNameAvailabilityResponse{RawResponse: resp}, nil
+	return ClientCheckNameAvailabilityResponse{}, nil
 }
 
 // checkNameAvailabilityCreateRequest creates the CheckNameAvailability request.
@@ -99,9 +99,7 @@ func (client *Client) BeginCreate(ctx context.Context, resourceGroupName string,
 	if err != nil {
 		return ClientCreatePollerResponse{}, err
 	}
-	result := ClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("Client.Create", "", resp, client.pl)
 	if err != nil {
 		return ClientCreatePollerResponse{}, err
@@ -165,9 +163,7 @@ func (client *Client) BeginDelete(ctx context.Context, resourceGroupName string,
 	if err != nil {
 		return ClientDeletePollerResponse{}, err
 	}
-	result := ClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("Client.Delete", "", resp, client.pl)
 	if err != nil {
 		return ClientDeletePollerResponse{}, err
@@ -232,9 +228,7 @@ func (client *Client) BeginExportData(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return ClientExportDataPollerResponse{}, err
 	}
-	result := ClientExportDataPollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientExportDataPollerResponse{}
 	pt, err := armruntime.NewPoller("Client.ExportData", "", resp, client.pl)
 	if err != nil {
 		return ClientExportDataPollerResponse{}, err
@@ -338,7 +332,7 @@ func (client *Client) forceRebootCreateRequest(ctx context.Context, resourceGrou
 
 // forceRebootHandleResponse handles the ForceReboot response.
 func (client *Client) forceRebootHandleResponse(resp *http.Response) (ClientForceRebootResponse, error) {
-	result := ClientForceRebootResponse{RawResponse: resp}
+	result := ClientForceRebootResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ForceRebootResponse); err != nil {
 		return ClientForceRebootResponse{}, err
 	}
@@ -393,7 +387,7 @@ func (client *Client) getCreateRequest(ctx context.Context, resourceGroupName st
 
 // getHandleResponse handles the Get response.
 func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse, error) {
-	result := ClientGetResponse{RawResponse: resp}
+	result := ClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceInfo); err != nil {
 		return ClientGetResponse{}, err
 	}
@@ -411,9 +405,7 @@ func (client *Client) BeginImportData(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return ClientImportDataPollerResponse{}, err
 	}
-	result := ClientImportDataPollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientImportDataPollerResponse{}
 	pt, err := armruntime.NewPoller("Client.ImportData", "", resp, client.pl)
 	if err != nil {
 		return ClientImportDataPollerResponse{}, err
@@ -507,7 +499,7 @@ func (client *Client) listByResourceGroupCreateRequest(ctx context.Context, reso
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *Client) listByResourceGroupHandleResponse(resp *http.Response) (ClientListByResourceGroupResponse, error) {
-	result := ClientListByResourceGroupResponse{RawResponse: resp}
+	result := ClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListResult); err != nil {
 		return ClientListByResourceGroupResponse{}, err
 	}
@@ -549,7 +541,7 @@ func (client *Client) listBySubscriptionCreateRequest(ctx context.Context, optio
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *Client) listBySubscriptionHandleResponse(resp *http.Response) (ClientListBySubscriptionResponse, error) {
-	result := ClientListBySubscriptionResponse{RawResponse: resp}
+	result := ClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListResult); err != nil {
 		return ClientListBySubscriptionResponse{}, err
 	}
@@ -604,7 +596,7 @@ func (client *Client) listKeysCreateRequest(ctx context.Context, resourceGroupNa
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *Client) listKeysHandleResponse(resp *http.Response) (ClientListKeysResponse, error) {
-	result := ClientListKeysResponse{RawResponse: resp}
+	result := ClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessKeys); err != nil {
 		return ClientListKeysResponse{}, err
 	}
@@ -659,7 +651,7 @@ func (client *Client) listUpgradeNotificationsCreateRequest(ctx context.Context,
 
 // listUpgradeNotificationsHandleResponse handles the ListUpgradeNotifications response.
 func (client *Client) listUpgradeNotificationsHandleResponse(resp *http.Response) (ClientListUpgradeNotificationsResponse, error) {
-	result := ClientListUpgradeNotificationsResponse{RawResponse: resp}
+	result := ClientListUpgradeNotificationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotificationListResponse); err != nil {
 		return ClientListUpgradeNotificationsResponse{}, err
 	}
@@ -715,7 +707,7 @@ func (client *Client) regenerateKeyCreateRequest(ctx context.Context, resourceGr
 
 // regenerateKeyHandleResponse handles the RegenerateKey response.
 func (client *Client) regenerateKeyHandleResponse(resp *http.Response) (ClientRegenerateKeyResponse, error) {
-	result := ClientRegenerateKeyResponse{RawResponse: resp}
+	result := ClientRegenerateKeyResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessKeys); err != nil {
 		return ClientRegenerateKeyResponse{}, err
 	}
@@ -771,7 +763,7 @@ func (client *Client) updateCreateRequest(ctx context.Context, resourceGroupName
 
 // updateHandleResponse handles the Update response.
 func (client *Client) updateHandleResponse(resp *http.Response) (ClientUpdateResponse, error) {
-	result := ClientUpdateResponse{RawResponse: resp}
+	result := ClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceInfo); err != nil {
 		return ClientUpdateResponse{}, err
 	}

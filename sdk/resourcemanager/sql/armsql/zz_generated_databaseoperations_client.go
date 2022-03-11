@@ -34,17 +34,17 @@ type DatabaseOperationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDatabaseOperationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DatabaseOperationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DatabaseOperationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -70,7 +70,7 @@ func (client *DatabaseOperationsClient) Cancel(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return DatabaseOperationsClientCancelResponse{}, runtime.NewResponseError(resp)
 	}
-	return DatabaseOperationsClientCancelResponse{RawResponse: resp}, nil
+	return DatabaseOperationsClientCancelResponse{}, nil
 }
 
 // cancelCreateRequest creates the Cancel request.
@@ -155,7 +155,7 @@ func (client *DatabaseOperationsClient) listByDatabaseCreateRequest(ctx context.
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *DatabaseOperationsClient) listByDatabaseHandleResponse(resp *http.Response) (DatabaseOperationsClientListByDatabaseResponse, error) {
-	result := DatabaseOperationsClientListByDatabaseResponse{RawResponse: resp}
+	result := DatabaseOperationsClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseOperationListResult); err != nil {
 		return DatabaseOperationsClientListByDatabaseResponse{}, err
 	}

@@ -35,17 +35,17 @@ type SourceControlSyncJobStreamsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSourceControlSyncJobStreamsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SourceControlSyncJobStreamsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SourceControlSyncJobStreamsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -111,7 +111,7 @@ func (client *SourceControlSyncJobStreamsClient) getCreateRequest(ctx context.Co
 
 // getHandleResponse handles the Get response.
 func (client *SourceControlSyncJobStreamsClient) getHandleResponse(resp *http.Response) (SourceControlSyncJobStreamsClientGetResponse, error) {
-	result := SourceControlSyncJobStreamsClientGetResponse{RawResponse: resp}
+	result := SourceControlSyncJobStreamsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceControlSyncJobStreamByID); err != nil {
 		return SourceControlSyncJobStreamsClientGetResponse{}, err
 	}
@@ -174,7 +174,7 @@ func (client *SourceControlSyncJobStreamsClient) listBySyncJobCreateRequest(ctx 
 
 // listBySyncJobHandleResponse handles the ListBySyncJob response.
 func (client *SourceControlSyncJobStreamsClient) listBySyncJobHandleResponse(resp *http.Response) (SourceControlSyncJobStreamsClientListBySyncJobResponse, error) {
-	result := SourceControlSyncJobStreamsClientListBySyncJobResponse{RawResponse: resp}
+	result := SourceControlSyncJobStreamsClientListBySyncJobResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceControlSyncJobStreamsListBySyncJob); err != nil {
 		return SourceControlSyncJobStreamsClientListBySyncJobResponse{}, err
 	}

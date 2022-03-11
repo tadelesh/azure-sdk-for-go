@@ -34,17 +34,17 @@ type SQLServerRegistrationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLServerRegistrationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLServerRegistrationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLServerRegistrationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *SQLServerRegistrationsClient) createOrUpdateCreateRequest(ctx cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *SQLServerRegistrationsClient) createOrUpdateHandleResponse(resp *http.Response) (SQLServerRegistrationsClientCreateOrUpdateResponse, error) {
-	result := SQLServerRegistrationsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := SQLServerRegistrationsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLServerRegistration); err != nil {
 		return SQLServerRegistrationsClientCreateOrUpdateResponse{}, err
 	}
@@ -126,7 +126,7 @@ func (client *SQLServerRegistrationsClient) Delete(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SQLServerRegistrationsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SQLServerRegistrationsClientDeleteResponse{RawResponse: resp}, nil
+	return SQLServerRegistrationsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -205,7 +205,7 @@ func (client *SQLServerRegistrationsClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *SQLServerRegistrationsClient) getHandleResponse(resp *http.Response) (SQLServerRegistrationsClientGetResponse, error) {
-	result := SQLServerRegistrationsClientGetResponse{RawResponse: resp}
+	result := SQLServerRegistrationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLServerRegistration); err != nil {
 		return SQLServerRegistrationsClientGetResponse{}, err
 	}
@@ -248,7 +248,7 @@ func (client *SQLServerRegistrationsClient) listCreateRequest(ctx context.Contex
 
 // listHandleResponse handles the List response.
 func (client *SQLServerRegistrationsClient) listHandleResponse(resp *http.Response) (SQLServerRegistrationsClientListResponse, error) {
-	result := SQLServerRegistrationsClientListResponse{RawResponse: resp}
+	result := SQLServerRegistrationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLServerRegistrationListResult); err != nil {
 		return SQLServerRegistrationsClientListResponse{}, err
 	}
@@ -297,7 +297,7 @@ func (client *SQLServerRegistrationsClient) listByResourceGroupCreateRequest(ctx
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *SQLServerRegistrationsClient) listByResourceGroupHandleResponse(resp *http.Response) (SQLServerRegistrationsClientListByResourceGroupResponse, error) {
-	result := SQLServerRegistrationsClientListByResourceGroupResponse{RawResponse: resp}
+	result := SQLServerRegistrationsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLServerRegistrationListResult); err != nil {
 		return SQLServerRegistrationsClientListByResourceGroupResponse{}, err
 	}
@@ -355,7 +355,7 @@ func (client *SQLServerRegistrationsClient) updateCreateRequest(ctx context.Cont
 
 // updateHandleResponse handles the Update response.
 func (client *SQLServerRegistrationsClient) updateHandleResponse(resp *http.Response) (SQLServerRegistrationsClientUpdateResponse, error) {
-	result := SQLServerRegistrationsClientUpdateResponse{RawResponse: resp}
+	result := SQLServerRegistrationsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLServerRegistration); err != nil {
 		return SQLServerRegistrationsClientUpdateResponse{}, err
 	}

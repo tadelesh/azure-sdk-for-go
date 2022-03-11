@@ -35,17 +35,17 @@ type WebhookClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWebhookClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WebhookClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WebhookClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *WebhookClient) createOrUpdateCreateRequest(ctx context.Context, re
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *WebhookClient) createOrUpdateHandleResponse(resp *http.Response) (WebhookClientCreateOrUpdateResponse, error) {
-	result := WebhookClientCreateOrUpdateResponse{RawResponse: resp}
+	result := WebhookClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Webhook); err != nil {
 		return WebhookClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *WebhookClient) Delete(ctx context.Context, resourceGroupName strin
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebhookClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebhookClientDeleteResponse{RawResponse: resp}, nil
+	return WebhookClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -210,7 +210,7 @@ func (client *WebhookClient) generateURICreateRequest(ctx context.Context, resou
 
 // generateURIHandleResponse handles the GenerateURI response.
 func (client *WebhookClient) generateURIHandleResponse(resp *http.Response) (WebhookClientGenerateURIResponse, error) {
-	result := WebhookClientGenerateURIResponse{RawResponse: resp}
+	result := WebhookClientGenerateURIResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Value); err != nil {
 		return WebhookClientGenerateURIResponse{}, err
 	}
@@ -270,7 +270,7 @@ func (client *WebhookClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *WebhookClient) getHandleResponse(resp *http.Response) (WebhookClientGetResponse, error) {
-	result := WebhookClientGetResponse{RawResponse: resp}
+	result := WebhookClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Webhook); err != nil {
 		return WebhookClientGetResponse{}, err
 	}
@@ -326,7 +326,7 @@ func (client *WebhookClient) listByAutomationAccountCreateRequest(ctx context.Co
 
 // listByAutomationAccountHandleResponse handles the ListByAutomationAccount response.
 func (client *WebhookClient) listByAutomationAccountHandleResponse(resp *http.Response) (WebhookClientListByAutomationAccountResponse, error) {
-	result := WebhookClientListByAutomationAccountResponse{RawResponse: resp}
+	result := WebhookClientListByAutomationAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebhookListResult); err != nil {
 		return WebhookClientListByAutomationAccountResponse{}, err
 	}
@@ -387,7 +387,7 @@ func (client *WebhookClient) updateCreateRequest(ctx context.Context, resourceGr
 
 // updateHandleResponse handles the Update response.
 func (client *WebhookClient) updateHandleResponse(resp *http.Response) (WebhookClientUpdateResponse, error) {
-	result := WebhookClientUpdateResponse{RawResponse: resp}
+	result := WebhookClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Webhook); err != nil {
 		return WebhookClientUpdateResponse{}, err
 	}

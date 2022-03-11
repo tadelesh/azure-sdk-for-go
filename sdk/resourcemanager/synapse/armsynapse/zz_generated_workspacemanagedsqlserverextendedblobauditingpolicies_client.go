@@ -34,17 +34,17 @@ type WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClient) Begin
 	if err != nil {
 		return WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClientCreateOrUpdatePollerResponse{}, err
@@ -176,7 +174,7 @@ func (client *WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClient) getCr
 
 // getHandleResponse handles the Get response.
 func (client *WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClient) getHandleResponse(resp *http.Response) (WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClientGetResponse, error) {
-	result := WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClientGetResponse{RawResponse: resp}
+	result := WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExtendedServerBlobAuditingPolicy); err != nil {
 		return WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClientGetResponse{}, err
 	}
@@ -229,7 +227,7 @@ func (client *WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClient) listB
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClient) listByWorkspaceHandleResponse(resp *http.Response) (WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClientListByWorkspaceResponse, error) {
-	result := WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClientListByWorkspaceResponse{RawResponse: resp}
+	result := WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExtendedServerBlobAuditingPolicyListResult); err != nil {
 		return WorkspaceManagedSQLServerExtendedBlobAuditingPoliciesClientListByWorkspaceResponse{}, err
 	}

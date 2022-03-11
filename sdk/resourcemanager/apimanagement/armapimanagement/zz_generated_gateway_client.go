@@ -36,17 +36,17 @@ type GatewayClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGatewayClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *GatewayClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GatewayClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *GatewayClient) createOrUpdateCreateRequest(ctx context.Context, re
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *GatewayClient) createOrUpdateHandleResponse(resp *http.Response) (GatewayClientCreateOrUpdateResponse, error) {
-	result := GatewayClientCreateOrUpdateResponse{RawResponse: resp}
+	result := GatewayClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -139,7 +139,7 @@ func (client *GatewayClient) Delete(ctx context.Context, resourceGroupName strin
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return GatewayClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return GatewayClientDeleteResponse{RawResponse: resp}, nil
+	return GatewayClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -227,7 +227,7 @@ func (client *GatewayClient) generateTokenCreateRequest(ctx context.Context, res
 
 // generateTokenHandleResponse handles the GenerateToken response.
 func (client *GatewayClient) generateTokenHandleResponse(resp *http.Response) (GatewayClientGenerateTokenResponse, error) {
-	result := GatewayClientGenerateTokenResponse{RawResponse: resp}
+	result := GatewayClientGenerateTokenResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GatewayTokenContract); err != nil {
 		return GatewayClientGenerateTokenResponse{}, err
 	}
@@ -288,7 +288,7 @@ func (client *GatewayClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *GatewayClient) getHandleResponse(resp *http.Response) (GatewayClientGetResponse, error) {
-	result := GatewayClientGetResponse{RawResponse: resp}
+	result := GatewayClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -348,7 +348,7 @@ func (client *GatewayClient) getEntityTagCreateRequest(ctx context.Context, reso
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *GatewayClient) getEntityTagHandleResponse(resp *http.Response) (GatewayClientGetEntityTagResponse, error) {
-	result := GatewayClientGetEntityTagResponse{RawResponse: resp}
+	result := GatewayClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -412,7 +412,7 @@ func (client *GatewayClient) listByServiceCreateRequest(ctx context.Context, res
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *GatewayClient) listByServiceHandleResponse(resp *http.Response) (GatewayClientListByServiceResponse, error) {
-	result := GatewayClientListByServiceResponse{RawResponse: resp}
+	result := GatewayClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GatewayCollection); err != nil {
 		return GatewayClientListByServiceResponse{}, err
 	}
@@ -473,7 +473,7 @@ func (client *GatewayClient) listKeysCreateRequest(ctx context.Context, resource
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *GatewayClient) listKeysHandleResponse(resp *http.Response) (GatewayClientListKeysResponse, error) {
-	result := GatewayClientListKeysResponse{RawResponse: resp}
+	result := GatewayClientListKeysResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -502,7 +502,7 @@ func (client *GatewayClient) RegenerateKey(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return GatewayClientRegenerateKeyResponse{}, runtime.NewResponseError(resp)
 	}
-	return GatewayClientRegenerateKeyResponse{RawResponse: resp}, nil
+	return GatewayClientRegenerateKeyResponse{}, nil
 }
 
 // regenerateKeyCreateRequest creates the RegenerateKey request.
@@ -592,7 +592,7 @@ func (client *GatewayClient) updateCreateRequest(ctx context.Context, resourceGr
 
 // updateHandleResponse handles the Update response.
 func (client *GatewayClient) updateHandleResponse(resp *http.Response) (GatewayClientUpdateResponse, error) {
-	result := GatewayClientUpdateResponse{RawResponse: resp}
+	result := GatewayClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

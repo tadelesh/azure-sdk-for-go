@@ -34,17 +34,17 @@ type SQLPoolGeoBackupPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLPoolGeoBackupPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLPoolGeoBackupPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLPoolGeoBackupPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *SQLPoolGeoBackupPoliciesClient) createOrUpdateCreateRequest(ctx co
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *SQLPoolGeoBackupPoliciesClient) createOrUpdateHandleResponse(resp *http.Response) (SQLPoolGeoBackupPoliciesClientCreateOrUpdateResponse, error) {
-	result := SQLPoolGeoBackupPoliciesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := SQLPoolGeoBackupPoliciesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GeoBackupPolicy); err != nil {
 		return SQLPoolGeoBackupPoliciesClientCreateOrUpdateResponse{}, err
 	}
@@ -175,7 +175,7 @@ func (client *SQLPoolGeoBackupPoliciesClient) getCreateRequest(ctx context.Conte
 
 // getHandleResponse handles the Get response.
 func (client *SQLPoolGeoBackupPoliciesClient) getHandleResponse(resp *http.Response) (SQLPoolGeoBackupPoliciesClientGetResponse, error) {
-	result := SQLPoolGeoBackupPoliciesClientGetResponse{RawResponse: resp}
+	result := SQLPoolGeoBackupPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GeoBackupPolicy); err != nil {
 		return SQLPoolGeoBackupPoliciesClientGetResponse{}, err
 	}
@@ -189,19 +189,13 @@ func (client *SQLPoolGeoBackupPoliciesClient) getHandleResponse(resp *http.Respo
 // sqlPoolName - SQL pool name
 // options - SQLPoolGeoBackupPoliciesClientListOptions contains the optional parameters for the SQLPoolGeoBackupPoliciesClient.List
 // method.
-func (client *SQLPoolGeoBackupPoliciesClient) List(ctx context.Context, resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolGeoBackupPoliciesClientListOptions) (SQLPoolGeoBackupPoliciesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
-	if err != nil {
-		return SQLPoolGeoBackupPoliciesClientListResponse{}, err
+func (client *SQLPoolGeoBackupPoliciesClient) List(resourceGroupName string, workspaceName string, sqlPoolName string, options *SQLPoolGeoBackupPoliciesClientListOptions) *SQLPoolGeoBackupPoliciesClientListPager {
+	return &SQLPoolGeoBackupPoliciesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return SQLPoolGeoBackupPoliciesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return SQLPoolGeoBackupPoliciesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -236,7 +230,7 @@ func (client *SQLPoolGeoBackupPoliciesClient) listCreateRequest(ctx context.Cont
 
 // listHandleResponse handles the List response.
 func (client *SQLPoolGeoBackupPoliciesClient) listHandleResponse(resp *http.Response) (SQLPoolGeoBackupPoliciesClientListResponse, error) {
-	result := SQLPoolGeoBackupPoliciesClientListResponse{RawResponse: resp}
+	result := SQLPoolGeoBackupPoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GeoBackupPolicyListResult); err != nil {
 		return SQLPoolGeoBackupPoliciesClientListResponse{}, err
 	}

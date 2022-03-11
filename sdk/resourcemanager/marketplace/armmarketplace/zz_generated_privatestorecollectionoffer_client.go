@@ -32,16 +32,16 @@ type PrivateStoreCollectionOfferClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateStoreCollectionOfferClient(credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateStoreCollectionOfferClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateStoreCollectionOfferClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *PrivateStoreCollectionOfferClient) createOrUpdateCreateRequest(ctx
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *PrivateStoreCollectionOfferClient) createOrUpdateHandleResponse(resp *http.Response) (PrivateStoreCollectionOfferClientCreateOrUpdateResponse, error) {
-	result := PrivateStoreCollectionOfferClientCreateOrUpdateResponse{RawResponse: resp}
+	result := PrivateStoreCollectionOfferClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Offer); err != nil {
 		return PrivateStoreCollectionOfferClientCreateOrUpdateResponse{}, err
 	}
@@ -125,7 +125,7 @@ func (client *PrivateStoreCollectionOfferClient) Delete(ctx context.Context, pri
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return PrivateStoreCollectionOfferClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return PrivateStoreCollectionOfferClientDeleteResponse{RawResponse: resp}, nil
+	return PrivateStoreCollectionOfferClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -204,7 +204,7 @@ func (client *PrivateStoreCollectionOfferClient) getCreateRequest(ctx context.Co
 
 // getHandleResponse handles the Get response.
 func (client *PrivateStoreCollectionOfferClient) getHandleResponse(resp *http.Response) (PrivateStoreCollectionOfferClientGetResponse, error) {
-	result := PrivateStoreCollectionOfferClientGetResponse{RawResponse: resp}
+	result := PrivateStoreCollectionOfferClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Offer); err != nil {
 		return PrivateStoreCollectionOfferClientGetResponse{}, err
 	}
@@ -253,7 +253,7 @@ func (client *PrivateStoreCollectionOfferClient) listCreateRequest(ctx context.C
 
 // listHandleResponse handles the List response.
 func (client *PrivateStoreCollectionOfferClient) listHandleResponse(resp *http.Response) (PrivateStoreCollectionOfferClientListResponse, error) {
-	result := PrivateStoreCollectionOfferClientListResponse{RawResponse: resp}
+	result := PrivateStoreCollectionOfferClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OfferListResponse); err != nil {
 		return PrivateStoreCollectionOfferClientListResponse{}, err
 	}
@@ -279,7 +279,7 @@ func (client *PrivateStoreCollectionOfferClient) Post(ctx context.Context, priva
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return PrivateStoreCollectionOfferClientPostResponse{}, runtime.NewResponseError(resp)
 	}
-	return PrivateStoreCollectionOfferClientPostResponse{RawResponse: resp}, nil
+	return PrivateStoreCollectionOfferClientPostResponse{}, nil
 }
 
 // postCreateRequest creates the Post request.

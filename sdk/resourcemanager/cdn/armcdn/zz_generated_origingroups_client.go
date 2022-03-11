@@ -63,9 +63,7 @@ func (client *OriginGroupsClient) BeginCreate(ctx context.Context, resourceGroup
 	if err != nil {
 		return OriginGroupsClientCreatePollerResponse{}, err
 	}
-	result := OriginGroupsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := OriginGroupsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("OriginGroupsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return OriginGroupsClientCreatePollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *OriginGroupsClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return OriginGroupsClientDeletePollerResponse{}, err
 	}
-	result := OriginGroupsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := OriginGroupsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("OriginGroupsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return OriginGroupsClientDeletePollerResponse{}, err
@@ -262,7 +258,7 @@ func (client *OriginGroupsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *OriginGroupsClient) getHandleResponse(resp *http.Response) (OriginGroupsClientGetResponse, error) {
-	result := OriginGroupsClientGetResponse{RawResponse: resp}
+	result := OriginGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OriginGroup); err != nil {
 		return OriginGroupsClientGetResponse{}, err
 	}
@@ -320,7 +316,7 @@ func (client *OriginGroupsClient) listByEndpointCreateRequest(ctx context.Contex
 
 // listByEndpointHandleResponse handles the ListByEndpoint response.
 func (client *OriginGroupsClient) listByEndpointHandleResponse(resp *http.Response) (OriginGroupsClientListByEndpointResponse, error) {
-	result := OriginGroupsClientListByEndpointResponse{RawResponse: resp}
+	result := OriginGroupsClientListByEndpointResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OriginGroupListResult); err != nil {
 		return OriginGroupsClientListByEndpointResponse{}, err
 	}
@@ -341,9 +337,7 @@ func (client *OriginGroupsClient) BeginUpdate(ctx context.Context, resourceGroup
 	if err != nil {
 		return OriginGroupsClientUpdatePollerResponse{}, err
 	}
-	result := OriginGroupsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := OriginGroupsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("OriginGroupsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return OriginGroupsClientUpdatePollerResponse{}, err

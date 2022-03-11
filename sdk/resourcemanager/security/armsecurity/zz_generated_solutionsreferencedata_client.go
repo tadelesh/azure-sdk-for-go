@@ -91,7 +91,7 @@ func (client *SolutionsReferenceDataClient) listCreateRequest(ctx context.Contex
 
 // listHandleResponse handles the List response.
 func (client *SolutionsReferenceDataClient) listHandleResponse(resp *http.Response) (SolutionsReferenceDataClientListResponse, error) {
-	result := SolutionsReferenceDataClientListResponse{RawResponse: resp}
+	result := SolutionsReferenceDataClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SolutionsReferenceDataList); err != nil {
 		return SolutionsReferenceDataClientListResponse{}, err
 	}
@@ -141,7 +141,7 @@ func (client *SolutionsReferenceDataClient) listByHomeRegionCreateRequest(ctx co
 
 // listByHomeRegionHandleResponse handles the ListByHomeRegion response.
 func (client *SolutionsReferenceDataClient) listByHomeRegionHandleResponse(resp *http.Response) (SolutionsReferenceDataClientListByHomeRegionResponse, error) {
-	result := SolutionsReferenceDataClientListByHomeRegionResponse{RawResponse: resp}
+	result := SolutionsReferenceDataClientListByHomeRegionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SolutionsReferenceDataList); err != nil {
 		return SolutionsReferenceDataClientListByHomeRegionResponse{}, err
 	}

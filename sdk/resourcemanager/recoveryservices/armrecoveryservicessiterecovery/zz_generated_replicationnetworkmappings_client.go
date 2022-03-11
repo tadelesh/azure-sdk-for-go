@@ -38,19 +38,19 @@ type ReplicationNetworkMappingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReplicationNetworkMappingsClient(resourceName string, resourceGroupName string, subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReplicationNetworkMappingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReplicationNetworkMappingsClient{
 		resourceName:      resourceName,
 		resourceGroupName: resourceGroupName,
 		subscriptionID:    subscriptionID,
-		host:              string(cp.Endpoint),
-		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:              string(ep),
+		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -68,9 +68,7 @@ func (client *ReplicationNetworkMappingsClient) BeginCreate(ctx context.Context,
 	if err != nil {
 		return ReplicationNetworkMappingsClientCreatePollerResponse{}, err
 	}
-	result := ReplicationNetworkMappingsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationNetworkMappingsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationNetworkMappingsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return ReplicationNetworkMappingsClientCreatePollerResponse{}, err
@@ -130,7 +128,7 @@ func (client *ReplicationNetworkMappingsClient) createCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, input)
@@ -148,9 +146,7 @@ func (client *ReplicationNetworkMappingsClient) BeginDelete(ctx context.Context,
 	if err != nil {
 		return ReplicationNetworkMappingsClientDeletePollerResponse{}, err
 	}
-	result := ReplicationNetworkMappingsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationNetworkMappingsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationNetworkMappingsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ReplicationNetworkMappingsClientDeletePollerResponse{}, err
@@ -210,7 +206,7 @@ func (client *ReplicationNetworkMappingsClient) deleteCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	return req, nil
 }
@@ -269,7 +265,7 @@ func (client *ReplicationNetworkMappingsClient) getCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -277,7 +273,7 @@ func (client *ReplicationNetworkMappingsClient) getCreateRequest(ctx context.Con
 
 // getHandleResponse handles the Get response.
 func (client *ReplicationNetworkMappingsClient) getHandleResponse(resp *http.Response) (ReplicationNetworkMappingsClientGetResponse, error) {
-	result := ReplicationNetworkMappingsClientGetResponse{RawResponse: resp}
+	result := ReplicationNetworkMappingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkMapping); err != nil {
 		return ReplicationNetworkMappingsClientGetResponse{}, err
 	}
@@ -320,7 +316,7 @@ func (client *ReplicationNetworkMappingsClient) listCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -328,7 +324,7 @@ func (client *ReplicationNetworkMappingsClient) listCreateRequest(ctx context.Co
 
 // listHandleResponse handles the List response.
 func (client *ReplicationNetworkMappingsClient) listHandleResponse(resp *http.Response) (ReplicationNetworkMappingsClientListResponse, error) {
-	result := ReplicationNetworkMappingsClientListResponse{RawResponse: resp}
+	result := ReplicationNetworkMappingsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkMappingCollection); err != nil {
 		return ReplicationNetworkMappingsClientListResponse{}, err
 	}
@@ -381,7 +377,7 @@ func (client *ReplicationNetworkMappingsClient) listByReplicationNetworksCreateR
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -389,7 +385,7 @@ func (client *ReplicationNetworkMappingsClient) listByReplicationNetworksCreateR
 
 // listByReplicationNetworksHandleResponse handles the ListByReplicationNetworks response.
 func (client *ReplicationNetworkMappingsClient) listByReplicationNetworksHandleResponse(resp *http.Response) (ReplicationNetworkMappingsClientListByReplicationNetworksResponse, error) {
-	result := ReplicationNetworkMappingsClientListByReplicationNetworksResponse{RawResponse: resp}
+	result := ReplicationNetworkMappingsClientListByReplicationNetworksResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkMappingCollection); err != nil {
 		return ReplicationNetworkMappingsClientListByReplicationNetworksResponse{}, err
 	}
@@ -409,9 +405,7 @@ func (client *ReplicationNetworkMappingsClient) BeginUpdate(ctx context.Context,
 	if err != nil {
 		return ReplicationNetworkMappingsClientUpdatePollerResponse{}, err
 	}
-	result := ReplicationNetworkMappingsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationNetworkMappingsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationNetworkMappingsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ReplicationNetworkMappingsClientUpdatePollerResponse{}, err
@@ -471,7 +465,7 @@ func (client *ReplicationNetworkMappingsClient) updateCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, input)

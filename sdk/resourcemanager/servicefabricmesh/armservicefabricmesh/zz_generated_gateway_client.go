@@ -34,17 +34,17 @@ type GatewayClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGatewayClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *GatewayClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GatewayClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -97,7 +97,7 @@ func (client *GatewayClient) createCreateRequest(ctx context.Context, resourceGr
 
 // createHandleResponse handles the Create response.
 func (client *GatewayClient) createHandleResponse(resp *http.Response) (GatewayClientCreateResponse, error) {
-	result := GatewayClientCreateResponse{RawResponse: resp}
+	result := GatewayClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GatewayResourceDescription); err != nil {
 		return GatewayClientCreateResponse{}, err
 	}
@@ -121,7 +121,7 @@ func (client *GatewayClient) Delete(ctx context.Context, resourceGroupName strin
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return GatewayClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return GatewayClientDeleteResponse{RawResponse: resp}, nil
+	return GatewayClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -193,7 +193,7 @@ func (client *GatewayClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *GatewayClient) getHandleResponse(resp *http.Response) (GatewayClientGetResponse, error) {
-	result := GatewayClientGetResponse{RawResponse: resp}
+	result := GatewayClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GatewayResourceDescription); err != nil {
 		return GatewayClientGetResponse{}, err
 	}
@@ -242,7 +242,7 @@ func (client *GatewayClient) listByResourceGroupCreateRequest(ctx context.Contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *GatewayClient) listByResourceGroupHandleResponse(resp *http.Response) (GatewayClientListByResourceGroupResponse, error) {
-	result := GatewayClientListByResourceGroupResponse{RawResponse: resp}
+	result := GatewayClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GatewayResourceDescriptionList); err != nil {
 		return GatewayClientListByResourceGroupResponse{}, err
 	}
@@ -286,7 +286,7 @@ func (client *GatewayClient) listBySubscriptionCreateRequest(ctx context.Context
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *GatewayClient) listBySubscriptionHandleResponse(resp *http.Response) (GatewayClientListBySubscriptionResponse, error) {
-	result := GatewayClientListBySubscriptionResponse{RawResponse: resp}
+	result := GatewayClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GatewayResourceDescriptionList); err != nil {
 		return GatewayClientListBySubscriptionResponse{}, err
 	}

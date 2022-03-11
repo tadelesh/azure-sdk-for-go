@@ -8,12 +8,7 @@
 
 package armhybriddatamanager
 
-import (
-	"encoding/json"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
-	"reflect"
-	"time"
-)
+import "time"
 
 // AvailableProviderOperation - Class represents provider operation
 type AvailableProviderOperation struct {
@@ -28,7 +23,7 @@ type AvailableProviderOperation struct {
 	Origin *string `json:"origin,omitempty"`
 
 	// Gets or sets Properties Reserved for future use
-	Properties map[string]interface{} `json:"properties,omitempty"`
+	Properties interface{} `json:"properties,omitempty"`
 }
 
 // AvailableProviderOperationDisplay - Contains the localized display information for this particular operation / action.
@@ -62,14 +57,6 @@ type AvailableProviderOperations struct {
 
 	// List of operations.
 	Value []*AvailableProviderOperation `json:"value,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type AvailableProviderOperations.
-func (a AvailableProviderOperations) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", a.NextLink)
-	populate(objectMap, "value", a.Value)
-	return json.Marshal(objectMap)
 }
 
 // CustomerSecret - The pair of customer secret.
@@ -111,19 +98,6 @@ type DataManager struct {
 	Type *string `json:"type,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type DataManager.
-func (d DataManager) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "etag", d.Etag)
-	populate(objectMap, "id", d.ID)
-	populate(objectMap, "location", d.Location)
-	populate(objectMap, "name", d.Name)
-	populate(objectMap, "sku", d.SKU)
-	populate(objectMap, "tags", d.Tags)
-	populate(objectMap, "type", d.Type)
-	return json.Marshal(objectMap)
-}
-
 // DataManagerList - DataManager resources Collection.
 type DataManagerList struct {
 	// Link for the next set of data stores.
@@ -131,14 +105,6 @@ type DataManagerList struct {
 
 	// List of data manager resources.
 	Value []*DataManager `json:"value,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type DataManagerList.
-func (d DataManagerList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", d.NextLink)
-	populate(objectMap, "value", d.Value)
-	return json.Marshal(objectMap)
 }
 
 // DataManagerUpdateParameter - The DataManagerUpdateParameter.
@@ -149,14 +115,6 @@ type DataManagerUpdateParameter struct {
 	// The list of key value pairs that describe the resource. These tags can be used in viewing and grouping this resource (across
 	// resource groups).
 	Tags map[string]*string `json:"tags,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type DataManagerUpdateParameter.
-func (d DataManagerUpdateParameter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "sku", d.SKU)
-	populate(objectMap, "tags", d.Tags)
-	return json.Marshal(objectMap)
 }
 
 // DataManagersClientBeginCreateOptions contains the optional parameters for the DataManagersClient.BeginCreate method.
@@ -216,14 +174,6 @@ type DataServiceList struct {
 	Value []*DataService `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type DataServiceList.
-func (d DataServiceList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", d.NextLink)
-	populate(objectMap, "value", d.Value)
-	return json.Marshal(objectMap)
-}
-
 // DataServiceProperties - Data Service properties.
 type DataServiceProperties struct {
 	// REQUIRED; State of the data service.
@@ -234,15 +184,6 @@ type DataServiceProperties struct {
 
 	// Supported data store types which can be used as a source.
 	SupportedDataSourceTypes []*string `json:"supportedDataSourceTypes,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type DataServiceProperties.
-func (d DataServiceProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "state", d.State)
-	populate(objectMap, "supportedDataSinkTypes", d.SupportedDataSinkTypes)
-	populate(objectMap, "supportedDataSourceTypes", d.SupportedDataSourceTypes)
-	return json.Marshal(objectMap)
 }
 
 // DataServicesClientGetOptions contains the optional parameters for the DataServicesClient.Get method.
@@ -286,14 +227,6 @@ type DataStoreList struct {
 	Value []*DataStore `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type DataStoreList.
-func (d DataStoreList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", d.NextLink)
-	populate(objectMap, "value", d.Value)
-	return json.Marshal(objectMap)
-}
-
 // DataStoreProperties - Data Store for sources and sinks
 type DataStoreProperties struct {
 	// REQUIRED; The arm id of the data store type.
@@ -308,21 +241,10 @@ type DataStoreProperties struct {
 	CustomerSecrets []*CustomerSecret `json:"customerSecrets,omitempty"`
 
 	// A generic json used differently by each data source type.
-	ExtendedProperties map[string]interface{} `json:"extendedProperties,omitempty"`
+	ExtendedProperties interface{} `json:"extendedProperties,omitempty"`
 
 	// Arm Id for the manager resource to which the data source is associated. This is optional.
 	RepositoryID *string `json:"repositoryId,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type DataStoreProperties.
-func (d DataStoreProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "customerSecrets", d.CustomerSecrets)
-	populate(objectMap, "dataStoreTypeId", d.DataStoreTypeID)
-	populate(objectMap, "extendedProperties", d.ExtendedProperties)
-	populate(objectMap, "repositoryId", d.RepositoryID)
-	populate(objectMap, "state", d.State)
-	return json.Marshal(objectMap)
 }
 
 // DataStoreType - Data Store Type.
@@ -349,14 +271,6 @@ type DataStoreTypeList struct {
 	Value []*DataStoreType `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type DataStoreTypeList.
-func (d DataStoreTypeList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", d.NextLink)
-	populate(objectMap, "value", d.Value)
-	return json.Marshal(objectMap)
-}
-
 // DataStoreTypeProperties - Data Store Type properties.
 type DataStoreTypeProperties struct {
 	// REQUIRED; State of the data store type.
@@ -370,16 +284,6 @@ type DataStoreTypeProperties struct {
 
 	// Supported data services where it can be used as a source.
 	SupportedDataServicesAsSource []*string `json:"supportedDataServicesAsSource,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type DataStoreTypeProperties.
-func (d DataStoreTypeProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "repositoryType", d.RepositoryType)
-	populate(objectMap, "state", d.State)
-	populate(objectMap, "supportedDataServicesAsSink", d.SupportedDataServicesAsSink)
-	populate(objectMap, "supportedDataServicesAsSource", d.SupportedDataServicesAsSource)
-	return json.Marshal(objectMap)
 }
 
 // DataStoreTypesClientGetOptions contains the optional parameters for the DataStoreTypesClient.Get method.
@@ -478,61 +382,6 @@ type Job struct {
 	Type *string `json:"type,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type Job.
-func (j Job) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populateTimeRFC3339(objectMap, "endTime", j.EndTime)
-	populate(objectMap, "error", j.Error)
-	populate(objectMap, "id", j.ID)
-	populate(objectMap, "name", j.Name)
-	populate(objectMap, "properties", j.Properties)
-	populateTimeRFC3339(objectMap, "startTime", j.StartTime)
-	populate(objectMap, "status", j.Status)
-	populate(objectMap, "type", j.Type)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type Job.
-func (j *Job) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "endTime":
-			err = unpopulateTimeRFC3339(val, &j.EndTime)
-			delete(rawMsg, key)
-		case "error":
-			err = unpopulate(val, &j.Error)
-			delete(rawMsg, key)
-		case "id":
-			err = unpopulate(val, &j.ID)
-			delete(rawMsg, key)
-		case "name":
-			err = unpopulate(val, &j.Name)
-			delete(rawMsg, key)
-		case "properties":
-			err = unpopulate(val, &j.Properties)
-			delete(rawMsg, key)
-		case "startTime":
-			err = unpopulateTimeRFC3339(val, &j.StartTime)
-			delete(rawMsg, key)
-		case "status":
-			err = unpopulate(val, &j.Status)
-			delete(rawMsg, key)
-		case "type":
-			err = unpopulate(val, &j.Type)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // JobDefinition - Job Definition.
 type JobDefinition struct {
 	// REQUIRED; JobDefinition properties.
@@ -560,41 +409,6 @@ type JobDefinitionFilter struct {
 	LastModified *time.Time `json:"lastModified,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type JobDefinitionFilter.
-func (j JobDefinitionFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "dataSource", j.DataSource)
-	populateTimeRFC3339(objectMap, "lastModified", j.LastModified)
-	populate(objectMap, "state", j.State)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type JobDefinitionFilter.
-func (j *JobDefinitionFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "dataSource":
-			err = unpopulate(val, &j.DataSource)
-			delete(rawMsg, key)
-		case "lastModified":
-			err = unpopulateTimeRFC3339(val, &j.LastModified)
-			delete(rawMsg, key)
-		case "state":
-			err = unpopulate(val, &j.State)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // JobDefinitionList - Job Definition Collection.
 type JobDefinitionList struct {
 	// Link for the next set of job definitions.
@@ -602,14 +416,6 @@ type JobDefinitionList struct {
 
 	// List of job definitions.
 	Value []*JobDefinition `json:"value,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type JobDefinitionList.
-func (j JobDefinitionList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", j.NextLink)
-	populate(objectMap, "value", j.Value)
-	return json.Marshal(objectMap)
 }
 
 // JobDefinitionProperties - Job Definition
@@ -629,7 +435,7 @@ type JobDefinitionProperties struct {
 	CustomerSecrets []*CustomerSecret `json:"customerSecrets,omitempty"`
 
 	// A generic json used differently by each data service type.
-	DataServiceInput map[string]interface{} `json:"dataServiceInput,omitempty"`
+	DataServiceInput interface{} `json:"dataServiceInput,omitempty"`
 
 	// Last modified time of the job definition.
 	LastModifiedTime *time.Time `json:"lastModifiedTime,omitempty"`
@@ -642,65 +448,6 @@ type JobDefinitionProperties struct {
 
 	// Enum to detect if user confirmation is required. If not passed will default to NotRequired.
 	UserConfirmation *UserConfirmation `json:"userConfirmation,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type JobDefinitionProperties.
-func (j JobDefinitionProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "customerSecrets", j.CustomerSecrets)
-	populate(objectMap, "dataServiceInput", j.DataServiceInput)
-	populate(objectMap, "dataSinkId", j.DataSinkID)
-	populate(objectMap, "dataSourceId", j.DataSourceID)
-	populateTimeRFC3339(objectMap, "lastModifiedTime", j.LastModifiedTime)
-	populate(objectMap, "runLocation", j.RunLocation)
-	populate(objectMap, "schedules", j.Schedules)
-	populate(objectMap, "state", j.State)
-	populate(objectMap, "userConfirmation", j.UserConfirmation)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type JobDefinitionProperties.
-func (j *JobDefinitionProperties) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "customerSecrets":
-			err = unpopulate(val, &j.CustomerSecrets)
-			delete(rawMsg, key)
-		case "dataServiceInput":
-			err = unpopulate(val, &j.DataServiceInput)
-			delete(rawMsg, key)
-		case "dataSinkId":
-			err = unpopulate(val, &j.DataSinkID)
-			delete(rawMsg, key)
-		case "dataSourceId":
-			err = unpopulate(val, &j.DataSourceID)
-			delete(rawMsg, key)
-		case "lastModifiedTime":
-			err = unpopulateTimeRFC3339(val, &j.LastModifiedTime)
-			delete(rawMsg, key)
-		case "runLocation":
-			err = unpopulate(val, &j.RunLocation)
-			delete(rawMsg, key)
-		case "schedules":
-			err = unpopulate(val, &j.Schedules)
-			delete(rawMsg, key)
-		case "state":
-			err = unpopulate(val, &j.State)
-			delete(rawMsg, key)
-		case "userConfirmation":
-			err = unpopulate(val, &j.UserConfirmation)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // JobDefinitionsClientBeginCreateOrUpdateOptions contains the optional parameters for the JobDefinitionsClient.BeginCreateOrUpdate
@@ -753,16 +500,6 @@ type JobDetails struct {
 	JobStages []*JobStages `json:"jobStages,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type JobDetails.
-func (j JobDetails) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "errorDetails", j.ErrorDetails)
-	populate(objectMap, "itemDetailsLink", j.ItemDetailsLink)
-	populate(objectMap, "jobDefinition", j.JobDefinition)
-	populate(objectMap, "jobStages", j.JobStages)
-	return json.Marshal(objectMap)
-}
-
 // JobFilter - Contains the information about the filters for the job.
 type JobFilter struct {
 	// REQUIRED; The status of the job.
@@ -772,37 +509,6 @@ type JobFilter struct {
 	StartTime *time.Time `json:"startTime,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type JobFilter.
-func (j JobFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populateTimeRFC3339(objectMap, "startTime", j.StartTime)
-	populate(objectMap, "status", j.Status)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type JobFilter.
-func (j *JobFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "startTime":
-			err = unpopulateTimeRFC3339(val, &j.StartTime)
-			delete(rawMsg, key)
-		case "status":
-			err = unpopulate(val, &j.Status)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // JobList - Job Collection.
 type JobList struct {
 	// Link for the next set of jobs.
@@ -810,14 +516,6 @@ type JobList struct {
 
 	// List of jobs.
 	Value []*Job `json:"value,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type JobList.
-func (j JobList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", j.NextLink)
-	populate(objectMap, "value", j.Value)
-	return json.Marshal(objectMap)
 }
 
 // JobProperties - Job Properties
@@ -856,20 +554,10 @@ type JobStages struct {
 	ErrorDetails []*ErrorDetails `json:"errorDetails,omitempty"`
 
 	// Job Stage Details
-	JobStageDetails map[string]interface{} `json:"jobStageDetails,omitempty"`
+	JobStageDetails interface{} `json:"jobStageDetails,omitempty"`
 
 	// Name of the job stage.
 	StageName *string `json:"stageName,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type JobStages.
-func (j JobStages) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "errorDetails", j.ErrorDetails)
-	populate(objectMap, "jobStageDetails", j.JobStageDetails)
-	populate(objectMap, "stageName", j.StageName)
-	populate(objectMap, "stageStatus", j.StageStatus)
-	return json.Marshal(objectMap)
 }
 
 // JobsClientBeginCancelOptions contains the optional parameters for the JobsClient.BeginCancel method.
@@ -948,14 +636,6 @@ type PublicKeyList struct {
 	Value []*PublicKey `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type PublicKeyList.
-func (p PublicKeyList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", p.NextLink)
-	populate(objectMap, "value", p.Value)
-	return json.Marshal(objectMap)
-}
-
 // PublicKeyProperties - PublicKey Properties
 type PublicKeyProperties struct {
 	// REQUIRED; Level one public key for encryption
@@ -999,18 +679,6 @@ type Resource struct {
 	Type *string `json:"type,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type Resource.
-func (r Resource) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", r.ID)
-	populate(objectMap, "location", r.Location)
-	populate(objectMap, "name", r.Name)
-	populate(objectMap, "sku", r.SKU)
-	populate(objectMap, "tags", r.Tags)
-	populate(objectMap, "type", r.Type)
-	return json.Marshal(objectMap)
-}
-
 // RunParameters - Run parameters for a job.
 type RunParameters struct {
 	// List of customer secrets containing a key identifier and key value. The key identifier is a way for the specific data source
@@ -1019,19 +687,10 @@ type RunParameters struct {
 	CustomerSecrets []*CustomerSecret `json:"customerSecrets,omitempty"`
 
 	// A generic json used differently by each data service type.
-	DataServiceInput map[string]interface{} `json:"dataServiceInput,omitempty"`
+	DataServiceInput interface{} `json:"dataServiceInput,omitempty"`
 
 	// Enum to detect if user confirmation is required. If not passed will default to NotRequired.
 	UserConfirmation *UserConfirmation `json:"userConfirmation,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type RunParameters.
-func (r RunParameters) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "customerSecrets", r.CustomerSecrets)
-	populate(objectMap, "dataServiceInput", r.DataServiceInput)
-	populate(objectMap, "userConfirmation", r.UserConfirmation)
-	return json.Marshal(objectMap)
 }
 
 // SKU - The sku type.
@@ -1050,29 +709,4 @@ type Schedule struct {
 
 	// A list of repetition intervals in ISO 8601 format.
 	PolicyList []*string `json:"policyList,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type Schedule.
-func (s Schedule) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "name", s.Name)
-	populate(objectMap, "policyList", s.PolicyList)
-	return json.Marshal(objectMap)
-}
-
-func populate(m map[string]interface{}, k string, v interface{}) {
-	if v == nil {
-		return
-	} else if azcore.IsNullValue(v) {
-		m[k] = nil
-	} else if !reflect.ValueOf(v).IsNil() {
-		m[k] = v
-	}
-}
-
-func unpopulate(data json.RawMessage, v interface{}) error {
-	if data == nil {
-		return nil
-	}
-	return json.Unmarshal(data, v)
 }

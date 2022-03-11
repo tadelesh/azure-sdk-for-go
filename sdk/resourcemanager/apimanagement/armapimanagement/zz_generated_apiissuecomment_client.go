@@ -36,17 +36,17 @@ type APIIssueCommentClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAPIIssueCommentClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *APIIssueCommentClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &APIIssueCommentClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -119,7 +119,7 @@ func (client *APIIssueCommentClient) createOrUpdateCreateRequest(ctx context.Con
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *APIIssueCommentClient) createOrUpdateHandleResponse(resp *http.Response) (APIIssueCommentClientCreateOrUpdateResponse, error) {
-	result := APIIssueCommentClientCreateOrUpdateResponse{RawResponse: resp}
+	result := APIIssueCommentClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -151,7 +151,7 @@ func (client *APIIssueCommentClient) Delete(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return APIIssueCommentClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return APIIssueCommentClientDeleteResponse{RawResponse: resp}, nil
+	return APIIssueCommentClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -256,7 +256,7 @@ func (client *APIIssueCommentClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *APIIssueCommentClient) getHandleResponse(resp *http.Response) (APIIssueCommentClientGetResponse, error) {
-	result := APIIssueCommentClientGetResponse{RawResponse: resp}
+	result := APIIssueCommentClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -326,7 +326,7 @@ func (client *APIIssueCommentClient) getEntityTagCreateRequest(ctx context.Conte
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *APIIssueCommentClient) getEntityTagHandleResponse(resp *http.Response) (APIIssueCommentClientGetEntityTagResponse, error) {
-	result := APIIssueCommentClientGetEntityTagResponse{RawResponse: resp}
+	result := APIIssueCommentClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -401,7 +401,7 @@ func (client *APIIssueCommentClient) listByServiceCreateRequest(ctx context.Cont
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *APIIssueCommentClient) listByServiceHandleResponse(resp *http.Response) (APIIssueCommentClientListByServiceResponse, error) {
-	result := APIIssueCommentClientListByServiceResponse{RawResponse: resp}
+	result := APIIssueCommentClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IssueCommentCollection); err != nil {
 		return APIIssueCommentClientListByServiceResponse{}, err
 	}

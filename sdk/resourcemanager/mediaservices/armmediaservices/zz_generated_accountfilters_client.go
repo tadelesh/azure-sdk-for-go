@@ -34,17 +34,17 @@ type AccountFiltersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAccountFiltersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AccountFiltersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AccountFiltersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *AccountFiltersClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *AccountFiltersClient) createOrUpdateHandleResponse(resp *http.Response) (AccountFiltersClientCreateOrUpdateResponse, error) {
-	result := AccountFiltersClientCreateOrUpdateResponse{RawResponse: resp}
+	result := AccountFiltersClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountFilter); err != nil {
 		return AccountFiltersClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *AccountFiltersClient) Delete(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return AccountFiltersClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AccountFiltersClientDeleteResponse{RawResponse: resp}, nil
+	return AccountFiltersClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *AccountFiltersClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *AccountFiltersClient) getHandleResponse(resp *http.Response) (AccountFiltersClientGetResponse, error) {
-	result := AccountFiltersClientGetResponse{RawResponse: resp}
+	result := AccountFiltersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountFilter); err != nil {
 		return AccountFiltersClientGetResponse{}, err
 	}
@@ -267,7 +267,7 @@ func (client *AccountFiltersClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *AccountFiltersClient) listHandleResponse(resp *http.Response) (AccountFiltersClientListResponse, error) {
-	result := AccountFiltersClientListResponse{RawResponse: resp}
+	result := AccountFiltersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountFilterCollection); err != nil {
 		return AccountFiltersClientListResponse{}, err
 	}
@@ -328,7 +328,7 @@ func (client *AccountFiltersClient) updateCreateRequest(ctx context.Context, res
 
 // updateHandleResponse handles the Update response.
 func (client *AccountFiltersClient) updateHandleResponse(resp *http.Response) (AccountFiltersClientUpdateResponse, error) {
-	result := AccountFiltersClientUpdateResponse{RawResponse: resp}
+	result := AccountFiltersClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountFilter); err != nil {
 		return AccountFiltersClientUpdateResponse{}, err
 	}

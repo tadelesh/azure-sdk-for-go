@@ -1,5 +1,61 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ChangesClientListChangesBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ChangesClientListChangesBySubscriptionResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ResourceChangesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ResourceChangesClientListResponse, error)`
+- Function `*ChangesClientListChangesByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ChangesClientListChangesByResourceGroupResponse, error)`
+- Function `*ChangesClientListChangesByResourceGroupPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*ChangesClientListChangesByResourceGroupPager.Err` has been removed
+- Function `*ChangesClientListChangesBySubscriptionPager.Err` has been removed
+- Function `*ChangesClientListChangesBySubscriptionPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*ResourceChangesClientListPager.PageResponse` has been removed
+- Function `*ResourceChangesClientListPager.Err` has been removed
+- Struct `ChangesClientListChangesByResourceGroupResult` has been removed
+- Struct `ChangesClientListChangesBySubscriptionResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `ResourceChangesClientListResult` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `ChangesClientListChangesByResourceGroupResult` of struct `ChangesClientListChangesByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ChangesClientListChangesByResourceGroupResponse` has been removed
+- Field `ChangesClientListChangesBySubscriptionResult` of struct `ChangesClientListChangesBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ChangesClientListChangesBySubscriptionResponse` has been removed
+- Field `ResourceChangesClientListResult` of struct `ResourceChangesClientListResponse` has been removed
+- Field `RawResponse` of struct `ResourceChangesClientListResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New function `*ChangesClientListChangesBySubscriptionPager.More() bool`
+- New function `*ResourceChangesClientListPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*ChangesClientListChangesByResourceGroupPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `ChangeList` in struct `ChangesClientListChangesByResourceGroupResponse`
+- New anonymous field `ChangeList` in struct `ResourceChangesClientListResponse`
+- New anonymous field `ResourceProviderOperationList` in struct `OperationsClientListResponse`
+- New anonymous field `ChangeList` in struct `ChangesClientListChangesBySubscriptionResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

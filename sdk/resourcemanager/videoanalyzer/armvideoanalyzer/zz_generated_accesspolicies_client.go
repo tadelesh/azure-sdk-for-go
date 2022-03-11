@@ -105,7 +105,7 @@ func (client *AccessPoliciesClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *AccessPoliciesClient) createOrUpdateHandleResponse(resp *http.Response) (AccessPoliciesClientCreateOrUpdateResponse, error) {
-	result := AccessPoliciesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := AccessPoliciesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessPolicyEntity); err != nil {
 		return AccessPoliciesClientCreateOrUpdateResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *AccessPoliciesClient) Delete(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return AccessPoliciesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AccessPoliciesClientDeleteResponse{RawResponse: resp}, nil
+	return AccessPoliciesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -216,7 +216,7 @@ func (client *AccessPoliciesClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *AccessPoliciesClient) getHandleResponse(resp *http.Response) (AccessPoliciesClientGetResponse, error) {
-	result := AccessPoliciesClientGetResponse{RawResponse: resp}
+	result := AccessPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessPolicyEntity); err != nil {
 		return AccessPoliciesClientGetResponse{}, err
 	}
@@ -271,7 +271,7 @@ func (client *AccessPoliciesClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *AccessPoliciesClient) listHandleResponse(resp *http.Response) (AccessPoliciesClientListResponse, error) {
-	result := AccessPoliciesClientListResponse{RawResponse: resp}
+	result := AccessPoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessPolicyEntityCollection); err != nil {
 		return AccessPoliciesClientListResponse{}, err
 	}
@@ -332,7 +332,7 @@ func (client *AccessPoliciesClient) updateCreateRequest(ctx context.Context, res
 
 // updateHandleResponse handles the Update response.
 func (client *AccessPoliciesClient) updateHandleResponse(resp *http.Response) (AccessPoliciesClientUpdateResponse, error) {
-	result := AccessPoliciesClientUpdateResponse{RawResponse: resp}
+	result := AccessPoliciesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessPolicyEntity); err != nil {
 		return AccessPoliciesClientUpdateResponse{}, err
 	}

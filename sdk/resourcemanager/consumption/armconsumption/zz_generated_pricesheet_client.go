@@ -35,17 +35,17 @@ type PriceSheetClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPriceSheetClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PriceSheetClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PriceSheetClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -97,7 +97,7 @@ func (client *PriceSheetClient) getCreateRequest(ctx context.Context, options *P
 
 // getHandleResponse handles the Get response.
 func (client *PriceSheetClient) getHandleResponse(resp *http.Response) (PriceSheetClientGetResponse, error) {
-	result := PriceSheetClientGetResponse{RawResponse: resp}
+	result := PriceSheetClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PriceSheetResult); err != nil {
 		return PriceSheetClientGetResponse{}, err
 	}
@@ -158,7 +158,7 @@ func (client *PriceSheetClient) getByBillingPeriodCreateRequest(ctx context.Cont
 
 // getByBillingPeriodHandleResponse handles the GetByBillingPeriod response.
 func (client *PriceSheetClient) getByBillingPeriodHandleResponse(resp *http.Response) (PriceSheetClientGetByBillingPeriodResponse, error) {
-	result := PriceSheetClientGetByBillingPeriodResponse{RawResponse: resp}
+	result := PriceSheetClientGetByBillingPeriodResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PriceSheetResult); err != nil {
 		return PriceSheetClientGetByBillingPeriodResponse{}, err
 	}

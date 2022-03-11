@@ -34,17 +34,17 @@ type DataConnectorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataConnectorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataConnectorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataConnectorsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -68,7 +68,7 @@ func (client *DataConnectorsClient) Connect(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return DataConnectorsClientConnectResponse{}, runtime.NewResponseError(resp)
 	}
-	return DataConnectorsClientConnectResponse{RawResponse: resp}, nil
+	return DataConnectorsClientConnectResponse{}, nil
 }
 
 // connectCreateRequest creates the Connect request.
@@ -156,7 +156,7 @@ func (client *DataConnectorsClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *DataConnectorsClient) createOrUpdateHandleResponse(resp *http.Response) (DataConnectorsClientCreateOrUpdateResponse, error) {
-	result := DataConnectorsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := DataConnectorsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return DataConnectorsClientCreateOrUpdateResponse{}, err
 	}
@@ -181,7 +181,7 @@ func (client *DataConnectorsClient) Delete(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DataConnectorsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DataConnectorsClientDeleteResponse{RawResponse: resp}, nil
+	return DataConnectorsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -233,7 +233,7 @@ func (client *DataConnectorsClient) Disconnect(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return DataConnectorsClientDisconnectResponse{}, runtime.NewResponseError(resp)
 	}
-	return DataConnectorsClientDisconnectResponse{RawResponse: resp}, nil
+	return DataConnectorsClientDisconnectResponse{}, nil
 }
 
 // disconnectCreateRequest creates the Disconnect request.
@@ -319,7 +319,7 @@ func (client *DataConnectorsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *DataConnectorsClient) getHandleResponse(resp *http.Response) (DataConnectorsClientGetResponse, error) {
-	result := DataConnectorsClientGetResponse{RawResponse: resp}
+	result := DataConnectorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return DataConnectorsClientGetResponse{}, err
 	}
@@ -371,7 +371,7 @@ func (client *DataConnectorsClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *DataConnectorsClient) listHandleResponse(resp *http.Response) (DataConnectorsClientListResponse, error) {
-	result := DataConnectorsClientListResponse{RawResponse: resp}
+	result := DataConnectorsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataConnectorList); err != nil {
 		return DataConnectorsClientListResponse{}, err
 	}

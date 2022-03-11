@@ -34,17 +34,17 @@ type ConfigurationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewConfigurationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ConfigurationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ConfigurationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *ConfigurationsClient) BeginCreateOrUpdate(ctx context.Context, res
 	if err != nil {
 		return ConfigurationsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ConfigurationsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ConfigurationsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ConfigurationsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ConfigurationsClientCreateOrUpdatePollerResponse{}, err
@@ -175,7 +173,7 @@ func (client *ConfigurationsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *ConfigurationsClient) getHandleResponse(resp *http.Response) (ConfigurationsClientGetResponse, error) {
-	result := ConfigurationsClientGetResponse{RawResponse: resp}
+	result := ConfigurationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Configuration); err != nil {
 		return ConfigurationsClientGetResponse{}, err
 	}
@@ -188,19 +186,13 @@ func (client *ConfigurationsClient) getHandleResponse(resp *http.Response) (Conf
 // serverName - The name of the server.
 // options - ConfigurationsClientListByServerOptions contains the optional parameters for the ConfigurationsClient.ListByServer
 // method.
-func (client *ConfigurationsClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string, options *ConfigurationsClientListByServerOptions) (ConfigurationsClientListByServerResponse, error) {
-	req, err := client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
-	if err != nil {
-		return ConfigurationsClientListByServerResponse{}, err
+func (client *ConfigurationsClient) ListByServer(resourceGroupName string, serverName string, options *ConfigurationsClientListByServerOptions) *ConfigurationsClientListByServerPager {
+	return &ConfigurationsClientListByServerPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ConfigurationsClientListByServerResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ConfigurationsClientListByServerResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByServerHandleResponse(resp)
 }
 
 // listByServerCreateRequest creates the ListByServer request.
@@ -231,7 +223,7 @@ func (client *ConfigurationsClient) listByServerCreateRequest(ctx context.Contex
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *ConfigurationsClient) listByServerHandleResponse(resp *http.Response) (ConfigurationsClientListByServerResponse, error) {
-	result := ConfigurationsClientListByServerResponse{RawResponse: resp}
+	result := ConfigurationsClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigurationListResult); err != nil {
 		return ConfigurationsClientListByServerResponse{}, err
 	}

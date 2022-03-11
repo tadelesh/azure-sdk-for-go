@@ -34,17 +34,17 @@ type SubscriptionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSubscriptionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SubscriptionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SubscriptionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -94,7 +94,7 @@ func (client *SubscriptionsClient) listQuotasCreateRequest(ctx context.Context, 
 
 // listQuotasHandleResponse handles the ListQuotas response.
 func (client *SubscriptionsClient) listQuotasHandleResponse(resp *http.Response) (SubscriptionsClientListQuotasResponse, error) {
-	result := SubscriptionsClientListQuotasResponse{RawResponse: resp}
+	result := SubscriptionsClientListQuotasResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SubscriptionQuotasListResult); err != nil {
 		return SubscriptionsClientListQuotasResponse{}, err
 	}

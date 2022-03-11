@@ -34,17 +34,17 @@ type TablesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTablesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TablesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TablesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *TablesClient) BeginCreateOrUpdate(ctx context.Context, resourceGro
 	if err != nil {
 		return TablesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := TablesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := TablesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("TablesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return TablesClientCreateOrUpdatePollerResponse{}, err
@@ -133,9 +131,7 @@ func (client *TablesClient) BeginDelete(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return TablesClientDeletePollerResponse{}, err
 	}
-	result := TablesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := TablesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("TablesClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return TablesClientDeletePollerResponse{}, err
@@ -246,7 +242,7 @@ func (client *TablesClient) getCreateRequest(ctx context.Context, resourceGroupN
 
 // getHandleResponse handles the Get response.
 func (client *TablesClient) getHandleResponse(resp *http.Response) (TablesClientGetResponse, error) {
-	result := TablesClientGetResponse{RawResponse: resp}
+	result := TablesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Table); err != nil {
 		return TablesClientGetResponse{}, err
 	}
@@ -258,19 +254,13 @@ func (client *TablesClient) getHandleResponse(resp *http.Response) (TablesClient
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // workspaceName - The name of the workspace.
 // options - TablesClientListByWorkspaceOptions contains the optional parameters for the TablesClient.ListByWorkspace method.
-func (client *TablesClient) ListByWorkspace(ctx context.Context, resourceGroupName string, workspaceName string, options *TablesClientListByWorkspaceOptions) (TablesClientListByWorkspaceResponse, error) {
-	req, err := client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
-	if err != nil {
-		return TablesClientListByWorkspaceResponse{}, err
+func (client *TablesClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *TablesClientListByWorkspaceOptions) *TablesClientListByWorkspacePager {
+	return &TablesClientListByWorkspacePager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return TablesClientListByWorkspaceResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return TablesClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByWorkspaceHandleResponse(resp)
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.
@@ -301,7 +291,7 @@ func (client *TablesClient) listByWorkspaceCreateRequest(ctx context.Context, re
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *TablesClient) listByWorkspaceHandleResponse(resp *http.Response) (TablesClientListByWorkspaceResponse, error) {
-	result := TablesClientListByWorkspaceResponse{RawResponse: resp}
+	result := TablesClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TablesListResult); err != nil {
 		return TablesClientListByWorkspaceResponse{}, err
 	}
@@ -320,9 +310,7 @@ func (client *TablesClient) BeginUpdate(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return TablesClientUpdatePollerResponse{}, err
 	}
-	result := TablesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := TablesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("TablesClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return TablesClientUpdatePollerResponse{}, err

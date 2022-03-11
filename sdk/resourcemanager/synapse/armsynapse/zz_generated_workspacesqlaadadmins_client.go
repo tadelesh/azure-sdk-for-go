@@ -34,17 +34,17 @@ type WorkspaceSQLAADAdminsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkspaceSQLAADAdminsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkspaceSQLAADAdminsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkspaceSQLAADAdminsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *WorkspaceSQLAADAdminsClient) BeginCreateOrUpdate(ctx context.Conte
 	if err != nil {
 		return WorkspaceSQLAADAdminsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := WorkspaceSQLAADAdminsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkspaceSQLAADAdminsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkspaceSQLAADAdminsClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return WorkspaceSQLAADAdminsClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *WorkspaceSQLAADAdminsClient) BeginDelete(ctx context.Context, reso
 	if err != nil {
 		return WorkspaceSQLAADAdminsClientDeletePollerResponse{}, err
 	}
-	result := WorkspaceSQLAADAdminsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkspaceSQLAADAdminsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkspaceSQLAADAdminsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return WorkspaceSQLAADAdminsClientDeletePollerResponse{}, err
@@ -233,7 +229,7 @@ func (client *WorkspaceSQLAADAdminsClient) getCreateRequest(ctx context.Context,
 
 // getHandleResponse handles the Get response.
 func (client *WorkspaceSQLAADAdminsClient) getHandleResponse(resp *http.Response) (WorkspaceSQLAADAdminsClientGetResponse, error) {
-	result := WorkspaceSQLAADAdminsClientGetResponse{RawResponse: resp}
+	result := WorkspaceSQLAADAdminsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceAADAdminInfo); err != nil {
 		return WorkspaceSQLAADAdminsClientGetResponse{}, err
 	}

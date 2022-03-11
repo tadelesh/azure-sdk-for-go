@@ -34,17 +34,17 @@ type ComputeClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewComputeClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ComputeClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ComputeClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *ComputeClient) BeginCreateOrUpdate(ctx context.Context, resourceGr
 	if err != nil {
 		return ComputeClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ComputeClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ComputeClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ComputeClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ComputeClientCreateOrUpdatePollerResponse{}, err
@@ -139,9 +137,7 @@ func (client *ComputeClient) BeginDelete(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return ComputeClientDeletePollerResponse{}, err
 	}
-	result := ComputeClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ComputeClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ComputeClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ComputeClientDeletePollerResponse{}, err
@@ -254,7 +250,7 @@ func (client *ComputeClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *ComputeClient) getHandleResponse(resp *http.Response) (ComputeClientGetResponse, error) {
-	result := ComputeClientGetResponse{RawResponse: resp}
+	result := ComputeClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComputeResource); err != nil {
 		return ComputeClientGetResponse{}, err
 	}
@@ -309,7 +305,7 @@ func (client *ComputeClient) listCreateRequest(ctx context.Context, resourceGrou
 
 // listHandleResponse handles the List response.
 func (client *ComputeClient) listHandleResponse(resp *http.Response) (ComputeClientListResponse, error) {
-	result := ComputeClientListResponse{RawResponse: resp}
+	result := ComputeClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PaginatedComputeResourcesList); err != nil {
 		return ComputeClientListResponse{}, err
 	}
@@ -369,7 +365,7 @@ func (client *ComputeClient) listKeysCreateRequest(ctx context.Context, resource
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *ComputeClient) listKeysHandleResponse(resp *http.Response) (ComputeClientListKeysResponse, error) {
-	result := ComputeClientListKeysResponse{RawResponse: resp}
+	result := ComputeClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return ComputeClientListKeysResponse{}, err
 	}
@@ -426,7 +422,7 @@ func (client *ComputeClient) listNodesCreateRequest(ctx context.Context, resourc
 
 // listNodesHandleResponse handles the ListNodes response.
 func (client *ComputeClient) listNodesHandleResponse(resp *http.Response) (ComputeClientListNodesResponse, error) {
-	result := ComputeClientListNodesResponse{RawResponse: resp}
+	result := ComputeClientListNodesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AmlComputeNodesInformation); err != nil {
 		return ComputeClientListNodesResponse{}, err
 	}
@@ -444,9 +440,7 @@ func (client *ComputeClient) BeginRestart(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ComputeClientRestartPollerResponse{}, err
 	}
-	result := ComputeClientRestartPollerResponse{
-		RawResponse: resp,
-	}
+	result := ComputeClientRestartPollerResponse{}
 	pt, err := armruntime.NewPoller("ComputeClient.Restart", "", resp, client.pl)
 	if err != nil {
 		return ComputeClientRestartPollerResponse{}, err
@@ -515,9 +509,7 @@ func (client *ComputeClient) BeginStart(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return ComputeClientStartPollerResponse{}, err
 	}
-	result := ComputeClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := ComputeClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("ComputeClient.Start", "", resp, client.pl)
 	if err != nil {
 		return ComputeClientStartPollerResponse{}, err
@@ -586,9 +578,7 @@ func (client *ComputeClient) BeginStop(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return ComputeClientStopPollerResponse{}, err
 	}
-	result := ComputeClientStopPollerResponse{
-		RawResponse: resp,
-	}
+	result := ComputeClientStopPollerResponse{}
 	pt, err := armruntime.NewPoller("ComputeClient.Stop", "", resp, client.pl)
 	if err != nil {
 		return ComputeClientStopPollerResponse{}, err
@@ -659,9 +649,7 @@ func (client *ComputeClient) BeginUpdate(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return ComputeClientUpdatePollerResponse{}, err
 	}
-	result := ComputeClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ComputeClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ComputeClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ComputeClientUpdatePollerResponse{}, err

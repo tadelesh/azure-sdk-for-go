@@ -110,7 +110,7 @@ func (client *EdgeModulesClient) createOrUpdateCreateRequest(ctx context.Context
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *EdgeModulesClient) createOrUpdateHandleResponse(resp *http.Response) (EdgeModulesClientCreateOrUpdateResponse, error) {
-	result := EdgeModulesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := EdgeModulesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EdgeModuleEntity); err != nil {
 		return EdgeModulesClientCreateOrUpdateResponse{}, err
 	}
@@ -137,7 +137,7 @@ func (client *EdgeModulesClient) Delete(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return EdgeModulesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return EdgeModulesClientDeleteResponse{RawResponse: resp}, nil
+	return EdgeModulesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -223,7 +223,7 @@ func (client *EdgeModulesClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *EdgeModulesClient) getHandleResponse(resp *http.Response) (EdgeModulesClientGetResponse, error) {
-	result := EdgeModulesClientGetResponse{RawResponse: resp}
+	result := EdgeModulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EdgeModuleEntity); err != nil {
 		return EdgeModulesClientGetResponse{}, err
 	}
@@ -278,7 +278,7 @@ func (client *EdgeModulesClient) listCreateRequest(ctx context.Context, resource
 
 // listHandleResponse handles the List response.
 func (client *EdgeModulesClient) listHandleResponse(resp *http.Response) (EdgeModulesClientListResponse, error) {
-	result := EdgeModulesClientListResponse{RawResponse: resp}
+	result := EdgeModulesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EdgeModuleEntityCollection); err != nil {
 		return EdgeModulesClientListResponse{}, err
 	}
@@ -346,7 +346,7 @@ func (client *EdgeModulesClient) listProvisioningTokenCreateRequest(ctx context.
 
 // listProvisioningTokenHandleResponse handles the ListProvisioningToken response.
 func (client *EdgeModulesClient) listProvisioningTokenHandleResponse(resp *http.Response) (EdgeModulesClientListProvisioningTokenResponse, error) {
-	result := EdgeModulesClientListProvisioningTokenResponse{RawResponse: resp}
+	result := EdgeModulesClientListProvisioningTokenResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EdgeModuleProvisioningToken); err != nil {
 		return EdgeModulesClientListProvisioningTokenResponse{}, err
 	}

@@ -1,5 +1,80 @@
 # Release History
 
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Struct `AccountsClientCheckNameAvailabilityResult` has been removed
+- Struct `AccountsClientCreateOrUpdateResult` has been removed
+- Struct `AccountsClientGetResult` has been removed
+- Struct `AccountsClientListByResourceGroupResult` has been removed
+- Struct `AccountsClientUpdateResult` has been removed
+- Struct `ExtensionsClientCreateResult` has been removed
+- Struct `ExtensionsClientGetResult` has been removed
+- Struct `ExtensionsClientListByAccountResult` has been removed
+- Struct `ExtensionsClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `ProjectsClientCreateResult` has been removed
+- Struct `ProjectsClientGetJobStatusResult` has been removed
+- Struct `ProjectsClientGetResult` has been removed
+- Struct `ProjectsClientListByResourceGroupResult` has been removed
+- Struct `ProjectsClientUpdateResult` has been removed
+- Field `AccountsClientListByResourceGroupResult` of struct `AccountsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientListByResourceGroupResponse` has been removed
+- Field `ProjectsClientGetResult` of struct `ProjectsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientDeleteResponse` has been removed
+- Field `ExtensionsClientCreateResult` of struct `ExtensionsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientCreateResponse` has been removed
+- Field `AccountsClientGetResult` of struct `AccountsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientGetResponse` has been removed
+- Field `ExtensionsClientGetResult` of struct `ExtensionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientGetResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `AccountsClientUpdateResult` of struct `AccountsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientCreatePollerResponse` has been removed
+- Field `AccountsClientCheckNameAvailabilityResult` of struct `AccountsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientCheckNameAvailabilityResponse` has been removed
+- Field `ProjectsClientUpdateResult` of struct `ProjectsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientUpdateResponse` has been removed
+- Field `ProjectsClientCreateResult` of struct `ProjectsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientCreateResponse` has been removed
+- Field `ExtensionsClientListByAccountResult` of struct `ExtensionsClientListByAccountResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientListByAccountResponse` has been removed
+- Field `ProjectsClientListByResourceGroupResult` of struct `ProjectsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientListByResourceGroupResponse` has been removed
+- Field `ExtensionsClientUpdateResult` of struct `ExtensionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientUpdateResponse` has been removed
+- Field `AccountsClientCreateOrUpdateResult` of struct `AccountsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientCreateOrUpdateResponse` has been removed
+- Field `ProjectsClientGetJobStatusResult` of struct `ProjectsClientGetJobStatusResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientGetJobStatusResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientDeleteResponse` has been removed
+
+### Features Added
+
+- New anonymous field `ExtensionResource` in struct `ExtensionsClientGetResponse`
+- New anonymous field `AccountResource` in struct `AccountsClientUpdateResponse`
+- New anonymous field `CheckNameAvailabilityResult` in struct `AccountsClientCheckNameAvailabilityResponse`
+- New anonymous field `AccountResource` in struct `AccountsClientCreateOrUpdateResponse`
+- New anonymous field `ExtensionResourceListResult` in struct `ExtensionsClientListByAccountResponse`
+- New anonymous field `ProjectResource` in struct `ProjectsClientCreateResponse`
+- New anonymous field `AccountResource` in struct `AccountsClientGetResponse`
+- New anonymous field `ProjectResource` in struct `ProjectsClientGetJobStatusResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `AccountResourceListResult` in struct `AccountsClientListByResourceGroupResponse`
+- New anonymous field `ExtensionResource` in struct `ExtensionsClientCreateResponse`
+- New anonymous field `ExtensionResource` in struct `ExtensionsClientUpdateResponse`
+- New anonymous field `ProjectResourceListResult` in struct `ProjectsClientListByResourceGroupResponse`
+- New anonymous field `ProjectResource` in struct `ProjectsClientGetResponse`
+- New anonymous field `ProjectResource` in struct `ProjectsClientUpdateResponse`
+
+
+## 0.2.1 (2022-03-10)
+### Other Changes
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

@@ -34,17 +34,17 @@ type ReplicationUsagesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReplicationUsagesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReplicationUsagesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReplicationUsagesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -54,19 +54,13 @@ func NewReplicationUsagesClient(subscriptionID string, credential azcore.TokenCr
 // resourceGroupName - The name of the resource group where the recovery services vault is present.
 // vaultName - The name of the recovery services vault.
 // options - ReplicationUsagesClientListOptions contains the optional parameters for the ReplicationUsagesClient.List method.
-func (client *ReplicationUsagesClient) List(ctx context.Context, resourceGroupName string, vaultName string, options *ReplicationUsagesClientListOptions) (ReplicationUsagesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, vaultName, options)
-	if err != nil {
-		return ReplicationUsagesClientListResponse{}, err
+func (client *ReplicationUsagesClient) List(resourceGroupName string, vaultName string, options *ReplicationUsagesClientListOptions) *ReplicationUsagesClientListPager {
+	return &ReplicationUsagesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, vaultName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ReplicationUsagesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ReplicationUsagesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -97,7 +91,7 @@ func (client *ReplicationUsagesClient) listCreateRequest(ctx context.Context, re
 
 // listHandleResponse handles the List response.
 func (client *ReplicationUsagesClient) listHandleResponse(resp *http.Response) (ReplicationUsagesClientListResponse, error) {
-	result := ReplicationUsagesClientListResponse{RawResponse: resp}
+	result := ReplicationUsagesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReplicationUsageList); err != nil {
 		return ReplicationUsagesClientListResponse{}, err
 	}

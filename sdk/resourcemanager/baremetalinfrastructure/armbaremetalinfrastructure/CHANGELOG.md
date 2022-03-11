@@ -1,5 +1,62 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*AzureBareMetalInstancesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(AzureBareMetalInstancesClientListByResourceGroupResponse, error)`
+- Function `*AzureBareMetalInstancesClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(AzureBareMetalInstancesClientListBySubscriptionResponse, error)`
+- Function `*OperationsClient.List` parameter(s) have been changed from `(context.Context, *OperationsClientListOptions)` to `(*OperationsClientListOptions)`
+- Function `*OperationsClient.List` return value(s) have been changed from `(OperationsClientListResponse, error)` to `(*OperationsClientListPager)`
+- Function `*AzureBareMetalInstancesClientListByResourceGroupPager.Err` has been removed
+- Function `*AzureBareMetalInstancesClientListBySubscriptionPager.Err` has been removed
+- Function `*AzureBareMetalInstancesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*AzureBareMetalInstancesClientListBySubscriptionPager.PageResponse` has been removed
+- Struct `AzureBareMetalInstancesClientGetResult` has been removed
+- Struct `AzureBareMetalInstancesClientListByResourceGroupResult` has been removed
+- Struct `AzureBareMetalInstancesClientListBySubscriptionResult` has been removed
+- Struct `AzureBareMetalInstancesClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `AzureBareMetalInstancesClientUpdateResult` of struct `AzureBareMetalInstancesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AzureBareMetalInstancesClientUpdateResponse` has been removed
+- Field `AzureBareMetalInstancesClientListBySubscriptionResult` of struct `AzureBareMetalInstancesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `AzureBareMetalInstancesClientListBySubscriptionResponse` has been removed
+- Field `AzureBareMetalInstancesClientGetResult` of struct `AzureBareMetalInstancesClientGetResponse` has been removed
+- Field `RawResponse` of struct `AzureBareMetalInstancesClientGetResponse` has been removed
+- Field `AzureBareMetalInstancesClientListByResourceGroupResult` of struct `AzureBareMetalInstancesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `AzureBareMetalInstancesClientListByResourceGroupResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+
+### Features Added
+
+- New function `*AzureBareMetalInstancesClientListByResourceGroupPager.More() bool`
+- New function `*OperationsClientListPager.NextPage(context.Context) (OperationsClientListResponse, error)`
+- New function `*AzureBareMetalInstancesClientListBySubscriptionPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `ErrorDefinition.MarshalJSON() ([]byte, error)`
+- New struct `ErrorDefinition`
+- New struct `ErrorResponse`
+- New struct `OperationsClientListPager`
+- New struct `Result`
+- New anonymous field `AzureBareMetalInstance` in struct `AzureBareMetalInstancesClientGetResponse`
+- New anonymous field `OperationList` in struct `OperationsClientListResponse`
+- New anonymous field `AzureBareMetalInstancesListResult` in struct `AzureBareMetalInstancesClientListBySubscriptionResponse`
+- New anonymous field `AzureBareMetalInstance` in struct `AzureBareMetalInstancesClientUpdateResponse`
+- New anonymous field `AzureBareMetalInstancesListResult` in struct `AzureBareMetalInstancesClientListByResourceGroupResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDefinition.MarshalJSON` has been removed
+- Struct `ErrorDefinition` has been removed
+- Struct `ErrorResponse` has been removed
+- Struct `Result` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

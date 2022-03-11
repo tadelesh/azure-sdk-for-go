@@ -43,11 +43,10 @@ func (p *AccountsClientUpdatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final AccountsClientUpdateResponse will be returned.
 func (p *AccountsClientUpdatePoller) FinalResponse(ctx context.Context) (AccountsClientUpdateResponse, error) {
 	respType := AccountsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Account)
+	_, err := p.pt.FinalResponse(ctx, &respType.Account)
 	if err != nil {
 		return AccountsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *InvoiceSectionsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final InvoiceSectionsClientCreateOrUpdateResponse will be returned.
 func (p *InvoiceSectionsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (InvoiceSectionsClientCreateOrUpdateResponse, error) {
 	respType := InvoiceSectionsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.InvoiceSection)
+	_, err := p.pt.FinalResponse(ctx, &respType.InvoiceSection)
 	if err != nil {
 		return InvoiceSectionsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *InvoicesClientDownloadBillingSubscriptionInvoicePoller) Poll(ctx contex
 // If the final GET succeeded then the final InvoicesClientDownloadBillingSubscriptionInvoiceResponse will be returned.
 func (p *InvoicesClientDownloadBillingSubscriptionInvoicePoller) FinalResponse(ctx context.Context) (InvoicesClientDownloadBillingSubscriptionInvoiceResponse, error) {
 	respType := InvoicesClientDownloadBillingSubscriptionInvoiceResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DownloadURL)
+	_, err := p.pt.FinalResponse(ctx, &respType.DownloadURL)
 	if err != nil {
 		return InvoicesClientDownloadBillingSubscriptionInvoiceResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *InvoicesClientDownloadInvoicePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final InvoicesClientDownloadInvoiceResponse will be returned.
 func (p *InvoicesClientDownloadInvoicePoller) FinalResponse(ctx context.Context) (InvoicesClientDownloadInvoiceResponse, error) {
 	respType := InvoicesClientDownloadInvoiceResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DownloadURL)
+	_, err := p.pt.FinalResponse(ctx, &respType.DownloadURL)
 	if err != nil {
 		return InvoicesClientDownloadInvoiceResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *InvoicesClientDownloadMultipleBillingProfileInvoicesPoller) Poll(ctx co
 // If the final GET succeeded then the final InvoicesClientDownloadMultipleBillingProfileInvoicesResponse will be returned.
 func (p *InvoicesClientDownloadMultipleBillingProfileInvoicesPoller) FinalResponse(ctx context.Context) (InvoicesClientDownloadMultipleBillingProfileInvoicesResponse, error) {
 	respType := InvoicesClientDownloadMultipleBillingProfileInvoicesResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DownloadURL)
+	_, err := p.pt.FinalResponse(ctx, &respType.DownloadURL)
 	if err != nil {
 		return InvoicesClientDownloadMultipleBillingProfileInvoicesResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPoller) Poll(c
 // If the final GET succeeded then the final InvoicesClientDownloadMultipleBillingSubscriptionInvoicesResponse will be returned.
 func (p *InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPoller) FinalResponse(ctx context.Context) (InvoicesClientDownloadMultipleBillingSubscriptionInvoicesResponse, error) {
 	respType := InvoicesClientDownloadMultipleBillingSubscriptionInvoicesResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DownloadURL)
+	_, err := p.pt.FinalResponse(ctx, &respType.DownloadURL)
 	if err != nil {
 		return InvoicesClientDownloadMultipleBillingSubscriptionInvoicesResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *ProfilesClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final ProfilesClientCreateOrUpdateResponse will be returned.
 func (p *ProfilesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ProfilesClientCreateOrUpdateResponse, error) {
 	respType := ProfilesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Profile)
+	_, err := p.pt.FinalResponse(ctx, &respType.Profile)
 	if err != nil {
 		return ProfilesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *SubscriptionsClientMovePoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final SubscriptionsClientMoveResponse will be returned.
 func (p *SubscriptionsClientMovePoller) FinalResponse(ctx context.Context) (SubscriptionsClientMoveResponse, error) {
 	respType := SubscriptionsClientMoveResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Subscription)
+	_, err := p.pt.FinalResponse(ctx, &respType.Subscription)
 	if err != nil {
 		return SubscriptionsClientMoveResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

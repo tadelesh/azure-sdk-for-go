@@ -34,17 +34,17 @@ type ServerDNSAliasesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServerDNSAliasesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServerDNSAliasesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServerDNSAliasesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *ServerDNSAliasesClient) BeginAcquire(ctx context.Context, resource
 	if err != nil {
 		return ServerDNSAliasesClientAcquirePollerResponse{}, err
 	}
-	result := ServerDNSAliasesClientAcquirePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerDNSAliasesClientAcquirePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerDNSAliasesClient.Acquire", "", resp, client.pl)
 	if err != nil {
 		return ServerDNSAliasesClientAcquirePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *ServerDNSAliasesClient) BeginCreateOrUpdate(ctx context.Context, r
 	if err != nil {
 		return ServerDNSAliasesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ServerDNSAliasesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerDNSAliasesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerDNSAliasesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ServerDNSAliasesClientCreateOrUpdatePollerResponse{}, err
@@ -208,9 +204,7 @@ func (client *ServerDNSAliasesClient) BeginDelete(ctx context.Context, resourceG
 	if err != nil {
 		return ServerDNSAliasesClientDeletePollerResponse{}, err
 	}
-	result := ServerDNSAliasesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerDNSAliasesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerDNSAliasesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ServerDNSAliasesClientDeletePollerResponse{}, err
@@ -321,7 +315,7 @@ func (client *ServerDNSAliasesClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *ServerDNSAliasesClient) getHandleResponse(resp *http.Response) (ServerDNSAliasesClientGetResponse, error) {
-	result := ServerDNSAliasesClientGetResponse{RawResponse: resp}
+	result := ServerDNSAliasesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerDNSAlias); err != nil {
 		return ServerDNSAliasesClientGetResponse{}, err
 	}
@@ -375,7 +369,7 @@ func (client *ServerDNSAliasesClient) listByServerCreateRequest(ctx context.Cont
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *ServerDNSAliasesClient) listByServerHandleResponse(resp *http.Response) (ServerDNSAliasesClientListByServerResponse, error) {
-	result := ServerDNSAliasesClientListByServerResponse{RawResponse: resp}
+	result := ServerDNSAliasesClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerDNSAliasListResult); err != nil {
 		return ServerDNSAliasesClientListByServerResponse{}, err
 	}

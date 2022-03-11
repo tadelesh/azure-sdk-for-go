@@ -35,17 +35,17 @@ type JobStepsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewJobStepsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *JobStepsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &JobStepsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -115,7 +115,7 @@ func (client *JobStepsClient) createOrUpdateCreateRequest(ctx context.Context, r
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *JobStepsClient) createOrUpdateHandleResponse(resp *http.Response) (JobStepsClientCreateOrUpdateResponse, error) {
-	result := JobStepsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := JobStepsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobStep); err != nil {
 		return JobStepsClientCreateOrUpdateResponse{}, err
 	}
@@ -143,7 +143,7 @@ func (client *JobStepsClient) Delete(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return JobStepsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return JobStepsClientDeleteResponse{RawResponse: resp}, nil
+	return JobStepsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -247,7 +247,7 @@ func (client *JobStepsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *JobStepsClient) getHandleResponse(resp *http.Response) (JobStepsClientGetResponse, error) {
-	result := JobStepsClientGetResponse{RawResponse: resp}
+	result := JobStepsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobStep); err != nil {
 		return JobStepsClientGetResponse{}, err
 	}
@@ -320,7 +320,7 @@ func (client *JobStepsClient) getByVersionCreateRequest(ctx context.Context, res
 
 // getByVersionHandleResponse handles the GetByVersion response.
 func (client *JobStepsClient) getByVersionHandleResponse(resp *http.Response) (JobStepsClientGetByVersionResponse, error) {
-	result := JobStepsClientGetByVersionResponse{RawResponse: resp}
+	result := JobStepsClientGetByVersionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobStep); err != nil {
 		return JobStepsClientGetByVersionResponse{}, err
 	}
@@ -383,7 +383,7 @@ func (client *JobStepsClient) listByJobCreateRequest(ctx context.Context, resour
 
 // listByJobHandleResponse handles the ListByJob response.
 func (client *JobStepsClient) listByJobHandleResponse(resp *http.Response) (JobStepsClientListByJobResponse, error) {
-	result := JobStepsClientListByJobResponse{RawResponse: resp}
+	result := JobStepsClientListByJobResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobStepListResult); err != nil {
 		return JobStepsClientListByJobResponse{}, err
 	}
@@ -448,7 +448,7 @@ func (client *JobStepsClient) listByVersionCreateRequest(ctx context.Context, re
 
 // listByVersionHandleResponse handles the ListByVersion response.
 func (client *JobStepsClient) listByVersionHandleResponse(resp *http.Response) (JobStepsClientListByVersionResponse, error) {
-	result := JobStepsClientListByVersionResponse{RawResponse: resp}
+	result := JobStepsClientListByVersionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobStepListResult); err != nil {
 		return JobStepsClientListByVersionResponse{}, err
 	}

@@ -35,17 +35,17 @@ type CloudServicesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCloudServicesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CloudServicesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CloudServicesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *CloudServicesClient) BeginCreateOrUpdate(ctx context.Context, reso
 	if err != nil {
 		return CloudServicesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := CloudServicesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudServicesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("CloudServicesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return CloudServicesClientCreateOrUpdatePollerResponse{}, err
@@ -132,9 +130,7 @@ func (client *CloudServicesClient) BeginDelete(ctx context.Context, resourceGrou
 	if err != nil {
 		return CloudServicesClientDeletePollerResponse{}, err
 	}
-	result := CloudServicesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudServicesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CloudServicesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return CloudServicesClientDeletePollerResponse{}, err
@@ -199,9 +195,7 @@ func (client *CloudServicesClient) BeginDeleteInstances(ctx context.Context, res
 	if err != nil {
 		return CloudServicesClientDeleteInstancesPollerResponse{}, err
 	}
-	result := CloudServicesClientDeleteInstancesPollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudServicesClientDeleteInstancesPollerResponse{}
 	pt, err := armruntime.NewPoller("CloudServicesClient.DeleteInstances", "", resp, client.pl)
 	if err != nil {
 		return CloudServicesClientDeleteInstancesPollerResponse{}, err
@@ -306,7 +300,7 @@ func (client *CloudServicesClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *CloudServicesClient) getHandleResponse(resp *http.Response) (CloudServicesClientGetResponse, error) {
-	result := CloudServicesClientGetResponse{RawResponse: resp}
+	result := CloudServicesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CloudService); err != nil {
 		return CloudServicesClientGetResponse{}, err
 	}
@@ -362,7 +356,7 @@ func (client *CloudServicesClient) getInstanceViewCreateRequest(ctx context.Cont
 
 // getInstanceViewHandleResponse handles the GetInstanceView response.
 func (client *CloudServicesClient) getInstanceViewHandleResponse(resp *http.Response) (CloudServicesClientGetInstanceViewResponse, error) {
-	result := CloudServicesClientGetInstanceViewResponse{RawResponse: resp}
+	result := CloudServicesClientGetInstanceViewResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CloudServiceInstanceView); err != nil {
 		return CloudServicesClientGetInstanceViewResponse{}, err
 	}
@@ -410,7 +404,7 @@ func (client *CloudServicesClient) listCreateRequest(ctx context.Context, resour
 
 // listHandleResponse handles the List response.
 func (client *CloudServicesClient) listHandleResponse(resp *http.Response) (CloudServicesClientListResponse, error) {
-	result := CloudServicesClientListResponse{RawResponse: resp}
+	result := CloudServicesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CloudServiceListResult); err != nil {
 		return CloudServicesClientListResponse{}, err
 	}
@@ -454,7 +448,7 @@ func (client *CloudServicesClient) listAllCreateRequest(ctx context.Context, opt
 
 // listAllHandleResponse handles the ListAll response.
 func (client *CloudServicesClient) listAllHandleResponse(resp *http.Response) (CloudServicesClientListAllResponse, error) {
-	result := CloudServicesClientListAllResponse{RawResponse: resp}
+	result := CloudServicesClientListAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CloudServiceListResult); err != nil {
 		return CloudServicesClientListAllResponse{}, err
 	}
@@ -473,9 +467,7 @@ func (client *CloudServicesClient) BeginPowerOff(ctx context.Context, resourceGr
 	if err != nil {
 		return CloudServicesClientPowerOffPollerResponse{}, err
 	}
-	result := CloudServicesClientPowerOffPollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudServicesClientPowerOffPollerResponse{}
 	pt, err := armruntime.NewPoller("CloudServicesClient.PowerOff", "", resp, client.pl)
 	if err != nil {
 		return CloudServicesClientPowerOffPollerResponse{}, err
@@ -542,9 +534,7 @@ func (client *CloudServicesClient) BeginRebuild(ctx context.Context, resourceGro
 	if err != nil {
 		return CloudServicesClientRebuildPollerResponse{}, err
 	}
-	result := CloudServicesClientRebuildPollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudServicesClientRebuildPollerResponse{}
 	pt, err := armruntime.NewPoller("CloudServicesClient.Rebuild", "", resp, client.pl)
 	if err != nil {
 		return CloudServicesClientRebuildPollerResponse{}, err
@@ -614,9 +604,7 @@ func (client *CloudServicesClient) BeginReimage(ctx context.Context, resourceGro
 	if err != nil {
 		return CloudServicesClientReimagePollerResponse{}, err
 	}
-	result := CloudServicesClientReimagePollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudServicesClientReimagePollerResponse{}
 	pt, err := armruntime.NewPoller("CloudServicesClient.Reimage", "", resp, client.pl)
 	if err != nil {
 		return CloudServicesClientReimagePollerResponse{}, err
@@ -684,9 +672,7 @@ func (client *CloudServicesClient) BeginRestart(ctx context.Context, resourceGro
 	if err != nil {
 		return CloudServicesClientRestartPollerResponse{}, err
 	}
-	result := CloudServicesClientRestartPollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudServicesClientRestartPollerResponse{}
 	pt, err := armruntime.NewPoller("CloudServicesClient.Restart", "", resp, client.pl)
 	if err != nil {
 		return CloudServicesClientRestartPollerResponse{}, err
@@ -754,9 +740,7 @@ func (client *CloudServicesClient) BeginStart(ctx context.Context, resourceGroup
 	if err != nil {
 		return CloudServicesClientStartPollerResponse{}, err
 	}
-	result := CloudServicesClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudServicesClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("CloudServicesClient.Start", "", resp, client.pl)
 	if err != nil {
 		return CloudServicesClientStartPollerResponse{}, err
@@ -821,9 +805,7 @@ func (client *CloudServicesClient) BeginUpdate(ctx context.Context, resourceGrou
 	if err != nil {
 		return CloudServicesClientUpdatePollerResponse{}, err
 	}
-	result := CloudServicesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudServicesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("CloudServicesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return CloudServicesClientUpdatePollerResponse{}, err

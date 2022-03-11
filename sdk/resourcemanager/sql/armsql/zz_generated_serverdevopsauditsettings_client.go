@@ -34,17 +34,17 @@ type ServerDevOpsAuditSettingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServerDevOpsAuditSettingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServerDevOpsAuditSettingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServerDevOpsAuditSettingsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ServerDevOpsAuditSettingsClient) BeginCreateOrUpdate(ctx context.C
 	if err != nil {
 		return ServerDevOpsAuditSettingsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ServerDevOpsAuditSettingsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerDevOpsAuditSettingsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerDevOpsAuditSettingsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ServerDevOpsAuditSettingsClientCreateOrUpdatePollerResponse{}, err
@@ -178,7 +176,7 @@ func (client *ServerDevOpsAuditSettingsClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *ServerDevOpsAuditSettingsClient) getHandleResponse(resp *http.Response) (ServerDevOpsAuditSettingsClientGetResponse, error) {
-	result := ServerDevOpsAuditSettingsClientGetResponse{RawResponse: resp}
+	result := ServerDevOpsAuditSettingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerDevOpsAuditingSettings); err != nil {
 		return ServerDevOpsAuditSettingsClientGetResponse{}, err
 	}
@@ -232,7 +230,7 @@ func (client *ServerDevOpsAuditSettingsClient) listByServerCreateRequest(ctx con
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *ServerDevOpsAuditSettingsClient) listByServerHandleResponse(resp *http.Response) (ServerDevOpsAuditSettingsClientListByServerResponse, error) {
-	result := ServerDevOpsAuditSettingsClientListByServerResponse{RawResponse: resp}
+	result := ServerDevOpsAuditSettingsClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerDevOpsAuditSettingsListResult); err != nil {
 		return ServerDevOpsAuditSettingsClientListByServerResponse{}, err
 	}

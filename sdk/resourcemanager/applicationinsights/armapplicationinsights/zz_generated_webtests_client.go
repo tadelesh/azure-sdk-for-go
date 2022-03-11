@@ -34,17 +34,17 @@ type WebTestsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWebTestsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WebTestsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WebTestsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *WebTestsClient) createOrUpdateCreateRequest(ctx context.Context, r
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *WebTestsClient) createOrUpdateHandleResponse(resp *http.Response) (WebTestsClientCreateOrUpdateResponse, error) {
-	result := WebTestsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := WebTestsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebTest); err != nil {
 		return WebTestsClientCreateOrUpdateResponse{}, err
 	}
@@ -122,7 +122,7 @@ func (client *WebTestsClient) Delete(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebTestsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebTestsClientDeleteResponse{RawResponse: resp}, nil
+	return WebTestsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -198,7 +198,7 @@ func (client *WebTestsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *WebTestsClient) getHandleResponse(resp *http.Response) (WebTestsClientGetResponse, error) {
-	result := WebTestsClientGetResponse{RawResponse: resp}
+	result := WebTestsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebTest); err != nil {
 		return WebTestsClientGetResponse{}, err
 	}
@@ -240,7 +240,7 @@ func (client *WebTestsClient) listCreateRequest(ctx context.Context, options *We
 
 // listHandleResponse handles the List response.
 func (client *WebTestsClient) listHandleResponse(resp *http.Response) (WebTestsClientListResponse, error) {
-	result := WebTestsClientListResponse{RawResponse: resp}
+	result := WebTestsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebTestListResult); err != nil {
 		return WebTestsClientListResponse{}, err
 	}
@@ -293,7 +293,7 @@ func (client *WebTestsClient) listByComponentCreateRequest(ctx context.Context, 
 
 // listByComponentHandleResponse handles the ListByComponent response.
 func (client *WebTestsClient) listByComponentHandleResponse(resp *http.Response) (WebTestsClientListByComponentResponse, error) {
-	result := WebTestsClientListByComponentResponse{RawResponse: resp}
+	result := WebTestsClientListByComponentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebTestListResult); err != nil {
 		return WebTestsClientListByComponentResponse{}, err
 	}
@@ -341,7 +341,7 @@ func (client *WebTestsClient) listByResourceGroupCreateRequest(ctx context.Conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *WebTestsClient) listByResourceGroupHandleResponse(resp *http.Response) (WebTestsClientListByResourceGroupResponse, error) {
-	result := WebTestsClientListByResourceGroupResponse{RawResponse: resp}
+	result := WebTestsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebTestListResult); err != nil {
 		return WebTestsClientListByResourceGroupResponse{}, err
 	}
@@ -397,7 +397,7 @@ func (client *WebTestsClient) updateTagsCreateRequest(ctx context.Context, resou
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *WebTestsClient) updateTagsHandleResponse(resp *http.Response) (WebTestsClientUpdateTagsResponse, error) {
-	result := WebTestsClientUpdateTagsResponse{RawResponse: resp}
+	result := WebTestsClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebTest); err != nil {
 		return WebTestsClientUpdateTagsResponse{}, err
 	}

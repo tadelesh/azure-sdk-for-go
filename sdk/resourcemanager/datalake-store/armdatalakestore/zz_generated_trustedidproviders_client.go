@@ -35,17 +35,17 @@ type TrustedIDProvidersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTrustedIDProvidersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TrustedIDProvidersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TrustedIDProvidersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -107,7 +107,7 @@ func (client *TrustedIDProvidersClient) createOrUpdateCreateRequest(ctx context.
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *TrustedIDProvidersClient) createOrUpdateHandleResponse(resp *http.Response) (TrustedIDProvidersClientCreateOrUpdateResponse, error) {
-	result := TrustedIDProvidersClientCreateOrUpdateResponse{RawResponse: resp}
+	result := TrustedIDProvidersClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TrustedIDProvider); err != nil {
 		return TrustedIDProvidersClientCreateOrUpdateResponse{}, err
 	}
@@ -133,7 +133,7 @@ func (client *TrustedIDProvidersClient) Delete(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return TrustedIDProvidersClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return TrustedIDProvidersClientDeleteResponse{RawResponse: resp}, nil
+	return TrustedIDProvidersClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -218,7 +218,7 @@ func (client *TrustedIDProvidersClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *TrustedIDProvidersClient) getHandleResponse(resp *http.Response) (TrustedIDProvidersClientGetResponse, error) {
-	result := TrustedIDProvidersClientGetResponse{RawResponse: resp}
+	result := TrustedIDProvidersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TrustedIDProvider); err != nil {
 		return TrustedIDProvidersClientGetResponse{}, err
 	}
@@ -271,7 +271,7 @@ func (client *TrustedIDProvidersClient) listByAccountCreateRequest(ctx context.C
 
 // listByAccountHandleResponse handles the ListByAccount response.
 func (client *TrustedIDProvidersClient) listByAccountHandleResponse(resp *http.Response) (TrustedIDProvidersClientListByAccountResponse, error) {
-	result := TrustedIDProvidersClientListByAccountResponse{RawResponse: resp}
+	result := TrustedIDProvidersClientListByAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TrustedIDProviderListResult); err != nil {
 		return TrustedIDProvidersClientListByAccountResponse{}, err
 	}
@@ -336,7 +336,7 @@ func (client *TrustedIDProvidersClient) updateCreateRequest(ctx context.Context,
 
 // updateHandleResponse handles the Update response.
 func (client *TrustedIDProvidersClient) updateHandleResponse(resp *http.Response) (TrustedIDProvidersClientUpdateResponse, error) {
-	result := TrustedIDProvidersClientUpdateResponse{RawResponse: resp}
+	result := TrustedIDProvidersClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TrustedIDProvider); err != nil {
 		return TrustedIDProvidersClientUpdateResponse{}, err
 	}

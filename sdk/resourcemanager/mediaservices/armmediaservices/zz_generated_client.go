@@ -34,17 +34,17 @@ type Client struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *Client {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &Client{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *Client) createOrUpdateCreateRequest(ctx context.Context, resourceG
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *Client) createOrUpdateHandleResponse(resp *http.Response) (ClientCreateOrUpdateResponse, error) {
-	result := ClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MediaService); err != nil {
 		return ClientCreateOrUpdateResponse{}, err
 	}
@@ -122,7 +122,7 @@ func (client *Client) Delete(ctx context.Context, resourceGroupName string, acco
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ClientDeleteResponse{RawResponse: resp}, nil
+	return ClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -199,7 +199,7 @@ func (client *Client) getCreateRequest(ctx context.Context, resourceGroupName st
 
 // getHandleResponse handles the Get response.
 func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse, error) {
-	result := ClientGetResponse{RawResponse: resp}
+	result := ClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MediaService); err != nil {
 		return ClientGetResponse{}, err
 	}
@@ -246,7 +246,7 @@ func (client *Client) listCreateRequest(ctx context.Context, resourceGroupName s
 
 // listHandleResponse handles the List response.
 func (client *Client) listHandleResponse(resp *http.Response) (ClientListResponse, error) {
-	result := ClientListResponse{RawResponse: resp}
+	result := ClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MediaServiceCollection); err != nil {
 		return ClientListResponse{}, err
 	}
@@ -288,7 +288,7 @@ func (client *Client) listBySubscriptionCreateRequest(ctx context.Context, optio
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *Client) listBySubscriptionHandleResponse(resp *http.Response) (ClientListBySubscriptionResponse, error) {
-	result := ClientListBySubscriptionResponse{RawResponse: resp}
+	result := ClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MediaServiceCollection); err != nil {
 		return ClientListBySubscriptionResponse{}, err
 	}
@@ -344,7 +344,7 @@ func (client *Client) listEdgePoliciesCreateRequest(ctx context.Context, resourc
 
 // listEdgePoliciesHandleResponse handles the ListEdgePolicies response.
 func (client *Client) listEdgePoliciesHandleResponse(resp *http.Response) (ClientListEdgePoliciesResponse, error) {
-	result := ClientListEdgePoliciesResponse{RawResponse: resp}
+	result := ClientListEdgePoliciesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EdgePolicies); err != nil {
 		return ClientListEdgePoliciesResponse{}, err
 	}
@@ -369,7 +369,7 @@ func (client *Client) SyncStorageKeys(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ClientSyncStorageKeysResponse{}, runtime.NewResponseError(resp)
 	}
-	return ClientSyncStorageKeysResponse{RawResponse: resp}, nil
+	return ClientSyncStorageKeysResponse{}, nil
 }
 
 // syncStorageKeysCreateRequest creates the SyncStorageKeys request.
@@ -447,7 +447,7 @@ func (client *Client) updateCreateRequest(ctx context.Context, resourceGroupName
 
 // updateHandleResponse handles the Update response.
 func (client *Client) updateHandleResponse(resp *http.Response) (ClientUpdateResponse, error) {
-	result := ClientUpdateResponse{RawResponse: resp}
+	result := ClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MediaService); err != nil {
 		return ClientUpdateResponse{}, err
 	}

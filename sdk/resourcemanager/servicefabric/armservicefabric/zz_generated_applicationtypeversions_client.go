@@ -34,17 +34,17 @@ type ApplicationTypeVersionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewApplicationTypeVersionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ApplicationTypeVersionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ApplicationTypeVersionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ApplicationTypeVersionsClient) BeginCreateOrUpdate(ctx context.Con
 	if err != nil {
 		return ApplicationTypeVersionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ApplicationTypeVersionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ApplicationTypeVersionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ApplicationTypeVersionsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ApplicationTypeVersionsClientCreateOrUpdatePollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *ApplicationTypeVersionsClient) BeginDelete(ctx context.Context, re
 	if err != nil {
 		return ApplicationTypeVersionsClientDeletePollerResponse{}, err
 	}
-	result := ApplicationTypeVersionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ApplicationTypeVersionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ApplicationTypeVersionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ApplicationTypeVersionsClientDeletePollerResponse{}, err
@@ -264,7 +260,7 @@ func (client *ApplicationTypeVersionsClient) getCreateRequest(ctx context.Contex
 
 // getHandleResponse handles the Get response.
 func (client *ApplicationTypeVersionsClient) getHandleResponse(resp *http.Response) (ApplicationTypeVersionsClientGetResponse, error) {
-	result := ApplicationTypeVersionsClientGetResponse{RawResponse: resp}
+	result := ApplicationTypeVersionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationTypeVersionResource); err != nil {
 		return ApplicationTypeVersionsClientGetResponse{}, err
 	}
@@ -326,7 +322,7 @@ func (client *ApplicationTypeVersionsClient) listCreateRequest(ctx context.Conte
 
 // listHandleResponse handles the List response.
 func (client *ApplicationTypeVersionsClient) listHandleResponse(resp *http.Response) (ApplicationTypeVersionsClientListResponse, error) {
-	result := ApplicationTypeVersionsClientListResponse{RawResponse: resp}
+	result := ApplicationTypeVersionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationTypeVersionResourceList); err != nil {
 		return ApplicationTypeVersionsClientListResponse{}, err
 	}

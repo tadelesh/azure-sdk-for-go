@@ -33,16 +33,16 @@ type Client struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewClient(credential azcore.TokenCredential, options *arm.ClientOptions) *Client {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &Client{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -58,9 +58,7 @@ func (client *Client) BeginCreateOrUpdate(ctx context.Context, groupID string, c
 	if err != nil {
 		return ClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("Client.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ClientCreateOrUpdatePollerResponse{}, err
@@ -119,9 +117,7 @@ func (client *Client) BeginDelete(ctx context.Context, groupID string, options *
 	if err != nil {
 		return ClientDeletePollerResponse{}, err
 	}
-	result := ClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("Client.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ClientDeletePollerResponse{}, err
@@ -221,7 +217,7 @@ func (client *Client) getCreateRequest(ctx context.Context, groupID string, opti
 
 // getHandleResponse handles the Get response.
 func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse, error) {
-	result := ClientGetResponse{RawResponse: resp}
+	result := ClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagementGroup); err != nil {
 		return ClientGetResponse{}, err
 	}
@@ -270,7 +266,7 @@ func (client *Client) getDescendantsCreateRequest(ctx context.Context, groupID s
 
 // getDescendantsHandleResponse handles the GetDescendants response.
 func (client *Client) getDescendantsHandleResponse(resp *http.Response) (ClientGetDescendantsResponse, error) {
-	result := ClientGetDescendantsResponse{RawResponse: resp}
+	result := ClientGetDescendantsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DescendantListResult); err != nil {
 		return ClientGetDescendantsResponse{}, err
 	}
@@ -314,7 +310,7 @@ func (client *Client) listCreateRequest(ctx context.Context, options *ClientList
 
 // listHandleResponse handles the List response.
 func (client *Client) listHandleResponse(resp *http.Response) (ClientListResponse, error) {
-	result := ClientListResponse{RawResponse: resp}
+	result := ClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagementGroupListResult); err != nil {
 		return ClientListResponse{}, err
 	}
@@ -364,7 +360,7 @@ func (client *Client) updateCreateRequest(ctx context.Context, groupID string, p
 
 // updateHandleResponse handles the Update response.
 func (client *Client) updateHandleResponse(resp *http.Response) (ClientUpdateResponse, error) {
-	result := ClientUpdateResponse{RawResponse: resp}
+	result := ClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagementGroup); err != nil {
 		return ClientUpdateResponse{}, err
 	}

@@ -35,17 +35,17 @@ type FieldsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFieldsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FieldsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FieldsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -57,19 +57,13 @@ func NewFieldsClient(subscriptionID string, credential azcore.TokenCredential, o
 // moduleName - The name of module.
 // typeName - The name of type.
 // options - FieldsClientListByTypeOptions contains the optional parameters for the FieldsClient.ListByType method.
-func (client *FieldsClient) ListByType(ctx context.Context, resourceGroupName string, automationAccountName string, moduleName string, typeName string, options *FieldsClientListByTypeOptions) (FieldsClientListByTypeResponse, error) {
-	req, err := client.listByTypeCreateRequest(ctx, resourceGroupName, automationAccountName, moduleName, typeName, options)
-	if err != nil {
-		return FieldsClientListByTypeResponse{}, err
+func (client *FieldsClient) ListByType(resourceGroupName string, automationAccountName string, moduleName string, typeName string, options *FieldsClientListByTypeOptions) *FieldsClientListByTypePager {
+	return &FieldsClientListByTypePager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByTypeCreateRequest(ctx, resourceGroupName, automationAccountName, moduleName, typeName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return FieldsClientListByTypeResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return FieldsClientListByTypeResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByTypeHandleResponse(resp)
 }
 
 // listByTypeCreateRequest creates the ListByType request.
@@ -108,7 +102,7 @@ func (client *FieldsClient) listByTypeCreateRequest(ctx context.Context, resourc
 
 // listByTypeHandleResponse handles the ListByType response.
 func (client *FieldsClient) listByTypeHandleResponse(resp *http.Response) (FieldsClientListByTypeResponse, error) {
-	result := FieldsClientListByTypeResponse{RawResponse: resp}
+	result := FieldsClientListByTypeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TypeFieldListResult); err != nil {
 		return FieldsClientListByTypeResponse{}, err
 	}

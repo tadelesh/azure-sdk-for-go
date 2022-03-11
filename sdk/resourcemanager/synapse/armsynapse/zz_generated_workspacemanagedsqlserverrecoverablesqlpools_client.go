@@ -34,17 +34,17 @@ type WorkspaceManagedSQLServerRecoverableSQLPoolsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkspaceManagedSQLServerRecoverableSQLPoolsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkspaceManagedSQLServerRecoverableSQLPoolsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkspaceManagedSQLServerRecoverableSQLPoolsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *WorkspaceManagedSQLServerRecoverableSQLPoolsClient) getCreateReque
 
 // getHandleResponse handles the Get response.
 func (client *WorkspaceManagedSQLServerRecoverableSQLPoolsClient) getHandleResponse(resp *http.Response) (WorkspaceManagedSQLServerRecoverableSQLPoolsClientGetResponse, error) {
-	result := WorkspaceManagedSQLServerRecoverableSQLPoolsClientGetResponse{RawResponse: resp}
+	result := WorkspaceManagedSQLServerRecoverableSQLPoolsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecoverableSQLPool); err != nil {
 		return WorkspaceManagedSQLServerRecoverableSQLPoolsClientGetResponse{}, err
 	}
@@ -156,7 +156,7 @@ func (client *WorkspaceManagedSQLServerRecoverableSQLPoolsClient) listCreateRequ
 
 // listHandleResponse handles the List response.
 func (client *WorkspaceManagedSQLServerRecoverableSQLPoolsClient) listHandleResponse(resp *http.Response) (WorkspaceManagedSQLServerRecoverableSQLPoolsClientListResponse, error) {
-	result := WorkspaceManagedSQLServerRecoverableSQLPoolsClientListResponse{RawResponse: resp}
+	result := WorkspaceManagedSQLServerRecoverableSQLPoolsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecoverableSQLPoolListResult); err != nil {
 		return WorkspaceManagedSQLServerRecoverableSQLPoolsClientListResponse{}, err
 	}

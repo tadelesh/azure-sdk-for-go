@@ -34,17 +34,17 @@ type DataCollectionEndpointsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataCollectionEndpointsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataCollectionEndpointsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataCollectionEndpointsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -101,7 +101,7 @@ func (client *DataCollectionEndpointsClient) createCreateRequest(ctx context.Con
 
 // createHandleResponse handles the Create response.
 func (client *DataCollectionEndpointsClient) createHandleResponse(resp *http.Response) (DataCollectionEndpointsClientCreateResponse, error) {
-	result := DataCollectionEndpointsClientCreateResponse{RawResponse: resp}
+	result := DataCollectionEndpointsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataCollectionEndpointResource); err != nil {
 		return DataCollectionEndpointsClientCreateResponse{}, err
 	}
@@ -126,7 +126,7 @@ func (client *DataCollectionEndpointsClient) Delete(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DataCollectionEndpointsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DataCollectionEndpointsClientDeleteResponse{RawResponse: resp}, nil
+	return DataCollectionEndpointsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -204,7 +204,7 @@ func (client *DataCollectionEndpointsClient) getCreateRequest(ctx context.Contex
 
 // getHandleResponse handles the Get response.
 func (client *DataCollectionEndpointsClient) getHandleResponse(resp *http.Response) (DataCollectionEndpointsClientGetResponse, error) {
-	result := DataCollectionEndpointsClientGetResponse{RawResponse: resp}
+	result := DataCollectionEndpointsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataCollectionEndpointResource); err != nil {
 		return DataCollectionEndpointsClientGetResponse{}, err
 	}
@@ -252,7 +252,7 @@ func (client *DataCollectionEndpointsClient) listByResourceGroupCreateRequest(ct
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *DataCollectionEndpointsClient) listByResourceGroupHandleResponse(resp *http.Response) (DataCollectionEndpointsClientListByResourceGroupResponse, error) {
-	result := DataCollectionEndpointsClientListByResourceGroupResponse{RawResponse: resp}
+	result := DataCollectionEndpointsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataCollectionEndpointResourceListResult); err != nil {
 		return DataCollectionEndpointsClientListByResourceGroupResponse{}, err
 	}
@@ -295,7 +295,7 @@ func (client *DataCollectionEndpointsClient) listBySubscriptionCreateRequest(ctx
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *DataCollectionEndpointsClient) listBySubscriptionHandleResponse(resp *http.Response) (DataCollectionEndpointsClientListBySubscriptionResponse, error) {
-	result := DataCollectionEndpointsClientListBySubscriptionResponse{RawResponse: resp}
+	result := DataCollectionEndpointsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataCollectionEndpointResourceListResult); err != nil {
 		return DataCollectionEndpointsClientListBySubscriptionResponse{}, err
 	}
@@ -354,7 +354,7 @@ func (client *DataCollectionEndpointsClient) updateCreateRequest(ctx context.Con
 
 // updateHandleResponse handles the Update response.
 func (client *DataCollectionEndpointsClient) updateHandleResponse(resp *http.Response) (DataCollectionEndpointsClientUpdateResponse, error) {
-	result := DataCollectionEndpointsClientUpdateResponse{RawResponse: resp}
+	result := DataCollectionEndpointsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataCollectionEndpointResource); err != nil {
 		return DataCollectionEndpointsClientUpdateResponse{}, err
 	}

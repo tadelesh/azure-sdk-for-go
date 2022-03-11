@@ -35,17 +35,17 @@ type SignInSettingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSignInSettingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SignInSettingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SignInSettingsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *SignInSettingsClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *SignInSettingsClient) createOrUpdateHandleResponse(resp *http.Response) (SignInSettingsClientCreateOrUpdateResponse, error) {
-	result := SignInSettingsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := SignInSettingsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PortalSigninSettings); err != nil {
 		return SignInSettingsClientCreateOrUpdateResponse{}, err
 	}
@@ -158,7 +158,7 @@ func (client *SignInSettingsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *SignInSettingsClient) getHandleResponse(resp *http.Response) (SignInSettingsClientGetResponse, error) {
-	result := SignInSettingsClientGetResponse{RawResponse: resp}
+	result := SignInSettingsClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -213,7 +213,7 @@ func (client *SignInSettingsClient) getEntityTagCreateRequest(ctx context.Contex
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *SignInSettingsClient) getEntityTagHandleResponse(resp *http.Response) (SignInSettingsClientGetEntityTagResponse, error) {
-	result := SignInSettingsClientGetEntityTagResponse{RawResponse: resp}
+	result := SignInSettingsClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -243,7 +243,7 @@ func (client *SignInSettingsClient) Update(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return SignInSettingsClientUpdateResponse{}, runtime.NewResponseError(resp)
 	}
-	return SignInSettingsClientUpdateResponse{RawResponse: resp}, nil
+	return SignInSettingsClientUpdateResponse{}, nil
 }
 
 // updateCreateRequest creates the Update request.

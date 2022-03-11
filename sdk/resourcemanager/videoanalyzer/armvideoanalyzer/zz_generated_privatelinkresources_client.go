@@ -103,7 +103,7 @@ func (client *PrivateLinkResourcesClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *PrivateLinkResourcesClient) getHandleResponse(resp *http.Response) (PrivateLinkResourcesClientGetResponse, error) {
-	result := PrivateLinkResourcesClientGetResponse{RawResponse: resp}
+	result := PrivateLinkResourcesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResource); err != nil {
 		return PrivateLinkResourcesClientGetResponse{}, err
 	}
@@ -159,7 +159,7 @@ func (client *PrivateLinkResourcesClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *PrivateLinkResourcesClient) listHandleResponse(resp *http.Response) (PrivateLinkResourcesClientListResponse, error) {
-	result := PrivateLinkResourcesClientListResponse{RawResponse: resp}
+	result := PrivateLinkResourcesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourceListResult); err != nil {
 		return PrivateLinkResourcesClientListResponse{}, err
 	}

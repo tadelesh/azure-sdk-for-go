@@ -34,17 +34,17 @@ type ThreatIntelligenceIndicatorClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewThreatIntelligenceIndicatorClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ThreatIntelligenceIndicatorClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ThreatIntelligenceIndicatorClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -69,7 +69,7 @@ func (client *ThreatIntelligenceIndicatorClient) AppendTags(ctx context.Context,
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ThreatIntelligenceIndicatorClientAppendTagsResponse{}, runtime.NewResponseError(resp)
 	}
-	return ThreatIntelligenceIndicatorClientAppendTagsResponse{RawResponse: resp}, nil
+	return ThreatIntelligenceIndicatorClientAppendTagsResponse{}, nil
 }
 
 // appendTagsCreateRequest creates the AppendTags request.
@@ -157,7 +157,7 @@ func (client *ThreatIntelligenceIndicatorClient) createCreateRequest(ctx context
 
 // createHandleResponse handles the Create response.
 func (client *ThreatIntelligenceIndicatorClient) createHandleResponse(resp *http.Response) (ThreatIntelligenceIndicatorClientCreateResponse, error) {
-	result := ThreatIntelligenceIndicatorClientCreateResponse{RawResponse: resp}
+	result := ThreatIntelligenceIndicatorClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ThreatIntelligenceInformation); err != nil {
 		return ThreatIntelligenceIndicatorClientCreateResponse{}, err
 	}
@@ -214,7 +214,7 @@ func (client *ThreatIntelligenceIndicatorClient) createIndicatorCreateRequest(ct
 
 // createIndicatorHandleResponse handles the CreateIndicator response.
 func (client *ThreatIntelligenceIndicatorClient) createIndicatorHandleResponse(resp *http.Response) (ThreatIntelligenceIndicatorClientCreateIndicatorResponse, error) {
-	result := ThreatIntelligenceIndicatorClientCreateIndicatorResponse{RawResponse: resp}
+	result := ThreatIntelligenceIndicatorClientCreateIndicatorResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ThreatIntelligenceInformation); err != nil {
 		return ThreatIntelligenceIndicatorClientCreateIndicatorResponse{}, err
 	}
@@ -240,7 +240,7 @@ func (client *ThreatIntelligenceIndicatorClient) Delete(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ThreatIntelligenceIndicatorClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ThreatIntelligenceIndicatorClientDeleteResponse{RawResponse: resp}, nil
+	return ThreatIntelligenceIndicatorClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -327,7 +327,7 @@ func (client *ThreatIntelligenceIndicatorClient) getCreateRequest(ctx context.Co
 
 // getHandleResponse handles the Get response.
 func (client *ThreatIntelligenceIndicatorClient) getHandleResponse(resp *http.Response) (ThreatIntelligenceIndicatorClientGetResponse, error) {
-	result := ThreatIntelligenceIndicatorClientGetResponse{RawResponse: resp}
+	result := ThreatIntelligenceIndicatorClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ThreatIntelligenceInformation); err != nil {
 		return ThreatIntelligenceIndicatorClientGetResponse{}, err
 	}
@@ -381,7 +381,7 @@ func (client *ThreatIntelligenceIndicatorClient) queryIndicatorsCreateRequest(ct
 
 // queryIndicatorsHandleResponse handles the QueryIndicators response.
 func (client *ThreatIntelligenceIndicatorClient) queryIndicatorsHandleResponse(resp *http.Response) (ThreatIntelligenceIndicatorClientQueryIndicatorsResponse, error) {
-	result := ThreatIntelligenceIndicatorClientQueryIndicatorsResponse{RawResponse: resp}
+	result := ThreatIntelligenceIndicatorClientQueryIndicatorsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ThreatIntelligenceInformationList); err != nil {
 		return ThreatIntelligenceIndicatorClientQueryIndicatorsResponse{}, err
 	}
@@ -443,7 +443,7 @@ func (client *ThreatIntelligenceIndicatorClient) replaceTagsCreateRequest(ctx co
 
 // replaceTagsHandleResponse handles the ReplaceTags response.
 func (client *ThreatIntelligenceIndicatorClient) replaceTagsHandleResponse(resp *http.Response) (ThreatIntelligenceIndicatorClientReplaceTagsResponse, error) {
-	result := ThreatIntelligenceIndicatorClientReplaceTagsResponse{RawResponse: resp}
+	result := ThreatIntelligenceIndicatorClientReplaceTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ThreatIntelligenceInformation); err != nil {
 		return ThreatIntelligenceIndicatorClientReplaceTagsResponse{}, err
 	}

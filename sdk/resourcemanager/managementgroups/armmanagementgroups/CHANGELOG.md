@@ -1,5 +1,129 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ClientGetDescendantsPager.NextPage` return value(s) have been changed from `(bool)` to `(ClientGetDescendantsResponse, error)`
+- Function `*ClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ClientListResponse, error)`
+- Function `*ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResponse, error)`
+- Function `*EntitiesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(EntitiesClientListResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupPager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*EntitiesClientListPager.PageResponse` has been removed
+- Function `*ClientGetDescendantsPager.PageResponse` has been removed
+- Function `*ClientGetDescendantsPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*EntitiesClientListPager.Err` has been removed
+- Function `*ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupPager.PageResponse` has been removed
+- Function `*ClientListPager.Err` has been removed
+- Function `*ClientListPager.PageResponse` has been removed
+- Struct `APIClientCheckNameAvailabilityResult` has been removed
+- Struct `APIClientStartTenantBackfillResult` has been removed
+- Struct `APIClientTenantBackfillStatusResult` has been removed
+- Struct `ClientCreateOrUpdateResult` has been removed
+- Struct `ClientDeleteResult` has been removed
+- Struct `ClientGetDescendantsResult` has been removed
+- Struct `ClientGetResult` has been removed
+- Struct `ClientListResult` has been removed
+- Struct `ClientUpdateResult` has been removed
+- Struct `EntitiesClientListResult` has been removed
+- Struct `HierarchySettingsClientCreateOrUpdateResult` has been removed
+- Struct `HierarchySettingsClientGetResult` has been removed
+- Struct `HierarchySettingsClientListResult` has been removed
+- Struct `HierarchySettingsClientUpdateResult` has been removed
+- Struct `ManagementGroupSubscriptionsClientCreateResult` has been removed
+- Struct `ManagementGroupSubscriptionsClientGetSubscriptionResult` has been removed
+- Struct `ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `HierarchySettingsClientUpdateResult` of struct `HierarchySettingsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `HierarchySettingsClientUpdateResponse` has been removed
+- Field `APIClientCheckNameAvailabilityResult` of struct `APIClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `APIClientCheckNameAvailabilityResponse` has been removed
+- Field `HierarchySettingsClientListResult` of struct `HierarchySettingsClientListResponse` has been removed
+- Field `RawResponse` of struct `HierarchySettingsClientListResponse` has been removed
+- Field `ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResult` of struct `ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResponse` has been removed
+- Field `RawResponse` of struct `ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResponse` has been removed
+- Field `RawResponse` of struct `ManagementGroupSubscriptionsClientDeleteResponse` has been removed
+- Field `ClientDeleteResult` of struct `ClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ClientCreateOrUpdatePollerResponse` has been removed
+- Field `ClientListResult` of struct `ClientListResponse` has been removed
+- Field `RawResponse` of struct `ClientListResponse` has been removed
+- Field `ClientCreateOrUpdateResult` of struct `ClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientCreateOrUpdateResponse` has been removed
+- Field `APIClientTenantBackfillStatusResult` of struct `APIClientTenantBackfillStatusResponse` has been removed
+- Field `RawResponse` of struct `APIClientTenantBackfillStatusResponse` has been removed
+- Field `APIClientStartTenantBackfillResult` of struct `APIClientStartTenantBackfillResponse` has been removed
+- Field `RawResponse` of struct `APIClientStartTenantBackfillResponse` has been removed
+- Field `ClientGetResult` of struct `ClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClientGetResponse` has been removed
+- Field `ClientUpdateResult` of struct `ClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientUpdateResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `EntitiesClientListResult` of struct `EntitiesClientListResponse` has been removed
+- Field `RawResponse` of struct `EntitiesClientListResponse` has been removed
+- Field `ClientGetDescendantsResult` of struct `ClientGetDescendantsResponse` has been removed
+- Field `RawResponse` of struct `ClientGetDescendantsResponse` has been removed
+- Field `HierarchySettingsClientGetResult` of struct `HierarchySettingsClientGetResponse` has been removed
+- Field `RawResponse` of struct `HierarchySettingsClientGetResponse` has been removed
+- Field `HierarchySettingsClientCreateOrUpdateResult` of struct `HierarchySettingsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `HierarchySettingsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientDeletePollerResponse` has been removed
+- Field `ManagementGroupSubscriptionsClientGetSubscriptionResult` of struct `ManagementGroupSubscriptionsClientGetSubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ManagementGroupSubscriptionsClientGetSubscriptionResponse` has been removed
+- Field `RawResponse` of struct `HierarchySettingsClientDeleteResponse` has been removed
+- Field `ManagementGroupSubscriptionsClientCreateResult` of struct `ManagementGroupSubscriptionsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ManagementGroupSubscriptionsClientCreateResponse` has been removed
+
+### Features Added
+
+- New function `*ClientGetDescendantsPager.More() bool`
+- New function `EntityHierarchyItemProperties.MarshalJSON() ([]byte, error)`
+- New function `*ClientListPager.More() bool`
+- New function `*ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupPager.More() bool`
+- New function `*EntitiesClientListPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New struct `EntityHierarchyItem`
+- New struct `EntityHierarchyItemProperties`
+- New struct `ErrorDetails`
+- New struct `ErrorResponse`
+- New struct `OperationResults`
+- New anonymous field `ManagementGroup` in struct `ClientCreateOrUpdateResponse`
+- New anonymous field `TenantBackfillStatusResult` in struct `APIClientStartTenantBackfillResponse`
+- New anonymous field `DescendantListResult` in struct `ClientGetDescendantsResponse`
+- New anonymous field `CheckNameAvailabilityResult` in struct `APIClientCheckNameAvailabilityResponse`
+- New anonymous field `HierarchySettings` in struct `HierarchySettingsClientGetResponse`
+- New anonymous field `ManagementGroup` in struct `ClientUpdateResponse`
+- New anonymous field `ManagementGroup` in struct `ClientGetResponse`
+- New anonymous field `HierarchySettings` in struct `HierarchySettingsClientCreateOrUpdateResponse`
+- New anonymous field `HierarchySettings` in struct `HierarchySettingsClientUpdateResponse`
+- New anonymous field `SubscriptionUnderManagementGroup` in struct `ManagementGroupSubscriptionsClientCreateResponse`
+- New anonymous field `SubscriptionUnderManagementGroup` in struct `ManagementGroupSubscriptionsClientGetSubscriptionResponse`
+- New anonymous field `ManagementGroupListResult` in struct `ClientListResponse`
+- New anonymous field `AzureAsyncOperationResults` in struct `ClientDeleteResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `HierarchySettingsList` in struct `HierarchySettingsClientListResponse`
+- New anonymous field `ListSubscriptionUnderManagementGroup` in struct `ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResponse`
+- New anonymous field `TenantBackfillStatusResult` in struct `APIClientTenantBackfillStatusResponse`
+- New anonymous field `EntityListResult` in struct `EntitiesClientListResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `EntityHierarchyItemProperties.MarshalJSON` has been removed
+- Struct `EntityHierarchyItem` has been removed
+- Struct `EntityHierarchyItemProperties` has been removed
+- Struct `ErrorDetails` has been removed
+- Struct `ErrorResponse` has been removed
+- Struct `OperationResults` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

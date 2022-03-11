@@ -1,5 +1,134 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*PrivateStoreClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateStoreClientListResponse, error)`
+- Function `*PrivateStoreCollectionOfferClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateStoreCollectionOfferClientListResponse, error)`
+- Function `*PrivateStoreCollectionOfferClientListPager.PageResponse` has been removed
+- Function `*PrivateStoreCollectionOfferClientListPager.Err` has been removed
+- Function `*PrivateStoreClientListPager.Err` has been removed
+- Function `*PrivateStoreClientListPager.PageResponse` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateStoreClientAdminRequestApprovalsListResult` has been removed
+- Struct `PrivateStoreClientBillingAccountsResult` has been removed
+- Struct `PrivateStoreClientBulkCollectionsActionResult` has been removed
+- Struct `PrivateStoreClientCollectionsToSubscriptionsMappingResult` has been removed
+- Struct `PrivateStoreClientCreateApprovalRequestResult` has been removed
+- Struct `PrivateStoreClientGetAdminRequestApprovalResult` has been removed
+- Struct `PrivateStoreClientGetApprovalRequestsListResult` has been removed
+- Struct `PrivateStoreClientGetRequestApprovalResult` has been removed
+- Struct `PrivateStoreClientGetResult` has been removed
+- Struct `PrivateStoreClientListResult` has been removed
+- Struct `PrivateStoreClientQueryApprovedPlansResult` has been removed
+- Struct `PrivateStoreClientQueryNotificationsStateResult` has been removed
+- Struct `PrivateStoreClientQueryOffersResult` has been removed
+- Struct `PrivateStoreClientQueryRequestApprovalResult` has been removed
+- Struct `PrivateStoreClientUpdateAdminRequestApprovalResult` has been removed
+- Struct `PrivateStoreCollectionClientCreateOrUpdateResult` has been removed
+- Struct `PrivateStoreCollectionClientGetResult` has been removed
+- Struct `PrivateStoreCollectionClientListResult` has been removed
+- Struct `PrivateStoreCollectionClientTransferOffersResult` has been removed
+- Struct `PrivateStoreCollectionOfferClientCreateOrUpdateResult` has been removed
+- Struct `PrivateStoreCollectionOfferClientGetResult` has been removed
+- Struct `PrivateStoreCollectionOfferClientListResult` has been removed
+- Field `PrivateStoreCollectionClientTransferOffersResult` of struct `PrivateStoreCollectionClientTransferOffersResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreCollectionClientTransferOffersResponse` has been removed
+- Field `PrivateStoreClientCreateApprovalRequestResult` of struct `PrivateStoreClientCreateApprovalRequestResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientCreateApprovalRequestResponse` has been removed
+- Field `PrivateStoreCollectionClientCreateOrUpdateResult` of struct `PrivateStoreCollectionClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreCollectionClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreCollectionClientPostResponse` has been removed
+- Field `PrivateStoreClientGetApprovalRequestsListResult` of struct `PrivateStoreClientGetApprovalRequestsListResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientGetApprovalRequestsListResponse` has been removed
+- Field `PrivateStoreClientUpdateAdminRequestApprovalResult` of struct `PrivateStoreClientUpdateAdminRequestApprovalResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientUpdateAdminRequestApprovalResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `PrivateStoreClientListResult` of struct `PrivateStoreClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientListResponse` has been removed
+- Field `PrivateStoreClientGetAdminRequestApprovalResult` of struct `PrivateStoreClientGetAdminRequestApprovalResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientGetAdminRequestApprovalResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreCollectionOfferClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientDeleteResponse` has been removed
+- Field `PrivateStoreCollectionClientGetResult` of struct `PrivateStoreCollectionClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreCollectionClientGetResponse` has been removed
+- Field `PrivateStoreClientGetRequestApprovalResult` of struct `PrivateStoreClientGetRequestApprovalResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientGetRequestApprovalResponse` has been removed
+- Field `PrivateStoreClientQueryApprovedPlansResult` of struct `PrivateStoreClientQueryApprovedPlansResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientQueryApprovedPlansResponse` has been removed
+- Field `PrivateStoreClientQueryOffersResult` of struct `PrivateStoreClientQueryOffersResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientQueryOffersResponse` has been removed
+- Field `PrivateStoreCollectionClientListResult` of struct `PrivateStoreCollectionClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreCollectionClientListResponse` has been removed
+- Field `PrivateStoreClientCollectionsToSubscriptionsMappingResult` of struct `PrivateStoreClientCollectionsToSubscriptionsMappingResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientCollectionsToSubscriptionsMappingResponse` has been removed
+- Field `PrivateStoreClientQueryRequestApprovalResult` of struct `PrivateStoreClientQueryRequestApprovalResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientQueryRequestApprovalResponse` has been removed
+- Field `PrivateStoreClientGetResult` of struct `PrivateStoreClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreCollectionClientDeleteResponse` has been removed
+- Field `PrivateStoreClientBulkCollectionsActionResult` of struct `PrivateStoreClientBulkCollectionsActionResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientBulkCollectionsActionResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientCreateOrUpdateResponse` has been removed
+- Field `PrivateStoreCollectionOfferClientGetResult` of struct `PrivateStoreCollectionOfferClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreCollectionOfferClientGetResponse` has been removed
+- Field `PrivateStoreClientQueryNotificationsStateResult` of struct `PrivateStoreClientQueryNotificationsStateResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientQueryNotificationsStateResponse` has been removed
+- Field `PrivateStoreClientAdminRequestApprovalsListResult` of struct `PrivateStoreClientAdminRequestApprovalsListResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientAdminRequestApprovalsListResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreCollectionOfferClientPostResponse` has been removed
+- Field `PrivateStoreCollectionOfferClientCreateOrUpdateResult` of struct `PrivateStoreCollectionOfferClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreCollectionOfferClientCreateOrUpdateResponse` has been removed
+- Field `PrivateStoreClientBillingAccountsResult` of struct `PrivateStoreClientBillingAccountsResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientBillingAccountsResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientWithdrawPlanResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreClientAcknowledgeOfferNotificationResponse` has been removed
+- Field `PrivateStoreCollectionOfferClientListResult` of struct `PrivateStoreCollectionOfferClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateStoreCollectionOfferClientListResponse` has been removed
+
+### Features Added
+
+- New function `*PrivateStoreCollectionOfferClientListPager.More() bool`
+- New function `*PrivateStoreClientListPager.More() bool`
+- New struct `ErrorResponse`
+- New struct `ErrorResponseError`
+- New anonymous field `QueryOffers` in struct `PrivateStoreClientQueryOffersResponse`
+- New anonymous field `CollectionsList` in struct `PrivateStoreCollectionClientListResponse`
+- New anonymous field `Collection` in struct `PrivateStoreCollectionClientGetResponse`
+- New anonymous field `BillingAccountsResponse` in struct `PrivateStoreClientBillingAccountsResponse`
+- New anonymous field `PrivateStore` in struct `PrivateStoreClientGetResponse`
+- New anonymous field `QueryApprovedPlansResponse` in struct `PrivateStoreClientQueryApprovedPlansResponse`
+- New anonymous field `CollectionsToSubscriptionsMappingResponse` in struct `PrivateStoreClientCollectionsToSubscriptionsMappingResponse`
+- New anonymous field `RequestApprovalResource` in struct `PrivateStoreClientGetRequestApprovalResponse`
+- New anonymous field `RequestApprovalResource` in struct `PrivateStoreClientCreateApprovalRequestResponse`
+- New anonymous field `Collection` in struct `PrivateStoreCollectionClientCreateOrUpdateResponse`
+- New anonymous field `PrivateStoreNotificationsState` in struct `PrivateStoreClientQueryNotificationsStateResponse`
+- New anonymous field `OfferListResponse` in struct `PrivateStoreCollectionOfferClientListResponse`
+- New anonymous field `TransferOffersResponse` in struct `PrivateStoreCollectionClientTransferOffersResponse`
+- New anonymous field `AdminRequestApprovalsResource` in struct `PrivateStoreClientGetAdminRequestApprovalResponse`
+- New anonymous field `Offer` in struct `PrivateStoreCollectionOfferClientGetResponse`
+- New anonymous field `BulkCollectionsResponse` in struct `PrivateStoreClientBulkCollectionsActionResponse`
+- New anonymous field `PrivateStoreList` in struct `PrivateStoreClientListResponse`
+- New anonymous field `Offer` in struct `PrivateStoreCollectionOfferClientCreateOrUpdateResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `RequestApprovalsList` in struct `PrivateStoreClientGetApprovalRequestsListResponse`
+- New anonymous field `AdminRequestApprovalsResource` in struct `PrivateStoreClientUpdateAdminRequestApprovalResponse`
+- New anonymous field `AdminRequestApprovalsList` in struct `PrivateStoreClientAdminRequestApprovalsListResponse`
+- New anonymous field `QueryRequestApproval` in struct `PrivateStoreClientQueryRequestApprovalResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `SingleOperation.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Struct `ErrorResponse` has been removed
+- Struct `ErrorResponseError` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

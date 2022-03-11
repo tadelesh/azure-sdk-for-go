@@ -35,17 +35,17 @@ type CachesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCachesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CachesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CachesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *CachesClient) BeginCreateOrUpdate(ctx context.Context, resourceGro
 	if err != nil {
 		return CachesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := CachesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CachesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("CachesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return CachesClientCreateOrUpdatePollerResponse{}, err
@@ -130,9 +128,7 @@ func (client *CachesClient) BeginDebugInfo(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return CachesClientDebugInfoPollerResponse{}, err
 	}
-	result := CachesClientDebugInfoPollerResponse{
-		RawResponse: resp,
-	}
+	result := CachesClientDebugInfoPollerResponse{}
 	pt, err := armruntime.NewPoller("CachesClient.DebugInfo", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return CachesClientDebugInfoPollerResponse{}, err
@@ -196,9 +192,7 @@ func (client *CachesClient) BeginDelete(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return CachesClientDeletePollerResponse{}, err
 	}
-	result := CachesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CachesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CachesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return CachesClientDeletePollerResponse{}, err
@@ -263,9 +257,7 @@ func (client *CachesClient) BeginFlush(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return CachesClientFlushPollerResponse{}, err
 	}
-	result := CachesClientFlushPollerResponse{
-		RawResponse: resp,
-	}
+	result := CachesClientFlushPollerResponse{}
 	pt, err := armruntime.NewPoller("CachesClient.Flush", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return CachesClientFlushPollerResponse{}, err
@@ -368,7 +360,7 @@ func (client *CachesClient) getCreateRequest(ctx context.Context, resourceGroupN
 
 // getHandleResponse handles the Get response.
 func (client *CachesClient) getHandleResponse(resp *http.Response) (CachesClientGetResponse, error) {
-	result := CachesClientGetResponse{RawResponse: resp}
+	result := CachesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Cache); err != nil {
 		return CachesClientGetResponse{}, err
 	}
@@ -410,7 +402,7 @@ func (client *CachesClient) listCreateRequest(ctx context.Context, options *Cach
 
 // listHandleResponse handles the List response.
 func (client *CachesClient) listHandleResponse(resp *http.Response) (CachesClientListResponse, error) {
-	result := CachesClientListResponse{RawResponse: resp}
+	result := CachesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CachesListResult); err != nil {
 		return CachesClientListResponse{}, err
 	}
@@ -458,7 +450,7 @@ func (client *CachesClient) listByResourceGroupCreateRequest(ctx context.Context
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *CachesClient) listByResourceGroupHandleResponse(resp *http.Response) (CachesClientListByResourceGroupResponse, error) {
-	result := CachesClientListByResourceGroupResponse{RawResponse: resp}
+	result := CachesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CachesListResult); err != nil {
 		return CachesClientListByResourceGroupResponse{}, err
 	}
@@ -475,9 +467,7 @@ func (client *CachesClient) BeginStart(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return CachesClientStartPollerResponse{}, err
 	}
-	result := CachesClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := CachesClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("CachesClient.Start", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return CachesClientStartPollerResponse{}, err
@@ -541,9 +531,7 @@ func (client *CachesClient) BeginStop(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return CachesClientStopPollerResponse{}, err
 	}
-	result := CachesClientStopPollerResponse{
-		RawResponse: resp,
-	}
+	result := CachesClientStopPollerResponse{}
 	pt, err := armruntime.NewPoller("CachesClient.Stop", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return CachesClientStopPollerResponse{}, err
@@ -648,7 +636,7 @@ func (client *CachesClient) updateCreateRequest(ctx context.Context, resourceGro
 
 // updateHandleResponse handles the Update response.
 func (client *CachesClient) updateHandleResponse(resp *http.Response) (CachesClientUpdateResponse, error) {
-	result := CachesClientUpdateResponse{RawResponse: resp}
+	result := CachesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Cache); err != nil {
 		return CachesClientUpdateResponse{}, err
 	}
@@ -666,9 +654,7 @@ func (client *CachesClient) BeginUpgradeFirmware(ctx context.Context, resourceGr
 	if err != nil {
 		return CachesClientUpgradeFirmwarePollerResponse{}, err
 	}
-	result := CachesClientUpgradeFirmwarePollerResponse{
-		RawResponse: resp,
-	}
+	result := CachesClientUpgradeFirmwarePollerResponse{}
 	pt, err := armruntime.NewPoller("CachesClient.UpgradeFirmware", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return CachesClientUpgradeFirmwarePollerResponse{}, err

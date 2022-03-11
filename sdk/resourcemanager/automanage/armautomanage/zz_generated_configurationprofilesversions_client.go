@@ -34,17 +34,17 @@ type ConfigurationProfilesVersionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewConfigurationProfilesVersionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ConfigurationProfilesVersionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ConfigurationProfilesVersionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *ConfigurationProfilesVersionsClient) createOrUpdateCreateRequest(c
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ConfigurationProfilesVersionsClient) createOrUpdateHandleResponse(resp *http.Response) (ConfigurationProfilesVersionsClientCreateOrUpdateResponse, error) {
-	result := ConfigurationProfilesVersionsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ConfigurationProfilesVersionsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigurationProfile); err != nil {
 		return ConfigurationProfilesVersionsClientCreateOrUpdateResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *ConfigurationProfilesVersionsClient) Delete(ctx context.Context, r
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ConfigurationProfilesVersionsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ConfigurationProfilesVersionsClientDeleteResponse{RawResponse: resp}, nil
+	return ConfigurationProfilesVersionsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -217,7 +217,7 @@ func (client *ConfigurationProfilesVersionsClient) getCreateRequest(ctx context.
 
 // getHandleResponse handles the Get response.
 func (client *ConfigurationProfilesVersionsClient) getHandleResponse(resp *http.Response) (ConfigurationProfilesVersionsClientGetResponse, error) {
-	result := ConfigurationProfilesVersionsClientGetResponse{RawResponse: resp}
+	result := ConfigurationProfilesVersionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigurationProfile); err != nil {
 		return ConfigurationProfilesVersionsClientGetResponse{}, err
 	}
@@ -230,19 +230,13 @@ func (client *ConfigurationProfilesVersionsClient) getHandleResponse(resp *http.
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ConfigurationProfilesVersionsClientListChildResourcesOptions contains the optional parameters for the ConfigurationProfilesVersionsClient.ListChildResources
 // method.
-func (client *ConfigurationProfilesVersionsClient) ListChildResources(ctx context.Context, configurationProfileName string, resourceGroupName string, options *ConfigurationProfilesVersionsClientListChildResourcesOptions) (ConfigurationProfilesVersionsClientListChildResourcesResponse, error) {
-	req, err := client.listChildResourcesCreateRequest(ctx, configurationProfileName, resourceGroupName, options)
-	if err != nil {
-		return ConfigurationProfilesVersionsClientListChildResourcesResponse{}, err
+func (client *ConfigurationProfilesVersionsClient) ListChildResources(configurationProfileName string, resourceGroupName string, options *ConfigurationProfilesVersionsClientListChildResourcesOptions) *ConfigurationProfilesVersionsClientListChildResourcesPager {
+	return &ConfigurationProfilesVersionsClientListChildResourcesPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listChildResourcesCreateRequest(ctx, configurationProfileName, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ConfigurationProfilesVersionsClientListChildResourcesResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ConfigurationProfilesVersionsClientListChildResourcesResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listChildResourcesHandleResponse(resp)
 }
 
 // listChildResourcesCreateRequest creates the ListChildResources request.
@@ -273,7 +267,7 @@ func (client *ConfigurationProfilesVersionsClient) listChildResourcesCreateReque
 
 // listChildResourcesHandleResponse handles the ListChildResources response.
 func (client *ConfigurationProfilesVersionsClient) listChildResourcesHandleResponse(resp *http.Response) (ConfigurationProfilesVersionsClientListChildResourcesResponse, error) {
-	result := ConfigurationProfilesVersionsClientListChildResourcesResponse{RawResponse: resp}
+	result := ConfigurationProfilesVersionsClientListChildResourcesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigurationProfileList); err != nil {
 		return ConfigurationProfilesVersionsClientListChildResourcesResponse{}, err
 	}
@@ -335,7 +329,7 @@ func (client *ConfigurationProfilesVersionsClient) updateCreateRequest(ctx conte
 
 // updateHandleResponse handles the Update response.
 func (client *ConfigurationProfilesVersionsClient) updateHandleResponse(resp *http.Response) (ConfigurationProfilesVersionsClientUpdateResponse, error) {
-	result := ConfigurationProfilesVersionsClientUpdateResponse{RawResponse: resp}
+	result := ConfigurationProfilesVersionsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigurationProfile); err != nil {
 		return ConfigurationProfilesVersionsClientUpdateResponse{}, err
 	}

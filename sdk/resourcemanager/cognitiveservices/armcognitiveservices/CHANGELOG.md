@@ -1,5 +1,180 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ResourceSKUsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ResourceSKUsClientListResponse, error)`
+- Function `*DeploymentsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(DeploymentsClientListResponse, error)`
+- Function `*AccountsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(AccountsClientListByResourceGroupResponse, error)`
+- Function `*AccountsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(AccountsClientListResponse, error)`
+- Function `*CommitmentTiersClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(CommitmentTiersClientListResponse, error)`
+- Function `*DeletedAccountsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(DeletedAccountsClientListResponse, error)`
+- Function `*CommitmentPlansClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(CommitmentPlansClientListResponse, error)`
+- Function `*CommitmentTiersClientListPager.PageResponse` has been removed
+- Function `*DeletedAccountsClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*DeploymentsClientListPager.PageResponse` has been removed
+- Function `*DeletedAccountsClientListPager.PageResponse` has been removed
+- Function `*DeploymentsClientListPager.Err` has been removed
+- Function `*CommitmentPlansClientListPager.Err` has been removed
+- Function `*AccountsClientListPager.Err` has been removed
+- Function `*AccountsClientListByResourceGroupPager.Err` has been removed
+- Function `*AccountsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*AccountsClientListPager.PageResponse` has been removed
+- Function `*ResourceSKUsClientListPager.PageResponse` has been removed
+- Function `*ResourceSKUsClientListPager.Err` has been removed
+- Function `*CommitmentPlansClientListPager.PageResponse` has been removed
+- Function `*CommitmentTiersClientListPager.Err` has been removed
+- Struct `AccountsClientCreateResult` has been removed
+- Struct `AccountsClientGetResult` has been removed
+- Struct `AccountsClientListByResourceGroupResult` has been removed
+- Struct `AccountsClientListKeysResult` has been removed
+- Struct `AccountsClientListResult` has been removed
+- Struct `AccountsClientListSKUsResult` has been removed
+- Struct `AccountsClientListUsagesResult` has been removed
+- Struct `AccountsClientRegenerateKeyResult` has been removed
+- Struct `AccountsClientUpdateResult` has been removed
+- Struct `CommitmentPlansClientCreateOrUpdateResult` has been removed
+- Struct `CommitmentPlansClientGetResult` has been removed
+- Struct `CommitmentPlansClientListResult` has been removed
+- Struct `CommitmentTiersClientListResult` has been removed
+- Struct `DeletedAccountsClientGetResult` has been removed
+- Struct `DeletedAccountsClientListResult` has been removed
+- Struct `DeploymentsClientCreateOrUpdateResult` has been removed
+- Struct `DeploymentsClientGetResult` has been removed
+- Struct `DeploymentsClientListResult` has been removed
+- Struct `ManagementClientCheckDomainAvailabilityResult` has been removed
+- Struct `ManagementClientCheckSKUAvailabilityResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientCreateOrUpdateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListResult` has been removed
+- Struct `PrivateLinkResourcesClientListResult` has been removed
+- Struct `ResourceSKUsClientListResult` has been removed
+- Field `DeploymentsClientGetResult` of struct `DeploymentsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `AccountsClientListKeysResult` of struct `AccountsClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientListKeysResponse` has been removed
+- Field `PrivateEndpointConnectionsClientCreateOrUpdateResult` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientDeletePollerResponse` has been removed
+- Field `AccountsClientUpdateResult` of struct `AccountsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientUpdateResponse` has been removed
+- Field `AccountsClientGetResult` of struct `AccountsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientGetResponse` has been removed
+- Field `DeploymentsClientListResult` of struct `DeploymentsClientListResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientListResponse` has been removed
+- Field `CommitmentPlansClientCreateOrUpdateResult` of struct `CommitmentPlansClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `CommitmentPlansClientCreateOrUpdateResponse` has been removed
+- Field `DeletedAccountsClientGetResult` of struct `DeletedAccountsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DeletedAccountsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `CommitmentPlansClientDeleteResponse` has been removed
+- Field `PrivateLinkResourcesClientListResult` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `AccountsClientCreateResult` of struct `AccountsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientCreateResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListResult` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `CommitmentPlansClientDeletePollerResponse` has been removed
+- Field `ManagementClientCheckSKUAvailabilityResult` of struct `ManagementClientCheckSKUAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientCheckSKUAvailabilityResponse` has been removed
+- Field `ManagementClientCheckDomainAvailabilityResult` of struct `ManagementClientCheckDomainAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientCheckDomainAvailabilityResponse` has been removed
+- Field `AccountsClientListUsagesResult` of struct `AccountsClientListUsagesResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientListUsagesResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientCreateOrUpdatePollerResponse` has been removed
+- Field `DeploymentsClientCreateOrUpdateResult` of struct `DeploymentsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `DeletedAccountsClientListResult` of struct `DeletedAccountsClientListResponse` has been removed
+- Field `RawResponse` of struct `DeletedAccountsClientListResponse` has been removed
+- Field `AccountsClientListByResourceGroupResult` of struct `AccountsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientListByResourceGroupResponse` has been removed
+- Field `ResourceSKUsClientListResult` of struct `ResourceSKUsClientListResponse` has been removed
+- Field `RawResponse` of struct `ResourceSKUsClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeletePollerResponse` has been removed
+- Field `AccountsClientListSKUsResult` of struct `AccountsClientListSKUsResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientListSKUsResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientCreatePollerResponse` has been removed
+- Field `AccountsClientListResult` of struct `AccountsClientListResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientListResponse` has been removed
+- Field `CommitmentPlansClientGetResult` of struct `CommitmentPlansClientGetResponse` has been removed
+- Field `RawResponse` of struct `CommitmentPlansClientGetResponse` has been removed
+- Field `RawResponse` of struct `DeletedAccountsClientPurgeResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientDeleteResponse` has been removed
+- Field `CommitmentPlansClientListResult` of struct `CommitmentPlansClientListResponse` has been removed
+- Field `RawResponse` of struct `CommitmentPlansClientListResponse` has been removed
+- Field `CommitmentTiersClientListResult` of struct `CommitmentTiersClientListResponse` has been removed
+- Field `RawResponse` of struct `CommitmentTiersClientListResponse` has been removed
+- Field `RawResponse` of struct `DeletedAccountsClientPurgePollerResponse` has been removed
+- Field `AccountsClientRegenerateKeyResult` of struct `AccountsClientRegenerateKeyResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientRegenerateKeyResponse` has been removed
+
+### Features Added
+
+- New function `*CommitmentTiersClientListPager.More() bool`
+- New function `*AccountsClientListPager.More() bool`
+- New function `*CommitmentPlansClientListPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*DeploymentsClientListPager.More() bool`
+- New function `*DeletedAccountsClientListPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*ResourceSKUsClientListPager.More() bool`
+- New function `*AccountsClientListByResourceGroupPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `DeploymentListResult` in struct `DeploymentsClientListResponse`
+- New anonymous field `Account` in struct `AccountsClientGetResponse`
+- New anonymous field `CommitmentPlan` in struct `CommitmentPlansClientGetResponse`
+- New anonymous field `CommitmentPlan` in struct `CommitmentPlansClientCreateOrUpdateResponse`
+- New anonymous field `APIKeys` in struct `AccountsClientListKeysResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse`
+- New anonymous field `ResourceSKUListResult` in struct `ResourceSKUsClientListResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListResponse`
+- New anonymous field `SKUAvailabilityListResult` in struct `ManagementClientCheckSKUAvailabilityResponse`
+- New anonymous field `Deployment` in struct `DeploymentsClientCreateOrUpdateResponse`
+- New anonymous field `Account` in struct `DeletedAccountsClientGetResponse`
+- New anonymous field `CommitmentTierListResult` in struct `CommitmentTiersClientListResponse`
+- New anonymous field `AccountListResult` in struct `AccountsClientListResponse`
+- New anonymous field `AccountListResult` in struct `AccountsClientListByResourceGroupResponse`
+- New anonymous field `Account` in struct `AccountsClientUpdateResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `PrivateLinkResourcesClientListResponse`
+- New anonymous field `UsageListResult` in struct `AccountsClientListUsagesResponse`
+- New anonymous field `DomainAvailability` in struct `ManagementClientCheckDomainAvailabilityResponse`
+- New anonymous field `Account` in struct `AccountsClientCreateResponse`
+- New anonymous field `AccountSKUListResult` in struct `AccountsClientListSKUsResponse`
+- New anonymous field `AccountListResult` in struct `DeletedAccountsClientListResponse`
+- New anonymous field `APIKeys` in struct `AccountsClientRegenerateKeyResponse`
+- New anonymous field `CommitmentPlanListResult` in struct `CommitmentPlansClientListResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `Deployment` in struct `DeploymentsClientGetResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `APIProperties.AdditionalProperties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

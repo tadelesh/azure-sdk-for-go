@@ -35,17 +35,17 @@ type ApplicationClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewApplicationClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ApplicationClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ApplicationClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -106,7 +106,7 @@ func (client *ApplicationClient) createCreateRequest(ctx context.Context, resour
 
 // createHandleResponse handles the Create response.
 func (client *ApplicationClient) createHandleResponse(resp *http.Response) (ApplicationClientCreateResponse, error) {
-	result := ApplicationClientCreateResponse{RawResponse: resp}
+	result := ApplicationClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Application); err != nil {
 		return ApplicationClientCreateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *ApplicationClient) Delete(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ApplicationClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ApplicationClientDeleteResponse{RawResponse: resp}, nil
+	return ApplicationClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -217,7 +217,7 @@ func (client *ApplicationClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *ApplicationClient) getHandleResponse(resp *http.Response) (ApplicationClientGetResponse, error) {
-	result := ApplicationClientGetResponse{RawResponse: resp}
+	result := ApplicationClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Application); err != nil {
 		return ApplicationClientGetResponse{}, err
 	}
@@ -272,7 +272,7 @@ func (client *ApplicationClient) listCreateRequest(ctx context.Context, resource
 
 // listHandleResponse handles the List response.
 func (client *ApplicationClient) listHandleResponse(resp *http.Response) (ApplicationClientListResponse, error) {
-	result := ApplicationClientListResponse{RawResponse: resp}
+	result := ApplicationClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListApplicationsResult); err != nil {
 		return ApplicationClientListResponse{}, err
 	}
@@ -333,7 +333,7 @@ func (client *ApplicationClient) updateCreateRequest(ctx context.Context, resour
 
 // updateHandleResponse handles the Update response.
 func (client *ApplicationClient) updateHandleResponse(resp *http.Response) (ApplicationClientUpdateResponse, error) {
-	result := ApplicationClientUpdateResponse{RawResponse: resp}
+	result := ApplicationClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Application); err != nil {
 		return ApplicationClientUpdateResponse{}, err
 	}

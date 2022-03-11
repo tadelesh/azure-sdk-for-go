@@ -34,17 +34,17 @@ type IntegrationAccountAssembliesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIntegrationAccountAssembliesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IntegrationAccountAssembliesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IntegrationAccountAssembliesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *IntegrationAccountAssembliesClient) createOrUpdateCreateRequest(ct
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *IntegrationAccountAssembliesClient) createOrUpdateHandleResponse(resp *http.Response) (IntegrationAccountAssembliesClientCreateOrUpdateResponse, error) {
-	result := IntegrationAccountAssembliesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := IntegrationAccountAssembliesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssemblyDefinition); err != nil {
 		return IntegrationAccountAssembliesClientCreateOrUpdateResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *IntegrationAccountAssembliesClient) Delete(ctx context.Context, re
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return IntegrationAccountAssembliesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return IntegrationAccountAssembliesClientDeleteResponse{RawResponse: resp}, nil
+	return IntegrationAccountAssembliesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -217,7 +217,7 @@ func (client *IntegrationAccountAssembliesClient) getCreateRequest(ctx context.C
 
 // getHandleResponse handles the Get response.
 func (client *IntegrationAccountAssembliesClient) getHandleResponse(resp *http.Response) (IntegrationAccountAssembliesClientGetResponse, error) {
-	result := IntegrationAccountAssembliesClientGetResponse{RawResponse: resp}
+	result := IntegrationAccountAssembliesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssemblyDefinition); err != nil {
 		return IntegrationAccountAssembliesClientGetResponse{}, err
 	}
@@ -230,19 +230,13 @@ func (client *IntegrationAccountAssembliesClient) getHandleResponse(resp *http.R
 // integrationAccountName - The integration account name.
 // options - IntegrationAccountAssembliesClientListOptions contains the optional parameters for the IntegrationAccountAssembliesClient.List
 // method.
-func (client *IntegrationAccountAssembliesClient) List(ctx context.Context, resourceGroupName string, integrationAccountName string, options *IntegrationAccountAssembliesClientListOptions) (IntegrationAccountAssembliesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, integrationAccountName, options)
-	if err != nil {
-		return IntegrationAccountAssembliesClientListResponse{}, err
+func (client *IntegrationAccountAssembliesClient) List(resourceGroupName string, integrationAccountName string, options *IntegrationAccountAssembliesClientListOptions) *IntegrationAccountAssembliesClientListPager {
+	return &IntegrationAccountAssembliesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, integrationAccountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return IntegrationAccountAssembliesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return IntegrationAccountAssembliesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -273,7 +267,7 @@ func (client *IntegrationAccountAssembliesClient) listCreateRequest(ctx context.
 
 // listHandleResponse handles the List response.
 func (client *IntegrationAccountAssembliesClient) listHandleResponse(resp *http.Response) (IntegrationAccountAssembliesClientListResponse, error) {
-	result := IntegrationAccountAssembliesClientListResponse{RawResponse: resp}
+	result := IntegrationAccountAssembliesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssemblyCollection); err != nil {
 		return IntegrationAccountAssembliesClientListResponse{}, err
 	}
@@ -334,7 +328,7 @@ func (client *IntegrationAccountAssembliesClient) listContentCallbackURLCreateRe
 
 // listContentCallbackURLHandleResponse handles the ListContentCallbackURL response.
 func (client *IntegrationAccountAssembliesClient) listContentCallbackURLHandleResponse(resp *http.Response) (IntegrationAccountAssembliesClientListContentCallbackURLResponse, error) {
-	result := IntegrationAccountAssembliesClientListContentCallbackURLResponse{RawResponse: resp}
+	result := IntegrationAccountAssembliesClientListContentCallbackURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowTriggerCallbackURL); err != nil {
 		return IntegrationAccountAssembliesClientListContentCallbackURLResponse{}, err
 	}

@@ -34,17 +34,17 @@ type AssetFiltersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAssetFiltersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AssetFiltersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AssetFiltersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *AssetFiltersClient) createOrUpdateCreateRequest(ctx context.Contex
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *AssetFiltersClient) createOrUpdateHandleResponse(resp *http.Response) (AssetFiltersClientCreateOrUpdateResponse, error) {
-	result := AssetFiltersClientCreateOrUpdateResponse{RawResponse: resp}
+	result := AssetFiltersClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssetFilter); err != nil {
 		return AssetFiltersClientCreateOrUpdateResponse{}, err
 	}
@@ -135,7 +135,7 @@ func (client *AssetFiltersClient) Delete(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return AssetFiltersClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AssetFiltersClientDeleteResponse{RawResponse: resp}, nil
+	return AssetFiltersClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -230,7 +230,7 @@ func (client *AssetFiltersClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *AssetFiltersClient) getHandleResponse(resp *http.Response) (AssetFiltersClientGetResponse, error) {
-	result := AssetFiltersClientGetResponse{RawResponse: resp}
+	result := AssetFiltersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssetFilter); err != nil {
 		return AssetFiltersClientGetResponse{}, err
 	}
@@ -287,7 +287,7 @@ func (client *AssetFiltersClient) listCreateRequest(ctx context.Context, resourc
 
 // listHandleResponse handles the List response.
 func (client *AssetFiltersClient) listHandleResponse(resp *http.Response) (AssetFiltersClientListResponse, error) {
-	result := AssetFiltersClientListResponse{RawResponse: resp}
+	result := AssetFiltersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssetFilterCollection); err != nil {
 		return AssetFiltersClientListResponse{}, err
 	}
@@ -353,7 +353,7 @@ func (client *AssetFiltersClient) updateCreateRequest(ctx context.Context, resou
 
 // updateHandleResponse handles the Update response.
 func (client *AssetFiltersClient) updateHandleResponse(resp *http.Response) (AssetFiltersClientUpdateResponse, error) {
-	result := AssetFiltersClientUpdateResponse{RawResponse: resp}
+	result := AssetFiltersClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssetFilter); err != nil {
 		return AssetFiltersClientUpdateResponse{}, err
 	}

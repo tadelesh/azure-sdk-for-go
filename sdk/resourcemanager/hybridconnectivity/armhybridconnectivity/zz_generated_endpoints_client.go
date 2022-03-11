@@ -31,16 +31,16 @@ type EndpointsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewEndpointsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *EndpointsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &EndpointsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -85,7 +85,7 @@ func (client *EndpointsClient) createOrUpdateCreateRequest(ctx context.Context, 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *EndpointsClient) createOrUpdateHandleResponse(resp *http.Response) (EndpointsClientCreateOrUpdateResponse, error) {
-	result := EndpointsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := EndpointsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EndpointResource); err != nil {
 		return EndpointsClientCreateOrUpdateResponse{}, err
 	}
@@ -109,7 +109,7 @@ func (client *EndpointsClient) Delete(ctx context.Context, resourceURI string, e
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return EndpointsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return EndpointsClientDeleteResponse{RawResponse: resp}, nil
+	return EndpointsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -166,7 +166,7 @@ func (client *EndpointsClient) getCreateRequest(ctx context.Context, resourceURI
 
 // getHandleResponse handles the Get response.
 func (client *EndpointsClient) getHandleResponse(resp *http.Response) (EndpointsClientGetResponse, error) {
-	result := EndpointsClientGetResponse{RawResponse: resp}
+	result := EndpointsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EndpointResource); err != nil {
 		return EndpointsClientGetResponse{}, err
 	}
@@ -206,7 +206,7 @@ func (client *EndpointsClient) listCreateRequest(ctx context.Context, resourceUR
 
 // listHandleResponse handles the List response.
 func (client *EndpointsClient) listHandleResponse(resp *http.Response) (EndpointsClientListResponse, error) {
-	result := EndpointsClientListResponse{RawResponse: resp}
+	result := EndpointsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EndpointsList); err != nil {
 		return EndpointsClientListResponse{}, err
 	}
@@ -255,7 +255,7 @@ func (client *EndpointsClient) listCredentialsCreateRequest(ctx context.Context,
 
 // listCredentialsHandleResponse handles the ListCredentials response.
 func (client *EndpointsClient) listCredentialsHandleResponse(resp *http.Response) (EndpointsClientListCredentialsResponse, error) {
-	result := EndpointsClientListCredentialsResponse{RawResponse: resp}
+	result := EndpointsClientListCredentialsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EndpointAccessResource); err != nil {
 		return EndpointsClientListCredentialsResponse{}, err
 	}
@@ -301,7 +301,7 @@ func (client *EndpointsClient) updateCreateRequest(ctx context.Context, resource
 
 // updateHandleResponse handles the Update response.
 func (client *EndpointsClient) updateHandleResponse(resp *http.Response) (EndpointsClientUpdateResponse, error) {
-	result := EndpointsClientUpdateResponse{RawResponse: resp}
+	result := EndpointsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EndpointResource); err != nil {
 		return EndpointsClientUpdateResponse{}, err
 	}

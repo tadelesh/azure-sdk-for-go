@@ -43,11 +43,10 @@ func (p *IntegrationServiceEnvironmentManagedApisClientDeletePoller) Poll(ctx co
 // If the final GET succeeded then the final IntegrationServiceEnvironmentManagedApisClientDeleteResponse will be returned.
 func (p *IntegrationServiceEnvironmentManagedApisClientDeletePoller) FinalResponse(ctx context.Context) (IntegrationServiceEnvironmentManagedApisClientDeleteResponse, error) {
 	respType := IntegrationServiceEnvironmentManagedApisClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return IntegrationServiceEnvironmentManagedApisClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *IntegrationServiceEnvironmentManagedApisClientPutPoller) Poll(ctx conte
 // If the final GET succeeded then the final IntegrationServiceEnvironmentManagedApisClientPutResponse will be returned.
 func (p *IntegrationServiceEnvironmentManagedApisClientPutPoller) FinalResponse(ctx context.Context) (IntegrationServiceEnvironmentManagedApisClientPutResponse, error) {
 	respType := IntegrationServiceEnvironmentManagedApisClientPutResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.IntegrationServiceEnvironmentManagedAPI)
+	_, err := p.pt.FinalResponse(ctx, &respType.IntegrationServiceEnvironmentManagedAPI)
 	if err != nil {
 		return IntegrationServiceEnvironmentManagedApisClientPutResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *IntegrationServiceEnvironmentsClientCreateOrUpdatePoller) Poll(ctx cont
 // If the final GET succeeded then the final IntegrationServiceEnvironmentsClientCreateOrUpdateResponse will be returned.
 func (p *IntegrationServiceEnvironmentsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (IntegrationServiceEnvironmentsClientCreateOrUpdateResponse, error) {
 	respType := IntegrationServiceEnvironmentsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.IntegrationServiceEnvironment)
+	_, err := p.pt.FinalResponse(ctx, &respType.IntegrationServiceEnvironment)
 	if err != nil {
 		return IntegrationServiceEnvironmentsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *IntegrationServiceEnvironmentsClientUpdatePoller) Poll(ctx context.Cont
 // If the final GET succeeded then the final IntegrationServiceEnvironmentsClientUpdateResponse will be returned.
 func (p *IntegrationServiceEnvironmentsClientUpdatePoller) FinalResponse(ctx context.Context) (IntegrationServiceEnvironmentsClientUpdateResponse, error) {
 	respType := IntegrationServiceEnvironmentsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.IntegrationServiceEnvironment)
+	_, err := p.pt.FinalResponse(ctx, &respType.IntegrationServiceEnvironment)
 	if err != nil {
 		return IntegrationServiceEnvironmentsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *WorkflowsClientMovePoller) Poll(ctx context.Context) (*http.Response, e
 // If the final GET succeeded then the final WorkflowsClientMoveResponse will be returned.
 func (p *WorkflowsClientMovePoller) FinalResponse(ctx context.Context) (WorkflowsClientMoveResponse, error) {
 	respType := WorkflowsClientMoveResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return WorkflowsClientMoveResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

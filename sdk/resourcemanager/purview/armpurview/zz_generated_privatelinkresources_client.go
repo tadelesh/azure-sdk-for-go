@@ -34,17 +34,17 @@ type PrivateLinkResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateLinkResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateLinkResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateLinkResourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *PrivateLinkResourcesClient) getByGroupIDCreateRequest(ctx context.
 
 // getByGroupIDHandleResponse handles the GetByGroupID response.
 func (client *PrivateLinkResourcesClient) getByGroupIDHandleResponse(resp *http.Response) (PrivateLinkResourcesClientGetByGroupIDResponse, error) {
-	result := PrivateLinkResourcesClientGetByGroupIDResponse{RawResponse: resp}
+	result := PrivateLinkResourcesClientGetByGroupIDResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResource); err != nil {
 		return PrivateLinkResourcesClientGetByGroupIDResponse{}, err
 	}
@@ -156,7 +156,7 @@ func (client *PrivateLinkResourcesClient) listByAccountCreateRequest(ctx context
 
 // listByAccountHandleResponse handles the ListByAccount response.
 func (client *PrivateLinkResourcesClient) listByAccountHandleResponse(resp *http.Response) (PrivateLinkResourcesClientListByAccountResponse, error) {
-	result := PrivateLinkResourcesClientListByAccountResponse{RawResponse: resp}
+	result := PrivateLinkResourcesClientListByAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourceList); err != nil {
 		return PrivateLinkResourcesClientListByAccountResponse{}, err
 	}

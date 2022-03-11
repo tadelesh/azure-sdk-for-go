@@ -34,17 +34,17 @@ type SQLPoolWorkloadClassifierClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLPoolWorkloadClassifierClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLPoolWorkloadClassifierClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLPoolWorkloadClassifierClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *SQLPoolWorkloadClassifierClient) BeginCreateOrUpdate(ctx context.C
 	if err != nil {
 		return SQLPoolWorkloadClassifierClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := SQLPoolWorkloadClassifierClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLPoolWorkloadClassifierClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLPoolWorkloadClassifierClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return SQLPoolWorkloadClassifierClientCreateOrUpdatePollerResponse{}, err
@@ -146,9 +144,7 @@ func (client *SQLPoolWorkloadClassifierClient) BeginDelete(ctx context.Context, 
 	if err != nil {
 		return SQLPoolWorkloadClassifierClientDeletePollerResponse{}, err
 	}
-	result := SQLPoolWorkloadClassifierClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLPoolWorkloadClassifierClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLPoolWorkloadClassifierClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return SQLPoolWorkloadClassifierClientDeletePollerResponse{}, err
@@ -277,7 +273,7 @@ func (client *SQLPoolWorkloadClassifierClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *SQLPoolWorkloadClassifierClient) getHandleResponse(resp *http.Response) (SQLPoolWorkloadClassifierClientGetResponse, error) {
-	result := SQLPoolWorkloadClassifierClientGetResponse{RawResponse: resp}
+	result := SQLPoolWorkloadClassifierClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadClassifier); err != nil {
 		return SQLPoolWorkloadClassifierClientGetResponse{}, err
 	}
@@ -340,7 +336,7 @@ func (client *SQLPoolWorkloadClassifierClient) listCreateRequest(ctx context.Con
 
 // listHandleResponse handles the List response.
 func (client *SQLPoolWorkloadClassifierClient) listHandleResponse(resp *http.Response) (SQLPoolWorkloadClassifierClientListResponse, error) {
-	result := SQLPoolWorkloadClassifierClientListResponse{RawResponse: resp}
+	result := SQLPoolWorkloadClassifierClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadClassifierListResult); err != nil {
 		return SQLPoolWorkloadClassifierClientListResponse{}, err
 	}

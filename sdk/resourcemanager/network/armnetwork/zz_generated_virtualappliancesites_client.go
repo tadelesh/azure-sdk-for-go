@@ -35,17 +35,17 @@ type VirtualApplianceSitesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualApplianceSitesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualApplianceSitesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualApplianceSitesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *VirtualApplianceSitesClient) BeginCreateOrUpdate(ctx context.Conte
 	if err != nil {
 		return VirtualApplianceSitesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VirtualApplianceSitesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualApplianceSitesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualApplianceSitesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VirtualApplianceSitesClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *VirtualApplianceSitesClient) BeginDelete(ctx context.Context, reso
 	if err != nil {
 		return VirtualApplianceSitesClientDeletePollerResponse{}, err
 	}
-	result := VirtualApplianceSitesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualApplianceSitesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualApplianceSitesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return VirtualApplianceSitesClientDeletePollerResponse{}, err
@@ -249,7 +245,7 @@ func (client *VirtualApplianceSitesClient) getCreateRequest(ctx context.Context,
 
 // getHandleResponse handles the Get response.
 func (client *VirtualApplianceSitesClient) getHandleResponse(resp *http.Response) (VirtualApplianceSitesClientGetResponse, error) {
-	result := VirtualApplianceSitesClientGetResponse{RawResponse: resp}
+	result := VirtualApplianceSitesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualApplianceSite); err != nil {
 		return VirtualApplianceSitesClientGetResponse{}, err
 	}
@@ -302,7 +298,7 @@ func (client *VirtualApplianceSitesClient) listCreateRequest(ctx context.Context
 
 // listHandleResponse handles the List response.
 func (client *VirtualApplianceSitesClient) listHandleResponse(resp *http.Response) (VirtualApplianceSitesClientListResponse, error) {
-	result := VirtualApplianceSitesClientListResponse{RawResponse: resp}
+	result := VirtualApplianceSitesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualApplianceSiteListResult); err != nil {
 		return VirtualApplianceSitesClientListResponse{}, err
 	}

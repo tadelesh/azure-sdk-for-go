@@ -29,16 +29,16 @@ type ListTenantConfigurationViolationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewListTenantConfigurationViolationsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ListTenantConfigurationViolationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ListTenantConfigurationViolationsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -75,7 +75,7 @@ func (client *ListTenantConfigurationViolationsClient) listCreateRequest(ctx con
 
 // listHandleResponse handles the List response.
 func (client *ListTenantConfigurationViolationsClient) listHandleResponse(resp *http.Response) (ListTenantConfigurationViolationsClientListResponse, error) {
-	result := ListTenantConfigurationViolationsClientListResponse{RawResponse: resp}
+	result := ListTenantConfigurationViolationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ViolationsList); err != nil {
 		return ListTenantConfigurationViolationsClientListResponse{}, err
 	}

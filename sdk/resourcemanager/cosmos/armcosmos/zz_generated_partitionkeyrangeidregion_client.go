@@ -34,17 +34,17 @@ type PartitionKeyRangeIDRegionClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPartitionKeyRangeIDRegionClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PartitionKeyRangeIDRegionClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PartitionKeyRangeIDRegionClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,19 +62,13 @@ func NewPartitionKeyRangeIDRegionClient(subscriptionID string, credential azcore
 // and timeGrain. The supported operator is eq.
 // options - PartitionKeyRangeIDRegionClientListMetricsOptions contains the optional parameters for the PartitionKeyRangeIDRegionClient.ListMetrics
 // method.
-func (client *PartitionKeyRangeIDRegionClient) ListMetrics(ctx context.Context, resourceGroupName string, accountName string, region string, databaseRid string, collectionRid string, partitionKeyRangeID string, filter string, options *PartitionKeyRangeIDRegionClientListMetricsOptions) (PartitionKeyRangeIDRegionClientListMetricsResponse, error) {
-	req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, region, databaseRid, collectionRid, partitionKeyRangeID, filter, options)
-	if err != nil {
-		return PartitionKeyRangeIDRegionClientListMetricsResponse{}, err
+func (client *PartitionKeyRangeIDRegionClient) ListMetrics(resourceGroupName string, accountName string, region string, databaseRid string, collectionRid string, partitionKeyRangeID string, filter string, options *PartitionKeyRangeIDRegionClientListMetricsOptions) *PartitionKeyRangeIDRegionClientListMetricsPager {
+	return &PartitionKeyRangeIDRegionClientListMetricsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, region, databaseRid, collectionRid, partitionKeyRangeID, filter, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return PartitionKeyRangeIDRegionClientListMetricsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return PartitionKeyRangeIDRegionClientListMetricsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listMetricsHandleResponse(resp)
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.
@@ -122,7 +116,7 @@ func (client *PartitionKeyRangeIDRegionClient) listMetricsCreateRequest(ctx cont
 
 // listMetricsHandleResponse handles the ListMetrics response.
 func (client *PartitionKeyRangeIDRegionClient) listMetricsHandleResponse(resp *http.Response) (PartitionKeyRangeIDRegionClientListMetricsResponse, error) {
-	result := PartitionKeyRangeIDRegionClientListMetricsResponse{RawResponse: resp}
+	result := PartitionKeyRangeIDRegionClientListMetricsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PartitionMetricListResult); err != nil {
 		return PartitionKeyRangeIDRegionClientListMetricsResponse{}, err
 	}

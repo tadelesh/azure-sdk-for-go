@@ -42,17 +42,17 @@ type VMHostClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVMHostClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VMHostClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VMHostClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *VMHostClient) listCreateRequest(ctx context.Context, resourceGroup
 
 // listHandleResponse handles the List response.
 func (client *VMHostClient) listHandleResponse(resp *http.Response) (VMHostClientListResponse, error) {
-	result := VMHostClientListResponse{RawResponse: resp}
+	result := VMHostClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VMHostListResponse); err != nil {
 		return VMHostClientListResponse{}, err
 	}

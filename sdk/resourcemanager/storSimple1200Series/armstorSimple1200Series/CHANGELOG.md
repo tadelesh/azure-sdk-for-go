@@ -1,0 +1,534 @@
+# Release History
+
+## 0.2.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*IscsiDisksClient.ListMetricDefinition` parameter(s) have been changed from `(context.Context, string, string, string, string, string, *IscsiDisksClientListMetricDefinitionOptions)` to `(string, string, string, string, string, *IscsiDisksClientListMetricDefinitionOptions)`
+- Function `*IscsiDisksClient.ListMetricDefinition` return value(s) have been changed from `(IscsiDisksClientListMetricDefinitionResponse, error)` to `(*IscsiDisksClientListMetricDefinitionPager)`
+- Function `*FileServersClient.ListByDevice` parameter(s) have been changed from `(context.Context, string, string, string, *FileServersClientListByDeviceOptions)` to `(string, string, string, *FileServersClientListByDeviceOptions)`
+- Function `*FileServersClient.ListByDevice` return value(s) have been changed from `(FileServersClientListByDeviceResponse, error)` to `(*FileServersClientListByDevicePager)`
+- Function `*IscsiServersClient.ListByDevice` parameter(s) have been changed from `(context.Context, string, string, string, *IscsiServersClientListByDeviceOptions)` to `(string, string, string, *IscsiServersClientListByDeviceOptions)`
+- Function `*IscsiServersClient.ListByDevice` return value(s) have been changed from `(IscsiServersClientListByDeviceResponse, error)` to `(*IscsiServersClientListByDevicePager)`
+- Function `*DevicesClient.ListMetricDefinition` parameter(s) have been changed from `(context.Context, string, string, string, *DevicesClientListMetricDefinitionOptions)` to `(string, string, string, *DevicesClientListMetricDefinitionOptions)`
+- Function `*DevicesClient.ListMetricDefinition` return value(s) have been changed from `(DevicesClientListMetricDefinitionResponse, error)` to `(*DevicesClientListMetricDefinitionPager)`
+- Function `*ManagersClient.ListMetrics` parameter(s) have been changed from `(context.Context, string, string, *ManagersClientListMetricsOptions)` to `(string, string, *ManagersClientListMetricsOptions)`
+- Function `*ManagersClient.ListMetrics` return value(s) have been changed from `(ManagersClientListMetricsResponse, error)` to `(*ManagersClientListMetricsPager)`
+- Function `*AvailableProviderOperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(AvailableProviderOperationsClientListResponse, error)`
+- Function `*FileSharesClient.ListMetrics` parameter(s) have been changed from `(context.Context, string, string, string, string, string, *FileSharesClientListMetricsOptions)` to `(string, string, string, string, string, *FileSharesClientListMetricsOptions)`
+- Function `*FileSharesClient.ListMetrics` return value(s) have been changed from `(FileSharesClientListMetricsResponse, error)` to `(*FileSharesClientListMetricsPager)`
+- Function `*BackupScheduleGroupsClient.ListByDevice` parameter(s) have been changed from `(context.Context, string, string, string, *BackupScheduleGroupsClientListByDeviceOptions)` to `(string, string, string, *BackupScheduleGroupsClientListByDeviceOptions)`
+- Function `*BackupScheduleGroupsClient.ListByDevice` return value(s) have been changed from `(BackupScheduleGroupsClientListByDeviceResponse, error)` to `(*BackupScheduleGroupsClientListByDevicePager)`
+- Function `*IscsiDisksClient.ListMetrics` parameter(s) have been changed from `(context.Context, string, string, string, string, string, *IscsiDisksClientListMetricsOptions)` to `(string, string, string, string, string, *IscsiDisksClientListMetricsOptions)`
+- Function `*IscsiDisksClient.ListMetrics` return value(s) have been changed from `(IscsiDisksClientListMetricsResponse, error)` to `(*IscsiDisksClientListMetricsPager)`
+- Function `*BackupsClientListByDevicePager.NextPage` return value(s) have been changed from `(bool)` to `(BackupsClientListByDeviceResponse, error)`
+- Function `*DevicesClient.ListByManager` parameter(s) have been changed from `(context.Context, string, string, *DevicesClientListByManagerOptions)` to `(string, string, *DevicesClientListByManagerOptions)`
+- Function `*DevicesClient.ListByManager` return value(s) have been changed from `(DevicesClientListByManagerResponse, error)` to `(*DevicesClientListByManagerPager)`
+- Function `*FileSharesClient.ListMetricDefinition` parameter(s) have been changed from `(context.Context, string, string, string, string, string, *FileSharesClientListMetricDefinitionOptions)` to `(string, string, string, string, string, *FileSharesClientListMetricDefinitionOptions)`
+- Function `*FileSharesClient.ListMetricDefinition` return value(s) have been changed from `(FileSharesClientListMetricDefinitionResponse, error)` to `(*FileSharesClientListMetricDefinitionPager)`
+- Function `*ManagersClient.ListMetricDefinition` parameter(s) have been changed from `(context.Context, string, string, *ManagersClientListMetricDefinitionOptions)` to `(string, string, *ManagersClientListMetricDefinitionOptions)`
+- Function `*ManagersClient.ListMetricDefinition` return value(s) have been changed from `(ManagersClientListMetricDefinitionResponse, error)` to `(*ManagersClientListMetricDefinitionPager)`
+- Function `*StorageDomainsClient.ListByManager` parameter(s) have been changed from `(context.Context, string, string, *StorageDomainsClientListByManagerOptions)` to `(string, string, *StorageDomainsClientListByManagerOptions)`
+- Function `*StorageDomainsClient.ListByManager` return value(s) have been changed from `(StorageDomainsClientListByManagerResponse, error)` to `(*StorageDomainsClientListByManagerPager)`
+- Function `*ManagersClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *ManagersClientListByResourceGroupOptions)` to `(string, *ManagersClientListByResourceGroupOptions)`
+- Function `*ManagersClient.ListByResourceGroup` return value(s) have been changed from `(ManagersClientListByResourceGroupResponse, error)` to `(*ManagersClientListByResourceGroupPager)`
+- Function `*IscsiServersClient.ListByManager` parameter(s) have been changed from `(context.Context, string, string, *IscsiServersClientListByManagerOptions)` to `(string, string, *IscsiServersClientListByManagerOptions)`
+- Function `*IscsiServersClient.ListByManager` return value(s) have been changed from `(IscsiServersClientListByManagerResponse, error)` to `(*IscsiServersClientListByManagerPager)`
+- Function `*AlertsClientListByManagerPager.NextPage` return value(s) have been changed from `(bool)` to `(AlertsClientListByManagerResponse, error)`
+- Function `*IscsiServersClient.ListMetricDefinition` parameter(s) have been changed from `(context.Context, string, string, string, string, *IscsiServersClientListMetricDefinitionOptions)` to `(string, string, string, string, *IscsiServersClientListMetricDefinitionOptions)`
+- Function `*IscsiServersClient.ListMetricDefinition` return value(s) have been changed from `(IscsiServersClientListMetricDefinitionResponse, error)` to `(*IscsiServersClientListMetricDefinitionPager)`
+- Function `*JobsClientListByManagerPager.NextPage` return value(s) have been changed from `(bool)` to `(JobsClientListByManagerResponse, error)`
+- Function `*JobsClientListByDevicePager.NextPage` return value(s) have been changed from `(bool)` to `(JobsClientListByDeviceResponse, error)`
+- Function `*BackupsClientListByManagerPager.NextPage` return value(s) have been changed from `(bool)` to `(BackupsClientListByManagerResponse, error)`
+- Function `*DevicesClient.ListMetrics` parameter(s) have been changed from `(context.Context, string, string, string, *DevicesClientListMetricsOptions)` to `(string, string, string, *DevicesClientListMetricsOptions)`
+- Function `*DevicesClient.ListMetrics` return value(s) have been changed from `(DevicesClientListMetricsResponse, error)` to `(*DevicesClientListMetricsPager)`
+- Function `*DevicesClient.ListFailoverTarget` parameter(s) have been changed from `(context.Context, string, string, string, *DevicesClientListFailoverTargetOptions)` to `(string, string, string, *DevicesClientListFailoverTargetOptions)`
+- Function `*DevicesClient.ListFailoverTarget` return value(s) have been changed from `(DevicesClientListFailoverTargetResponse, error)` to `(*DevicesClientListFailoverTargetPager)`
+- Function `*ChapSettingsClient.ListByDevice` parameter(s) have been changed from `(context.Context, string, string, string, *ChapSettingsClientListByDeviceOptions)` to `(string, string, string, *ChapSettingsClientListByDeviceOptions)`
+- Function `*ChapSettingsClient.ListByDevice` return value(s) have been changed from `(ChapSettingsClientListByDeviceResponse, error)` to `(*ChapSettingsClientListByDevicePager)`
+- Function `*IscsiDisksClient.ListByIscsiServer` parameter(s) have been changed from `(context.Context, string, string, string, string, *IscsiDisksClientListByIscsiServerOptions)` to `(string, string, string, string, *IscsiDisksClientListByIscsiServerOptions)`
+- Function `*IscsiDisksClient.ListByIscsiServer` return value(s) have been changed from `(IscsiDisksClientListByIscsiServerResponse, error)` to `(*IscsiDisksClientListByIscsiServerPager)`
+- Function `*ManagersClient.List` parameter(s) have been changed from `(context.Context, *ManagersClientListOptions)` to `(*ManagersClientListOptions)`
+- Function `*ManagersClient.List` return value(s) have been changed from `(ManagersClientListResponse, error)` to `(*ManagersClientListPager)`
+- Function `*FileSharesClient.ListByFileServer` parameter(s) have been changed from `(context.Context, string, string, string, string, *FileSharesClientListByFileServerOptions)` to `(string, string, string, string, *FileSharesClientListByFileServerOptions)`
+- Function `*FileSharesClient.ListByFileServer` return value(s) have been changed from `(FileSharesClientListByFileServerResponse, error)` to `(*FileSharesClientListByFileServerPager)`
+- Function `*IscsiDisksClient.ListByDevice` parameter(s) have been changed from `(context.Context, string, string, string, *IscsiDisksClientListByDeviceOptions)` to `(string, string, string, *IscsiDisksClientListByDeviceOptions)`
+- Function `*IscsiDisksClient.ListByDevice` return value(s) have been changed from `(IscsiDisksClientListByDeviceResponse, error)` to `(*IscsiDisksClientListByDevicePager)`
+- Function `*FileServersClient.ListMetricDefinition` parameter(s) have been changed from `(context.Context, string, string, string, string, *FileServersClientListMetricDefinitionOptions)` to `(string, string, string, string, *FileServersClientListMetricDefinitionOptions)`
+- Function `*FileServersClient.ListMetricDefinition` return value(s) have been changed from `(FileServersClientListMetricDefinitionResponse, error)` to `(*FileServersClientListMetricDefinitionPager)`
+- Function `*FileSharesClient.ListByDevice` parameter(s) have been changed from `(context.Context, string, string, string, *FileSharesClientListByDeviceOptions)` to `(string, string, string, *FileSharesClientListByDeviceOptions)`
+- Function `*FileSharesClient.ListByDevice` return value(s) have been changed from `(FileSharesClientListByDeviceResponse, error)` to `(*FileSharesClientListByDevicePager)`
+- Function `*IscsiServersClient.ListMetrics` parameter(s) have been changed from `(context.Context, string, string, string, string, *IscsiServersClientListMetricsOptions)` to `(string, string, string, string, *IscsiServersClientListMetricsOptions)`
+- Function `*IscsiServersClient.ListMetrics` return value(s) have been changed from `(IscsiServersClientListMetricsResponse, error)` to `(*IscsiServersClientListMetricsPager)`
+- Function `*FileServersClient.ListMetrics` parameter(s) have been changed from `(context.Context, string, string, string, string, *FileServersClientListMetricsOptions)` to `(string, string, string, string, *FileServersClientListMetricsOptions)`
+- Function `*FileServersClient.ListMetrics` return value(s) have been changed from `(FileServersClientListMetricsResponse, error)` to `(*FileServersClientListMetricsPager)`
+- Function `*FileServersClient.ListByManager` parameter(s) have been changed from `(context.Context, string, string, *FileServersClientListByManagerOptions)` to `(string, string, *FileServersClientListByManagerOptions)`
+- Function `*FileServersClient.ListByManager` return value(s) have been changed from `(FileServersClientListByManagerResponse, error)` to `(*FileServersClientListByManagerPager)`
+- Function `*AccessControlRecordsClient.ListByManager` parameter(s) have been changed from `(context.Context, string, string, *AccessControlRecordsClientListByManagerOptions)` to `(string, string, *AccessControlRecordsClientListByManagerOptions)`
+- Function `*AccessControlRecordsClient.ListByManager` return value(s) have been changed from `(AccessControlRecordsClientListByManagerResponse, error)` to `(*AccessControlRecordsClientListByManagerPager)`
+- Function `*StorageAccountCredentialsClient.ListByManager` parameter(s) have been changed from `(context.Context, string, string, *StorageAccountCredentialsClientListByManagerOptions)` to `(string, string, *StorageAccountCredentialsClientListByManagerOptions)`
+- Function `*StorageAccountCredentialsClient.ListByManager` return value(s) have been changed from `(StorageAccountCredentialsClientListByManagerResponse, error)` to `(*StorageAccountCredentialsClientListByManagerPager)`
+- Function `*AvailableProviderOperationsClientListPager.Err` has been removed
+- Function `*BackupsClientListByManagerPager.PageResponse` has been removed
+- Function `*AlertsClientListByManagerPager.PageResponse` has been removed
+- Function `*JobsClientListByManagerPager.PageResponse` has been removed
+- Function `*JobsClientListByManagerPager.Err` has been removed
+- Function `*JobsClientListByDevicePager.Err` has been removed
+- Function `*AvailableProviderOperationsClientListPager.PageResponse` has been removed
+- Function `*JobsClientListByDevicePager.PageResponse` has been removed
+- Function `*BackupsClientListByManagerPager.Err` has been removed
+- Function `*BackupsClientListByDevicePager.Err` has been removed
+- Function `*BackupsClientListByDevicePager.PageResponse` has been removed
+- Function `*AlertsClientListByManagerPager.Err` has been removed
+- Struct `AccessControlRecordsClientCreateOrUpdateResult` has been removed
+- Struct `AccessControlRecordsClientGetResult` has been removed
+- Struct `AccessControlRecordsClientListByManagerResult` has been removed
+- Struct `AlertsClientListByManagerResult` has been removed
+- Struct `AvailableProviderOperationsClientListResult` has been removed
+- Struct `BackupScheduleGroupsClientCreateOrUpdateResult` has been removed
+- Struct `BackupScheduleGroupsClientGetResult` has been removed
+- Struct `BackupScheduleGroupsClientListByDeviceResult` has been removed
+- Struct `BackupsClientListByDeviceResult` has been removed
+- Struct `BackupsClientListByManagerResult` has been removed
+- Struct `ChapSettingsClientCreateOrUpdateResult` has been removed
+- Struct `ChapSettingsClientGetResult` has been removed
+- Struct `ChapSettingsClientListByDeviceResult` has been removed
+- Struct `DevicesClientCreateOrUpdateAlertSettingsResult` has been removed
+- Struct `DevicesClientGetAlertSettingsResult` has been removed
+- Struct `DevicesClientGetNetworkSettingsResult` has been removed
+- Struct `DevicesClientGetResult` has been removed
+- Struct `DevicesClientGetTimeSettingsResult` has been removed
+- Struct `DevicesClientGetUpdateSummaryResult` has been removed
+- Struct `DevicesClientListByManagerResult` has been removed
+- Struct `DevicesClientListFailoverTargetResult` has been removed
+- Struct `DevicesClientListMetricDefinitionResult` has been removed
+- Struct `DevicesClientListMetricsResult` has been removed
+- Struct `DevicesClientPatchResult` has been removed
+- Struct `FileServersClientCreateOrUpdateResult` has been removed
+- Struct `FileServersClientGetResult` has been removed
+- Struct `FileServersClientListByDeviceResult` has been removed
+- Struct `FileServersClientListByManagerResult` has been removed
+- Struct `FileServersClientListMetricDefinitionResult` has been removed
+- Struct `FileServersClientListMetricsResult` has been removed
+- Struct `FileSharesClientCreateOrUpdateResult` has been removed
+- Struct `FileSharesClientGetResult` has been removed
+- Struct `FileSharesClientListByDeviceResult` has been removed
+- Struct `FileSharesClientListByFileServerResult` has been removed
+- Struct `FileSharesClientListMetricDefinitionResult` has been removed
+- Struct `FileSharesClientListMetricsResult` has been removed
+- Struct `IscsiDisksClientCreateOrUpdateResult` has been removed
+- Struct `IscsiDisksClientGetResult` has been removed
+- Struct `IscsiDisksClientListByDeviceResult` has been removed
+- Struct `IscsiDisksClientListByIscsiServerResult` has been removed
+- Struct `IscsiDisksClientListMetricDefinitionResult` has been removed
+- Struct `IscsiDisksClientListMetricsResult` has been removed
+- Struct `IscsiServersClientCreateOrUpdateResult` has been removed
+- Struct `IscsiServersClientGetResult` has been removed
+- Struct `IscsiServersClientListByDeviceResult` has been removed
+- Struct `IscsiServersClientListByManagerResult` has been removed
+- Struct `IscsiServersClientListMetricDefinitionResult` has been removed
+- Struct `IscsiServersClientListMetricsResult` has been removed
+- Struct `JobsClientGetResult` has been removed
+- Struct `JobsClientListByDeviceResult` has been removed
+- Struct `JobsClientListByManagerResult` has been removed
+- Struct `ManagersClientCreateExtendedInfoResult` has been removed
+- Struct `ManagersClientCreateOrUpdateResult` has been removed
+- Struct `ManagersClientGetEncryptionKeyResult` has been removed
+- Struct `ManagersClientGetEncryptionSettingsResult` has been removed
+- Struct `ManagersClientGetExtendedInfoResult` has been removed
+- Struct `ManagersClientGetResult` has been removed
+- Struct `ManagersClientListByResourceGroupResult` has been removed
+- Struct `ManagersClientListMetricDefinitionResult` has been removed
+- Struct `ManagersClientListMetricsResult` has been removed
+- Struct `ManagersClientListResult` has been removed
+- Struct `ManagersClientUpdateExtendedInfoResult` has been removed
+- Struct `ManagersClientUpdateResult` has been removed
+- Struct `ManagersClientUploadRegistrationCertificateResult` has been removed
+- Struct `StorageAccountCredentialsClientCreateOrUpdateResult` has been removed
+- Struct `StorageAccountCredentialsClientGetResult` has been removed
+- Struct `StorageAccountCredentialsClientListByManagerResult` has been removed
+- Struct `StorageDomainsClientCreateOrUpdateResult` has been removed
+- Struct `StorageDomainsClientGetResult` has been removed
+- Struct `StorageDomainsClientListByManagerResult` has been removed
+- Field `FileServersClientListByDeviceResult` of struct `FileServersClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `FileServersClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientCreateOrUpdateSecuritySettingsResponse` has been removed
+- Field `RawResponse` of struct `IscsiDisksClientCreateOrUpdatePollerResponse` has been removed
+- Field `JobsClientGetResult` of struct `JobsClientGetResponse` has been removed
+- Field `RawResponse` of struct `JobsClientGetResponse` has been removed
+- Field `ManagersClientGetEncryptionSettingsResult` of struct `ManagersClientGetEncryptionSettingsResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientGetEncryptionSettingsResponse` has been removed
+- Field `RawResponse` of struct `IscsiServersClientCreateOrUpdatePollerResponse` has been removed
+- Field `IscsiDisksClientListMetricDefinitionResult` of struct `IscsiDisksClientListMetricDefinitionResponse` has been removed
+- Field `RawResponse` of struct `IscsiDisksClientListMetricDefinitionResponse` has been removed
+- Field `RawResponse` of struct `AlertsClientClearResponse` has been removed
+- Field `ChapSettingsClientCreateOrUpdateResult` of struct `ChapSettingsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ChapSettingsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `FileServersClientBackupNowResponse` has been removed
+- Field `StorageDomainsClientListByManagerResult` of struct `StorageDomainsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `StorageDomainsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientPatchPollerResponse` has been removed
+- Field `JobsClientListByManagerResult` of struct `JobsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `JobsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientCreateOrUpdatePollerResponse` has been removed
+- Field `AlertsClientListByManagerResult` of struct `AlertsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `AlertsClientListByManagerResponse` has been removed
+- Field `ManagersClientCreateOrUpdateResult` of struct `ManagersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientCreateOrUpdateResponse` has been removed
+- Field `ManagersClientListByResourceGroupResult` of struct `ManagersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientListByResourceGroupResponse` has been removed
+- Field `ManagersClientUpdateExtendedInfoResult` of struct `ManagersClientUpdateExtendedInfoResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientUpdateExtendedInfoResponse` has been removed
+- Field `IscsiDisksClientListByDeviceResult` of struct `IscsiDisksClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `IscsiDisksClientListByDeviceResponse` has been removed
+- Field `AccessControlRecordsClientCreateOrUpdateResult` of struct `AccessControlRecordsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccessControlRecordsClientCreateOrUpdateResponse` has been removed
+- Field `ManagersClientUploadRegistrationCertificateResult` of struct `ManagersClientUploadRegistrationCertificateResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientUploadRegistrationCertificateResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientDownloadUpdatesResponse` has been removed
+- Field `BackupScheduleGroupsClientGetResult` of struct `BackupScheduleGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `BackupScheduleGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientClonePollerResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientFailoverResponse` has been removed
+- Field `RawResponse` of struct `IscsiServersClientDeleteResponse` has been removed
+- Field `IscsiServersClientListByManagerResult` of struct `IscsiServersClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `IscsiServersClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `FileSharesClientDeleteResponse` has been removed
+- Field `FileServersClientCreateOrUpdateResult` of struct `FileServersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `FileServersClientCreateOrUpdateResponse` has been removed
+- Field `StorageAccountCredentialsClientGetResult` of struct `StorageAccountCredentialsClientGetResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientGetResponse` has been removed
+- Field `DevicesClientListByManagerResult` of struct `DevicesClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientListByManagerResponse` has been removed
+- Field `IscsiServersClientCreateOrUpdateResult` of struct `IscsiServersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `IscsiServersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ChapSettingsClientCreateOrUpdatePollerResponse` has been removed
+- Field `FileServersClientListMetricDefinitionResult` of struct `FileServersClientListMetricDefinitionResponse` has been removed
+- Field `RawResponse` of struct `FileServersClientListMetricDefinitionResponse` has been removed
+- Field `JobsClientListByDeviceResult` of struct `JobsClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `JobsClientListByDeviceResponse` has been removed
+- Field `FileSharesClientCreateOrUpdateResult` of struct `FileSharesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `FileSharesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `IscsiServersClientBackupNowResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `IscsiServersClientDeletePollerResponse` has been removed
+- Field `DevicesClientGetAlertSettingsResult` of struct `DevicesClientGetAlertSettingsResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientGetAlertSettingsResponse` has been removed
+- Field `RawResponse` of struct `ChapSettingsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `IscsiDisksClientDeleteResponse` has been removed
+- Field `FileServersClientListMetricsResult` of struct `FileServersClientListMetricsResponse` has been removed
+- Field `RawResponse` of struct `FileServersClientListMetricsResponse` has been removed
+- Field `BackupScheduleGroupsClientListByDeviceResult` of struct `BackupScheduleGroupsClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `BackupScheduleGroupsClientListByDeviceResponse` has been removed
+- Field `IscsiDisksClientListMetricsResult` of struct `IscsiDisksClientListMetricsResponse` has been removed
+- Field `RawResponse` of struct `IscsiDisksClientListMetricsResponse` has been removed
+- Field `RawResponse` of struct `IscsiServersClientBackupNowPollerResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientDeletePollerResponse` has been removed
+- Field `ManagersClientListMetricDefinitionResult` of struct `ManagersClientListMetricDefinitionResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientListMetricDefinitionResponse` has been removed
+- Field `RawResponse` of struct `AccessControlRecordsClientDeletePollerResponse` has been removed
+- Field `DevicesClientListMetricDefinitionResult` of struct `DevicesClientListMetricDefinitionResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientListMetricDefinitionResponse` has been removed
+- Field `IscsiServersClientListByDeviceResult` of struct `IscsiServersClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `IscsiServersClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `ChapSettingsClientDeletePollerResponse` has been removed
+- Field `AvailableProviderOperationsClientListResult` of struct `AvailableProviderOperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `AvailableProviderOperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientDeleteExtendedInfoResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientInstallUpdatesPollerResponse` has been removed
+- Field `RawResponse` of struct `BackupScheduleGroupsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientDeactivatePollerResponse` has been removed
+- Field `RawResponse` of struct `StorageDomainsClientDeletePollerResponse` has been removed
+- Field `FileSharesClientListByFileServerResult` of struct `FileSharesClientListByFileServerResponse` has been removed
+- Field `RawResponse` of struct `FileSharesClientListByFileServerResponse` has been removed
+- Field `RawResponse` of struct `FileServersClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientDeleteResponse` has been removed
+- Field `FileSharesClientGetResult` of struct `FileSharesClientGetResponse` has been removed
+- Field `RawResponse` of struct `FileSharesClientGetResponse` has been removed
+- Field `ManagersClientGetExtendedInfoResult` of struct `ManagersClientGetExtendedInfoResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientGetExtendedInfoResponse` has been removed
+- Field `IscsiServersClientGetResult` of struct `IscsiServersClientGetResponse` has been removed
+- Field `RawResponse` of struct `IscsiServersClientGetResponse` has been removed
+- Field `StorageDomainsClientGetResult` of struct `StorageDomainsClientGetResponse` has been removed
+- Field `RawResponse` of struct `StorageDomainsClientGetResponse` has been removed
+- Field `FileSharesClientListMetricsResult` of struct `FileSharesClientListMetricsResponse` has been removed
+- Field `RawResponse` of struct `FileSharesClientListMetricsResponse` has been removed
+- Field `RawResponse` of struct `AccessControlRecordsClientCreateOrUpdatePollerResponse` has been removed
+- Field `DevicesClientGetNetworkSettingsResult` of struct `DevicesClientGetNetworkSettingsResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientGetNetworkSettingsResponse` has been removed
+- Field `RawResponse` of struct `BackupScheduleGroupsClientDeletePollerResponse` has been removed
+- Field `AccessControlRecordsClientListByManagerResult` of struct `AccessControlRecordsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `AccessControlRecordsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientCreateOrUpdateAlertSettingsPollerResponse` has been removed
+- Field `ManagersClientGetEncryptionKeyResult` of struct `ManagersClientGetEncryptionKeyResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientGetEncryptionKeyResponse` has been removed
+- Field `FileServersClientGetResult` of struct `FileServersClientGetResponse` has been removed
+- Field `RawResponse` of struct `FileServersClientGetResponse` has been removed
+- Field `StorageAccountCredentialsClientCreateOrUpdateResult` of struct `StorageAccountCredentialsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientCreateOrUpdateResponse` has been removed
+- Field `IscsiServersClientListMetricDefinitionResult` of struct `IscsiServersClientListMetricDefinitionResponse` has been removed
+- Field `RawResponse` of struct `IscsiServersClientListMetricDefinitionResponse` has been removed
+- Field `IscsiDisksClientCreateOrUpdateResult` of struct `IscsiDisksClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `IscsiDisksClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `FileServersClientBackupNowPollerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientCreateOrUpdateSecuritySettingsPollerResponse` has been removed
+- Field `FileServersClientListByManagerResult` of struct `FileServersClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `FileServersClientListByManagerResponse` has been removed
+- Field `BackupsClientListByManagerResult` of struct `BackupsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `StorageDomainsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientDeactivateResponse` has been removed
+- Field `AccessControlRecordsClientGetResult` of struct `AccessControlRecordsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AccessControlRecordsClientGetResponse` has been removed
+- Field `ManagersClientCreateExtendedInfoResult` of struct `ManagersClientCreateExtendedInfoResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientCreateExtendedInfoResponse` has been removed
+- Field `IscsiDisksClientListByIscsiServerResult` of struct `IscsiDisksClientListByIscsiServerResponse` has been removed
+- Field `RawResponse` of struct `IscsiDisksClientListByIscsiServerResponse` has been removed
+- Field `IscsiServersClientListMetricsResult` of struct `IscsiServersClientListMetricsResponse` has been removed
+- Field `RawResponse` of struct `IscsiServersClientListMetricsResponse` has been removed
+- Field `RawResponse` of struct `FileServersClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `IscsiDisksClientDeletePollerResponse` has been removed
+- Field `ManagersClientListResult` of struct `ManagersClientListResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientListResponse` has been removed
+- Field `RawResponse` of struct `AccessControlRecordsClientDeleteResponse` has been removed
+- Field `IscsiDisksClientGetResult` of struct `IscsiDisksClientGetResponse` has been removed
+- Field `RawResponse` of struct `IscsiDisksClientGetResponse` has been removed
+- Field `BackupsClientListByDeviceResult` of struct `BackupsClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientListByDeviceResponse` has been removed
+- Field `ManagersClientListMetricsResult` of struct `ManagersClientListMetricsResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientListMetricsResponse` has been removed
+- Field `DevicesClientListFailoverTargetResult` of struct `DevicesClientListFailoverTargetResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientListFailoverTargetResponse` has been removed
+- Field `RawResponse` of struct `FileSharesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientScanForUpdatesResponse` has been removed
+- Field `ManagersClientUpdateResult` of struct `ManagersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientUpdateResponse` has been removed
+- Field `ManagersClientGetResult` of struct `ManagersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientGetResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientFailoverPollerResponse` has been removed
+- Field `DevicesClientListMetricsResult` of struct `DevicesClientListMetricsResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientListMetricsResponse` has been removed
+- Field `DevicesClientGetUpdateSummaryResult` of struct `DevicesClientGetUpdateSummaryResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientGetUpdateSummaryResponse` has been removed
+- Field `RawResponse` of struct `FileServersClientDeleteResponse` has been removed
+- Field `DevicesClientPatchResult` of struct `DevicesClientPatchResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientPatchResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientScanForUpdatesPollerResponse` has been removed
+- Field `RawResponse` of struct `FileSharesClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `StorageDomainsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientCloneResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientDeleteResponse` has been removed
+- Field `FileSharesClientListByDeviceResult` of struct `FileSharesClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `FileSharesClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientDownloadUpdatesPollerResponse` has been removed
+- Field `RawResponse` of struct `AlertsClientSendTestEmailResponse` has been removed
+- Field `ChapSettingsClientGetResult` of struct `ChapSettingsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ChapSettingsClientGetResponse` has been removed
+- Field `DevicesClientCreateOrUpdateAlertSettingsResult` of struct `DevicesClientCreateOrUpdateAlertSettingsResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientCreateOrUpdateAlertSettingsResponse` has been removed
+- Field `RawResponse` of struct `BackupScheduleGroupsClientDeleteResponse` has been removed
+- Field `DevicesClientGetTimeSettingsResult` of struct `DevicesClientGetTimeSettingsResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientGetTimeSettingsResponse` has been removed
+- Field `StorageDomainsClientCreateOrUpdateResult` of struct `StorageDomainsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `StorageDomainsClientCreateOrUpdateResponse` has been removed
+- Field `BackupScheduleGroupsClientCreateOrUpdateResult` of struct `BackupScheduleGroupsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `BackupScheduleGroupsClientCreateOrUpdateResponse` has been removed
+- Field `DevicesClientGetResult` of struct `DevicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientGetResponse` has been removed
+- Field `FileSharesClientListMetricDefinitionResult` of struct `FileSharesClientListMetricDefinitionResponse` has been removed
+- Field `RawResponse` of struct `FileSharesClientListMetricDefinitionResponse` has been removed
+- Field `StorageAccountCredentialsClientListByManagerResult` of struct `StorageAccountCredentialsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientInstallUpdatesResponse` has been removed
+- Field `ChapSettingsClientListByDeviceResult` of struct `ChapSettingsClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `ChapSettingsClientListByDeviceResponse` has been removed
+
+### Features Added
+
+- New function `*FileServersClientListMetricsPager.More() bool`
+- New function `*FileServersClientListMetricDefinitionPager.NextPage(context.Context) (FileServersClientListMetricDefinitionResponse, error)`
+- New function `*DevicesClientListMetricDefinitionPager.More() bool`
+- New function `*FileSharesClientListByDevicePager.More() bool`
+- New function `*DevicesClientListMetricDefinitionPager.NextPage(context.Context) (DevicesClientListMetricDefinitionResponse, error)`
+- New function `*AlertFilter.UnmarshalJSON([]byte) error`
+- New function `*AccessControlRecordsClientListByManagerPager.NextPage(context.Context) (AccessControlRecordsClientListByManagerResponse, error)`
+- New function `*StorageDomainsClientListByManagerPager.More() bool`
+- New function `*StorageAccountCredentialsClientListByManagerPager.More() bool`
+- New function `*IscsiServersClientListMetricsPager.More() bool`
+- New function `*IscsiDisksClientListMetricsPager.NextPage(context.Context) (IscsiDisksClientListMetricsResponse, error)`
+- New function `*FileServersClientListByManagerPager.More() bool`
+- New function `*StorageDomainsClientListByManagerPager.NextPage(context.Context) (StorageDomainsClientListByManagerResponse, error)`
+- New function `*DevicesClientListByManagerPager.NextPage(context.Context) (DevicesClientListByManagerResponse, error)`
+- New function `JobFilter.MarshalJSON() ([]byte, error)`
+- New function `*BackupFilter.UnmarshalJSON([]byte) error`
+- New function `*IscsiServersClientListMetricsPager.NextPage(context.Context) (IscsiServersClientListMetricsResponse, error)`
+- New function `*ManagersClientListMetricDefinitionPager.More() bool`
+- New function `*IscsiDisksClientListMetricDefinitionPager.NextPage(context.Context) (IscsiDisksClientListMetricDefinitionResponse, error)`
+- New function `*JobsClientListByDevicePager.More() bool`
+- New function `*FileServersClientListByDevicePager.More() bool`
+- New function `*IscsiServersClientListMetricDefinitionPager.NextPage(context.Context) (IscsiServersClientListMetricDefinitionResponse, error)`
+- New function `*BackupScheduleGroupsClientListByDevicePager.More() bool`
+- New function `*StorageAccountCredentialsClientListByManagerPager.NextPage(context.Context) (StorageAccountCredentialsClientListByManagerResponse, error)`
+- New function `*IscsiServersClientListByManagerPager.NextPage(context.Context) (IscsiServersClientListByManagerResponse, error)`
+- New function `*FileSharesClientListByFileServerPager.More() bool`
+- New function `*DevicesClientListMetricsPager.NextPage(context.Context) (DevicesClientListMetricsResponse, error)`
+- New function `*ChapSettingsClientListByDevicePager.More() bool`
+- New function `*FileSharesClientListMetricDefinitionPager.NextPage(context.Context) (FileSharesClientListMetricDefinitionResponse, error)`
+- New function `*IscsiDisksClientListByDevicePager.NextPage(context.Context) (IscsiDisksClientListByDeviceResponse, error)`
+- New function `*ManagersClientListMetricDefinitionPager.NextPage(context.Context) (ManagersClientListMetricDefinitionResponse, error)`
+- New function `*ManagersClientListByResourceGroupPager.More() bool`
+- New function `*ManagersClientListByResourceGroupPager.NextPage(context.Context) (ManagersClientListByResourceGroupResponse, error)`
+- New function `Error.MarshalJSON() ([]byte, error)`
+- New function `*IscsiDisksClientListMetricDefinitionPager.More() bool`
+- New function `*BackupsClientListByDevicePager.More() bool`
+- New function `*FileSharesClientListByDevicePager.NextPage(context.Context) (FileSharesClientListByDeviceResponse, error)`
+- New function `*IscsiServersClientListMetricDefinitionPager.More() bool`
+- New function `*ManagersClientListPager.More() bool`
+- New function `*ChapSettingsClientListByDevicePager.NextPage(context.Context) (ChapSettingsClientListByDeviceResponse, error)`
+- New function `*FileServersClientListMetricDefinitionPager.More() bool`
+- New function `*IscsiDisksClientListByIscsiServerPager.More() bool`
+- New function `*BackupScheduleGroupsClientListByDevicePager.NextPage(context.Context) (BackupScheduleGroupsClientListByDeviceResponse, error)`
+- New function `*ManagersClientListPager.NextPage(context.Context) (ManagersClientListResponse, error)`
+- New function `*IscsiServersClientListByDevicePager.More() bool`
+- New function `*FileSharesClientListMetricsPager.More() bool`
+- New function `*IscsiDisksClientListByIscsiServerPager.NextPage(context.Context) (IscsiDisksClientListByIscsiServerResponse, error)`
+- New function `*DevicesClientListMetricsPager.More() bool`
+- New function `*ManagersClientListMetricsPager.More() bool`
+- New function `*DevicesClientListFailoverTargetPager.More() bool`
+- New function `*FileServersClientListMetricsPager.NextPage(context.Context) (FileServersClientListMetricsResponse, error)`
+- New function `*MetricFilter.UnmarshalJSON([]byte) error`
+- New function `*FileServersClientListByManagerPager.NextPage(context.Context) (FileServersClientListByManagerResponse, error)`
+- New function `*FileSharesClientListMetricDefinitionPager.More() bool`
+- New function `BackupFilter.MarshalJSON() ([]byte, error)`
+- New function `*IscsiServersClientListByManagerPager.More() bool`
+- New function `*IscsiDisksClientListMetricsPager.More() bool`
+- New function `*DevicesClientListFailoverTargetPager.NextPage(context.Context) (DevicesClientListFailoverTargetResponse, error)`
+- New function `*FileSharesClientListByFileServerPager.NextPage(context.Context) (FileSharesClientListByFileServerResponse, error)`
+- New function `MetricFilter.MarshalJSON() ([]byte, error)`
+- New function `*FileSharesClientListMetricsPager.NextPage(context.Context) (FileSharesClientListMetricsResponse, error)`
+- New function `*JobsClientListByManagerPager.More() bool`
+- New function `*ManagersClientListMetricsPager.NextPage(context.Context) (ManagersClientListMetricsResponse, error)`
+- New function `*AccessControlRecordsClientListByManagerPager.More() bool`
+- New function `AlertFilter.MarshalJSON() ([]byte, error)`
+- New function `*IscsiDisksClientListByDevicePager.More() bool`
+- New function `*DevicesClientListByManagerPager.More() bool`
+- New function `*IscsiServersClientListByDevicePager.NextPage(context.Context) (IscsiServersClientListByDeviceResponse, error)`
+- New function `*FileServersClientListByDevicePager.NextPage(context.Context) (FileServersClientListByDeviceResponse, error)`
+- New function `*JobFilter.UnmarshalJSON([]byte) error`
+- New function `*AlertsClientListByManagerPager.More() bool`
+- New function `*AvailableProviderOperationsClientListPager.More() bool`
+- New function `*BackupsClientListByManagerPager.More() bool`
+- New struct `AccessControlRecordsClientListByManagerPager`
+- New struct `AlertFilter`
+- New struct `BackupFilter`
+- New struct `BackupScheduleGroupsClientListByDevicePager`
+- New struct `ChapSettingsClientListByDevicePager`
+- New struct `DevicesClientListByManagerPager`
+- New struct `DevicesClientListFailoverTargetPager`
+- New struct `DevicesClientListMetricDefinitionPager`
+- New struct `DevicesClientListMetricsPager`
+- New struct `Error`
+- New struct `FileServersClientListByDevicePager`
+- New struct `FileServersClientListByManagerPager`
+- New struct `FileServersClientListMetricDefinitionPager`
+- New struct `FileServersClientListMetricsPager`
+- New struct `FileSharesClientListByDevicePager`
+- New struct `FileSharesClientListByFileServerPager`
+- New struct `FileSharesClientListMetricDefinitionPager`
+- New struct `FileSharesClientListMetricsPager`
+- New struct `IscsiDisksClientListByDevicePager`
+- New struct `IscsiDisksClientListByIscsiServerPager`
+- New struct `IscsiDisksClientListMetricDefinitionPager`
+- New struct `IscsiDisksClientListMetricsPager`
+- New struct `IscsiServersClientListByDevicePager`
+- New struct `IscsiServersClientListByManagerPager`
+- New struct `IscsiServersClientListMetricDefinitionPager`
+- New struct `IscsiServersClientListMetricsPager`
+- New struct `Item`
+- New struct `JobFilter`
+- New struct `ManagersClientListByResourceGroupPager`
+- New struct `ManagersClientListMetricDefinitionPager`
+- New struct `ManagersClientListMetricsPager`
+- New struct `ManagersClientListPager`
+- New struct `Message`
+- New struct `MetricFilter`
+- New struct `MetricNameFilter`
+- New struct `StorageAccountCredentialsClientListByManagerPager`
+- New struct `StorageDomainsClientListByManagerPager`
+- New anonymous field `StorageAccountCredential` in struct `StorageAccountCredentialsClientCreateOrUpdateResponse`
+- New anonymous field `FileShareList` in struct `FileSharesClientListByFileServerResponse`
+- New anonymous field `BackupList` in struct `BackupsClientListByDeviceResponse`
+- New anonymous field `ManagerExtendedInfo` in struct `ManagersClientUpdateExtendedInfoResponse`
+- New anonymous field `StorageDomain` in struct `StorageDomainsClientGetResponse`
+- New anonymous field `AccessControlRecordList` in struct `AccessControlRecordsClientListByManagerResponse`
+- New anonymous field `NetworkSettings` in struct `DevicesClientGetNetworkSettingsResponse`
+- New anonymous field `SymmetricEncryptedSecret` in struct `ManagersClientGetEncryptionKeyResponse`
+- New anonymous field `Manager` in struct `ManagersClientCreateOrUpdateResponse`
+- New anonymous field `Device` in struct `DevicesClientPatchResponse`
+- New anonymous field `MetricList` in struct `DevicesClientListMetricsResponse`
+- New anonymous field `ISCSIDiskList` in struct `IscsiDisksClientListByDeviceResponse`
+- New anonymous field `ChapSettingsList` in struct `ChapSettingsClientListByDeviceResponse`
+- New anonymous field `ChapSettings` in struct `ChapSettingsClientGetResponse`
+- New anonymous field `MetricDefinitionList` in struct `IscsiServersClientListMetricDefinitionResponse`
+- New anonymous field `MetricList` in struct `IscsiServersClientListMetricsResponse`
+- New anonymous field `ISCSIDisk` in struct `IscsiDisksClientCreateOrUpdateResponse`
+- New anonymous field `UploadCertificateResponse` in struct `ManagersClientUploadRegistrationCertificateResponse`
+- New anonymous field `ChapSettings` in struct `ChapSettingsClientCreateOrUpdateResponse`
+- New anonymous field `MetricDefinitionList` in struct `ManagersClientListMetricDefinitionResponse`
+- New anonymous field `ManagerExtendedInfo` in struct `ManagersClientCreateExtendedInfoResponse`
+- New anonymous field `Updates` in struct `DevicesClientGetUpdateSummaryResponse`
+- New anonymous field `BackupScheduleGroupList` in struct `BackupScheduleGroupsClientListByDeviceResponse`
+- New anonymous field `ISCSIDisk` in struct `IscsiDisksClientGetResponse`
+- New anonymous field `AlertSettings` in struct `DevicesClientCreateOrUpdateAlertSettingsResponse`
+- New anonymous field `MetricDefinitionList` in struct `IscsiDisksClientListMetricDefinitionResponse`
+- New anonymous field `MetricDefinitionList` in struct `FileSharesClientListMetricDefinitionResponse`
+- New anonymous field `StorageDomainList` in struct `StorageDomainsClientListByManagerResponse`
+- New anonymous field `JobList` in struct `JobsClientListByManagerResponse`
+- New anonymous field `ManagerExtendedInfo` in struct `ManagersClientGetExtendedInfoResponse`
+- New anonymous field `Manager` in struct `ManagersClientUpdateResponse`
+- New anonymous field `StorageAccountCredentialList` in struct `StorageAccountCredentialsClientListByManagerResponse`
+- New anonymous field `AlertSettings` in struct `DevicesClientGetAlertSettingsResponse`
+- New anonymous field `ISCSIDiskList` in struct `IscsiDisksClientListByIscsiServerResponse`
+- New anonymous field `AlertList` in struct `AlertsClientListByManagerResponse`
+- New anonymous field `Device` in struct `DevicesClientGetResponse`
+- New anonymous field `BackupScheduleGroup` in struct `BackupScheduleGroupsClientCreateOrUpdateResponse`
+- New anonymous field `TimeSettings` in struct `DevicesClientGetTimeSettingsResponse`
+- New anonymous field `FileServer` in struct `FileServersClientCreateOrUpdateResponse`
+- New anonymous field `Manager` in struct `ManagersClientGetResponse`
+- New anonymous field `FileServer` in struct `FileServersClientGetResponse`
+- New anonymous field `ManagerList` in struct `ManagersClientListResponse`
+- New anonymous field `FileShareList` in struct `FileSharesClientListByDeviceResponse`
+- New anonymous field `MetricDefinitionList` in struct `DevicesClientListMetricDefinitionResponse`
+- New anonymous field `MetricList` in struct `FileSharesClientListMetricsResponse`
+- New anonymous field `FileShare` in struct `FileSharesClientGetResponse`
+- New anonymous field `BackupScheduleGroup` in struct `BackupScheduleGroupsClientGetResponse`
+- New anonymous field `StorageDomain` in struct `StorageDomainsClientCreateOrUpdateResponse`
+- New anonymous field `ISCSIServerList` in struct `IscsiServersClientListByManagerResponse`
+- New anonymous field `EncryptionSettings` in struct `ManagersClientGetEncryptionSettingsResponse`
+- New anonymous field `DeviceList` in struct `DevicesClientListFailoverTargetResponse`
+- New anonymous field `MetricList` in struct `FileServersClientListMetricsResponse`
+- New anonymous field `Job` in struct `JobsClientGetResponse`
+- New anonymous field `MetricDefinitionList` in struct `FileServersClientListMetricDefinitionResponse`
+- New anonymous field `MetricList` in struct `IscsiDisksClientListMetricsResponse`
+- New anonymous field `DeviceList` in struct `DevicesClientListByManagerResponse`
+- New anonymous field `StorageAccountCredential` in struct `StorageAccountCredentialsClientGetResponse`
+- New anonymous field `BackupList` in struct `BackupsClientListByManagerResponse`
+- New anonymous field `AvailableProviderOperations` in struct `AvailableProviderOperationsClientListResponse`
+- New anonymous field `ISCSIServer` in struct `IscsiServersClientGetResponse`
+- New anonymous field `JobList` in struct `JobsClientListByDeviceResponse`
+- New anonymous field `ManagerList` in struct `ManagersClientListByResourceGroupResponse`
+- New anonymous field `FileServerList` in struct `FileServersClientListByManagerResponse`
+- New anonymous field `ISCSIServer` in struct `IscsiServersClientCreateOrUpdateResponse`
+- New anonymous field `FileServerList` in struct `FileServersClientListByDeviceResponse`
+- New anonymous field `MetricList` in struct `ManagersClientListMetricsResponse`
+- New anonymous field `AccessControlRecord` in struct `AccessControlRecordsClientGetResponse`
+- New anonymous field `FileShare` in struct `FileSharesClientCreateOrUpdateResponse`
+- New anonymous field `AccessControlRecord` in struct `AccessControlRecordsClientCreateOrUpdateResponse`
+- New anonymous field `ISCSIServerList` in struct `IscsiServersClientListByDeviceResponse`
+
+
+## 0.1.0 (2022-03-10)
+
+- Init release.

@@ -35,17 +35,17 @@ type CommunicationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCommunicationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CommunicationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CommunicationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -96,7 +96,7 @@ func (client *CommunicationsClient) checkNameAvailabilityCreateRequest(ctx conte
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *CommunicationsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (CommunicationsClientCheckNameAvailabilityResponse, error) {
-	result := CommunicationsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := CommunicationsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameAvailabilityOutput); err != nil {
 		return CommunicationsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -115,9 +115,7 @@ func (client *CommunicationsClient) BeginCreate(ctx context.Context, supportTick
 	if err != nil {
 		return CommunicationsClientCreatePollerResponse{}, err
 	}
-	result := CommunicationsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CommunicationsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("CommunicationsClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return CommunicationsClientCreatePollerResponse{}, err
@@ -219,7 +217,7 @@ func (client *CommunicationsClient) getCreateRequest(ctx context.Context, suppor
 
 // getHandleResponse handles the Get response.
 func (client *CommunicationsClient) getHandleResponse(resp *http.Response) (CommunicationsClientGetResponse, error) {
-	result := CommunicationsClientGetResponse{RawResponse: resp}
+	result := CommunicationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CommunicationDetails); err != nil {
 		return CommunicationsClientGetResponse{}, err
 	}
@@ -277,7 +275,7 @@ func (client *CommunicationsClient) listCreateRequest(ctx context.Context, suppo
 
 // listHandleResponse handles the List response.
 func (client *CommunicationsClient) listHandleResponse(resp *http.Response) (CommunicationsClientListResponse, error) {
-	result := CommunicationsClientListResponse{RawResponse: resp}
+	result := CommunicationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CommunicationsListResult); err != nil {
 		return CommunicationsClientListResponse{}, err
 	}

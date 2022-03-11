@@ -36,17 +36,17 @@ type APIVersionSetClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAPIVersionSetClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *APIVersionSetClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &APIVersionSetClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *APIVersionSetClient) createOrUpdateCreateRequest(ctx context.Conte
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *APIVersionSetClient) createOrUpdateHandleResponse(resp *http.Response) (APIVersionSetClientCreateOrUpdateResponse, error) {
-	result := APIVersionSetClientCreateOrUpdateResponse{RawResponse: resp}
+	result := APIVersionSetClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -139,7 +139,7 @@ func (client *APIVersionSetClient) Delete(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return APIVersionSetClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return APIVersionSetClientDeleteResponse{RawResponse: resp}, nil
+	return APIVersionSetClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -226,7 +226,7 @@ func (client *APIVersionSetClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *APIVersionSetClient) getHandleResponse(resp *http.Response) (APIVersionSetClientGetResponse, error) {
-	result := APIVersionSetClientGetResponse{RawResponse: resp}
+	result := APIVersionSetClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -286,7 +286,7 @@ func (client *APIVersionSetClient) getEntityTagCreateRequest(ctx context.Context
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *APIVersionSetClient) getEntityTagHandleResponse(resp *http.Response) (APIVersionSetClientGetEntityTagResponse, error) {
-	result := APIVersionSetClientGetEntityTagResponse{RawResponse: resp}
+	result := APIVersionSetClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -351,7 +351,7 @@ func (client *APIVersionSetClient) listByServiceCreateRequest(ctx context.Contex
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *APIVersionSetClient) listByServiceHandleResponse(resp *http.Response) (APIVersionSetClientListByServiceResponse, error) {
-	result := APIVersionSetClientListByServiceResponse{RawResponse: resp}
+	result := APIVersionSetClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIVersionSetCollection); err != nil {
 		return APIVersionSetClientListByServiceResponse{}, err
 	}
@@ -415,7 +415,7 @@ func (client *APIVersionSetClient) updateCreateRequest(ctx context.Context, reso
 
 // updateHandleResponse handles the Update response.
 func (client *APIVersionSetClient) updateHandleResponse(resp *http.Response) (APIVersionSetClientUpdateResponse, error) {
-	result := APIVersionSetClientUpdateResponse{RawResponse: resp}
+	result := APIVersionSetClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

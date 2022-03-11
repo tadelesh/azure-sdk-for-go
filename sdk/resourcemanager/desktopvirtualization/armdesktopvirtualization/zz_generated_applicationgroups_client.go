@@ -34,17 +34,17 @@ type ApplicationGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewApplicationGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ApplicationGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ApplicationGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *ApplicationGroupsClient) createOrUpdateCreateRequest(ctx context.C
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ApplicationGroupsClient) createOrUpdateHandleResponse(resp *http.Response) (ApplicationGroupsClientCreateOrUpdateResponse, error) {
-	result := ApplicationGroupsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ApplicationGroupsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationGroup); err != nil {
 		return ApplicationGroupsClientCreateOrUpdateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *ApplicationGroupsClient) Delete(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ApplicationGroupsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ApplicationGroupsClientDeleteResponse{RawResponse: resp}, nil
+	return ApplicationGroupsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -201,7 +201,7 @@ func (client *ApplicationGroupsClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *ApplicationGroupsClient) getHandleResponse(resp *http.Response) (ApplicationGroupsClientGetResponse, error) {
-	result := ApplicationGroupsClientGetResponse{RawResponse: resp}
+	result := ApplicationGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationGroup); err != nil {
 		return ApplicationGroupsClientGetResponse{}, err
 	}
@@ -252,7 +252,7 @@ func (client *ApplicationGroupsClient) listByResourceGroupCreateRequest(ctx cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ApplicationGroupsClient) listByResourceGroupHandleResponse(resp *http.Response) (ApplicationGroupsClientListByResourceGroupResponse, error) {
-	result := ApplicationGroupsClientListByResourceGroupResponse{RawResponse: resp}
+	result := ApplicationGroupsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationGroupList); err != nil {
 		return ApplicationGroupsClientListByResourceGroupResponse{}, err
 	}
@@ -298,7 +298,7 @@ func (client *ApplicationGroupsClient) listBySubscriptionCreateRequest(ctx conte
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *ApplicationGroupsClient) listBySubscriptionHandleResponse(resp *http.Response) (ApplicationGroupsClientListBySubscriptionResponse, error) {
-	result := ApplicationGroupsClientListBySubscriptionResponse{RawResponse: resp}
+	result := ApplicationGroupsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationGroupList); err != nil {
 		return ApplicationGroupsClientListBySubscriptionResponse{}, err
 	}
@@ -357,7 +357,7 @@ func (client *ApplicationGroupsClient) updateCreateRequest(ctx context.Context, 
 
 // updateHandleResponse handles the Update response.
 func (client *ApplicationGroupsClient) updateHandleResponse(resp *http.Response) (ApplicationGroupsClientUpdateResponse, error) {
-	result := ApplicationGroupsClientUpdateResponse{RawResponse: resp}
+	result := ApplicationGroupsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationGroup); err != nil {
 		return ApplicationGroupsClientUpdateResponse{}, err
 	}

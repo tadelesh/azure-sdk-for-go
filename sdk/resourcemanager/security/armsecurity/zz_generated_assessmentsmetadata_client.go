@@ -94,7 +94,7 @@ func (client *AssessmentsMetadataClient) createInSubscriptionCreateRequest(ctx c
 
 // createInSubscriptionHandleResponse handles the CreateInSubscription response.
 func (client *AssessmentsMetadataClient) createInSubscriptionHandleResponse(resp *http.Response) (AssessmentsMetadataClientCreateInSubscriptionResponse, error) {
-	result := AssessmentsMetadataClientCreateInSubscriptionResponse{RawResponse: resp}
+	result := AssessmentsMetadataClientCreateInSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssessmentMetadataResponse); err != nil {
 		return AssessmentsMetadataClientCreateInSubscriptionResponse{}, err
 	}
@@ -119,7 +119,7 @@ func (client *AssessmentsMetadataClient) DeleteInSubscription(ctx context.Contex
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return AssessmentsMetadataClientDeleteInSubscriptionResponse{}, runtime.NewResponseError(resp)
 	}
-	return AssessmentsMetadataClientDeleteInSubscriptionResponse{RawResponse: resp}, nil
+	return AssessmentsMetadataClientDeleteInSubscriptionResponse{}, nil
 }
 
 // deleteInSubscriptionCreateRequest creates the DeleteInSubscription request.
@@ -183,7 +183,7 @@ func (client *AssessmentsMetadataClient) getCreateRequest(ctx context.Context, a
 
 // getHandleResponse handles the Get response.
 func (client *AssessmentsMetadataClient) getHandleResponse(resp *http.Response) (AssessmentsMetadataClientGetResponse, error) {
-	result := AssessmentsMetadataClientGetResponse{RawResponse: resp}
+	result := AssessmentsMetadataClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssessmentMetadataResponse); err != nil {
 		return AssessmentsMetadataClientGetResponse{}, err
 	}
@@ -234,7 +234,7 @@ func (client *AssessmentsMetadataClient) getInSubscriptionCreateRequest(ctx cont
 
 // getInSubscriptionHandleResponse handles the GetInSubscription response.
 func (client *AssessmentsMetadataClient) getInSubscriptionHandleResponse(resp *http.Response) (AssessmentsMetadataClientGetInSubscriptionResponse, error) {
-	result := AssessmentsMetadataClientGetInSubscriptionResponse{RawResponse: resp}
+	result := AssessmentsMetadataClientGetInSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssessmentMetadataResponse); err != nil {
 		return AssessmentsMetadataClientGetInSubscriptionResponse{}, err
 	}
@@ -273,7 +273,7 @@ func (client *AssessmentsMetadataClient) listCreateRequest(ctx context.Context, 
 
 // listHandleResponse handles the List response.
 func (client *AssessmentsMetadataClient) listHandleResponse(resp *http.Response) (AssessmentsMetadataClientListResponse, error) {
-	result := AssessmentsMetadataClientListResponse{RawResponse: resp}
+	result := AssessmentsMetadataClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssessmentMetadataResponseList); err != nil {
 		return AssessmentsMetadataClientListResponse{}, err
 	}
@@ -316,7 +316,7 @@ func (client *AssessmentsMetadataClient) listBySubscriptionCreateRequest(ctx con
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *AssessmentsMetadataClient) listBySubscriptionHandleResponse(resp *http.Response) (AssessmentsMetadataClientListBySubscriptionResponse, error) {
-	result := AssessmentsMetadataClientListBySubscriptionResponse{RawResponse: resp}
+	result := AssessmentsMetadataClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssessmentMetadataResponseList); err != nil {
 		return AssessmentsMetadataClientListBySubscriptionResponse{}, err
 	}

@@ -34,17 +34,17 @@ type PrivateLinkScopeOperationStatusClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateLinkScopeOperationStatusClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateLinkScopeOperationStatusClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateLinkScopeOperationStatusClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *PrivateLinkScopeOperationStatusClient) getCreateRequest(ctx contex
 
 // getHandleResponse handles the Get response.
 func (client *PrivateLinkScopeOperationStatusClient) getHandleResponse(resp *http.Response) (PrivateLinkScopeOperationStatusClientGetResponse, error) {
-	result := PrivateLinkScopeOperationStatusClientGetResponse{RawResponse: resp}
+	result := PrivateLinkScopeOperationStatusClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OperationStatus); err != nil {
 		return PrivateLinkScopeOperationStatusClientGetResponse{}, err
 	}

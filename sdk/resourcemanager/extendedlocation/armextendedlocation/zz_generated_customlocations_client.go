@@ -34,17 +34,17 @@ type CustomLocationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCustomLocationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CustomLocationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CustomLocationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *CustomLocationsClient) BeginCreateOrUpdate(ctx context.Context, re
 	if err != nil {
 		return CustomLocationsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := CustomLocationsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CustomLocationsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("CustomLocationsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return CustomLocationsClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *CustomLocationsClient) BeginDelete(ctx context.Context, resourceGr
 	if err != nil {
 		return CustomLocationsClientDeletePollerResponse{}, err
 	}
-	result := CustomLocationsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CustomLocationsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CustomLocationsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return CustomLocationsClientDeletePollerResponse{}, err
@@ -232,7 +228,7 @@ func (client *CustomLocationsClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *CustomLocationsClient) getHandleResponse(resp *http.Response) (CustomLocationsClientGetResponse, error) {
-	result := CustomLocationsClientGetResponse{RawResponse: resp}
+	result := CustomLocationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomLocation); err != nil {
 		return CustomLocationsClientGetResponse{}, err
 	}
@@ -281,7 +277,7 @@ func (client *CustomLocationsClient) listByResourceGroupCreateRequest(ctx contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *CustomLocationsClient) listByResourceGroupHandleResponse(resp *http.Response) (CustomLocationsClientListByResourceGroupResponse, error) {
-	result := CustomLocationsClientListByResourceGroupResponse{RawResponse: resp}
+	result := CustomLocationsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomLocationListResult); err != nil {
 		return CustomLocationsClientListByResourceGroupResponse{}, err
 	}
@@ -325,7 +321,7 @@ func (client *CustomLocationsClient) listBySubscriptionCreateRequest(ctx context
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *CustomLocationsClient) listBySubscriptionHandleResponse(resp *http.Response) (CustomLocationsClientListBySubscriptionResponse, error) {
-	result := CustomLocationsClientListBySubscriptionResponse{RawResponse: resp}
+	result := CustomLocationsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomLocationListResult); err != nil {
 		return CustomLocationsClientListBySubscriptionResponse{}, err
 	}
@@ -378,7 +374,7 @@ func (client *CustomLocationsClient) listEnabledResourceTypesCreateRequest(ctx c
 
 // listEnabledResourceTypesHandleResponse handles the ListEnabledResourceTypes response.
 func (client *CustomLocationsClient) listEnabledResourceTypesHandleResponse(resp *http.Response) (CustomLocationsClientListEnabledResourceTypesResponse, error) {
-	result := CustomLocationsClientListEnabledResourceTypesResponse{RawResponse: resp}
+	result := CustomLocationsClientListEnabledResourceTypesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EnabledResourceTypesListResult); err != nil {
 		return CustomLocationsClientListEnabledResourceTypesResponse{}, err
 	}
@@ -417,7 +413,7 @@ func (client *CustomLocationsClient) listOperationsCreateRequest(ctx context.Con
 
 // listOperationsHandleResponse handles the ListOperations response.
 func (client *CustomLocationsClient) listOperationsHandleResponse(resp *http.Response) (CustomLocationsClientListOperationsResponse, error) {
-	result := CustomLocationsClientListOperationsResponse{RawResponse: resp}
+	result := CustomLocationsClientListOperationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomLocationOperationsList); err != nil {
 		return CustomLocationsClientListOperationsResponse{}, err
 	}
@@ -473,7 +469,7 @@ func (client *CustomLocationsClient) updateCreateRequest(ctx context.Context, re
 
 // updateHandleResponse handles the Update response.
 func (client *CustomLocationsClient) updateHandleResponse(resp *http.Response) (CustomLocationsClientUpdateResponse, error) {
-	result := CustomLocationsClientUpdateResponse{RawResponse: resp}
+	result := CustomLocationsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomLocation); err != nil {
 		return CustomLocationsClientUpdateResponse{}, err
 	}

@@ -35,17 +35,17 @@ type UserConfirmationPasswordClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewUserConfirmationPasswordClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *UserConfirmationPasswordClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &UserConfirmationPasswordClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -69,7 +69,7 @@ func (client *UserConfirmationPasswordClient) Send(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return UserConfirmationPasswordClientSendResponse{}, runtime.NewResponseError(resp)
 	}
-	return UserConfirmationPasswordClientSendResponse{RawResponse: resp}, nil
+	return UserConfirmationPasswordClientSendResponse{}, nil
 }
 
 // sendCreateRequest creates the Send request.

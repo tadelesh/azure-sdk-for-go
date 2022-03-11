@@ -34,17 +34,17 @@ type WorkspaceManagedSQLServerEncryptionProtectorClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkspaceManagedSQLServerEncryptionProtectorClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkspaceManagedSQLServerEncryptionProtectorClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkspaceManagedSQLServerEncryptionProtectorClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *WorkspaceManagedSQLServerEncryptionProtectorClient) BeginCreateOrU
 	if err != nil {
 		return WorkspaceManagedSQLServerEncryptionProtectorClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := WorkspaceManagedSQLServerEncryptionProtectorClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkspaceManagedSQLServerEncryptionProtectorClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkspaceManagedSQLServerEncryptionProtectorClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return WorkspaceManagedSQLServerEncryptionProtectorClientCreateOrUpdatePollerResponse{}, err
@@ -176,7 +174,7 @@ func (client *WorkspaceManagedSQLServerEncryptionProtectorClient) getCreateReque
 
 // getHandleResponse handles the Get response.
 func (client *WorkspaceManagedSQLServerEncryptionProtectorClient) getHandleResponse(resp *http.Response) (WorkspaceManagedSQLServerEncryptionProtectorClientGetResponse, error) {
-	result := WorkspaceManagedSQLServerEncryptionProtectorClientGetResponse{RawResponse: resp}
+	result := WorkspaceManagedSQLServerEncryptionProtectorClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EncryptionProtector); err != nil {
 		return WorkspaceManagedSQLServerEncryptionProtectorClientGetResponse{}, err
 	}
@@ -229,7 +227,7 @@ func (client *WorkspaceManagedSQLServerEncryptionProtectorClient) listCreateRequ
 
 // listHandleResponse handles the List response.
 func (client *WorkspaceManagedSQLServerEncryptionProtectorClient) listHandleResponse(resp *http.Response) (WorkspaceManagedSQLServerEncryptionProtectorClientListResponse, error) {
-	result := WorkspaceManagedSQLServerEncryptionProtectorClientListResponse{RawResponse: resp}
+	result := WorkspaceManagedSQLServerEncryptionProtectorClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EncryptionProtectorListResult); err != nil {
 		return WorkspaceManagedSQLServerEncryptionProtectorClientListResponse{}, err
 	}
@@ -248,9 +246,7 @@ func (client *WorkspaceManagedSQLServerEncryptionProtectorClient) BeginRevalidat
 	if err != nil {
 		return WorkspaceManagedSQLServerEncryptionProtectorClientRevalidatePollerResponse{}, err
 	}
-	result := WorkspaceManagedSQLServerEncryptionProtectorClientRevalidatePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkspaceManagedSQLServerEncryptionProtectorClientRevalidatePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkspaceManagedSQLServerEncryptionProtectorClient.Revalidate", "", resp, client.pl)
 	if err != nil {
 		return WorkspaceManagedSQLServerEncryptionProtectorClientRevalidatePollerResponse{}, err

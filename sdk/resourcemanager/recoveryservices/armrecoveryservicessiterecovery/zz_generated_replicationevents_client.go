@@ -38,19 +38,19 @@ type ReplicationEventsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReplicationEventsClient(resourceName string, resourceGroupName string, subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReplicationEventsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReplicationEventsClient{
 		resourceName:      resourceName,
 		resourceGroupName: resourceGroupName,
 		subscriptionID:    subscriptionID,
-		host:              string(cp.Endpoint),
-		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:              string(ep),
+		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *ReplicationEventsClient) getCreateRequest(ctx context.Context, eve
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -106,7 +106,7 @@ func (client *ReplicationEventsClient) getCreateRequest(ctx context.Context, eve
 
 // getHandleResponse handles the Get response.
 func (client *ReplicationEventsClient) getHandleResponse(resp *http.Response) (ReplicationEventsClientGetResponse, error) {
-	result := ReplicationEventsClientGetResponse{RawResponse: resp}
+	result := ReplicationEventsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Event); err != nil {
 		return ReplicationEventsClientGetResponse{}, err
 	}
@@ -148,7 +148,7 @@ func (client *ReplicationEventsClient) listCreateRequest(ctx context.Context, op
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	if options != nil && options.Filter != nil {
 		reqQP.Set("$filter", *options.Filter)
 	}
@@ -159,7 +159,7 @@ func (client *ReplicationEventsClient) listCreateRequest(ctx context.Context, op
 
 // listHandleResponse handles the List response.
 func (client *ReplicationEventsClient) listHandleResponse(resp *http.Response) (ReplicationEventsClientListResponse, error) {
-	result := ReplicationEventsClientListResponse{RawResponse: resp}
+	result := ReplicationEventsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventCollection); err != nil {
 		return ReplicationEventsClientListResponse{}, err
 	}

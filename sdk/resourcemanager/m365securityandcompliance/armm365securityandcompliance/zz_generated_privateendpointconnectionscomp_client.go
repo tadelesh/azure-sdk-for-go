@@ -34,17 +34,17 @@ type PrivateEndpointConnectionsCompClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateEndpointConnectionsCompClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateEndpointConnectionsCompClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateEndpointConnectionsCompClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *PrivateEndpointConnectionsCompClient) BeginCreateOrUpdate(ctx cont
 	if err != nil {
 		return PrivateEndpointConnectionsCompClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PrivateEndpointConnectionsCompClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateEndpointConnectionsCompClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateEndpointConnectionsCompClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return PrivateEndpointConnectionsCompClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *PrivateEndpointConnectionsCompClient) BeginDelete(ctx context.Cont
 	if err != nil {
 		return PrivateEndpointConnectionsCompClientDeletePollerResponse{}, err
 	}
-	result := PrivateEndpointConnectionsCompClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateEndpointConnectionsCompClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateEndpointConnectionsCompClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return PrivateEndpointConnectionsCompClientDeletePollerResponse{}, err
@@ -248,7 +244,7 @@ func (client *PrivateEndpointConnectionsCompClient) getCreateRequest(ctx context
 
 // getHandleResponse handles the Get response.
 func (client *PrivateEndpointConnectionsCompClient) getHandleResponse(resp *http.Response) (PrivateEndpointConnectionsCompClientGetResponse, error) {
-	result := PrivateEndpointConnectionsCompClientGetResponse{RawResponse: resp}
+	result := PrivateEndpointConnectionsCompClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnection); err != nil {
 		return PrivateEndpointConnectionsCompClientGetResponse{}, err
 	}
@@ -301,7 +297,7 @@ func (client *PrivateEndpointConnectionsCompClient) listByServiceCreateRequest(c
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *PrivateEndpointConnectionsCompClient) listByServiceHandleResponse(resp *http.Response) (PrivateEndpointConnectionsCompClientListByServiceResponse, error) {
-	result := PrivateEndpointConnectionsCompClientListByServiceResponse{RawResponse: resp}
+	result := PrivateEndpointConnectionsCompClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionListResult); err != nil {
 		return PrivateEndpointConnectionsCompClientListByServiceResponse{}, err
 	}

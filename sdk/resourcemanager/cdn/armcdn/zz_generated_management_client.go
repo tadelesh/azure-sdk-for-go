@@ -86,7 +86,7 @@ func (client *ManagementClient) checkNameAvailabilityCreateRequest(ctx context.C
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *ManagementClient) checkNameAvailabilityHandleResponse(resp *http.Response) (ManagementClientCheckNameAvailabilityResponse, error) {
-	result := ManagementClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := ManagementClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameAvailabilityOutput); err != nil {
 		return ManagementClientCheckNameAvailabilityResponse{}, err
 	}
@@ -134,7 +134,7 @@ func (client *ManagementClient) checkNameAvailabilityWithSubscriptionCreateReque
 
 // checkNameAvailabilityWithSubscriptionHandleResponse handles the CheckNameAvailabilityWithSubscription response.
 func (client *ManagementClient) checkNameAvailabilityWithSubscriptionHandleResponse(resp *http.Response) (ManagementClientCheckNameAvailabilityWithSubscriptionResponse, error) {
-	result := ManagementClientCheckNameAvailabilityWithSubscriptionResponse{RawResponse: resp}
+	result := ManagementClientCheckNameAvailabilityWithSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameAvailabilityOutput); err != nil {
 		return ManagementClientCheckNameAvailabilityWithSubscriptionResponse{}, err
 	}
@@ -183,7 +183,7 @@ func (client *ManagementClient) validateProbeCreateRequest(ctx context.Context, 
 
 // validateProbeHandleResponse handles the ValidateProbe response.
 func (client *ManagementClient) validateProbeHandleResponse(resp *http.Response) (ManagementClientValidateProbeResponse, error) {
-	result := ManagementClientValidateProbeResponse{RawResponse: resp}
+	result := ManagementClientValidateProbeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ValidateProbeOutput); err != nil {
 		return ManagementClientValidateProbeResponse{}, err
 	}

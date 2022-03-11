@@ -34,17 +34,17 @@ type DataCollectionRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataCollectionRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataCollectionRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataCollectionRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -101,7 +101,7 @@ func (client *DataCollectionRulesClient) createCreateRequest(ctx context.Context
 
 // createHandleResponse handles the Create response.
 func (client *DataCollectionRulesClient) createHandleResponse(resp *http.Response) (DataCollectionRulesClientCreateResponse, error) {
-	result := DataCollectionRulesClientCreateResponse{RawResponse: resp}
+	result := DataCollectionRulesClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataCollectionRuleResource); err != nil {
 		return DataCollectionRulesClientCreateResponse{}, err
 	}
@@ -126,7 +126,7 @@ func (client *DataCollectionRulesClient) Delete(ctx context.Context, resourceGro
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DataCollectionRulesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DataCollectionRulesClientDeleteResponse{RawResponse: resp}, nil
+	return DataCollectionRulesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -203,7 +203,7 @@ func (client *DataCollectionRulesClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *DataCollectionRulesClient) getHandleResponse(resp *http.Response) (DataCollectionRulesClientGetResponse, error) {
-	result := DataCollectionRulesClientGetResponse{RawResponse: resp}
+	result := DataCollectionRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataCollectionRuleResource); err != nil {
 		return DataCollectionRulesClientGetResponse{}, err
 	}
@@ -251,7 +251,7 @@ func (client *DataCollectionRulesClient) listByResourceGroupCreateRequest(ctx co
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *DataCollectionRulesClient) listByResourceGroupHandleResponse(resp *http.Response) (DataCollectionRulesClientListByResourceGroupResponse, error) {
-	result := DataCollectionRulesClientListByResourceGroupResponse{RawResponse: resp}
+	result := DataCollectionRulesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataCollectionRuleResourceListResult); err != nil {
 		return DataCollectionRulesClientListByResourceGroupResponse{}, err
 	}
@@ -294,7 +294,7 @@ func (client *DataCollectionRulesClient) listBySubscriptionCreateRequest(ctx con
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *DataCollectionRulesClient) listBySubscriptionHandleResponse(resp *http.Response) (DataCollectionRulesClientListBySubscriptionResponse, error) {
-	result := DataCollectionRulesClientListBySubscriptionResponse{RawResponse: resp}
+	result := DataCollectionRulesClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataCollectionRuleResourceListResult); err != nil {
 		return DataCollectionRulesClientListBySubscriptionResponse{}, err
 	}
@@ -353,7 +353,7 @@ func (client *DataCollectionRulesClient) updateCreateRequest(ctx context.Context
 
 // updateHandleResponse handles the Update response.
 func (client *DataCollectionRulesClient) updateHandleResponse(resp *http.Response) (DataCollectionRulesClientUpdateResponse, error) {
-	result := DataCollectionRulesClientUpdateResponse{RawResponse: resp}
+	result := DataCollectionRulesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataCollectionRuleResource); err != nil {
 		return DataCollectionRulesClientUpdateResponse{}, err
 	}

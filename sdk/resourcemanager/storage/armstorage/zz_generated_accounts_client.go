@@ -61,9 +61,7 @@ func (client *AccountsClient) BeginAbortHierarchicalNamespaceMigration(ctx conte
 	if err != nil {
 		return AccountsClientAbortHierarchicalNamespaceMigrationPollerResponse{}, err
 	}
-	result := AccountsClientAbortHierarchicalNamespaceMigrationPollerResponse{
-		RawResponse: resp,
-	}
+	result := AccountsClientAbortHierarchicalNamespaceMigrationPollerResponse{}
 	pt, err := armruntime.NewPoller("AccountsClient.AbortHierarchicalNamespaceMigration", "location", resp, client.pl)
 	if err != nil {
 		return AccountsClientAbortHierarchicalNamespaceMigrationPollerResponse{}, err
@@ -158,7 +156,7 @@ func (client *AccountsClient) checkNameAvailabilityCreateRequest(ctx context.Con
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *AccountsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (AccountsClientCheckNameAvailabilityResponse, error) {
-	result := AccountsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := AccountsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameAvailabilityResult); err != nil {
 		return AccountsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -180,9 +178,7 @@ func (client *AccountsClient) BeginCreate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return AccountsClientCreatePollerResponse{}, err
 	}
-	result := AccountsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AccountsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("AccountsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return AccountsClientCreatePollerResponse{}, err
@@ -257,7 +253,7 @@ func (client *AccountsClient) Delete(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return AccountsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AccountsClientDeleteResponse{RawResponse: resp}, nil
+	return AccountsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -298,9 +294,7 @@ func (client *AccountsClient) BeginFailover(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return AccountsClientFailoverPollerResponse{}, err
 	}
-	result := AccountsClientFailoverPollerResponse{
-		RawResponse: resp,
-	}
+	result := AccountsClientFailoverPollerResponse{}
 	pt, err := armruntime.NewPoller("AccountsClient.Failover", "location", resp, client.pl)
 	if err != nil {
 		return AccountsClientFailoverPollerResponse{}, err
@@ -408,7 +402,7 @@ func (client *AccountsClient) getPropertiesCreateRequest(ctx context.Context, re
 
 // getPropertiesHandleResponse handles the GetProperties response.
 func (client *AccountsClient) getPropertiesHandleResponse(resp *http.Response) (AccountsClientGetPropertiesResponse, error) {
-	result := AccountsClientGetPropertiesResponse{RawResponse: resp}
+	result := AccountsClientGetPropertiesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Account); err != nil {
 		return AccountsClientGetPropertiesResponse{}, err
 	}
@@ -430,9 +424,7 @@ func (client *AccountsClient) BeginHierarchicalNamespaceMigration(ctx context.Co
 	if err != nil {
 		return AccountsClientHierarchicalNamespaceMigrationPollerResponse{}, err
 	}
-	result := AccountsClientHierarchicalNamespaceMigrationPollerResponse{
-		RawResponse: resp,
-	}
+	result := AccountsClientHierarchicalNamespaceMigrationPollerResponse{}
 	pt, err := armruntime.NewPoller("AccountsClient.HierarchicalNamespaceMigration", "location", resp, client.pl)
 	if err != nil {
 		return AccountsClientHierarchicalNamespaceMigrationPollerResponse{}, err
@@ -523,7 +515,7 @@ func (client *AccountsClient) listCreateRequest(ctx context.Context, options *Ac
 
 // listHandleResponse handles the List response.
 func (client *AccountsClient) listHandleResponse(resp *http.Response) (AccountsClientListResponse, error) {
-	result := AccountsClientListResponse{RawResponse: resp}
+	result := AccountsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountListResult); err != nil {
 		return AccountsClientListResponse{}, err
 	}
@@ -580,7 +572,7 @@ func (client *AccountsClient) listAccountSASCreateRequest(ctx context.Context, r
 
 // listAccountSASHandleResponse handles the ListAccountSAS response.
 func (client *AccountsClient) listAccountSASHandleResponse(resp *http.Response) (AccountsClientListAccountSASResponse, error) {
-	result := AccountsClientListAccountSASResponse{RawResponse: resp}
+	result := AccountsClientListAccountSASResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListAccountSasResponse); err != nil {
 		return AccountsClientListAccountSASResponse{}, err
 	}
@@ -629,7 +621,7 @@ func (client *AccountsClient) listByResourceGroupCreateRequest(ctx context.Conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *AccountsClient) listByResourceGroupHandleResponse(resp *http.Response) (AccountsClientListByResourceGroupResponse, error) {
-	result := AccountsClientListByResourceGroupResponse{RawResponse: resp}
+	result := AccountsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountListResult); err != nil {
 		return AccountsClientListByResourceGroupResponse{}, err
 	}
@@ -688,7 +680,7 @@ func (client *AccountsClient) listKeysCreateRequest(ctx context.Context, resourc
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *AccountsClient) listKeysHandleResponse(resp *http.Response) (AccountsClientListKeysResponse, error) {
-	result := AccountsClientListKeysResponse{RawResponse: resp}
+	result := AccountsClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountListKeysResult); err != nil {
 		return AccountsClientListKeysResponse{}, err
 	}
@@ -745,7 +737,7 @@ func (client *AccountsClient) listServiceSASCreateRequest(ctx context.Context, r
 
 // listServiceSASHandleResponse handles the ListServiceSAS response.
 func (client *AccountsClient) listServiceSASHandleResponse(resp *http.Response) (AccountsClientListServiceSASResponse, error) {
-	result := AccountsClientListServiceSASResponse{RawResponse: resp}
+	result := AccountsClientListServiceSASResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListServiceSasResponse); err != nil {
 		return AccountsClientListServiceSASResponse{}, err
 	}
@@ -802,7 +794,7 @@ func (client *AccountsClient) regenerateKeyCreateRequest(ctx context.Context, re
 
 // regenerateKeyHandleResponse handles the RegenerateKey response.
 func (client *AccountsClient) regenerateKeyHandleResponse(resp *http.Response) (AccountsClientRegenerateKeyResponse, error) {
-	result := AccountsClientRegenerateKeyResponse{RawResponse: resp}
+	result := AccountsClientRegenerateKeyResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountListKeysResult); err != nil {
 		return AccountsClientRegenerateKeyResponse{}, err
 	}
@@ -822,9 +814,7 @@ func (client *AccountsClient) BeginRestoreBlobRanges(ctx context.Context, resour
 	if err != nil {
 		return AccountsClientRestoreBlobRangesPollerResponse{}, err
 	}
-	result := AccountsClientRestoreBlobRangesPollerResponse{
-		RawResponse: resp,
-	}
+	result := AccountsClientRestoreBlobRangesPollerResponse{}
 	pt, err := armruntime.NewPoller("AccountsClient.RestoreBlobRanges", "location", resp, client.pl)
 	if err != nil {
 		return AccountsClientRestoreBlobRangesPollerResponse{}, err
@@ -897,7 +887,7 @@ func (client *AccountsClient) RevokeUserDelegationKeys(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return AccountsClientRevokeUserDelegationKeysResponse{}, runtime.NewResponseError(resp)
 	}
-	return AccountsClientRevokeUserDelegationKeysResponse{RawResponse: resp}, nil
+	return AccountsClientRevokeUserDelegationKeysResponse{}, nil
 }
 
 // revokeUserDelegationKeysCreateRequest creates the RevokeUserDelegationKeys request.
@@ -981,7 +971,7 @@ func (client *AccountsClient) updateCreateRequest(ctx context.Context, resourceG
 
 // updateHandleResponse handles the Update response.
 func (client *AccountsClient) updateHandleResponse(resp *http.Response) (AccountsClientUpdateResponse, error) {
-	result := AccountsClientUpdateResponse{RawResponse: resp}
+	result := AccountsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Account); err != nil {
 		return AccountsClientUpdateResponse{}, err
 	}

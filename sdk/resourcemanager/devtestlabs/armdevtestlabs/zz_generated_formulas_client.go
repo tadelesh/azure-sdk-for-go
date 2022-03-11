@@ -35,17 +35,17 @@ type FormulasClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFormulasClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FormulasClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FormulasClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *FormulasClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return FormulasClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := FormulasClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := FormulasClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("FormulasClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return FormulasClientCreateOrUpdatePollerResponse{}, err
@@ -141,7 +139,7 @@ func (client *FormulasClient) Delete(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return FormulasClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return FormulasClientDeleteResponse{RawResponse: resp}, nil
+	return FormulasClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -230,7 +228,7 @@ func (client *FormulasClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *FormulasClient) getHandleResponse(resp *http.Response) (FormulasClientGetResponse, error) {
-	result := FormulasClientGetResponse{RawResponse: resp}
+	result := FormulasClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Formula); err != nil {
 		return FormulasClientGetResponse{}, err
 	}
@@ -294,7 +292,7 @@ func (client *FormulasClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *FormulasClient) listHandleResponse(resp *http.Response) (FormulasClientListResponse, error) {
-	result := FormulasClientListResponse{RawResponse: resp}
+	result := FormulasClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FormulaList); err != nil {
 		return FormulasClientListResponse{}, err
 	}
@@ -355,7 +353,7 @@ func (client *FormulasClient) updateCreateRequest(ctx context.Context, resourceG
 
 // updateHandleResponse handles the Update response.
 func (client *FormulasClient) updateHandleResponse(resp *http.Response) (FormulasClientUpdateResponse, error) {
-	result := FormulasClientUpdateResponse{RawResponse: resp}
+	result := FormulasClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Formula); err != nil {
 		return FormulasClientUpdateResponse{}, err
 	}

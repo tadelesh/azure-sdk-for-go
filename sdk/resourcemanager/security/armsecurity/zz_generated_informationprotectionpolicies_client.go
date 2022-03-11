@@ -90,7 +90,7 @@ func (client *InformationProtectionPoliciesClient) createOrUpdateCreateRequest(c
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *InformationProtectionPoliciesClient) createOrUpdateHandleResponse(resp *http.Response) (InformationProtectionPoliciesClientCreateOrUpdateResponse, error) {
-	result := InformationProtectionPoliciesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := InformationProtectionPoliciesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InformationProtectionPolicy); err != nil {
 		return InformationProtectionPoliciesClientCreateOrUpdateResponse{}, err
 	}
@@ -140,7 +140,7 @@ func (client *InformationProtectionPoliciesClient) getCreateRequest(ctx context.
 
 // getHandleResponse handles the Get response.
 func (client *InformationProtectionPoliciesClient) getHandleResponse(resp *http.Response) (InformationProtectionPoliciesClientGetResponse, error) {
-	result := InformationProtectionPoliciesClientGetResponse{RawResponse: resp}
+	result := InformationProtectionPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InformationProtectionPolicy); err != nil {
 		return InformationProtectionPoliciesClientGetResponse{}, err
 	}
@@ -182,7 +182,7 @@ func (client *InformationProtectionPoliciesClient) listCreateRequest(ctx context
 
 // listHandleResponse handles the List response.
 func (client *InformationProtectionPoliciesClient) listHandleResponse(resp *http.Response) (InformationProtectionPoliciesClientListResponse, error) {
-	result := InformationProtectionPoliciesClientListResponse{RawResponse: resp}
+	result := InformationProtectionPoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InformationProtectionPolicyList); err != nil {
 		return InformationProtectionPoliciesClientListResponse{}, err
 	}

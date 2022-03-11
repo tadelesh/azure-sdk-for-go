@@ -11,74 +11,37 @@ package armpowerbiprivatelinks
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	OperationListResult
 }
 
 // PowerBIResourcesClientCreateResponse contains the response from method PowerBIResourcesClient.Create.
 type PowerBIResourcesClientCreateResponse struct {
-	PowerBIResourcesClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PowerBIResourcesClientCreateResult contains the result from method PowerBIResourcesClient.Create.
-type PowerBIResourcesClientCreateResult struct {
 	TenantResource
 }
 
 // PowerBIResourcesClientDeleteResponse contains the response from method PowerBIResourcesClient.Delete.
 type PowerBIResourcesClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // PowerBIResourcesClientListByResourceNameResponse contains the response from method PowerBIResourcesClient.ListByResourceName.
 type PowerBIResourcesClientListByResourceNameResponse struct {
-	PowerBIResourcesClientListByResourceNameResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PowerBIResourcesClientListByResourceNameResult contains the result from method PowerBIResourcesClient.ListByResourceName.
-type PowerBIResourcesClientListByResourceNameResult struct {
 	// Array of TenantResource
 	TenantResourceArray []*TenantResource
 }
 
 // PowerBIResourcesClientUpdateResponse contains the response from method PowerBIResourcesClient.Update.
 type PowerBIResourcesClientUpdateResponse struct {
-	PowerBIResourcesClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PowerBIResourcesClientUpdateResult contains the result from method PowerBIResourcesClient.Update.
-type PowerBIResourcesClientUpdateResult struct {
 	TenantResource
 }
 
 // PrivateEndpointConnectionsClientCreateResponse contains the response from method PrivateEndpointConnectionsClient.Create.
 type PrivateEndpointConnectionsClientCreateResponse struct {
-	PrivateEndpointConnectionsClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateEndpointConnectionsClientCreateResult contains the result from method PrivateEndpointConnectionsClient.Create.
-type PrivateEndpointConnectionsClientCreateResult struct {
 	PrivateEndpointConnection
 }
 
@@ -86,9 +49,6 @@ type PrivateEndpointConnectionsClientCreateResult struct {
 type PrivateEndpointConnectionsClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *PrivateEndpointConnectionsClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -96,11 +56,10 @@ type PrivateEndpointConnectionsClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l PrivateEndpointConnectionsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PrivateEndpointConnectionsClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -113,66 +72,36 @@ func (l *PrivateEndpointConnectionsClientDeletePollerResponse) Resume(ctx contex
 	poller := &PrivateEndpointConnectionsClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // PrivateEndpointConnectionsClientDeleteResponse contains the response from method PrivateEndpointConnectionsClient.Delete.
 type PrivateEndpointConnectionsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // PrivateEndpointConnectionsClientGetResponse contains the response from method PrivateEndpointConnectionsClient.Get.
 type PrivateEndpointConnectionsClientGetResponse struct {
-	PrivateEndpointConnectionsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateEndpointConnectionsClientGetResult contains the result from method PrivateEndpointConnectionsClient.Get.
-type PrivateEndpointConnectionsClientGetResult struct {
 	PrivateEndpointConnection
 }
 
 // PrivateEndpointConnectionsClientListByResourceResponse contains the response from method PrivateEndpointConnectionsClient.ListByResource.
 type PrivateEndpointConnectionsClientListByResourceResponse struct {
-	PrivateEndpointConnectionsClientListByResourceResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateEndpointConnectionsClientListByResourceResult contains the result from method PrivateEndpointConnectionsClient.ListByResource.
-type PrivateEndpointConnectionsClientListByResourceResult struct {
 	PrivateEndpointConnectionListResult
 }
 
 // PrivateLinkResourcesClientGetResponse contains the response from method PrivateLinkResourcesClient.Get.
 type PrivateLinkResourcesClientGetResponse struct {
-	PrivateLinkResourcesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateLinkResourcesClientGetResult contains the result from method PrivateLinkResourcesClient.Get.
-type PrivateLinkResourcesClientGetResult struct {
 	PrivateLinkResource
 }
 
 // PrivateLinkResourcesClientListByResourceResponse contains the response from method PrivateLinkResourcesClient.ListByResource.
 type PrivateLinkResourcesClientListByResourceResponse struct {
-	PrivateLinkResourcesClientListByResourceResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateLinkResourcesClientListByResourceResult contains the result from method PrivateLinkResourcesClient.ListByResource.
-type PrivateLinkResourcesClientListByResourceResult struct {
 	PrivateLinkResourcesListResult
 }
 
@@ -180,9 +109,6 @@ type PrivateLinkResourcesClientListByResourceResult struct {
 type PrivateLinkServiceResourceOperationResultsClientGetPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *PrivateLinkServiceResourceOperationResultsClientGetPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -190,11 +116,10 @@ type PrivateLinkServiceResourceOperationResultsClientGetPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l PrivateLinkServiceResourceOperationResultsClientGetPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PrivateLinkServiceResourceOperationResultsClientGetResponse, error) {
 	respType := PrivateLinkServiceResourceOperationResultsClientGetResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.AsyncOperationDetail)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.AsyncOperationDetail)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -208,49 +133,27 @@ func (l *PrivateLinkServiceResourceOperationResultsClientGetPollerResponse) Resu
 	poller := &PrivateLinkServiceResourceOperationResultsClientGetPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // PrivateLinkServiceResourceOperationResultsClientGetResponse contains the response from method PrivateLinkServiceResourceOperationResultsClient.Get.
 type PrivateLinkServiceResourceOperationResultsClientGetResponse struct {
-	PrivateLinkServiceResourceOperationResultsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateLinkServiceResourceOperationResultsClientGetResult contains the result from method PrivateLinkServiceResourceOperationResultsClient.Get.
-type PrivateLinkServiceResourceOperationResultsClientGetResult struct {
 	AsyncOperationDetail
 }
 
 // PrivateLinkServicesClientListByResourceGroupResponse contains the response from method PrivateLinkServicesClient.ListByResourceGroup.
 type PrivateLinkServicesClientListByResourceGroupResponse struct {
-	PrivateLinkServicesClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateLinkServicesClientListByResourceGroupResult contains the result from method PrivateLinkServicesClient.ListByResourceGroup.
-type PrivateLinkServicesClientListByResourceGroupResult struct {
 	// Array of TenantResource
 	TenantResourceArray []*TenantResource
 }
 
 // PrivateLinkServicesForPowerBIClientListBySubscriptionIDResponse contains the response from method PrivateLinkServicesForPowerBIClient.ListBySubscriptionID.
 type PrivateLinkServicesForPowerBIClientListBySubscriptionIDResponse struct {
-	PrivateLinkServicesForPowerBIClientListBySubscriptionIDResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateLinkServicesForPowerBIClientListBySubscriptionIDResult contains the result from method PrivateLinkServicesForPowerBIClient.ListBySubscriptionID.
-type PrivateLinkServicesForPowerBIClientListBySubscriptionIDResult struct {
 	// Array of TenantResource
 	TenantResourceArray []*TenantResource
 }

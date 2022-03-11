@@ -24,9 +24,9 @@ import (
 // UsagesClient contains the methods for the Usages group.
 // Don't use this type directly, use NewUsagesClient() instead.
 type UsagesClient struct {
-	host string
+	host           string
 	subscriptionID string
-	pl runtime.Pipeline
+	pl             runtime.Pipeline
 }
 
 // NewUsagesClient creates a new instance of UsagesClient with the specified values.
@@ -44,8 +44,8 @@ func NewUsagesClient(subscriptionID string, credential azcore.TokenCredential, o
 	}
 	client := &UsagesClient{
 		subscriptionID: subscriptionID,
-		host: string(ep),
-		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -54,7 +54,7 @@ func NewUsagesClient(subscriptionID string, credential azcore.TokenCredential, o
 // If the operation fails it returns an *azcore.ResponseError type.
 // location - the location like "eastus"
 // options - UsagesClientListOptions contains the optional parameters for the UsagesClient.List method.
-func (client *UsagesClient) List(location string, options *UsagesClientListOptions) (*UsagesClientListPager) {
+func (client *UsagesClient) List(location string, options *UsagesClientListOptions) *UsagesClientListPager {
 	return &UsagesClientListPager{
 		client: client,
 		requester: func(ctx context.Context) (*policy.Request, error) {
@@ -82,7 +82,7 @@ func (client *UsagesClient) listCreateRequest(ctx context.Context, location stri
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-01-preview")
+	reqQP.Set("api-version", "2021-10-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -90,10 +90,9 @@ func (client *UsagesClient) listCreateRequest(ctx context.Context, location stri
 
 // listHandleResponse handles the List response.
 func (client *UsagesClient) listHandleResponse(resp *http.Response) (UsagesClientListResponse, error) {
-	result := UsagesClientListResponse{RawResponse: resp}
+	result := UsagesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UsageList); err != nil {
 		return UsagesClientListResponse{}, err
 	}
 	return result, nil
 }
-

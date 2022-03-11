@@ -35,17 +35,17 @@ type RunsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRunsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RunsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RunsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *RunsClient) BeginCancel(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return RunsClientCancelPollerResponse{}, err
 	}
-	result := RunsClientCancelPollerResponse{
-		RawResponse: resp,
-	}
+	result := RunsClientCancelPollerResponse{}
 	pt, err := armruntime.NewPoller("RunsClient.Cancel", "", resp, client.pl)
 	if err != nil {
 		return RunsClientCancelPollerResponse{}, err
@@ -174,7 +172,7 @@ func (client *RunsClient) getCreateRequest(ctx context.Context, resourceGroupNam
 
 // getHandleResponse handles the Get response.
 func (client *RunsClient) getHandleResponse(resp *http.Response) (RunsClientGetResponse, error) {
-	result := RunsClientGetResponse{RawResponse: resp}
+	result := RunsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Run); err != nil {
 		return RunsClientGetResponse{}, err
 	}
@@ -234,7 +232,7 @@ func (client *RunsClient) getLogSasURLCreateRequest(ctx context.Context, resourc
 
 // getLogSasURLHandleResponse handles the GetLogSasURL response.
 func (client *RunsClient) getLogSasURLHandleResponse(resp *http.Response) (RunsClientGetLogSasURLResponse, error) {
-	result := RunsClientGetLogSasURLResponse{RawResponse: resp}
+	result := RunsClientGetLogSasURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RunGetLogResult); err != nil {
 		return RunsClientGetLogSasURLResponse{}, err
 	}
@@ -292,7 +290,7 @@ func (client *RunsClient) listCreateRequest(ctx context.Context, resourceGroupNa
 
 // listHandleResponse handles the List response.
 func (client *RunsClient) listHandleResponse(resp *http.Response) (RunsClientListResponse, error) {
-	result := RunsClientListResponse{RawResponse: resp}
+	result := RunsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RunListResult); err != nil {
 		return RunsClientListResponse{}, err
 	}
@@ -311,9 +309,7 @@ func (client *RunsClient) BeginUpdate(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return RunsClientUpdatePollerResponse{}, err
 	}
-	result := RunsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := RunsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("RunsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return RunsClientUpdatePollerResponse{}, err

@@ -43,11 +43,10 @@ func (p *LedgerClientCreatePoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final LedgerClientCreateResponse will be returned.
 func (p *LedgerClientCreatePoller) FinalResponse(ctx context.Context) (LedgerClientCreateResponse, error) {
 	respType := LedgerClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ConfidentialLedger)
+	_, err := p.pt.FinalResponse(ctx, &respType.ConfidentialLedger)
 	if err != nil {
 		return LedgerClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *LedgerClientDeletePoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final LedgerClientDeleteResponse will be returned.
 func (p *LedgerClientDeletePoller) FinalResponse(ctx context.Context) (LedgerClientDeleteResponse, error) {
 	respType := LedgerClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return LedgerClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *LedgerClientUpdatePoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final LedgerClientUpdateResponse will be returned.
 func (p *LedgerClientUpdatePoller) FinalResponse(ctx context.Context) (LedgerClientUpdateResponse, error) {
 	respType := LedgerClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ConfidentialLedger)
+	_, err := p.pt.FinalResponse(ctx, &respType.ConfidentialLedger)
 	if err != nil {
 		return LedgerClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

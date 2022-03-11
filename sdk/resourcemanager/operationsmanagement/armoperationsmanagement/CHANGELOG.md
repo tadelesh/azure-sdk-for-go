@@ -1,5 +1,85 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClient.List` parameter(s) have been changed from `(context.Context, *OperationsClientListOptions)` to `(*OperationsClientListOptions)`
+- Function `*OperationsClient.List` return value(s) have been changed from `(OperationsClientListResponse, error)` to `(*OperationsClientListPager)`
+- Struct `ManagementAssociationsClientCreateOrUpdateResult` has been removed
+- Struct `ManagementAssociationsClientGetResult` has been removed
+- Struct `ManagementAssociationsClientListBySubscriptionResult` has been removed
+- Struct `ManagementConfigurationsClientCreateOrUpdateResult` has been removed
+- Struct `ManagementConfigurationsClientGetResult` has been removed
+- Struct `ManagementConfigurationsClientListBySubscriptionResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `SolutionsClientCreateOrUpdateResult` has been removed
+- Struct `SolutionsClientGetResult` has been removed
+- Struct `SolutionsClientListByResourceGroupResult` has been removed
+- Struct `SolutionsClientListBySubscriptionResult` has been removed
+- Struct `SolutionsClientUpdateResult` has been removed
+- Field `RawResponse` of struct `ManagementConfigurationsClientDeleteResponse` has been removed
+- Field `ManagementAssociationsClientGetResult` of struct `ManagementAssociationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ManagementAssociationsClientGetResponse` has been removed
+- Field `SolutionsClientListByResourceGroupResult` of struct `SolutionsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SolutionsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SolutionsClientDeleteResponse` has been removed
+- Field `ManagementConfigurationsClientListBySubscriptionResult` of struct `ManagementConfigurationsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ManagementConfigurationsClientListBySubscriptionResponse` has been removed
+- Field `ManagementAssociationsClientCreateOrUpdateResult` of struct `ManagementAssociationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ManagementAssociationsClientCreateOrUpdateResponse` has been removed
+- Field `SolutionsClientUpdateResult` of struct `SolutionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SolutionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SolutionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `SolutionsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ManagementAssociationsClientDeleteResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `ManagementConfigurationsClientCreateOrUpdateResult` of struct `ManagementConfigurationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ManagementConfigurationsClientCreateOrUpdateResponse` has been removed
+- Field `ManagementAssociationsClientListBySubscriptionResult` of struct `ManagementAssociationsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ManagementAssociationsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `SolutionsClientUpdatePollerResponse` has been removed
+- Field `SolutionsClientCreateOrUpdateResult` of struct `SolutionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SolutionsClientCreateOrUpdateResponse` has been removed
+- Field `SolutionsClientGetResult` of struct `SolutionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SolutionsClientGetResponse` has been removed
+- Field `SolutionsClientListBySubscriptionResult` of struct `SolutionsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `SolutionsClientListBySubscriptionResponse` has been removed
+- Field `ManagementConfigurationsClientGetResult` of struct `ManagementConfigurationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ManagementConfigurationsClientGetResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New function `*OperationsClientListPager.NextPage(context.Context) (OperationsClientListResponse, error)`
+- New struct `CodeMessageError`
+- New struct `CodeMessageErrorError`
+- New struct `OperationsClientListPager`
+- New anonymous field `ManagementAssociationPropertiesList` in struct `ManagementAssociationsClientListBySubscriptionResponse`
+- New anonymous field `SolutionPropertiesList` in struct `SolutionsClientListBySubscriptionResponse`
+- New anonymous field `ManagementAssociation` in struct `ManagementAssociationsClientCreateOrUpdateResponse`
+- New anonymous field `Solution` in struct `SolutionsClientGetResponse`
+- New anonymous field `Solution` in struct `SolutionsClientCreateOrUpdateResponse`
+- New anonymous field `ManagementConfigurationPropertiesList` in struct `ManagementConfigurationsClientListBySubscriptionResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `ManagementConfiguration` in struct `ManagementConfigurationsClientGetResponse`
+- New anonymous field `Solution` in struct `SolutionsClientUpdateResponse`
+- New anonymous field `ManagementConfiguration` in struct `ManagementConfigurationsClientCreateOrUpdateResponse`
+- New anonymous field `SolutionPropertiesList` in struct `SolutionsClientListByResourceGroupResponse`
+- New anonymous field `ManagementAssociation` in struct `ManagementAssociationsClientGetResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `ManagementConfigurationProperties.Template` has been changed from `map[string]interface{}` to `interface{}`
+- Struct `CodeMessageError` has been removed
+- Struct `CodeMessageErrorError` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

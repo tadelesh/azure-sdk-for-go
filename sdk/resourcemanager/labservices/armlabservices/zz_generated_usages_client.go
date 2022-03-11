@@ -92,7 +92,7 @@ func (client *UsagesClient) listByLocationCreateRequest(ctx context.Context, loc
 
 // listByLocationHandleResponse handles the ListByLocation response.
 func (client *UsagesClient) listByLocationHandleResponse(resp *http.Response) (UsagesClientListByLocationResponse, error) {
-	result := UsagesClientListByLocationResponse{RawResponse: resp}
+	result := UsagesClientListByLocationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListUsagesResult); err != nil {
 		return UsagesClientListByLocationResponse{}, err
 	}

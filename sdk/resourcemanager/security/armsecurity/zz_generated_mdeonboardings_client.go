@@ -87,7 +87,7 @@ func (client *MdeOnboardingsClient) getCreateRequest(ctx context.Context, option
 
 // getHandleResponse handles the Get response.
 func (client *MdeOnboardingsClient) getHandleResponse(resp *http.Response) (MdeOnboardingsClientGetResponse, error) {
-	result := MdeOnboardingsClientGetResponse{RawResponse: resp}
+	result := MdeOnboardingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MdeOnboardingData); err != nil {
 		return MdeOnboardingsClientGetResponse{}, err
 	}
@@ -132,7 +132,7 @@ func (client *MdeOnboardingsClient) listCreateRequest(ctx context.Context, optio
 
 // listHandleResponse handles the List response.
 func (client *MdeOnboardingsClient) listHandleResponse(resp *http.Response) (MdeOnboardingsClientListResponse, error) {
-	result := MdeOnboardingsClientListResponse{RawResponse: resp}
+	result := MdeOnboardingsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MdeOnboardingDataList); err != nil {
 		return MdeOnboardingsClientListResponse{}, err
 	}

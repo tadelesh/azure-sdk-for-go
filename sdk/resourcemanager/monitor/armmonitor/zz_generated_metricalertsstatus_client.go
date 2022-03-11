@@ -34,17 +34,17 @@ type MetricAlertsStatusClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMetricAlertsStatusClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MetricAlertsStatusClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MetricAlertsStatusClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -97,7 +97,7 @@ func (client *MetricAlertsStatusClient) listCreateRequest(ctx context.Context, r
 
 // listHandleResponse handles the List response.
 func (client *MetricAlertsStatusClient) listHandleResponse(resp *http.Response) (MetricAlertsStatusClientListResponse, error) {
-	result := MetricAlertsStatusClientListResponse{RawResponse: resp}
+	result := MetricAlertsStatusClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetricAlertStatusCollection); err != nil {
 		return MetricAlertsStatusClientListResponse{}, err
 	}
@@ -158,7 +158,7 @@ func (client *MetricAlertsStatusClient) listByNameCreateRequest(ctx context.Cont
 
 // listByNameHandleResponse handles the ListByName response.
 func (client *MetricAlertsStatusClient) listByNameHandleResponse(resp *http.Response) (MetricAlertsStatusClientListByNameResponse, error) {
-	result := MetricAlertsStatusClientListByNameResponse{RawResponse: resp}
+	result := MetricAlertsStatusClientListByNameResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetricAlertStatusCollection); err != nil {
 		return MetricAlertsStatusClientListByNameResponse{}, err
 	}

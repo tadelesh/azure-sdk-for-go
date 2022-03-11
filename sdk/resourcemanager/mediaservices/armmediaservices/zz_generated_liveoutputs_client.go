@@ -34,17 +34,17 @@ type LiveOutputsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLiveOutputsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LiveOutputsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LiveOutputsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *LiveOutputsClient) BeginCreate(ctx context.Context, resourceGroupN
 	if err != nil {
 		return LiveOutputsClientCreatePollerResponse{}, err
 	}
-	result := LiveOutputsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LiveOutputsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("LiveOutputsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return LiveOutputsClientCreatePollerResponse{}, err
@@ -138,9 +136,7 @@ func (client *LiveOutputsClient) BeginDelete(ctx context.Context, resourceGroupN
 	if err != nil {
 		return LiveOutputsClientDeletePollerResponse{}, err
 	}
-	result := LiveOutputsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := LiveOutputsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("LiveOutputsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return LiveOutputsClientDeletePollerResponse{}, err
@@ -260,7 +256,7 @@ func (client *LiveOutputsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *LiveOutputsClient) getHandleResponse(resp *http.Response) (LiveOutputsClientGetResponse, error) {
-	result := LiveOutputsClientGetResponse{RawResponse: resp}
+	result := LiveOutputsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LiveOutput); err != nil {
 		return LiveOutputsClientGetResponse{}, err
 	}
@@ -317,7 +313,7 @@ func (client *LiveOutputsClient) listCreateRequest(ctx context.Context, resource
 
 // listHandleResponse handles the List response.
 func (client *LiveOutputsClient) listHandleResponse(resp *http.Response) (LiveOutputsClientListResponse, error) {
-	result := LiveOutputsClientListResponse{RawResponse: resp}
+	result := LiveOutputsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LiveOutputListResult); err != nil {
 		return LiveOutputsClientListResponse{}, err
 	}

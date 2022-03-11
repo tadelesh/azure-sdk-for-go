@@ -35,17 +35,17 @@ type DedicatedCloudServicesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDedicatedCloudServicesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DedicatedCloudServicesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DedicatedCloudServicesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *DedicatedCloudServicesClient) createOrUpdateCreateRequest(ctx cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *DedicatedCloudServicesClient) createOrUpdateHandleResponse(resp *http.Response) (DedicatedCloudServicesClientCreateOrUpdateResponse, error) {
-	result := DedicatedCloudServicesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := DedicatedCloudServicesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DedicatedCloudService); err != nil {
 		return DedicatedCloudServicesClientCreateOrUpdateResponse{}, err
 	}
@@ -118,9 +118,7 @@ func (client *DedicatedCloudServicesClient) BeginDelete(ctx context.Context, res
 	if err != nil {
 		return DedicatedCloudServicesClientDeletePollerResponse{}, err
 	}
-	result := DedicatedCloudServicesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DedicatedCloudServicesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DedicatedCloudServicesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DedicatedCloudServicesClientDeletePollerResponse{}, err
@@ -223,7 +221,7 @@ func (client *DedicatedCloudServicesClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *DedicatedCloudServicesClient) getHandleResponse(resp *http.Response) (DedicatedCloudServicesClientGetResponse, error) {
-	result := DedicatedCloudServicesClientGetResponse{RawResponse: resp}
+	result := DedicatedCloudServicesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DedicatedCloudService); err != nil {
 		return DedicatedCloudServicesClientGetResponse{}, err
 	}
@@ -280,7 +278,7 @@ func (client *DedicatedCloudServicesClient) listByResourceGroupCreateRequest(ctx
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *DedicatedCloudServicesClient) listByResourceGroupHandleResponse(resp *http.Response) (DedicatedCloudServicesClientListByResourceGroupResponse, error) {
-	result := DedicatedCloudServicesClientListByResourceGroupResponse{RawResponse: resp}
+	result := DedicatedCloudServicesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DedicatedCloudServiceListResponse); err != nil {
 		return DedicatedCloudServicesClientListByResourceGroupResponse{}, err
 	}
@@ -332,7 +330,7 @@ func (client *DedicatedCloudServicesClient) listBySubscriptionCreateRequest(ctx 
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *DedicatedCloudServicesClient) listBySubscriptionHandleResponse(resp *http.Response) (DedicatedCloudServicesClientListBySubscriptionResponse, error) {
-	result := DedicatedCloudServicesClientListBySubscriptionResponse{RawResponse: resp}
+	result := DedicatedCloudServicesClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DedicatedCloudServiceListResponse); err != nil {
 		return DedicatedCloudServicesClientListBySubscriptionResponse{}, err
 	}
@@ -389,7 +387,7 @@ func (client *DedicatedCloudServicesClient) updateCreateRequest(ctx context.Cont
 
 // updateHandleResponse handles the Update response.
 func (client *DedicatedCloudServicesClient) updateHandleResponse(resp *http.Response) (DedicatedCloudServicesClientUpdateResponse, error) {
-	result := DedicatedCloudServicesClientUpdateResponse{RawResponse: resp}
+	result := DedicatedCloudServicesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DedicatedCloudService); err != nil {
 		return DedicatedCloudServicesClientUpdateResponse{}, err
 	}

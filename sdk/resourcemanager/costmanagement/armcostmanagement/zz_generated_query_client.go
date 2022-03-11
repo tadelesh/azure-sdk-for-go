@@ -32,16 +32,16 @@ type QueryClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewQueryClient(credential azcore.TokenCredential, options *arm.ClientOptions) *QueryClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &QueryClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -92,7 +92,7 @@ func (client *QueryClient) usageCreateRequest(ctx context.Context, scope string,
 
 // usageHandleResponse handles the Usage response.
 func (client *QueryClient) usageHandleResponse(resp *http.Response) (QueryClientUsageResponse, error) {
-	result := QueryClientUsageResponse{RawResponse: resp}
+	result := QueryClientUsageResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QueryResult); err != nil {
 		return QueryClientUsageResponse{}, err
 	}
@@ -147,7 +147,7 @@ func (client *QueryClient) usageByExternalCloudProviderTypeCreateRequest(ctx con
 
 // usageByExternalCloudProviderTypeHandleResponse handles the UsageByExternalCloudProviderType response.
 func (client *QueryClient) usageByExternalCloudProviderTypeHandleResponse(resp *http.Response) (QueryClientUsageByExternalCloudProviderTypeResponse, error) {
-	result := QueryClientUsageByExternalCloudProviderTypeResponse{RawResponse: resp}
+	result := QueryClientUsageByExternalCloudProviderTypeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QueryResult); err != nil {
 		return QueryClientUsageByExternalCloudProviderTypeResponse{}, err
 	}

@@ -35,17 +35,17 @@ type VPNConnectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVPNConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VPNConnectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VPNConnectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *VPNConnectionsClient) BeginCreateOrUpdate(ctx context.Context, res
 	if err != nil {
 		return VPNConnectionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VPNConnectionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VPNConnectionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VPNConnectionsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VPNConnectionsClientCreateOrUpdatePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *VPNConnectionsClient) BeginDelete(ctx context.Context, resourceGro
 	if err != nil {
 		return VPNConnectionsClientDeletePollerResponse{}, err
 	}
-	result := VPNConnectionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VPNConnectionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VPNConnectionsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return VPNConnectionsClientDeletePollerResponse{}, err
@@ -249,7 +245,7 @@ func (client *VPNConnectionsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *VPNConnectionsClient) getHandleResponse(resp *http.Response) (VPNConnectionsClientGetResponse, error) {
-	result := VPNConnectionsClientGetResponse{RawResponse: resp}
+	result := VPNConnectionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VPNConnection); err != nil {
 		return VPNConnectionsClientGetResponse{}, err
 	}
@@ -302,7 +298,7 @@ func (client *VPNConnectionsClient) listByVPNGatewayCreateRequest(ctx context.Co
 
 // listByVPNGatewayHandleResponse handles the ListByVPNGateway response.
 func (client *VPNConnectionsClient) listByVPNGatewayHandleResponse(resp *http.Response) (VPNConnectionsClientListByVPNGatewayResponse, error) {
-	result := VPNConnectionsClientListByVPNGatewayResponse{RawResponse: resp}
+	result := VPNConnectionsClientListByVPNGatewayResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListVPNConnectionsResult); err != nil {
 		return VPNConnectionsClientListByVPNGatewayResponse{}, err
 	}
@@ -321,9 +317,7 @@ func (client *VPNConnectionsClient) BeginStartPacketCapture(ctx context.Context,
 	if err != nil {
 		return VPNConnectionsClientStartPacketCapturePollerResponse{}, err
 	}
-	result := VPNConnectionsClientStartPacketCapturePollerResponse{
-		RawResponse: resp,
-	}
+	result := VPNConnectionsClientStartPacketCapturePollerResponse{}
 	pt, err := armruntime.NewPoller("VPNConnectionsClient.StartPacketCapture", "location", resp, client.pl)
 	if err != nil {
 		return VPNConnectionsClientStartPacketCapturePollerResponse{}, err
@@ -396,9 +390,7 @@ func (client *VPNConnectionsClient) BeginStopPacketCapture(ctx context.Context, 
 	if err != nil {
 		return VPNConnectionsClientStopPacketCapturePollerResponse{}, err
 	}
-	result := VPNConnectionsClientStopPacketCapturePollerResponse{
-		RawResponse: resp,
-	}
+	result := VPNConnectionsClientStopPacketCapturePollerResponse{}
 	pt, err := armruntime.NewPoller("VPNConnectionsClient.StopPacketCapture", "location", resp, client.pl)
 	if err != nil {
 		return VPNConnectionsClientStopPacketCapturePollerResponse{}, err

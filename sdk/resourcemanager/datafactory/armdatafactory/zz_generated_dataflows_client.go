@@ -34,17 +34,17 @@ type DataFlowsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataFlowsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataFlowsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataFlowsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -107,7 +107,7 @@ func (client *DataFlowsClient) createOrUpdateCreateRequest(ctx context.Context, 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *DataFlowsClient) createOrUpdateHandleResponse(resp *http.Response) (DataFlowsClientCreateOrUpdateResponse, error) {
-	result := DataFlowsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := DataFlowsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataFlowResource); err != nil {
 		return DataFlowsClientCreateOrUpdateResponse{}, err
 	}
@@ -132,7 +132,7 @@ func (client *DataFlowsClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DataFlowsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DataFlowsClientDeleteResponse{RawResponse: resp}, nil
+	return DataFlowsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -221,7 +221,7 @@ func (client *DataFlowsClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *DataFlowsClient) getHandleResponse(resp *http.Response) (DataFlowsClientGetResponse, error) {
-	result := DataFlowsClientGetResponse{RawResponse: resp}
+	result := DataFlowsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataFlowResource); err != nil {
 		return DataFlowsClientGetResponse{}, err
 	}
@@ -273,7 +273,7 @@ func (client *DataFlowsClient) listByFactoryCreateRequest(ctx context.Context, r
 
 // listByFactoryHandleResponse handles the ListByFactory response.
 func (client *DataFlowsClient) listByFactoryHandleResponse(resp *http.Response) (DataFlowsClientListByFactoryResponse, error) {
-	result := DataFlowsClientListByFactoryResponse{RawResponse: resp}
+	result := DataFlowsClientListByFactoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataFlowListResponse); err != nil {
 		return DataFlowsClientListByFactoryResponse{}, err
 	}

@@ -43,11 +43,10 @@ func (p *ContactProfilesClientCreateOrUpdatePoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final ContactProfilesClientCreateOrUpdateResponse will be returned.
 func (p *ContactProfilesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ContactProfilesClientCreateOrUpdateResponse, error) {
 	respType := ContactProfilesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ContactProfile)
+	_, err := p.pt.FinalResponse(ctx, &respType.ContactProfile)
 	if err != nil {
 		return ContactProfilesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ContactProfilesClientDeletePoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final ContactProfilesClientDeleteResponse will be returned.
 func (p *ContactProfilesClientDeletePoller) FinalResponse(ctx context.Context) (ContactProfilesClientDeleteResponse, error) {
 	respType := ContactProfilesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ContactProfilesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ContactsClientCreatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ContactsClientCreateResponse will be returned.
 func (p *ContactsClientCreatePoller) FinalResponse(ctx context.Context) (ContactsClientCreateResponse, error) {
 	respType := ContactsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Contact)
+	_, err := p.pt.FinalResponse(ctx, &respType.Contact)
 	if err != nil {
 		return ContactsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *ContactsClientDeletePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ContactsClientDeleteResponse will be returned.
 func (p *ContactsClientDeletePoller) FinalResponse(ctx context.Context) (ContactsClientDeleteResponse, error) {
 	respType := ContactsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ContactsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *SpacecraftsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final SpacecraftsClientCreateOrUpdateResponse will be returned.
 func (p *SpacecraftsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (SpacecraftsClientCreateOrUpdateResponse, error) {
 	respType := SpacecraftsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Spacecraft)
+	_, err := p.pt.FinalResponse(ctx, &respType.Spacecraft)
 	if err != nil {
 		return SpacecraftsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *SpacecraftsClientDeletePoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final SpacecraftsClientDeleteResponse will be returned.
 func (p *SpacecraftsClientDeletePoller) FinalResponse(ctx context.Context) (SpacecraftsClientDeleteResponse, error) {
 	respType := SpacecraftsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SpacecraftsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *SpacecraftsClientListAvailableContactsPoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final SpacecraftsClientListAvailableContactsResponse will be returned.
 func (p *SpacecraftsClientListAvailableContactsPoller) FinalResponse(ctx context.Context) (SpacecraftsClientListAvailableContactsResponse, error) {
 	respType := SpacecraftsClientListAvailableContactsResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.AvailableContactsListResult)
+	_, err := p.pt.FinalResponse(ctx, &respType.AvailableContactsListResult)
 	if err != nil {
 		return SpacecraftsClientListAvailableContactsResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

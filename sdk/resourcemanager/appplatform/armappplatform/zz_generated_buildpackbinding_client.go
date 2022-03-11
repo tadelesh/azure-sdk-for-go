@@ -35,17 +35,17 @@ type BuildpackBindingClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBuildpackBindingClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BuildpackBindingClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BuildpackBindingClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -66,9 +66,7 @@ func (client *BuildpackBindingClient) BeginCreateOrUpdate(ctx context.Context, r
 	if err != nil {
 		return BuildpackBindingClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := BuildpackBindingClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := BuildpackBindingClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("BuildpackBindingClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return BuildpackBindingClientCreateOrUpdatePollerResponse{}, err
@@ -149,9 +147,7 @@ func (client *BuildpackBindingClient) BeginDelete(ctx context.Context, resourceG
 	if err != nil {
 		return BuildpackBindingClientDeletePollerResponse{}, err
 	}
-	result := BuildpackBindingClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := BuildpackBindingClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("BuildpackBindingClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return BuildpackBindingClientDeletePollerResponse{}, err
@@ -281,7 +277,7 @@ func (client *BuildpackBindingClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *BuildpackBindingClient) getHandleResponse(resp *http.Response) (BuildpackBindingClientGetResponse, error) {
-	result := BuildpackBindingClientGetResponse{RawResponse: resp}
+	result := BuildpackBindingClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BuildpackBindingResource); err != nil {
 		return BuildpackBindingClientGetResponse{}, err
 	}
@@ -344,7 +340,7 @@ func (client *BuildpackBindingClient) listCreateRequest(ctx context.Context, res
 
 // listHandleResponse handles the List response.
 func (client *BuildpackBindingClient) listHandleResponse(resp *http.Response) (BuildpackBindingClientListResponse, error) {
-	result := BuildpackBindingClientListResponse{RawResponse: resp}
+	result := BuildpackBindingClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BuildpackBindingResourceCollection); err != nil {
 		return BuildpackBindingClientListResponse{}, err
 	}

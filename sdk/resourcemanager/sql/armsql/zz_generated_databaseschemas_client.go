@@ -34,17 +34,17 @@ type DatabaseSchemasClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDatabaseSchemasClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DatabaseSchemasClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DatabaseSchemasClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *DatabaseSchemasClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *DatabaseSchemasClient) getHandleResponse(resp *http.Response) (DatabaseSchemasClientGetResponse, error) {
-	result := DatabaseSchemasClientGetResponse{RawResponse: resp}
+	result := DatabaseSchemasClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseSchema); err != nil {
 		return DatabaseSchemasClientGetResponse{}, err
 	}
@@ -170,7 +170,7 @@ func (client *DatabaseSchemasClient) listByDatabaseCreateRequest(ctx context.Con
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *DatabaseSchemasClient) listByDatabaseHandleResponse(resp *http.Response) (DatabaseSchemasClientListByDatabaseResponse, error) {
-	result := DatabaseSchemasClientListByDatabaseResponse{RawResponse: resp}
+	result := DatabaseSchemasClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseSchemaListResult); err != nil {
 		return DatabaseSchemasClientListByDatabaseResponse{}, err
 	}

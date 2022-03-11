@@ -34,17 +34,17 @@ type SubscriptionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSubscriptionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SubscriptionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SubscriptionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -93,7 +93,7 @@ func (client *SubscriptionsClient) getCreateRequest(ctx context.Context, billing
 
 // getHandleResponse handles the Get response.
 func (client *SubscriptionsClient) getHandleResponse(resp *http.Response) (SubscriptionsClientGetResponse, error) {
-	result := SubscriptionsClientGetResponse{RawResponse: resp}
+	result := SubscriptionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Subscription); err != nil {
 		return SubscriptionsClientGetResponse{}, err
 	}
@@ -138,7 +138,7 @@ func (client *SubscriptionsClient) listByBillingAccountCreateRequest(ctx context
 
 // listByBillingAccountHandleResponse handles the ListByBillingAccount response.
 func (client *SubscriptionsClient) listByBillingAccountHandleResponse(resp *http.Response) (SubscriptionsClientListByBillingAccountResponse, error) {
-	result := SubscriptionsClientListByBillingAccountResponse{RawResponse: resp}
+	result := SubscriptionsClientListByBillingAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SubscriptionsListResult); err != nil {
 		return SubscriptionsClientListByBillingAccountResponse{}, err
 	}
@@ -188,7 +188,7 @@ func (client *SubscriptionsClient) listByBillingProfileCreateRequest(ctx context
 
 // listByBillingProfileHandleResponse handles the ListByBillingProfile response.
 func (client *SubscriptionsClient) listByBillingProfileHandleResponse(resp *http.Response) (SubscriptionsClientListByBillingProfileResponse, error) {
-	result := SubscriptionsClientListByBillingProfileResponse{RawResponse: resp}
+	result := SubscriptionsClientListByBillingProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SubscriptionsListResult); err != nil {
 		return SubscriptionsClientListByBillingProfileResponse{}, err
 	}
@@ -238,7 +238,7 @@ func (client *SubscriptionsClient) listByCustomerCreateRequest(ctx context.Conte
 
 // listByCustomerHandleResponse handles the ListByCustomer response.
 func (client *SubscriptionsClient) listByCustomerHandleResponse(resp *http.Response) (SubscriptionsClientListByCustomerResponse, error) {
-	result := SubscriptionsClientListByCustomerResponse{RawResponse: resp}
+	result := SubscriptionsClientListByCustomerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SubscriptionsListResult); err != nil {
 		return SubscriptionsClientListByCustomerResponse{}, err
 	}
@@ -293,7 +293,7 @@ func (client *SubscriptionsClient) listByInvoiceSectionCreateRequest(ctx context
 
 // listByInvoiceSectionHandleResponse handles the ListByInvoiceSection response.
 func (client *SubscriptionsClient) listByInvoiceSectionHandleResponse(resp *http.Response) (SubscriptionsClientListByInvoiceSectionResponse, error) {
-	result := SubscriptionsClientListByInvoiceSectionResponse{RawResponse: resp}
+	result := SubscriptionsClientListByInvoiceSectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SubscriptionsListResult); err != nil {
 		return SubscriptionsClientListByInvoiceSectionResponse{}, err
 	}
@@ -312,9 +312,7 @@ func (client *SubscriptionsClient) BeginMove(ctx context.Context, billingAccount
 	if err != nil {
 		return SubscriptionsClientMovePollerResponse{}, err
 	}
-	result := SubscriptionsClientMovePollerResponse{
-		RawResponse: resp,
-	}
+	result := SubscriptionsClientMovePollerResponse{}
 	pt, err := armruntime.NewPoller("SubscriptionsClient.Move", "", resp, client.pl)
 	if err != nil {
 		return SubscriptionsClientMovePollerResponse{}, err
@@ -411,7 +409,7 @@ func (client *SubscriptionsClient) updateCreateRequest(ctx context.Context, bill
 
 // updateHandleResponse handles the Update response.
 func (client *SubscriptionsClient) updateHandleResponse(resp *http.Response) (SubscriptionsClientUpdateResponse, error) {
-	result := SubscriptionsClientUpdateResponse{RawResponse: resp}
+	result := SubscriptionsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Subscription); err != nil {
 		return SubscriptionsClientUpdateResponse{}, err
 	}
@@ -464,7 +462,7 @@ func (client *SubscriptionsClient) validateMoveCreateRequest(ctx context.Context
 
 // validateMoveHandleResponse handles the ValidateMove response.
 func (client *SubscriptionsClient) validateMoveHandleResponse(resp *http.Response) (SubscriptionsClientValidateMoveResponse, error) {
-	result := SubscriptionsClientValidateMoveResponse{RawResponse: resp}
+	result := SubscriptionsClientValidateMoveResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ValidateSubscriptionTransferEligibilityResult); err != nil {
 		return SubscriptionsClientValidateMoveResponse{}, err
 	}

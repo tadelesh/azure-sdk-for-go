@@ -11,19 +11,11 @@ package armconfidentialledger
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // ClientCheckNameAvailabilityResponse contains the response from method Client.CheckNameAvailability.
 type ClientCheckNameAvailabilityResponse struct {
-	ClientCheckNameAvailabilityResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ClientCheckNameAvailabilityResult contains the result from method Client.CheckNameAvailability.
-type ClientCheckNameAvailabilityResult struct {
 	CheckNameAvailabilityResponse
 }
 
@@ -31,9 +23,6 @@ type ClientCheckNameAvailabilityResult struct {
 type LedgerClientCreatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *LedgerClientCreatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -41,11 +30,10 @@ type LedgerClientCreatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l LedgerClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LedgerClientCreateResponse, error) {
 	respType := LedgerClientCreateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ConfidentialLedger)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ConfidentialLedger)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -58,24 +46,16 @@ func (l *LedgerClientCreatePollerResponse) Resume(ctx context.Context, client *L
 	poller := &LedgerClientCreatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // LedgerClientCreateResponse contains the response from method LedgerClient.Create.
 type LedgerClientCreateResponse struct {
-	LedgerClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LedgerClientCreateResult contains the result from method LedgerClient.Create.
-type LedgerClientCreateResult struct {
 	ConfidentialLedger
 }
 
@@ -83,9 +63,6 @@ type LedgerClientCreateResult struct {
 type LedgerClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *LedgerClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -93,11 +70,10 @@ type LedgerClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l LedgerClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LedgerClientDeleteResponse, error) {
 	respType := LedgerClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -110,54 +86,31 @@ func (l *LedgerClientDeletePollerResponse) Resume(ctx context.Context, client *L
 	poller := &LedgerClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // LedgerClientDeleteResponse contains the response from method LedgerClient.Delete.
 type LedgerClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // LedgerClientGetResponse contains the response from method LedgerClient.Get.
 type LedgerClientGetResponse struct {
-	LedgerClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LedgerClientGetResult contains the result from method LedgerClient.Get.
-type LedgerClientGetResult struct {
 	ConfidentialLedger
 }
 
 // LedgerClientListByResourceGroupResponse contains the response from method LedgerClient.ListByResourceGroup.
 type LedgerClientListByResourceGroupResponse struct {
-	LedgerClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LedgerClientListByResourceGroupResult contains the result from method LedgerClient.ListByResourceGroup.
-type LedgerClientListByResourceGroupResult struct {
 	List
 }
 
 // LedgerClientListBySubscriptionResponse contains the response from method LedgerClient.ListBySubscription.
 type LedgerClientListBySubscriptionResponse struct {
-	LedgerClientListBySubscriptionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LedgerClientListBySubscriptionResult contains the result from method LedgerClient.ListBySubscription.
-type LedgerClientListBySubscriptionResult struct {
 	List
 }
 
@@ -165,9 +118,6 @@ type LedgerClientListBySubscriptionResult struct {
 type LedgerClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *LedgerClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -175,11 +125,10 @@ type LedgerClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l LedgerClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LedgerClientUpdateResponse, error) {
 	respType := LedgerClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ConfidentialLedger)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ConfidentialLedger)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -192,35 +141,20 @@ func (l *LedgerClientUpdatePollerResponse) Resume(ctx context.Context, client *L
 	poller := &LedgerClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // LedgerClientUpdateResponse contains the response from method LedgerClient.Update.
 type LedgerClientUpdateResponse struct {
-	LedgerClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LedgerClientUpdateResult contains the result from method LedgerClient.Update.
-type LedgerClientUpdateResult struct {
 	ConfidentialLedger
 }
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	ResourceProviderOperationList
 }

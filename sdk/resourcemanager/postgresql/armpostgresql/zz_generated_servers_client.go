@@ -34,17 +34,17 @@ type ServersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -60,9 +60,7 @@ func (client *ServersClient) BeginCreate(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return ServersClientCreatePollerResponse{}, err
 	}
-	result := ServersClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServersClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServersClient.Create", "", resp, client.pl)
 	if err != nil {
 		return ServersClientCreatePollerResponse{}, err
@@ -126,9 +124,7 @@ func (client *ServersClient) BeginDelete(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return ServersClientDeletePollerResponse{}, err
 	}
-	result := ServersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ServersClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ServersClientDeletePollerResponse{}, err
@@ -230,7 +226,7 @@ func (client *ServersClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *ServersClient) getHandleResponse(resp *http.Response) (ServersClientGetResponse, error) {
-	result := ServersClientGetResponse{RawResponse: resp}
+	result := ServersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Server); err != nil {
 		return ServersClientGetResponse{}, err
 	}
@@ -240,19 +236,13 @@ func (client *ServersClient) getHandleResponse(resp *http.Response) (ServersClie
 // List - List all the servers in a given subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ServersClientListOptions contains the optional parameters for the ServersClient.List method.
-func (client *ServersClient) List(ctx context.Context, options *ServersClientListOptions) (ServersClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, options)
-	if err != nil {
-		return ServersClientListResponse{}, err
+func (client *ServersClient) List(options *ServersClientListOptions) *ServersClientListPager {
+	return &ServersClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ServersClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ServersClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -275,7 +265,7 @@ func (client *ServersClient) listCreateRequest(ctx context.Context, options *Ser
 
 // listHandleResponse handles the List response.
 func (client *ServersClient) listHandleResponse(resp *http.Response) (ServersClientListResponse, error) {
-	result := ServersClientListResponse{RawResponse: resp}
+	result := ServersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerListResult); err != nil {
 		return ServersClientListResponse{}, err
 	}
@@ -287,19 +277,13 @@ func (client *ServersClient) listHandleResponse(resp *http.Response) (ServersCli
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ServersClientListByResourceGroupOptions contains the optional parameters for the ServersClient.ListByResourceGroup
 // method.
-func (client *ServersClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, options *ServersClientListByResourceGroupOptions) (ServersClientListByResourceGroupResponse, error) {
-	req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-	if err != nil {
-		return ServersClientListByResourceGroupResponse{}, err
+func (client *ServersClient) ListByResourceGroup(resourceGroupName string, options *ServersClientListByResourceGroupOptions) *ServersClientListByResourceGroupPager {
+	return &ServersClientListByResourceGroupPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ServersClientListByResourceGroupResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ServersClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByResourceGroupHandleResponse(resp)
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -326,7 +310,7 @@ func (client *ServersClient) listByResourceGroupCreateRequest(ctx context.Contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ServersClient) listByResourceGroupHandleResponse(resp *http.Response) (ServersClientListByResourceGroupResponse, error) {
-	result := ServersClientListByResourceGroupResponse{RawResponse: resp}
+	result := ServersClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerListResult); err != nil {
 		return ServersClientListByResourceGroupResponse{}, err
 	}
@@ -343,9 +327,7 @@ func (client *ServersClient) BeginRestart(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ServersClientRestartPollerResponse{}, err
 	}
-	result := ServersClientRestartPollerResponse{
-		RawResponse: resp,
-	}
+	result := ServersClientRestartPollerResponse{}
 	pt, err := armruntime.NewPoller("ServersClient.Restart", "", resp, client.pl)
 	if err != nil {
 		return ServersClientRestartPollerResponse{}, err
@@ -411,9 +393,7 @@ func (client *ServersClient) BeginUpdate(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return ServersClientUpdatePollerResponse{}, err
 	}
-	result := ServersClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServersClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServersClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ServersClientUpdatePollerResponse{}, err

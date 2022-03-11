@@ -11,19 +11,11 @@ package armedgeorderpartner
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // APISClientListOperationsPartnerResponse contains the response from method APISClient.ListOperationsPartner.
 type APISClientListOperationsPartnerResponse struct {
-	APISClientListOperationsPartnerResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// APISClientListOperationsPartnerResult contains the result from method APISClient.ListOperationsPartner.
-type APISClientListOperationsPartnerResult struct {
 	OperationListResult
 }
 
@@ -31,9 +23,6 @@ type APISClientListOperationsPartnerResult struct {
 type APISClientManageInventoryMetadataPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *APISClientManageInventoryMetadataPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -41,11 +30,10 @@ type APISClientManageInventoryMetadataPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l APISClientManageInventoryMetadataPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (APISClientManageInventoryMetadataResponse, error) {
 	respType := APISClientManageInventoryMetadataResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -58,35 +46,25 @@ func (l *APISClientManageInventoryMetadataPollerResponse) Resume(ctx context.Con
 	poller := &APISClientManageInventoryMetadataPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // APISClientManageInventoryMetadataResponse contains the response from method APISClient.ManageInventoryMetadata.
 type APISClientManageInventoryMetadataResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // APISClientManageLinkResponse contains the response from method APISClient.ManageLink.
 type APISClientManageLinkResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // APISClientSearchInventoriesResponse contains the response from method APISClient.SearchInventories.
 type APISClientSearchInventoriesResponse struct {
-	APISClientSearchInventoriesResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// APISClientSearchInventoriesResult contains the result from method APISClient.SearchInventories.
-type APISClientSearchInventoriesResult struct {
 	PartnerInventoryList
 }

@@ -35,17 +35,17 @@ type PoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *PoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return PoliciesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PoliciesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PoliciesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PoliciesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return PoliciesClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *PoliciesClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return PoliciesClientDeletePollerResponse{}, err
 	}
-	result := PoliciesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PoliciesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PoliciesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return PoliciesClientDeletePollerResponse{}, err
@@ -231,7 +227,7 @@ func (client *PoliciesClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *PoliciesClient) getHandleResponse(resp *http.Response) (PoliciesClientGetResponse, error) {
-	result := PoliciesClientGetResponse{RawResponse: resp}
+	result := PoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebApplicationFirewallPolicy); err != nil {
 		return PoliciesClientGetResponse{}, err
 	}
@@ -278,7 +274,7 @@ func (client *PoliciesClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *PoliciesClient) listHandleResponse(resp *http.Response) (PoliciesClientListResponse, error) {
-	result := PoliciesClientListResponse{RawResponse: resp}
+	result := PoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebApplicationFirewallPolicyList); err != nil {
 		return PoliciesClientListResponse{}, err
 	}

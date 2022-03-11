@@ -11,31 +11,16 @@ package armcommunication
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	OperationListResult
 }
 
 // ServiceClientCheckNameAvailabilityResponse contains the response from method ServiceClient.CheckNameAvailability.
 type ServiceClientCheckNameAvailabilityResponse struct {
-	ServiceClientCheckNameAvailabilityResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ServiceClientCheckNameAvailabilityResult contains the result from method ServiceClient.CheckNameAvailability.
-type ServiceClientCheckNameAvailabilityResult struct {
 	NameAvailability
 }
 
@@ -43,9 +28,6 @@ type ServiceClientCheckNameAvailabilityResult struct {
 type ServiceClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ServiceClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -53,11 +35,10 @@ type ServiceClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ServiceClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ServiceClientCreateOrUpdateResponse, error) {
 	respType := ServiceClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ServiceResource)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ServiceResource)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -70,24 +51,16 @@ func (l *ServiceClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, 
 	poller := &ServiceClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ServiceClientCreateOrUpdateResponse contains the response from method ServiceClient.CreateOrUpdate.
 type ServiceClientCreateOrUpdateResponse struct {
-	ServiceClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ServiceClientCreateOrUpdateResult contains the result from method ServiceClient.CreateOrUpdate.
-type ServiceClientCreateOrUpdateResult struct {
 	ServiceResource
 }
 
@@ -95,9 +68,6 @@ type ServiceClientCreateOrUpdateResult struct {
 type ServiceClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ServiceClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -105,11 +75,10 @@ type ServiceClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ServiceClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ServiceClientDeleteResponse, error) {
 	respType := ServiceClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -122,101 +91,50 @@ func (l *ServiceClientDeletePollerResponse) Resume(ctx context.Context, client *
 	poller := &ServiceClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ServiceClientDeleteResponse contains the response from method ServiceClient.Delete.
 type ServiceClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // ServiceClientGetResponse contains the response from method ServiceClient.Get.
 type ServiceClientGetResponse struct {
-	ServiceClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ServiceClientGetResult contains the result from method ServiceClient.Get.
-type ServiceClientGetResult struct {
 	ServiceResource
 }
 
 // ServiceClientLinkNotificationHubResponse contains the response from method ServiceClient.LinkNotificationHub.
 type ServiceClientLinkNotificationHubResponse struct {
-	ServiceClientLinkNotificationHubResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ServiceClientLinkNotificationHubResult contains the result from method ServiceClient.LinkNotificationHub.
-type ServiceClientLinkNotificationHubResult struct {
 	LinkedNotificationHub
 }
 
 // ServiceClientListByResourceGroupResponse contains the response from method ServiceClient.ListByResourceGroup.
 type ServiceClientListByResourceGroupResponse struct {
-	ServiceClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ServiceClientListByResourceGroupResult contains the result from method ServiceClient.ListByResourceGroup.
-type ServiceClientListByResourceGroupResult struct {
 	ServiceResourceList
 }
 
 // ServiceClientListBySubscriptionResponse contains the response from method ServiceClient.ListBySubscription.
 type ServiceClientListBySubscriptionResponse struct {
-	ServiceClientListBySubscriptionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ServiceClientListBySubscriptionResult contains the result from method ServiceClient.ListBySubscription.
-type ServiceClientListBySubscriptionResult struct {
 	ServiceResourceList
 }
 
 // ServiceClientListKeysResponse contains the response from method ServiceClient.ListKeys.
 type ServiceClientListKeysResponse struct {
-	ServiceClientListKeysResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ServiceClientListKeysResult contains the result from method ServiceClient.ListKeys.
-type ServiceClientListKeysResult struct {
 	ServiceKeys
 }
 
 // ServiceClientRegenerateKeyResponse contains the response from method ServiceClient.RegenerateKey.
 type ServiceClientRegenerateKeyResponse struct {
-	ServiceClientRegenerateKeyResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ServiceClientRegenerateKeyResult contains the result from method ServiceClient.RegenerateKey.
-type ServiceClientRegenerateKeyResult struct {
 	ServiceKeys
 }
 
 // ServiceClientUpdateResponse contains the response from method ServiceClient.Update.
 type ServiceClientUpdateResponse struct {
-	ServiceClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ServiceClientUpdateResult contains the result from method ServiceClient.Update.
-type ServiceClientUpdateResult struct {
 	ServiceResource
 }

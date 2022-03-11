@@ -11,7 +11,6 @@ package armresourcemover
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
@@ -19,9 +18,6 @@ import (
 type MoveCollectionsClientBulkRemovePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *MoveCollectionsClientBulkRemovePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -29,11 +25,10 @@ type MoveCollectionsClientBulkRemovePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l MoveCollectionsClientBulkRemovePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (MoveCollectionsClientBulkRemoveResponse, error) {
 	respType := MoveCollectionsClientBulkRemoveResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationStatus)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationStatus)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -46,24 +41,16 @@ func (l *MoveCollectionsClientBulkRemovePollerResponse) Resume(ctx context.Conte
 	poller := &MoveCollectionsClientBulkRemovePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // MoveCollectionsClientBulkRemoveResponse contains the response from method MoveCollectionsClient.BulkRemove.
 type MoveCollectionsClientBulkRemoveResponse struct {
-	MoveCollectionsClientBulkRemoveResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MoveCollectionsClientBulkRemoveResult contains the result from method MoveCollectionsClient.BulkRemove.
-type MoveCollectionsClientBulkRemoveResult struct {
 	OperationStatus
 }
 
@@ -71,9 +58,6 @@ type MoveCollectionsClientBulkRemoveResult struct {
 type MoveCollectionsClientCommitPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *MoveCollectionsClientCommitPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -81,11 +65,10 @@ type MoveCollectionsClientCommitPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l MoveCollectionsClientCommitPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (MoveCollectionsClientCommitResponse, error) {
 	respType := MoveCollectionsClientCommitResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationStatus)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationStatus)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -98,36 +81,21 @@ func (l *MoveCollectionsClientCommitPollerResponse) Resume(ctx context.Context, 
 	poller := &MoveCollectionsClientCommitPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // MoveCollectionsClientCommitResponse contains the response from method MoveCollectionsClient.Commit.
 type MoveCollectionsClientCommitResponse struct {
-	MoveCollectionsClientCommitResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MoveCollectionsClientCommitResult contains the result from method MoveCollectionsClient.Commit.
-type MoveCollectionsClientCommitResult struct {
 	OperationStatus
 }
 
 // MoveCollectionsClientCreateResponse contains the response from method MoveCollectionsClient.Create.
 type MoveCollectionsClientCreateResponse struct {
-	MoveCollectionsClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MoveCollectionsClientCreateResult contains the result from method MoveCollectionsClient.Create.
-type MoveCollectionsClientCreateResult struct {
 	MoveCollection
 }
 
@@ -135,9 +103,6 @@ type MoveCollectionsClientCreateResult struct {
 type MoveCollectionsClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *MoveCollectionsClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -145,11 +110,10 @@ type MoveCollectionsClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l MoveCollectionsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (MoveCollectionsClientDeleteResponse, error) {
 	respType := MoveCollectionsClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationStatus)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationStatus)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -162,24 +126,16 @@ func (l *MoveCollectionsClientDeletePollerResponse) Resume(ctx context.Context, 
 	poller := &MoveCollectionsClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // MoveCollectionsClientDeleteResponse contains the response from method MoveCollectionsClient.Delete.
 type MoveCollectionsClientDeleteResponse struct {
-	MoveCollectionsClientDeleteResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MoveCollectionsClientDeleteResult contains the result from method MoveCollectionsClient.Delete.
-type MoveCollectionsClientDeleteResult struct {
 	OperationStatus
 }
 
@@ -187,9 +143,6 @@ type MoveCollectionsClientDeleteResult struct {
 type MoveCollectionsClientDiscardPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *MoveCollectionsClientDiscardPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -197,11 +150,10 @@ type MoveCollectionsClientDiscardPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l MoveCollectionsClientDiscardPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (MoveCollectionsClientDiscardResponse, error) {
 	respType := MoveCollectionsClientDiscardResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationStatus)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationStatus)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -214,36 +166,21 @@ func (l *MoveCollectionsClientDiscardPollerResponse) Resume(ctx context.Context,
 	poller := &MoveCollectionsClientDiscardPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // MoveCollectionsClientDiscardResponse contains the response from method MoveCollectionsClient.Discard.
 type MoveCollectionsClientDiscardResponse struct {
-	MoveCollectionsClientDiscardResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MoveCollectionsClientDiscardResult contains the result from method MoveCollectionsClient.Discard.
-type MoveCollectionsClientDiscardResult struct {
 	OperationStatus
 }
 
 // MoveCollectionsClientGetResponse contains the response from method MoveCollectionsClient.Get.
 type MoveCollectionsClientGetResponse struct {
-	MoveCollectionsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MoveCollectionsClientGetResult contains the result from method MoveCollectionsClient.Get.
-type MoveCollectionsClientGetResult struct {
 	MoveCollection
 }
 
@@ -251,9 +188,6 @@ type MoveCollectionsClientGetResult struct {
 type MoveCollectionsClientInitiateMovePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *MoveCollectionsClientInitiateMovePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -261,11 +195,10 @@ type MoveCollectionsClientInitiateMovePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l MoveCollectionsClientInitiateMovePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (MoveCollectionsClientInitiateMoveResponse, error) {
 	respType := MoveCollectionsClientInitiateMoveResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationStatus)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationStatus)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -278,60 +211,31 @@ func (l *MoveCollectionsClientInitiateMovePollerResponse) Resume(ctx context.Con
 	poller := &MoveCollectionsClientInitiateMovePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // MoveCollectionsClientInitiateMoveResponse contains the response from method MoveCollectionsClient.InitiateMove.
 type MoveCollectionsClientInitiateMoveResponse struct {
-	MoveCollectionsClientInitiateMoveResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MoveCollectionsClientInitiateMoveResult contains the result from method MoveCollectionsClient.InitiateMove.
-type MoveCollectionsClientInitiateMoveResult struct {
 	OperationStatus
 }
 
 // MoveCollectionsClientListMoveCollectionsByResourceGroupResponse contains the response from method MoveCollectionsClient.ListMoveCollectionsByResourceGroup.
 type MoveCollectionsClientListMoveCollectionsByResourceGroupResponse struct {
-	MoveCollectionsClientListMoveCollectionsByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MoveCollectionsClientListMoveCollectionsByResourceGroupResult contains the result from method MoveCollectionsClient.ListMoveCollectionsByResourceGroup.
-type MoveCollectionsClientListMoveCollectionsByResourceGroupResult struct {
 	MoveCollectionResultList
 }
 
 // MoveCollectionsClientListMoveCollectionsBySubscriptionResponse contains the response from method MoveCollectionsClient.ListMoveCollectionsBySubscription.
 type MoveCollectionsClientListMoveCollectionsBySubscriptionResponse struct {
-	MoveCollectionsClientListMoveCollectionsBySubscriptionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MoveCollectionsClientListMoveCollectionsBySubscriptionResult contains the result from method MoveCollectionsClient.ListMoveCollectionsBySubscription.
-type MoveCollectionsClientListMoveCollectionsBySubscriptionResult struct {
 	MoveCollectionResultList
 }
 
 // MoveCollectionsClientListRequiredForResponse contains the response from method MoveCollectionsClient.ListRequiredFor.
 type MoveCollectionsClientListRequiredForResponse struct {
-	MoveCollectionsClientListRequiredForResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MoveCollectionsClientListRequiredForResult contains the result from method MoveCollectionsClient.ListRequiredFor.
-type MoveCollectionsClientListRequiredForResult struct {
 	RequiredForResourcesCollection
 }
 
@@ -339,9 +243,6 @@ type MoveCollectionsClientListRequiredForResult struct {
 type MoveCollectionsClientPreparePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *MoveCollectionsClientPreparePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -349,11 +250,10 @@ type MoveCollectionsClientPreparePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l MoveCollectionsClientPreparePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (MoveCollectionsClientPrepareResponse, error) {
 	respType := MoveCollectionsClientPrepareResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationStatus)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationStatus)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -366,24 +266,16 @@ func (l *MoveCollectionsClientPreparePollerResponse) Resume(ctx context.Context,
 	poller := &MoveCollectionsClientPreparePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // MoveCollectionsClientPrepareResponse contains the response from method MoveCollectionsClient.Prepare.
 type MoveCollectionsClientPrepareResponse struct {
-	MoveCollectionsClientPrepareResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MoveCollectionsClientPrepareResult contains the result from method MoveCollectionsClient.Prepare.
-type MoveCollectionsClientPrepareResult struct {
 	OperationStatus
 }
 
@@ -391,9 +283,6 @@ type MoveCollectionsClientPrepareResult struct {
 type MoveCollectionsClientResolveDependenciesPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *MoveCollectionsClientResolveDependenciesPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -401,11 +290,10 @@ type MoveCollectionsClientResolveDependenciesPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l MoveCollectionsClientResolveDependenciesPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (MoveCollectionsClientResolveDependenciesResponse, error) {
 	respType := MoveCollectionsClientResolveDependenciesResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationStatus)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationStatus)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -418,36 +306,21 @@ func (l *MoveCollectionsClientResolveDependenciesPollerResponse) Resume(ctx cont
 	poller := &MoveCollectionsClientResolveDependenciesPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // MoveCollectionsClientResolveDependenciesResponse contains the response from method MoveCollectionsClient.ResolveDependencies.
 type MoveCollectionsClientResolveDependenciesResponse struct {
-	MoveCollectionsClientResolveDependenciesResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MoveCollectionsClientResolveDependenciesResult contains the result from method MoveCollectionsClient.ResolveDependencies.
-type MoveCollectionsClientResolveDependenciesResult struct {
 	OperationStatus
 }
 
 // MoveCollectionsClientUpdateResponse contains the response from method MoveCollectionsClient.Update.
 type MoveCollectionsClientUpdateResponse struct {
-	MoveCollectionsClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MoveCollectionsClientUpdateResult contains the result from method MoveCollectionsClient.Update.
-type MoveCollectionsClientUpdateResult struct {
 	MoveCollection
 }
 
@@ -455,9 +328,6 @@ type MoveCollectionsClientUpdateResult struct {
 type MoveResourcesClientCreatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *MoveResourcesClientCreatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -465,11 +335,10 @@ type MoveResourcesClientCreatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l MoveResourcesClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (MoveResourcesClientCreateResponse, error) {
 	respType := MoveResourcesClientCreateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.MoveResource)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.MoveResource)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -482,24 +351,16 @@ func (l *MoveResourcesClientCreatePollerResponse) Resume(ctx context.Context, cl
 	poller := &MoveResourcesClientCreatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // MoveResourcesClientCreateResponse contains the response from method MoveResourcesClient.Create.
 type MoveResourcesClientCreateResponse struct {
-	MoveResourcesClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MoveResourcesClientCreateResult contains the result from method MoveResourcesClient.Create.
-type MoveResourcesClientCreateResult struct {
 	MoveResource
 }
 
@@ -507,9 +368,6 @@ type MoveResourcesClientCreateResult struct {
 type MoveResourcesClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *MoveResourcesClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -517,11 +375,10 @@ type MoveResourcesClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l MoveResourcesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (MoveResourcesClientDeleteResponse, error) {
 	respType := MoveResourcesClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationStatus)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OperationStatus)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -534,71 +391,35 @@ func (l *MoveResourcesClientDeletePollerResponse) Resume(ctx context.Context, cl
 	poller := &MoveResourcesClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // MoveResourcesClientDeleteResponse contains the response from method MoveResourcesClient.Delete.
 type MoveResourcesClientDeleteResponse struct {
-	MoveResourcesClientDeleteResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MoveResourcesClientDeleteResult contains the result from method MoveResourcesClient.Delete.
-type MoveResourcesClientDeleteResult struct {
 	OperationStatus
 }
 
 // MoveResourcesClientGetResponse contains the response from method MoveResourcesClient.Get.
 type MoveResourcesClientGetResponse struct {
-	MoveResourcesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MoveResourcesClientGetResult contains the result from method MoveResourcesClient.Get.
-type MoveResourcesClientGetResult struct {
 	MoveResource
 }
 
 // MoveResourcesClientListResponse contains the response from method MoveResourcesClient.List.
 type MoveResourcesClientListResponse struct {
-	MoveResourcesClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MoveResourcesClientListResult contains the result from method MoveResourcesClient.List.
-type MoveResourcesClientListResult struct {
 	MoveResourceCollection
 }
 
 // OperationsDiscoveryClientGetResponse contains the response from method OperationsDiscoveryClient.Get.
 type OperationsDiscoveryClientGetResponse struct {
-	OperationsDiscoveryClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsDiscoveryClientGetResult contains the result from method OperationsDiscoveryClient.Get.
-type OperationsDiscoveryClientGetResult struct {
 	OperationsDiscoveryCollection
 }
 
 // UnresolvedDependenciesClientGetResponse contains the response from method UnresolvedDependenciesClient.Get.
 type UnresolvedDependenciesClientGetResponse struct {
-	UnresolvedDependenciesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// UnresolvedDependenciesClientGetResult contains the result from method UnresolvedDependenciesClient.Get.
-type UnresolvedDependenciesClientGetResult struct {
 	UnresolvedDependencyCollection
 }

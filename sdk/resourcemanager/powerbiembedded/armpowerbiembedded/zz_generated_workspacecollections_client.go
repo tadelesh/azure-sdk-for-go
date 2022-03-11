@@ -35,17 +35,17 @@ type WorkspaceCollectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkspaceCollectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkspaceCollectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkspaceCollectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *WorkspaceCollectionsClient) checkNameAvailabilityCreateRequest(ctx
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *WorkspaceCollectionsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (WorkspaceCollectionsClientCheckNameAvailabilityResponse, error) {
-	result := WorkspaceCollectionsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := WorkspaceCollectionsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameResponse); err != nil {
 		return WorkspaceCollectionsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -154,7 +154,7 @@ func (client *WorkspaceCollectionsClient) createCreateRequest(ctx context.Contex
 
 // createHandleResponse handles the Create response.
 func (client *WorkspaceCollectionsClient) createHandleResponse(resp *http.Response) (WorkspaceCollectionsClientCreateResponse, error) {
-	result := WorkspaceCollectionsClientCreateResponse{RawResponse: resp}
+	result := WorkspaceCollectionsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceCollection); err != nil {
 		return WorkspaceCollectionsClientCreateResponse{}, err
 	}
@@ -172,9 +172,7 @@ func (client *WorkspaceCollectionsClient) BeginDelete(ctx context.Context, resou
 	if err != nil {
 		return WorkspaceCollectionsClientDeletePollerResponse{}, err
 	}
-	result := WorkspaceCollectionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkspaceCollectionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkspaceCollectionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return WorkspaceCollectionsClientDeletePollerResponse{}, err
@@ -277,7 +275,7 @@ func (client *WorkspaceCollectionsClient) getAccessKeysCreateRequest(ctx context
 
 // getAccessKeysHandleResponse handles the GetAccessKeys response.
 func (client *WorkspaceCollectionsClient) getAccessKeysHandleResponse(resp *http.Response) (WorkspaceCollectionsClientGetAccessKeysResponse, error) {
-	result := WorkspaceCollectionsClientGetAccessKeysResponse{RawResponse: resp}
+	result := WorkspaceCollectionsClientGetAccessKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceCollectionAccessKeys); err != nil {
 		return WorkspaceCollectionsClientGetAccessKeysResponse{}, err
 	}
@@ -333,7 +331,7 @@ func (client *WorkspaceCollectionsClient) getByNameCreateRequest(ctx context.Con
 
 // getByNameHandleResponse handles the GetByName response.
 func (client *WorkspaceCollectionsClient) getByNameHandleResponse(resp *http.Response) (WorkspaceCollectionsClientGetByNameResponse, error) {
-	result := WorkspaceCollectionsClientGetByNameResponse{RawResponse: resp}
+	result := WorkspaceCollectionsClientGetByNameResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceCollection); err != nil {
 		return WorkspaceCollectionsClientGetByNameResponse{}, err
 	}
@@ -345,19 +343,13 @@ func (client *WorkspaceCollectionsClient) getByNameHandleResponse(resp *http.Res
 // resourceGroupName - Azure resource group
 // options - WorkspaceCollectionsClientListByResourceGroupOptions contains the optional parameters for the WorkspaceCollectionsClient.ListByResourceGroup
 // method.
-func (client *WorkspaceCollectionsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, options *WorkspaceCollectionsClientListByResourceGroupOptions) (WorkspaceCollectionsClientListByResourceGroupResponse, error) {
-	req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-	if err != nil {
-		return WorkspaceCollectionsClientListByResourceGroupResponse{}, err
+func (client *WorkspaceCollectionsClient) ListByResourceGroup(resourceGroupName string, options *WorkspaceCollectionsClientListByResourceGroupOptions) *WorkspaceCollectionsClientListByResourceGroupPager {
+	return &WorkspaceCollectionsClientListByResourceGroupPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return WorkspaceCollectionsClientListByResourceGroupResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return WorkspaceCollectionsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByResourceGroupHandleResponse(resp)
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -384,7 +376,7 @@ func (client *WorkspaceCollectionsClient) listByResourceGroupCreateRequest(ctx c
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *WorkspaceCollectionsClient) listByResourceGroupHandleResponse(resp *http.Response) (WorkspaceCollectionsClientListByResourceGroupResponse, error) {
-	result := WorkspaceCollectionsClientListByResourceGroupResponse{RawResponse: resp}
+	result := WorkspaceCollectionsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceCollectionList); err != nil {
 		return WorkspaceCollectionsClientListByResourceGroupResponse{}, err
 	}
@@ -395,19 +387,13 @@ func (client *WorkspaceCollectionsClient) listByResourceGroupHandleResponse(resp
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - WorkspaceCollectionsClientListBySubscriptionOptions contains the optional parameters for the WorkspaceCollectionsClient.ListBySubscription
 // method.
-func (client *WorkspaceCollectionsClient) ListBySubscription(ctx context.Context, options *WorkspaceCollectionsClientListBySubscriptionOptions) (WorkspaceCollectionsClientListBySubscriptionResponse, error) {
-	req, err := client.listBySubscriptionCreateRequest(ctx, options)
-	if err != nil {
-		return WorkspaceCollectionsClientListBySubscriptionResponse{}, err
+func (client *WorkspaceCollectionsClient) ListBySubscription(options *WorkspaceCollectionsClientListBySubscriptionOptions) *WorkspaceCollectionsClientListBySubscriptionPager {
+	return &WorkspaceCollectionsClientListBySubscriptionPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listBySubscriptionCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return WorkspaceCollectionsClientListBySubscriptionResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return WorkspaceCollectionsClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listBySubscriptionHandleResponse(resp)
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -430,7 +416,7 @@ func (client *WorkspaceCollectionsClient) listBySubscriptionCreateRequest(ctx co
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *WorkspaceCollectionsClient) listBySubscriptionHandleResponse(resp *http.Response) (WorkspaceCollectionsClientListBySubscriptionResponse, error) {
-	result := WorkspaceCollectionsClientListBySubscriptionResponse{RawResponse: resp}
+	result := WorkspaceCollectionsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceCollectionList); err != nil {
 		return WorkspaceCollectionsClientListBySubscriptionResponse{}, err
 	}
@@ -455,7 +441,7 @@ func (client *WorkspaceCollectionsClient) Migrate(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WorkspaceCollectionsClientMigrateResponse{}, runtime.NewResponseError(resp)
 	}
-	return WorkspaceCollectionsClientMigrateResponse{RawResponse: resp}, nil
+	return WorkspaceCollectionsClientMigrateResponse{}, nil
 }
 
 // migrateCreateRequest creates the Migrate request.
@@ -530,7 +516,7 @@ func (client *WorkspaceCollectionsClient) regenerateKeyCreateRequest(ctx context
 
 // regenerateKeyHandleResponse handles the RegenerateKey response.
 func (client *WorkspaceCollectionsClient) regenerateKeyHandleResponse(resp *http.Response) (WorkspaceCollectionsClientRegenerateKeyResponse, error) {
-	result := WorkspaceCollectionsClientRegenerateKeyResponse{RawResponse: resp}
+	result := WorkspaceCollectionsClientRegenerateKeyResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceCollectionAccessKeys); err != nil {
 		return WorkspaceCollectionsClientRegenerateKeyResponse{}, err
 	}
@@ -587,7 +573,7 @@ func (client *WorkspaceCollectionsClient) updateCreateRequest(ctx context.Contex
 
 // updateHandleResponse handles the Update response.
 func (client *WorkspaceCollectionsClient) updateHandleResponse(resp *http.Response) (WorkspaceCollectionsClientUpdateResponse, error) {
-	result := WorkspaceCollectionsClientUpdateResponse{RawResponse: resp}
+	result := WorkspaceCollectionsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceCollection); err != nil {
 		return WorkspaceCollectionsClientUpdateResponse{}, err
 	}

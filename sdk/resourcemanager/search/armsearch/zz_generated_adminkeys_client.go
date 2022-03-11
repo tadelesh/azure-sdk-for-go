@@ -35,17 +35,17 @@ type AdminKeysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAdminKeysClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AdminKeysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AdminKeysClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *AdminKeysClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *AdminKeysClient) getHandleResponse(resp *http.Response) (AdminKeysClientGetResponse, error) {
-	result := AdminKeysClientGetResponse{RawResponse: resp}
+	result := AdminKeysClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdminKeyResult); err != nil {
 		return AdminKeysClientGetResponse{}, err
 	}
@@ -166,7 +166,7 @@ func (client *AdminKeysClient) regenerateCreateRequest(ctx context.Context, reso
 
 // regenerateHandleResponse handles the Regenerate response.
 func (client *AdminKeysClient) regenerateHandleResponse(resp *http.Response) (AdminKeysClientRegenerateResponse, error) {
-	result := AdminKeysClientRegenerateResponse{RawResponse: resp}
+	result := AdminKeysClientRegenerateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdminKeyResult); err != nil {
 		return AdminKeysClientRegenerateResponse{}, err
 	}

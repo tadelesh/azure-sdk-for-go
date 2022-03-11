@@ -34,17 +34,17 @@ type PrivateEndpointConnectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateEndpointConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateEndpointConnectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateEndpointConnectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -68,7 +68,7 @@ func (client *PrivateEndpointConnectionsClient) DeleteByHostPool(ctx context.Con
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return PrivateEndpointConnectionsClientDeleteByHostPoolResponse{}, runtime.NewResponseError(resp)
 	}
-	return PrivateEndpointConnectionsClientDeleteByHostPoolResponse{RawResponse: resp}, nil
+	return PrivateEndpointConnectionsClientDeleteByHostPoolResponse{}, nil
 }
 
 // deleteByHostPoolCreateRequest creates the DeleteByHostPool request.
@@ -120,7 +120,7 @@ func (client *PrivateEndpointConnectionsClient) DeleteByWorkspace(ctx context.Co
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return PrivateEndpointConnectionsClientDeleteByWorkspaceResponse{}, runtime.NewResponseError(resp)
 	}
-	return PrivateEndpointConnectionsClientDeleteByWorkspaceResponse{RawResponse: resp}, nil
+	return PrivateEndpointConnectionsClientDeleteByWorkspaceResponse{}, nil
 }
 
 // deleteByWorkspaceCreateRequest creates the DeleteByWorkspace request.
@@ -207,7 +207,7 @@ func (client *PrivateEndpointConnectionsClient) getByHostPoolCreateRequest(ctx c
 
 // getByHostPoolHandleResponse handles the GetByHostPool response.
 func (client *PrivateEndpointConnectionsClient) getByHostPoolHandleResponse(resp *http.Response) (PrivateEndpointConnectionsClientGetByHostPoolResponse, error) {
-	result := PrivateEndpointConnectionsClientGetByHostPoolResponse{RawResponse: resp}
+	result := PrivateEndpointConnectionsClientGetByHostPoolResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionWithSystemData); err != nil {
 		return PrivateEndpointConnectionsClientGetByHostPoolResponse{}, err
 	}
@@ -268,7 +268,7 @@ func (client *PrivateEndpointConnectionsClient) getByWorkspaceCreateRequest(ctx 
 
 // getByWorkspaceHandleResponse handles the GetByWorkspace response.
 func (client *PrivateEndpointConnectionsClient) getByWorkspaceHandleResponse(resp *http.Response) (PrivateEndpointConnectionsClientGetByWorkspaceResponse, error) {
-	result := PrivateEndpointConnectionsClientGetByWorkspaceResponse{RawResponse: resp}
+	result := PrivateEndpointConnectionsClientGetByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionWithSystemData); err != nil {
 		return PrivateEndpointConnectionsClientGetByWorkspaceResponse{}, err
 	}
@@ -321,7 +321,7 @@ func (client *PrivateEndpointConnectionsClient) listByHostPoolCreateRequest(ctx 
 
 // listByHostPoolHandleResponse handles the ListByHostPool response.
 func (client *PrivateEndpointConnectionsClient) listByHostPoolHandleResponse(resp *http.Response) (PrivateEndpointConnectionsClientListByHostPoolResponse, error) {
-	result := PrivateEndpointConnectionsClientListByHostPoolResponse{RawResponse: resp}
+	result := PrivateEndpointConnectionsClientListByHostPoolResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionListResultWithSystemData); err != nil {
 		return PrivateEndpointConnectionsClientListByHostPoolResponse{}, err
 	}
@@ -374,7 +374,7 @@ func (client *PrivateEndpointConnectionsClient) listByWorkspaceCreateRequest(ctx
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *PrivateEndpointConnectionsClient) listByWorkspaceHandleResponse(resp *http.Response) (PrivateEndpointConnectionsClientListByWorkspaceResponse, error) {
-	result := PrivateEndpointConnectionsClientListByWorkspaceResponse{RawResponse: resp}
+	result := PrivateEndpointConnectionsClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionListResultWithSystemData); err != nil {
 		return PrivateEndpointConnectionsClientListByWorkspaceResponse{}, err
 	}
@@ -436,7 +436,7 @@ func (client *PrivateEndpointConnectionsClient) updateByHostPoolCreateRequest(ct
 
 // updateByHostPoolHandleResponse handles the UpdateByHostPool response.
 func (client *PrivateEndpointConnectionsClient) updateByHostPoolHandleResponse(resp *http.Response) (PrivateEndpointConnectionsClientUpdateByHostPoolResponse, error) {
-	result := PrivateEndpointConnectionsClientUpdateByHostPoolResponse{RawResponse: resp}
+	result := PrivateEndpointConnectionsClientUpdateByHostPoolResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionWithSystemData); err != nil {
 		return PrivateEndpointConnectionsClientUpdateByHostPoolResponse{}, err
 	}
@@ -498,7 +498,7 @@ func (client *PrivateEndpointConnectionsClient) updateByWorkspaceCreateRequest(c
 
 // updateByWorkspaceHandleResponse handles the UpdateByWorkspace response.
 func (client *PrivateEndpointConnectionsClient) updateByWorkspaceHandleResponse(resp *http.Response) (PrivateEndpointConnectionsClientUpdateByWorkspaceResponse, error) {
-	result := PrivateEndpointConnectionsClientUpdateByWorkspaceResponse{RawResponse: resp}
+	result := PrivateEndpointConnectionsClientUpdateByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionWithSystemData); err != nil {
 		return PrivateEndpointConnectionsClientUpdateByWorkspaceResponse{}, err
 	}

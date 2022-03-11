@@ -103,7 +103,7 @@ func (client *RegulatoryComplianceAssessmentsClient) getCreateRequest(ctx contex
 
 // getHandleResponse handles the Get response.
 func (client *RegulatoryComplianceAssessmentsClient) getHandleResponse(resp *http.Response) (RegulatoryComplianceAssessmentsClientGetResponse, error) {
-	result := RegulatoryComplianceAssessmentsClientGetResponse{RawResponse: resp}
+	result := RegulatoryComplianceAssessmentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegulatoryComplianceAssessment); err != nil {
 		return RegulatoryComplianceAssessmentsClientGetResponse{}, err
 	}
@@ -159,7 +159,7 @@ func (client *RegulatoryComplianceAssessmentsClient) listCreateRequest(ctx conte
 
 // listHandleResponse handles the List response.
 func (client *RegulatoryComplianceAssessmentsClient) listHandleResponse(resp *http.Response) (RegulatoryComplianceAssessmentsClientListResponse, error) {
-	result := RegulatoryComplianceAssessmentsClientListResponse{RawResponse: resp}
+	result := RegulatoryComplianceAssessmentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegulatoryComplianceAssessmentList); err != nil {
 		return RegulatoryComplianceAssessmentsClientListResponse{}, err
 	}

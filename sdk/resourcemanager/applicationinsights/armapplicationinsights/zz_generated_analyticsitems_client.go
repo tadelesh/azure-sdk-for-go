@@ -35,17 +35,17 @@ type AnalyticsItemsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAnalyticsItemsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AnalyticsItemsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AnalyticsItemsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -69,7 +69,7 @@ func (client *AnalyticsItemsClient) Delete(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return AnalyticsItemsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AnalyticsItemsClientDeleteResponse{RawResponse: resp}, nil
+	return AnalyticsItemsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -167,7 +167,7 @@ func (client *AnalyticsItemsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *AnalyticsItemsClient) getHandleResponse(resp *http.Response) (AnalyticsItemsClientGetResponse, error) {
-	result := AnalyticsItemsClientGetResponse{RawResponse: resp}
+	result := AnalyticsItemsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentAnalyticsItem); err != nil {
 		return AnalyticsItemsClientGetResponse{}, err
 	}
@@ -237,7 +237,7 @@ func (client *AnalyticsItemsClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *AnalyticsItemsClient) listHandleResponse(resp *http.Response) (AnalyticsItemsClientListResponse, error) {
-	result := AnalyticsItemsClientListResponse{RawResponse: resp}
+	result := AnalyticsItemsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentAnalyticsItemArray); err != nil {
 		return AnalyticsItemsClientListResponse{}, err
 	}
@@ -302,7 +302,7 @@ func (client *AnalyticsItemsClient) putCreateRequest(ctx context.Context, resour
 
 // putHandleResponse handles the Put response.
 func (client *AnalyticsItemsClient) putHandleResponse(resp *http.Response) (AnalyticsItemsClientPutResponse, error) {
-	result := AnalyticsItemsClientPutResponse{RawResponse: resp}
+	result := AnalyticsItemsClientPutResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentAnalyticsItem); err != nil {
 		return AnalyticsItemsClientPutResponse{}, err
 	}

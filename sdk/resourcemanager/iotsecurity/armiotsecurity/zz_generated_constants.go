@@ -10,105 +10,8 @@ package armiotsecurity
 
 const (
 	moduleName    = "armiotsecurity"
-	moduleVersion = "v0.2.0"
+	moduleVersion = "v0.3.0"
 )
-
-// AlertIntent - Kill chain related intent behind the alert. Could contain multiple enum values (separated by commas)
-type AlertIntent string
-
-const (
-	AlertIntentCollection          AlertIntent = "Collection"
-	AlertIntentCommandAndControl   AlertIntent = "CommandAndControl"
-	AlertIntentCredentialAccess    AlertIntent = "CredentialAccess"
-	AlertIntentDefenseEvasion      AlertIntent = "DefenseEvasion"
-	AlertIntentDiscovery           AlertIntent = "Discovery"
-	AlertIntentExecution           AlertIntent = "Execution"
-	AlertIntentExfiltration        AlertIntent = "Exfiltration"
-	AlertIntentExploitation        AlertIntent = "Exploitation"
-	AlertIntentImpact              AlertIntent = "Impact"
-	AlertIntentInitialAccess       AlertIntent = "InitialAccess"
-	AlertIntentLateralMovement     AlertIntent = "LateralMovement"
-	AlertIntentPersistence         AlertIntent = "Persistence"
-	AlertIntentPreAttack           AlertIntent = "PreAttack"
-	AlertIntentPrivilegeEscalation AlertIntent = "PrivilegeEscalation"
-	AlertIntentProbing             AlertIntent = "Probing"
-	AlertIntentUnknown             AlertIntent = "Unknown"
-)
-
-// PossibleAlertIntentValues returns the possible values for the AlertIntent const type.
-func PossibleAlertIntentValues() []AlertIntent {
-	return []AlertIntent{
-		AlertIntentCollection,
-		AlertIntentCommandAndControl,
-		AlertIntentCredentialAccess,
-		AlertIntentDefenseEvasion,
-		AlertIntentDiscovery,
-		AlertIntentExecution,
-		AlertIntentExfiltration,
-		AlertIntentExploitation,
-		AlertIntentImpact,
-		AlertIntentInitialAccess,
-		AlertIntentLateralMovement,
-		AlertIntentPersistence,
-		AlertIntentPreAttack,
-		AlertIntentPrivilegeEscalation,
-		AlertIntentProbing,
-		AlertIntentUnknown,
-	}
-}
-
-// ToPtr returns a *AlertIntent pointing to the current value.
-func (c AlertIntent) ToPtr() *AlertIntent {
-	return &c
-}
-
-// AlertSeverity - Alert Severity
-type AlertSeverity string
-
-const (
-	AlertSeverityHigh          AlertSeverity = "High"
-	AlertSeverityInformational AlertSeverity = "Informational"
-	AlertSeverityLow           AlertSeverity = "Low"
-	AlertSeverityMedium        AlertSeverity = "Medium"
-)
-
-// PossibleAlertSeverityValues returns the possible values for the AlertSeverity const type.
-func PossibleAlertSeverityValues() []AlertSeverity {
-	return []AlertSeverity{
-		AlertSeverityHigh,
-		AlertSeverityInformational,
-		AlertSeverityLow,
-		AlertSeverityMedium,
-	}
-}
-
-// ToPtr returns a *AlertSeverity pointing to the current value.
-func (c AlertSeverity) ToPtr() *AlertSeverity {
-	return &c
-}
-
-// AlertStatus - Alert Status
-type AlertStatus string
-
-const (
-	AlertStatusClosed     AlertStatus = "Closed"
-	AlertStatusInProgress AlertStatus = "InProgress"
-	AlertStatusNew        AlertStatus = "New"
-)
-
-// PossibleAlertStatusValues returns the possible values for the AlertStatus const type.
-func PossibleAlertStatusValues() []AlertStatus {
-	return []AlertStatus{
-		AlertStatusClosed,
-		AlertStatusInProgress,
-		AlertStatusNew,
-	}
-}
-
-// ToPtr returns a *AlertStatus pointing to the current value.
-func (c AlertStatus) ToPtr() *AlertStatus {
-	return &c
-}
 
 // AuthorizedState - Authorized state of the device.
 type AuthorizedState string
@@ -367,37 +270,6 @@ func (c PurdueLevel) ToPtr() *PurdueLevel {
 	return &c
 }
 
-// RecommendationSeverity - The severity of the recommendation
-type RecommendationSeverity string
-
-const (
-	RecommendationSeverityHealthy       RecommendationSeverity = "Healthy"
-	RecommendationSeverityHigh          RecommendationSeverity = "High"
-	RecommendationSeverityLow           RecommendationSeverity = "Low"
-	RecommendationSeverityMedium        RecommendationSeverity = "Medium"
-	RecommendationSeverityNotApplicable RecommendationSeverity = "NotApplicable"
-	RecommendationSeverityOffByPolicy   RecommendationSeverity = "OffByPolicy"
-	RecommendationSeverityUnknown       RecommendationSeverity = "Unknown"
-)
-
-// PossibleRecommendationSeverityValues returns the possible values for the RecommendationSeverity const type.
-func PossibleRecommendationSeverityValues() []RecommendationSeverity {
-	return []RecommendationSeverity{
-		RecommendationSeverityHealthy,
-		RecommendationSeverityHigh,
-		RecommendationSeverityLow,
-		RecommendationSeverityMedium,
-		RecommendationSeverityNotApplicable,
-		RecommendationSeverityOffByPolicy,
-		RecommendationSeverityUnknown,
-	}
-}
-
-// ToPtr returns a *RecommendationSeverity pointing to the current value.
-func (c RecommendationSeverity) ToPtr() *RecommendationSeverity {
-	return &c
-}
-
 // SensorStatus - Status of the IoT sensor
 type SensorStatus string
 
@@ -439,33 +311,6 @@ func PossibleSensorTypeValues() []SensorType {
 
 // ToPtr returns a *SensorType pointing to the current value.
 func (c SensorType) ToPtr() *SensorType {
-	return &c
-}
-
-// SeverityScore - The severity score of the vulnerability
-type SeverityScore string
-
-const (
-	SeverityScoreCritical SeverityScore = "Critical"
-	SeverityScoreHigh     SeverityScore = "High"
-	SeverityScoreLow      SeverityScore = "Low"
-	SeverityScoreMedium   SeverityScore = "Medium"
-	SeverityScoreNone     SeverityScore = "None"
-)
-
-// PossibleSeverityScoreValues returns the possible values for the SeverityScore const type.
-func PossibleSeverityScoreValues() []SeverityScore {
-	return []SeverityScore{
-		SeverityScoreCritical,
-		SeverityScoreHigh,
-		SeverityScoreLow,
-		SeverityScoreMedium,
-		SeverityScoreNone,
-	}
-}
-
-// ToPtr returns a *SeverityScore pointing to the current value.
-func (c SeverityScore) ToPtr() *SeverityScore {
 	return &c
 }
 

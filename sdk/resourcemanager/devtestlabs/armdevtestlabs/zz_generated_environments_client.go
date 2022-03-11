@@ -35,17 +35,17 @@ type EnvironmentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewEnvironmentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *EnvironmentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &EnvironmentsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *EnvironmentsClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return EnvironmentsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := EnvironmentsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := EnvironmentsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("EnvironmentsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return EnvironmentsClientCreateOrUpdatePollerResponse{}, err
@@ -141,9 +139,7 @@ func (client *EnvironmentsClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return EnvironmentsClientDeletePollerResponse{}, err
 	}
-	result := EnvironmentsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := EnvironmentsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("EnvironmentsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return EnvironmentsClientDeletePollerResponse{}, err
@@ -266,7 +262,7 @@ func (client *EnvironmentsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *EnvironmentsClient) getHandleResponse(resp *http.Response) (EnvironmentsClientGetResponse, error) {
-	result := EnvironmentsClientGetResponse{RawResponse: resp}
+	result := EnvironmentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DtlEnvironment); err != nil {
 		return EnvironmentsClientGetResponse{}, err
 	}
@@ -335,7 +331,7 @@ func (client *EnvironmentsClient) listCreateRequest(ctx context.Context, resourc
 
 // listHandleResponse handles the List response.
 func (client *EnvironmentsClient) listHandleResponse(resp *http.Response) (EnvironmentsClientListResponse, error) {
-	result := EnvironmentsClientListResponse{RawResponse: resp}
+	result := EnvironmentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DtlEnvironmentList); err != nil {
 		return EnvironmentsClientListResponse{}, err
 	}
@@ -401,7 +397,7 @@ func (client *EnvironmentsClient) updateCreateRequest(ctx context.Context, resou
 
 // updateHandleResponse handles the Update response.
 func (client *EnvironmentsClient) updateHandleResponse(resp *http.Response) (EnvironmentsClientUpdateResponse, error) {
-	result := EnvironmentsClientUpdateResponse{RawResponse: resp}
+	result := EnvironmentsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DtlEnvironment); err != nil {
 		return EnvironmentsClientUpdateResponse{}, err
 	}

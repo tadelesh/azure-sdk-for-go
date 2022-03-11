@@ -34,17 +34,17 @@ type ProviderRegistrationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProviderRegistrationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ProviderRegistrationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProviderRegistrationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -60,9 +60,7 @@ func (client *ProviderRegistrationsClient) BeginCreateOrUpdate(ctx context.Conte
 	if err != nil {
 		return ProviderRegistrationsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ProviderRegistrationsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ProviderRegistrationsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ProviderRegistrationsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ProviderRegistrationsClientCreateOrUpdatePollerResponse{}, err
@@ -129,7 +127,7 @@ func (client *ProviderRegistrationsClient) Delete(ctx context.Context, providerN
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ProviderRegistrationsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ProviderRegistrationsClientDeleteResponse{RawResponse: resp}, nil
+	return ProviderRegistrationsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -198,7 +196,7 @@ func (client *ProviderRegistrationsClient) generateOperationsCreateRequest(ctx c
 
 // generateOperationsHandleResponse handles the GenerateOperations response.
 func (client *ProviderRegistrationsClient) generateOperationsHandleResponse(resp *http.Response) (ProviderRegistrationsClientGenerateOperationsResponse, error) {
-	result := ProviderRegistrationsClientGenerateOperationsResponse{RawResponse: resp}
+	result := ProviderRegistrationsClientGenerateOperationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OperationsDefinitionArray); err != nil {
 		return ProviderRegistrationsClientGenerateOperationsResponse{}, err
 	}
@@ -249,7 +247,7 @@ func (client *ProviderRegistrationsClient) getCreateRequest(ctx context.Context,
 
 // getHandleResponse handles the Get response.
 func (client *ProviderRegistrationsClient) getHandleResponse(resp *http.Response) (ProviderRegistrationsClientGetResponse, error) {
-	result := ProviderRegistrationsClientGetResponse{RawResponse: resp}
+	result := ProviderRegistrationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProviderRegistration); err != nil {
 		return ProviderRegistrationsClientGetResponse{}, err
 	}
@@ -292,7 +290,7 @@ func (client *ProviderRegistrationsClient) listCreateRequest(ctx context.Context
 
 // listHandleResponse handles the List response.
 func (client *ProviderRegistrationsClient) listHandleResponse(resp *http.Response) (ProviderRegistrationsClientListResponse, error) {
-	result := ProviderRegistrationsClientListResponse{RawResponse: resp}
+	result := ProviderRegistrationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProviderRegistrationArrayResponseWithContinuation); err != nil {
 		return ProviderRegistrationsClientListResponse{}, err
 	}

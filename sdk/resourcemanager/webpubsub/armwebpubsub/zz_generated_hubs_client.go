@@ -64,9 +64,7 @@ func (client *HubsClient) BeginCreateOrUpdate(ctx context.Context, hubName strin
 	if err != nil {
 		return HubsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := HubsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := HubsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("HubsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return HubsClientCreateOrUpdatePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *HubsClient) BeginDelete(ctx context.Context, hubName string, resou
 	if err != nil {
 		return HubsClientDeletePollerResponse{}, err
 	}
-	result := HubsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := HubsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("HubsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return HubsClientDeletePollerResponse{}, err
@@ -250,7 +246,7 @@ func (client *HubsClient) getCreateRequest(ctx context.Context, hubName string, 
 
 // getHandleResponse handles the Get response.
 func (client *HubsClient) getHandleResponse(resp *http.Response) (HubsClientGetResponse, error) {
-	result := HubsClientGetResponse{RawResponse: resp}
+	result := HubsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Hub); err != nil {
 		return HubsClientGetResponse{}, err
 	}
@@ -303,7 +299,7 @@ func (client *HubsClient) listCreateRequest(ctx context.Context, resourceGroupNa
 
 // listHandleResponse handles the List response.
 func (client *HubsClient) listHandleResponse(resp *http.Response) (HubsClientListResponse, error) {
-	result := HubsClientListResponse{RawResponse: resp}
+	result := HubsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HubList); err != nil {
 		return HubsClientListResponse{}, err
 	}

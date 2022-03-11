@@ -103,7 +103,7 @@ func (client *RuleSetsClient) createCreateRequest(ctx context.Context, resourceG
 
 // createHandleResponse handles the Create response.
 func (client *RuleSetsClient) createHandleResponse(resp *http.Response) (RuleSetsClientCreateResponse, error) {
-	result := RuleSetsClientCreateResponse{RawResponse: resp}
+	result := RuleSetsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RuleSet); err != nil {
 		return RuleSetsClientCreateResponse{}, err
 	}
@@ -123,9 +123,7 @@ func (client *RuleSetsClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return RuleSetsClientDeletePollerResponse{}, err
 	}
-	result := RuleSetsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := RuleSetsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("RuleSetsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return RuleSetsClientDeletePollerResponse{}, err
@@ -239,7 +237,7 @@ func (client *RuleSetsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *RuleSetsClient) getHandleResponse(resp *http.Response) (RuleSetsClientGetResponse, error) {
-	result := RuleSetsClientGetResponse{RawResponse: resp}
+	result := RuleSetsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RuleSet); err != nil {
 		return RuleSetsClientGetResponse{}, err
 	}
@@ -292,7 +290,7 @@ func (client *RuleSetsClient) listByProfileCreateRequest(ctx context.Context, re
 
 // listByProfileHandleResponse handles the ListByProfile response.
 func (client *RuleSetsClient) listByProfileHandleResponse(resp *http.Response) (RuleSetsClientListByProfileResponse, error) {
-	result := RuleSetsClientListByProfileResponse{RawResponse: resp}
+	result := RuleSetsClientListByProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RuleSetListResult); err != nil {
 		return RuleSetsClientListByProfileResponse{}, err
 	}
@@ -351,7 +349,7 @@ func (client *RuleSetsClient) listResourceUsageCreateRequest(ctx context.Context
 
 // listResourceUsageHandleResponse handles the ListResourceUsage response.
 func (client *RuleSetsClient) listResourceUsageHandleResponse(resp *http.Response) (RuleSetsClientListResourceUsageResponse, error) {
-	result := RuleSetsClientListResourceUsageResponse{RawResponse: resp}
+	result := RuleSetsClientListResourceUsageResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UsagesListResult); err != nil {
 		return RuleSetsClientListResourceUsageResponse{}, err
 	}

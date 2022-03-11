@@ -34,17 +34,17 @@ type DatabasesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDatabasesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DatabasesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DatabasesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *DatabasesClient) BeginCreateOrUpdate(ctx context.Context, resource
 	if err != nil {
 		return DatabasesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DatabasesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DatabasesClientCreateOrUpdatePollerResponse{}, err
@@ -133,9 +131,7 @@ func (client *DatabasesClient) BeginDelete(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DatabasesClientDeletePollerResponse{}, err
 	}
-	result := DatabasesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DatabasesClientDeletePollerResponse{}, err
@@ -246,7 +242,7 @@ func (client *DatabasesClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *DatabasesClient) getHandleResponse(resp *http.Response) (DatabasesClientGetResponse, error) {
-	result := DatabasesClientGetResponse{RawResponse: resp}
+	result := DatabasesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Database); err != nil {
 		return DatabasesClientGetResponse{}, err
 	}
@@ -258,19 +254,13 @@ func (client *DatabasesClient) getHandleResponse(resp *http.Response) (Databases
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // serverName - The name of the server.
 // options - DatabasesClientListByServerOptions contains the optional parameters for the DatabasesClient.ListByServer method.
-func (client *DatabasesClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string, options *DatabasesClientListByServerOptions) (DatabasesClientListByServerResponse, error) {
-	req, err := client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
-	if err != nil {
-		return DatabasesClientListByServerResponse{}, err
+func (client *DatabasesClient) ListByServer(resourceGroupName string, serverName string, options *DatabasesClientListByServerOptions) *DatabasesClientListByServerPager {
+	return &DatabasesClientListByServerPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DatabasesClientListByServerResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DatabasesClientListByServerResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByServerHandleResponse(resp)
 }
 
 // listByServerCreateRequest creates the ListByServer request.
@@ -301,7 +291,7 @@ func (client *DatabasesClient) listByServerCreateRequest(ctx context.Context, re
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *DatabasesClient) listByServerHandleResponse(resp *http.Response) (DatabasesClientListByServerResponse, error) {
-	result := DatabasesClientListByServerResponse{RawResponse: resp}
+	result := DatabasesClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseListResult); err != nil {
 		return DatabasesClientListByServerResponse{}, err
 	}

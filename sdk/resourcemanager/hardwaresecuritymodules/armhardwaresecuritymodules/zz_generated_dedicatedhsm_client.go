@@ -36,17 +36,17 @@ type DedicatedHsmClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDedicatedHsmClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DedicatedHsmClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DedicatedHsmClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *DedicatedHsmClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return DedicatedHsmClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DedicatedHsmClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DedicatedHsmClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DedicatedHsmClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DedicatedHsmClientCreateOrUpdatePollerResponse{}, err
@@ -130,9 +128,7 @@ func (client *DedicatedHsmClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return DedicatedHsmClientDeletePollerResponse{}, err
 	}
-	result := DedicatedHsmClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DedicatedHsmClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DedicatedHsmClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DedicatedHsmClientDeletePollerResponse{}, err
@@ -234,7 +230,7 @@ func (client *DedicatedHsmClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *DedicatedHsmClient) getHandleResponse(resp *http.Response) (DedicatedHsmClientGetResponse, error) {
-	result := DedicatedHsmClientGetResponse{RawResponse: resp}
+	result := DedicatedHsmClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DedicatedHsm); err != nil {
 		return DedicatedHsmClientGetResponse{}, err
 	}
@@ -286,7 +282,7 @@ func (client *DedicatedHsmClient) listByResourceGroupCreateRequest(ctx context.C
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *DedicatedHsmClient) listByResourceGroupHandleResponse(resp *http.Response) (DedicatedHsmClientListByResourceGroupResponse, error) {
-	result := DedicatedHsmClientListByResourceGroupResponse{RawResponse: resp}
+	result := DedicatedHsmClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DedicatedHsmListResult); err != nil {
 		return DedicatedHsmClientListByResourceGroupResponse{}, err
 	}
@@ -332,7 +328,7 @@ func (client *DedicatedHsmClient) listBySubscriptionCreateRequest(ctx context.Co
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *DedicatedHsmClient) listBySubscriptionHandleResponse(resp *http.Response) (DedicatedHsmClientListBySubscriptionResponse, error) {
-	result := DedicatedHsmClientListBySubscriptionResponse{RawResponse: resp}
+	result := DedicatedHsmClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DedicatedHsmListResult); err != nil {
 		return DedicatedHsmClientListBySubscriptionResponse{}, err
 	}
@@ -386,7 +382,7 @@ func (client *DedicatedHsmClient) listOutboundNetworkDependenciesEndpointsCreate
 
 // listOutboundNetworkDependenciesEndpointsHandleResponse handles the ListOutboundNetworkDependenciesEndpoints response.
 func (client *DedicatedHsmClient) listOutboundNetworkDependenciesEndpointsHandleResponse(resp *http.Response) (DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResponse, error) {
-	result := DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResponse{RawResponse: resp}
+	result := DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OutboundEnvironmentEndpointCollection); err != nil {
 		return DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResponse{}, err
 	}
@@ -405,9 +401,7 @@ func (client *DedicatedHsmClient) BeginUpdate(ctx context.Context, resourceGroup
 	if err != nil {
 		return DedicatedHsmClientUpdatePollerResponse{}, err
 	}
-	result := DedicatedHsmClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DedicatedHsmClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DedicatedHsmClient.Update", "", resp, client.pl)
 	if err != nil {
 		return DedicatedHsmClientUpdatePollerResponse{}, err

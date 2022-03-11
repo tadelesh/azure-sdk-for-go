@@ -100,7 +100,7 @@ func (client *AFDProfilesClient) checkHostNameAvailabilityCreateRequest(ctx cont
 
 // checkHostNameAvailabilityHandleResponse handles the CheckHostNameAvailability response.
 func (client *AFDProfilesClient) checkHostNameAvailabilityHandleResponse(resp *http.Response) (AFDProfilesClientCheckHostNameAvailabilityResponse, error) {
-	result := AFDProfilesClientCheckHostNameAvailabilityResponse{RawResponse: resp}
+	result := AFDProfilesClientCheckHostNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameAvailabilityOutput); err != nil {
 		return AFDProfilesClientCheckHostNameAvailabilityResponse{}, err
 	}
@@ -154,7 +154,7 @@ func (client *AFDProfilesClient) listResourceUsageCreateRequest(ctx context.Cont
 
 // listResourceUsageHandleResponse handles the ListResourceUsage response.
 func (client *AFDProfilesClient) listResourceUsageHandleResponse(resp *http.Response) (AFDProfilesClientListResourceUsageResponse, error) {
-	result := AFDProfilesClientListResourceUsageResponse{RawResponse: resp}
+	result := AFDProfilesClientListResourceUsageResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UsagesListResult); err != nil {
 		return AFDProfilesClientListResourceUsageResponse{}, err
 	}

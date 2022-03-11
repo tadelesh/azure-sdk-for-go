@@ -35,17 +35,17 @@ type AttachedDatabaseConfigurationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAttachedDatabaseConfigurationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AttachedDatabaseConfigurationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AttachedDatabaseConfigurationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *AttachedDatabaseConfigurationsClient) checkNameAvailabilityCreateR
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *AttachedDatabaseConfigurationsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (AttachedDatabaseConfigurationsClientCheckNameAvailabilityResponse, error) {
-	result := AttachedDatabaseConfigurationsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := AttachedDatabaseConfigurationsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameResult); err != nil {
 		return AttachedDatabaseConfigurationsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -120,9 +120,7 @@ func (client *AttachedDatabaseConfigurationsClient) BeginCreateOrUpdate(ctx cont
 	if err != nil {
 		return AttachedDatabaseConfigurationsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := AttachedDatabaseConfigurationsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AttachedDatabaseConfigurationsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AttachedDatabaseConfigurationsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return AttachedDatabaseConfigurationsClientCreateOrUpdatePollerResponse{}, err
@@ -192,9 +190,7 @@ func (client *AttachedDatabaseConfigurationsClient) BeginDelete(ctx context.Cont
 	if err != nil {
 		return AttachedDatabaseConfigurationsClientDeletePollerResponse{}, err
 	}
-	result := AttachedDatabaseConfigurationsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AttachedDatabaseConfigurationsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AttachedDatabaseConfigurationsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return AttachedDatabaseConfigurationsClientDeletePollerResponse{}, err
@@ -306,7 +302,7 @@ func (client *AttachedDatabaseConfigurationsClient) getCreateRequest(ctx context
 
 // getHandleResponse handles the Get response.
 func (client *AttachedDatabaseConfigurationsClient) getHandleResponse(resp *http.Response) (AttachedDatabaseConfigurationsClientGetResponse, error) {
-	result := AttachedDatabaseConfigurationsClientGetResponse{RawResponse: resp}
+	result := AttachedDatabaseConfigurationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AttachedDatabaseConfiguration); err != nil {
 		return AttachedDatabaseConfigurationsClientGetResponse{}, err
 	}
@@ -319,19 +315,13 @@ func (client *AttachedDatabaseConfigurationsClient) getHandleResponse(resp *http
 // clusterName - The name of the Kusto cluster.
 // options - AttachedDatabaseConfigurationsClientListByClusterOptions contains the optional parameters for the AttachedDatabaseConfigurationsClient.ListByCluster
 // method.
-func (client *AttachedDatabaseConfigurationsClient) ListByCluster(ctx context.Context, resourceGroupName string, clusterName string, options *AttachedDatabaseConfigurationsClientListByClusterOptions) (AttachedDatabaseConfigurationsClientListByClusterResponse, error) {
-	req, err := client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
-	if err != nil {
-		return AttachedDatabaseConfigurationsClientListByClusterResponse{}, err
+func (client *AttachedDatabaseConfigurationsClient) ListByCluster(resourceGroupName string, clusterName string, options *AttachedDatabaseConfigurationsClientListByClusterOptions) *AttachedDatabaseConfigurationsClientListByClusterPager {
+	return &AttachedDatabaseConfigurationsClientListByClusterPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return AttachedDatabaseConfigurationsClientListByClusterResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return AttachedDatabaseConfigurationsClientListByClusterResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByClusterHandleResponse(resp)
 }
 
 // listByClusterCreateRequest creates the ListByCluster request.
@@ -362,7 +352,7 @@ func (client *AttachedDatabaseConfigurationsClient) listByClusterCreateRequest(c
 
 // listByClusterHandleResponse handles the ListByCluster response.
 func (client *AttachedDatabaseConfigurationsClient) listByClusterHandleResponse(resp *http.Response) (AttachedDatabaseConfigurationsClientListByClusterResponse, error) {
-	result := AttachedDatabaseConfigurationsClientListByClusterResponse{RawResponse: resp}
+	result := AttachedDatabaseConfigurationsClientListByClusterResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AttachedDatabaseConfigurationListResult); err != nil {
 		return AttachedDatabaseConfigurationsClientListByClusterResponse{}, err
 	}

@@ -36,17 +36,17 @@ type AuthorizationServerClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAuthorizationServerClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AuthorizationServerClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AuthorizationServerClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *AuthorizationServerClient) createOrUpdateCreateRequest(ctx context
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *AuthorizationServerClient) createOrUpdateHandleResponse(resp *http.Response) (AuthorizationServerClientCreateOrUpdateResponse, error) {
-	result := AuthorizationServerClientCreateOrUpdateResponse{RawResponse: resp}
+	result := AuthorizationServerClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -140,7 +140,7 @@ func (client *AuthorizationServerClient) Delete(ctx context.Context, resourceGro
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return AuthorizationServerClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AuthorizationServerClientDeleteResponse{RawResponse: resp}, nil
+	return AuthorizationServerClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -227,7 +227,7 @@ func (client *AuthorizationServerClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *AuthorizationServerClient) getHandleResponse(resp *http.Response) (AuthorizationServerClientGetResponse, error) {
-	result := AuthorizationServerClientGetResponse{RawResponse: resp}
+	result := AuthorizationServerClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -287,7 +287,7 @@ func (client *AuthorizationServerClient) getEntityTagCreateRequest(ctx context.C
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *AuthorizationServerClient) getEntityTagHandleResponse(resp *http.Response) (AuthorizationServerClientGetEntityTagResponse, error) {
-	result := AuthorizationServerClientGetEntityTagResponse{RawResponse: resp}
+	result := AuthorizationServerClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -352,7 +352,7 @@ func (client *AuthorizationServerClient) listByServiceCreateRequest(ctx context.
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *AuthorizationServerClient) listByServiceHandleResponse(resp *http.Response) (AuthorizationServerClientListByServiceResponse, error) {
-	result := AuthorizationServerClientListByServiceResponse{RawResponse: resp}
+	result := AuthorizationServerClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AuthorizationServerCollection); err != nil {
 		return AuthorizationServerClientListByServiceResponse{}, err
 	}
@@ -413,7 +413,7 @@ func (client *AuthorizationServerClient) listSecretsCreateRequest(ctx context.Co
 
 // listSecretsHandleResponse handles the ListSecrets response.
 func (client *AuthorizationServerClient) listSecretsHandleResponse(resp *http.Response) (AuthorizationServerClientListSecretsResponse, error) {
-	result := AuthorizationServerClientListSecretsResponse{RawResponse: resp}
+	result := AuthorizationServerClientListSecretsResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -481,7 +481,7 @@ func (client *AuthorizationServerClient) updateCreateRequest(ctx context.Context
 
 // updateHandleResponse handles the Update response.
 func (client *AuthorizationServerClient) updateHandleResponse(resp *http.Response) (AuthorizationServerClientUpdateResponse, error) {
-	result := AuthorizationServerClientUpdateResponse{RawResponse: resp}
+	result := AuthorizationServerClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

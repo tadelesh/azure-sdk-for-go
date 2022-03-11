@@ -35,17 +35,17 @@ type DedicatedHostsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDedicatedHostsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DedicatedHostsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DedicatedHostsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *DedicatedHostsClient) BeginCreateOrUpdate(ctx context.Context, res
 	if err != nil {
 		return DedicatedHostsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DedicatedHostsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DedicatedHostsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DedicatedHostsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DedicatedHostsClientCreateOrUpdatePollerResponse{}, err
@@ -117,7 +115,7 @@ func (client *DedicatedHostsClient) createOrUpdateCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -135,9 +133,7 @@ func (client *DedicatedHostsClient) BeginDelete(ctx context.Context, resourceGro
 	if err != nil {
 		return DedicatedHostsClientDeletePollerResponse{}, err
 	}
-	result := DedicatedHostsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DedicatedHostsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DedicatedHostsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DedicatedHostsClientDeletePollerResponse{}, err
@@ -189,8 +185,9 @@ func (client *DedicatedHostsClient) deleteCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
 }
 
@@ -242,7 +239,7 @@ func (client *DedicatedHostsClient) getCreateRequest(ctx context.Context, resour
 	if options != nil && options.Expand != nil {
 		reqQP.Set("$expand", string(*options.Expand))
 	}
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -250,7 +247,7 @@ func (client *DedicatedHostsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *DedicatedHostsClient) getHandleResponse(resp *http.Response) (DedicatedHostsClientGetResponse, error) {
-	result := DedicatedHostsClientGetResponse{RawResponse: resp}
+	result := DedicatedHostsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DedicatedHost); err != nil {
 		return DedicatedHostsClientGetResponse{}, err
 	}
@@ -296,7 +293,7 @@ func (client *DedicatedHostsClient) listByHostGroupCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -304,11 +301,87 @@ func (client *DedicatedHostsClient) listByHostGroupCreateRequest(ctx context.Con
 
 // listByHostGroupHandleResponse handles the ListByHostGroup response.
 func (client *DedicatedHostsClient) listByHostGroupHandleResponse(resp *http.Response) (DedicatedHostsClientListByHostGroupResponse, error) {
-	result := DedicatedHostsClientListByHostGroupResponse{RawResponse: resp}
+	result := DedicatedHostsClientListByHostGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DedicatedHostListResult); err != nil {
 		return DedicatedHostsClientListByHostGroupResponse{}, err
 	}
 	return result, nil
+}
+
+// BeginRestart - Restart the dedicated host. The operation will complete successfully once the dedicated host has restarted
+// and is running. To determine the health of VMs deployed on the dedicated host after the
+// restart check the Resource Health Center in the Azure Portal. Please refer to https://docs.microsoft.com/en-us/azure/service-health/resource-health-overview
+// for more details.
+// If the operation fails it returns an *azcore.ResponseError type.
+// resourceGroupName - The name of the resource group.
+// hostGroupName - The name of the dedicated host group.
+// hostName - The name of the dedicated host.
+// options - DedicatedHostsClientBeginRestartOptions contains the optional parameters for the DedicatedHostsClient.BeginRestart
+// method.
+func (client *DedicatedHostsClient) BeginRestart(ctx context.Context, resourceGroupName string, hostGroupName string, hostName string, options *DedicatedHostsClientBeginRestartOptions) (DedicatedHostsClientRestartPollerResponse, error) {
+	resp, err := client.restart(ctx, resourceGroupName, hostGroupName, hostName, options)
+	if err != nil {
+		return DedicatedHostsClientRestartPollerResponse{}, err
+	}
+	result := DedicatedHostsClientRestartPollerResponse{}
+	pt, err := armruntime.NewPoller("DedicatedHostsClient.Restart", "", resp, client.pl)
+	if err != nil {
+		return DedicatedHostsClientRestartPollerResponse{}, err
+	}
+	result.Poller = &DedicatedHostsClientRestartPoller{
+		pt: pt,
+	}
+	return result, nil
+}
+
+// Restart - Restart the dedicated host. The operation will complete successfully once the dedicated host has restarted and
+// is running. To determine the health of VMs deployed on the dedicated host after the
+// restart check the Resource Health Center in the Azure Portal. Please refer to https://docs.microsoft.com/en-us/azure/service-health/resource-health-overview
+// for more details.
+// If the operation fails it returns an *azcore.ResponseError type.
+func (client *DedicatedHostsClient) restart(ctx context.Context, resourceGroupName string, hostGroupName string, hostName string, options *DedicatedHostsClientBeginRestartOptions) (*http.Response, error) {
+	req, err := client.restartCreateRequest(ctx, resourceGroupName, hostGroupName, hostName, options)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := client.pl.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	if !runtime.HasStatusCode(resp, http.StatusOK) {
+		return nil, runtime.NewResponseError(resp)
+	}
+	return resp, nil
+}
+
+// restartCreateRequest creates the Restart request.
+func (client *DedicatedHostsClient) restartCreateRequest(ctx context.Context, resourceGroupName string, hostGroupName string, hostName string, options *DedicatedHostsClientBeginRestartOptions) (*policy.Request, error) {
+	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/hostGroups/{hostGroupName}/hosts/{hostName}/restart"
+	if resourceGroupName == "" {
+		return nil, errors.New("parameter resourceGroupName cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+	if hostGroupName == "" {
+		return nil, errors.New("parameter hostGroupName cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{hostGroupName}", url.PathEscape(hostGroupName))
+	if hostName == "" {
+		return nil, errors.New("parameter hostName cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{hostName}", url.PathEscape(hostName))
+	if client.subscriptionID == "" {
+		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.host, urlPath))
+	if err != nil {
+		return nil, err
+	}
+	reqQP := req.Raw().URL.Query()
+	reqQP.Set("api-version", "2021-11-01")
+	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().Header.Set("Accept", "application/json")
+	return req, nil
 }
 
 // BeginUpdate - Update an dedicated host .
@@ -324,9 +397,7 @@ func (client *DedicatedHostsClient) BeginUpdate(ctx context.Context, resourceGro
 	if err != nil {
 		return DedicatedHostsClientUpdatePollerResponse{}, err
 	}
-	result := DedicatedHostsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DedicatedHostsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DedicatedHostsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return DedicatedHostsClientUpdatePollerResponse{}, err
@@ -378,7 +449,7 @@ func (client *DedicatedHostsClient) updateCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)

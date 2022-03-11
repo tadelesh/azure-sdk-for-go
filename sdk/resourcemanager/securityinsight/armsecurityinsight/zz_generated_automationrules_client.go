@@ -34,17 +34,17 @@ type AutomationRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAutomationRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AutomationRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AutomationRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *AutomationRulesClient) createOrUpdateCreateRequest(ctx context.Con
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *AutomationRulesClient) createOrUpdateHandleResponse(resp *http.Response) (AutomationRulesClientCreateOrUpdateResponse, error) {
-	result := AutomationRulesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := AutomationRulesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AutomationRule); err != nil {
 		return AutomationRulesClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *AutomationRulesClient) Delete(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return AutomationRulesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AutomationRulesClientDeleteResponse{RawResponse: resp}, nil
+	return AutomationRulesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *AutomationRulesClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *AutomationRulesClient) getHandleResponse(resp *http.Response) (AutomationRulesClientGetResponse, error) {
-	result := AutomationRulesClientGetResponse{RawResponse: resp}
+	result := AutomationRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AutomationRule); err != nil {
 		return AutomationRulesClientGetResponse{}, err
 	}
@@ -267,7 +267,7 @@ func (client *AutomationRulesClient) listCreateRequest(ctx context.Context, reso
 
 // listHandleResponse handles the List response.
 func (client *AutomationRulesClient) listHandleResponse(resp *http.Response) (AutomationRulesClientListResponse, error) {
-	result := AutomationRulesClientListResponse{RawResponse: resp}
+	result := AutomationRulesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AutomationRulesList); err != nil {
 		return AutomationRulesClientListResponse{}, err
 	}

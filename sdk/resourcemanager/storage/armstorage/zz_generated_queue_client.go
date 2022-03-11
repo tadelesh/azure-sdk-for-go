@@ -106,7 +106,7 @@ func (client *QueueClient) createCreateRequest(ctx context.Context, resourceGrou
 
 // createHandleResponse handles the Create response.
 func (client *QueueClient) createHandleResponse(resp *http.Response) (QueueClientCreateResponse, error) {
-	result := QueueClientCreateResponse{RawResponse: resp}
+	result := QueueClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Queue); err != nil {
 		return QueueClientCreateResponse{}, err
 	}
@@ -134,7 +134,7 @@ func (client *QueueClient) Delete(ctx context.Context, resourceGroupName string,
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return QueueClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return QueueClientDeleteResponse{RawResponse: resp}, nil
+	return QueueClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -223,7 +223,7 @@ func (client *QueueClient) getCreateRequest(ctx context.Context, resourceGroupNa
 
 // getHandleResponse handles the Get response.
 func (client *QueueClient) getHandleResponse(resp *http.Response) (QueueClientGetResponse, error) {
-	result := QueueClientGetResponse{RawResponse: resp}
+	result := QueueClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Queue); err != nil {
 		return QueueClientGetResponse{}, err
 	}
@@ -282,7 +282,7 @@ func (client *QueueClient) listCreateRequest(ctx context.Context, resourceGroupN
 
 // listHandleResponse handles the List response.
 func (client *QueueClient) listHandleResponse(resp *http.Response) (QueueClientListResponse, error) {
-	result := QueueClientListResponse{RawResponse: resp}
+	result := QueueClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListQueueResource); err != nil {
 		return QueueClientListResponse{}, err
 	}
@@ -346,7 +346,7 @@ func (client *QueueClient) updateCreateRequest(ctx context.Context, resourceGrou
 
 // updateHandleResponse handles the Update response.
 func (client *QueueClient) updateHandleResponse(resp *http.Response) (QueueClientUpdateResponse, error) {
-	result := QueueClientUpdateResponse{RawResponse: resp}
+	result := QueueClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Queue); err != nil {
 		return QueueClientUpdateResponse{}, err
 	}

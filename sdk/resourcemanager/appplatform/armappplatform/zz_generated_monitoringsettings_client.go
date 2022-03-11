@@ -35,17 +35,17 @@ type MonitoringSettingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMonitoringSettingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MonitoringSettingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MonitoringSettingsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *MonitoringSettingsClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *MonitoringSettingsClient) getHandleResponse(resp *http.Response) (MonitoringSettingsClientGetResponse, error) {
-	result := MonitoringSettingsClientGetResponse{RawResponse: resp}
+	result := MonitoringSettingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MonitoringSettingResource); err != nil {
 		return MonitoringSettingsClientGetResponse{}, err
 	}
@@ -119,9 +119,7 @@ func (client *MonitoringSettingsClient) BeginUpdatePatch(ctx context.Context, re
 	if err != nil {
 		return MonitoringSettingsClientUpdatePatchPollerResponse{}, err
 	}
-	result := MonitoringSettingsClientUpdatePatchPollerResponse{
-		RawResponse: resp,
-	}
+	result := MonitoringSettingsClientUpdatePatchPollerResponse{}
 	pt, err := armruntime.NewPoller("MonitoringSettingsClient.UpdatePatch", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return MonitoringSettingsClientUpdatePatchPollerResponse{}, err
@@ -188,9 +186,7 @@ func (client *MonitoringSettingsClient) BeginUpdatePut(ctx context.Context, reso
 	if err != nil {
 		return MonitoringSettingsClientUpdatePutPollerResponse{}, err
 	}
-	result := MonitoringSettingsClientUpdatePutPollerResponse{
-		RawResponse: resp,
-	}
+	result := MonitoringSettingsClientUpdatePutPollerResponse{}
 	pt, err := armruntime.NewPoller("MonitoringSettingsClient.UpdatePut", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return MonitoringSettingsClientUpdatePutPollerResponse{}, err

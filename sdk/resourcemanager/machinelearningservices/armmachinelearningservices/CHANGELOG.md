@@ -1,5 +1,231 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ComputeClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ComputeClientListResponse, error)`
+- Function `*WorkspacesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(WorkspacesClientListByResourceGroupResponse, error)`
+- Function `*WorkspacesClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(WorkspacesClientListBySubscriptionResponse, error)`
+- Function `*PrivateEndpointConnectionsClient.List` parameter(s) have been changed from `(context.Context, string, string, *PrivateEndpointConnectionsClientListOptions)` to `(string, string, *PrivateEndpointConnectionsClientListOptions)`
+- Function `*PrivateEndpointConnectionsClient.List` return value(s) have been changed from `(PrivateEndpointConnectionsClientListResponse, error)` to `(*PrivateEndpointConnectionsClientListPager)`
+- Function `*QuotasClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(QuotasClientListResponse, error)`
+- Function `*ComputeClientListNodesPager.NextPage` return value(s) have been changed from `(bool)` to `(ComputeClientListNodesResponse, error)`
+- Function `*WorkspaceFeaturesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(WorkspaceFeaturesClientListResponse, error)`
+- Function `*WorkspaceSKUsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(WorkspaceSKUsClientListResponse, error)`
+- Function `*OperationsClient.List` parameter(s) have been changed from `(context.Context, *OperationsClientListOptions)` to `(*OperationsClientListOptions)`
+- Function `*OperationsClient.List` return value(s) have been changed from `(OperationsClientListResponse, error)` to `(*OperationsClientListPager)`
+- Function `*UsagesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(UsagesClientListResponse, error)`
+- Function `*WorkspaceConnectionsClient.List` parameter(s) have been changed from `(context.Context, string, string, *WorkspaceConnectionsClientListOptions)` to `(string, string, *WorkspaceConnectionsClientListOptions)`
+- Function `*WorkspaceConnectionsClient.List` return value(s) have been changed from `(WorkspaceConnectionsClientListResponse, error)` to `(*WorkspaceConnectionsClientListPager)`
+- Function `*ComputeClientListNodesPager.Err` has been removed
+- Function `*UsagesClientListPager.Err` has been removed
+- Function `*WorkspacesClientListBySubscriptionPager.Err` has been removed
+- Function `*ComputeClientListPager.PageResponse` has been removed
+- Function `*UsagesClientListPager.PageResponse` has been removed
+- Function `*QuotasClientListPager.PageResponse` has been removed
+- Function `*WorkspacesClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*WorkspacesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ComputeClientListPager.Err` has been removed
+- Function `*WorkspaceSKUsClientListPager.Err` has been removed
+- Function `*QuotasClientListPager.Err` has been removed
+- Function `*WorkspaceFeaturesClientListPager.PageResponse` has been removed
+- Function `*WorkspaceSKUsClientListPager.PageResponse` has been removed
+- Function `*WorkspaceFeaturesClientListPager.Err` has been removed
+- Function `*ComputeClientListNodesPager.PageResponse` has been removed
+- Function `*ComputeClientListKeysResult.UnmarshalJSON` has been removed
+- Function `*WorkspacesClientListByResourceGroupPager.Err` has been removed
+- Struct `ComputeClientCreateOrUpdateResult` has been removed
+- Struct `ComputeClientGetResult` has been removed
+- Struct `ComputeClientListKeysResult` has been removed
+- Struct `ComputeClientListNodesResult` has been removed
+- Struct `ComputeClientListResult` has been removed
+- Struct `ComputeClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientCreateOrUpdateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListResult` has been removed
+- Struct `PrivateLinkResourcesClientListResult` has been removed
+- Struct `QuotasClientListResult` has been removed
+- Struct `QuotasClientUpdateResult` has been removed
+- Struct `UsagesClientListResult` has been removed
+- Struct `VirtualMachineSizesClientListResult` has been removed
+- Struct `WorkspaceConnectionsClientCreateResult` has been removed
+- Struct `WorkspaceConnectionsClientGetResult` has been removed
+- Struct `WorkspaceConnectionsClientListResult` has been removed
+- Struct `WorkspaceFeaturesClientListResult` has been removed
+- Struct `WorkspaceSKUsClientListResult` has been removed
+- Struct `WorkspacesClientCreateOrUpdateResult` has been removed
+- Struct `WorkspacesClientDiagnoseResult` has been removed
+- Struct `WorkspacesClientGetResult` has been removed
+- Struct `WorkspacesClientListByResourceGroupResult` has been removed
+- Struct `WorkspacesClientListBySubscriptionResult` has been removed
+- Struct `WorkspacesClientListKeysResult` has been removed
+- Struct `WorkspacesClientListNotebookAccessTokenResult` has been removed
+- Struct `WorkspacesClientListNotebookKeysResult` has been removed
+- Struct `WorkspacesClientListOutboundNetworkDependenciesEndpointsResult` has been removed
+- Struct `WorkspacesClientListStorageAccountKeysResult` has been removed
+- Struct `WorkspacesClientPrepareNotebookResult` has been removed
+- Struct `WorkspacesClientUpdateResult` has been removed
+- Field `RawResponse` of struct `WorkspaceConnectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientDeletePollerResponse` has been removed
+- Field `UsagesClientListResult` of struct `UsagesClientListResponse` has been removed
+- Field `RawResponse` of struct `UsagesClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ComputeClientCreateOrUpdatePollerResponse` has been removed
+- Field `ComputeClientCreateOrUpdateResult` of struct `ComputeClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ComputeClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientResyncKeysPollerResponse` has been removed
+- Field `RawResponse` of struct `ComputeClientStopResponse` has been removed
+- Field `WorkspacesClientListOutboundNetworkDependenciesEndpointsResult` of struct `WorkspacesClientListOutboundNetworkDependenciesEndpointsResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientListOutboundNetworkDependenciesEndpointsResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `WorkspaceConnectionsClientGetResult` of struct `WorkspaceConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `WorkspaceConnectionsClientGetResponse` has been removed
+- Field `VirtualMachineSizesClientListResult` of struct `VirtualMachineSizesClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineSizesClientListResponse` has been removed
+- Field `WorkspacesClientListKeysResult` of struct `WorkspacesClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientDiagnosePollerResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientDeleteResponse` has been removed
+- Field `ComputeClientListNodesResult` of struct `ComputeClientListNodesResponse` has been removed
+- Field `RawResponse` of struct `ComputeClientListNodesResponse` has been removed
+- Field `PrivateLinkResourcesClientListResult` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `WorkspaceConnectionsClientListResult` of struct `WorkspaceConnectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `WorkspaceConnectionsClientListResponse` has been removed
+- Field `WorkspacesClientGetResult` of struct `WorkspacesClientGetResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientGetResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `WorkspacesClientCreateOrUpdateResult` of struct `WorkspacesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ComputeClientStartPollerResponse` has been removed
+- Field `QuotasClientListResult` of struct `QuotasClientListResponse` has been removed
+- Field `RawResponse` of struct `QuotasClientListResponse` has been removed
+- Field `QuotasClientUpdateResult` of struct `QuotasClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `QuotasClientUpdateResponse` has been removed
+- Field `WorkspacesClientListNotebookAccessTokenResult` of struct `WorkspacesClientListNotebookAccessTokenResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientListNotebookAccessTokenResponse` has been removed
+- Field `RawResponse` of struct `ComputeClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ComputeClientRestartPollerResponse` has been removed
+- Field `WorkspaceConnectionsClientCreateResult` of struct `WorkspaceConnectionsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `WorkspaceConnectionsClientCreateResponse` has been removed
+- Field `PrivateEndpointConnectionsClientCreateOrUpdateResult` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientCreateOrUpdatePollerResponse` has been removed
+- Field `WorkspacesClientDiagnoseResult` of struct `WorkspacesClientDiagnoseResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientDiagnoseResponse` has been removed
+- Field `RawResponse` of struct `ComputeClientStopPollerResponse` has been removed
+- Field `ComputeClientGetResult` of struct `ComputeClientGetResponse` has been removed
+- Field `RawResponse` of struct `ComputeClientGetResponse` has been removed
+- Field `ComputeClientListResult` of struct `ComputeClientListResponse` has been removed
+- Field `RawResponse` of struct `ComputeClientListResponse` has been removed
+- Field `WorkspacesClientPrepareNotebookResult` of struct `WorkspacesClientPrepareNotebookResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientPrepareNotebookResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientResyncKeysResponse` has been removed
+- Field `WorkspaceFeaturesClientListResult` of struct `WorkspaceFeaturesClientListResponse` has been removed
+- Field `RawResponse` of struct `WorkspaceFeaturesClientListResponse` has been removed
+- Field `RawResponse` of struct `ComputeClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ComputeClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientPrepareNotebookPollerResponse` has been removed
+- Field `ComputeClientListKeysResult` of struct `ComputeClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `ComputeClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `ComputeClientStartResponse` has been removed
+- Field `WorkspacesClientListStorageAccountKeysResult` of struct `WorkspacesClientListStorageAccountKeysResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientListStorageAccountKeysResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListResult` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `WorkspacesClientListNotebookKeysResult` of struct `WorkspacesClientListNotebookKeysResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientListNotebookKeysResponse` has been removed
+- Field `WorkspaceSKUsClientListResult` of struct `WorkspaceSKUsClientListResponse` has been removed
+- Field `RawResponse` of struct `WorkspaceSKUsClientListResponse` has been removed
+- Field `WorkspacesClientListByResourceGroupResult` of struct `WorkspacesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ComputeClientRestartResponse` has been removed
+- Field `WorkspacesClientListBySubscriptionResult` of struct `WorkspacesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientListBySubscriptionResponse` has been removed
+- Field `ComputeClientUpdateResult` of struct `ComputeClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ComputeClientUpdateResponse` has been removed
+- Field `WorkspacesClientUpdateResult` of struct `WorkspacesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientUpdateResponse` has been removed
+
+### Features Added
+
+- New function `*WorkspaceFeaturesClientListPager.More() bool`
+- New function `*WorkspacesClientListByResourceGroupPager.More() bool`
+- New function `*WorkspacesClientListBySubscriptionPager.More() bool`
+- New function `*ComputeClientListNodesPager.More() bool`
+- New function `*QuotasClientListPager.More() bool`
+- New function `*PrivateEndpointConnectionsClientListPager.NextPage(context.Context) (PrivateEndpointConnectionsClientListResponse, error)`
+- New function `*ComputeClientListPager.More() bool`
+- New function `*ComputeClientListKeysResponse.UnmarshalJSON([]byte) error`
+- New function `*UsagesClientListPager.More() bool`
+- New function `*OperationsClientListPager.NextPage(context.Context) (OperationsClientListResponse, error)`
+- New function `*WorkspaceConnectionsClientListPager.NextPage(context.Context) (WorkspaceConnectionsClientListResponse, error)`
+- New function `*WorkspaceSKUsClientListPager.More() bool`
+- New function `*PrivateEndpointConnectionsClientListPager.More() bool`
+- New function `*WorkspaceConnectionsClientListPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New struct `ContainerResourceRequirements`
+- New struct `OperationsClientListPager`
+- New struct `PrivateEndpointConnectionsClientListPager`
+- New struct `ServicePrincipalCredentials`
+- New struct `WorkspaceConnectionsClientListPager`
+- New anonymous field `Workspace` in struct `WorkspacesClientUpdateResponse`
+- New anonymous field `Workspace` in struct `WorkspacesClientGetResponse`
+- New anonymous field `ComputeResource` in struct `ComputeClientGetResponse`
+- New anonymous field `ExternalFQDNResponse` in struct `WorkspacesClientListOutboundNetworkDependenciesEndpointsResponse`
+- New anonymous field `ListNotebookKeysResult` in struct `WorkspacesClientListNotebookKeysResponse`
+- New anonymous field `WorkspaceConnection` in struct `WorkspaceConnectionsClientCreateResponse`
+- New anonymous field `DiagnoseResponseResult` in struct `WorkspacesClientDiagnoseResponse`
+- New anonymous field `AmlComputeNodesInformation` in struct `ComputeClientListNodesResponse`
+- New anonymous field `ComputeResource` in struct `ComputeClientCreateOrUpdateResponse`
+- New anonymous field `SKUListResult` in struct `WorkspaceSKUsClientListResponse`
+- New anonymous field `ListWorkspaceKeysResult` in struct `WorkspacesClientListKeysResponse`
+- New anonymous field `Workspace` in struct `WorkspacesClientCreateOrUpdateResponse`
+- New anonymous field `ListUsagesResult` in struct `UsagesClientListResponse`
+- New anonymous field `WorkspaceListResult` in struct `WorkspacesClientListBySubscriptionResponse`
+- New anonymous field `ComputeResource` in struct `ComputeClientUpdateResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListResponse`
+- New anonymous field `WorkspaceConnection` in struct `WorkspaceConnectionsClientGetResponse`
+- New anonymous field `ListAmlUserFeatureResult` in struct `WorkspaceFeaturesClientListResponse`
+- New anonymous field `WorkspaceListResult` in struct `WorkspacesClientListByResourceGroupResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `PrivateLinkResourcesClientListResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `PaginatedComputeResourcesList` in struct `ComputeClientListResponse`
+- New anonymous field `UpdateWorkspaceQuotasResult` in struct `QuotasClientUpdateResponse`
+- New anonymous field `ComputeSecretsClassification` in struct `ComputeClientListKeysResponse`
+- New anonymous field `VirtualMachineSizeListResult` in struct `VirtualMachineSizesClientListResponse`
+- New anonymous field `ListStorageAccountKeysResult` in struct `WorkspacesClientListStorageAccountKeysResponse`
+- New anonymous field `ListWorkspaceQuotas` in struct `QuotasClientListResponse`
+- New anonymous field `NotebookResourceInfo` in struct `WorkspacesClientPrepareNotebookResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse`
+- New anonymous field `PaginatedWorkspaceConnectionsList` in struct `WorkspaceConnectionsClientListResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `NotebookAccessTokenResult` in struct `WorkspacesClientListNotebookAccessTokenResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `DiagnoseRequestProperties.StorageAccount` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `DiagnoseRequestProperties.Udr` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `DiagnoseRequestProperties.ResourceLock` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `DiagnoseRequestProperties.Others` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `DiagnoseRequestProperties.ContainerRegistry` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `DiagnoseRequestProperties.DNSResolution` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `DiagnoseRequestProperties.KeyVault` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `DiagnoseRequestProperties.ApplicationInsights` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `DiagnoseRequestProperties.Nsg` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `ErrorAdditionalInfo.Info` has been changed from `map[string]interface{}` to `interface{}`
+- Struct `ContainerResourceRequirements` has been removed
+- Struct `ServicePrincipalCredentials` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

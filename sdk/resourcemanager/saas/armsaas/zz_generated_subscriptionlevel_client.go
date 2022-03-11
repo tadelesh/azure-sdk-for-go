@@ -34,17 +34,17 @@ type SubscriptionLevelClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSubscriptionLevelClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SubscriptionLevelClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SubscriptionLevelClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *SubscriptionLevelClient) BeginCreateOrUpdate(ctx context.Context, 
 	if err != nil {
 		return SubscriptionLevelClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := SubscriptionLevelClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SubscriptionLevelClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SubscriptionLevelClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return SubscriptionLevelClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *SubscriptionLevelClient) BeginDelete(ctx context.Context, resource
 	if err != nil {
 		return SubscriptionLevelClientDeletePollerResponse{}, err
 	}
-	result := SubscriptionLevelClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SubscriptionLevelClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SubscriptionLevelClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return SubscriptionLevelClientDeletePollerResponse{}, err
@@ -232,7 +228,7 @@ func (client *SubscriptionLevelClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *SubscriptionLevelClient) getHandleResponse(resp *http.Response) (SubscriptionLevelClientGetResponse, error) {
-	result := SubscriptionLevelClientGetResponse{RawResponse: resp}
+	result := SubscriptionLevelClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Resource); err != nil {
 		return SubscriptionLevelClientGetResponse{}, err
 	}
@@ -288,7 +284,7 @@ func (client *SubscriptionLevelClient) listAccessTokenCreateRequest(ctx context.
 
 // listAccessTokenHandleResponse handles the ListAccessToken response.
 func (client *SubscriptionLevelClient) listAccessTokenHandleResponse(resp *http.Response) (SubscriptionLevelClientListAccessTokenResponse, error) {
-	result := SubscriptionLevelClientListAccessTokenResponse{RawResponse: resp}
+	result := SubscriptionLevelClientListAccessTokenResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessTokenResult); err != nil {
 		return SubscriptionLevelClientListAccessTokenResponse{}, err
 	}
@@ -331,7 +327,7 @@ func (client *SubscriptionLevelClient) listByAzureSubscriptionCreateRequest(ctx 
 
 // listByAzureSubscriptionHandleResponse handles the ListByAzureSubscription response.
 func (client *SubscriptionLevelClient) listByAzureSubscriptionHandleResponse(resp *http.Response) (SubscriptionLevelClientListByAzureSubscriptionResponse, error) {
-	result := SubscriptionLevelClientListByAzureSubscriptionResponse{RawResponse: resp}
+	result := SubscriptionLevelClientListByAzureSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceResponseWithContinuation); err != nil {
 		return SubscriptionLevelClientListByAzureSubscriptionResponse{}, err
 	}
@@ -379,7 +375,7 @@ func (client *SubscriptionLevelClient) listByResourceGroupCreateRequest(ctx cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *SubscriptionLevelClient) listByResourceGroupHandleResponse(resp *http.Response) (SubscriptionLevelClientListByResourceGroupResponse, error) {
-	result := SubscriptionLevelClientListByResourceGroupResponse{RawResponse: resp}
+	result := SubscriptionLevelClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceResponseWithContinuation); err != nil {
 		return SubscriptionLevelClientListByResourceGroupResponse{}, err
 	}
@@ -397,9 +393,7 @@ func (client *SubscriptionLevelClient) BeginMoveResources(ctx context.Context, r
 	if err != nil {
 		return SubscriptionLevelClientMoveResourcesPollerResponse{}, err
 	}
-	result := SubscriptionLevelClientMoveResourcesPollerResponse{
-		RawResponse: resp,
-	}
+	result := SubscriptionLevelClientMoveResourcesPollerResponse{}
 	pt, err := armruntime.NewPoller("SubscriptionLevelClient.MoveResources", "location", resp, client.pl)
 	if err != nil {
 		return SubscriptionLevelClientMoveResourcesPollerResponse{}, err
@@ -461,9 +455,7 @@ func (client *SubscriptionLevelClient) BeginUpdate(ctx context.Context, resource
 	if err != nil {
 		return SubscriptionLevelClientUpdatePollerResponse{}, err
 	}
-	result := SubscriptionLevelClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SubscriptionLevelClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SubscriptionLevelClient.Update", "location", resp, client.pl)
 	if err != nil {
 		return SubscriptionLevelClientUpdatePollerResponse{}, err
@@ -529,9 +521,7 @@ func (client *SubscriptionLevelClient) BeginUpdateToUnsubscribed(ctx context.Con
 	if err != nil {
 		return SubscriptionLevelClientUpdateToUnsubscribedPollerResponse{}, err
 	}
-	result := SubscriptionLevelClientUpdateToUnsubscribedPollerResponse{
-		RawResponse: resp,
-	}
+	result := SubscriptionLevelClientUpdateToUnsubscribedPollerResponse{}
 	pt, err := armruntime.NewPoller("SubscriptionLevelClient.UpdateToUnsubscribed", "location", resp, client.pl)
 	if err != nil {
 		return SubscriptionLevelClientUpdateToUnsubscribedPollerResponse{}, err
@@ -603,7 +593,7 @@ func (client *SubscriptionLevelClient) ValidateMoveResources(ctx context.Context
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return SubscriptionLevelClientValidateMoveResourcesResponse{}, runtime.NewResponseError(resp)
 	}
-	return SubscriptionLevelClientValidateMoveResourcesResponse{RawResponse: resp}, nil
+	return SubscriptionLevelClientValidateMoveResourcesResponse{}, nil
 }
 
 // validateMoveResourcesCreateRequest creates the ValidateMoveResources request.

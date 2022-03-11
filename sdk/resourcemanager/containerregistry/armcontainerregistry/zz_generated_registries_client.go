@@ -34,17 +34,17 @@ type RegistriesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRegistriesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RegistriesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RegistriesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -82,7 +82,7 @@ func (client *RegistriesClient) checkNameAvailabilityCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, registryNameCheckRequest)
@@ -90,7 +90,7 @@ func (client *RegistriesClient) checkNameAvailabilityCreateRequest(ctx context.C
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *RegistriesClient) checkNameAvailabilityHandleResponse(resp *http.Response) (RegistriesClientCheckNameAvailabilityResponse, error) {
-	result := RegistriesClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := RegistriesClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegistryNameStatus); err != nil {
 		return RegistriesClientCheckNameAvailabilityResponse{}, err
 	}
@@ -108,9 +108,7 @@ func (client *RegistriesClient) BeginCreate(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return RegistriesClientCreatePollerResponse{}, err
 	}
-	result := RegistriesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := RegistriesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("RegistriesClient.Create", "", resp, client.pl)
 	if err != nil {
 		return RegistriesClientCreatePollerResponse{}, err
@@ -158,7 +156,7 @@ func (client *RegistriesClient) createCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, registry)
@@ -174,9 +172,7 @@ func (client *RegistriesClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return RegistriesClientDeletePollerResponse{}, err
 	}
-	result := RegistriesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := RegistriesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("RegistriesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return RegistriesClientDeletePollerResponse{}, err
@@ -224,9 +220,75 @@ func (client *RegistriesClient) deleteCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	return req, nil
+}
+
+// BeginGenerateCredentials - Generate keys for a token of a specified container registry.
+// If the operation fails it returns an *azcore.ResponseError type.
+// resourceGroupName - The name of the resource group to which the container registry belongs.
+// registryName - The name of the container registry.
+// generateCredentialsParameters - The parameters for generating credentials.
+// options - RegistriesClientBeginGenerateCredentialsOptions contains the optional parameters for the RegistriesClient.BeginGenerateCredentials
+// method.
+func (client *RegistriesClient) BeginGenerateCredentials(ctx context.Context, resourceGroupName string, registryName string, generateCredentialsParameters GenerateCredentialsParameters, options *RegistriesClientBeginGenerateCredentialsOptions) (RegistriesClientGenerateCredentialsPollerResponse, error) {
+	resp, err := client.generateCredentials(ctx, resourceGroupName, registryName, generateCredentialsParameters, options)
+	if err != nil {
+		return RegistriesClientGenerateCredentialsPollerResponse{}, err
+	}
+	result := RegistriesClientGenerateCredentialsPollerResponse{}
+	pt, err := armruntime.NewPoller("RegistriesClient.GenerateCredentials", "", resp, client.pl)
+	if err != nil {
+		return RegistriesClientGenerateCredentialsPollerResponse{}, err
+	}
+	result.Poller = &RegistriesClientGenerateCredentialsPoller{
+		pt: pt,
+	}
+	return result, nil
+}
+
+// GenerateCredentials - Generate keys for a token of a specified container registry.
+// If the operation fails it returns an *azcore.ResponseError type.
+func (client *RegistriesClient) generateCredentials(ctx context.Context, resourceGroupName string, registryName string, generateCredentialsParameters GenerateCredentialsParameters, options *RegistriesClientBeginGenerateCredentialsOptions) (*http.Response, error) {
+	req, err := client.generateCredentialsCreateRequest(ctx, resourceGroupName, registryName, generateCredentialsParameters, options)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := client.pl.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
+		return nil, runtime.NewResponseError(resp)
+	}
+	return resp, nil
+}
+
+// generateCredentialsCreateRequest creates the GenerateCredentials request.
+func (client *RegistriesClient) generateCredentialsCreateRequest(ctx context.Context, resourceGroupName string, registryName string, generateCredentialsParameters GenerateCredentialsParameters, options *RegistriesClientBeginGenerateCredentialsOptions) (*policy.Request, error) {
+	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}/generateCredentials"
+	if client.subscriptionID == "" {
+		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+	if resourceGroupName == "" {
+		return nil, errors.New("parameter resourceGroupName cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+	if registryName == "" {
+		return nil, errors.New("parameter registryName cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{registryName}", url.PathEscape(registryName))
+	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.host, urlPath))
+	if err != nil {
+		return nil, err
+	}
+	reqQP := req.Raw().URL.Query()
+	reqQP.Set("api-version", "2021-12-01-preview")
+	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().Header.Set("Accept", "application/json")
+	return req, runtime.MarshalAsJSON(req, generateCredentialsParameters)
 }
 
 // Get - Gets the properties of the specified container registry.
@@ -269,7 +331,7 @@ func (client *RegistriesClient) getCreateRequest(ctx context.Context, resourceGr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -277,7 +339,7 @@ func (client *RegistriesClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *RegistriesClient) getHandleResponse(resp *http.Response) (RegistriesClientGetResponse, error) {
-	result := RegistriesClientGetResponse{RawResponse: resp}
+	result := RegistriesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Registry); err != nil {
 		return RegistriesClientGetResponse{}, err
 	}
@@ -333,7 +395,7 @@ func (client *RegistriesClient) getBuildSourceUploadURLCreateRequest(ctx context
 
 // getBuildSourceUploadURLHandleResponse handles the GetBuildSourceUploadURL response.
 func (client *RegistriesClient) getBuildSourceUploadURLHandleResponse(resp *http.Response) (RegistriesClientGetBuildSourceUploadURLResponse, error) {
-	result := RegistriesClientGetBuildSourceUploadURLResponse{RawResponse: resp}
+	result := RegistriesClientGetBuildSourceUploadURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceUploadDefinition); err != nil {
 		return RegistriesClientGetBuildSourceUploadURLResponse{}, err
 	}
@@ -386,7 +448,7 @@ func (client *RegistriesClient) getPrivateLinkResourceCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -394,7 +456,7 @@ func (client *RegistriesClient) getPrivateLinkResourceCreateRequest(ctx context.
 
 // getPrivateLinkResourceHandleResponse handles the GetPrivateLinkResource response.
 func (client *RegistriesClient) getPrivateLinkResourceHandleResponse(resp *http.Response) (RegistriesClientGetPrivateLinkResourceResponse, error) {
-	result := RegistriesClientGetPrivateLinkResourceResponse{RawResponse: resp}
+	result := RegistriesClientGetPrivateLinkResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResource); err != nil {
 		return RegistriesClientGetPrivateLinkResourceResponse{}, err
 	}
@@ -413,9 +475,7 @@ func (client *RegistriesClient) BeginImportImage(ctx context.Context, resourceGr
 	if err != nil {
 		return RegistriesClientImportImagePollerResponse{}, err
 	}
-	result := RegistriesClientImportImagePollerResponse{
-		RawResponse: resp,
-	}
+	result := RegistriesClientImportImagePollerResponse{}
 	pt, err := armruntime.NewPoller("RegistriesClient.ImportImage", "", resp, client.pl)
 	if err != nil {
 		return RegistriesClientImportImagePollerResponse{}, err
@@ -463,7 +523,7 @@ func (client *RegistriesClient) importImageCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	return req, runtime.MarshalAsJSON(req, parameters)
 }
@@ -495,7 +555,7 @@ func (client *RegistriesClient) listCreateRequest(ctx context.Context, options *
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -503,7 +563,7 @@ func (client *RegistriesClient) listCreateRequest(ctx context.Context, options *
 
 // listHandleResponse handles the List response.
 func (client *RegistriesClient) listHandleResponse(resp *http.Response) (RegistriesClientListResponse, error) {
-	result := RegistriesClientListResponse{RawResponse: resp}
+	result := RegistriesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegistryListResult); err != nil {
 		return RegistriesClientListResponse{}, err
 	}
@@ -543,7 +603,7 @@ func (client *RegistriesClient) listByResourceGroupCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -551,7 +611,7 @@ func (client *RegistriesClient) listByResourceGroupCreateRequest(ctx context.Con
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *RegistriesClient) listByResourceGroupHandleResponse(resp *http.Response) (RegistriesClientListByResourceGroupResponse, error) {
-	result := RegistriesClientListByResourceGroupResponse{RawResponse: resp}
+	result := RegistriesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegistryListResult); err != nil {
 		return RegistriesClientListByResourceGroupResponse{}, err
 	}
@@ -599,7 +659,7 @@ func (client *RegistriesClient) listCredentialsCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -607,7 +667,7 @@ func (client *RegistriesClient) listCredentialsCreateRequest(ctx context.Context
 
 // listCredentialsHandleResponse handles the ListCredentials response.
 func (client *RegistriesClient) listCredentialsHandleResponse(resp *http.Response) (RegistriesClientListCredentialsResponse, error) {
-	result := RegistriesClientListCredentialsResponse{RawResponse: resp}
+	result := RegistriesClientListCredentialsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegistryListCredentialsResult); err != nil {
 		return RegistriesClientListCredentialsResponse{}, err
 	}
@@ -652,7 +712,7 @@ func (client *RegistriesClient) listPrivateLinkResourcesCreateRequest(ctx contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -660,7 +720,7 @@ func (client *RegistriesClient) listPrivateLinkResourcesCreateRequest(ctx contex
 
 // listPrivateLinkResourcesHandleResponse handles the ListPrivateLinkResources response.
 func (client *RegistriesClient) listPrivateLinkResourcesHandleResponse(resp *http.Response) (RegistriesClientListPrivateLinkResourcesResponse, error) {
-	result := RegistriesClientListPrivateLinkResourcesResponse{RawResponse: resp}
+	result := RegistriesClientListPrivateLinkResourcesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourceListResult); err != nil {
 		return RegistriesClientListPrivateLinkResourcesResponse{}, err
 	}
@@ -707,7 +767,7 @@ func (client *RegistriesClient) listUsagesCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -715,7 +775,7 @@ func (client *RegistriesClient) listUsagesCreateRequest(ctx context.Context, res
 
 // listUsagesHandleResponse handles the ListUsages response.
 func (client *RegistriesClient) listUsagesHandleResponse(resp *http.Response) (RegistriesClientListUsagesResponse, error) {
-	result := RegistriesClientListUsagesResponse{RawResponse: resp}
+	result := RegistriesClientListUsagesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegistryUsageListResult); err != nil {
 		return RegistriesClientListUsagesResponse{}, err
 	}
@@ -764,7 +824,7 @@ func (client *RegistriesClient) regenerateCredentialCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, regenerateCredentialParameters)
@@ -772,7 +832,7 @@ func (client *RegistriesClient) regenerateCredentialCreateRequest(ctx context.Co
 
 // regenerateCredentialHandleResponse handles the RegenerateCredential response.
 func (client *RegistriesClient) regenerateCredentialHandleResponse(resp *http.Response) (RegistriesClientRegenerateCredentialResponse, error) {
-	result := RegistriesClientRegenerateCredentialResponse{RawResponse: resp}
+	result := RegistriesClientRegenerateCredentialResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegistryListCredentialsResult); err != nil {
 		return RegistriesClientRegenerateCredentialResponse{}, err
 	}
@@ -791,9 +851,7 @@ func (client *RegistriesClient) BeginScheduleRun(ctx context.Context, resourceGr
 	if err != nil {
 		return RegistriesClientScheduleRunPollerResponse{}, err
 	}
-	result := RegistriesClientScheduleRunPollerResponse{
-		RawResponse: resp,
-	}
+	result := RegistriesClientScheduleRunPollerResponse{}
 	pt, err := armruntime.NewPoller("RegistriesClient.ScheduleRun", "", resp, client.pl)
 	if err != nil {
 		return RegistriesClientScheduleRunPollerResponse{}, err
@@ -858,9 +916,7 @@ func (client *RegistriesClient) BeginUpdate(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return RegistriesClientUpdatePollerResponse{}, err
 	}
-	result := RegistriesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := RegistriesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("RegistriesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return RegistriesClientUpdatePollerResponse{}, err
@@ -908,7 +964,7 @@ func (client *RegistriesClient) updateCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, registryUpdateParameters)

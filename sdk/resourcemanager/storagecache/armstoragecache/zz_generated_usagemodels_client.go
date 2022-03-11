@@ -35,17 +35,17 @@ type UsageModelsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewUsageModelsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *UsageModelsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &UsageModelsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -85,7 +85,7 @@ func (client *UsageModelsClient) listCreateRequest(ctx context.Context, options 
 
 // listHandleResponse handles the List response.
 func (client *UsageModelsClient) listHandleResponse(resp *http.Response) (UsageModelsClientListResponse, error) {
-	result := UsageModelsClientListResponse{RawResponse: resp}
+	result := UsageModelsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UsageModelsResult); err != nil {
 		return UsageModelsClientListResponse{}, err
 	}

@@ -34,17 +34,17 @@ type IotConnectorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIotConnectorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IotConnectorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IotConnectorsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *IotConnectorsClient) BeginCreateOrUpdate(ctx context.Context, reso
 	if err != nil {
 		return IotConnectorsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := IotConnectorsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := IotConnectorsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("IotConnectorsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return IotConnectorsClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *IotConnectorsClient) BeginDelete(ctx context.Context, resourceGrou
 	if err != nil {
 		return IotConnectorsClientDeletePollerResponse{}, err
 	}
-	result := IotConnectorsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := IotConnectorsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("IotConnectorsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return IotConnectorsClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *IotConnectorsClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *IotConnectorsClient) getHandleResponse(resp *http.Response) (IotConnectorsClientGetResponse, error) {
-	result := IotConnectorsClientGetResponse{RawResponse: resp}
+	result := IotConnectorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IotConnector); err != nil {
 		return IotConnectorsClientGetResponse{}, err
 	}
@@ -300,7 +296,7 @@ func (client *IotConnectorsClient) listByWorkspaceCreateRequest(ctx context.Cont
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *IotConnectorsClient) listByWorkspaceHandleResponse(resp *http.Response) (IotConnectorsClientListByWorkspaceResponse, error) {
-	result := IotConnectorsClientListByWorkspaceResponse{RawResponse: resp}
+	result := IotConnectorsClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IotConnectorCollection); err != nil {
 		return IotConnectorsClientListByWorkspaceResponse{}, err
 	}
@@ -320,9 +316,7 @@ func (client *IotConnectorsClient) BeginUpdate(ctx context.Context, resourceGrou
 	if err != nil {
 		return IotConnectorsClientUpdatePollerResponse{}, err
 	}
-	result := IotConnectorsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := IotConnectorsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("IotConnectorsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return IotConnectorsClientUpdatePollerResponse{}, err

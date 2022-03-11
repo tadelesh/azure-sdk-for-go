@@ -43,11 +43,10 @@ func (p *AccountClientCreatePoller) Poll(ctx context.Context) (*http.Response, e
 // If the final GET succeeded then the final AccountClientCreateResponse will be returned.
 func (p *AccountClientCreatePoller) FinalResponse(ctx context.Context) (AccountClientCreateResponse, error) {
 	respType := AccountClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Account)
+	_, err := p.pt.FinalResponse(ctx, &respType.Account)
 	if err != nil {
 		return AccountClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *AccountClientDeletePoller) Poll(ctx context.Context) (*http.Response, e
 // If the final GET succeeded then the final AccountClientDeleteResponse will be returned.
 func (p *AccountClientDeletePoller) FinalResponse(ctx context.Context) (AccountClientDeleteResponse, error) {
 	respType := AccountClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return AccountClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *CertificateClientDeletePoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final CertificateClientDeleteResponse will be returned.
 func (p *CertificateClientDeletePoller) FinalResponse(ctx context.Context) (CertificateClientDeleteResponse, error) {
 	respType := CertificateClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CertificateClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *PoolClientDeletePoller) Poll(ctx context.Context) (*http.Response, erro
 // If the final GET succeeded then the final PoolClientDeleteResponse will be returned.
 func (p *PoolClientDeletePoller) FinalResponse(ctx context.Context) (PoolClientDeleteResponse, error) {
 	respType := PoolClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PoolClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *PrivateEndpointConnectionClientUpdatePoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final PrivateEndpointConnectionClientUpdateResponse will be returned.
 func (p *PrivateEndpointConnectionClientUpdatePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionClientUpdateResponse, error) {
 	respType := PrivateEndpointConnectionClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return PrivateEndpointConnectionClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

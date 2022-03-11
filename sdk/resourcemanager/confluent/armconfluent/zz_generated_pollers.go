@@ -43,11 +43,10 @@ func (p *OrganizationClientCreatePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final OrganizationClientCreateResponse will be returned.
 func (p *OrganizationClientCreatePoller) FinalResponse(ctx context.Context) (OrganizationClientCreateResponse, error) {
 	respType := OrganizationClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OrganizationResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.OrganizationResource)
 	if err != nil {
 		return OrganizationClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *OrganizationClientDeletePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final OrganizationClientDeleteResponse will be returned.
 func (p *OrganizationClientDeletePoller) FinalResponse(ctx context.Context) (OrganizationClientDeleteResponse, error) {
 	respType := OrganizationClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return OrganizationClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

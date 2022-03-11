@@ -32,16 +32,16 @@ type DiagnosticSettingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDiagnosticSettingsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *DiagnosticSettingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DiagnosticSettingsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -87,7 +87,7 @@ func (client *DiagnosticSettingsClient) createOrUpdateCreateRequest(ctx context.
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *DiagnosticSettingsClient) createOrUpdateHandleResponse(resp *http.Response) (DiagnosticSettingsClientCreateOrUpdateResponse, error) {
-	result := DiagnosticSettingsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := DiagnosticSettingsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiagnosticSettingsResource); err != nil {
 		return DiagnosticSettingsClientCreateOrUpdateResponse{}, err
 	}
@@ -111,7 +111,7 @@ func (client *DiagnosticSettingsClient) Delete(ctx context.Context, name string,
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DiagnosticSettingsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DiagnosticSettingsClientDeleteResponse{RawResponse: resp}, nil
+	return DiagnosticSettingsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -171,7 +171,7 @@ func (client *DiagnosticSettingsClient) getCreateRequest(ctx context.Context, na
 
 // getHandleResponse handles the Get response.
 func (client *DiagnosticSettingsClient) getHandleResponse(resp *http.Response) (DiagnosticSettingsClientGetResponse, error) {
-	result := DiagnosticSettingsClientGetResponse{RawResponse: resp}
+	result := DiagnosticSettingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiagnosticSettingsResource); err != nil {
 		return DiagnosticSettingsClientGetResponse{}, err
 	}
@@ -212,7 +212,7 @@ func (client *DiagnosticSettingsClient) listCreateRequest(ctx context.Context, o
 
 // listHandleResponse handles the List response.
 func (client *DiagnosticSettingsClient) listHandleResponse(resp *http.Response) (DiagnosticSettingsClientListResponse, error) {
-	result := DiagnosticSettingsClientListResponse{RawResponse: resp}
+	result := DiagnosticSettingsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiagnosticSettingsResourceCollection); err != nil {
 		return DiagnosticSettingsClientListResponse{}, err
 	}

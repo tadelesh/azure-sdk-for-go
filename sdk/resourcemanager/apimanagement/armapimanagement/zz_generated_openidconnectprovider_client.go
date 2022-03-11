@@ -36,17 +36,17 @@ type OpenIDConnectProviderClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewOpenIDConnectProviderClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *OpenIDConnectProviderClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &OpenIDConnectProviderClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *OpenIDConnectProviderClient) createOrUpdateCreateRequest(ctx conte
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *OpenIDConnectProviderClient) createOrUpdateHandleResponse(resp *http.Response) (OpenIDConnectProviderClientCreateOrUpdateResponse, error) {
-	result := OpenIDConnectProviderClientCreateOrUpdateResponse{RawResponse: resp}
+	result := OpenIDConnectProviderClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -140,7 +140,7 @@ func (client *OpenIDConnectProviderClient) Delete(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return OpenIDConnectProviderClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return OpenIDConnectProviderClientDeleteResponse{RawResponse: resp}, nil
+	return OpenIDConnectProviderClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -228,7 +228,7 @@ func (client *OpenIDConnectProviderClient) getCreateRequest(ctx context.Context,
 
 // getHandleResponse handles the Get response.
 func (client *OpenIDConnectProviderClient) getHandleResponse(resp *http.Response) (OpenIDConnectProviderClientGetResponse, error) {
-	result := OpenIDConnectProviderClientGetResponse{RawResponse: resp}
+	result := OpenIDConnectProviderClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -288,7 +288,7 @@ func (client *OpenIDConnectProviderClient) getEntityTagCreateRequest(ctx context
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *OpenIDConnectProviderClient) getEntityTagHandleResponse(resp *http.Response) (OpenIDConnectProviderClientGetEntityTagResponse, error) {
-	result := OpenIDConnectProviderClientGetEntityTagResponse{RawResponse: resp}
+	result := OpenIDConnectProviderClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -353,7 +353,7 @@ func (client *OpenIDConnectProviderClient) listByServiceCreateRequest(ctx contex
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *OpenIDConnectProviderClient) listByServiceHandleResponse(resp *http.Response) (OpenIDConnectProviderClientListByServiceResponse, error) {
-	result := OpenIDConnectProviderClientListByServiceResponse{RawResponse: resp}
+	result := OpenIDConnectProviderClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OpenIDConnectProviderCollection); err != nil {
 		return OpenIDConnectProviderClientListByServiceResponse{}, err
 	}
@@ -414,7 +414,7 @@ func (client *OpenIDConnectProviderClient) listSecretsCreateRequest(ctx context.
 
 // listSecretsHandleResponse handles the ListSecrets response.
 func (client *OpenIDConnectProviderClient) listSecretsHandleResponse(resp *http.Response) (OpenIDConnectProviderClientListSecretsResponse, error) {
-	result := OpenIDConnectProviderClientListSecretsResponse{RawResponse: resp}
+	result := OpenIDConnectProviderClientListSecretsResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -482,7 +482,7 @@ func (client *OpenIDConnectProviderClient) updateCreateRequest(ctx context.Conte
 
 // updateHandleResponse handles the Update response.
 func (client *OpenIDConnectProviderClient) updateHandleResponse(resp *http.Response) (OpenIDConnectProviderClientUpdateResponse, error) {
-	result := OpenIDConnectProviderClientUpdateResponse{RawResponse: resp}
+	result := OpenIDConnectProviderClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

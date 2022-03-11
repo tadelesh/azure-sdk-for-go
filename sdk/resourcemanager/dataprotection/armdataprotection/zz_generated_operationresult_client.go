@@ -35,17 +35,17 @@ type OperationResultClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewOperationResultClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *OperationResultClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &OperationResultClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -96,7 +96,7 @@ func (client *OperationResultClient) getCreateRequest(ctx context.Context, opera
 
 // getHandleResponse handles the Get response.
 func (client *OperationResultClient) getHandleResponse(resp *http.Response) (OperationResultClientGetResponse, error) {
-	result := OperationResultClientGetResponse{RawResponse: resp}
+	result := OperationResultClientGetResponse{}
 	if val := resp.Header.Get("Location"); val != "" {
 		result.Location = &val
 	}

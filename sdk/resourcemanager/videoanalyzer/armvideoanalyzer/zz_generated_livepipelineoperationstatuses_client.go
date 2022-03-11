@@ -108,7 +108,7 @@ func (client *LivePipelineOperationStatusesClient) getCreateRequest(ctx context.
 
 // getHandleResponse handles the Get response.
 func (client *LivePipelineOperationStatusesClient) getHandleResponse(resp *http.Response) (LivePipelineOperationStatusesClientGetResponse, error) {
-	result := LivePipelineOperationStatusesClientGetResponse{RawResponse: resp}
+	result := LivePipelineOperationStatusesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LivePipelineOperationStatus); err != nil {
 		return LivePipelineOperationStatusesClientGetResponse{}, err
 	}

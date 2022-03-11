@@ -35,17 +35,17 @@ type VPNServerConfigurationsAssociatedWithVirtualWanClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVPNServerConfigurationsAssociatedWithVirtualWanClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VPNServerConfigurationsAssociatedWithVirtualWanClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VPNServerConfigurationsAssociatedWithVirtualWanClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *VPNServerConfigurationsAssociatedWithVirtualWanClient) BeginList(c
 	if err != nil {
 		return VPNServerConfigurationsAssociatedWithVirtualWanClientListPollerResponse{}, err
 	}
-	result := VPNServerConfigurationsAssociatedWithVirtualWanClientListPollerResponse{
-		RawResponse: resp,
-	}
+	result := VPNServerConfigurationsAssociatedWithVirtualWanClientListPollerResponse{}
 	pt, err := armruntime.NewPoller("VPNServerConfigurationsAssociatedWithVirtualWanClient.List", "location", resp, client.pl)
 	if err != nil {
 		return VPNServerConfigurationsAssociatedWithVirtualWanClientListPollerResponse{}, err

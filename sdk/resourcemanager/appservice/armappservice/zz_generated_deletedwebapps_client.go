@@ -97,7 +97,7 @@ func (client *DeletedWebAppsClient) getDeletedWebAppByLocationCreateRequest(ctx 
 
 // getDeletedWebAppByLocationHandleResponse handles the GetDeletedWebAppByLocation response.
 func (client *DeletedWebAppsClient) getDeletedWebAppByLocationHandleResponse(resp *http.Response) (DeletedWebAppsClientGetDeletedWebAppByLocationResponse, error) {
-	result := DeletedWebAppsClientGetDeletedWebAppByLocationResponse{RawResponse: resp}
+	result := DeletedWebAppsClientGetDeletedWebAppByLocationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedSite); err != nil {
 		return DeletedWebAppsClientGetDeletedWebAppByLocationResponse{}, err
 	}
@@ -139,7 +139,7 @@ func (client *DeletedWebAppsClient) listCreateRequest(ctx context.Context, optio
 
 // listHandleResponse handles the List response.
 func (client *DeletedWebAppsClient) listHandleResponse(resp *http.Response) (DeletedWebAppsClientListResponse, error) {
-	result := DeletedWebAppsClientListResponse{RawResponse: resp}
+	result := DeletedWebAppsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedWebAppCollection); err != nil {
 		return DeletedWebAppsClientListResponse{}, err
 	}
@@ -186,7 +186,7 @@ func (client *DeletedWebAppsClient) listByLocationCreateRequest(ctx context.Cont
 
 // listByLocationHandleResponse handles the ListByLocation response.
 func (client *DeletedWebAppsClient) listByLocationHandleResponse(resp *http.Response) (DeletedWebAppsClientListByLocationResponse, error) {
-	result := DeletedWebAppsClientListByLocationResponse{RawResponse: resp}
+	result := DeletedWebAppsClientListByLocationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedWebAppCollection); err != nil {
 		return DeletedWebAppsClientListByLocationResponse{}, err
 	}

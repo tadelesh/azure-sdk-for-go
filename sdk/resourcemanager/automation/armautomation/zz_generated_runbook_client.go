@@ -35,17 +35,17 @@ type RunbookClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRunbookClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RunbookClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RunbookClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *RunbookClient) createOrUpdateCreateRequest(ctx context.Context, re
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *RunbookClient) createOrUpdateHandleResponse(resp *http.Response) (RunbookClientCreateOrUpdateResponse, error) {
-	result := RunbookClientCreateOrUpdateResponse{RawResponse: resp}
+	result := RunbookClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Runbook); err != nil {
 		return RunbookClientCreateOrUpdateResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *RunbookClient) Delete(ctx context.Context, resourceGroupName strin
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return RunbookClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return RunbookClientDeleteResponse{RawResponse: resp}, nil
+	return RunbookClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -216,7 +216,7 @@ func (client *RunbookClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *RunbookClient) getHandleResponse(resp *http.Response) (RunbookClientGetResponse, error) {
-	result := RunbookClientGetResponse{RawResponse: resp}
+	result := RunbookClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Runbook); err != nil {
 		return RunbookClientGetResponse{}, err
 	}
@@ -241,7 +241,7 @@ func (client *RunbookClient) GetContent(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated, http.StatusAccepted, http.StatusNoContent) {
 		return RunbookClientGetContentResponse{}, runtime.NewResponseError(resp)
 	}
-	return RunbookClientGetContentResponse{RawResponse: resp}, nil
+	return RunbookClientGetContentResponse{}, nil
 }
 
 // getContentCreateRequest creates the GetContent request.
@@ -320,7 +320,7 @@ func (client *RunbookClient) listByAutomationAccountCreateRequest(ctx context.Co
 
 // listByAutomationAccountHandleResponse handles the ListByAutomationAccount response.
 func (client *RunbookClient) listByAutomationAccountHandleResponse(resp *http.Response) (RunbookClientListByAutomationAccountResponse, error) {
-	result := RunbookClientListByAutomationAccountResponse{RawResponse: resp}
+	result := RunbookClientListByAutomationAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RunbookListResult); err != nil {
 		return RunbookClientListByAutomationAccountResponse{}, err
 	}
@@ -338,9 +338,7 @@ func (client *RunbookClient) BeginPublish(ctx context.Context, resourceGroupName
 	if err != nil {
 		return RunbookClientPublishPollerResponse{}, err
 	}
-	result := RunbookClientPublishPollerResponse{
-		RawResponse: resp,
-	}
+	result := RunbookClientPublishPollerResponse{}
 	pt, err := armruntime.NewPoller("RunbookClient.Publish", "", resp, client.pl)
 	if err != nil {
 		return RunbookClientPublishPollerResponse{}, err
@@ -452,7 +450,7 @@ func (client *RunbookClient) updateCreateRequest(ctx context.Context, resourceGr
 
 // updateHandleResponse handles the Update response.
 func (client *RunbookClient) updateHandleResponse(resp *http.Response) (RunbookClientUpdateResponse, error) {
-	result := RunbookClientUpdateResponse{RawResponse: resp}
+	result := RunbookClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Runbook); err != nil {
 		return RunbookClientUpdateResponse{}, err
 	}

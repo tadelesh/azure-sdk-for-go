@@ -34,17 +34,17 @@ type DatabasesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDatabasesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DatabasesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DatabasesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *DatabasesClient) BeginCreate(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DatabasesClientCreatePollerResponse{}, err
 	}
-	result := DatabasesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.Create", "original-uri", resp, client.pl)
 	if err != nil {
 		return DatabasesClientCreatePollerResponse{}, err
@@ -115,7 +113,7 @@ func (client *DatabasesClient) createCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-08-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -132,9 +130,7 @@ func (client *DatabasesClient) BeginDelete(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DatabasesClientDeletePollerResponse{}, err
 	}
-	result := DatabasesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DatabasesClientDeletePollerResponse{}, err
@@ -186,7 +182,7 @@ func (client *DatabasesClient) deleteCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-08-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -204,9 +200,7 @@ func (client *DatabasesClient) BeginExport(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DatabasesClientExportPollerResponse{}, err
 	}
-	result := DatabasesClientExportPollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientExportPollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.Export", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DatabasesClientExportPollerResponse{}, err
@@ -258,7 +252,78 @@ func (client *DatabasesClient) exportCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-08-01")
+	reqQP.Set("api-version", "2022-01-01")
+	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().Header.Set("Accept", "application/json")
+	return req, runtime.MarshalAsJSON(req, parameters)
+}
+
+// BeginForceUnlink - Forcibly removes the link to the specified database resource.
+// If the operation fails it returns an *azcore.ResponseError type.
+// resourceGroupName - The name of the resource group. The name is case insensitive.
+// clusterName - The name of the RedisEnterprise cluster.
+// databaseName - The name of the database.
+// parameters - Information identifying the database to be unlinked.
+// options - DatabasesClientBeginForceUnlinkOptions contains the optional parameters for the DatabasesClient.BeginForceUnlink
+// method.
+func (client *DatabasesClient) BeginForceUnlink(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters ForceUnlinkParameters, options *DatabasesClientBeginForceUnlinkOptions) (DatabasesClientForceUnlinkPollerResponse, error) {
+	resp, err := client.forceUnlink(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
+	if err != nil {
+		return DatabasesClientForceUnlinkPollerResponse{}, err
+	}
+	result := DatabasesClientForceUnlinkPollerResponse{}
+	pt, err := armruntime.NewPoller("DatabasesClient.ForceUnlink", "azure-async-operation", resp, client.pl)
+	if err != nil {
+		return DatabasesClientForceUnlinkPollerResponse{}, err
+	}
+	result.Poller = &DatabasesClientForceUnlinkPoller{
+		pt: pt,
+	}
+	return result, nil
+}
+
+// ForceUnlink - Forcibly removes the link to the specified database resource.
+// If the operation fails it returns an *azcore.ResponseError type.
+func (client *DatabasesClient) forceUnlink(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters ForceUnlinkParameters, options *DatabasesClientBeginForceUnlinkOptions) (*http.Response, error) {
+	req, err := client.forceUnlinkCreateRequest(ctx, resourceGroupName, clusterName, databaseName, parameters, options)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := client.pl.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
+		return nil, runtime.NewResponseError(resp)
+	}
+	return resp, nil
+}
+
+// forceUnlinkCreateRequest creates the ForceUnlink request.
+func (client *DatabasesClient) forceUnlinkCreateRequest(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, parameters ForceUnlinkParameters, options *DatabasesClientBeginForceUnlinkOptions) (*policy.Request, error) {
+	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Cache/redisEnterprise/{clusterName}/databases/{databaseName}/forceUnlink"
+	if resourceGroupName == "" {
+		return nil, errors.New("parameter resourceGroupName cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+	if clusterName == "" {
+		return nil, errors.New("parameter clusterName cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{clusterName}", url.PathEscape(clusterName))
+	if databaseName == "" {
+		return nil, errors.New("parameter databaseName cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{databaseName}", url.PathEscape(databaseName))
+	if client.subscriptionID == "" {
+		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.host, urlPath))
+	if err != nil {
+		return nil, err
+	}
+	reqQP := req.Raw().URL.Query()
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -309,7 +374,7 @@ func (client *DatabasesClient) getCreateRequest(ctx context.Context, resourceGro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-08-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -317,7 +382,7 @@ func (client *DatabasesClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *DatabasesClient) getHandleResponse(resp *http.Response) (DatabasesClientGetResponse, error) {
-	result := DatabasesClientGetResponse{RawResponse: resp}
+	result := DatabasesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Database); err != nil {
 		return DatabasesClientGetResponse{}, err
 	}
@@ -336,9 +401,7 @@ func (client *DatabasesClient) BeginImport(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DatabasesClientImportPollerResponse{}, err
 	}
-	result := DatabasesClientImportPollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientImportPollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.Import", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DatabasesClientImportPollerResponse{}, err
@@ -390,7 +453,7 @@ func (client *DatabasesClient) importCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-08-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -433,7 +496,7 @@ func (client *DatabasesClient) listByClusterCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-08-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -441,7 +504,7 @@ func (client *DatabasesClient) listByClusterCreateRequest(ctx context.Context, r
 
 // listByClusterHandleResponse handles the ListByCluster response.
 func (client *DatabasesClient) listByClusterHandleResponse(resp *http.Response) (DatabasesClientListByClusterResponse, error) {
-	result := DatabasesClientListByClusterResponse{RawResponse: resp}
+	result := DatabasesClientListByClusterResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseList); err != nil {
 		return DatabasesClientListByClusterResponse{}, err
 	}
@@ -493,7 +556,7 @@ func (client *DatabasesClient) listKeysCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-08-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -501,7 +564,7 @@ func (client *DatabasesClient) listKeysCreateRequest(ctx context.Context, resour
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *DatabasesClient) listKeysHandleResponse(resp *http.Response) (DatabasesClientListKeysResponse, error) {
-	result := DatabasesClientListKeysResponse{RawResponse: resp}
+	result := DatabasesClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessKeys); err != nil {
 		return DatabasesClientListKeysResponse{}, err
 	}
@@ -521,9 +584,7 @@ func (client *DatabasesClient) BeginRegenerateKey(ctx context.Context, resourceG
 	if err != nil {
 		return DatabasesClientRegenerateKeyPollerResponse{}, err
 	}
-	result := DatabasesClientRegenerateKeyPollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientRegenerateKeyPollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.RegenerateKey", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DatabasesClientRegenerateKeyPollerResponse{}, err
@@ -575,7 +636,7 @@ func (client *DatabasesClient) regenerateKeyCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-08-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -593,9 +654,7 @@ func (client *DatabasesClient) BeginUpdate(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DatabasesClientUpdatePollerResponse{}, err
 	}
-	result := DatabasesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DatabasesClientUpdatePollerResponse{}, err
@@ -647,7 +706,7 @@ func (client *DatabasesClient) updateCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-08-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)

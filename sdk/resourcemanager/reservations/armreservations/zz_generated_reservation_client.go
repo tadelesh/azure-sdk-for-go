@@ -33,16 +33,16 @@ type ReservationClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReservationClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ReservationClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReservationClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -58,9 +58,7 @@ func (client *ReservationClient) BeginAvailableScopes(ctx context.Context, reser
 	if err != nil {
 		return ReservationClientAvailableScopesPollerResponse{}, err
 	}
-	result := ReservationClientAvailableScopesPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReservationClientAvailableScopesPollerResponse{}
 	pt, err := armruntime.NewPoller("ReservationClient.AvailableScopes", "", resp, client.pl)
 	if err != nil {
 		return ReservationClientAvailableScopesPollerResponse{}, err
@@ -157,7 +155,7 @@ func (client *ReservationClient) getCreateRequest(ctx context.Context, reservati
 
 // getHandleResponse handles the Get response.
 func (client *ReservationClient) getHandleResponse(resp *http.Response) (ReservationClientGetResponse, error) {
-	result := ReservationClientGetResponse{RawResponse: resp}
+	result := ReservationClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReservationResponse); err != nil {
 		return ReservationClientGetResponse{}, err
 	}
@@ -200,7 +198,7 @@ func (client *ReservationClient) listCreateRequest(ctx context.Context, reservat
 
 // listHandleResponse handles the List response.
 func (client *ReservationClient) listHandleResponse(resp *http.Response) (ReservationClientListResponse, error) {
-	result := ReservationClientListResponse{RawResponse: resp}
+	result := ReservationClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReservationList); err != nil {
 		return ReservationClientListResponse{}, err
 	}
@@ -257,7 +255,7 @@ func (client *ReservationClient) listAllCreateRequest(ctx context.Context, optio
 
 // listAllHandleResponse handles the ListAll response.
 func (client *ReservationClient) listAllHandleResponse(resp *http.Response) (ReservationClientListAllResponse, error) {
-	result := ReservationClientListAllResponse{RawResponse: resp}
+	result := ReservationClientListAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListResult); err != nil {
 		return ReservationClientListAllResponse{}, err
 	}
@@ -306,7 +304,7 @@ func (client *ReservationClient) listRevisionsCreateRequest(ctx context.Context,
 
 // listRevisionsHandleResponse handles the ListRevisions response.
 func (client *ReservationClient) listRevisionsHandleResponse(resp *http.Response) (ReservationClientListRevisionsResponse, error) {
-	result := ReservationClientListRevisionsResponse{RawResponse: resp}
+	result := ReservationClientListRevisionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReservationList); err != nil {
 		return ReservationClientListRevisionsResponse{}, err
 	}
@@ -324,9 +322,7 @@ func (client *ReservationClient) BeginMerge(ctx context.Context, reservationOrde
 	if err != nil {
 		return ReservationClientMergePollerResponse{}, err
 	}
-	result := ReservationClientMergePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReservationClientMergePollerResponse{}
 	pt, err := armruntime.NewPoller("ReservationClient.Merge", "location", resp, client.pl)
 	if err != nil {
 		return ReservationClientMergePollerResponse{}, err
@@ -382,9 +378,7 @@ func (client *ReservationClient) BeginSplit(ctx context.Context, reservationOrde
 	if err != nil {
 		return ReservationClientSplitPollerResponse{}, err
 	}
-	result := ReservationClientSplitPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReservationClientSplitPollerResponse{}
 	pt, err := armruntime.NewPoller("ReservationClient.Split", "location", resp, client.pl)
 	if err != nil {
 		return ReservationClientSplitPollerResponse{}, err
@@ -441,9 +435,7 @@ func (client *ReservationClient) BeginUpdate(ctx context.Context, reservationOrd
 	if err != nil {
 		return ReservationClientUpdatePollerResponse{}, err
 	}
-	result := ReservationClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReservationClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReservationClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ReservationClientUpdatePollerResponse{}, err

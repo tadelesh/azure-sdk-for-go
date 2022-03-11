@@ -34,17 +34,17 @@ type ServerAdvisorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServerAdvisorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServerAdvisorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServerAdvisorsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *ServerAdvisorsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *ServerAdvisorsClient) getHandleResponse(resp *http.Response) (ServerAdvisorsClientGetResponse, error) {
-	result := ServerAdvisorsClientGetResponse{RawResponse: resp}
+	result := ServerAdvisorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Advisor); err != nil {
 		return ServerAdvisorsClientGetResponse{}, err
 	}
@@ -163,7 +163,7 @@ func (client *ServerAdvisorsClient) listByServerCreateRequest(ctx context.Contex
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *ServerAdvisorsClient) listByServerHandleResponse(resp *http.Response) (ServerAdvisorsClientListByServerResponse, error) {
-	result := ServerAdvisorsClientListByServerResponse{RawResponse: resp}
+	result := ServerAdvisorsClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdvisorArray); err != nil {
 		return ServerAdvisorsClientListByServerResponse{}, err
 	}
@@ -225,7 +225,7 @@ func (client *ServerAdvisorsClient) updateCreateRequest(ctx context.Context, res
 
 // updateHandleResponse handles the Update response.
 func (client *ServerAdvisorsClient) updateHandleResponse(resp *http.Response) (ServerAdvisorsClientUpdateResponse, error) {
-	result := ServerAdvisorsClientUpdateResponse{RawResponse: resp}
+	result := ServerAdvisorsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Advisor); err != nil {
 		return ServerAdvisorsClientUpdateResponse{}, err
 	}

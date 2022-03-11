@@ -35,17 +35,17 @@ type CustomDomainsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCustomDomainsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CustomDomainsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CustomDomainsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -65,9 +65,7 @@ func (client *CustomDomainsClient) BeginCreateOrUpdate(ctx context.Context, reso
 	if err != nil {
 		return CustomDomainsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := CustomDomainsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CustomDomainsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("CustomDomainsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return CustomDomainsClientCreateOrUpdatePollerResponse{}, err
@@ -143,9 +141,7 @@ func (client *CustomDomainsClient) BeginDelete(ctx context.Context, resourceGrou
 	if err != nil {
 		return CustomDomainsClientDeletePollerResponse{}, err
 	}
-	result := CustomDomainsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CustomDomainsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CustomDomainsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return CustomDomainsClientDeletePollerResponse{}, err
@@ -266,7 +262,7 @@ func (client *CustomDomainsClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *CustomDomainsClient) getHandleResponse(resp *http.Response) (CustomDomainsClientGetResponse, error) {
-	result := CustomDomainsClientGetResponse{RawResponse: resp}
+	result := CustomDomainsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomDomainResource); err != nil {
 		return CustomDomainsClientGetResponse{}, err
 	}
@@ -324,7 +320,7 @@ func (client *CustomDomainsClient) listCreateRequest(ctx context.Context, resour
 
 // listHandleResponse handles the List response.
 func (client *CustomDomainsClient) listHandleResponse(resp *http.Response) (CustomDomainsClientListResponse, error) {
-	result := CustomDomainsClientListResponse{RawResponse: resp}
+	result := CustomDomainsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomDomainResourceCollection); err != nil {
 		return CustomDomainsClientListResponse{}, err
 	}
@@ -346,9 +342,7 @@ func (client *CustomDomainsClient) BeginUpdate(ctx context.Context, resourceGrou
 	if err != nil {
 		return CustomDomainsClientUpdatePollerResponse{}, err
 	}
-	result := CustomDomainsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CustomDomainsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("CustomDomainsClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return CustomDomainsClientUpdatePollerResponse{}, err

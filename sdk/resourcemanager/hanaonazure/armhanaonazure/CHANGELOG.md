@@ -1,5 +1,76 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ProviderInstancesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ProviderInstancesClientListResponse, error)`
+- Function `*SapMonitorsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SapMonitorsClientListResponse, error)`
+- Function `*OperationsClient.List` parameter(s) have been changed from `(context.Context, *OperationsClientListOptions)` to `(*OperationsClientListOptions)`
+- Function `*OperationsClient.List` return value(s) have been changed from `(OperationsClientListResponse, error)` to `(*OperationsClientListPager)`
+- Function `*ProviderInstancesClientListPager.Err` has been removed
+- Function `*ProviderInstancesClientListPager.PageResponse` has been removed
+- Function `*SapMonitorsClientListPager.PageResponse` has been removed
+- Function `*SapMonitorsClientListPager.Err` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `ProviderInstancesClientCreateResult` has been removed
+- Struct `ProviderInstancesClientGetResult` has been removed
+- Struct `ProviderInstancesClientListResult` has been removed
+- Struct `SapMonitorsClientCreateResult` has been removed
+- Struct `SapMonitorsClientGetResult` has been removed
+- Struct `SapMonitorsClientListResult` has been removed
+- Struct `SapMonitorsClientUpdateResult` has been removed
+- Field `RawResponse` of struct `SapMonitorsClientCreatePollerResponse` has been removed
+- Field `SapMonitorsClientCreateResult` of struct `SapMonitorsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `SapMonitorsClientCreateResponse` has been removed
+- Field `SapMonitorsClientListResult` of struct `SapMonitorsClientListResponse` has been removed
+- Field `RawResponse` of struct `SapMonitorsClientListResponse` has been removed
+- Field `RawResponse` of struct `ProviderInstancesClientDeletePollerResponse` has been removed
+- Field `ProviderInstancesClientCreateResult` of struct `ProviderInstancesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ProviderInstancesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ProviderInstancesClientDeleteResponse` has been removed
+- Field `SapMonitorsClientUpdateResult` of struct `SapMonitorsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SapMonitorsClientUpdateResponse` has been removed
+- Field `SapMonitorsClientGetResult` of struct `SapMonitorsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SapMonitorsClientGetResponse` has been removed
+- Field `ProviderInstancesClientListResult` of struct `ProviderInstancesClientListResponse` has been removed
+- Field `RawResponse` of struct `ProviderInstancesClientListResponse` has been removed
+- Field `ProviderInstancesClientGetResult` of struct `ProviderInstancesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProviderInstancesClientGetResponse` has been removed
+- Field `RawResponse` of struct `SapMonitorsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ProviderInstancesClientCreatePollerResponse` has been removed
+- Field `RawResponse` of struct `SapMonitorsClientDeleteResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.NextPage(context.Context) (OperationsClientListResponse, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*ProviderInstancesClientListPager.More() bool`
+- New function `*SapMonitorsClientListPager.More() bool`
+- New struct `ErrorResponse`
+- New struct `ErrorResponseError`
+- New struct `OperationsClientListPager`
+- New anonymous field `ProviderInstanceListResult` in struct `ProviderInstancesClientListResponse`
+- New anonymous field `OperationList` in struct `OperationsClientListResponse`
+- New anonymous field `ProviderInstance` in struct `ProviderInstancesClientCreateResponse`
+- New anonymous field `SapMonitorListResult` in struct `SapMonitorsClientListResponse`
+- New anonymous field `SapMonitor` in struct `SapMonitorsClientUpdateResponse`
+- New anonymous field `ProviderInstance` in struct `ProviderInstancesClientGetResponse`
+- New anonymous field `SapMonitor` in struct `SapMonitorsClientCreateResponse`
+- New anonymous field `SapMonitor` in struct `SapMonitorsClientGetResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Struct `ErrorResponse` has been removed
+- Struct `ErrorResponseError` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

@@ -35,17 +35,17 @@ type BuildServiceClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBuildServiceClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BuildServiceClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BuildServiceClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -111,7 +111,7 @@ func (client *BuildServiceClient) createOrUpdateBuildCreateRequest(ctx context.C
 
 // createOrUpdateBuildHandleResponse handles the CreateOrUpdateBuild response.
 func (client *BuildServiceClient) createOrUpdateBuildHandleResponse(resp *http.Response) (BuildServiceClientCreateOrUpdateBuildResponse, error) {
-	result := BuildServiceClientCreateOrUpdateBuildResponse{RawResponse: resp}
+	result := BuildServiceClientCreateOrUpdateBuildResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Build); err != nil {
 		return BuildServiceClientCreateOrUpdateBuildResponse{}, err
 	}
@@ -177,7 +177,7 @@ func (client *BuildServiceClient) getBuildCreateRequest(ctx context.Context, res
 
 // getBuildHandleResponse handles the GetBuild response.
 func (client *BuildServiceClient) getBuildHandleResponse(resp *http.Response) (BuildServiceClientGetBuildResponse, error) {
-	result := BuildServiceClientGetBuildResponse{RawResponse: resp}
+	result := BuildServiceClientGetBuildResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Build); err != nil {
 		return BuildServiceClientGetBuildResponse{}, err
 	}
@@ -249,7 +249,7 @@ func (client *BuildServiceClient) getBuildResultCreateRequest(ctx context.Contex
 
 // getBuildResultHandleResponse handles the GetBuildResult response.
 func (client *BuildServiceClient) getBuildResultHandleResponse(resp *http.Response) (BuildServiceClientGetBuildResultResponse, error) {
-	result := BuildServiceClientGetBuildResultResponse{RawResponse: resp}
+	result := BuildServiceClientGetBuildResultResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BuildResult); err != nil {
 		return BuildServiceClientGetBuildResultResponse{}, err
 	}
@@ -321,7 +321,7 @@ func (client *BuildServiceClient) getBuildResultLogCreateRequest(ctx context.Con
 
 // getBuildResultLogHandleResponse handles the GetBuildResultLog response.
 func (client *BuildServiceClient) getBuildResultLogHandleResponse(resp *http.Response) (BuildServiceClientGetBuildResultLogResponse, error) {
-	result := BuildServiceClientGetBuildResultLogResponse{RawResponse: resp}
+	result := BuildServiceClientGetBuildResultLogResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BuildResultLog); err != nil {
 		return BuildServiceClientGetBuildResultLogResponse{}, err
 	}
@@ -383,7 +383,7 @@ func (client *BuildServiceClient) getBuildServiceCreateRequest(ctx context.Conte
 
 // getBuildServiceHandleResponse handles the GetBuildService response.
 func (client *BuildServiceClient) getBuildServiceHandleResponse(resp *http.Response) (BuildServiceClientGetBuildServiceResponse, error) {
-	result := BuildServiceClientGetBuildServiceResponse{RawResponse: resp}
+	result := BuildServiceClientGetBuildServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BuildService); err != nil {
 		return BuildServiceClientGetBuildServiceResponse{}, err
 	}
@@ -445,7 +445,7 @@ func (client *BuildServiceClient) getResourceUploadURLCreateRequest(ctx context.
 
 // getResourceUploadURLHandleResponse handles the GetResourceUploadURL response.
 func (client *BuildServiceClient) getResourceUploadURLHandleResponse(resp *http.Response) (BuildServiceClientGetResourceUploadURLResponse, error) {
-	result := BuildServiceClientGetResourceUploadURLResponse{RawResponse: resp}
+	result := BuildServiceClientGetResourceUploadURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceUploadDefinition); err != nil {
 		return BuildServiceClientGetResourceUploadURLResponse{}, err
 	}
@@ -512,7 +512,7 @@ func (client *BuildServiceClient) getSupportedBuildpackCreateRequest(ctx context
 
 // getSupportedBuildpackHandleResponse handles the GetSupportedBuildpack response.
 func (client *BuildServiceClient) getSupportedBuildpackHandleResponse(resp *http.Response) (BuildServiceClientGetSupportedBuildpackResponse, error) {
-	result := BuildServiceClientGetSupportedBuildpackResponse{RawResponse: resp}
+	result := BuildServiceClientGetSupportedBuildpackResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SupportedBuildpackResource); err != nil {
 		return BuildServiceClientGetSupportedBuildpackResponse{}, err
 	}
@@ -579,7 +579,7 @@ func (client *BuildServiceClient) getSupportedStackCreateRequest(ctx context.Con
 
 // getSupportedStackHandleResponse handles the GetSupportedStack response.
 func (client *BuildServiceClient) getSupportedStackHandleResponse(resp *http.Response) (BuildServiceClientGetSupportedStackResponse, error) {
-	result := BuildServiceClientGetSupportedStackResponse{RawResponse: resp}
+	result := BuildServiceClientGetSupportedStackResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SupportedStackResource); err != nil {
 		return BuildServiceClientGetSupportedStackResponse{}, err
 	}
@@ -643,7 +643,7 @@ func (client *BuildServiceClient) listBuildResultsCreateRequest(ctx context.Cont
 
 // listBuildResultsHandleResponse handles the ListBuildResults response.
 func (client *BuildServiceClient) listBuildResultsHandleResponse(resp *http.Response) (BuildServiceClientListBuildResultsResponse, error) {
-	result := BuildServiceClientListBuildResultsResponse{RawResponse: resp}
+	result := BuildServiceClientListBuildResultsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BuildResultCollection); err != nil {
 		return BuildServiceClientListBuildResultsResponse{}, err
 	}
@@ -697,7 +697,7 @@ func (client *BuildServiceClient) listBuildServicesCreateRequest(ctx context.Con
 
 // listBuildServicesHandleResponse handles the ListBuildServices response.
 func (client *BuildServiceClient) listBuildServicesHandleResponse(resp *http.Response) (BuildServiceClientListBuildServicesResponse, error) {
-	result := BuildServiceClientListBuildServicesResponse{RawResponse: resp}
+	result := BuildServiceClientListBuildServicesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BuildServiceCollection); err != nil {
 		return BuildServiceClientListBuildServicesResponse{}, err
 	}
@@ -755,7 +755,7 @@ func (client *BuildServiceClient) listBuildsCreateRequest(ctx context.Context, r
 
 // listBuildsHandleResponse handles the ListBuilds response.
 func (client *BuildServiceClient) listBuildsHandleResponse(resp *http.Response) (BuildServiceClientListBuildsResponse, error) {
-	result := BuildServiceClientListBuildsResponse{RawResponse: resp}
+	result := BuildServiceClientListBuildsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BuildCollection); err != nil {
 		return BuildServiceClientListBuildsResponse{}, err
 	}
@@ -817,7 +817,7 @@ func (client *BuildServiceClient) listSupportedBuildpacksCreateRequest(ctx conte
 
 // listSupportedBuildpacksHandleResponse handles the ListSupportedBuildpacks response.
 func (client *BuildServiceClient) listSupportedBuildpacksHandleResponse(resp *http.Response) (BuildServiceClientListSupportedBuildpacksResponse, error) {
-	result := BuildServiceClientListSupportedBuildpacksResponse{RawResponse: resp}
+	result := BuildServiceClientListSupportedBuildpacksResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SupportedBuildpacksCollection); err != nil {
 		return BuildServiceClientListSupportedBuildpacksResponse{}, err
 	}
@@ -879,7 +879,7 @@ func (client *BuildServiceClient) listSupportedStacksCreateRequest(ctx context.C
 
 // listSupportedStacksHandleResponse handles the ListSupportedStacks response.
 func (client *BuildServiceClient) listSupportedStacksHandleResponse(resp *http.Response) (BuildServiceClientListSupportedStacksResponse, error) {
-	result := BuildServiceClientListSupportedStacksResponse{RawResponse: resp}
+	result := BuildServiceClientListSupportedStacksResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SupportedStacksCollection); err != nil {
 		return BuildServiceClientListSupportedStacksResponse{}, err
 	}

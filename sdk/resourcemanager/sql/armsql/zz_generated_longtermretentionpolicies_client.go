@@ -34,17 +34,17 @@ type LongTermRetentionPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLongTermRetentionPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LongTermRetentionPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LongTermRetentionPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *LongTermRetentionPoliciesClient) BeginCreateOrUpdate(ctx context.C
 	if err != nil {
 		return LongTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := LongTermRetentionPoliciesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LongTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("LongTermRetentionPoliciesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return LongTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}, err
@@ -188,7 +186,7 @@ func (client *LongTermRetentionPoliciesClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *LongTermRetentionPoliciesClient) getHandleResponse(resp *http.Response) (LongTermRetentionPoliciesClientGetResponse, error) {
-	result := LongTermRetentionPoliciesClientGetResponse{RawResponse: resp}
+	result := LongTermRetentionPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LongTermRetentionPolicy); err != nil {
 		return LongTermRetentionPoliciesClientGetResponse{}, err
 	}
@@ -247,7 +245,7 @@ func (client *LongTermRetentionPoliciesClient) listByDatabaseCreateRequest(ctx c
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *LongTermRetentionPoliciesClient) listByDatabaseHandleResponse(resp *http.Response) (LongTermRetentionPoliciesClientListByDatabaseResponse, error) {
-	result := LongTermRetentionPoliciesClientListByDatabaseResponse{RawResponse: resp}
+	result := LongTermRetentionPoliciesClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LongTermRetentionPolicyListResult); err != nil {
 		return LongTermRetentionPoliciesClientListByDatabaseResponse{}, err
 	}

@@ -35,17 +35,17 @@ type DefaultSecurityRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDefaultSecurityRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DefaultSecurityRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DefaultSecurityRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *DefaultSecurityRulesClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *DefaultSecurityRulesClient) getHandleResponse(resp *http.Response) (DefaultSecurityRulesClientGetResponse, error) {
-	result := DefaultSecurityRulesClientGetResponse{RawResponse: resp}
+	result := DefaultSecurityRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecurityRule); err != nil {
 		return DefaultSecurityRulesClientGetResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *DefaultSecurityRulesClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *DefaultSecurityRulesClient) listHandleResponse(resp *http.Response) (DefaultSecurityRulesClientListResponse, error) {
-	result := DefaultSecurityRulesClientListResponse{RawResponse: resp}
+	result := DefaultSecurityRulesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecurityRuleListResult); err != nil {
 		return DefaultSecurityRulesClientListResponse{}, err
 	}

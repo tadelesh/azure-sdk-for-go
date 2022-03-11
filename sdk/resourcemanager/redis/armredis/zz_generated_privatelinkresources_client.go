@@ -56,19 +56,13 @@ func NewPrivateLinkResourcesClient(subscriptionID string, credential azcore.Toke
 // cacheName - The name of the Redis cache.
 // options - PrivateLinkResourcesClientListByRedisCacheOptions contains the optional parameters for the PrivateLinkResourcesClient.ListByRedisCache
 // method.
-func (client *PrivateLinkResourcesClient) ListByRedisCache(ctx context.Context, resourceGroupName string, cacheName string, options *PrivateLinkResourcesClientListByRedisCacheOptions) (PrivateLinkResourcesClientListByRedisCacheResponse, error) {
-	req, err := client.listByRedisCacheCreateRequest(ctx, resourceGroupName, cacheName, options)
-	if err != nil {
-		return PrivateLinkResourcesClientListByRedisCacheResponse{}, err
+func (client *PrivateLinkResourcesClient) ListByRedisCache(resourceGroupName string, cacheName string, options *PrivateLinkResourcesClientListByRedisCacheOptions) *PrivateLinkResourcesClientListByRedisCachePager {
+	return &PrivateLinkResourcesClientListByRedisCachePager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByRedisCacheCreateRequest(ctx, resourceGroupName, cacheName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return PrivateLinkResourcesClientListByRedisCacheResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return PrivateLinkResourcesClientListByRedisCacheResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByRedisCacheHandleResponse(resp)
 }
 
 // listByRedisCacheCreateRequest creates the ListByRedisCache request.
@@ -99,7 +93,7 @@ func (client *PrivateLinkResourcesClient) listByRedisCacheCreateRequest(ctx cont
 
 // listByRedisCacheHandleResponse handles the ListByRedisCache response.
 func (client *PrivateLinkResourcesClient) listByRedisCacheHandleResponse(resp *http.Response) (PrivateLinkResourcesClientListByRedisCacheResponse, error) {
-	result := PrivateLinkResourcesClientListByRedisCacheResponse{RawResponse: resp}
+	result := PrivateLinkResourcesClientListByRedisCacheResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourceListResult); err != nil {
 		return PrivateLinkResourcesClientListByRedisCacheResponse{}, err
 	}

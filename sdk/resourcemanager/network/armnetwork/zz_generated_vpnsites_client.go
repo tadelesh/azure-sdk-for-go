@@ -35,17 +35,17 @@ type VPNSitesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVPNSitesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VPNSitesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VPNSitesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *VPNSitesClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return VPNSitesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VPNSitesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VPNSitesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VPNSitesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VPNSitesClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *VPNSitesClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return VPNSitesClientDeletePollerResponse{}, err
 	}
-	result := VPNSitesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VPNSitesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VPNSitesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return VPNSitesClientDeletePollerResponse{}, err
@@ -232,7 +228,7 @@ func (client *VPNSitesClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *VPNSitesClient) getHandleResponse(resp *http.Response) (VPNSitesClientGetResponse, error) {
-	result := VPNSitesClientGetResponse{RawResponse: resp}
+	result := VPNSitesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VPNSite); err != nil {
 		return VPNSitesClientGetResponse{}, err
 	}
@@ -274,7 +270,7 @@ func (client *VPNSitesClient) listCreateRequest(ctx context.Context, options *VP
 
 // listHandleResponse handles the List response.
 func (client *VPNSitesClient) listHandleResponse(resp *http.Response) (VPNSitesClientListResponse, error) {
-	result := VPNSitesClientListResponse{RawResponse: resp}
+	result := VPNSitesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListVPNSitesResult); err != nil {
 		return VPNSitesClientListResponse{}, err
 	}
@@ -322,7 +318,7 @@ func (client *VPNSitesClient) listByResourceGroupCreateRequest(ctx context.Conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *VPNSitesClient) listByResourceGroupHandleResponse(resp *http.Response) (VPNSitesClientListByResourceGroupResponse, error) {
-	result := VPNSitesClientListByResourceGroupResponse{RawResponse: resp}
+	result := VPNSitesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListVPNSitesResult); err != nil {
 		return VPNSitesClientListByResourceGroupResponse{}, err
 	}
@@ -378,7 +374,7 @@ func (client *VPNSitesClient) updateTagsCreateRequest(ctx context.Context, resou
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *VPNSitesClient) updateTagsHandleResponse(resp *http.Response) (VPNSitesClientUpdateTagsResponse, error) {
-	result := VPNSitesClientUpdateTagsResponse{RawResponse: resp}
+	result := VPNSitesClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VPNSite); err != nil {
 		return VPNSitesClientUpdateTagsResponse{}, err
 	}

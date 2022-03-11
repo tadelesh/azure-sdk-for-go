@@ -35,17 +35,17 @@ type AccountClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAccountClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AccountClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AccountClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *AccountClient) createOrUpdateCreateRequest(ctx context.Context, re
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *AccountClient) createOrUpdateHandleResponse(resp *http.Response) (AccountClientCreateOrUpdateResponse, error) {
-	result := AccountClientCreateOrUpdateResponse{RawResponse: resp}
+	result := AccountClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Account); err != nil {
 		return AccountClientCreateOrUpdateResponse{}, err
 	}
@@ -123,7 +123,7 @@ func (client *AccountClient) Delete(ctx context.Context, resourceGroupName strin
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return AccountClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AccountClientDeleteResponse{RawResponse: resp}, nil
+	return AccountClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -200,7 +200,7 @@ func (client *AccountClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *AccountClient) getHandleResponse(resp *http.Response) (AccountClientGetResponse, error) {
-	result := AccountClientGetResponse{RawResponse: resp}
+	result := AccountClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Account); err != nil {
 		return AccountClientGetResponse{}, err
 	}
@@ -242,7 +242,7 @@ func (client *AccountClient) listCreateRequest(ctx context.Context, options *Acc
 
 // listHandleResponse handles the List response.
 func (client *AccountClient) listHandleResponse(resp *http.Response) (AccountClientListResponse, error) {
-	result := AccountClientListResponse{RawResponse: resp}
+	result := AccountClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountListResult); err != nil {
 		return AccountClientListResponse{}, err
 	}
@@ -290,7 +290,7 @@ func (client *AccountClient) listByResourceGroupCreateRequest(ctx context.Contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *AccountClient) listByResourceGroupHandleResponse(resp *http.Response) (AccountClientListByResourceGroupResponse, error) {
-	result := AccountClientListByResourceGroupResponse{RawResponse: resp}
+	result := AccountClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountListResult); err != nil {
 		return AccountClientListByResourceGroupResponse{}, err
 	}
@@ -346,7 +346,7 @@ func (client *AccountClient) updateCreateRequest(ctx context.Context, resourceGr
 
 // updateHandleResponse handles the Update response.
 func (client *AccountClient) updateHandleResponse(resp *http.Response) (AccountClientUpdateResponse, error) {
-	result := AccountClientUpdateResponse{RawResponse: resp}
+	result := AccountClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Account); err != nil {
 		return AccountClientUpdateResponse{}, err
 	}

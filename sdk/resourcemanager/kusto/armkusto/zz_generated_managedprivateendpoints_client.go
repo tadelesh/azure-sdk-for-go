@@ -35,17 +35,17 @@ type ManagedPrivateEndpointsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedPrivateEndpointsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedPrivateEndpointsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedPrivateEndpointsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *ManagedPrivateEndpointsClient) checkNameAvailabilityCreateRequest(
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *ManagedPrivateEndpointsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (ManagedPrivateEndpointsClientCheckNameAvailabilityResponse, error) {
-	result := ManagedPrivateEndpointsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := ManagedPrivateEndpointsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameResult); err != nil {
 		return ManagedPrivateEndpointsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -120,9 +120,7 @@ func (client *ManagedPrivateEndpointsClient) BeginCreateOrUpdate(ctx context.Con
 	if err != nil {
 		return ManagedPrivateEndpointsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ManagedPrivateEndpointsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedPrivateEndpointsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedPrivateEndpointsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ManagedPrivateEndpointsClientCreateOrUpdatePollerResponse{}, err
@@ -192,9 +190,7 @@ func (client *ManagedPrivateEndpointsClient) BeginDelete(ctx context.Context, re
 	if err != nil {
 		return ManagedPrivateEndpointsClientDeletePollerResponse{}, err
 	}
-	result := ManagedPrivateEndpointsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedPrivateEndpointsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedPrivateEndpointsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ManagedPrivateEndpointsClientDeletePollerResponse{}, err
@@ -306,7 +302,7 @@ func (client *ManagedPrivateEndpointsClient) getCreateRequest(ctx context.Contex
 
 // getHandleResponse handles the Get response.
 func (client *ManagedPrivateEndpointsClient) getHandleResponse(resp *http.Response) (ManagedPrivateEndpointsClientGetResponse, error) {
-	result := ManagedPrivateEndpointsClientGetResponse{RawResponse: resp}
+	result := ManagedPrivateEndpointsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedPrivateEndpoint); err != nil {
 		return ManagedPrivateEndpointsClientGetResponse{}, err
 	}
@@ -319,19 +315,13 @@ func (client *ManagedPrivateEndpointsClient) getHandleResponse(resp *http.Respon
 // clusterName - The name of the Kusto cluster.
 // options - ManagedPrivateEndpointsClientListOptions contains the optional parameters for the ManagedPrivateEndpointsClient.List
 // method.
-func (client *ManagedPrivateEndpointsClient) List(ctx context.Context, resourceGroupName string, clusterName string, options *ManagedPrivateEndpointsClientListOptions) (ManagedPrivateEndpointsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, clusterName, options)
-	if err != nil {
-		return ManagedPrivateEndpointsClientListResponse{}, err
+func (client *ManagedPrivateEndpointsClient) List(resourceGroupName string, clusterName string, options *ManagedPrivateEndpointsClientListOptions) *ManagedPrivateEndpointsClientListPager {
+	return &ManagedPrivateEndpointsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, clusterName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ManagedPrivateEndpointsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ManagedPrivateEndpointsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -362,7 +352,7 @@ func (client *ManagedPrivateEndpointsClient) listCreateRequest(ctx context.Conte
 
 // listHandleResponse handles the List response.
 func (client *ManagedPrivateEndpointsClient) listHandleResponse(resp *http.Response) (ManagedPrivateEndpointsClientListResponse, error) {
-	result := ManagedPrivateEndpointsClientListResponse{RawResponse: resp}
+	result := ManagedPrivateEndpointsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedPrivateEndpointListResult); err != nil {
 		return ManagedPrivateEndpointsClientListResponse{}, err
 	}
@@ -382,9 +372,7 @@ func (client *ManagedPrivateEndpointsClient) BeginUpdate(ctx context.Context, re
 	if err != nil {
 		return ManagedPrivateEndpointsClientUpdatePollerResponse{}, err
 	}
-	result := ManagedPrivateEndpointsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedPrivateEndpointsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedPrivateEndpointsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ManagedPrivateEndpointsClientUpdatePollerResponse{}, err

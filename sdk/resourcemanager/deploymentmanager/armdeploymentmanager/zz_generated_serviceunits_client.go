@@ -35,17 +35,17 @@ type ServiceUnitsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServiceUnitsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServiceUnitsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServiceUnitsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -65,9 +65,7 @@ func (client *ServiceUnitsClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return ServiceUnitsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ServiceUnitsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServiceUnitsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServiceUnitsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ServiceUnitsClientCreateOrUpdatePollerResponse{}, err
@@ -149,7 +147,7 @@ func (client *ServiceUnitsClient) Delete(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ServiceUnitsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ServiceUnitsClientDeleteResponse{RawResponse: resp}, nil
+	return ServiceUnitsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -244,7 +242,7 @@ func (client *ServiceUnitsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *ServiceUnitsClient) getHandleResponse(resp *http.Response) (ServiceUnitsClientGetResponse, error) {
-	result := ServiceUnitsClientGetResponse{RawResponse: resp}
+	result := ServiceUnitsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceUnitResource); err != nil {
 		return ServiceUnitsClientGetResponse{}, err
 	}
@@ -304,7 +302,7 @@ func (client *ServiceUnitsClient) listCreateRequest(ctx context.Context, resourc
 
 // listHandleResponse handles the List response.
 func (client *ServiceUnitsClient) listHandleResponse(resp *http.Response) (ServiceUnitsClientListResponse, error) {
-	result := ServiceUnitsClientListResponse{RawResponse: resp}
+	result := ServiceUnitsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceUnitResourceArray); err != nil {
 		return ServiceUnitsClientListResponse{}, err
 	}

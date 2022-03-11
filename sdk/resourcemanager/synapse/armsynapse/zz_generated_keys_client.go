@@ -34,17 +34,17 @@ type KeysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewKeysClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *KeysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &KeysClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *KeysClient) createOrUpdateCreateRequest(ctx context.Context, resou
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *KeysClient) createOrUpdateHandleResponse(resp *http.Response) (KeysClientCreateOrUpdateResponse, error) {
-	result := KeysClientCreateOrUpdateResponse{RawResponse: resp}
+	result := KeysClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Key); err != nil {
 		return KeysClientCreateOrUpdateResponse{}, err
 	}
@@ -163,7 +163,7 @@ func (client *KeysClient) deleteCreateRequest(ctx context.Context, resourceGroup
 
 // deleteHandleResponse handles the Delete response.
 func (client *KeysClient) deleteHandleResponse(resp *http.Response) (KeysClientDeleteResponse, error) {
-	result := KeysClientDeleteResponse{RawResponse: resp}
+	result := KeysClientDeleteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Key); err != nil {
 		return KeysClientDeleteResponse{}, err
 	}
@@ -223,7 +223,7 @@ func (client *KeysClient) getCreateRequest(ctx context.Context, resourceGroupNam
 
 // getHandleResponse handles the Get response.
 func (client *KeysClient) getHandleResponse(resp *http.Response) (KeysClientGetResponse, error) {
-	result := KeysClientGetResponse{RawResponse: resp}
+	result := KeysClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Key); err != nil {
 		return KeysClientGetResponse{}, err
 	}
@@ -275,7 +275,7 @@ func (client *KeysClient) listByWorkspaceCreateRequest(ctx context.Context, reso
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *KeysClient) listByWorkspaceHandleResponse(resp *http.Response) (KeysClientListByWorkspaceResponse, error) {
-	result := KeysClientListByWorkspaceResponse{RawResponse: resp}
+	result := KeysClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KeyInfoListResult); err != nil {
 		return KeysClientListByWorkspaceResponse{}, err
 	}

@@ -34,17 +34,17 @@ type ScalingPlansClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewScalingPlansClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ScalingPlansClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ScalingPlansClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *ScalingPlansClient) createCreateRequest(ctx context.Context, resou
 
 // createHandleResponse handles the Create response.
 func (client *ScalingPlansClient) createHandleResponse(resp *http.Response) (ScalingPlansClientCreateResponse, error) {
-	result := ScalingPlansClientCreateResponse{RawResponse: resp}
+	result := ScalingPlansClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScalingPlan); err != nil {
 		return ScalingPlansClientCreateResponse{}, err
 	}
@@ -122,7 +122,7 @@ func (client *ScalingPlansClient) Delete(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ScalingPlansClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ScalingPlansClientDeleteResponse{RawResponse: resp}, nil
+	return ScalingPlansClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -199,7 +199,7 @@ func (client *ScalingPlansClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *ScalingPlansClient) getHandleResponse(resp *http.Response) (ScalingPlansClientGetResponse, error) {
-	result := ScalingPlansClientGetResponse{RawResponse: resp}
+	result := ScalingPlansClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScalingPlan); err != nil {
 		return ScalingPlansClientGetResponse{}, err
 	}
@@ -252,7 +252,7 @@ func (client *ScalingPlansClient) listByHostPoolCreateRequest(ctx context.Contex
 
 // listByHostPoolHandleResponse handles the ListByHostPool response.
 func (client *ScalingPlansClient) listByHostPoolHandleResponse(resp *http.Response) (ScalingPlansClientListByHostPoolResponse, error) {
-	result := ScalingPlansClientListByHostPoolResponse{RawResponse: resp}
+	result := ScalingPlansClientListByHostPoolResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScalingPlanList); err != nil {
 		return ScalingPlansClientListByHostPoolResponse{}, err
 	}
@@ -300,7 +300,7 @@ func (client *ScalingPlansClient) listByResourceGroupCreateRequest(ctx context.C
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ScalingPlansClient) listByResourceGroupHandleResponse(resp *http.Response) (ScalingPlansClientListByResourceGroupResponse, error) {
-	result := ScalingPlansClientListByResourceGroupResponse{RawResponse: resp}
+	result := ScalingPlansClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScalingPlanList); err != nil {
 		return ScalingPlansClientListByResourceGroupResponse{}, err
 	}
@@ -343,7 +343,7 @@ func (client *ScalingPlansClient) listBySubscriptionCreateRequest(ctx context.Co
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *ScalingPlansClient) listBySubscriptionHandleResponse(resp *http.Response) (ScalingPlansClientListBySubscriptionResponse, error) {
-	result := ScalingPlansClientListBySubscriptionResponse{RawResponse: resp}
+	result := ScalingPlansClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScalingPlanList); err != nil {
 		return ScalingPlansClientListBySubscriptionResponse{}, err
 	}
@@ -401,7 +401,7 @@ func (client *ScalingPlansClient) updateCreateRequest(ctx context.Context, resou
 
 // updateHandleResponse handles the Update response.
 func (client *ScalingPlansClient) updateHandleResponse(resp *http.Response) (ScalingPlansClientUpdateResponse, error) {
-	result := ScalingPlansClientUpdateResponse{RawResponse: resp}
+	result := ScalingPlansClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScalingPlan); err != nil {
 		return ScalingPlansClientUpdateResponse{}, err
 	}

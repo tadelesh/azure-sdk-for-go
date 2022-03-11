@@ -43,11 +43,10 @@ func (p *DomainTopicsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final DomainTopicsClientCreateOrUpdateResponse will be returned.
 func (p *DomainTopicsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (DomainTopicsClientCreateOrUpdateResponse, error) {
 	respType := DomainTopicsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DomainTopic)
+	_, err := p.pt.FinalResponse(ctx, &respType.DomainTopic)
 	if err != nil {
 		return DomainTopicsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *DomainTopicsClientDeletePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final DomainTopicsClientDeleteResponse will be returned.
 func (p *DomainTopicsClientDeletePoller) FinalResponse(ctx context.Context) (DomainTopicsClientDeleteResponse, error) {
 	respType := DomainTopicsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DomainTopicsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *DomainsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final DomainsClientCreateOrUpdateResponse will be returned.
 func (p *DomainsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (DomainsClientCreateOrUpdateResponse, error) {
 	respType := DomainsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Domain)
+	_, err := p.pt.FinalResponse(ctx, &respType.Domain)
 	if err != nil {
 		return DomainsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *DomainsClientDeletePoller) Poll(ctx context.Context) (*http.Response, e
 // If the final GET succeeded then the final DomainsClientDeleteResponse will be returned.
 func (p *DomainsClientDeletePoller) FinalResponse(ctx context.Context) (DomainsClientDeleteResponse, error) {
 	respType := DomainsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DomainsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *DomainsClientUpdatePoller) Poll(ctx context.Context) (*http.Response, e
 // If the final GET succeeded then the final DomainsClientUpdateResponse will be returned.
 func (p *DomainsClientUpdatePoller) FinalResponse(ctx context.Context) (DomainsClientUpdateResponse, error) {
 	respType := DomainsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Domain)
+	_, err := p.pt.FinalResponse(ctx, &respType.Domain)
 	if err != nil {
 		return DomainsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *EventSubscriptionsClientCreateOrUpdatePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final EventSubscriptionsClientCreateOrUpdateResponse will be returned.
 func (p *EventSubscriptionsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (EventSubscriptionsClientCreateOrUpdateResponse, error) {
 	respType := EventSubscriptionsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.EventSubscription)
+	_, err := p.pt.FinalResponse(ctx, &respType.EventSubscription)
 	if err != nil {
 		return EventSubscriptionsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *EventSubscriptionsClientDeletePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final EventSubscriptionsClientDeleteResponse will be returned.
 func (p *EventSubscriptionsClientDeletePoller) FinalResponse(ctx context.Context) (EventSubscriptionsClientDeleteResponse, error) {
 	respType := EventSubscriptionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return EventSubscriptionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *EventSubscriptionsClientUpdatePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final EventSubscriptionsClientUpdateResponse will be returned.
 func (p *EventSubscriptionsClientUpdatePoller) FinalResponse(ctx context.Context) (EventSubscriptionsClientUpdateResponse, error) {
 	respType := EventSubscriptionsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.EventSubscription)
+	_, err := p.pt.FinalResponse(ctx, &respType.EventSubscription)
 	if err != nil {
 		return EventSubscriptionsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *PrivateEndpointConnectionsClientDeletePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionsClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointConnectionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -430,11 +421,10 @@ func (p *PrivateEndpointConnectionsClientUpdatePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientUpdateResponse will be returned.
 func (p *PrivateEndpointConnectionsClientUpdatePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientUpdateResponse, error) {
 	respType := PrivateEndpointConnectionsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return PrivateEndpointConnectionsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -473,11 +463,10 @@ func (p *SystemTopicEventSubscriptionsClientCreateOrUpdatePoller) Poll(ctx conte
 // If the final GET succeeded then the final SystemTopicEventSubscriptionsClientCreateOrUpdateResponse will be returned.
 func (p *SystemTopicEventSubscriptionsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (SystemTopicEventSubscriptionsClientCreateOrUpdateResponse, error) {
 	respType := SystemTopicEventSubscriptionsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.EventSubscription)
+	_, err := p.pt.FinalResponse(ctx, &respType.EventSubscription)
 	if err != nil {
 		return SystemTopicEventSubscriptionsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -516,11 +505,10 @@ func (p *SystemTopicEventSubscriptionsClientDeletePoller) Poll(ctx context.Conte
 // If the final GET succeeded then the final SystemTopicEventSubscriptionsClientDeleteResponse will be returned.
 func (p *SystemTopicEventSubscriptionsClientDeletePoller) FinalResponse(ctx context.Context) (SystemTopicEventSubscriptionsClientDeleteResponse, error) {
 	respType := SystemTopicEventSubscriptionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SystemTopicEventSubscriptionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -559,11 +547,10 @@ func (p *SystemTopicEventSubscriptionsClientUpdatePoller) Poll(ctx context.Conte
 // If the final GET succeeded then the final SystemTopicEventSubscriptionsClientUpdateResponse will be returned.
 func (p *SystemTopicEventSubscriptionsClientUpdatePoller) FinalResponse(ctx context.Context) (SystemTopicEventSubscriptionsClientUpdateResponse, error) {
 	respType := SystemTopicEventSubscriptionsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.EventSubscription)
+	_, err := p.pt.FinalResponse(ctx, &respType.EventSubscription)
 	if err != nil {
 		return SystemTopicEventSubscriptionsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -602,11 +589,10 @@ func (p *SystemTopicsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final SystemTopicsClientCreateOrUpdateResponse will be returned.
 func (p *SystemTopicsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (SystemTopicsClientCreateOrUpdateResponse, error) {
 	respType := SystemTopicsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SystemTopic)
+	_, err := p.pt.FinalResponse(ctx, &respType.SystemTopic)
 	if err != nil {
 		return SystemTopicsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -645,11 +631,10 @@ func (p *SystemTopicsClientDeletePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final SystemTopicsClientDeleteResponse will be returned.
 func (p *SystemTopicsClientDeletePoller) FinalResponse(ctx context.Context) (SystemTopicsClientDeleteResponse, error) {
 	respType := SystemTopicsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SystemTopicsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -688,11 +673,10 @@ func (p *SystemTopicsClientUpdatePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final SystemTopicsClientUpdateResponse will be returned.
 func (p *SystemTopicsClientUpdatePoller) FinalResponse(ctx context.Context) (SystemTopicsClientUpdateResponse, error) {
 	respType := SystemTopicsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SystemTopic)
+	_, err := p.pt.FinalResponse(ctx, &respType.SystemTopic)
 	if err != nil {
 		return SystemTopicsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -731,11 +715,10 @@ func (p *TopicsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final TopicsClientCreateOrUpdateResponse will be returned.
 func (p *TopicsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (TopicsClientCreateOrUpdateResponse, error) {
 	respType := TopicsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Topic)
+	_, err := p.pt.FinalResponse(ctx, &respType.Topic)
 	if err != nil {
 		return TopicsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -774,11 +757,10 @@ func (p *TopicsClientDeletePoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final TopicsClientDeleteResponse will be returned.
 func (p *TopicsClientDeletePoller) FinalResponse(ctx context.Context) (TopicsClientDeleteResponse, error) {
 	respType := TopicsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return TopicsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -817,11 +799,10 @@ func (p *TopicsClientRegenerateKeyPoller) Poll(ctx context.Context) (*http.Respo
 // If the final GET succeeded then the final TopicsClientRegenerateKeyResponse will be returned.
 func (p *TopicsClientRegenerateKeyPoller) FinalResponse(ctx context.Context) (TopicsClientRegenerateKeyResponse, error) {
 	respType := TopicsClientRegenerateKeyResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.TopicSharedAccessKeys)
+	_, err := p.pt.FinalResponse(ctx, &respType.TopicSharedAccessKeys)
 	if err != nil {
 		return TopicsClientRegenerateKeyResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -860,11 +841,10 @@ func (p *TopicsClientUpdatePoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final TopicsClientUpdateResponse will be returned.
 func (p *TopicsClientUpdatePoller) FinalResponse(ctx context.Context) (TopicsClientUpdateResponse, error) {
 	respType := TopicsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Topic)
+	_, err := p.pt.FinalResponse(ctx, &respType.Topic)
 	if err != nil {
 		return TopicsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

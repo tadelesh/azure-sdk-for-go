@@ -34,17 +34,17 @@ type NetworkFunctionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewNetworkFunctionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *NetworkFunctionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &NetworkFunctionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *NetworkFunctionsClient) BeginCreateOrUpdate(ctx context.Context, r
 	if err != nil {
 		return NetworkFunctionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := NetworkFunctionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := NetworkFunctionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("NetworkFunctionsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return NetworkFunctionsClientCreateOrUpdatePollerResponse{}, err
@@ -131,9 +129,7 @@ func (client *NetworkFunctionsClient) BeginDelete(ctx context.Context, resourceG
 	if err != nil {
 		return NetworkFunctionsClientDeletePollerResponse{}, err
 	}
-	result := NetworkFunctionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := NetworkFunctionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("NetworkFunctionsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return NetworkFunctionsClientDeletePollerResponse{}, err
@@ -236,7 +232,7 @@ func (client *NetworkFunctionsClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *NetworkFunctionsClient) getHandleResponse(resp *http.Response) (NetworkFunctionsClientGetResponse, error) {
-	result := NetworkFunctionsClientGetResponse{RawResponse: resp}
+	result := NetworkFunctionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkFunction); err != nil {
 		return NetworkFunctionsClientGetResponse{}, err
 	}
@@ -284,7 +280,7 @@ func (client *NetworkFunctionsClient) listByResourceGroupCreateRequest(ctx conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *NetworkFunctionsClient) listByResourceGroupHandleResponse(resp *http.Response) (NetworkFunctionsClientListByResourceGroupResponse, error) {
-	result := NetworkFunctionsClientListByResourceGroupResponse{RawResponse: resp}
+	result := NetworkFunctionsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkFunctionListResult); err != nil {
 		return NetworkFunctionsClientListByResourceGroupResponse{}, err
 	}
@@ -327,7 +323,7 @@ func (client *NetworkFunctionsClient) listBySubscriptionCreateRequest(ctx contex
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *NetworkFunctionsClient) listBySubscriptionHandleResponse(resp *http.Response) (NetworkFunctionsClientListBySubscriptionResponse, error) {
-	result := NetworkFunctionsClientListBySubscriptionResponse{RawResponse: resp}
+	result := NetworkFunctionsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkFunctionListResult); err != nil {
 		return NetworkFunctionsClientListBySubscriptionResponse{}, err
 	}
@@ -384,7 +380,7 @@ func (client *NetworkFunctionsClient) updateTagsCreateRequest(ctx context.Contex
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *NetworkFunctionsClient) updateTagsHandleResponse(resp *http.Response) (NetworkFunctionsClientUpdateTagsResponse, error) {
-	result := NetworkFunctionsClientUpdateTagsResponse{RawResponse: resp}
+	result := NetworkFunctionsClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkFunction); err != nil {
 		return NetworkFunctionsClientUpdateTagsResponse{}, err
 	}

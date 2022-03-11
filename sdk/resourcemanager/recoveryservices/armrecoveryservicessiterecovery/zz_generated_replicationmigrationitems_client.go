@@ -38,19 +38,19 @@ type ReplicationMigrationItemsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReplicationMigrationItemsClient(resourceName string, resourceGroupName string, subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReplicationMigrationItemsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReplicationMigrationItemsClient{
 		resourceName:      resourceName,
 		resourceGroupName: resourceGroupName,
 		subscriptionID:    subscriptionID,
-		host:              string(cp.Endpoint),
-		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:              string(ep),
+		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -68,9 +68,7 @@ func (client *ReplicationMigrationItemsClient) BeginCreate(ctx context.Context, 
 	if err != nil {
 		return ReplicationMigrationItemsClientCreatePollerResponse{}, err
 	}
-	result := ReplicationMigrationItemsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationMigrationItemsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationMigrationItemsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return ReplicationMigrationItemsClientCreatePollerResponse{}, err
@@ -130,7 +128,7 @@ func (client *ReplicationMigrationItemsClient) createCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, input)
@@ -148,9 +146,7 @@ func (client *ReplicationMigrationItemsClient) BeginDelete(ctx context.Context, 
 	if err != nil {
 		return ReplicationMigrationItemsClientDeletePollerResponse{}, err
 	}
-	result := ReplicationMigrationItemsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationMigrationItemsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationMigrationItemsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ReplicationMigrationItemsClientDeletePollerResponse{}, err
@@ -210,7 +206,7 @@ func (client *ReplicationMigrationItemsClient) deleteCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	if options != nil && options.DeleteOption != nil {
 		reqQP.Set("deleteOption", *options.DeleteOption)
 	}
@@ -272,7 +268,7 @@ func (client *ReplicationMigrationItemsClient) getCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -280,7 +276,7 @@ func (client *ReplicationMigrationItemsClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *ReplicationMigrationItemsClient) getHandleResponse(resp *http.Response) (ReplicationMigrationItemsClientGetResponse, error) {
-	result := ReplicationMigrationItemsClientGetResponse{RawResponse: resp}
+	result := ReplicationMigrationItemsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MigrationItem); err != nil {
 		return ReplicationMigrationItemsClientGetResponse{}, err
 	}
@@ -323,7 +319,7 @@ func (client *ReplicationMigrationItemsClient) listCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	if options != nil && options.SkipToken != nil {
 		reqQP.Set("skipToken", *options.SkipToken)
 	}
@@ -340,7 +336,7 @@ func (client *ReplicationMigrationItemsClient) listCreateRequest(ctx context.Con
 
 // listHandleResponse handles the List response.
 func (client *ReplicationMigrationItemsClient) listHandleResponse(resp *http.Response) (ReplicationMigrationItemsClientListResponse, error) {
-	result := ReplicationMigrationItemsClientListResponse{RawResponse: resp}
+	result := ReplicationMigrationItemsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MigrationItemCollection); err != nil {
 		return ReplicationMigrationItemsClientListResponse{}, err
 	}
@@ -393,7 +389,7 @@ func (client *ReplicationMigrationItemsClient) listByReplicationProtectionContai
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	if options != nil && options.SkipToken != nil {
 		reqQP.Set("skipToken", *options.SkipToken)
 	}
@@ -410,7 +406,7 @@ func (client *ReplicationMigrationItemsClient) listByReplicationProtectionContai
 
 // listByReplicationProtectionContainersHandleResponse handles the ListByReplicationProtectionContainers response.
 func (client *ReplicationMigrationItemsClient) listByReplicationProtectionContainersHandleResponse(resp *http.Response) (ReplicationMigrationItemsClientListByReplicationProtectionContainersResponse, error) {
-	result := ReplicationMigrationItemsClientListByReplicationProtectionContainersResponse{RawResponse: resp}
+	result := ReplicationMigrationItemsClientListByReplicationProtectionContainersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MigrationItemCollection); err != nil {
 		return ReplicationMigrationItemsClientListByReplicationProtectionContainersResponse{}, err
 	}
@@ -430,9 +426,7 @@ func (client *ReplicationMigrationItemsClient) BeginMigrate(ctx context.Context,
 	if err != nil {
 		return ReplicationMigrationItemsClientMigratePollerResponse{}, err
 	}
-	result := ReplicationMigrationItemsClientMigratePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationMigrationItemsClientMigratePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationMigrationItemsClient.Migrate", "", resp, client.pl)
 	if err != nil {
 		return ReplicationMigrationItemsClientMigratePollerResponse{}, err
@@ -492,7 +486,7 @@ func (client *ReplicationMigrationItemsClient) migrateCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, migrateInput)
@@ -511,9 +505,7 @@ func (client *ReplicationMigrationItemsClient) BeginResync(ctx context.Context, 
 	if err != nil {
 		return ReplicationMigrationItemsClientResyncPollerResponse{}, err
 	}
-	result := ReplicationMigrationItemsClientResyncPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationMigrationItemsClientResyncPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationMigrationItemsClient.Resync", "", resp, client.pl)
 	if err != nil {
 		return ReplicationMigrationItemsClientResyncPollerResponse{}, err
@@ -573,7 +565,7 @@ func (client *ReplicationMigrationItemsClient) resyncCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, input)
@@ -592,9 +584,7 @@ func (client *ReplicationMigrationItemsClient) BeginTestMigrate(ctx context.Cont
 	if err != nil {
 		return ReplicationMigrationItemsClientTestMigratePollerResponse{}, err
 	}
-	result := ReplicationMigrationItemsClientTestMigratePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationMigrationItemsClientTestMigratePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationMigrationItemsClient.TestMigrate", "", resp, client.pl)
 	if err != nil {
 		return ReplicationMigrationItemsClientTestMigratePollerResponse{}, err
@@ -654,7 +644,7 @@ func (client *ReplicationMigrationItemsClient) testMigrateCreateRequest(ctx cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, testMigrateInput)
@@ -673,9 +663,7 @@ func (client *ReplicationMigrationItemsClient) BeginTestMigrateCleanup(ctx conte
 	if err != nil {
 		return ReplicationMigrationItemsClientTestMigrateCleanupPollerResponse{}, err
 	}
-	result := ReplicationMigrationItemsClientTestMigrateCleanupPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationMigrationItemsClientTestMigrateCleanupPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationMigrationItemsClient.TestMigrateCleanup", "", resp, client.pl)
 	if err != nil {
 		return ReplicationMigrationItemsClientTestMigrateCleanupPollerResponse{}, err
@@ -735,7 +723,7 @@ func (client *ReplicationMigrationItemsClient) testMigrateCleanupCreateRequest(c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, testMigrateCleanupInput)
@@ -754,9 +742,7 @@ func (client *ReplicationMigrationItemsClient) BeginUpdate(ctx context.Context, 
 	if err != nil {
 		return ReplicationMigrationItemsClientUpdatePollerResponse{}, err
 	}
-	result := ReplicationMigrationItemsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationMigrationItemsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationMigrationItemsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ReplicationMigrationItemsClientUpdatePollerResponse{}, err
@@ -816,7 +802,7 @@ func (client *ReplicationMigrationItemsClient) updateCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, input)

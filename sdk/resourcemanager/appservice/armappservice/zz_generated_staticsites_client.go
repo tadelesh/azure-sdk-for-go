@@ -63,9 +63,7 @@ func (client *StaticSitesClient) BeginApproveOrRejectPrivateEndpointConnection(c
 	if err != nil {
 		return StaticSitesClientApproveOrRejectPrivateEndpointConnectionPollerResponse{}, err
 	}
-	result := StaticSitesClientApproveOrRejectPrivateEndpointConnectionPollerResponse{
-		RawResponse: resp,
-	}
+	result := StaticSitesClientApproveOrRejectPrivateEndpointConnectionPollerResponse{}
 	pt, err := armruntime.NewPoller("StaticSitesClient.ApproveOrRejectPrivateEndpointConnection", "", resp, client.pl)
 	if err != nil {
 		return StaticSitesClientApproveOrRejectPrivateEndpointConnectionPollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *StaticSitesClient) BeginCreateOrUpdateStaticSite(ctx context.Conte
 	if err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSitePollerResponse{}, err
 	}
-	result := StaticSitesClientCreateOrUpdateStaticSitePollerResponse{
-		RawResponse: resp,
-	}
+	result := StaticSitesClientCreateOrUpdateStaticSitePollerResponse{}
 	pt, err := armruntime.NewPoller("StaticSitesClient.CreateOrUpdateStaticSite", "", resp, client.pl)
 	if err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSitePollerResponse{}, err
@@ -243,7 +239,7 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteAppSettingsCreateReques
 
 // createOrUpdateStaticSiteAppSettingsHandleResponse handles the CreateOrUpdateStaticSiteAppSettings response.
 func (client *StaticSitesClient) createOrUpdateStaticSiteAppSettingsHandleResponse(resp *http.Response) (StaticSitesClientCreateOrUpdateStaticSiteAppSettingsResponse, error) {
-	result := StaticSitesClientCreateOrUpdateStaticSiteAppSettingsResponse{RawResponse: resp}
+	result := StaticSitesClientCreateOrUpdateStaticSiteAppSettingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSiteAppSettingsResponse{}, err
 	}
@@ -305,7 +301,7 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteBuildAppSettingsCreateR
 
 // createOrUpdateStaticSiteBuildAppSettingsHandleResponse handles the CreateOrUpdateStaticSiteBuildAppSettings response.
 func (client *StaticSitesClient) createOrUpdateStaticSiteBuildAppSettingsHandleResponse(resp *http.Response) (StaticSitesClientCreateOrUpdateStaticSiteBuildAppSettingsResponse, error) {
-	result := StaticSitesClientCreateOrUpdateStaticSiteBuildAppSettingsResponse{RawResponse: resp}
+	result := StaticSitesClientCreateOrUpdateStaticSiteBuildAppSettingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSiteBuildAppSettingsResponse{}, err
 	}
@@ -368,7 +364,7 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteBuildFunctionAppSetting
 
 // createOrUpdateStaticSiteBuildFunctionAppSettingsHandleResponse handles the CreateOrUpdateStaticSiteBuildFunctionAppSettings response.
 func (client *StaticSitesClient) createOrUpdateStaticSiteBuildFunctionAppSettingsHandleResponse(resp *http.Response) (StaticSitesClientCreateOrUpdateStaticSiteBuildFunctionAppSettingsResponse, error) {
-	result := StaticSitesClientCreateOrUpdateStaticSiteBuildFunctionAppSettingsResponse{RawResponse: resp}
+	result := StaticSitesClientCreateOrUpdateStaticSiteBuildFunctionAppSettingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSiteBuildFunctionAppSettingsResponse{}, err
 	}
@@ -390,9 +386,7 @@ func (client *StaticSitesClient) BeginCreateOrUpdateStaticSiteCustomDomain(ctx c
 	if err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPollerResponse{}, err
 	}
-	result := StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPollerResponse{
-		RawResponse: resp,
-	}
+	result := StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPollerResponse{}
 	pt, err := armruntime.NewPoller("StaticSitesClient.CreateOrUpdateStaticSiteCustomDomain", "", resp, client.pl)
 	if err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPollerResponse{}, err
@@ -502,7 +496,7 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteFunctionAppSettingsCrea
 
 // createOrUpdateStaticSiteFunctionAppSettingsHandleResponse handles the CreateOrUpdateStaticSiteFunctionAppSettings response.
 func (client *StaticSitesClient) createOrUpdateStaticSiteFunctionAppSettingsHandleResponse(resp *http.Response) (StaticSitesClientCreateOrUpdateStaticSiteFunctionAppSettingsResponse, error) {
-	result := StaticSitesClientCreateOrUpdateStaticSiteFunctionAppSettingsResponse{RawResponse: resp}
+	result := StaticSitesClientCreateOrUpdateStaticSiteFunctionAppSettingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSiteFunctionAppSettingsResponse{}, err
 	}
@@ -558,7 +552,7 @@ func (client *StaticSitesClient) createUserRolesInvitationLinkCreateRequest(ctx 
 
 // createUserRolesInvitationLinkHandleResponse handles the CreateUserRolesInvitationLink response.
 func (client *StaticSitesClient) createUserRolesInvitationLinkHandleResponse(resp *http.Response) (StaticSitesClientCreateUserRolesInvitationLinkResponse, error) {
-	result := StaticSitesClientCreateUserRolesInvitationLinkResponse{RawResponse: resp}
+	result := StaticSitesClientCreateUserRolesInvitationLinkResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteUserInvitationResponseResource); err != nil {
 		return StaticSitesClientCreateUserRolesInvitationLinkResponse{}, err
 	}
@@ -577,9 +571,7 @@ func (client *StaticSitesClient) BeginCreateZipDeploymentForStaticSite(ctx conte
 	if err != nil {
 		return StaticSitesClientCreateZipDeploymentForStaticSitePollerResponse{}, err
 	}
-	result := StaticSitesClientCreateZipDeploymentForStaticSitePollerResponse{
-		RawResponse: resp,
-	}
+	result := StaticSitesClientCreateZipDeploymentForStaticSitePollerResponse{}
 	pt, err := armruntime.NewPoller("StaticSitesClient.CreateZipDeploymentForStaticSite", "", resp, client.pl)
 	if err != nil {
 		return StaticSitesClientCreateZipDeploymentForStaticSitePollerResponse{}, err
@@ -647,9 +639,7 @@ func (client *StaticSitesClient) BeginCreateZipDeploymentForStaticSiteBuild(ctx 
 	if err != nil {
 		return StaticSitesClientCreateZipDeploymentForStaticSiteBuildPollerResponse{}, err
 	}
-	result := StaticSitesClientCreateZipDeploymentForStaticSiteBuildPollerResponse{
-		RawResponse: resp,
-	}
+	result := StaticSitesClientCreateZipDeploymentForStaticSiteBuildPollerResponse{}
 	pt, err := armruntime.NewPoller("StaticSitesClient.CreateZipDeploymentForStaticSiteBuild", "", resp, client.pl)
 	if err != nil {
 		return StaticSitesClientCreateZipDeploymentForStaticSiteBuildPollerResponse{}, err
@@ -719,9 +709,7 @@ func (client *StaticSitesClient) BeginDeletePrivateEndpointConnection(ctx contex
 	if err != nil {
 		return StaticSitesClientDeletePrivateEndpointConnectionPollerResponse{}, err
 	}
-	result := StaticSitesClientDeletePrivateEndpointConnectionPollerResponse{
-		RawResponse: resp,
-	}
+	result := StaticSitesClientDeletePrivateEndpointConnectionPollerResponse{}
 	pt, err := armruntime.NewPoller("StaticSitesClient.DeletePrivateEndpointConnection", "", resp, client.pl)
 	if err != nil {
 		return StaticSitesClientDeletePrivateEndpointConnectionPollerResponse{}, err
@@ -790,9 +778,7 @@ func (client *StaticSitesClient) BeginDeleteStaticSite(ctx context.Context, reso
 	if err != nil {
 		return StaticSitesClientDeleteStaticSitePollerResponse{}, err
 	}
-	result := StaticSitesClientDeleteStaticSitePollerResponse{
-		RawResponse: resp,
-	}
+	result := StaticSitesClientDeleteStaticSitePollerResponse{}
 	pt, err := armruntime.NewPoller("StaticSitesClient.DeleteStaticSite", "", resp, client.pl)
 	if err != nil {
 		return StaticSitesClientDeleteStaticSitePollerResponse{}, err
@@ -858,9 +844,7 @@ func (client *StaticSitesClient) BeginDeleteStaticSiteBuild(ctx context.Context,
 	if err != nil {
 		return StaticSitesClientDeleteStaticSiteBuildPollerResponse{}, err
 	}
-	result := StaticSitesClientDeleteStaticSiteBuildPollerResponse{
-		RawResponse: resp,
-	}
+	result := StaticSitesClientDeleteStaticSiteBuildPollerResponse{}
 	pt, err := armruntime.NewPoller("StaticSitesClient.DeleteStaticSiteBuild", "", resp, client.pl)
 	if err != nil {
 		return StaticSitesClientDeleteStaticSiteBuildPollerResponse{}, err
@@ -930,9 +914,7 @@ func (client *StaticSitesClient) BeginDeleteStaticSiteCustomDomain(ctx context.C
 	if err != nil {
 		return StaticSitesClientDeleteStaticSiteCustomDomainPollerResponse{}, err
 	}
-	result := StaticSitesClientDeleteStaticSiteCustomDomainPollerResponse{
-		RawResponse: resp,
-	}
+	result := StaticSitesClientDeleteStaticSiteCustomDomainPollerResponse{}
 	pt, err := armruntime.NewPoller("StaticSitesClient.DeleteStaticSiteCustomDomain", "", resp, client.pl)
 	if err != nil {
 		return StaticSitesClientDeleteStaticSiteCustomDomainPollerResponse{}, err
@@ -1010,7 +992,7 @@ func (client *StaticSitesClient) DeleteStaticSiteUser(ctx context.Context, resou
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return StaticSitesClientDeleteStaticSiteUserResponse{}, runtime.NewResponseError(resp)
 	}
-	return StaticSitesClientDeleteStaticSiteUserResponse{RawResponse: resp}, nil
+	return StaticSitesClientDeleteStaticSiteUserResponse{}, nil
 }
 
 // deleteStaticSiteUserCreateRequest creates the DeleteStaticSiteUser request.
@@ -1058,9 +1040,7 @@ func (client *StaticSitesClient) BeginDetachStaticSite(ctx context.Context, reso
 	if err != nil {
 		return StaticSitesClientDetachStaticSitePollerResponse{}, err
 	}
-	result := StaticSitesClientDetachStaticSitePollerResponse{
-		RawResponse: resp,
-	}
+	result := StaticSitesClientDetachStaticSitePollerResponse{}
 	pt, err := armruntime.NewPoller("StaticSitesClient.DetachStaticSite", "", resp, client.pl)
 	if err != nil {
 		return StaticSitesClientDetachStaticSitePollerResponse{}, err
@@ -1133,7 +1113,7 @@ func (client *StaticSitesClient) DetachUserProvidedFunctionAppFromStaticSite(ctx
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return StaticSitesClientDetachUserProvidedFunctionAppFromStaticSiteResponse{}, runtime.NewResponseError(resp)
 	}
-	return StaticSitesClientDetachUserProvidedFunctionAppFromStaticSiteResponse{RawResponse: resp}, nil
+	return StaticSitesClientDetachUserProvidedFunctionAppFromStaticSiteResponse{}, nil
 }
 
 // detachUserProvidedFunctionAppFromStaticSiteCreateRequest creates the DetachUserProvidedFunctionAppFromStaticSite request.
@@ -1187,7 +1167,7 @@ func (client *StaticSitesClient) DetachUserProvidedFunctionAppFromStaticSiteBuil
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return StaticSitesClientDetachUserProvidedFunctionAppFromStaticSiteBuildResponse{}, runtime.NewResponseError(resp)
 	}
-	return StaticSitesClientDetachUserProvidedFunctionAppFromStaticSiteBuildResponse{RawResponse: resp}, nil
+	return StaticSitesClientDetachUserProvidedFunctionAppFromStaticSiteBuildResponse{}, nil
 }
 
 // detachUserProvidedFunctionAppFromStaticSiteBuildCreateRequest creates the DetachUserProvidedFunctionAppFromStaticSiteBuild request.
@@ -1278,7 +1258,7 @@ func (client *StaticSitesClient) getPrivateEndpointConnectionCreateRequest(ctx c
 
 // getPrivateEndpointConnectionHandleResponse handles the GetPrivateEndpointConnection response.
 func (client *StaticSitesClient) getPrivateEndpointConnectionHandleResponse(resp *http.Response) (StaticSitesClientGetPrivateEndpointConnectionResponse, error) {
-	result := StaticSitesClientGetPrivateEndpointConnectionResponse{RawResponse: resp}
+	result := StaticSitesClientGetPrivateEndpointConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemotePrivateEndpointConnectionARMResource); err != nil {
 		return StaticSitesClientGetPrivateEndpointConnectionResponse{}, err
 	}
@@ -1332,7 +1312,7 @@ func (client *StaticSitesClient) getPrivateEndpointConnectionListCreateRequest(c
 
 // getPrivateEndpointConnectionListHandleResponse handles the GetPrivateEndpointConnectionList response.
 func (client *StaticSitesClient) getPrivateEndpointConnectionListHandleResponse(resp *http.Response) (StaticSitesClientGetPrivateEndpointConnectionListResponse, error) {
-	result := StaticSitesClientGetPrivateEndpointConnectionListResponse{RawResponse: resp}
+	result := StaticSitesClientGetPrivateEndpointConnectionListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionCollection); err != nil {
 		return StaticSitesClientGetPrivateEndpointConnectionListResponse{}, err
 	}
@@ -1388,7 +1368,7 @@ func (client *StaticSitesClient) getPrivateLinkResourcesCreateRequest(ctx contex
 
 // getPrivateLinkResourcesHandleResponse handles the GetPrivateLinkResources response.
 func (client *StaticSitesClient) getPrivateLinkResourcesHandleResponse(resp *http.Response) (StaticSitesClientGetPrivateLinkResourcesResponse, error) {
-	result := StaticSitesClientGetPrivateLinkResourcesResponse{RawResponse: resp}
+	result := StaticSitesClientGetPrivateLinkResourcesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourcesWrapper); err != nil {
 		return StaticSitesClientGetPrivateLinkResourcesResponse{}, err
 	}
@@ -1444,7 +1424,7 @@ func (client *StaticSitesClient) getStaticSiteCreateRequest(ctx context.Context,
 
 // getStaticSiteHandleResponse handles the GetStaticSite response.
 func (client *StaticSitesClient) getStaticSiteHandleResponse(resp *http.Response) (StaticSitesClientGetStaticSiteResponse, error) {
-	result := StaticSitesClientGetStaticSiteResponse{RawResponse: resp}
+	result := StaticSitesClientGetStaticSiteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteARMResource); err != nil {
 		return StaticSitesClientGetStaticSiteResponse{}, err
 	}
@@ -1505,7 +1485,7 @@ func (client *StaticSitesClient) getStaticSiteBuildCreateRequest(ctx context.Con
 
 // getStaticSiteBuildHandleResponse handles the GetStaticSiteBuild response.
 func (client *StaticSitesClient) getStaticSiteBuildHandleResponse(resp *http.Response) (StaticSitesClientGetStaticSiteBuildResponse, error) {
-	result := StaticSitesClientGetStaticSiteBuildResponse{RawResponse: resp}
+	result := StaticSitesClientGetStaticSiteBuildResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteBuildARMResource); err != nil {
 		return StaticSitesClientGetStaticSiteBuildResponse{}, err
 	}
@@ -1558,7 +1538,7 @@ func (client *StaticSitesClient) getStaticSiteBuildsCreateRequest(ctx context.Co
 
 // getStaticSiteBuildsHandleResponse handles the GetStaticSiteBuilds response.
 func (client *StaticSitesClient) getStaticSiteBuildsHandleResponse(resp *http.Response) (StaticSitesClientGetStaticSiteBuildsResponse, error) {
-	result := StaticSitesClientGetStaticSiteBuildsResponse{RawResponse: resp}
+	result := StaticSitesClientGetStaticSiteBuildsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteBuildCollection); err != nil {
 		return StaticSitesClientGetStaticSiteBuildsResponse{}, err
 	}
@@ -1619,7 +1599,7 @@ func (client *StaticSitesClient) getStaticSiteCustomDomainCreateRequest(ctx cont
 
 // getStaticSiteCustomDomainHandleResponse handles the GetStaticSiteCustomDomain response.
 func (client *StaticSitesClient) getStaticSiteCustomDomainHandleResponse(resp *http.Response) (StaticSitesClientGetStaticSiteCustomDomainResponse, error) {
-	result := StaticSitesClientGetStaticSiteCustomDomainResponse{RawResponse: resp}
+	result := StaticSitesClientGetStaticSiteCustomDomainResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteCustomDomainOverviewARMResource); err != nil {
 		return StaticSitesClientGetStaticSiteCustomDomainResponse{}, err
 	}
@@ -1667,7 +1647,7 @@ func (client *StaticSitesClient) getStaticSitesByResourceGroupCreateRequest(ctx 
 
 // getStaticSitesByResourceGroupHandleResponse handles the GetStaticSitesByResourceGroup response.
 func (client *StaticSitesClient) getStaticSitesByResourceGroupHandleResponse(resp *http.Response) (StaticSitesClientGetStaticSitesByResourceGroupResponse, error) {
-	result := StaticSitesClientGetStaticSitesByResourceGroupResponse{RawResponse: resp}
+	result := StaticSitesClientGetStaticSitesByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteCollection); err != nil {
 		return StaticSitesClientGetStaticSitesByResourceGroupResponse{}, err
 	}
@@ -1729,7 +1709,7 @@ func (client *StaticSitesClient) getUserProvidedFunctionAppForStaticSiteCreateRe
 
 // getUserProvidedFunctionAppForStaticSiteHandleResponse handles the GetUserProvidedFunctionAppForStaticSite response.
 func (client *StaticSitesClient) getUserProvidedFunctionAppForStaticSiteHandleResponse(resp *http.Response) (StaticSitesClientGetUserProvidedFunctionAppForStaticSiteResponse, error) {
-	result := StaticSitesClientGetUserProvidedFunctionAppForStaticSiteResponse{RawResponse: resp}
+	result := StaticSitesClientGetUserProvidedFunctionAppForStaticSiteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteUserProvidedFunctionAppARMResource); err != nil {
 		return StaticSitesClientGetUserProvidedFunctionAppForStaticSiteResponse{}, err
 	}
@@ -1796,7 +1776,7 @@ func (client *StaticSitesClient) getUserProvidedFunctionAppForStaticSiteBuildCre
 
 // getUserProvidedFunctionAppForStaticSiteBuildHandleResponse handles the GetUserProvidedFunctionAppForStaticSiteBuild response.
 func (client *StaticSitesClient) getUserProvidedFunctionAppForStaticSiteBuildHandleResponse(resp *http.Response) (StaticSitesClientGetUserProvidedFunctionAppForStaticSiteBuildResponse, error) {
-	result := StaticSitesClientGetUserProvidedFunctionAppForStaticSiteBuildResponse{RawResponse: resp}
+	result := StaticSitesClientGetUserProvidedFunctionAppForStaticSiteBuildResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteUserProvidedFunctionAppARMResource); err != nil {
 		return StaticSitesClientGetUserProvidedFunctionAppForStaticSiteBuildResponse{}, err
 	}
@@ -1850,7 +1830,7 @@ func (client *StaticSitesClient) getUserProvidedFunctionAppsForStaticSiteCreateR
 
 // getUserProvidedFunctionAppsForStaticSiteHandleResponse handles the GetUserProvidedFunctionAppsForStaticSite response.
 func (client *StaticSitesClient) getUserProvidedFunctionAppsForStaticSiteHandleResponse(resp *http.Response) (StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse, error) {
-	result := StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse{RawResponse: resp}
+	result := StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteUserProvidedFunctionAppsCollection); err != nil {
 		return StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse{}, err
 	}
@@ -1909,7 +1889,7 @@ func (client *StaticSitesClient) getUserProvidedFunctionAppsForStaticSiteBuildCr
 
 // getUserProvidedFunctionAppsForStaticSiteBuildHandleResponse handles the GetUserProvidedFunctionAppsForStaticSiteBuild response.
 func (client *StaticSitesClient) getUserProvidedFunctionAppsForStaticSiteBuildHandleResponse(resp *http.Response) (StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse, error) {
-	result := StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse{RawResponse: resp}
+	result := StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteUserProvidedFunctionAppsCollection); err != nil {
 		return StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse{}, err
 	}
@@ -1951,7 +1931,7 @@ func (client *StaticSitesClient) listCreateRequest(ctx context.Context, options 
 
 // listHandleResponse handles the List response.
 func (client *StaticSitesClient) listHandleResponse(resp *http.Response) (StaticSitesClientListResponse, error) {
-	result := StaticSitesClientListResponse{RawResponse: resp}
+	result := StaticSitesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteCollection); err != nil {
 		return StaticSitesClientListResponse{}, err
 	}
@@ -2007,7 +1987,7 @@ func (client *StaticSitesClient) listStaticSiteAppSettingsCreateRequest(ctx cont
 
 // listStaticSiteAppSettingsHandleResponse handles the ListStaticSiteAppSettings response.
 func (client *StaticSitesClient) listStaticSiteAppSettingsHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteAppSettingsResponse, error) {
-	result := StaticSitesClientListStaticSiteAppSettingsResponse{RawResponse: resp}
+	result := StaticSitesClientListStaticSiteAppSettingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientListStaticSiteAppSettingsResponse{}, err
 	}
@@ -2068,7 +2048,7 @@ func (client *StaticSitesClient) listStaticSiteBuildAppSettingsCreateRequest(ctx
 
 // listStaticSiteBuildAppSettingsHandleResponse handles the ListStaticSiteBuildAppSettings response.
 func (client *StaticSitesClient) listStaticSiteBuildAppSettingsHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteBuildAppSettingsResponse, error) {
-	result := StaticSitesClientListStaticSiteBuildAppSettingsResponse{RawResponse: resp}
+	result := StaticSitesClientListStaticSiteBuildAppSettingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientListStaticSiteBuildAppSettingsResponse{}, err
 	}
@@ -2129,7 +2109,7 @@ func (client *StaticSitesClient) listStaticSiteBuildFunctionAppSettingsCreateReq
 
 // listStaticSiteBuildFunctionAppSettingsHandleResponse handles the ListStaticSiteBuildFunctionAppSettings response.
 func (client *StaticSitesClient) listStaticSiteBuildFunctionAppSettingsHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteBuildFunctionAppSettingsResponse, error) {
-	result := StaticSitesClientListStaticSiteBuildFunctionAppSettingsResponse{RawResponse: resp}
+	result := StaticSitesClientListStaticSiteBuildFunctionAppSettingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientListStaticSiteBuildFunctionAppSettingsResponse{}, err
 	}
@@ -2187,7 +2167,7 @@ func (client *StaticSitesClient) listStaticSiteBuildFunctionsCreateRequest(ctx c
 
 // listStaticSiteBuildFunctionsHandleResponse handles the ListStaticSiteBuildFunctions response.
 func (client *StaticSitesClient) listStaticSiteBuildFunctionsHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteBuildFunctionsResponse, error) {
-	result := StaticSitesClientListStaticSiteBuildFunctionsResponse{RawResponse: resp}
+	result := StaticSitesClientListStaticSiteBuildFunctionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteFunctionOverviewCollection); err != nil {
 		return StaticSitesClientListStaticSiteBuildFunctionsResponse{}, err
 	}
@@ -2243,7 +2223,7 @@ func (client *StaticSitesClient) listStaticSiteConfiguredRolesCreateRequest(ctx 
 
 // listStaticSiteConfiguredRolesHandleResponse handles the ListStaticSiteConfiguredRoles response.
 func (client *StaticSitesClient) listStaticSiteConfiguredRolesHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteConfiguredRolesResponse, error) {
-	result := StaticSitesClientListStaticSiteConfiguredRolesResponse{RawResponse: resp}
+	result := StaticSitesClientListStaticSiteConfiguredRolesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringList); err != nil {
 		return StaticSitesClientListStaticSiteConfiguredRolesResponse{}, err
 	}
@@ -2296,7 +2276,7 @@ func (client *StaticSitesClient) listStaticSiteCustomDomainsCreateRequest(ctx co
 
 // listStaticSiteCustomDomainsHandleResponse handles the ListStaticSiteCustomDomains response.
 func (client *StaticSitesClient) listStaticSiteCustomDomainsHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteCustomDomainsResponse, error) {
-	result := StaticSitesClientListStaticSiteCustomDomainsResponse{RawResponse: resp}
+	result := StaticSitesClientListStaticSiteCustomDomainsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteCustomDomainOverviewCollection); err != nil {
 		return StaticSitesClientListStaticSiteCustomDomainsResponse{}, err
 	}
@@ -2352,7 +2332,7 @@ func (client *StaticSitesClient) listStaticSiteFunctionAppSettingsCreateRequest(
 
 // listStaticSiteFunctionAppSettingsHandleResponse handles the ListStaticSiteFunctionAppSettings response.
 func (client *StaticSitesClient) listStaticSiteFunctionAppSettingsHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteFunctionAppSettingsResponse, error) {
-	result := StaticSitesClientListStaticSiteFunctionAppSettingsResponse{RawResponse: resp}
+	result := StaticSitesClientListStaticSiteFunctionAppSettingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientListStaticSiteFunctionAppSettingsResponse{}, err
 	}
@@ -2405,7 +2385,7 @@ func (client *StaticSitesClient) listStaticSiteFunctionsCreateRequest(ctx contex
 
 // listStaticSiteFunctionsHandleResponse handles the ListStaticSiteFunctions response.
 func (client *StaticSitesClient) listStaticSiteFunctionsHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteFunctionsResponse, error) {
-	result := StaticSitesClientListStaticSiteFunctionsResponse{RawResponse: resp}
+	result := StaticSitesClientListStaticSiteFunctionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteFunctionOverviewCollection); err != nil {
 		return StaticSitesClientListStaticSiteFunctionsResponse{}, err
 	}
@@ -2461,7 +2441,7 @@ func (client *StaticSitesClient) listStaticSiteSecretsCreateRequest(ctx context.
 
 // listStaticSiteSecretsHandleResponse handles the ListStaticSiteSecrets response.
 func (client *StaticSitesClient) listStaticSiteSecretsHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteSecretsResponse, error) {
-	result := StaticSitesClientListStaticSiteSecretsResponse{RawResponse: resp}
+	result := StaticSitesClientListStaticSiteSecretsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientListStaticSiteSecretsResponse{}, err
 	}
@@ -2519,7 +2499,7 @@ func (client *StaticSitesClient) listStaticSiteUsersCreateRequest(ctx context.Co
 
 // listStaticSiteUsersHandleResponse handles the ListStaticSiteUsers response.
 func (client *StaticSitesClient) listStaticSiteUsersHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteUsersResponse, error) {
-	result := StaticSitesClientListStaticSiteUsersResponse{RawResponse: resp}
+	result := StaticSitesClientListStaticSiteUsersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteUserCollection); err != nil {
 		return StaticSitesClientListStaticSiteUsersResponse{}, err
 	}
@@ -2571,7 +2551,7 @@ func (client *StaticSitesClient) previewWorkflowCreateRequest(ctx context.Contex
 
 // previewWorkflowHandleResponse handles the PreviewWorkflow response.
 func (client *StaticSitesClient) previewWorkflowHandleResponse(resp *http.Response) (StaticSitesClientPreviewWorkflowResponse, error) {
-	result := StaticSitesClientPreviewWorkflowResponse{RawResponse: resp}
+	result := StaticSitesClientPreviewWorkflowResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSitesWorkflowPreview); err != nil {
 		return StaticSitesClientPreviewWorkflowResponse{}, err
 	}
@@ -2592,9 +2572,7 @@ func (client *StaticSitesClient) BeginRegisterUserProvidedFunctionAppWithStaticS
 	if err != nil {
 		return StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePollerResponse{}, err
 	}
-	result := StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePollerResponse{
-		RawResponse: resp,
-	}
+	result := StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePollerResponse{}
 	pt, err := armruntime.NewPoller("StaticSitesClient.RegisterUserProvidedFunctionAppWithStaticSite", "", resp, client.pl)
 	if err != nil {
 		return StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePollerResponse{}, err
@@ -2670,9 +2648,7 @@ func (client *StaticSitesClient) BeginRegisterUserProvidedFunctionAppWithStaticS
 	if err != nil {
 		return StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPollerResponse{}, err
 	}
-	result := StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPollerResponse{
-		RawResponse: resp,
-	}
+	result := StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPollerResponse{}
 	pt, err := armruntime.NewPoller("StaticSitesClient.RegisterUserProvidedFunctionAppWithStaticSiteBuild", "", resp, client.pl)
 	if err != nil {
 		return StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPollerResponse{}, err
@@ -2756,7 +2732,7 @@ func (client *StaticSitesClient) ResetStaticSiteAPIKey(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return StaticSitesClientResetStaticSiteAPIKeyResponse{}, runtime.NewResponseError(resp)
 	}
-	return StaticSitesClientResetStaticSiteAPIKeyResponse{RawResponse: resp}, nil
+	return StaticSitesClientResetStaticSiteAPIKeyResponse{}, nil
 }
 
 // resetStaticSiteAPIKeyCreateRequest creates the ResetStaticSiteAPIKey request.
@@ -2836,7 +2812,7 @@ func (client *StaticSitesClient) updateStaticSiteCreateRequest(ctx context.Conte
 
 // updateStaticSiteHandleResponse handles the UpdateStaticSite response.
 func (client *StaticSitesClient) updateStaticSiteHandleResponse(resp *http.Response) (StaticSitesClientUpdateStaticSiteResponse, error) {
-	result := StaticSitesClientUpdateStaticSiteResponse{RawResponse: resp}
+	result := StaticSitesClientUpdateStaticSiteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteARMResource); err != nil {
 		return StaticSitesClientUpdateStaticSiteResponse{}, err
 	}
@@ -2903,7 +2879,7 @@ func (client *StaticSitesClient) updateStaticSiteUserCreateRequest(ctx context.C
 
 // updateStaticSiteUserHandleResponse handles the UpdateStaticSiteUser response.
 func (client *StaticSitesClient) updateStaticSiteUserHandleResponse(resp *http.Response) (StaticSitesClientUpdateStaticSiteUserResponse, error) {
-	result := StaticSitesClientUpdateStaticSiteUserResponse{RawResponse: resp}
+	result := StaticSitesClientUpdateStaticSiteUserResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteUserARMResource); err != nil {
 		return StaticSitesClientUpdateStaticSiteUserResponse{}, err
 	}
@@ -2925,9 +2901,7 @@ func (client *StaticSitesClient) BeginValidateCustomDomainCanBeAddedToStaticSite
 	if err != nil {
 		return StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePollerResponse{}, err
 	}
-	result := StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePollerResponse{
-		RawResponse: resp,
-	}
+	result := StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePollerResponse{}
 	pt, err := armruntime.NewPoller("StaticSitesClient.ValidateCustomDomainCanBeAddedToStaticSite", "", resp, client.pl)
 	if err != nil {
 		return StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePollerResponse{}, err

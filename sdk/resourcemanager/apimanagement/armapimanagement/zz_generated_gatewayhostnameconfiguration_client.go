@@ -36,17 +36,17 @@ type GatewayHostnameConfigurationClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGatewayHostnameConfigurationClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *GatewayHostnameConfigurationClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GatewayHostnameConfigurationClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -114,7 +114,7 @@ func (client *GatewayHostnameConfigurationClient) createOrUpdateCreateRequest(ct
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *GatewayHostnameConfigurationClient) createOrUpdateHandleResponse(resp *http.Response) (GatewayHostnameConfigurationClientCreateOrUpdateResponse, error) {
-	result := GatewayHostnameConfigurationClientCreateOrUpdateResponse{RawResponse: resp}
+	result := GatewayHostnameConfigurationClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -147,7 +147,7 @@ func (client *GatewayHostnameConfigurationClient) Delete(ctx context.Context, re
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return GatewayHostnameConfigurationClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return GatewayHostnameConfigurationClientDeleteResponse{RawResponse: resp}, nil
+	return GatewayHostnameConfigurationClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -245,7 +245,7 @@ func (client *GatewayHostnameConfigurationClient) getCreateRequest(ctx context.C
 
 // getHandleResponse handles the Get response.
 func (client *GatewayHostnameConfigurationClient) getHandleResponse(resp *http.Response) (GatewayHostnameConfigurationClientGetResponse, error) {
-	result := GatewayHostnameConfigurationClientGetResponse{RawResponse: resp}
+	result := GatewayHostnameConfigurationClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -311,7 +311,7 @@ func (client *GatewayHostnameConfigurationClient) getEntityTagCreateRequest(ctx 
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *GatewayHostnameConfigurationClient) getEntityTagHandleResponse(resp *http.Response) (GatewayHostnameConfigurationClientGetEntityTagResponse, error) {
-	result := GatewayHostnameConfigurationClientGetEntityTagResponse{RawResponse: resp}
+	result := GatewayHostnameConfigurationClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -382,7 +382,7 @@ func (client *GatewayHostnameConfigurationClient) listByServiceCreateRequest(ctx
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *GatewayHostnameConfigurationClient) listByServiceHandleResponse(resp *http.Response) (GatewayHostnameConfigurationClientListByServiceResponse, error) {
-	result := GatewayHostnameConfigurationClientListByServiceResponse{RawResponse: resp}
+	result := GatewayHostnameConfigurationClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GatewayHostnameConfigurationCollection); err != nil {
 		return GatewayHostnameConfigurationClientListByServiceResponse{}, err
 	}

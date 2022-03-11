@@ -10,6 +10,7 @@ package armedgeorderpartner
 
 import (
 	"context"
+	"errors"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
 	"net/http"
@@ -20,106 +21,96 @@ import (
 type APISClientListOperationsPartnerPager struct {
 	client    *APISClient
 	current   APISClientListOperationsPartnerResponse
-	err       error
 	requester func(context.Context) (*policy.Request, error)
 	advancer  func(context.Context, APISClientListOperationsPartnerResponse) (*policy.Request, error)
 }
 
-// Err returns the last error encountered while paging.
-func (p *APISClientListOperationsPartnerPager) Err() error {
-	return p.err
-}
-
-// NextPage returns true if the pager advanced to the next page.
-// Returns false if there are no more pages or an error occurred.
-func (p *APISClientListOperationsPartnerPager) NextPage(ctx context.Context) bool {
-	var req *policy.Request
-	var err error
+// More returns true if there are more pages to retrieve.
+func (p *APISClientListOperationsPartnerPager) More() bool {
 	if !reflect.ValueOf(p.current).IsZero() {
 		if p.current.OperationListResult.NextLink == nil || len(*p.current.OperationListResult.NextLink) == 0 {
 			return false
+		}
+	}
+	return true
+}
+
+// NextPage advances the pager to the next page.
+func (p *APISClientListOperationsPartnerPager) NextPage(ctx context.Context) (APISClientListOperationsPartnerResponse, error) {
+	var req *policy.Request
+	var err error
+	if !reflect.ValueOf(p.current).IsZero() {
+		if !p.More() {
+			return APISClientListOperationsPartnerResponse{}, errors.New("no more pages")
 		}
 		req, err = p.advancer(ctx, p.current)
 	} else {
 		req, err = p.requester(ctx)
 	}
 	if err != nil {
-		p.err = err
-		return false
+		return APISClientListOperationsPartnerResponse{}, err
 	}
 	resp, err := p.client.pl.Do(req)
 	if err != nil {
-		p.err = err
-		return false
+		return APISClientListOperationsPartnerResponse{}, err
 	}
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		p.err = runtime.NewResponseError(resp)
-		return false
+
+		return APISClientListOperationsPartnerResponse{}, runtime.NewResponseError(resp)
 	}
 	result, err := p.client.listOperationsPartnerHandleResponse(resp)
 	if err != nil {
-		p.err = err
-		return false
+		return APISClientListOperationsPartnerResponse{}, err
 	}
 	p.current = result
-	return true
-}
-
-// PageResponse returns the current APISClientListOperationsPartnerResponse page.
-func (p *APISClientListOperationsPartnerPager) PageResponse() APISClientListOperationsPartnerResponse {
-	return p.current
+	return p.current, nil
 }
 
 // APISClientSearchInventoriesPager provides operations for iterating over paged responses.
 type APISClientSearchInventoriesPager struct {
 	client    *APISClient
 	current   APISClientSearchInventoriesResponse
-	err       error
 	requester func(context.Context) (*policy.Request, error)
 	advancer  func(context.Context, APISClientSearchInventoriesResponse) (*policy.Request, error)
 }
 
-// Err returns the last error encountered while paging.
-func (p *APISClientSearchInventoriesPager) Err() error {
-	return p.err
-}
-
-// NextPage returns true if the pager advanced to the next page.
-// Returns false if there are no more pages or an error occurred.
-func (p *APISClientSearchInventoriesPager) NextPage(ctx context.Context) bool {
-	var req *policy.Request
-	var err error
+// More returns true if there are more pages to retrieve.
+func (p *APISClientSearchInventoriesPager) More() bool {
 	if !reflect.ValueOf(p.current).IsZero() {
 		if p.current.PartnerInventoryList.NextLink == nil || len(*p.current.PartnerInventoryList.NextLink) == 0 {
 			return false
+		}
+	}
+	return true
+}
+
+// NextPage advances the pager to the next page.
+func (p *APISClientSearchInventoriesPager) NextPage(ctx context.Context) (APISClientSearchInventoriesResponse, error) {
+	var req *policy.Request
+	var err error
+	if !reflect.ValueOf(p.current).IsZero() {
+		if !p.More() {
+			return APISClientSearchInventoriesResponse{}, errors.New("no more pages")
 		}
 		req, err = p.advancer(ctx, p.current)
 	} else {
 		req, err = p.requester(ctx)
 	}
 	if err != nil {
-		p.err = err
-		return false
+		return APISClientSearchInventoriesResponse{}, err
 	}
 	resp, err := p.client.pl.Do(req)
 	if err != nil {
-		p.err = err
-		return false
+		return APISClientSearchInventoriesResponse{}, err
 	}
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		p.err = runtime.NewResponseError(resp)
-		return false
+
+		return APISClientSearchInventoriesResponse{}, runtime.NewResponseError(resp)
 	}
 	result, err := p.client.searchInventoriesHandleResponse(resp)
 	if err != nil {
-		p.err = err
-		return false
+		return APISClientSearchInventoriesResponse{}, err
 	}
 	p.current = result
-	return true
-}
-
-// PageResponse returns the current APISClientSearchInventoriesResponse page.
-func (p *APISClientSearchInventoriesPager) PageResponse() APISClientSearchInventoriesResponse {
-	return p.current
+	return p.current, nil
 }

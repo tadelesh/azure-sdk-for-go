@@ -43,11 +43,10 @@ func (p *ClientCreatePoller) Poll(ctx context.Context) (*http.Response, error) {
 // If the final GET succeeded then the final ClientCreateResponse will be returned.
 func (p *ClientCreatePoller) FinalResponse(ctx context.Context) (ClientCreateResponse, error) {
 	respType := ClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ResourceInfo)
+	_, err := p.pt.FinalResponse(ctx, &respType.ResourceInfo)
 	if err != nil {
 		return ClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ClientDeletePoller) Poll(ctx context.Context) (*http.Response, error) {
 // If the final GET succeeded then the final ClientDeleteResponse will be returned.
 func (p *ClientDeletePoller) FinalResponse(ctx context.Context) (ClientDeleteResponse, error) {
 	respType := ClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ClientExportDataPoller) Poll(ctx context.Context) (*http.Response, erro
 // If the final GET succeeded then the final ClientExportDataResponse will be returned.
 func (p *ClientExportDataPoller) FinalResponse(ctx context.Context) (ClientExportDataResponse, error) {
 	respType := ClientExportDataResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClientExportDataResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *ClientImportDataPoller) Poll(ctx context.Context) (*http.Response, erro
 // If the final GET succeeded then the final ClientImportDataResponse will be returned.
 func (p *ClientImportDataPoller) FinalResponse(ctx context.Context) (ClientImportDataResponse, error) {
 	respType := ClientImportDataResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClientImportDataResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *LinkedServerClientCreatePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final LinkedServerClientCreateResponse will be returned.
 func (p *LinkedServerClientCreatePoller) FinalResponse(ctx context.Context) (LinkedServerClientCreateResponse, error) {
 	respType := LinkedServerClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.LinkedServerWithProperties)
+	_, err := p.pt.FinalResponse(ctx, &respType.LinkedServerWithProperties)
 	if err != nil {
 		return LinkedServerClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *PrivateEndpointConnectionsClientPutPoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientPutResponse will be returned.
 func (p *PrivateEndpointConnectionsClientPutPoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientPutResponse, error) {
 	respType := PrivateEndpointConnectionsClientPutResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return PrivateEndpointConnectionsClientPutResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

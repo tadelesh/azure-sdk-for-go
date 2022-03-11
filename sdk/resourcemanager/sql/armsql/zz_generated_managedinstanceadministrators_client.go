@@ -34,17 +34,17 @@ type ManagedInstanceAdministratorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedInstanceAdministratorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedInstanceAdministratorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedInstanceAdministratorsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *ManagedInstanceAdministratorsClient) BeginCreateOrUpdate(ctx conte
 	if err != nil {
 		return ManagedInstanceAdministratorsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ManagedInstanceAdministratorsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedInstanceAdministratorsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedInstanceAdministratorsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ManagedInstanceAdministratorsClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *ManagedInstanceAdministratorsClient) BeginDelete(ctx context.Conte
 	if err != nil {
 		return ManagedInstanceAdministratorsClientDeletePollerResponse{}, err
 	}
-	result := ManagedInstanceAdministratorsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedInstanceAdministratorsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedInstanceAdministratorsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ManagedInstanceAdministratorsClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *ManagedInstanceAdministratorsClient) getCreateRequest(ctx context.
 
 // getHandleResponse handles the Get response.
 func (client *ManagedInstanceAdministratorsClient) getHandleResponse(resp *http.Response) (ManagedInstanceAdministratorsClientGetResponse, error) {
-	result := ManagedInstanceAdministratorsClientGetResponse{RawResponse: resp}
+	result := ManagedInstanceAdministratorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceAdministrator); err != nil {
 		return ManagedInstanceAdministratorsClientGetResponse{}, err
 	}
@@ -301,7 +297,7 @@ func (client *ManagedInstanceAdministratorsClient) listByInstanceCreateRequest(c
 
 // listByInstanceHandleResponse handles the ListByInstance response.
 func (client *ManagedInstanceAdministratorsClient) listByInstanceHandleResponse(resp *http.Response) (ManagedInstanceAdministratorsClientListByInstanceResponse, error) {
-	result := ManagedInstanceAdministratorsClientListByInstanceResponse{RawResponse: resp}
+	result := ManagedInstanceAdministratorsClientListByInstanceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceAdministratorListResult); err != nil {
 		return ManagedInstanceAdministratorsClientListByInstanceResponse{}, err
 	}

@@ -34,17 +34,17 @@ type SQLPoolUsagesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLPoolUsagesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLPoolUsagesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLPoolUsagesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *SQLPoolUsagesClient) listCreateRequest(ctx context.Context, resour
 
 // listHandleResponse handles the List response.
 func (client *SQLPoolUsagesClient) listHandleResponse(resp *http.Response) (SQLPoolUsagesClientListResponse, error) {
-	result := SQLPoolUsagesClientListResponse{RawResponse: resp}
+	result := SQLPoolUsagesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLPoolUsageListResult); err != nil {
 		return SQLPoolUsagesClientListResponse{}, err
 	}

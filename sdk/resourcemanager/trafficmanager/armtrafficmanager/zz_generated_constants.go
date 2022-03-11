@@ -10,7 +10,7 @@ package armtrafficmanager
 
 const (
 	moduleName    = "armtrafficmanager"
-	moduleVersion = "v0.2.0"
+	moduleVersion = "v0.3.0"
 )
 
 // AllowedEndpointRecordType - The allowed type DNS record types for this profile.
@@ -86,6 +86,28 @@ func PossibleEndpointStatusValues() []EndpointStatus {
 
 // ToPtr returns a *EndpointStatus pointing to the current value.
 func (c EndpointStatus) ToPtr() *EndpointStatus {
+	return &c
+}
+
+type EndpointType string
+
+const (
+	EndpointTypeAzureEndpoints    EndpointType = "AzureEndpoints"
+	EndpointTypeExternalEndpoints EndpointType = "ExternalEndpoints"
+	EndpointTypeNestedEndpoints   EndpointType = "NestedEndpoints"
+)
+
+// PossibleEndpointTypeValues returns the possible values for the EndpointType const type.
+func PossibleEndpointTypeValues() []EndpointType {
+	return []EndpointType{
+		EndpointTypeAzureEndpoints,
+		EndpointTypeExternalEndpoints,
+		EndpointTypeNestedEndpoints,
+	}
+}
+
+// ToPtr returns a *EndpointType pointing to the current value.
+func (c EndpointType) ToPtr() *EndpointType {
 	return &c
 }
 

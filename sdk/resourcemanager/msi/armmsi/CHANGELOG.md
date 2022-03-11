@@ -1,5 +1,68 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*UserAssignedIdentitiesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(UserAssignedIdentitiesClientListByResourceGroupResponse, error)`
+- Function `*UserAssignedIdentitiesClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(UserAssignedIdentitiesClientListBySubscriptionResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*UserAssignedIdentitiesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*UserAssignedIdentitiesClientListByResourceGroupPager.Err` has been removed
+- Function `*UserAssignedIdentitiesClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*UserAssignedIdentitiesClientListBySubscriptionPager.Err` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `SystemAssignedIdentitiesClientGetByScopeResult` has been removed
+- Struct `UserAssignedIdentitiesClientCreateOrUpdateResult` has been removed
+- Struct `UserAssignedIdentitiesClientGetResult` has been removed
+- Struct `UserAssignedIdentitiesClientListByResourceGroupResult` has been removed
+- Struct `UserAssignedIdentitiesClientListBySubscriptionResult` has been removed
+- Struct `UserAssignedIdentitiesClientUpdateResult` has been removed
+- Field `SystemAssignedIdentitiesClientGetByScopeResult` of struct `SystemAssignedIdentitiesClientGetByScopeResponse` has been removed
+- Field `RawResponse` of struct `SystemAssignedIdentitiesClientGetByScopeResponse` has been removed
+- Field `RawResponse` of struct `UserAssignedIdentitiesClientDeleteResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `UserAssignedIdentitiesClientListBySubscriptionResult` of struct `UserAssignedIdentitiesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `UserAssignedIdentitiesClientListBySubscriptionResponse` has been removed
+- Field `UserAssignedIdentitiesClientCreateOrUpdateResult` of struct `UserAssignedIdentitiesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `UserAssignedIdentitiesClientCreateOrUpdateResponse` has been removed
+- Field `UserAssignedIdentitiesClientUpdateResult` of struct `UserAssignedIdentitiesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `UserAssignedIdentitiesClientUpdateResponse` has been removed
+- Field `UserAssignedIdentitiesClientListByResourceGroupResult` of struct `UserAssignedIdentitiesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `UserAssignedIdentitiesClientListByResourceGroupResponse` has been removed
+- Field `UserAssignedIdentitiesClientGetResult` of struct `UserAssignedIdentitiesClientGetResponse` has been removed
+- Field `RawResponse` of struct `UserAssignedIdentitiesClientGetResponse` has been removed
+
+### Features Added
+
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*UserAssignedIdentitiesClientListByResourceGroupPager.More() bool`
+- New function `*UserAssignedIdentitiesClientListBySubscriptionPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New anonymous field `SystemAssignedIdentity` in struct `SystemAssignedIdentitiesClientGetByScopeResponse`
+- New anonymous field `UserAssignedIdentitiesListResult` in struct `UserAssignedIdentitiesClientListByResourceGroupResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `UserAssignedIdentitiesListResult` in struct `UserAssignedIdentitiesClientListBySubscriptionResponse`
+- New anonymous field `Identity` in struct `UserAssignedIdentitiesClientCreateOrUpdateResponse`
+- New anonymous field `Identity` in struct `UserAssignedIdentitiesClientGetResponse`
+- New anonymous field `Identity` in struct `UserAssignedIdentitiesClientUpdateResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

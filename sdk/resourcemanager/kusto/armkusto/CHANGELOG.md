@@ -1,5 +1,393 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*PrivateEndpointConnectionsClient.List` parameter(s) have been changed from `(context.Context, string, string, *PrivateEndpointConnectionsClientListOptions)` to `(string, string, *PrivateEndpointConnectionsClientListOptions)`
+- Function `*PrivateEndpointConnectionsClient.List` return value(s) have been changed from `(PrivateEndpointConnectionsClientListResponse, error)` to `(*PrivateEndpointConnectionsClientListPager)`
+- Function `*DatabasesClient.ListByCluster` parameter(s) have been changed from `(context.Context, string, string, *DatabasesClientListByClusterOptions)` to `(string, string, *DatabasesClientListByClusterOptions)`
+- Function `*DatabasesClient.ListByCluster` return value(s) have been changed from `(DatabasesClientListByClusterResponse, error)` to `(*DatabasesClientListByClusterPager)`
+- Function `*ClustersClient.ListLanguageExtensions` parameter(s) have been changed from `(context.Context, string, string, *ClustersClientListLanguageExtensionsOptions)` to `(string, string, *ClustersClientListLanguageExtensionsOptions)`
+- Function `*ClustersClient.ListLanguageExtensions` return value(s) have been changed from `(ClustersClientListLanguageExtensionsResponse, error)` to `(*ClustersClientListLanguageExtensionsPager)`
+- Function `*ClustersClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *ClustersClientListByResourceGroupOptions)` to `(string, *ClustersClientListByResourceGroupOptions)`
+- Function `*ClustersClient.ListByResourceGroup` return value(s) have been changed from `(ClustersClientListByResourceGroupResponse, error)` to `(*ClustersClientListByResourceGroupPager)`
+- Function `*PrivateLinkResourcesClient.List` parameter(s) have been changed from `(context.Context, string, string, *PrivateLinkResourcesClientListOptions)` to `(string, string, *PrivateLinkResourcesClientListOptions)`
+- Function `*PrivateLinkResourcesClient.List` return value(s) have been changed from `(PrivateLinkResourcesClientListResponse, error)` to `(*PrivateLinkResourcesClientListPager)`
+- Function `*ClustersClient.ListSKUs` parameter(s) have been changed from `(context.Context, *ClustersClientListSKUsOptions)` to `(*ClustersClientListSKUsOptions)`
+- Function `*ClustersClient.ListSKUs` return value(s) have been changed from `(ClustersClientListSKUsResponse, error)` to `(*ClustersClientListSKUsPager)`
+- Function `*DatabasesClient.ListPrincipals` parameter(s) have been changed from `(context.Context, string, string, string, *DatabasesClientListPrincipalsOptions)` to `(string, string, string, *DatabasesClientListPrincipalsOptions)`
+- Function `*DatabasesClient.ListPrincipals` return value(s) have been changed from `(DatabasesClientListPrincipalsResponse, error)` to `(*DatabasesClientListPrincipalsPager)`
+- Function `*ClustersClientListOutboundNetworkDependenciesEndpointsPager.NextPage` return value(s) have been changed from `(bool)` to `(ClustersClientListOutboundNetworkDependenciesEndpointsResponse, error)`
+- Function `*ClustersClient.List` parameter(s) have been changed from `(context.Context, *ClustersClientListOptions)` to `(*ClustersClientListOptions)`
+- Function `*ClustersClient.List` return value(s) have been changed from `(ClustersClientListResponse, error)` to `(*ClustersClientListPager)`
+- Function `*DataConnectionsClient.ListByDatabase` parameter(s) have been changed from `(context.Context, string, string, string, *DataConnectionsClientListByDatabaseOptions)` to `(string, string, string, *DataConnectionsClientListByDatabaseOptions)`
+- Function `*DataConnectionsClient.ListByDatabase` return value(s) have been changed from `(DataConnectionsClientListByDatabaseResponse, error)` to `(*DataConnectionsClientListByDatabasePager)`
+- Function `*ClustersClient.ListFollowerDatabases` parameter(s) have been changed from `(context.Context, string, string, *ClustersClientListFollowerDatabasesOptions)` to `(string, string, *ClustersClientListFollowerDatabasesOptions)`
+- Function `*ClustersClient.ListFollowerDatabases` return value(s) have been changed from `(ClustersClientListFollowerDatabasesResponse, error)` to `(*ClustersClientListFollowerDatabasesPager)`
+- Function `*ScriptsClient.ListByDatabase` parameter(s) have been changed from `(context.Context, string, string, string, *ScriptsClientListByDatabaseOptions)` to `(string, string, string, *ScriptsClientListByDatabaseOptions)`
+- Function `*ScriptsClient.ListByDatabase` return value(s) have been changed from `(ScriptsClientListByDatabaseResponse, error)` to `(*ScriptsClientListByDatabasePager)`
+- Function `*ClusterPrincipalAssignmentsClient.List` parameter(s) have been changed from `(context.Context, string, string, *ClusterPrincipalAssignmentsClientListOptions)` to `(string, string, *ClusterPrincipalAssignmentsClientListOptions)`
+- Function `*ClusterPrincipalAssignmentsClient.List` return value(s) have been changed from `(ClusterPrincipalAssignmentsClientListResponse, error)` to `(*ClusterPrincipalAssignmentsClientListPager)`
+- Function `*AttachedDatabaseConfigurationsClient.ListByCluster` parameter(s) have been changed from `(context.Context, string, string, *AttachedDatabaseConfigurationsClientListByClusterOptions)` to `(string, string, *AttachedDatabaseConfigurationsClientListByClusterOptions)`
+- Function `*AttachedDatabaseConfigurationsClient.ListByCluster` return value(s) have been changed from `(AttachedDatabaseConfigurationsClientListByClusterResponse, error)` to `(*AttachedDatabaseConfigurationsClientListByClusterPager)`
+- Function `*ClustersClient.ListSKUsByResource` parameter(s) have been changed from `(context.Context, string, string, *ClustersClientListSKUsByResourceOptions)` to `(string, string, *ClustersClientListSKUsByResourceOptions)`
+- Function `*ClustersClient.ListSKUsByResource` return value(s) have been changed from `(ClustersClientListSKUsByResourceResponse, error)` to `(*ClustersClientListSKUsByResourcePager)`
+- Function `*ManagedPrivateEndpointsClient.List` parameter(s) have been changed from `(context.Context, string, string, *ManagedPrivateEndpointsClientListOptions)` to `(string, string, *ManagedPrivateEndpointsClientListOptions)`
+- Function `*ManagedPrivateEndpointsClient.List` return value(s) have been changed from `(ManagedPrivateEndpointsClientListResponse, error)` to `(*ManagedPrivateEndpointsClientListPager)`
+- Function `*DatabasePrincipalAssignmentsClient.List` parameter(s) have been changed from `(context.Context, string, string, string, *DatabasePrincipalAssignmentsClientListOptions)` to `(string, string, string, *DatabasePrincipalAssignmentsClientListOptions)`
+- Function `*DatabasePrincipalAssignmentsClient.List` return value(s) have been changed from `(DatabasePrincipalAssignmentsClientListResponse, error)` to `(*DatabasePrincipalAssignmentsClientListPager)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*DatabasesClientCreateOrUpdateResult.UnmarshalJSON` has been removed
+- Function `*ClustersClientListOutboundNetworkDependenciesEndpointsPager.PageResponse` has been removed
+- Function `*DataConnectionsClientGetResult.UnmarshalJSON` has been removed
+- Function `*DataConnectionsClientCreateOrUpdateResult.UnmarshalJSON` has been removed
+- Function `*DatabasesClientGetResult.UnmarshalJSON` has been removed
+- Function `*DataConnectionsClientUpdateResult.UnmarshalJSON` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*DatabasesClientUpdateResult.UnmarshalJSON` has been removed
+- Function `*ClustersClientListOutboundNetworkDependenciesEndpointsPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Struct `AttachedDatabaseConfigurationsClientCheckNameAvailabilityResult` has been removed
+- Struct `AttachedDatabaseConfigurationsClientCreateOrUpdateResult` has been removed
+- Struct `AttachedDatabaseConfigurationsClientGetResult` has been removed
+- Struct `AttachedDatabaseConfigurationsClientListByClusterResult` has been removed
+- Struct `ClusterPrincipalAssignmentsClientCheckNameAvailabilityResult` has been removed
+- Struct `ClusterPrincipalAssignmentsClientCreateOrUpdateResult` has been removed
+- Struct `ClusterPrincipalAssignmentsClientGetResult` has been removed
+- Struct `ClusterPrincipalAssignmentsClientListResult` has been removed
+- Struct `ClustersClientCheckNameAvailabilityResult` has been removed
+- Struct `ClustersClientCreateOrUpdateResult` has been removed
+- Struct `ClustersClientDiagnoseVirtualNetworkResult` has been removed
+- Struct `ClustersClientGetResult` has been removed
+- Struct `ClustersClientListByResourceGroupResult` has been removed
+- Struct `ClustersClientListFollowerDatabasesResult` has been removed
+- Struct `ClustersClientListLanguageExtensionsResult` has been removed
+- Struct `ClustersClientListOutboundNetworkDependenciesEndpointsResult` has been removed
+- Struct `ClustersClientListResult` has been removed
+- Struct `ClustersClientListSKUsByResourceResult` has been removed
+- Struct `ClustersClientListSKUsResult` has been removed
+- Struct `ClustersClientUpdateResult` has been removed
+- Struct `DataConnectionsClientCheckNameAvailabilityResult` has been removed
+- Struct `DataConnectionsClientCreateOrUpdateResult` has been removed
+- Struct `DataConnectionsClientDataConnectionValidationResult` has been removed
+- Struct `DataConnectionsClientGetResult` has been removed
+- Struct `DataConnectionsClientListByDatabaseResult` has been removed
+- Struct `DataConnectionsClientUpdateResult` has been removed
+- Struct `DatabasePrincipalAssignmentsClientCheckNameAvailabilityResult` has been removed
+- Struct `DatabasePrincipalAssignmentsClientCreateOrUpdateResult` has been removed
+- Struct `DatabasePrincipalAssignmentsClientGetResult` has been removed
+- Struct `DatabasePrincipalAssignmentsClientListResult` has been removed
+- Struct `DatabasesClientAddPrincipalsResult` has been removed
+- Struct `DatabasesClientCheckNameAvailabilityResult` has been removed
+- Struct `DatabasesClientCreateOrUpdateResult` has been removed
+- Struct `DatabasesClientGetResult` has been removed
+- Struct `DatabasesClientListByClusterResult` has been removed
+- Struct `DatabasesClientListPrincipalsResult` has been removed
+- Struct `DatabasesClientRemovePrincipalsResult` has been removed
+- Struct `DatabasesClientUpdateResult` has been removed
+- Struct `ManagedPrivateEndpointsClientCheckNameAvailabilityResult` has been removed
+- Struct `ManagedPrivateEndpointsClientCreateOrUpdateResult` has been removed
+- Struct `ManagedPrivateEndpointsClientGetResult` has been removed
+- Struct `ManagedPrivateEndpointsClientListResult` has been removed
+- Struct `ManagedPrivateEndpointsClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `OperationsResultsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientCreateOrUpdateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListResult` has been removed
+- Struct `PrivateLinkResourcesClientGetResult` has been removed
+- Struct `PrivateLinkResourcesClientListResult` has been removed
+- Struct `ScriptsClientCheckNameAvailabilityResult` has been removed
+- Struct `ScriptsClientCreateOrUpdateResult` has been removed
+- Struct `ScriptsClientGetResult` has been removed
+- Struct `ScriptsClientListByDatabaseResult` has been removed
+- Struct `ScriptsClientUpdateResult` has been removed
+- Field `RawResponse` of struct `ClustersClientStopPollerResponse` has been removed
+- Field `ScriptsClientGetResult` of struct `ScriptsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ScriptsClientGetResponse` has been removed
+- Field `ManagedPrivateEndpointsClientCreateOrUpdateResult` of struct `ManagedPrivateEndpointsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ManagedPrivateEndpointsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClusterPrincipalAssignmentsClientDeletePollerResponse` has been removed
+- Field `DatabasesClientCreateOrUpdateResult` of struct `DatabasesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientCreateOrUpdateResponse` has been removed
+- Field `ClusterPrincipalAssignmentsClientGetResult` of struct `ClusterPrincipalAssignmentsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClusterPrincipalAssignmentsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientDetachFollowerDatabasesResponse` has been removed
+- Field `DatabasesClientUpdateResult` of struct `DatabasesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientStopResponse` has been removed
+- Field `ManagedPrivateEndpointsClientListResult` of struct `ManagedPrivateEndpointsClientListResponse` has been removed
+- Field `RawResponse` of struct `ManagedPrivateEndpointsClientListResponse` has been removed
+- Field `ClustersClientListFollowerDatabasesResult` of struct `ClustersClientListFollowerDatabasesResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListFollowerDatabasesResponse` has been removed
+- Field `ClustersClientListResult` of struct `ClustersClientListResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListResponse` has been removed
+- Field `RawResponse` of struct `DataConnectionsClientDataConnectionValidationPollerResponse` has been removed
+- Field `ClusterPrincipalAssignmentsClientCheckNameAvailabilityResult` of struct `ClusterPrincipalAssignmentsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ClusterPrincipalAssignmentsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdatePollerResponse` has been removed
+- Field `OperationsResultsClientGetResult` of struct `OperationsResultsClientGetResponse` has been removed
+- Field `RawResponse` of struct `OperationsResultsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeletePollerResponse` has been removed
+- Field `DataConnectionsClientCreateOrUpdateResult` of struct `DataConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DataConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AttachedDatabaseConfigurationsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientRemoveLanguageExtensionsResponse` has been removed
+- Field `RawResponse` of struct `DataConnectionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientStartPollerResponse` has been removed
+- Field `DataConnectionsClientListByDatabaseResult` of struct `DataConnectionsClientListByDatabaseResponse` has been removed
+- Field `RawResponse` of struct `DataConnectionsClientListByDatabaseResponse` has been removed
+- Field `RawResponse` of struct `DatabasePrincipalAssignmentsClientCreateOrUpdatePollerResponse` has been removed
+- Field `PrivateEndpointConnectionsClientCreateOrUpdateResult` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `ClustersClientDiagnoseVirtualNetworkResult` of struct `ClustersClientDiagnoseVirtualNetworkResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientDiagnoseVirtualNetworkResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `ClustersClientCreateOrUpdateResult` of struct `ClustersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientCreateOrUpdateResponse` has been removed
+- Field `ClusterPrincipalAssignmentsClientCreateOrUpdateResult` of struct `ClusterPrincipalAssignmentsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClusterPrincipalAssignmentsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DataConnectionsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientStartResponse` has been removed
+- Field `ClustersClientListSKUsResult` of struct `ClustersClientListSKUsResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListSKUsResponse` has been removed
+- Field `ScriptsClientUpdateResult` of struct `ScriptsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ScriptsClientUpdateResponse` has been removed
+- Field `DatabasesClientGetResult` of struct `DatabasesClientGetResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientGetResponse` has been removed
+- Field `DataConnectionsClientUpdateResult` of struct `DataConnectionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DataConnectionsClientUpdateResponse` has been removed
+- Field `PrivateLinkResourcesClientGetResult` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `DatabasesClientAddPrincipalsResult` of struct `DatabasesClientAddPrincipalsResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientAddPrincipalsResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientUpdatePollerResponse` has been removed
+- Field `ClustersClientListLanguageExtensionsResult` of struct `ClustersClientListLanguageExtensionsResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListLanguageExtensionsResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ScriptsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientDetachFollowerDatabasesPollerResponse` has been removed
+- Field `DatabasePrincipalAssignmentsClientCreateOrUpdateResult` of struct `DatabasePrincipalAssignmentsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DatabasePrincipalAssignmentsClientCreateOrUpdateResponse` has been removed
+- Field `AttachedDatabaseConfigurationsClientCreateOrUpdateResult` of struct `AttachedDatabaseConfigurationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AttachedDatabaseConfigurationsClientCreateOrUpdateResponse` has been removed
+- Field `ClustersClientListSKUsByResourceResult` of struct `ClustersClientListSKUsByResourceResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListSKUsByResourceResponse` has been removed
+- Field `ClustersClientGetResult` of struct `ClustersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientGetResponse` has been removed
+- Field `DatabasesClientRemovePrincipalsResult` of struct `DatabasesClientRemovePrincipalsResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientRemovePrincipalsResponse` has been removed
+- Field `ClustersClientListByResourceGroupResult` of struct `ClustersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListByResourceGroupResponse` has been removed
+- Field `AttachedDatabaseConfigurationsClientCheckNameAvailabilityResult` of struct `AttachedDatabaseConfigurationsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `AttachedDatabaseConfigurationsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `DatabasePrincipalAssignmentsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DataConnectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientCreateOrUpdatePollerResponse` has been removed
+- Field `DatabasePrincipalAssignmentsClientCheckNameAvailabilityResult` of struct `DatabasePrincipalAssignmentsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `DatabasePrincipalAssignmentsClientCheckNameAvailabilityResponse` has been removed
+- Field `ClustersClientListOutboundNetworkDependenciesEndpointsResult` of struct `ClustersClientListOutboundNetworkDependenciesEndpointsResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListOutboundNetworkDependenciesEndpointsResponse` has been removed
+- Field `PrivateLinkResourcesClientListResult` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `ScriptsClientDeletePollerResponse` has been removed
+- Field `DatabasesClientListPrincipalsResult` of struct `DatabasesClientListPrincipalsResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientListPrincipalsResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `DataConnectionsClientGetResult` of struct `DataConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DataConnectionsClientGetResponse` has been removed
+- Field `DatabasesClientListByClusterResult` of struct `DatabasesClientListByClusterResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientListByClusterResponse` has been removed
+- Field `ScriptsClientCheckNameAvailabilityResult` of struct `ScriptsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ScriptsClientCheckNameAvailabilityResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListResult` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `AttachedDatabaseConfigurationsClientListByClusterResult` of struct `AttachedDatabaseConfigurationsClientListByClusterResponse` has been removed
+- Field `RawResponse` of struct `AttachedDatabaseConfigurationsClientListByClusterResponse` has been removed
+- Field `ManagedPrivateEndpointsClientCheckNameAvailabilityResult` of struct `ManagedPrivateEndpointsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ManagedPrivateEndpointsClientCheckNameAvailabilityResponse` has been removed
+- Field `ManagedPrivateEndpointsClientUpdateResult` of struct `ManagedPrivateEndpointsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ManagedPrivateEndpointsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DatabasePrincipalAssignmentsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ManagedPrivateEndpointsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientAddLanguageExtensionsPollerResponse` has been removed
+- Field `RawResponse` of struct `ManagedPrivateEndpointsClientUpdatePollerResponse` has been removed
+- Field `AttachedDatabaseConfigurationsClientGetResult` of struct `AttachedDatabaseConfigurationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AttachedDatabaseConfigurationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClusterPrincipalAssignmentsClientCreateOrUpdatePollerResponse` has been removed
+- Field `DatabasePrincipalAssignmentsClientListResult` of struct `DatabasePrincipalAssignmentsClientListResponse` has been removed
+- Field `RawResponse` of struct `DatabasePrincipalAssignmentsClientListResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientDiagnoseVirtualNetworkPollerResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientDeletePollerResponse` has been removed
+- Field `ClusterPrincipalAssignmentsClientListResult` of struct `ClusterPrincipalAssignmentsClientListResponse` has been removed
+- Field `RawResponse` of struct `ClusterPrincipalAssignmentsClientListResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientRemoveLanguageExtensionsPollerResponse` has been removed
+- Field `DataConnectionsClientCheckNameAvailabilityResult` of struct `DataConnectionsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `DataConnectionsClientCheckNameAvailabilityResponse` has been removed
+- Field `DataConnectionsClientDataConnectionValidationResult` of struct `DataConnectionsClientDataConnectionValidationResponse` has been removed
+- Field `RawResponse` of struct `DataConnectionsClientDataConnectionValidationResponse` has been removed
+- Field `ClustersClientCheckNameAvailabilityResult` of struct `ClustersClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `AttachedDatabaseConfigurationsClientCreateOrUpdatePollerResponse` has been removed
+- Field `DatabasesClientCheckNameAvailabilityResult` of struct `DatabasesClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ManagedPrivateEndpointsClientDeletePollerResponse` has been removed
+- Field `ClustersClientUpdateResult` of struct `ClustersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientDeleteResponse` has been removed
+- Field `ManagedPrivateEndpointsClientGetResult` of struct `ManagedPrivateEndpointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ManagedPrivateEndpointsClientGetResponse` has been removed
+- Field `ScriptsClientCreateOrUpdateResult` of struct `ScriptsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ScriptsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ScriptsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ManagedPrivateEndpointsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ScriptsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientAddLanguageExtensionsResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ClusterPrincipalAssignmentsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `AttachedDatabaseConfigurationsClientDeleteResponse` has been removed
+- Field `DatabasePrincipalAssignmentsClientGetResult` of struct `DatabasePrincipalAssignmentsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DatabasePrincipalAssignmentsClientGetResponse` has been removed
+- Field `ScriptsClientListByDatabaseResult` of struct `ScriptsClientListByDatabaseResponse` has been removed
+- Field `RawResponse` of struct `ScriptsClientListByDatabaseResponse` has been removed
+- Field `RawResponse` of struct `DataConnectionsClientDeletePollerResponse` has been removed
+
+### Features Added
+
+- New function `*ClustersClientListPager.More() bool`
+- New function `*DataConnectionsClientUpdateResponse.UnmarshalJSON([]byte) error`
+- New function `*PrivateLinkResourcesClientListPager.More() bool`
+- New function `*DataConnectionsClientListByDatabasePager.More() bool`
+- New function `*DatabasesClientListPrincipalsPager.More() bool`
+- New function `*ClustersClientListSKUsByResourcePager.More() bool`
+- New function `*DatabasePrincipalAssignmentsClientListPager.More() bool`
+- New function `*ClustersClientListSKUsPager.More() bool`
+- New function `*ClustersClientListFollowerDatabasesPager.NextPage(context.Context) (ClustersClientListFollowerDatabasesResponse, error)`
+- New function `*ClusterPrincipalAssignmentsClientListPager.More() bool`
+- New function `*DatabasePrincipalAssignmentsClientListPager.NextPage(context.Context) (DatabasePrincipalAssignmentsClientListResponse, error)`
+- New function `*ManagedPrivateEndpointsClientListPager.More() bool`
+- New function `*AttachedDatabaseConfigurationsClientListByClusterPager.More() bool`
+- New function `*DataConnectionsClientGetResponse.UnmarshalJSON([]byte) error`
+- New function `*DataConnectionsClientCreateOrUpdateResponse.UnmarshalJSON([]byte) error`
+- New function `*ClustersClientListFollowerDatabasesPager.More() bool`
+- New function `*ScriptsClientListByDatabasePager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*ClustersClientListLanguageExtensionsPager.More() bool`
+- New function `*ClustersClientListByResourceGroupPager.NextPage(context.Context) (ClustersClientListByResourceGroupResponse, error)`
+- New function `*DatabasesClientGetResponse.UnmarshalJSON([]byte) error`
+- New function `*PrivateEndpointConnectionsClientListPager.More() bool`
+- New function `*ClustersClientListOutboundNetworkDependenciesEndpointsPager.More() bool`
+- New function `*DatabasesClientListPrincipalsPager.NextPage(context.Context) (DatabasesClientListPrincipalsResponse, error)`
+- New function `*ClustersClientListSKUsByResourcePager.NextPage(context.Context) (ClustersClientListSKUsByResourceResponse, error)`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*ScriptsClientListByDatabasePager.NextPage(context.Context) (ScriptsClientListByDatabaseResponse, error)`
+- New function `*DatabasesClientListByClusterPager.NextPage(context.Context) (DatabasesClientListByClusterResponse, error)`
+- New function `*DataConnectionsClientListByDatabasePager.NextPage(context.Context) (DataConnectionsClientListByDatabaseResponse, error)`
+- New function `*DatabasesClientCreateOrUpdateResponse.UnmarshalJSON([]byte) error`
+- New function `*ClustersClientListPager.NextPage(context.Context) (ClustersClientListResponse, error)`
+- New function `*ClustersClientListSKUsPager.NextPage(context.Context) (ClustersClientListSKUsResponse, error)`
+- New function `*DatabasesClientUpdateResponse.UnmarshalJSON([]byte) error`
+- New function `*PrivateEndpointConnectionsClientListPager.NextPage(context.Context) (PrivateEndpointConnectionsClientListResponse, error)`
+- New function `*DatabasesClientListByClusterPager.More() bool`
+- New function `*ClustersClientListLanguageExtensionsPager.NextPage(context.Context) (ClustersClientListLanguageExtensionsResponse, error)`
+- New function `*AttachedDatabaseConfigurationsClientListByClusterPager.NextPage(context.Context) (AttachedDatabaseConfigurationsClientListByClusterResponse, error)`
+- New function `*ClustersClientListByResourceGroupPager.More() bool`
+- New function `*PrivateLinkResourcesClientListPager.NextPage(context.Context) (PrivateLinkResourcesClientListResponse, error)`
+- New function `*ClusterPrincipalAssignmentsClientListPager.NextPage(context.Context) (ClusterPrincipalAssignmentsClientListResponse, error)`
+- New function `*ManagedPrivateEndpointsClientListPager.NextPage(context.Context) (ManagedPrivateEndpointsClientListResponse, error)`
+- New struct `AttachedDatabaseConfigurationsClientListByClusterPager`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New struct `ClusterPrincipalAssignmentsClientListPager`
+- New struct `ClustersClientListByResourceGroupPager`
+- New struct `ClustersClientListFollowerDatabasesPager`
+- New struct `ClustersClientListLanguageExtensionsPager`
+- New struct `ClustersClientListPager`
+- New struct `ClustersClientListSKUsByResourcePager`
+- New struct `ClustersClientListSKUsPager`
+- New struct `DataConnectionsClientListByDatabasePager`
+- New struct `DatabasePrincipalAssignmentsClientListPager`
+- New struct `DatabasesClientListByClusterPager`
+- New struct `DatabasesClientListPrincipalsPager`
+- New struct `ManagedPrivateEndpointsClientListPager`
+- New struct `PrivateEndpointConnectionsClientListPager`
+- New struct `PrivateLinkResourcesClientListPager`
+- New struct `ScriptsClientListByDatabasePager`
+- New anonymous field `ClusterPrincipalAssignment` in struct `ClusterPrincipalAssignmentsClientGetResponse`
+- New anonymous field `ManagedPrivateEndpoint` in struct `ManagedPrivateEndpointsClientUpdateResponse`
+- New anonymous field `DiagnoseVirtualNetworkResult` in struct `ClustersClientDiagnoseVirtualNetworkResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `ManagedPrivateEndpoint` in struct `ManagedPrivateEndpointsClientGetResponse`
+- New anonymous field `SKUDescriptionList` in struct `ClustersClientListSKUsResponse`
+- New anonymous field `DatabaseClassification` in struct `DatabasesClientCreateOrUpdateResponse`
+- New anonymous field `DataConnectionValidationListResult` in struct `DataConnectionsClientDataConnectionValidationResponse`
+- New anonymous field `DatabasePrincipalListResult` in struct `DatabasesClientAddPrincipalsResponse`
+- New anonymous field `CheckNameResult` in struct `ManagedPrivateEndpointsClientCheckNameAvailabilityResponse`
+- New anonymous field `ScriptListResult` in struct `ScriptsClientListByDatabaseResponse`
+- New anonymous field `DatabaseClassification` in struct `DatabasesClientGetResponse`
+- New anonymous field `ManagedPrivateEndpointListResult` in struct `ManagedPrivateEndpointsClientListResponse`
+- New anonymous field `Script` in struct `ScriptsClientCreateOrUpdateResponse`
+- New anonymous field `FollowerDatabaseListResult` in struct `ClustersClientListFollowerDatabasesResponse`
+- New anonymous field `PrivateLinkResource` in struct `PrivateLinkResourcesClientGetResponse`
+- New anonymous field `ManagedPrivateEndpoint` in struct `ManagedPrivateEndpointsClientCreateOrUpdateResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse`
+- New anonymous field `ClusterPrincipalAssignment` in struct `ClusterPrincipalAssignmentsClientCreateOrUpdateResponse`
+- New anonymous field `Cluster` in struct `ClustersClientGetResponse`
+- New anonymous field `Cluster` in struct `ClustersClientCreateOrUpdateResponse`
+- New anonymous field `CheckNameResult` in struct `ScriptsClientCheckNameAvailabilityResponse`
+- New anonymous field `Script` in struct `ScriptsClientUpdateResponse`
+- New anonymous field `ClusterListResult` in struct `ClustersClientListResponse`
+- New anonymous field `ClusterListResult` in struct `ClustersClientListByResourceGroupResponse`
+- New anonymous field `DatabaseListResult` in struct `DatabasesClientListByClusterResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `PrivateLinkResourcesClientListResponse`
+- New anonymous field `CheckNameResult` in struct `DatabasePrincipalAssignmentsClientCheckNameAvailabilityResponse`
+- New anonymous field `CheckNameResult` in struct `DatabasesClientCheckNameAvailabilityResponse`
+- New anonymous field `DataConnectionClassification` in struct `DataConnectionsClientUpdateResponse`
+- New anonymous field `DatabasePrincipalAssignment` in struct `DatabasePrincipalAssignmentsClientCreateOrUpdateResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `DataConnectionListResult` in struct `DataConnectionsClientListByDatabaseResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListResponse`
+- New anonymous field `DataConnectionClassification` in struct `DataConnectionsClientCreateOrUpdateResponse`
+- New anonymous field `LanguageExtensionsList` in struct `ClustersClientListLanguageExtensionsResponse`
+- New anonymous field `ClusterPrincipalAssignmentListResult` in struct `ClusterPrincipalAssignmentsClientListResponse`
+- New anonymous field `CheckNameResult` in struct `DataConnectionsClientCheckNameAvailabilityResponse`
+- New anonymous field `DatabaseClassification` in struct `DatabasesClientUpdateResponse`
+- New anonymous field `DataConnectionClassification` in struct `DataConnectionsClientGetResponse`
+- New anonymous field `DatabasePrincipalListResult` in struct `DatabasesClientRemovePrincipalsResponse`
+- New anonymous field `CheckNameResult` in struct `ClustersClientCheckNameAvailabilityResponse`
+- New anonymous field `AttachedDatabaseConfiguration` in struct `AttachedDatabaseConfigurationsClientCreateOrUpdateResponse`
+- New anonymous field `CheckNameResult` in struct `AttachedDatabaseConfigurationsClientCheckNameAvailabilityResponse`
+- New anonymous field `ListResourceSKUsResult` in struct `ClustersClientListSKUsByResourceResponse`
+- New anonymous field `AttachedDatabaseConfigurationListResult` in struct `AttachedDatabaseConfigurationsClientListByClusterResponse`
+- New anonymous field `Cluster` in struct `ClustersClientUpdateResponse`
+- New anonymous field `DatabasePrincipalListResult` in struct `DatabasesClientListPrincipalsResponse`
+- New anonymous field `Script` in struct `ScriptsClientGetResponse`
+- New anonymous field `OperationResult` in struct `OperationsResultsClientGetResponse`
+- New anonymous field `DatabasePrincipalAssignmentListResult` in struct `DatabasePrincipalAssignmentsClientListResponse`
+- New anonymous field `AttachedDatabaseConfiguration` in struct `AttachedDatabaseConfigurationsClientGetResponse`
+- New anonymous field `OutboundNetworkDependenciesEndpointListResult` in struct `ClustersClientListOutboundNetworkDependenciesEndpointsResponse`
+- New anonymous field `DatabasePrincipalAssignment` in struct `DatabasePrincipalAssignmentsClientGetResponse`
+- New anonymous field `CheckNameResult` in struct `ClusterPrincipalAssignmentsClientCheckNameAvailabilityResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `SKUDescription.Restrictions` has been changed from `[]map[string]interface{}` to `[]interface{}`
+- Type of `Operation.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

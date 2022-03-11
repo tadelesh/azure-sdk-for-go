@@ -105,7 +105,7 @@ func (client *TasksClient) getResourceGroupLevelTaskCreateRequest(ctx context.Co
 
 // getResourceGroupLevelTaskHandleResponse handles the GetResourceGroupLevelTask response.
 func (client *TasksClient) getResourceGroupLevelTaskHandleResponse(resp *http.Response) (TasksClientGetResourceGroupLevelTaskResponse, error) {
-	result := TasksClientGetResourceGroupLevelTaskResponse{RawResponse: resp}
+	result := TasksClientGetResourceGroupLevelTaskResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Task); err != nil {
 		return TasksClientGetResourceGroupLevelTaskResponse{}, err
 	}
@@ -160,7 +160,7 @@ func (client *TasksClient) getSubscriptionLevelTaskCreateRequest(ctx context.Con
 
 // getSubscriptionLevelTaskHandleResponse handles the GetSubscriptionLevelTask response.
 func (client *TasksClient) getSubscriptionLevelTaskHandleResponse(resp *http.Response) (TasksClientGetSubscriptionLevelTaskResponse, error) {
-	result := TasksClientGetSubscriptionLevelTaskResponse{RawResponse: resp}
+	result := TasksClientGetSubscriptionLevelTaskResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Task); err != nil {
 		return TasksClientGetSubscriptionLevelTaskResponse{}, err
 	}
@@ -205,7 +205,7 @@ func (client *TasksClient) listCreateRequest(ctx context.Context, options *Tasks
 
 // listHandleResponse handles the List response.
 func (client *TasksClient) listHandleResponse(resp *http.Response) (TasksClientListResponse, error) {
-	result := TasksClientListResponse{RawResponse: resp}
+	result := TasksClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TaskList); err != nil {
 		return TasksClientListResponse{}, err
 	}
@@ -254,7 +254,7 @@ func (client *TasksClient) listByHomeRegionCreateRequest(ctx context.Context, op
 
 // listByHomeRegionHandleResponse handles the ListByHomeRegion response.
 func (client *TasksClient) listByHomeRegionHandleResponse(resp *http.Response) (TasksClientListByHomeRegionResponse, error) {
-	result := TasksClientListByHomeRegionResponse{RawResponse: resp}
+	result := TasksClientListByHomeRegionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TaskList); err != nil {
 		return TasksClientListByHomeRegionResponse{}, err
 	}
@@ -309,7 +309,7 @@ func (client *TasksClient) listByResourceGroupCreateRequest(ctx context.Context,
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *TasksClient) listByResourceGroupHandleResponse(resp *http.Response) (TasksClientListByResourceGroupResponse, error) {
-	result := TasksClientListByResourceGroupResponse{RawResponse: resp}
+	result := TasksClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TaskList); err != nil {
 		return TasksClientListByResourceGroupResponse{}, err
 	}
@@ -335,7 +335,7 @@ func (client *TasksClient) UpdateResourceGroupLevelTaskState(ctx context.Context
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return TasksClientUpdateResourceGroupLevelTaskStateResponse{}, runtime.NewResponseError(resp)
 	}
-	return TasksClientUpdateResourceGroupLevelTaskStateResponse{RawResponse: resp}, nil
+	return TasksClientUpdateResourceGroupLevelTaskStateResponse{}, nil
 }
 
 // updateResourceGroupLevelTaskStateCreateRequest creates the UpdateResourceGroupLevelTaskState request.
@@ -390,7 +390,7 @@ func (client *TasksClient) UpdateSubscriptionLevelTaskState(ctx context.Context,
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return TasksClientUpdateSubscriptionLevelTaskStateResponse{}, runtime.NewResponseError(resp)
 	}
-	return TasksClientUpdateSubscriptionLevelTaskStateResponse{RawResponse: resp}, nil
+	return TasksClientUpdateSubscriptionLevelTaskStateResponse{}, nil
 }
 
 // updateSubscriptionLevelTaskStateCreateRequest creates the UpdateSubscriptionLevelTaskState request.

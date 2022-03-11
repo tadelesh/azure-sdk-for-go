@@ -1,5 +1,206 @@
 # Release History
 
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*LabPlansClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(LabPlansClientListByResourceGroupResponse, error)`
+- Function `*LabsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(LabsClientListByResourceGroupResponse, error)`
+- Function `*SKUsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SKUsClientListResponse, error)`
+- Function `*LabPlansClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(LabPlansClientListBySubscriptionResponse, error)`
+- Function `*UsersClientListByLabPager.NextPage` return value(s) have been changed from `(bool)` to `(UsersClientListByLabResponse, error)`
+- Function `*UsagesClientListByLocationPager.NextPage` return value(s) have been changed from `(bool)` to `(UsagesClientListByLocationResponse, error)`
+- Function `*SchedulesClientListByLabPager.NextPage` return value(s) have been changed from `(bool)` to `(SchedulesClientListByLabResponse, error)`
+- Function `*VirtualMachinesClientListByLabPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualMachinesClientListByLabResponse, error)`
+- Function `*ImagesClientListByLabPlanPager.NextPage` return value(s) have been changed from `(bool)` to `(ImagesClientListByLabPlanResponse, error)`
+- Function `*LabsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(LabsClientListBySubscriptionResponse, error)`
+- Function `*UsagesClientListByLocationPager.Err` has been removed
+- Function `*LabPlansClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*VirtualMachinesClientListByLabPager.Err` has been removed
+- Function `*UsersClientListByLabPager.Err` has been removed
+- Function `*VirtualMachinesClientListByLabPager.PageResponse` has been removed
+- Function `*LabPlansClientListBySubscriptionPager.Err` has been removed
+- Function `*LabsClientListBySubscriptionPager.Err` has been removed
+- Function `*LabPlansClientListByResourceGroupPager.Err` has been removed
+- Function `*SchedulesClientListByLabPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*LabsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*UsersClientListByLabPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*LabsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*SchedulesClientListByLabPager.Err` has been removed
+- Function `*SKUsClientListPager.Err` has been removed
+- Function `*SKUsClientListPager.PageResponse` has been removed
+- Function `*UsagesClientListByLocationPager.PageResponse` has been removed
+- Function `*LabsClientListByResourceGroupPager.Err` has been removed
+- Function `*ImagesClientListByLabPlanPager.PageResponse` has been removed
+- Function `*LabPlansClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*ImagesClientListByLabPlanPager.Err` has been removed
+- Struct `ImagesClientCreateOrUpdateResult` has been removed
+- Struct `ImagesClientGetResult` has been removed
+- Struct `ImagesClientListByLabPlanResult` has been removed
+- Struct `ImagesClientUpdateResult` has been removed
+- Struct `LabPlansClientCreateOrUpdateResult` has been removed
+- Struct `LabPlansClientGetResult` has been removed
+- Struct `LabPlansClientListByResourceGroupResult` has been removed
+- Struct `LabPlansClientListBySubscriptionResult` has been removed
+- Struct `LabPlansClientUpdateResult` has been removed
+- Struct `LabsClientCreateOrUpdateResult` has been removed
+- Struct `LabsClientGetResult` has been removed
+- Struct `LabsClientListByResourceGroupResult` has been removed
+- Struct `LabsClientListBySubscriptionResult` has been removed
+- Struct `LabsClientUpdateResult` has been removed
+- Struct `OperationResultsClientGetResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `SKUsClientListResult` has been removed
+- Struct `SchedulesClientCreateOrUpdateResult` has been removed
+- Struct `SchedulesClientGetResult` has been removed
+- Struct `SchedulesClientListByLabResult` has been removed
+- Struct `SchedulesClientUpdateResult` has been removed
+- Struct `UsagesClientListByLocationResult` has been removed
+- Struct `UsersClientCreateOrUpdateResult` has been removed
+- Struct `UsersClientGetResult` has been removed
+- Struct `UsersClientListByLabResult` has been removed
+- Struct `UsersClientUpdateResult` has been removed
+- Struct `VirtualMachinesClientGetResult` has been removed
+- Struct `VirtualMachinesClientListByLabResult` has been removed
+- Field `UsersClientCreateOrUpdateResult` of struct `UsersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `UsersClientCreateOrUpdateResponse` has been removed
+- Field `ImagesClientCreateOrUpdateResult` of struct `ImagesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ImagesClientCreateOrUpdateResponse` has been removed
+- Field `ImagesClientListByLabPlanResult` of struct `ImagesClientListByLabPlanResponse` has been removed
+- Field `RawResponse` of struct `ImagesClientListByLabPlanResponse` has been removed
+- Field `RawResponse` of struct `UsersClientInvitePollerResponse` has been removed
+- Field `RawResponse` of struct `UsersClientUpdatePollerResponse` has been removed
+- Field `LabsClientListByResourceGroupResult` of struct `LabsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `LabsClientListByResourceGroupResponse` has been removed
+- Field `LabsClientUpdateResult` of struct `LabsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `LabsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SchedulesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientResetPasswordPollerResponse` has been removed
+- Field `VirtualMachinesClientGetResult` of struct `VirtualMachinesClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientGetResponse` has been removed
+- Field `LabPlansClientUpdateResult` of struct `LabPlansClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `LabPlansClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `UsersClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientReimageResponse` has been removed
+- Field `UsersClientGetResult` of struct `UsersClientGetResponse` has been removed
+- Field `RawResponse` of struct `UsersClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientStartPollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientRedeployResponse` has been removed
+- Field `RawResponse` of struct `LabsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `LabPlansClientSaveImageResponse` has been removed
+- Field `RawResponse` of struct `LabPlansClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientRedeployPollerResponse` has been removed
+- Field `UsersClientListByLabResult` of struct `UsersClientListByLabResponse` has been removed
+- Field `RawResponse` of struct `UsersClientListByLabResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientStartResponse` has been removed
+- Field `RawResponse` of struct `LabPlansClientSaveImagePollerResponse` has been removed
+- Field `RawResponse` of struct `LabsClientPublishPollerResponse` has been removed
+- Field `LabPlansClientCreateOrUpdateResult` of struct `LabPlansClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `LabPlansClientCreateOrUpdateResponse` has been removed
+- Field `SchedulesClientListByLabResult` of struct `SchedulesClientListByLabResponse` has been removed
+- Field `RawResponse` of struct `SchedulesClientListByLabResponse` has been removed
+- Field `SchedulesClientUpdateResult` of struct `SchedulesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SchedulesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientReimagePollerResponse` has been removed
+- Field `OperationResultsClientGetResult` of struct `OperationResultsClientGetResponse` has been removed
+- Field `RawResponse` of struct `OperationResultsClientGetResponse` has been removed
+- Field `RawResponse` of struct `LabsClientSyncGroupResponse` has been removed
+- Field `RawResponse` of struct `LabsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `LabsClientUpdatePollerResponse` has been removed
+- Field `LabPlansClientGetResult` of struct `LabPlansClientGetResponse` has been removed
+- Field `RawResponse` of struct `LabPlansClientGetResponse` has been removed
+- Field `RawResponse` of struct `LabPlansClientDeleteResponse` has been removed
+- Field `UsagesClientListByLocationResult` of struct `UsagesClientListByLocationResponse` has been removed
+- Field `RawResponse` of struct `UsagesClientListByLocationResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientResetPasswordResponse` has been removed
+- Field `LabsClientGetResult` of struct `LabsClientGetResponse` has been removed
+- Field `RawResponse` of struct `LabsClientGetResponse` has been removed
+- Field `RawResponse` of struct `LabsClientDeleteResponse` has been removed
+- Field `ImagesClientUpdateResult` of struct `ImagesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ImagesClientUpdateResponse` has been removed
+- Field `SchedulesClientCreateOrUpdateResult` of struct `SchedulesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SchedulesClientCreateOrUpdateResponse` has been removed
+- Field `LabPlansClientListByResourceGroupResult` of struct `LabPlansClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `LabPlansClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `UsersClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `LabPlansClientUpdatePollerResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `LabPlansClientListBySubscriptionResult` of struct `LabPlansClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `LabPlansClientListBySubscriptionResponse` has been removed
+- Field `VirtualMachinesClientListByLabResult` of struct `VirtualMachinesClientListByLabResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientListByLabResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientStopResponse` has been removed
+- Field `RawResponse` of struct `LabsClientSyncGroupPollerResponse` has been removed
+- Field `RawResponse` of struct `UsersClientCreateOrUpdatePollerResponse` has been removed
+- Field `SKUsClientListResult` of struct `SKUsClientListResponse` has been removed
+- Field `RawResponse` of struct `SKUsClientListResponse` has been removed
+- Field `RawResponse` of struct `UsersClientInviteResponse` has been removed
+- Field `RawResponse` of struct `LabPlansClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `LabsClientPublishResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientStopPollerResponse` has been removed
+- Field `LabsClientCreateOrUpdateResult` of struct `LabsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `LabsClientCreateOrUpdateResponse` has been removed
+- Field `UsersClientUpdateResult` of struct `UsersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `UsersClientUpdateResponse` has been removed
+- Field `SchedulesClientGetResult` of struct `SchedulesClientGetResponse` has been removed
+- Field `RawResponse` of struct `SchedulesClientGetResponse` has been removed
+- Field `ImagesClientGetResult` of struct `ImagesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ImagesClientGetResponse` has been removed
+- Field `LabsClientListBySubscriptionResult` of struct `LabsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `LabsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `SchedulesClientDeletePollerResponse` has been removed
+
+### Features Added
+
+- New function `*SchedulesClientListByLabPager.More() bool`
+- New function `*ImagesClientListByLabPlanPager.More() bool`
+- New function `*UsersClientListByLabPager.More() bool`
+- New function `*LabsClientListBySubscriptionPager.More() bool`
+- New function `*LabsClientListByResourceGroupPager.More() bool`
+- New function `*UsagesClientListByLocationPager.More() bool`
+- New function `*LabPlansClientListByResourceGroupPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*VirtualMachinesClientListByLabPager.More() bool`
+- New function `*SKUsClientListPager.More() bool`
+- New function `*LabPlansClientListBySubscriptionPager.More() bool`
+- New struct `ErrorResponse`
+- New anonymous field `ListUsagesResult` in struct `UsagesClientListByLocationResponse`
+- New anonymous field `PagedLabPlans` in struct `LabPlansClientListBySubscriptionResponse`
+- New anonymous field `Lab` in struct `LabsClientUpdateResponse`
+- New anonymous field `PagedVirtualMachines` in struct `VirtualMachinesClientListByLabResponse`
+- New anonymous field `Schedule` in struct `SchedulesClientUpdateResponse`
+- New anonymous field `Lab` in struct `LabsClientGetResponse`
+- New anonymous field `User` in struct `UsersClientCreateOrUpdateResponse`
+- New anonymous field `User` in struct `UsersClientUpdateResponse`
+- New anonymous field `User` in struct `UsersClientGetResponse`
+- New anonymous field `PagedLabs` in struct `LabsClientListBySubscriptionResponse`
+- New anonymous field `PagedUsers` in struct `UsersClientListByLabResponse`
+- New anonymous field `OperationResult` in struct `OperationResultsClientGetResponse`
+- New anonymous field `LabPlan` in struct `LabPlansClientUpdateResponse`
+- New anonymous field `Image` in struct `ImagesClientUpdateResponse`
+- New anonymous field `LabPlan` in struct `LabPlansClientCreateOrUpdateResponse`
+- New anonymous field `Image` in struct `ImagesClientGetResponse`
+- New anonymous field `Lab` in struct `LabsClientCreateOrUpdateResponse`
+- New anonymous field `PagedSKUInfos` in struct `SKUsClientListResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `VirtualMachine` in struct `VirtualMachinesClientGetResponse`
+- New anonymous field `PagedLabPlans` in struct `LabPlansClientListByResourceGroupResponse`
+- New anonymous field `LabPlan` in struct `LabPlansClientGetResponse`
+- New anonymous field `Schedule` in struct `SchedulesClientCreateOrUpdateResponse`
+- New anonymous field `PagedImages` in struct `ImagesClientListByLabPlanResponse`
+- New anonymous field `Image` in struct `ImagesClientCreateOrUpdateResponse`
+- New anonymous field `Schedule` in struct `SchedulesClientGetResponse`
+- New anonymous field `PagedSchedules` in struct `SchedulesClientListByLabResponse`
+- New anonymous field `PagedLabs` in struct `LabsClientListByResourceGroupResponse`
+
+
+## 0.2.1 (2022-03-10)
+### Other Changes
+
+
 ## 0.2.0 (2022-01-21)
 ### Breaking Changes
 

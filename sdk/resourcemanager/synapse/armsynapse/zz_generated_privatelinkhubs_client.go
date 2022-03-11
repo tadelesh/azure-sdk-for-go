@@ -34,17 +34,17 @@ type PrivateLinkHubsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateLinkHubsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateLinkHubsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateLinkHubsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *PrivateLinkHubsClient) createOrUpdateCreateRequest(ctx context.Con
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *PrivateLinkHubsClient) createOrUpdateHandleResponse(resp *http.Response) (PrivateLinkHubsClientCreateOrUpdateResponse, error) {
-	result := PrivateLinkHubsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := PrivateLinkHubsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkHub); err != nil {
 		return PrivateLinkHubsClientCreateOrUpdateResponse{}, err
 	}
@@ -117,9 +117,7 @@ func (client *PrivateLinkHubsClient) BeginDelete(ctx context.Context, resourceGr
 	if err != nil {
 		return PrivateLinkHubsClientDeletePollerResponse{}, err
 	}
-	result := PrivateLinkHubsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateLinkHubsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateLinkHubsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return PrivateLinkHubsClientDeletePollerResponse{}, err
@@ -221,7 +219,7 @@ func (client *PrivateLinkHubsClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *PrivateLinkHubsClient) getHandleResponse(resp *http.Response) (PrivateLinkHubsClientGetResponse, error) {
-	result := PrivateLinkHubsClientGetResponse{RawResponse: resp}
+	result := PrivateLinkHubsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkHub); err != nil {
 		return PrivateLinkHubsClientGetResponse{}, err
 	}
@@ -263,7 +261,7 @@ func (client *PrivateLinkHubsClient) listCreateRequest(ctx context.Context, opti
 
 // listHandleResponse handles the List response.
 func (client *PrivateLinkHubsClient) listHandleResponse(resp *http.Response) (PrivateLinkHubsClientListResponse, error) {
-	result := PrivateLinkHubsClientListResponse{RawResponse: resp}
+	result := PrivateLinkHubsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkHubInfoListResult); err != nil {
 		return PrivateLinkHubsClientListResponse{}, err
 	}
@@ -311,7 +309,7 @@ func (client *PrivateLinkHubsClient) listByResourceGroupCreateRequest(ctx contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *PrivateLinkHubsClient) listByResourceGroupHandleResponse(resp *http.Response) (PrivateLinkHubsClientListByResourceGroupResponse, error) {
-	result := PrivateLinkHubsClientListByResourceGroupResponse{RawResponse: resp}
+	result := PrivateLinkHubsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkHubInfoListResult); err != nil {
 		return PrivateLinkHubsClientListByResourceGroupResponse{}, err
 	}
@@ -367,7 +365,7 @@ func (client *PrivateLinkHubsClient) updateCreateRequest(ctx context.Context, re
 
 // updateHandleResponse handles the Update response.
 func (client *PrivateLinkHubsClient) updateHandleResponse(resp *http.Response) (PrivateLinkHubsClientUpdateResponse, error) {
-	result := PrivateLinkHubsClientUpdateResponse{RawResponse: resp}
+	result := PrivateLinkHubsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkHub); err != nil {
 		return PrivateLinkHubsClientUpdateResponse{}, err
 	}

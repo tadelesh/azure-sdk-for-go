@@ -34,17 +34,17 @@ type FlightingRingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFlightingRingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FlightingRingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FlightingRingsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *FlightingRingsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *FlightingRingsClient) getHandleResponse(resp *http.Response) (FlightingRingsClientGetResponse, error) {
-	result := FlightingRingsClientGetResponse{RawResponse: resp}
+	result := FlightingRingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FlightingRingResource); err != nil {
 		return FlightingRingsClientGetResponse{}, err
 	}
@@ -154,7 +154,7 @@ func (client *FlightingRingsClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *FlightingRingsClient) listHandleResponse(resp *http.Response) (FlightingRingsClientListResponse, error) {
-	result := FlightingRingsClientListResponse{RawResponse: resp}
+	result := FlightingRingsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FlightingRingListResult); err != nil {
 		return FlightingRingsClientListResponse{}, err
 	}

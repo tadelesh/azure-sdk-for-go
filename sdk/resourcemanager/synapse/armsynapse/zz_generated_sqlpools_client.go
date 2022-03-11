@@ -34,17 +34,17 @@ type SQLPoolsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLPoolsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLPoolsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLPoolsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *SQLPoolsClient) BeginCreate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return SQLPoolsClientCreatePollerResponse{}, err
 	}
-	result := SQLPoolsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLPoolsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLPoolsClient.Create", "location", resp, client.pl)
 	if err != nil {
 		return SQLPoolsClientCreatePollerResponse{}, err
@@ -132,9 +130,7 @@ func (client *SQLPoolsClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return SQLPoolsClientDeletePollerResponse{}, err
 	}
-	result := SQLPoolsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLPoolsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLPoolsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return SQLPoolsClientDeletePollerResponse{}, err
@@ -245,7 +241,7 @@ func (client *SQLPoolsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *SQLPoolsClient) getHandleResponse(resp *http.Response) (SQLPoolsClientGetResponse, error) {
-	result := SQLPoolsClientGetResponse{RawResponse: resp}
+	result := SQLPoolsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLPool); err != nil {
 		return SQLPoolsClientGetResponse{}, err
 	}
@@ -298,7 +294,7 @@ func (client *SQLPoolsClient) listByWorkspaceCreateRequest(ctx context.Context, 
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *SQLPoolsClient) listByWorkspaceHandleResponse(resp *http.Response) (SQLPoolsClientListByWorkspaceResponse, error) {
-	result := SQLPoolsClientListByWorkspaceResponse{RawResponse: resp}
+	result := SQLPoolsClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLPoolInfoListResult); err != nil {
 		return SQLPoolsClientListByWorkspaceResponse{}, err
 	}
@@ -316,9 +312,7 @@ func (client *SQLPoolsClient) BeginPause(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return SQLPoolsClientPausePollerResponse{}, err
 	}
-	result := SQLPoolsClientPausePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLPoolsClientPausePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLPoolsClient.Pause", "location", resp, client.pl)
 	if err != nil {
 		return SQLPoolsClientPausePollerResponse{}, err
@@ -395,7 +389,7 @@ func (client *SQLPoolsClient) Rename(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return SQLPoolsClientRenameResponse{}, runtime.NewResponseError(resp)
 	}
-	return SQLPoolsClientRenameResponse{RawResponse: resp}, nil
+	return SQLPoolsClientRenameResponse{}, nil
 }
 
 // renameCreateRequest creates the Rename request.
@@ -438,9 +432,7 @@ func (client *SQLPoolsClient) BeginResume(ctx context.Context, resourceGroupName
 	if err != nil {
 		return SQLPoolsClientResumePollerResponse{}, err
 	}
-	result := SQLPoolsClientResumePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLPoolsClientResumePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLPoolsClient.Resume", "location", resp, client.pl)
 	if err != nil {
 		return SQLPoolsClientResumePollerResponse{}, err
@@ -552,7 +544,7 @@ func (client *SQLPoolsClient) updateCreateRequest(ctx context.Context, resourceG
 
 // updateHandleResponse handles the Update response.
 func (client *SQLPoolsClient) updateHandleResponse(resp *http.Response) (SQLPoolsClientUpdateResponse, error) {
-	result := SQLPoolsClientUpdateResponse{RawResponse: resp}
+	result := SQLPoolsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLPool); err != nil {
 		return SQLPoolsClientUpdateResponse{}, err
 	}

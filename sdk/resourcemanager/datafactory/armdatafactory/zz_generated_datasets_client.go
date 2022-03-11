@@ -34,17 +34,17 @@ type DatasetsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDatasetsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DatasetsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DatasetsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -106,7 +106,7 @@ func (client *DatasetsClient) createOrUpdateCreateRequest(ctx context.Context, r
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *DatasetsClient) createOrUpdateHandleResponse(resp *http.Response) (DatasetsClientCreateOrUpdateResponse, error) {
-	result := DatasetsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := DatasetsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatasetResource); err != nil {
 		return DatasetsClientCreateOrUpdateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *DatasetsClient) Delete(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DatasetsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DatasetsClientDeleteResponse{RawResponse: resp}, nil
+	return DatasetsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -220,7 +220,7 @@ func (client *DatasetsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *DatasetsClient) getHandleResponse(resp *http.Response) (DatasetsClientGetResponse, error) {
-	result := DatasetsClientGetResponse{RawResponse: resp}
+	result := DatasetsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatasetResource); err != nil {
 		return DatasetsClientGetResponse{}, err
 	}
@@ -272,7 +272,7 @@ func (client *DatasetsClient) listByFactoryCreateRequest(ctx context.Context, re
 
 // listByFactoryHandleResponse handles the ListByFactory response.
 func (client *DatasetsClient) listByFactoryHandleResponse(resp *http.Response) (DatasetsClientListByFactoryResponse, error) {
-	result := DatasetsClientListByFactoryResponse{RawResponse: resp}
+	result := DatasetsClientListByFactoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatasetListResponse); err != nil {
 		return DatasetsClientListByFactoryResponse{}, err
 	}

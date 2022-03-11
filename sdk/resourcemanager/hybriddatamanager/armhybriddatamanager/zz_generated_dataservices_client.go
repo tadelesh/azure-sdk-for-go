@@ -34,17 +34,17 @@ type DataServicesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataServicesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataServicesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataServicesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *DataServicesClient) getCreateRequest(ctx context.Context, dataServ
 
 // getHandleResponse handles the Get response.
 func (client *DataServicesClient) getHandleResponse(resp *http.Response) (DataServicesClientGetResponse, error) {
-	result := DataServicesClientGetResponse{RawResponse: resp}
+	result := DataServicesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataService); err != nil {
 		return DataServicesClientGetResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *DataServicesClient) listByDataManagerCreateRequest(ctx context.Con
 
 // listByDataManagerHandleResponse handles the ListByDataManager response.
 func (client *DataServicesClient) listByDataManagerHandleResponse(resp *http.Response) (DataServicesClientListByDataManagerResponse, error) {
-	result := DataServicesClientListByDataManagerResponse{RawResponse: resp}
+	result := DataServicesClientListByDataManagerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataServiceList); err != nil {
 		return DataServicesClientListByDataManagerResponse{}, err
 	}

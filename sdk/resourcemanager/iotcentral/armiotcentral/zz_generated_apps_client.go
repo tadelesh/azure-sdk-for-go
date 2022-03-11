@@ -34,17 +34,17 @@ type AppsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAppsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AppsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AppsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -90,7 +90,7 @@ func (client *AppsClient) checkNameAvailabilityCreateRequest(ctx context.Context
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *AppsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (AppsClientCheckNameAvailabilityResponse, error) {
-	result := AppsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := AppsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AppAvailabilityInfo); err != nil {
 		return AppsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -138,7 +138,7 @@ func (client *AppsClient) checkSubdomainAvailabilityCreateRequest(ctx context.Co
 
 // checkSubdomainAvailabilityHandleResponse handles the CheckSubdomainAvailability response.
 func (client *AppsClient) checkSubdomainAvailabilityHandleResponse(resp *http.Response) (AppsClientCheckSubdomainAvailabilityResponse, error) {
-	result := AppsClientCheckSubdomainAvailabilityResponse{RawResponse: resp}
+	result := AppsClientCheckSubdomainAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AppAvailabilityInfo); err != nil {
 		return AppsClientCheckSubdomainAvailabilityResponse{}, err
 	}
@@ -159,9 +159,7 @@ func (client *AppsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroup
 	if err != nil {
 		return AppsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := AppsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AppsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AppsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return AppsClientCreateOrUpdatePollerResponse{}, err
@@ -227,9 +225,7 @@ func (client *AppsClient) BeginDelete(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return AppsClientDeletePollerResponse{}, err
 	}
-	result := AppsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AppsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AppsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return AppsClientDeletePollerResponse{}, err
@@ -331,7 +327,7 @@ func (client *AppsClient) getCreateRequest(ctx context.Context, resourceGroupNam
 
 // getHandleResponse handles the Get response.
 func (client *AppsClient) getHandleResponse(resp *http.Response) (AppsClientGetResponse, error) {
-	result := AppsClientGetResponse{RawResponse: resp}
+	result := AppsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.App); err != nil {
 		return AppsClientGetResponse{}, err
 	}
@@ -379,7 +375,7 @@ func (client *AppsClient) listByResourceGroupCreateRequest(ctx context.Context, 
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *AppsClient) listByResourceGroupHandleResponse(resp *http.Response) (AppsClientListByResourceGroupResponse, error) {
-	result := AppsClientListByResourceGroupResponse{RawResponse: resp}
+	result := AppsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AppListResult); err != nil {
 		return AppsClientListByResourceGroupResponse{}, err
 	}
@@ -421,7 +417,7 @@ func (client *AppsClient) listBySubscriptionCreateRequest(ctx context.Context, o
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *AppsClient) listBySubscriptionHandleResponse(resp *http.Response) (AppsClientListBySubscriptionResponse, error) {
-	result := AppsClientListBySubscriptionResponse{RawResponse: resp}
+	result := AppsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AppListResult); err != nil {
 		return AppsClientListBySubscriptionResponse{}, err
 	}
@@ -463,7 +459,7 @@ func (client *AppsClient) listTemplatesCreateRequest(ctx context.Context, option
 
 // listTemplatesHandleResponse handles the ListTemplates response.
 func (client *AppsClient) listTemplatesHandleResponse(resp *http.Response) (AppsClientListTemplatesResponse, error) {
-	result := AppsClientListTemplatesResponse{RawResponse: resp}
+	result := AppsClientListTemplatesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AppTemplatesResult); err != nil {
 		return AppsClientListTemplatesResponse{}, err
 	}
@@ -481,9 +477,7 @@ func (client *AppsClient) BeginUpdate(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return AppsClientUpdatePollerResponse{}, err
 	}
-	result := AppsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AppsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AppsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return AppsClientUpdatePollerResponse{}, err

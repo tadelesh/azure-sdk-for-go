@@ -34,17 +34,17 @@ type ReplicationLinksClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReplicationLinksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReplicationLinksClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReplicationLinksClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -69,7 +69,7 @@ func (client *ReplicationLinksClient) Delete(ctx context.Context, resourceGroupN
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ReplicationLinksClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ReplicationLinksClientDeleteResponse{RawResponse: resp}, nil
+	return ReplicationLinksClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -119,9 +119,7 @@ func (client *ReplicationLinksClient) BeginFailover(ctx context.Context, resourc
 	if err != nil {
 		return ReplicationLinksClientFailoverPollerResponse{}, err
 	}
-	result := ReplicationLinksClientFailoverPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationLinksClientFailoverPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationLinksClient.Failover", "", resp, client.pl)
 	if err != nil {
 		return ReplicationLinksClientFailoverPollerResponse{}, err
@@ -197,9 +195,7 @@ func (client *ReplicationLinksClient) BeginFailoverAllowDataLoss(ctx context.Con
 	if err != nil {
 		return ReplicationLinksClientFailoverAllowDataLossPollerResponse{}, err
 	}
-	result := ReplicationLinksClientFailoverAllowDataLossPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationLinksClientFailoverAllowDataLossPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationLinksClient.FailoverAllowDataLoss", "", resp, client.pl)
 	if err != nil {
 		return ReplicationLinksClientFailoverAllowDataLossPollerResponse{}, err
@@ -320,7 +316,7 @@ func (client *ReplicationLinksClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *ReplicationLinksClient) getHandleResponse(resp *http.Response) (ReplicationLinksClientGetResponse, error) {
-	result := ReplicationLinksClientGetResponse{RawResponse: resp}
+	result := ReplicationLinksClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReplicationLink); err != nil {
 		return ReplicationLinksClientGetResponse{}, err
 	}
@@ -379,7 +375,7 @@ func (client *ReplicationLinksClient) listByDatabaseCreateRequest(ctx context.Co
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *ReplicationLinksClient) listByDatabaseHandleResponse(resp *http.Response) (ReplicationLinksClientListByDatabaseResponse, error) {
-	result := ReplicationLinksClientListByDatabaseResponse{RawResponse: resp}
+	result := ReplicationLinksClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReplicationLinkListResult); err != nil {
 		return ReplicationLinksClientListByDatabaseResponse{}, err
 	}
@@ -433,7 +429,7 @@ func (client *ReplicationLinksClient) listByServerCreateRequest(ctx context.Cont
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *ReplicationLinksClient) listByServerHandleResponse(resp *http.Response) (ReplicationLinksClientListByServerResponse, error) {
-	result := ReplicationLinksClientListByServerResponse{RawResponse: resp}
+	result := ReplicationLinksClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReplicationLinkListResult); err != nil {
 		return ReplicationLinksClientListByServerResponse{}, err
 	}
@@ -455,9 +451,7 @@ func (client *ReplicationLinksClient) BeginUnlink(ctx context.Context, resourceG
 	if err != nil {
 		return ReplicationLinksClientUnlinkPollerResponse{}, err
 	}
-	result := ReplicationLinksClientUnlinkPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationLinksClientUnlinkPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationLinksClient.Unlink", "", resp, client.pl)
 	if err != nil {
 		return ReplicationLinksClientUnlinkPollerResponse{}, err

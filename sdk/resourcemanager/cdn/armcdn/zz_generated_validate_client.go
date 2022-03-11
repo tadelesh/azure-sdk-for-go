@@ -88,7 +88,7 @@ func (client *ValidateClient) secretCreateRequest(ctx context.Context, validateS
 
 // secretHandleResponse handles the Secret response.
 func (client *ValidateClient) secretHandleResponse(resp *http.Response) (ValidateClientSecretResponse, error) {
-	result := ValidateClientSecretResponse{RawResponse: resp}
+	result := ValidateClientSecretResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ValidateSecretOutput); err != nil {
 		return ValidateClientSecretResponse{}, err
 	}

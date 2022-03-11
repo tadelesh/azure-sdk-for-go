@@ -34,17 +34,17 @@ type ProjectsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProjectsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ProjectsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProjectsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -65,9 +65,7 @@ func (client *ProjectsClient) BeginCreate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ProjectsClientCreatePollerResponse{}, err
 	}
-	result := ProjectsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ProjectsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ProjectsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return ProjectsClientCreatePollerResponse{}, err
@@ -185,7 +183,7 @@ func (client *ProjectsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *ProjectsClient) getHandleResponse(resp *http.Response) (ProjectsClientGetResponse, error) {
-	result := ProjectsClientGetResponse{RawResponse: resp}
+	result := ProjectsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProjectResource); err != nil {
 		return ProjectsClientGetResponse{}, err
 	}
@@ -255,7 +253,7 @@ func (client *ProjectsClient) getJobStatusCreateRequest(ctx context.Context, res
 
 // getJobStatusHandleResponse handles the GetJobStatus response.
 func (client *ProjectsClient) getJobStatusHandleResponse(resp *http.Response) (ProjectsClientGetJobStatusResponse, error) {
-	result := ProjectsClientGetJobStatusResponse{RawResponse: resp}
+	result := ProjectsClientGetJobStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProjectResource); err != nil {
 		return ProjectsClientGetJobStatusResponse{}, err
 	}
@@ -311,7 +309,7 @@ func (client *ProjectsClient) listByResourceGroupCreateRequest(ctx context.Conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ProjectsClient) listByResourceGroupHandleResponse(resp *http.Response) (ProjectsClientListByResourceGroupResponse, error) {
-	result := ProjectsClientListByResourceGroupResponse{RawResponse: resp}
+	result := ProjectsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProjectResourceListResult); err != nil {
 		return ProjectsClientListByResourceGroupResponse{}, err
 	}
@@ -372,7 +370,7 @@ func (client *ProjectsClient) updateCreateRequest(ctx context.Context, resourceG
 
 // updateHandleResponse handles the Update response.
 func (client *ProjectsClient) updateHandleResponse(resp *http.Response) (ProjectsClientUpdateResponse, error) {
-	result := ProjectsClientUpdateResponse{RawResponse: resp}
+	result := ProjectsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProjectResource); err != nil {
 		return ProjectsClientUpdateResponse{}, err
 	}

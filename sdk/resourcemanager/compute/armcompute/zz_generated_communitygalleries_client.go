@@ -35,17 +35,17 @@ type CommunityGalleriesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCommunityGalleriesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CommunityGalleriesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CommunityGalleriesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *CommunityGalleriesClient) getCreateRequest(ctx context.Context, lo
 
 // getHandleResponse handles the Get response.
 func (client *CommunityGalleriesClient) getHandleResponse(resp *http.Response) (CommunityGalleriesClientGetResponse, error) {
-	result := CommunityGalleriesClientGetResponse{RawResponse: resp}
+	result := CommunityGalleriesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CommunityGallery); err != nil {
 		return CommunityGalleriesClientGetResponse{}, err
 	}

@@ -35,17 +35,17 @@ type CapacityReservationGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCapacityReservationGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CapacityReservationGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CapacityReservationGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -94,7 +94,7 @@ func (client *CapacityReservationGroupsClient) createOrUpdateCreateRequest(ctx c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -102,7 +102,7 @@ func (client *CapacityReservationGroupsClient) createOrUpdateCreateRequest(ctx c
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *CapacityReservationGroupsClient) createOrUpdateHandleResponse(resp *http.Response) (CapacityReservationGroupsClientCreateOrUpdateResponse, error) {
-	result := CapacityReservationGroupsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := CapacityReservationGroupsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CapacityReservationGroup); err != nil {
 		return CapacityReservationGroupsClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *CapacityReservationGroupsClient) Delete(ctx context.Context, resou
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return CapacityReservationGroupsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return CapacityReservationGroupsClientDeleteResponse{RawResponse: resp}, nil
+	return CapacityReservationGroupsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -152,7 +152,7 @@ func (client *CapacityReservationGroupsClient) deleteCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -202,7 +202,7 @@ func (client *CapacityReservationGroupsClient) getCreateRequest(ctx context.Cont
 	if options != nil && options.Expand != nil {
 		reqQP.Set("$expand", string(*options.Expand))
 	}
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -210,7 +210,7 @@ func (client *CapacityReservationGroupsClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *CapacityReservationGroupsClient) getHandleResponse(resp *http.Response) (CapacityReservationGroupsClientGetResponse, error) {
-	result := CapacityReservationGroupsClientGetResponse{RawResponse: resp}
+	result := CapacityReservationGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CapacityReservationGroup); err != nil {
 		return CapacityReservationGroupsClientGetResponse{}, err
 	}
@@ -251,7 +251,7 @@ func (client *CapacityReservationGroupsClient) listByResourceGroupCreateRequest(
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	if options != nil && options.Expand != nil {
 		reqQP.Set("$expand", string(*options.Expand))
 	}
@@ -262,7 +262,7 @@ func (client *CapacityReservationGroupsClient) listByResourceGroupCreateRequest(
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *CapacityReservationGroupsClient) listByResourceGroupHandleResponse(resp *http.Response) (CapacityReservationGroupsClientListByResourceGroupResponse, error) {
-	result := CapacityReservationGroupsClientListByResourceGroupResponse{RawResponse: resp}
+	result := CapacityReservationGroupsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CapacityReservationGroupListResult); err != nil {
 		return CapacityReservationGroupsClientListByResourceGroupResponse{}, err
 	}
@@ -298,7 +298,7 @@ func (client *CapacityReservationGroupsClient) listBySubscriptionCreateRequest(c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	if options != nil && options.Expand != nil {
 		reqQP.Set("$expand", string(*options.Expand))
 	}
@@ -309,7 +309,7 @@ func (client *CapacityReservationGroupsClient) listBySubscriptionCreateRequest(c
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *CapacityReservationGroupsClient) listBySubscriptionHandleResponse(resp *http.Response) (CapacityReservationGroupsClientListBySubscriptionResponse, error) {
-	result := CapacityReservationGroupsClientListBySubscriptionResponse{RawResponse: resp}
+	result := CapacityReservationGroupsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CapacityReservationGroupListResult); err != nil {
 		return CapacityReservationGroupsClientListBySubscriptionResponse{}, err
 	}
@@ -359,7 +359,7 @@ func (client *CapacityReservationGroupsClient) updateCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -367,7 +367,7 @@ func (client *CapacityReservationGroupsClient) updateCreateRequest(ctx context.C
 
 // updateHandleResponse handles the Update response.
 func (client *CapacityReservationGroupsClient) updateHandleResponse(resp *http.Response) (CapacityReservationGroupsClientUpdateResponse, error) {
-	result := CapacityReservationGroupsClientUpdateResponse{RawResponse: resp}
+	result := CapacityReservationGroupsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CapacityReservationGroup); err != nil {
 		return CapacityReservationGroupsClientUpdateResponse{}, err
 	}

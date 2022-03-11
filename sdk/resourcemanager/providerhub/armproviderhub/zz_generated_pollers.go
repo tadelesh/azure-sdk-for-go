@@ -43,11 +43,10 @@ func (p *DefaultRolloutsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final DefaultRolloutsClientCreateOrUpdateResponse will be returned.
 func (p *DefaultRolloutsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (DefaultRolloutsClientCreateOrUpdateResponse, error) {
 	respType := DefaultRolloutsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DefaultRollout)
+	_, err := p.pt.FinalResponse(ctx, &respType.DefaultRollout)
 	if err != nil {
 		return DefaultRolloutsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ProviderRegistrationsClientCreateOrUpdatePoller) Poll(ctx context.Conte
 // If the final GET succeeded then the final ProviderRegistrationsClientCreateOrUpdateResponse will be returned.
 func (p *ProviderRegistrationsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ProviderRegistrationsClientCreateOrUpdateResponse, error) {
 	respType := ProviderRegistrationsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ProviderRegistration)
+	_, err := p.pt.FinalResponse(ctx, &respType.ProviderRegistration)
 	if err != nil {
 		return ProviderRegistrationsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ResourceTypeRegistrationsClientCreateOrUpdatePoller) Poll(ctx context.C
 // If the final GET succeeded then the final ResourceTypeRegistrationsClientCreateOrUpdateResponse will be returned.
 func (p *ResourceTypeRegistrationsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ResourceTypeRegistrationsClientCreateOrUpdateResponse, error) {
 	respType := ResourceTypeRegistrationsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ResourceTypeRegistration)
+	_, err := p.pt.FinalResponse(ctx, &respType.ResourceTypeRegistration)
 	if err != nil {
 		return ResourceTypeRegistrationsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

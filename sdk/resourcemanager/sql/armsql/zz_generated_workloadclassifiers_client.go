@@ -34,17 +34,17 @@ type WorkloadClassifiersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkloadClassifiersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkloadClassifiersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkloadClassifiersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -65,9 +65,7 @@ func (client *WorkloadClassifiersClient) BeginCreateOrUpdate(ctx context.Context
 	if err != nil {
 		return WorkloadClassifiersClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := WorkloadClassifiersClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadClassifiersClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadClassifiersClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return WorkloadClassifiersClientCreateOrUpdatePollerResponse{}, err
@@ -148,9 +146,7 @@ func (client *WorkloadClassifiersClient) BeginDelete(ctx context.Context, resour
 	if err != nil {
 		return WorkloadClassifiersClientDeletePollerResponse{}, err
 	}
-	result := WorkloadClassifiersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadClassifiersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadClassifiersClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return WorkloadClassifiersClientDeletePollerResponse{}, err
@@ -279,7 +275,7 @@ func (client *WorkloadClassifiersClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *WorkloadClassifiersClient) getHandleResponse(resp *http.Response) (WorkloadClassifiersClientGetResponse, error) {
-	result := WorkloadClassifiersClientGetResponse{RawResponse: resp}
+	result := WorkloadClassifiersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadClassifier); err != nil {
 		return WorkloadClassifiersClientGetResponse{}, err
 	}
@@ -343,7 +339,7 @@ func (client *WorkloadClassifiersClient) listByWorkloadGroupCreateRequest(ctx co
 
 // listByWorkloadGroupHandleResponse handles the ListByWorkloadGroup response.
 func (client *WorkloadClassifiersClient) listByWorkloadGroupHandleResponse(resp *http.Response) (WorkloadClassifiersClientListByWorkloadGroupResponse, error) {
-	result := WorkloadClassifiersClientListByWorkloadGroupResponse{RawResponse: resp}
+	result := WorkloadClassifiersClientListByWorkloadGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadClassifierListResult); err != nil {
 		return WorkloadClassifiersClientListByWorkloadGroupResponse{}, err
 	}

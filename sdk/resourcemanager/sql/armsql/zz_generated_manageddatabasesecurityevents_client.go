@@ -35,17 +35,17 @@ type ManagedDatabaseSecurityEventsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedDatabaseSecurityEventsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedDatabaseSecurityEventsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedDatabaseSecurityEventsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -114,7 +114,7 @@ func (client *ManagedDatabaseSecurityEventsClient) listByDatabaseCreateRequest(c
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *ManagedDatabaseSecurityEventsClient) listByDatabaseHandleResponse(resp *http.Response) (ManagedDatabaseSecurityEventsClientListByDatabaseResponse, error) {
-	result := ManagedDatabaseSecurityEventsClientListByDatabaseResponse{RawResponse: resp}
+	result := ManagedDatabaseSecurityEventsClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecurityEventCollection); err != nil {
 		return ManagedDatabaseSecurityEventsClientListByDatabaseResponse{}, err
 	}

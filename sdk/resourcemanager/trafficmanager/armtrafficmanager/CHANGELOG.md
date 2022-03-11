@@ -1,5 +1,110 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ProfilesClient.ListBySubscription` parameter(s) have been changed from `(context.Context, *ProfilesClientListBySubscriptionOptions)` to `(*ProfilesClientListBySubscriptionOptions)`
+- Function `*ProfilesClient.ListBySubscription` return value(s) have been changed from `(ProfilesClientListBySubscriptionResponse, error)` to `(*ProfilesClientListBySubscriptionPager)`
+- Function `*ProfilesClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *ProfilesClientListByResourceGroupOptions)` to `(string, *ProfilesClientListByResourceGroupOptions)`
+- Function `*ProfilesClient.ListByResourceGroup` return value(s) have been changed from `(ProfilesClientListByResourceGroupResponse, error)` to `(*ProfilesClientListByResourceGroupPager)`
+- Struct `EndpointsClientCreateOrUpdateResult` has been removed
+- Struct `EndpointsClientDeleteResult` has been removed
+- Struct `EndpointsClientGetResult` has been removed
+- Struct `EndpointsClientUpdateResult` has been removed
+- Struct `GeographicHierarchiesClientGetDefaultResult` has been removed
+- Struct `HeatMapClientGetResult` has been removed
+- Struct `ProfilesClientCheckTrafficManagerRelativeDNSNameAvailabilityResult` has been removed
+- Struct `ProfilesClientCreateOrUpdateResult` has been removed
+- Struct `ProfilesClientDeleteResult` has been removed
+- Struct `ProfilesClientGetResult` has been removed
+- Struct `ProfilesClientListByResourceGroupResult` has been removed
+- Struct `ProfilesClientListBySubscriptionResult` has been removed
+- Struct `ProfilesClientUpdateResult` has been removed
+- Struct `UserMetricsKeysClientCreateOrUpdateResult` has been removed
+- Struct `UserMetricsKeysClientDeleteResult` has been removed
+- Struct `UserMetricsKeysClientGetResult` has been removed
+- Field `ProfilesClientUpdateResult` of struct `ProfilesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProfilesClientUpdateResponse` has been removed
+- Field `EndpointsClientCreateOrUpdateResult` of struct `EndpointsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `EndpointsClientCreateOrUpdateResponse` has been removed
+- Field `ProfilesClientCheckTrafficManagerRelativeDNSNameAvailabilityResult` of struct `ProfilesClientCheckTrafficManagerRelativeDNSNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ProfilesClientCheckTrafficManagerRelativeDNSNameAvailabilityResponse` has been removed
+- Field `ProfilesClientListBySubscriptionResult` of struct `ProfilesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ProfilesClientListBySubscriptionResponse` has been removed
+- Field `UserMetricsKeysClientDeleteResult` of struct `UserMetricsKeysClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `UserMetricsKeysClientDeleteResponse` has been removed
+- Field `UserMetricsKeysClientCreateOrUpdateResult` of struct `UserMetricsKeysClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `UserMetricsKeysClientCreateOrUpdateResponse` has been removed
+- Field `EndpointsClientDeleteResult` of struct `EndpointsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `EndpointsClientDeleteResponse` has been removed
+- Field `GeographicHierarchiesClientGetDefaultResult` of struct `GeographicHierarchiesClientGetDefaultResponse` has been removed
+- Field `RawResponse` of struct `GeographicHierarchiesClientGetDefaultResponse` has been removed
+- Field `ProfilesClientGetResult` of struct `ProfilesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProfilesClientGetResponse` has been removed
+- Field `EndpointsClientUpdateResult` of struct `EndpointsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `EndpointsClientUpdateResponse` has been removed
+- Field `UserMetricsKeysClientGetResult` of struct `UserMetricsKeysClientGetResponse` has been removed
+- Field `RawResponse` of struct `UserMetricsKeysClientGetResponse` has been removed
+- Field `EndpointsClientGetResult` of struct `EndpointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `EndpointsClientGetResponse` has been removed
+- Field `HeatMapClientGetResult` of struct `HeatMapClientGetResponse` has been removed
+- Field `RawResponse` of struct `HeatMapClientGetResponse` has been removed
+- Field `ProfilesClientListByResourceGroupResult` of struct `ProfilesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ProfilesClientListByResourceGroupResponse` has been removed
+- Field `ProfilesClientDeleteResult` of struct `ProfilesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ProfilesClientDeleteResponse` has been removed
+- Field `ProfilesClientCreateOrUpdateResult` of struct `ProfilesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProfilesClientCreateOrUpdateResponse` has been removed
+
+### Features Added
+
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*ProfilesClientListBySubscriptionPager.More() bool`
+- New function `*ProfilesClientListByResourceGroupPager.NextPage(context.Context) (ProfilesClientListByResourceGroupResponse, error)`
+- New function `*ProfilesClientListBySubscriptionPager.NextPage(context.Context) (ProfilesClientListBySubscriptionResponse, error)`
+- New function `*ProfilesClientListByResourceGroupPager.More() bool`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New struct `ProfilesClientListByResourceGroupPager`
+- New struct `ProfilesClientListBySubscriptionPager`
+- New anonymous field `Profile` in struct `ProfilesClientGetResponse`
+- New anonymous field `Profile` in struct `ProfilesClientUpdateResponse`
+- New anonymous field `ProfileListResult` in struct `ProfilesClientListByResourceGroupResponse`
+- New anonymous field `HeatMapModel` in struct `HeatMapClientGetResponse`
+- New anonymous field `UserMetricsModel` in struct `UserMetricsKeysClientCreateOrUpdateResponse`
+- New anonymous field `Profile` in struct `ProfilesClientCreateOrUpdateResponse`
+- New anonymous field `UserMetricsModel` in struct `UserMetricsKeysClientGetResponse`
+- New anonymous field `DeleteOperationResult` in struct `EndpointsClientDeleteResponse`
+- New anonymous field `NameAvailability` in struct `ProfilesClientCheckTrafficManagerRelativeDNSNameAvailabilityResponse`
+- New anonymous field `DeleteOperationResult` in struct `ProfilesClientDeleteResponse`
+- New anonymous field `ProfileListResult` in struct `ProfilesClientListBySubscriptionResponse`
+- New anonymous field `Endpoint` in struct `EndpointsClientCreateOrUpdateResponse`
+- New anonymous field `GeographicHierarchy` in struct `GeographicHierarchiesClientGetDefaultResponse`
+- New anonymous field `Endpoint` in struct `EndpointsClientUpdateResponse`
+- New anonymous field `Endpoint` in struct `EndpointsClientGetResponse`
+- New anonymous field `DeleteOperationResult` in struct `UserMetricsKeysClientDeleteResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*EndpointsClient.Delete` parameter(s) have been changed from `(context.Context, string, string, string, string, *EndpointsClientDeleteOptions)` to `(context.Context, string, string, EndpointType, string, *EndpointsClientDeleteOptions)`
+- Function `*EndpointsClient.Get` parameter(s) have been changed from `(context.Context, string, string, string, string, *EndpointsClientGetOptions)` to `(context.Context, string, string, EndpointType, string, *EndpointsClientGetOptions)`
+- Function `*EndpointsClient.CreateOrUpdate` parameter(s) have been changed from `(context.Context, string, string, string, string, Endpoint, *EndpointsClientCreateOrUpdateOptions)` to `(context.Context, string, string, EndpointType, string, Endpoint, *EndpointsClientCreateOrUpdateOptions)`
+- Function `*EndpointsClient.Update` parameter(s) have been changed from `(context.Context, string, string, string, string, Endpoint, *EndpointsClientUpdateOptions)` to `(context.Context, string, string, EndpointType, string, Endpoint, *EndpointsClientUpdateOptions)`
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+
+### Features Added
+
+- New const `EndpointTypeNestedEndpoints`
+- New const `EndpointTypeExternalEndpoints`
+- New const `EndpointTypeAzureEndpoints`
+- New function `PossibleEndpointTypeValues() []EndpointType`
+- New function `EndpointType.ToPtr() *EndpointType`
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

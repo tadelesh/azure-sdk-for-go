@@ -43,11 +43,10 @@ func (p *CommunicationsClientCreatePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final CommunicationsClientCreateResponse will be returned.
 func (p *CommunicationsClientCreatePoller) FinalResponse(ctx context.Context) (CommunicationsClientCreateResponse, error) {
 	respType := CommunicationsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.CommunicationDetails)
+	_, err := p.pt.FinalResponse(ctx, &respType.CommunicationDetails)
 	if err != nil {
 		return CommunicationsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *TicketsClientCreatePoller) Poll(ctx context.Context) (*http.Response, e
 // If the final GET succeeded then the final TicketsClientCreateResponse will be returned.
 func (p *TicketsClientCreatePoller) FinalResponse(ctx context.Context) (TicketsClientCreateResponse, error) {
 	respType := TicketsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.TicketDetails)
+	_, err := p.pt.FinalResponse(ctx, &respType.TicketDetails)
 	if err != nil {
 		return TicketsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

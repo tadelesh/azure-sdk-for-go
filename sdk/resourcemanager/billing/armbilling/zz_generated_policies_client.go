@@ -32,16 +32,16 @@ type PoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPoliciesClient(credential azcore.TokenCredential, options *arm.ClientOptions) *PoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PoliciesClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -92,7 +92,7 @@ func (client *PoliciesClient) getByBillingProfileCreateRequest(ctx context.Conte
 
 // getByBillingProfileHandleResponse handles the GetByBillingProfile response.
 func (client *PoliciesClient) getByBillingProfileHandleResponse(resp *http.Response) (PoliciesClientGetByBillingProfileResponse, error) {
-	result := PoliciesClientGetByBillingProfileResponse{RawResponse: resp}
+	result := PoliciesClientGetByBillingProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Policy); err != nil {
 		return PoliciesClientGetByBillingProfileResponse{}, err
 	}
@@ -144,7 +144,7 @@ func (client *PoliciesClient) getByCustomerCreateRequest(ctx context.Context, bi
 
 // getByCustomerHandleResponse handles the GetByCustomer response.
 func (client *PoliciesClient) getByCustomerHandleResponse(resp *http.Response) (PoliciesClientGetByCustomerResponse, error) {
-	result := PoliciesClientGetByCustomerResponse{RawResponse: resp}
+	result := PoliciesClientGetByCustomerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomerPolicy); err != nil {
 		return PoliciesClientGetByCustomerResponse{}, err
 	}
@@ -197,7 +197,7 @@ func (client *PoliciesClient) updateCreateRequest(ctx context.Context, billingAc
 
 // updateHandleResponse handles the Update response.
 func (client *PoliciesClient) updateHandleResponse(resp *http.Response) (PoliciesClientUpdateResponse, error) {
-	result := PoliciesClientUpdateResponse{RawResponse: resp}
+	result := PoliciesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Policy); err != nil {
 		return PoliciesClientUpdateResponse{}, err
 	}
@@ -250,7 +250,7 @@ func (client *PoliciesClient) updateCustomerCreateRequest(ctx context.Context, b
 
 // updateCustomerHandleResponse handles the UpdateCustomer response.
 func (client *PoliciesClient) updateCustomerHandleResponse(resp *http.Response) (PoliciesClientUpdateCustomerResponse, error) {
-	result := PoliciesClientUpdateCustomerResponse{RawResponse: resp}
+	result := PoliciesClientUpdateCustomerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomerPolicy); err != nil {
 		return PoliciesClientUpdateCustomerResponse{}, err
 	}

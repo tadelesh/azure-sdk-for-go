@@ -34,17 +34,17 @@ type DashboardsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDashboardsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DashboardsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DashboardsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *DashboardsClient) createOrUpdateCreateRequest(ctx context.Context,
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *DashboardsClient) createOrUpdateHandleResponse(resp *http.Response) (DashboardsClientCreateOrUpdateResponse, error) {
-	result := DashboardsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := DashboardsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Dashboard); err != nil {
 		return DashboardsClientCreateOrUpdateResponse{}, err
 	}
@@ -123,7 +123,7 @@ func (client *DashboardsClient) Delete(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DashboardsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DashboardsClientDeleteResponse{RawResponse: resp}, nil
+	return DashboardsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -200,7 +200,7 @@ func (client *DashboardsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *DashboardsClient) getHandleResponse(resp *http.Response) (DashboardsClientGetResponse, error) {
-	result := DashboardsClientGetResponse{RawResponse: resp}
+	result := DashboardsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Dashboard); err != nil {
 		return DashboardsClientGetResponse{}, err
 	}
@@ -248,7 +248,7 @@ func (client *DashboardsClient) listByResourceGroupCreateRequest(ctx context.Con
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *DashboardsClient) listByResourceGroupHandleResponse(resp *http.Response) (DashboardsClientListByResourceGroupResponse, error) {
-	result := DashboardsClientListByResourceGroupResponse{RawResponse: resp}
+	result := DashboardsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DashboardListResult); err != nil {
 		return DashboardsClientListByResourceGroupResponse{}, err
 	}
@@ -291,7 +291,7 @@ func (client *DashboardsClient) listBySubscriptionCreateRequest(ctx context.Cont
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *DashboardsClient) listBySubscriptionHandleResponse(resp *http.Response) (DashboardsClientListBySubscriptionResponse, error) {
-	result := DashboardsClientListBySubscriptionResponse{RawResponse: resp}
+	result := DashboardsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DashboardListResult); err != nil {
 		return DashboardsClientListBySubscriptionResponse{}, err
 	}
@@ -347,7 +347,7 @@ func (client *DashboardsClient) updateCreateRequest(ctx context.Context, resourc
 
 // updateHandleResponse handles the Update response.
 func (client *DashboardsClient) updateHandleResponse(resp *http.Response) (DashboardsClientUpdateResponse, error) {
-	result := DashboardsClientUpdateResponse{RawResponse: resp}
+	result := DashboardsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Dashboard); err != nil {
 		return DashboardsClientUpdateResponse{}, err
 	}

@@ -34,17 +34,17 @@ type SynchronizationSettingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSynchronizationSettingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SynchronizationSettingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SynchronizationSettingsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *SynchronizationSettingsClient) createCreateRequest(ctx context.Con
 
 // createHandleResponse handles the Create response.
 func (client *SynchronizationSettingsClient) createHandleResponse(resp *http.Response) (SynchronizationSettingsClientCreateResponse, error) {
-	result := SynchronizationSettingsClientCreateResponse{RawResponse: resp}
+	result := SynchronizationSettingsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return SynchronizationSettingsClientCreateResponse{}, err
 	}
@@ -129,9 +129,7 @@ func (client *SynchronizationSettingsClient) BeginDelete(ctx context.Context, re
 	if err != nil {
 		return SynchronizationSettingsClientDeletePollerResponse{}, err
 	}
-	result := SynchronizationSettingsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SynchronizationSettingsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SynchronizationSettingsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return SynchronizationSettingsClientDeletePollerResponse{}, err
@@ -252,7 +250,7 @@ func (client *SynchronizationSettingsClient) getCreateRequest(ctx context.Contex
 
 // getHandleResponse handles the Get response.
 func (client *SynchronizationSettingsClient) getHandleResponse(resp *http.Response) (SynchronizationSettingsClientGetResponse, error) {
-	result := SynchronizationSettingsClientGetResponse{RawResponse: resp}
+	result := SynchronizationSettingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return SynchronizationSettingsClientGetResponse{}, err
 	}
@@ -313,7 +311,7 @@ func (client *SynchronizationSettingsClient) listByShareCreateRequest(ctx contex
 
 // listByShareHandleResponse handles the ListByShare response.
 func (client *SynchronizationSettingsClient) listByShareHandleResponse(resp *http.Response) (SynchronizationSettingsClientListByShareResponse, error) {
-	result := SynchronizationSettingsClientListByShareResponse{RawResponse: resp}
+	result := SynchronizationSettingsClientListByShareResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SynchronizationSettingList); err != nil {
 		return SynchronizationSettingsClientListByShareResponse{}, err
 	}

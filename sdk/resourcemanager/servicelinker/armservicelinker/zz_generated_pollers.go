@@ -43,11 +43,10 @@ func (p *LinkerClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final LinkerClientCreateOrUpdateResponse will be returned.
 func (p *LinkerClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (LinkerClientCreateOrUpdateResponse, error) {
 	respType := LinkerClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.LinkerResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.LinkerResource)
 	if err != nil {
 		return LinkerClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *LinkerClientDeletePoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final LinkerClientDeleteResponse will be returned.
 func (p *LinkerClientDeletePoller) FinalResponse(ctx context.Context) (LinkerClientDeleteResponse, error) {
 	respType := LinkerClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return LinkerClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *LinkerClientUpdatePoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final LinkerClientUpdateResponse will be returned.
 func (p *LinkerClientUpdatePoller) FinalResponse(ctx context.Context) (LinkerClientUpdateResponse, error) {
 	respType := LinkerClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.LinkerResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.LinkerResource)
 	if err != nil {
 		return LinkerClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *LinkerClientValidatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final LinkerClientValidateResponse will be returned.
 func (p *LinkerClientValidatePoller) FinalResponse(ctx context.Context) (LinkerClientValidateResponse, error) {
 	respType := LinkerClientValidateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ValidateResult)
+	_, err := p.pt.FinalResponse(ctx, &respType.ValidateResult)
 	if err != nil {
 		return LinkerClientValidateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

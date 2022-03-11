@@ -1,5 +1,229 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*TimeSeriesDatabaseConnectionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(TimeSeriesDatabaseConnectionsClientListResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ClientListByResourceGroupResponse, error)`
+- Function `*EndpointClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(EndpointClientListResponse, error)`
+- Function `*ClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ClientListResponse, error)`
+- Function `*ClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*ClientListPager.Err` has been removed
+- Function `*TimeSeriesDatabaseConnectionsClientListPager.Err` has been removed
+- Function `*ClientListByResourceGroupPager.Err` has been removed
+- Function `*ClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*EndpointClientListPager.PageResponse` has been removed
+- Function `*TimeSeriesDatabaseConnectionsClientListPager.PageResponse` has been removed
+- Function `*EndpointClientListPager.Err` has been removed
+- Struct `ClientCheckNameAvailabilityResult` has been removed
+- Struct `ClientCreateOrUpdateResult` has been removed
+- Struct `ClientDeleteResult` has been removed
+- Struct `ClientGetResult` has been removed
+- Struct `ClientListByResourceGroupResult` has been removed
+- Struct `ClientListResult` has been removed
+- Struct `ClientUpdateResult` has been removed
+- Struct `EndpointClientCreateOrUpdateResult` has been removed
+- Struct `EndpointClientDeleteResult` has been removed
+- Struct `EndpointClientGetResult` has been removed
+- Struct `EndpointClientListResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientCreateOrUpdateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListResult` has been removed
+- Struct `PrivateLinkResourcesClientGetResult` has been removed
+- Struct `PrivateLinkResourcesClientListResult` has been removed
+- Struct `TimeSeriesDatabaseConnectionsClientCreateOrUpdateResult` has been removed
+- Struct `TimeSeriesDatabaseConnectionsClientDeleteResult` has been removed
+- Struct `TimeSeriesDatabaseConnectionsClientGetResult` has been removed
+- Struct `TimeSeriesDatabaseConnectionsClientListResult` has been removed
+- Field `EndpointClientDeleteResult` of struct `EndpointClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `EndpointClientDeleteResponse` has been removed
+- Field `EndpointClientGetResult` of struct `EndpointClientGetResponse` has been removed
+- Field `RawResponse` of struct `EndpointClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClientDeletePollerResponse` has been removed
+- Field `PrivateLinkResourcesClientListResult` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeletePollerResponse` has been removed
+- Field `TimeSeriesDatabaseConnectionsClientDeleteResult` of struct `TimeSeriesDatabaseConnectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `TimeSeriesDatabaseConnectionsClientDeleteResponse` has been removed
+- Field `PrivateLinkResourcesClientGetResult` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `PrivateEndpointConnectionsClientCreateOrUpdateResult` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `ClientCheckNameAvailabilityResult` of struct `ClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `TimeSeriesDatabaseConnectionsClientDeletePollerResponse` has been removed
+- Field `TimeSeriesDatabaseConnectionsClientListResult` of struct `TimeSeriesDatabaseConnectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `TimeSeriesDatabaseConnectionsClientListResponse` has been removed
+- Field `ClientUpdateResult` of struct `ClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientUpdateResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `ClientDeleteResult` of struct `ClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `EndpointClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ClientCreateOrUpdatePollerResponse` has been removed
+- Field `EndpointClientCreateOrUpdateResult` of struct `EndpointClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `EndpointClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `TimeSeriesDatabaseConnectionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `ClientListByResourceGroupResult` of struct `ClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ClientListByResourceGroupResponse` has been removed
+- Field `ClientListResult` of struct `ClientListResponse` has been removed
+- Field `RawResponse` of struct `ClientListResponse` has been removed
+- Field `ClientGetResult` of struct `ClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClientGetResponse` has been removed
+- Field `ClientCreateOrUpdateResult` of struct `ClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientCreateOrUpdateResponse` has been removed
+- Field `EndpointClientListResult` of struct `EndpointClientListResponse` has been removed
+- Field `RawResponse` of struct `EndpointClientListResponse` has been removed
+- Field `TimeSeriesDatabaseConnectionsClientCreateOrUpdateResult` of struct `TimeSeriesDatabaseConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `TimeSeriesDatabaseConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientUpdatePollerResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `TimeSeriesDatabaseConnectionsClientGetResult` of struct `TimeSeriesDatabaseConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `TimeSeriesDatabaseConnectionsClientGetResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListResult` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `EndpointClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdatePollerResponse` has been removed
+
+### Features Added
+
+- New function `ErrorDefinition.MarshalJSON() ([]byte, error)`
+- New function `*TimeSeriesDatabaseConnectionsClientListPager.More() bool`
+- New function `*ClientListPager.More() bool`
+- New function `*ClientListByResourceGroupPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*EndpointClientListPager.More() bool`
+- New struct `ErrorDefinition`
+- New struct `ErrorResponse`
+- New anonymous field `PrivateEndpointConnectionsResponse` in struct `PrivateEndpointConnectionsClientListResponse`
+- New anonymous field `TimeSeriesDatabaseConnectionListResult` in struct `TimeSeriesDatabaseConnectionsClientListResponse`
+- New anonymous field `GroupIDInformationResponse` in struct `PrivateLinkResourcesClientListResponse`
+- New anonymous field `DescriptionListResult` in struct `ClientListByResourceGroupResponse`
+- New anonymous field `CheckNameResult` in struct `ClientCheckNameAvailabilityResponse`
+- New anonymous field `TimeSeriesDatabaseConnection` in struct `TimeSeriesDatabaseConnectionsClientCreateOrUpdateResponse`
+- New anonymous field `Description` in struct `ClientDeleteResponse`
+- New anonymous field `Description` in struct `ClientGetResponse`
+- New anonymous field `TimeSeriesDatabaseConnection` in struct `TimeSeriesDatabaseConnectionsClientGetResponse`
+- New anonymous field `DescriptionListResult` in struct `ClientListResponse`
+- New anonymous field `EndpointResourceListResult` in struct `EndpointClientListResponse`
+- New anonymous field `Description` in struct `ClientUpdateResponse`
+- New anonymous field `TimeSeriesDatabaseConnection` in struct `TimeSeriesDatabaseConnectionsClientDeleteResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `GroupIDInformation` in struct `PrivateLinkResourcesClientGetResponse`
+- New anonymous field `Description` in struct `ClientCreateOrUpdateResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `EndpointResource` in struct `EndpointClientDeleteResponse`
+- New anonymous field `EndpointResource` in struct `EndpointClientGetResponse`
+- New anonymous field `EndpointResource` in struct `EndpointClientCreateOrUpdateResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `ConnectionProperties.PrivateEndpoint` has been changed from `*ConnectionPropertiesPrivateEndpoint` to `*PrivateEndpoint`
+- Type of `PrivateEndpointConnection.Properties` has been changed from `*PrivateEndpointConnectionProperties` to `*ConnectionProperties`
+- Function `PrivateEndpointConnectionProperties.MarshalJSON` has been removed
+- Function `ErrorDefinition.MarshalJSON` has been removed
+- Function `GroupIDInformationPropertiesAutoGenerated.MarshalJSON` has been removed
+- Struct `ConnectionPropertiesPrivateEndpoint` has been removed
+- Struct `ErrorDefinition` has been removed
+- Struct `ErrorResponse` has been removed
+- Struct `GroupIDInformationPropertiesAutoGenerated` has been removed
+- Struct `PrivateEndpointConnectionProperties` has been removed
+
+### Features Added
+
+- New const `TimeSeriesDatabaseConnectionStateDeleting`
+- New const `CreatedByTypeUser`
+- New const `TimeSeriesDatabaseConnectionStateSucceeded`
+- New const `TimeSeriesDatabaseConnectionStateMoving`
+- New const `TimeSeriesDatabaseConnectionStateProvisioning`
+- New const `TimeSeriesDatabaseConnectionStateDeleted`
+- New const `TimeSeriesDatabaseConnectionStateCanceled`
+- New const `TimeSeriesDatabaseConnectionStateWarning`
+- New const `CreatedByTypeManagedIdentity`
+- New const `TimeSeriesDatabaseConnectionStateSuspending`
+- New const `ConnectionTypeAzureDataExplorer`
+- New const `CreatedByTypeApplication`
+- New const `TimeSeriesDatabaseConnectionStateRestoring`
+- New const `TimeSeriesDatabaseConnectionStateDisabled`
+- New const `CreatedByTypeKey`
+- New const `TimeSeriesDatabaseConnectionStateFailed`
+- New function `*TimeSeriesDatabaseConnectionsClient.BeginDelete(context.Context, string, string, string, *TimeSeriesDatabaseConnectionsClientBeginDeleteOptions) (TimeSeriesDatabaseConnectionsClientDeletePollerResponse, error)`
+- New function `*AzureDataExplorerConnectionProperties.UnmarshalJSON([]byte) error`
+- New function `*TimeSeriesDatabaseConnectionsClientCreateOrUpdatePollerResponse.Resume(context.Context, *TimeSeriesDatabaseConnectionsClient, string) error`
+- New function `*TimeSeriesDatabaseConnectionsClient.List(string, string, *TimeSeriesDatabaseConnectionsClientListOptions) *TimeSeriesDatabaseConnectionsClientListPager`
+- New function `CreatedByType.ToPtr() *CreatedByType`
+- New function `*AzureDataExplorerConnectionProperties.GetTimeSeriesDatabaseConnectionProperties() *TimeSeriesDatabaseConnectionProperties`
+- New function `TimeSeriesDatabaseConnectionsClientCreateOrUpdatePollerResponse.PollUntilDone(context.Context, time.Duration) (TimeSeriesDatabaseConnectionsClientCreateOrUpdateResponse, error)`
+- New function `*TimeSeriesDatabaseConnectionsClientDeletePoller.ResumeToken() (string, error)`
+- New function `*TimeSeriesDatabaseConnectionsClient.Get(context.Context, string, string, string, *TimeSeriesDatabaseConnectionsClientGetOptions) (TimeSeriesDatabaseConnectionsClientGetResponse, error)`
+- New function `*TimeSeriesDatabaseConnectionsClientCreateOrUpdatePoller.Done() bool`
+- New function `*TimeSeriesDatabaseConnectionsClientCreateOrUpdatePoller.ResumeToken() (string, error)`
+- New function `AzureDataExplorerConnectionProperties.MarshalJSON() ([]byte, error)`
+- New function `*TimeSeriesDatabaseConnectionsClientListPager.PageResponse() TimeSeriesDatabaseConnectionsClientListResponse`
+- New function `*TimeSeriesDatabaseConnectionsClientDeletePollerResponse.Resume(context.Context, *TimeSeriesDatabaseConnectionsClient, string) error`
+- New function `ConnectionType.ToPtr() *ConnectionType`
+- New function `TimeSeriesDatabaseConnectionListResult.MarshalJSON() ([]byte, error)`
+- New function `TimeSeriesDatabaseConnection.MarshalJSON() ([]byte, error)`
+- New function `*TimeSeriesDatabaseConnectionProperties.GetTimeSeriesDatabaseConnectionProperties() *TimeSeriesDatabaseConnectionProperties`
+- New function `Operation.MarshalJSON() ([]byte, error)`
+- New function `*SystemData.UnmarshalJSON([]byte) error`
+- New function `TimeSeriesDatabaseConnectionsClientDeletePollerResponse.PollUntilDone(context.Context, time.Duration) (TimeSeriesDatabaseConnectionsClientDeleteResponse, error)`
+- New function `*TimeSeriesDatabaseConnectionsClient.BeginCreateOrUpdate(context.Context, string, string, string, TimeSeriesDatabaseConnection, *TimeSeriesDatabaseConnectionsClientBeginCreateOrUpdateOptions) (TimeSeriesDatabaseConnectionsClientCreateOrUpdatePollerResponse, error)`
+- New function `*TimeSeriesDatabaseConnectionsClientListPager.Err() error`
+- New function `*TimeSeriesDatabaseConnectionsClientDeletePoller.FinalResponse(context.Context) (TimeSeriesDatabaseConnectionsClientDeleteResponse, error)`
+- New function `NewTimeSeriesDatabaseConnectionsClient(string, azcore.TokenCredential, *arm.ClientOptions) *TimeSeriesDatabaseConnectionsClient`
+- New function `*TimeSeriesDatabaseConnectionsClientDeletePoller.Done() bool`
+- New function `PossibleConnectionTypeValues() []ConnectionType`
+- New function `*TimeSeriesDatabaseConnectionsClientDeletePoller.Poll(context.Context) (*http.Response, error)`
+- New function `*TimeSeriesDatabaseConnectionsClientCreateOrUpdatePoller.FinalResponse(context.Context) (TimeSeriesDatabaseConnectionsClientCreateOrUpdateResponse, error)`
+- New function `SystemData.MarshalJSON() ([]byte, error)`
+- New function `PossibleTimeSeriesDatabaseConnectionStateValues() []TimeSeriesDatabaseConnectionState`
+- New function `*TimeSeriesDatabaseConnection.UnmarshalJSON([]byte) error`
+- New function `*TimeSeriesDatabaseConnectionsClientCreateOrUpdatePoller.Poll(context.Context) (*http.Response, error)`
+- New function `TimeSeriesDatabaseConnectionState.ToPtr() *TimeSeriesDatabaseConnectionState`
+- New function `*TimeSeriesDatabaseConnectionsClientListPager.NextPage(context.Context) bool`
+- New function `PossibleCreatedByTypeValues() []CreatedByType`
+- New struct `AzureDataExplorerConnectionProperties`
+- New struct `SystemData`
+- New struct `TimeSeriesDatabaseConnection`
+- New struct `TimeSeriesDatabaseConnectionListResult`
+- New struct `TimeSeriesDatabaseConnectionProperties`
+- New struct `TimeSeriesDatabaseConnectionsClient`
+- New struct `TimeSeriesDatabaseConnectionsClientBeginCreateOrUpdateOptions`
+- New struct `TimeSeriesDatabaseConnectionsClientBeginDeleteOptions`
+- New struct `TimeSeriesDatabaseConnectionsClientCreateOrUpdatePoller`
+- New struct `TimeSeriesDatabaseConnectionsClientCreateOrUpdatePollerResponse`
+- New struct `TimeSeriesDatabaseConnectionsClientCreateOrUpdateResponse`
+- New struct `TimeSeriesDatabaseConnectionsClientCreateOrUpdateResult`
+- New struct `TimeSeriesDatabaseConnectionsClientDeletePoller`
+- New struct `TimeSeriesDatabaseConnectionsClientDeletePollerResponse`
+- New struct `TimeSeriesDatabaseConnectionsClientDeleteResponse`
+- New struct `TimeSeriesDatabaseConnectionsClientDeleteResult`
+- New struct `TimeSeriesDatabaseConnectionsClientGetOptions`
+- New struct `TimeSeriesDatabaseConnectionsClientGetResponse`
+- New struct `TimeSeriesDatabaseConnectionsClientGetResult`
+- New struct `TimeSeriesDatabaseConnectionsClientListOptions`
+- New struct `TimeSeriesDatabaseConnectionsClientListPager`
+- New struct `TimeSeriesDatabaseConnectionsClientListResponse`
+- New struct `TimeSeriesDatabaseConnectionsClientListResult`
+- New field `Properties` in struct `Operation`
+- New field `SystemData` in struct `PrivateEndpointConnection`
+- New field `SystemData` in struct `EndpointResource`
+- New field `SystemData` in struct `ExternalResource`
+- New field `SystemData` in struct `Resource`
+- New field `SystemData` in struct `Description`
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

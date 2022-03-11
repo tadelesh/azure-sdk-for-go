@@ -34,17 +34,17 @@ type Client struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *Client {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &Client{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -93,7 +93,7 @@ func (client *Client) checkinManifestCreateRequest(ctx context.Context, provider
 
 // checkinManifestHandleResponse handles the CheckinManifest response.
 func (client *Client) checkinManifestHandleResponse(resp *http.Response) (ClientCheckinManifestResponse, error) {
-	result := ClientCheckinManifestResponse{RawResponse: resp}
+	result := ClientCheckinManifestResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckinManifestInfo); err != nil {
 		return ClientCheckinManifestResponse{}, err
 	}
@@ -143,7 +143,7 @@ func (client *Client) generateManifestCreateRequest(ctx context.Context, provide
 
 // generateManifestHandleResponse handles the GenerateManifest response.
 func (client *Client) generateManifestHandleResponse(resp *http.Response) (ClientGenerateManifestResponse, error) {
-	result := ClientGenerateManifestResponse{RawResponse: resp}
+	result := ClientGenerateManifestResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceProviderManifest); err != nil {
 		return ClientGenerateManifestResponse{}, err
 	}

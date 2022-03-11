@@ -43,11 +43,10 @@ func (p *OpenShiftClustersClientCreateOrUpdatePoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final OpenShiftClustersClientCreateOrUpdateResponse will be returned.
 func (p *OpenShiftClustersClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (OpenShiftClustersClientCreateOrUpdateResponse, error) {
 	respType := OpenShiftClustersClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OpenShiftCluster)
+	_, err := p.pt.FinalResponse(ctx, &respType.OpenShiftCluster)
 	if err != nil {
 		return OpenShiftClustersClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *OpenShiftClustersClientDeletePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final OpenShiftClustersClientDeleteResponse will be returned.
 func (p *OpenShiftClustersClientDeletePoller) FinalResponse(ctx context.Context) (OpenShiftClustersClientDeleteResponse, error) {
 	respType := OpenShiftClustersClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return OpenShiftClustersClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *OpenShiftClustersClientUpdatePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final OpenShiftClustersClientUpdateResponse will be returned.
 func (p *OpenShiftClustersClientUpdatePoller) FinalResponse(ctx context.Context) (OpenShiftClustersClientUpdateResponse, error) {
 	respType := OpenShiftClustersClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OpenShiftCluster)
+	_, err := p.pt.FinalResponse(ctx, &respType.OpenShiftCluster)
 	if err != nil {
 		return OpenShiftClustersClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

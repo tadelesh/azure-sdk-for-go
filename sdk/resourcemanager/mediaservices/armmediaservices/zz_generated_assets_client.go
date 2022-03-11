@@ -35,17 +35,17 @@ type AssetsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAssetsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AssetsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AssetsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *AssetsClient) createOrUpdateCreateRequest(ctx context.Context, res
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *AssetsClient) createOrUpdateHandleResponse(resp *http.Response) (AssetsClientCreateOrUpdateResponse, error) {
-	result := AssetsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := AssetsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Asset); err != nil {
 		return AssetsClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *AssetsClient) Delete(ctx context.Context, resourceGroupName string
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return AssetsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AssetsClientDeleteResponse{RawResponse: resp}, nil
+	return AssetsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *AssetsClient) getCreateRequest(ctx context.Context, resourceGroupN
 
 // getHandleResponse handles the Get response.
 func (client *AssetsClient) getHandleResponse(resp *http.Response) (AssetsClientGetResponse, error) {
-	result := AssetsClientGetResponse{RawResponse: resp}
+	result := AssetsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Asset); err != nil {
 		return AssetsClientGetResponse{}, err
 	}
@@ -276,7 +276,7 @@ func (client *AssetsClient) getEncryptionKeyCreateRequest(ctx context.Context, r
 
 // getEncryptionKeyHandleResponse handles the GetEncryptionKey response.
 func (client *AssetsClient) getEncryptionKeyHandleResponse(resp *http.Response) (AssetsClientGetEncryptionKeyResponse, error) {
-	result := AssetsClientGetEncryptionKeyResponse{RawResponse: resp}
+	result := AssetsClientGetEncryptionKeyResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StorageEncryptedAssetDecryptionData); err != nil {
 		return AssetsClientGetEncryptionKeyResponse{}, err
 	}
@@ -337,7 +337,7 @@ func (client *AssetsClient) listCreateRequest(ctx context.Context, resourceGroup
 
 // listHandleResponse handles the List response.
 func (client *AssetsClient) listHandleResponse(resp *http.Response) (AssetsClientListResponse, error) {
-	result := AssetsClientListResponse{RawResponse: resp}
+	result := AssetsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssetCollection); err != nil {
 		return AssetsClientListResponse{}, err
 	}
@@ -399,7 +399,7 @@ func (client *AssetsClient) listContainerSasCreateRequest(ctx context.Context, r
 
 // listContainerSasHandleResponse handles the ListContainerSas response.
 func (client *AssetsClient) listContainerSasHandleResponse(resp *http.Response) (AssetsClientListContainerSasResponse, error) {
-	result := AssetsClientListContainerSasResponse{RawResponse: resp}
+	result := AssetsClientListContainerSasResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssetContainerSas); err != nil {
 		return AssetsClientListContainerSasResponse{}, err
 	}
@@ -460,7 +460,7 @@ func (client *AssetsClient) listStreamingLocatorsCreateRequest(ctx context.Conte
 
 // listStreamingLocatorsHandleResponse handles the ListStreamingLocators response.
 func (client *AssetsClient) listStreamingLocatorsHandleResponse(resp *http.Response) (AssetsClientListStreamingLocatorsResponse, error) {
-	result := AssetsClientListStreamingLocatorsResponse{RawResponse: resp}
+	result := AssetsClientListStreamingLocatorsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListStreamingLocatorsResponse); err != nil {
 		return AssetsClientListStreamingLocatorsResponse{}, err
 	}
@@ -521,7 +521,7 @@ func (client *AssetsClient) updateCreateRequest(ctx context.Context, resourceGro
 
 // updateHandleResponse handles the Update response.
 func (client *AssetsClient) updateHandleResponse(resp *http.Response) (AssetsClientUpdateResponse, error) {
-	result := AssetsClientUpdateResponse{RawResponse: resp}
+	result := AssetsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Asset); err != nil {
 		return AssetsClientUpdateResponse{}, err
 	}

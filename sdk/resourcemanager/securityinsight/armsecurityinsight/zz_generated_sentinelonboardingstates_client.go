@@ -34,17 +34,17 @@ type SentinelOnboardingStatesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSentinelOnboardingStatesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SentinelOnboardingStatesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SentinelOnboardingStatesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -106,7 +106,7 @@ func (client *SentinelOnboardingStatesClient) createCreateRequest(ctx context.Co
 
 // createHandleResponse handles the Create response.
 func (client *SentinelOnboardingStatesClient) createHandleResponse(resp *http.Response) (SentinelOnboardingStatesClientCreateResponse, error) {
-	result := SentinelOnboardingStatesClientCreateResponse{RawResponse: resp}
+	result := SentinelOnboardingStatesClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SentinelOnboardingState); err != nil {
 		return SentinelOnboardingStatesClientCreateResponse{}, err
 	}
@@ -132,7 +132,7 @@ func (client *SentinelOnboardingStatesClient) Delete(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SentinelOnboardingStatesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SentinelOnboardingStatesClientDeleteResponse{RawResponse: resp}, nil
+	return SentinelOnboardingStatesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -219,7 +219,7 @@ func (client *SentinelOnboardingStatesClient) getCreateRequest(ctx context.Conte
 
 // getHandleResponse handles the Get response.
 func (client *SentinelOnboardingStatesClient) getHandleResponse(resp *http.Response) (SentinelOnboardingStatesClientGetResponse, error) {
-	result := SentinelOnboardingStatesClientGetResponse{RawResponse: resp}
+	result := SentinelOnboardingStatesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SentinelOnboardingState); err != nil {
 		return SentinelOnboardingStatesClientGetResponse{}, err
 	}
@@ -275,7 +275,7 @@ func (client *SentinelOnboardingStatesClient) listCreateRequest(ctx context.Cont
 
 // listHandleResponse handles the List response.
 func (client *SentinelOnboardingStatesClient) listHandleResponse(resp *http.Response) (SentinelOnboardingStatesClientListResponse, error) {
-	result := SentinelOnboardingStatesClientListResponse{RawResponse: resp}
+	result := SentinelOnboardingStatesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SentinelOnboardingStatesList); err != nil {
 		return SentinelOnboardingStatesClientListResponse{}, err
 	}

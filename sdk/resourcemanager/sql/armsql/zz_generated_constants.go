@@ -10,7 +10,7 @@ package armsql
 
 const (
 	moduleName    = "armsql"
-	moduleVersion = "v0.3.0"
+	moduleVersion = "v0.4.0"
 )
 
 type AdministratorName string
@@ -2232,6 +2232,27 @@ func PossibleReplicationLinkTypeValues() []ReplicationLinkType {
 
 // ToPtr returns a *ReplicationLinkType pointing to the current value.
 func (c ReplicationLinkType) ToPtr() *ReplicationLinkType {
+	return &c
+}
+
+// ReplicationMode - The replication mode of a distributed availability group. Parameter will be ignored during link creation.
+type ReplicationMode string
+
+const (
+	ReplicationModeAsync ReplicationMode = "Async"
+	ReplicationModeSync  ReplicationMode = "Sync"
+)
+
+// PossibleReplicationModeValues returns the possible values for the ReplicationMode const type.
+func PossibleReplicationModeValues() []ReplicationMode {
+	return []ReplicationMode{
+		ReplicationModeAsync,
+		ReplicationModeSync,
+	}
+}
+
+// ToPtr returns a *ReplicationMode pointing to the current value.
+func (c ReplicationMode) ToPtr() *ReplicationMode {
 	return &c
 }
 

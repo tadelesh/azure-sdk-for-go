@@ -34,17 +34,17 @@ type WorkflowsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkflowsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkflowsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkflowsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *WorkflowsClient) abortCreateRequest(ctx context.Context, resourceG
 
 // abortHandleResponse handles the Abort response.
 func (client *WorkflowsClient) abortHandleResponse(resp *http.Response) (WorkflowsClientAbortResponse, error) {
-	result := WorkflowsClientAbortResponse{RawResponse: resp}
+	result := WorkflowsClientAbortResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -165,7 +165,7 @@ func (client *WorkflowsClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *WorkflowsClient) getHandleResponse(resp *http.Response) (WorkflowsClientGetResponse, error) {
-	result := WorkflowsClientGetResponse{RawResponse: resp}
+	result := WorkflowsClientGetResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -184,19 +184,13 @@ func (client *WorkflowsClient) getHandleResponse(resp *http.Response) (Workflows
 // storageSyncServiceName - Name of Storage Sync Service resource.
 // options - WorkflowsClientListByStorageSyncServiceOptions contains the optional parameters for the WorkflowsClient.ListByStorageSyncService
 // method.
-func (client *WorkflowsClient) ListByStorageSyncService(ctx context.Context, resourceGroupName string, storageSyncServiceName string, options *WorkflowsClientListByStorageSyncServiceOptions) (WorkflowsClientListByStorageSyncServiceResponse, error) {
-	req, err := client.listByStorageSyncServiceCreateRequest(ctx, resourceGroupName, storageSyncServiceName, options)
-	if err != nil {
-		return WorkflowsClientListByStorageSyncServiceResponse{}, err
+func (client *WorkflowsClient) ListByStorageSyncService(resourceGroupName string, storageSyncServiceName string, options *WorkflowsClientListByStorageSyncServiceOptions) *WorkflowsClientListByStorageSyncServicePager {
+	return &WorkflowsClientListByStorageSyncServicePager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByStorageSyncServiceCreateRequest(ctx, resourceGroupName, storageSyncServiceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return WorkflowsClientListByStorageSyncServiceResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return WorkflowsClientListByStorageSyncServiceResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByStorageSyncServiceHandleResponse(resp)
 }
 
 // listByStorageSyncServiceCreateRequest creates the ListByStorageSyncService request.
@@ -227,7 +221,7 @@ func (client *WorkflowsClient) listByStorageSyncServiceCreateRequest(ctx context
 
 // listByStorageSyncServiceHandleResponse handles the ListByStorageSyncService response.
 func (client *WorkflowsClient) listByStorageSyncServiceHandleResponse(resp *http.Response) (WorkflowsClientListByStorageSyncServiceResponse, error) {
-	result := WorkflowsClientListByStorageSyncServiceResponse{RawResponse: resp}
+	result := WorkflowsClientListByStorageSyncServiceResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}

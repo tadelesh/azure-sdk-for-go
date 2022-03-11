@@ -36,17 +36,17 @@ type ProductClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProductClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ProductClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProductClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *ProductClient) createOrUpdateCreateRequest(ctx context.Context, re
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ProductClient) createOrUpdateHandleResponse(resp *http.Response) (ProductClientCreateOrUpdateResponse, error) {
-	result := ProductClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ProductClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -138,7 +138,7 @@ func (client *ProductClient) Delete(ctx context.Context, resourceGroupName strin
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ProductClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ProductClientDeleteResponse{RawResponse: resp}, nil
+	return ProductClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -228,7 +228,7 @@ func (client *ProductClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *ProductClient) getHandleResponse(resp *http.Response) (ProductClientGetResponse, error) {
-	result := ProductClientGetResponse{RawResponse: resp}
+	result := ProductClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -287,7 +287,7 @@ func (client *ProductClient) getEntityTagCreateRequest(ctx context.Context, reso
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *ProductClient) getEntityTagHandleResponse(resp *http.Response) (ProductClientGetEntityTagResponse, error) {
-	result := ProductClientGetEntityTagResponse{RawResponse: resp}
+	result := ProductClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -357,7 +357,7 @@ func (client *ProductClient) listByServiceCreateRequest(ctx context.Context, res
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *ProductClient) listByServiceHandleResponse(resp *http.Response) (ProductClientListByServiceResponse, error) {
-	result := ProductClientListByServiceResponse{RawResponse: resp}
+	result := ProductClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProductCollection); err != nil {
 		return ProductClientListByServiceResponse{}, err
 	}
@@ -421,7 +421,7 @@ func (client *ProductClient) listByTagsCreateRequest(ctx context.Context, resour
 
 // listByTagsHandleResponse handles the ListByTags response.
 func (client *ProductClient) listByTagsHandleResponse(resp *http.Response) (ProductClientListByTagsResponse, error) {
-	result := ProductClientListByTagsResponse{RawResponse: resp}
+	result := ProductClientListByTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TagResourceCollection); err != nil {
 		return ProductClientListByTagsResponse{}, err
 	}
@@ -485,7 +485,7 @@ func (client *ProductClient) updateCreateRequest(ctx context.Context, resourceGr
 
 // updateHandleResponse handles the Update response.
 func (client *ProductClient) updateHandleResponse(resp *http.Response) (ProductClientUpdateResponse, error) {
-	result := ProductClientUpdateResponse{RawResponse: resp}
+	result := ProductClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

@@ -35,17 +35,17 @@ type HybridConnectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewHybridConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *HybridConnectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &HybridConnectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *HybridConnectionsClient) createOrUpdateCreateRequest(ctx context.C
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *HybridConnectionsClient) createOrUpdateHandleResponse(resp *http.Response) (HybridConnectionsClientCreateOrUpdateResponse, error) {
-	result := HybridConnectionsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := HybridConnectionsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridConnection); err != nil {
 		return HybridConnectionsClientCreateOrUpdateResponse{}, err
 	}
@@ -172,7 +172,7 @@ func (client *HybridConnectionsClient) createOrUpdateAuthorizationRuleCreateRequ
 
 // createOrUpdateAuthorizationRuleHandleResponse handles the CreateOrUpdateAuthorizationRule response.
 func (client *HybridConnectionsClient) createOrUpdateAuthorizationRuleHandleResponse(resp *http.Response) (HybridConnectionsClientCreateOrUpdateAuthorizationRuleResponse, error) {
-	result := HybridConnectionsClientCreateOrUpdateAuthorizationRuleResponse{RawResponse: resp}
+	result := HybridConnectionsClientCreateOrUpdateAuthorizationRuleResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AuthorizationRule); err != nil {
 		return HybridConnectionsClientCreateOrUpdateAuthorizationRuleResponse{}, err
 	}
@@ -198,7 +198,7 @@ func (client *HybridConnectionsClient) Delete(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return HybridConnectionsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return HybridConnectionsClientDeleteResponse{RawResponse: resp}, nil
+	return HybridConnectionsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -251,7 +251,7 @@ func (client *HybridConnectionsClient) DeleteAuthorizationRule(ctx context.Conte
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return HybridConnectionsClientDeleteAuthorizationRuleResponse{}, runtime.NewResponseError(resp)
 	}
-	return HybridConnectionsClientDeleteAuthorizationRuleResponse{RawResponse: resp}, nil
+	return HybridConnectionsClientDeleteAuthorizationRuleResponse{}, nil
 }
 
 // deleteAuthorizationRuleCreateRequest creates the DeleteAuthorizationRule request.
@@ -341,7 +341,7 @@ func (client *HybridConnectionsClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *HybridConnectionsClient) getHandleResponse(resp *http.Response) (HybridConnectionsClientGetResponse, error) {
-	result := HybridConnectionsClientGetResponse{RawResponse: resp}
+	result := HybridConnectionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridConnection); err != nil {
 		return HybridConnectionsClientGetResponse{}, err
 	}
@@ -407,7 +407,7 @@ func (client *HybridConnectionsClient) getAuthorizationRuleCreateRequest(ctx con
 
 // getAuthorizationRuleHandleResponse handles the GetAuthorizationRule response.
 func (client *HybridConnectionsClient) getAuthorizationRuleHandleResponse(resp *http.Response) (HybridConnectionsClientGetAuthorizationRuleResponse, error) {
-	result := HybridConnectionsClientGetAuthorizationRuleResponse{RawResponse: resp}
+	result := HybridConnectionsClientGetAuthorizationRuleResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AuthorizationRule); err != nil {
 		return HybridConnectionsClientGetAuthorizationRuleResponse{}, err
 	}
@@ -465,7 +465,7 @@ func (client *HybridConnectionsClient) listAuthorizationRulesCreateRequest(ctx c
 
 // listAuthorizationRulesHandleResponse handles the ListAuthorizationRules response.
 func (client *HybridConnectionsClient) listAuthorizationRulesHandleResponse(resp *http.Response) (HybridConnectionsClientListAuthorizationRulesResponse, error) {
-	result := HybridConnectionsClientListAuthorizationRulesResponse{RawResponse: resp}
+	result := HybridConnectionsClientListAuthorizationRulesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AuthorizationRuleListResult); err != nil {
 		return HybridConnectionsClientListAuthorizationRulesResponse{}, err
 	}
@@ -518,7 +518,7 @@ func (client *HybridConnectionsClient) listByNamespaceCreateRequest(ctx context.
 
 // listByNamespaceHandleResponse handles the ListByNamespace response.
 func (client *HybridConnectionsClient) listByNamespaceHandleResponse(resp *http.Response) (HybridConnectionsClientListByNamespaceResponse, error) {
-	result := HybridConnectionsClientListByNamespaceResponse{RawResponse: resp}
+	result := HybridConnectionsClientListByNamespaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridConnectionListResult); err != nil {
 		return HybridConnectionsClientListByNamespaceResponse{}, err
 	}
@@ -584,7 +584,7 @@ func (client *HybridConnectionsClient) listKeysCreateRequest(ctx context.Context
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *HybridConnectionsClient) listKeysHandleResponse(resp *http.Response) (HybridConnectionsClientListKeysResponse, error) {
-	result := HybridConnectionsClientListKeysResponse{RawResponse: resp}
+	result := HybridConnectionsClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessKeys); err != nil {
 		return HybridConnectionsClientListKeysResponse{}, err
 	}
@@ -651,7 +651,7 @@ func (client *HybridConnectionsClient) regenerateKeysCreateRequest(ctx context.C
 
 // regenerateKeysHandleResponse handles the RegenerateKeys response.
 func (client *HybridConnectionsClient) regenerateKeysHandleResponse(resp *http.Response) (HybridConnectionsClientRegenerateKeysResponse, error) {
-	result := HybridConnectionsClientRegenerateKeysResponse{RawResponse: resp}
+	result := HybridConnectionsClientRegenerateKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessKeys); err != nil {
 		return HybridConnectionsClientRegenerateKeysResponse{}, err
 	}

@@ -35,17 +35,17 @@ type IntegrationAccountMapsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIntegrationAccountMapsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IntegrationAccountMapsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IntegrationAccountMapsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *IntegrationAccountMapsClient) createOrUpdateCreateRequest(ctx cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *IntegrationAccountMapsClient) createOrUpdateHandleResponse(resp *http.Response) (IntegrationAccountMapsClientCreateOrUpdateResponse, error) {
-	result := IntegrationAccountMapsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := IntegrationAccountMapsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountMap); err != nil {
 		return IntegrationAccountMapsClientCreateOrUpdateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *IntegrationAccountMapsClient) Delete(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return IntegrationAccountMapsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return IntegrationAccountMapsClientDeleteResponse{RawResponse: resp}, nil
+	return IntegrationAccountMapsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -218,7 +218,7 @@ func (client *IntegrationAccountMapsClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *IntegrationAccountMapsClient) getHandleResponse(resp *http.Response) (IntegrationAccountMapsClientGetResponse, error) {
-	result := IntegrationAccountMapsClientGetResponse{RawResponse: resp}
+	result := IntegrationAccountMapsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountMap); err != nil {
 		return IntegrationAccountMapsClientGetResponse{}, err
 	}
@@ -277,7 +277,7 @@ func (client *IntegrationAccountMapsClient) listCreateRequest(ctx context.Contex
 
 // listHandleResponse handles the List response.
 func (client *IntegrationAccountMapsClient) listHandleResponse(resp *http.Response) (IntegrationAccountMapsClientListResponse, error) {
-	result := IntegrationAccountMapsClientListResponse{RawResponse: resp}
+	result := IntegrationAccountMapsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountMapListResult); err != nil {
 		return IntegrationAccountMapsClientListResponse{}, err
 	}
@@ -338,7 +338,7 @@ func (client *IntegrationAccountMapsClient) listContentCallbackURLCreateRequest(
 
 // listContentCallbackURLHandleResponse handles the ListContentCallbackURL response.
 func (client *IntegrationAccountMapsClient) listContentCallbackURLHandleResponse(resp *http.Response) (IntegrationAccountMapsClientListContentCallbackURLResponse, error) {
-	result := IntegrationAccountMapsClientListContentCallbackURLResponse{RawResponse: resp}
+	result := IntegrationAccountMapsClientListContentCallbackURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowTriggerCallbackURL); err != nil {
 		return IntegrationAccountMapsClientListContentCallbackURLResponse{}, err
 	}

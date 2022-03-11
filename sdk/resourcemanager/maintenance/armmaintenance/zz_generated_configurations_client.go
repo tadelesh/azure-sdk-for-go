@@ -35,17 +35,17 @@ type ConfigurationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewConfigurationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ConfigurationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ConfigurationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *ConfigurationsClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ConfigurationsClient) createOrUpdateHandleResponse(resp *http.Response) (ConfigurationsClientCreateOrUpdateResponse, error) {
-	result := ConfigurationsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ConfigurationsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Configuration); err != nil {
 		return ConfigurationsClientCreateOrUpdateResponse{}, err
 	}
@@ -155,7 +155,7 @@ func (client *ConfigurationsClient) deleteCreateRequest(ctx context.Context, res
 
 // deleteHandleResponse handles the Delete response.
 func (client *ConfigurationsClient) deleteHandleResponse(resp *http.Response) (ConfigurationsClientDeleteResponse, error) {
-	result := ConfigurationsClientDeleteResponse{RawResponse: resp}
+	result := ConfigurationsClientDeleteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Configuration); err != nil {
 		return ConfigurationsClientDeleteResponse{}, err
 	}
@@ -210,7 +210,7 @@ func (client *ConfigurationsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *ConfigurationsClient) getHandleResponse(resp *http.Response) (ConfigurationsClientGetResponse, error) {
-	result := ConfigurationsClientGetResponse{RawResponse: resp}
+	result := ConfigurationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Configuration); err != nil {
 		return ConfigurationsClientGetResponse{}, err
 	}
@@ -220,19 +220,13 @@ func (client *ConfigurationsClient) getHandleResponse(resp *http.Response) (Conf
 // List - Get Configuration records within a subscription
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ConfigurationsClientListOptions contains the optional parameters for the ConfigurationsClient.List method.
-func (client *ConfigurationsClient) List(ctx context.Context, options *ConfigurationsClientListOptions) (ConfigurationsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, options)
-	if err != nil {
-		return ConfigurationsClientListResponse{}, err
+func (client *ConfigurationsClient) List(options *ConfigurationsClientListOptions) *ConfigurationsClientListPager {
+	return &ConfigurationsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ConfigurationsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ConfigurationsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -255,7 +249,7 @@ func (client *ConfigurationsClient) listCreateRequest(ctx context.Context, optio
 
 // listHandleResponse handles the List response.
 func (client *ConfigurationsClient) listHandleResponse(resp *http.Response) (ConfigurationsClientListResponse, error) {
-	result := ConfigurationsClientListResponse{RawResponse: resp}
+	result := ConfigurationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListMaintenanceConfigurationsResult); err != nil {
 		return ConfigurationsClientListResponse{}, err
 	}
@@ -311,7 +305,7 @@ func (client *ConfigurationsClient) updateCreateRequest(ctx context.Context, res
 
 // updateHandleResponse handles the Update response.
 func (client *ConfigurationsClient) updateHandleResponse(resp *http.Response) (ConfigurationsClientUpdateResponse, error) {
-	result := ConfigurationsClientUpdateResponse{RawResponse: resp}
+	result := ConfigurationsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Configuration); err != nil {
 		return ConfigurationsClientUpdateResponse{}, err
 	}

@@ -43,11 +43,10 @@ func (p *ClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ClientCreateOrUpdateResponse will be returned.
 func (p *ClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ClientCreateOrUpdateResponse, error) {
 	respType := ClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DomainService)
+	_, err := p.pt.FinalResponse(ctx, &respType.DomainService)
 	if err != nil {
 		return ClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ClientDeletePoller) Poll(ctx context.Context) (*http.Response, error) {
 // If the final GET succeeded then the final ClientDeleteResponse will be returned.
 func (p *ClientDeletePoller) FinalResponse(ctx context.Context) (ClientDeleteResponse, error) {
 	respType := ClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ClientUpdatePoller) Poll(ctx context.Context) (*http.Response, error) {
 // If the final GET succeeded then the final ClientUpdateResponse will be returned.
 func (p *ClientUpdatePoller) FinalResponse(ctx context.Context) (ClientUpdateResponse, error) {
 	respType := ClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DomainService)
+	_, err := p.pt.FinalResponse(ctx, &respType.DomainService)
 	if err != nil {
 		return ClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *OuContainerClientCreatePoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final OuContainerClientCreateResponse will be returned.
 func (p *OuContainerClientCreatePoller) FinalResponse(ctx context.Context) (OuContainerClientCreateResponse, error) {
 	respType := OuContainerClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OuContainer)
+	_, err := p.pt.FinalResponse(ctx, &respType.OuContainer)
 	if err != nil {
 		return OuContainerClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *OuContainerClientDeletePoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final OuContainerClientDeleteResponse will be returned.
 func (p *OuContainerClientDeletePoller) FinalResponse(ctx context.Context) (OuContainerClientDeleteResponse, error) {
 	respType := OuContainerClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return OuContainerClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *OuContainerClientUpdatePoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final OuContainerClientUpdateResponse will be returned.
 func (p *OuContainerClientUpdatePoller) FinalResponse(ctx context.Context) (OuContainerClientUpdateResponse, error) {
 	respType := OuContainerClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OuContainer)
+	_, err := p.pt.FinalResponse(ctx, &respType.OuContainer)
 	if err != nil {
 		return OuContainerClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

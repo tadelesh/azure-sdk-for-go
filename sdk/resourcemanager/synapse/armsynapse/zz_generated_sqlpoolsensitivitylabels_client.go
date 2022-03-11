@@ -35,17 +35,17 @@ type SQLPoolSensitivityLabelsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLPoolSensitivityLabelsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLPoolSensitivityLabelsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLPoolSensitivityLabelsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -121,7 +121,7 @@ func (client *SQLPoolSensitivityLabelsClient) createOrUpdateCreateRequest(ctx co
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *SQLPoolSensitivityLabelsClient) createOrUpdateHandleResponse(resp *http.Response) (SQLPoolSensitivityLabelsClientCreateOrUpdateResponse, error) {
-	result := SQLPoolSensitivityLabelsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := SQLPoolSensitivityLabelsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SensitivityLabel); err != nil {
 		return SQLPoolSensitivityLabelsClientCreateOrUpdateResponse{}, err
 	}
@@ -150,7 +150,7 @@ func (client *SQLPoolSensitivityLabelsClient) Delete(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SQLPoolSensitivityLabelsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SQLPoolSensitivityLabelsClientDeleteResponse{RawResponse: resp}, nil
+	return SQLPoolSensitivityLabelsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -217,7 +217,7 @@ func (client *SQLPoolSensitivityLabelsClient) DisableRecommendation(ctx context.
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return SQLPoolSensitivityLabelsClientDisableRecommendationResponse{}, runtime.NewResponseError(resp)
 	}
-	return SQLPoolSensitivityLabelsClientDisableRecommendationResponse{RawResponse: resp}, nil
+	return SQLPoolSensitivityLabelsClientDisableRecommendationResponse{}, nil
 }
 
 // disableRecommendationCreateRequest creates the DisableRecommendation request.
@@ -285,7 +285,7 @@ func (client *SQLPoolSensitivityLabelsClient) EnableRecommendation(ctx context.C
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return SQLPoolSensitivityLabelsClientEnableRecommendationResponse{}, runtime.NewResponseError(resp)
 	}
-	return SQLPoolSensitivityLabelsClientEnableRecommendationResponse{RawResponse: resp}, nil
+	return SQLPoolSensitivityLabelsClientEnableRecommendationResponse{}, nil
 }
 
 // enableRecommendationCreateRequest creates the EnableRecommendation request.
@@ -404,7 +404,7 @@ func (client *SQLPoolSensitivityLabelsClient) getCreateRequest(ctx context.Conte
 
 // getHandleResponse handles the Get response.
 func (client *SQLPoolSensitivityLabelsClient) getHandleResponse(resp *http.Response) (SQLPoolSensitivityLabelsClientGetResponse, error) {
-	result := SQLPoolSensitivityLabelsClientGetResponse{RawResponse: resp}
+	result := SQLPoolSensitivityLabelsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SensitivityLabel); err != nil {
 		return SQLPoolSensitivityLabelsClientGetResponse{}, err
 	}
@@ -465,7 +465,7 @@ func (client *SQLPoolSensitivityLabelsClient) listCurrentCreateRequest(ctx conte
 
 // listCurrentHandleResponse handles the ListCurrent response.
 func (client *SQLPoolSensitivityLabelsClient) listCurrentHandleResponse(resp *http.Response) (SQLPoolSensitivityLabelsClientListCurrentResponse, error) {
-	result := SQLPoolSensitivityLabelsClientListCurrentResponse{RawResponse: resp}
+	result := SQLPoolSensitivityLabelsClientListCurrentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SensitivityLabelListResult); err != nil {
 		return SQLPoolSensitivityLabelsClientListCurrentResponse{}, err
 	}
@@ -532,7 +532,7 @@ func (client *SQLPoolSensitivityLabelsClient) listRecommendedCreateRequest(ctx c
 
 // listRecommendedHandleResponse handles the ListRecommended response.
 func (client *SQLPoolSensitivityLabelsClient) listRecommendedHandleResponse(resp *http.Response) (SQLPoolSensitivityLabelsClientListRecommendedResponse, error) {
-	result := SQLPoolSensitivityLabelsClientListRecommendedResponse{RawResponse: resp}
+	result := SQLPoolSensitivityLabelsClientListRecommendedResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SensitivityLabelListResult); err != nil {
 		return SQLPoolSensitivityLabelsClientListRecommendedResponse{}, err
 	}
@@ -558,7 +558,7 @@ func (client *SQLPoolSensitivityLabelsClient) Update(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return SQLPoolSensitivityLabelsClientUpdateResponse{}, runtime.NewResponseError(resp)
 	}
-	return SQLPoolSensitivityLabelsClientUpdateResponse{RawResponse: resp}, nil
+	return SQLPoolSensitivityLabelsClientUpdateResponse{}, nil
 }
 
 // updateCreateRequest creates the Update request.

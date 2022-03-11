@@ -34,17 +34,17 @@ type DataManagersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataManagersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataManagersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataManagersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *DataManagersClient) BeginCreate(ctx context.Context, resourceGroup
 	if err != nil {
 		return DataManagersClientCreatePollerResponse{}, err
 	}
-	result := DataManagersClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DataManagersClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("DataManagersClient.Create", "", resp, client.pl)
 	if err != nil {
 		return DataManagersClientCreatePollerResponse{}, err
@@ -132,9 +130,7 @@ func (client *DataManagersClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return DataManagersClientDeletePollerResponse{}, err
 	}
-	result := DataManagersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DataManagersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DataManagersClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DataManagersClientDeletePollerResponse{}, err
@@ -236,7 +232,7 @@ func (client *DataManagersClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *DataManagersClient) getHandleResponse(resp *http.Response) (DataManagersClientGetResponse, error) {
-	result := DataManagersClientGetResponse{RawResponse: resp}
+	result := DataManagersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataManager); err != nil {
 		return DataManagersClientGetResponse{}, err
 	}
@@ -246,19 +242,13 @@ func (client *DataManagersClient) getHandleResponse(resp *http.Response) (DataMa
 // List - Lists all the data manager resources available under the subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DataManagersClientListOptions contains the optional parameters for the DataManagersClient.List method.
-func (client *DataManagersClient) List(ctx context.Context, options *DataManagersClientListOptions) (DataManagersClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, options)
-	if err != nil {
-		return DataManagersClientListResponse{}, err
+func (client *DataManagersClient) List(options *DataManagersClientListOptions) *DataManagersClientListPager {
+	return &DataManagersClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DataManagersClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DataManagersClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -281,7 +271,7 @@ func (client *DataManagersClient) listCreateRequest(ctx context.Context, options
 
 // listHandleResponse handles the List response.
 func (client *DataManagersClient) listHandleResponse(resp *http.Response) (DataManagersClientListResponse, error) {
-	result := DataManagersClientListResponse{RawResponse: resp}
+	result := DataManagersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataManagerList); err != nil {
 		return DataManagersClientListResponse{}, err
 	}
@@ -293,19 +283,13 @@ func (client *DataManagersClient) listHandleResponse(resp *http.Response) (DataM
 // resourceGroupName - The Resource Group Name
 // options - DataManagersClientListByResourceGroupOptions contains the optional parameters for the DataManagersClient.ListByResourceGroup
 // method.
-func (client *DataManagersClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, options *DataManagersClientListByResourceGroupOptions) (DataManagersClientListByResourceGroupResponse, error) {
-	req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-	if err != nil {
-		return DataManagersClientListByResourceGroupResponse{}, err
+func (client *DataManagersClient) ListByResourceGroup(resourceGroupName string, options *DataManagersClientListByResourceGroupOptions) *DataManagersClientListByResourceGroupPager {
+	return &DataManagersClientListByResourceGroupPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DataManagersClientListByResourceGroupResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DataManagersClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByResourceGroupHandleResponse(resp)
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -332,7 +316,7 @@ func (client *DataManagersClient) listByResourceGroupCreateRequest(ctx context.C
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *DataManagersClient) listByResourceGroupHandleResponse(resp *http.Response) (DataManagersClientListByResourceGroupResponse, error) {
-	result := DataManagersClientListByResourceGroupResponse{RawResponse: resp}
+	result := DataManagersClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataManagerList); err != nil {
 		return DataManagersClientListByResourceGroupResponse{}, err
 	}
@@ -352,9 +336,7 @@ func (client *DataManagersClient) BeginUpdate(ctx context.Context, resourceGroup
 	if err != nil {
 		return DataManagersClientUpdatePollerResponse{}, err
 	}
-	result := DataManagersClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DataManagersClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DataManagersClient.Update", "", resp, client.pl)
 	if err != nil {
 		return DataManagersClientUpdatePollerResponse{}, err

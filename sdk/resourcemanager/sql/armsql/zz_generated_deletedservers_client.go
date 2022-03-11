@@ -34,17 +34,17 @@ type DeletedServersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDeletedServersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DeletedServersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DeletedServersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -97,7 +97,7 @@ func (client *DeletedServersClient) getCreateRequest(ctx context.Context, locati
 
 // getHandleResponse handles the Get response.
 func (client *DeletedServersClient) getHandleResponse(resp *http.Response) (DeletedServersClientGetResponse, error) {
-	result := DeletedServersClientGetResponse{RawResponse: resp}
+	result := DeletedServersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedServer); err != nil {
 		return DeletedServersClientGetResponse{}, err
 	}
@@ -139,7 +139,7 @@ func (client *DeletedServersClient) listCreateRequest(ctx context.Context, optio
 
 // listHandleResponse handles the List response.
 func (client *DeletedServersClient) listHandleResponse(resp *http.Response) (DeletedServersClientListResponse, error) {
-	result := DeletedServersClientListResponse{RawResponse: resp}
+	result := DeletedServersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedServerListResult); err != nil {
 		return DeletedServersClientListResponse{}, err
 	}
@@ -187,7 +187,7 @@ func (client *DeletedServersClient) listByLocationCreateRequest(ctx context.Cont
 
 // listByLocationHandleResponse handles the ListByLocation response.
 func (client *DeletedServersClient) listByLocationHandleResponse(resp *http.Response) (DeletedServersClientListByLocationResponse, error) {
-	result := DeletedServersClientListByLocationResponse{RawResponse: resp}
+	result := DeletedServersClientListByLocationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedServerListResult); err != nil {
 		return DeletedServersClientListByLocationResponse{}, err
 	}
@@ -205,9 +205,7 @@ func (client *DeletedServersClient) BeginRecover(ctx context.Context, locationNa
 	if err != nil {
 		return DeletedServersClientRecoverPollerResponse{}, err
 	}
-	result := DeletedServersClientRecoverPollerResponse{
-		RawResponse: resp,
-	}
+	result := DeletedServersClientRecoverPollerResponse{}
 	pt, err := armruntime.NewPoller("DeletedServersClient.Recover", "", resp, client.pl)
 	if err != nil {
 		return DeletedServersClientRecoverPollerResponse{}, err

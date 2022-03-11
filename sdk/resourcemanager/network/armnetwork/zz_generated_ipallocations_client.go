@@ -35,17 +35,17 @@ type IPAllocationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIPAllocationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IPAllocationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IPAllocationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *IPAllocationsClient) BeginCreateOrUpdate(ctx context.Context, reso
 	if err != nil {
 		return IPAllocationsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := IPAllocationsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := IPAllocationsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("IPAllocationsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return IPAllocationsClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *IPAllocationsClient) BeginDelete(ctx context.Context, resourceGrou
 	if err != nil {
 		return IPAllocationsClientDeletePollerResponse{}, err
 	}
-	result := IPAllocationsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := IPAllocationsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("IPAllocationsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return IPAllocationsClientDeletePollerResponse{}, err
@@ -236,7 +232,7 @@ func (client *IPAllocationsClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *IPAllocationsClient) getHandleResponse(resp *http.Response) (IPAllocationsClientGetResponse, error) {
-	result := IPAllocationsClientGetResponse{RawResponse: resp}
+	result := IPAllocationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IPAllocation); err != nil {
 		return IPAllocationsClientGetResponse{}, err
 	}
@@ -278,7 +274,7 @@ func (client *IPAllocationsClient) listCreateRequest(ctx context.Context, option
 
 // listHandleResponse handles the List response.
 func (client *IPAllocationsClient) listHandleResponse(resp *http.Response) (IPAllocationsClientListResponse, error) {
-	result := IPAllocationsClientListResponse{RawResponse: resp}
+	result := IPAllocationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IPAllocationListResult); err != nil {
 		return IPAllocationsClientListResponse{}, err
 	}
@@ -326,7 +322,7 @@ func (client *IPAllocationsClient) listByResourceGroupCreateRequest(ctx context.
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *IPAllocationsClient) listByResourceGroupHandleResponse(resp *http.Response) (IPAllocationsClientListByResourceGroupResponse, error) {
-	result := IPAllocationsClientListByResourceGroupResponse{RawResponse: resp}
+	result := IPAllocationsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IPAllocationListResult); err != nil {
 		return IPAllocationsClientListByResourceGroupResponse{}, err
 	}
@@ -383,7 +379,7 @@ func (client *IPAllocationsClient) updateTagsCreateRequest(ctx context.Context, 
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *IPAllocationsClient) updateTagsHandleResponse(resp *http.Response) (IPAllocationsClientUpdateTagsResponse, error) {
-	result := IPAllocationsClientUpdateTagsResponse{RawResponse: resp}
+	result := IPAllocationsClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IPAllocation); err != nil {
 		return IPAllocationsClientUpdateTagsResponse{}, err
 	}

@@ -62,9 +62,7 @@ func (client *SecretsClient) BeginCreate(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return SecretsClientCreatePollerResponse{}, err
 	}
-	result := SecretsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SecretsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("SecretsClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return SecretsClientCreatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *SecretsClient) BeginDelete(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return SecretsClientDeletePollerResponse{}, err
 	}
-	result := SecretsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SecretsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SecretsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return SecretsClientDeletePollerResponse{}, err
@@ -248,7 +244,7 @@ func (client *SecretsClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *SecretsClient) getHandleResponse(resp *http.Response) (SecretsClientGetResponse, error) {
-	result := SecretsClientGetResponse{RawResponse: resp}
+	result := SecretsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Secret); err != nil {
 		return SecretsClientGetResponse{}, err
 	}
@@ -301,7 +297,7 @@ func (client *SecretsClient) listByProfileCreateRequest(ctx context.Context, res
 
 // listByProfileHandleResponse handles the ListByProfile response.
 func (client *SecretsClient) listByProfileHandleResponse(resp *http.Response) (SecretsClientListByProfileResponse, error) {
-	result := SecretsClientListByProfileResponse{RawResponse: resp}
+	result := SecretsClientListByProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecretListResult); err != nil {
 		return SecretsClientListByProfileResponse{}, err
 	}

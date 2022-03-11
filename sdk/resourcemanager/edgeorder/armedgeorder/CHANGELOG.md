@@ -1,5 +1,147 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ManagementClientListOrderItemsAtSubscriptionLevelPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagementClientListOrderItemsAtSubscriptionLevelResponse, error)`
+- Function `*ManagementClientListAddressesAtSubscriptionLevelPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagementClientListAddressesAtSubscriptionLevelResponse, error)`
+- Function `*ManagementClientListProductFamiliesPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagementClientListProductFamiliesResponse, error)`
+- Function `*ManagementClientListProductFamiliesMetadataPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagementClientListProductFamiliesMetadataResponse, error)`
+- Function `*ManagementClientListConfigurationsPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagementClientListConfigurationsResponse, error)`
+- Function `*ManagementClientListOrderAtSubscriptionLevelPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagementClientListOrderAtSubscriptionLevelResponse, error)`
+- Function `*ManagementClientListOrderItemsAtResourceGroupLevelPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagementClientListOrderItemsAtResourceGroupLevelResponse, error)`
+- Function `*ManagementClientListOperationsPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagementClientListOperationsResponse, error)`
+- Function `*ManagementClientListAddressesAtResourceGroupLevelPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagementClientListAddressesAtResourceGroupLevelResponse, error)`
+- Function `*ManagementClientListOrderAtResourceGroupLevelPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagementClientListOrderAtResourceGroupLevelResponse, error)`
+- Function `*ManagementClientListConfigurationsPager.PageResponse` has been removed
+- Function `*ManagementClientListOrderItemsAtSubscriptionLevelPager.Err` has been removed
+- Function `*ManagementClientListAddressesAtResourceGroupLevelPager.PageResponse` has been removed
+- Function `*ManagementClientListOrderAtResourceGroupLevelPager.Err` has been removed
+- Function `*ManagementClientListProductFamiliesPager.PageResponse` has been removed
+- Function `*ManagementClientListOrderItemsAtSubscriptionLevelPager.PageResponse` has been removed
+- Function `*ManagementClientListAddressesAtSubscriptionLevelPager.Err` has been removed
+- Function `*ManagementClientListOrderAtResourceGroupLevelPager.PageResponse` has been removed
+- Function `*ManagementClientListOrderItemsAtResourceGroupLevelPager.Err` has been removed
+- Function `*ManagementClientListConfigurationsPager.Err` has been removed
+- Function `*ManagementClientListOrderAtSubscriptionLevelPager.PageResponse` has been removed
+- Function `*ManagementClientListProductFamiliesMetadataPager.PageResponse` has been removed
+- Function `*ManagementClientListAddressesAtResourceGroupLevelPager.Err` has been removed
+- Function `*ManagementClientListOperationsPager.PageResponse` has been removed
+- Function `*ManagementClientListProductFamiliesMetadataPager.Err` has been removed
+- Function `*ManagementClientListAddressesAtSubscriptionLevelPager.PageResponse` has been removed
+- Function `*ManagementClientListOperationsPager.Err` has been removed
+- Function `*ManagementClientListProductFamiliesPager.Err` has been removed
+- Function `*ManagementClientListOrderItemsAtResourceGroupLevelPager.PageResponse` has been removed
+- Function `*ManagementClientListOrderAtSubscriptionLevelPager.Err` has been removed
+- Struct `ManagementClientCreateAddressResult` has been removed
+- Struct `ManagementClientCreateOrderItemResult` has been removed
+- Struct `ManagementClientGetAddressByNameResult` has been removed
+- Struct `ManagementClientGetOrderByNameResult` has been removed
+- Struct `ManagementClientGetOrderItemByNameResult` has been removed
+- Struct `ManagementClientListAddressesAtResourceGroupLevelResult` has been removed
+- Struct `ManagementClientListAddressesAtSubscriptionLevelResult` has been removed
+- Struct `ManagementClientListConfigurationsResult` has been removed
+- Struct `ManagementClientListOperationsResult` has been removed
+- Struct `ManagementClientListOrderAtResourceGroupLevelResult` has been removed
+- Struct `ManagementClientListOrderAtSubscriptionLevelResult` has been removed
+- Struct `ManagementClientListOrderItemsAtResourceGroupLevelResult` has been removed
+- Struct `ManagementClientListOrderItemsAtSubscriptionLevelResult` has been removed
+- Struct `ManagementClientListProductFamiliesMetadataResult` has been removed
+- Struct `ManagementClientListProductFamiliesResult` has been removed
+- Struct `ManagementClientUpdateAddressResult` has been removed
+- Struct `ManagementClientUpdateOrderItemResult` has been removed
+- Field `ManagementClientListAddressesAtResourceGroupLevelResult` of struct `ManagementClientListAddressesAtResourceGroupLevelResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientListAddressesAtResourceGroupLevelResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientCancelOrderItemResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientUpdateOrderItemPollerResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientCreateOrderItemPollerResponse` has been removed
+- Field `ManagementClientListProductFamiliesMetadataResult` of struct `ManagementClientListProductFamiliesMetadataResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientListProductFamiliesMetadataResponse` has been removed
+- Field `ManagementClientGetOrderItemByNameResult` of struct `ManagementClientGetOrderItemByNameResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientGetOrderItemByNameResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientCreateAddressPollerResponse` has been removed
+- Field `ManagementClientListProductFamiliesResult` of struct `ManagementClientListProductFamiliesResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientListProductFamiliesResponse` has been removed
+- Field `ManagementClientListOperationsResult` of struct `ManagementClientListOperationsResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientListOperationsResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientDeleteOrderItemByNameResponse` has been removed
+- Field `ManagementClientListOrderAtResourceGroupLevelResult` of struct `ManagementClientListOrderAtResourceGroupLevelResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientListOrderAtResourceGroupLevelResponse` has been removed
+- Field `ManagementClientGetOrderByNameResult` of struct `ManagementClientGetOrderByNameResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientGetOrderByNameResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientDeleteAddressByNamePollerResponse` has been removed
+- Field `ManagementClientListAddressesAtSubscriptionLevelResult` of struct `ManagementClientListAddressesAtSubscriptionLevelResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientListAddressesAtSubscriptionLevelResponse` has been removed
+- Field `ManagementClientUpdateAddressResult` of struct `ManagementClientUpdateAddressResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientUpdateAddressResponse` has been removed
+- Field `ManagementClientUpdateOrderItemResult` of struct `ManagementClientUpdateOrderItemResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientUpdateOrderItemResponse` has been removed
+- Field `ManagementClientListConfigurationsResult` of struct `ManagementClientListConfigurationsResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientListConfigurationsResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientDeleteAddressByNameResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientUpdateAddressPollerResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientReturnOrderItemResponse` has been removed
+- Field `ManagementClientListOrderItemsAtSubscriptionLevelResult` of struct `ManagementClientListOrderItemsAtSubscriptionLevelResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientListOrderItemsAtSubscriptionLevelResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientDeleteOrderItemByNamePollerResponse` has been removed
+- Field `ManagementClientCreateAddressResult` of struct `ManagementClientCreateAddressResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientCreateAddressResponse` has been removed
+- Field `ManagementClientListOrderItemsAtResourceGroupLevelResult` of struct `ManagementClientListOrderItemsAtResourceGroupLevelResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientListOrderItemsAtResourceGroupLevelResponse` has been removed
+- Field `ManagementClientGetAddressByNameResult` of struct `ManagementClientGetAddressByNameResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientGetAddressByNameResponse` has been removed
+- Field `ManagementClientListOrderAtSubscriptionLevelResult` of struct `ManagementClientListOrderAtSubscriptionLevelResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientListOrderAtSubscriptionLevelResponse` has been removed
+- Field `ManagementClientCreateOrderItemResult` of struct `ManagementClientCreateOrderItemResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientCreateOrderItemResponse` has been removed
+- Field `RawResponse` of struct `ManagementClientReturnOrderItemPollerResponse` has been removed
+
+### Features Added
+
+- New function `*ManagementClientListAddressesAtResourceGroupLevelPager.More() bool`
+- New function `*ManagementClientListOrderAtSubscriptionLevelPager.More() bool`
+- New function `*ManagementClientListOrderItemsAtResourceGroupLevelPager.More() bool`
+- New function `*ManagementClientListAddressesAtSubscriptionLevelPager.More() bool`
+- New function `*ManagementClientListOperationsPager.More() bool`
+- New function `*ManagementClientListOrderAtResourceGroupLevelPager.More() bool`
+- New function `*ManagementClientListConfigurationsPager.More() bool`
+- New function `*ManagementClientListOrderItemsAtSubscriptionLevelPager.More() bool`
+- New function `*ManagementClientListProductFamiliesMetadataPager.More() bool`
+- New function `*ManagementClientListProductFamiliesPager.More() bool`
+- New struct `ErrorResponse`
+- New struct `ResourceIdentity`
+- New struct `ShippingDetails`
+- New anonymous field `OrderItemResource` in struct `ManagementClientUpdateOrderItemResponse`
+- New anonymous field `OrderResourceList` in struct `ManagementClientListOrderAtResourceGroupLevelResponse`
+- New anonymous field `AddressResource` in struct `ManagementClientCreateAddressResponse`
+- New anonymous field `OrderItemResource` in struct `ManagementClientGetOrderItemByNameResponse`
+- New anonymous field `ProductFamilies` in struct `ManagementClientListProductFamiliesResponse`
+- New anonymous field `AddressResourceList` in struct `ManagementClientListAddressesAtResourceGroupLevelResponse`
+- New anonymous field `AddressResourceList` in struct `ManagementClientListAddressesAtSubscriptionLevelResponse`
+- New anonymous field `Configurations` in struct `ManagementClientListConfigurationsResponse`
+- New anonymous field `OrderResourceList` in struct `ManagementClientListOrderAtSubscriptionLevelResponse`
+- New anonymous field `AddressResource` in struct `ManagementClientGetAddressByNameResponse`
+- New anonymous field `AddressResource` in struct `ManagementClientUpdateAddressResponse`
+- New anonymous field `ProductFamiliesMetadata` in struct `ManagementClientListProductFamiliesMetadataResponse`
+- New anonymous field `OrderItemResource` in struct `ManagementClientCreateOrderItemResponse`
+- New anonymous field `OrderItemResourceList` in struct `ManagementClientListOrderItemsAtResourceGroupLevelResponse`
+- New anonymous field `OrderItemResourceList` in struct `ManagementClientListOrderItemsAtSubscriptionLevelResponse`
+- New anonymous field `OrderResource` in struct `ManagementClientGetOrderByNameResponse`
+- New anonymous field `OperationListResult` in struct `ManagementClientListOperationsResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `ErrorAdditionalInfo.Info` has been changed from `map[string]interface{}` to `interface{}`
+- Struct `ErrorResponse` has been removed
+- Struct `ResourceIdentity` has been removed
+- Struct `ShippingDetails` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

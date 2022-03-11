@@ -34,17 +34,17 @@ type TimeZonesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTimeZonesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TimeZonesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TimeZonesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *TimeZonesClient) getCreateRequest(ctx context.Context, locationNam
 
 // getHandleResponse handles the Get response.
 func (client *TimeZonesClient) getHandleResponse(resp *http.Response) (TimeZonesClientGetResponse, error) {
-	result := TimeZonesClientGetResponse{RawResponse: resp}
+	result := TimeZonesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TimeZone); err != nil {
 		return TimeZonesClientGetResponse{}, err
 	}
@@ -142,7 +142,7 @@ func (client *TimeZonesClient) listByLocationCreateRequest(ctx context.Context, 
 
 // listByLocationHandleResponse handles the ListByLocation response.
 func (client *TimeZonesClient) listByLocationHandleResponse(resp *http.Response) (TimeZonesClientListByLocationResponse, error) {
-	result := TimeZonesClientListByLocationResponse{RawResponse: resp}
+	result := TimeZonesClientListByLocationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TimeZoneListResult); err != nil {
 		return TimeZonesClientListByLocationResponse{}, err
 	}

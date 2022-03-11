@@ -34,17 +34,17 @@ type UsagesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewUsagesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *UsagesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &UsagesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -54,19 +54,13 @@ func NewUsagesClient(subscriptionID string, credential azcore.TokenCredential, o
 // resourceGroupName - The name of the resource group where the recovery services vault is present.
 // vaultName - The name of the recovery services vault.
 // options - UsagesClientListByVaultsOptions contains the optional parameters for the UsagesClient.ListByVaults method.
-func (client *UsagesClient) ListByVaults(ctx context.Context, resourceGroupName string, vaultName string, options *UsagesClientListByVaultsOptions) (UsagesClientListByVaultsResponse, error) {
-	req, err := client.listByVaultsCreateRequest(ctx, resourceGroupName, vaultName, options)
-	if err != nil {
-		return UsagesClientListByVaultsResponse{}, err
+func (client *UsagesClient) ListByVaults(resourceGroupName string, vaultName string, options *UsagesClientListByVaultsOptions) *UsagesClientListByVaultsPager {
+	return &UsagesClientListByVaultsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByVaultsCreateRequest(ctx, resourceGroupName, vaultName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return UsagesClientListByVaultsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return UsagesClientListByVaultsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByVaultsHandleResponse(resp)
 }
 
 // listByVaultsCreateRequest creates the ListByVaults request.
@@ -97,7 +91,7 @@ func (client *UsagesClient) listByVaultsCreateRequest(ctx context.Context, resou
 
 // listByVaultsHandleResponse handles the ListByVaults response.
 func (client *UsagesClient) listByVaultsHandleResponse(resp *http.Response) (UsagesClientListByVaultsResponse, error) {
-	result := UsagesClientListByVaultsResponse{RawResponse: resp}
+	result := UsagesClientListByVaultsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VaultUsageList); err != nil {
 		return UsagesClientListByVaultsResponse{}, err
 	}

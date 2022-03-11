@@ -111,7 +111,7 @@ func (client *FileSharesClient) createCreateRequest(ctx context.Context, resourc
 
 // createHandleResponse handles the Create response.
 func (client *FileSharesClient) createHandleResponse(resp *http.Response) (FileSharesClientCreateResponse, error) {
-	result := FileSharesClientCreateResponse{RawResponse: resp}
+	result := FileSharesClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FileShare); err != nil {
 		return FileSharesClientCreateResponse{}, err
 	}
@@ -139,7 +139,7 @@ func (client *FileSharesClient) Delete(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return FileSharesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return FileSharesClientDeleteResponse{RawResponse: resp}, nil
+	return FileSharesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -240,7 +240,7 @@ func (client *FileSharesClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *FileSharesClient) getHandleResponse(resp *http.Response) (FileSharesClientGetResponse, error) {
-	result := FileSharesClientGetResponse{RawResponse: resp}
+	result := FileSharesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FileShare); err != nil {
 		return FileSharesClientGetResponse{}, err
 	}
@@ -310,7 +310,7 @@ func (client *FileSharesClient) leaseCreateRequest(ctx context.Context, resource
 
 // leaseHandleResponse handles the Lease response.
 func (client *FileSharesClient) leaseHandleResponse(resp *http.Response) (FileSharesClientLeaseResponse, error) {
-	result := FileSharesClientLeaseResponse{RawResponse: resp}
+	result := FileSharesClientLeaseResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -375,7 +375,7 @@ func (client *FileSharesClient) listCreateRequest(ctx context.Context, resourceG
 
 // listHandleResponse handles the List response.
 func (client *FileSharesClient) listHandleResponse(resp *http.Response) (FileSharesClientListResponse, error) {
-	result := FileSharesClientListResponse{RawResponse: resp}
+	result := FileSharesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FileShareItems); err != nil {
 		return FileSharesClientListResponse{}, err
 	}
@@ -403,7 +403,7 @@ func (client *FileSharesClient) Restore(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return FileSharesClientRestoreResponse{}, runtime.NewResponseError(resp)
 	}
-	return FileSharesClientRestoreResponse{RawResponse: resp}, nil
+	return FileSharesClientRestoreResponse{}, nil
 }
 
 // restoreCreateRequest creates the Restore request.
@@ -494,7 +494,7 @@ func (client *FileSharesClient) updateCreateRequest(ctx context.Context, resourc
 
 // updateHandleResponse handles the Update response.
 func (client *FileSharesClient) updateHandleResponse(resp *http.Response) (FileSharesClientUpdateResponse, error) {
-	result := FileSharesClientUpdateResponse{RawResponse: resp}
+	result := FileSharesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FileShare); err != nil {
 		return FileSharesClientUpdateResponse{}, err
 	}

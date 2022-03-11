@@ -34,17 +34,17 @@ type TestResultsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTestResultsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TestResultsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TestResultsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -107,7 +107,7 @@ func (client *TestResultsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *TestResultsClient) getHandleResponse(resp *http.Response) (TestResultsClientGetResponse, error) {
-	result := TestResultsClientGetResponse{RawResponse: resp}
+	result := TestResultsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TestResultResource); err != nil {
 		return TestResultsClientGetResponse{}, err
 	}
@@ -173,7 +173,7 @@ func (client *TestResultsClient) getDownloadURLCreateRequest(ctx context.Context
 
 // getDownloadURLHandleResponse handles the GetDownloadURL response.
 func (client *TestResultsClient) getDownloadURLHandleResponse(resp *http.Response) (TestResultsClientGetDownloadURLResponse, error) {
-	result := TestResultsClientGetDownloadURLResponse{RawResponse: resp}
+	result := TestResultsClientGetDownloadURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DownloadURLResponse); err != nil {
 		return TestResultsClientGetDownloadURLResponse{}, err
 	}
@@ -239,7 +239,7 @@ func (client *TestResultsClient) getVideoDownloadURLCreateRequest(ctx context.Co
 
 // getVideoDownloadURLHandleResponse handles the GetVideoDownloadURL response.
 func (client *TestResultsClient) getVideoDownloadURLHandleResponse(resp *http.Response) (TestResultsClientGetVideoDownloadURLResponse, error) {
-	result := TestResultsClientGetVideoDownloadURLResponse{RawResponse: resp}
+	result := TestResultsClientGetVideoDownloadURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DownloadURLResponse); err != nil {
 		return TestResultsClientGetVideoDownloadURLResponse{}, err
 	}
@@ -302,7 +302,7 @@ func (client *TestResultsClient) listCreateRequest(ctx context.Context, resource
 
 // listHandleResponse handles the List response.
 func (client *TestResultsClient) listHandleResponse(resp *http.Response) (TestResultsClientListResponse, error) {
-	result := TestResultsClientListResponse{RawResponse: resp}
+	result := TestResultsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TestResultListResult); err != nil {
 		return TestResultsClientListResponse{}, err
 	}

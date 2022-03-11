@@ -35,17 +35,17 @@ type NodeReportsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewNodeReportsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *NodeReportsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &NodeReportsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *NodeReportsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *NodeReportsClient) getHandleResponse(resp *http.Response) (NodeReportsClientGetResponse, error) {
-	result := NodeReportsClientGetResponse{RawResponse: resp}
+	result := NodeReportsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DscNodeReport); err != nil {
 		return NodeReportsClientGetResponse{}, err
 	}
@@ -173,8 +173,8 @@ func (client *NodeReportsClient) getContentCreateRequest(ctx context.Context, re
 
 // getContentHandleResponse handles the GetContent response.
 func (client *NodeReportsClient) getContentHandleResponse(resp *http.Response) (NodeReportsClientGetContentResponse, error) {
-	result := NodeReportsClientGetContentResponse{RawResponse: resp}
-	if err := runtime.UnmarshalAsJSON(resp, &result.Object); err != nil {
+	result := NodeReportsClientGetContentResponse{}
+	if err := runtime.UnmarshalAsJSON(resp, &result.Interface); err != nil {
 		return NodeReportsClientGetContentResponse{}, err
 	}
 	return result, nil
@@ -233,7 +233,7 @@ func (client *NodeReportsClient) listByNodeCreateRequest(ctx context.Context, re
 
 // listByNodeHandleResponse handles the ListByNode response.
 func (client *NodeReportsClient) listByNodeHandleResponse(resp *http.Response) (NodeReportsClientListByNodeResponse, error) {
-	result := NodeReportsClientListByNodeResponse{RawResponse: resp}
+	result := NodeReportsClientListByNodeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DscNodeReportListResult); err != nil {
 		return NodeReportsClientListByNodeResponse{}, err
 	}

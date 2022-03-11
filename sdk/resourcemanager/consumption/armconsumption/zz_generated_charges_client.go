@@ -30,16 +30,16 @@ type ChargesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewChargesClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ChargesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ChargesClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *ChargesClient) listCreateRequest(ctx context.Context, scope string
 
 // listHandleResponse handles the List response.
 func (client *ChargesClient) listHandleResponse(resp *http.Response) (ChargesClientListResponse, error) {
-	result := ChargesClientListResponse{RawResponse: resp}
+	result := ChargesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ChargesListResult); err != nil {
 		return ChargesClientListResponse{}, err
 	}

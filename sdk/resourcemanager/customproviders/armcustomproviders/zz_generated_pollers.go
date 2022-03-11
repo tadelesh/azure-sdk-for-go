@@ -43,11 +43,10 @@ func (p *AssociationsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final AssociationsClientCreateOrUpdateResponse will be returned.
 func (p *AssociationsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (AssociationsClientCreateOrUpdateResponse, error) {
 	respType := AssociationsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Association)
+	_, err := p.pt.FinalResponse(ctx, &respType.Association)
 	if err != nil {
 		return AssociationsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *AssociationsClientDeletePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final AssociationsClientDeleteResponse will be returned.
 func (p *AssociationsClientDeletePoller) FinalResponse(ctx context.Context) (AssociationsClientDeleteResponse, error) {
 	respType := AssociationsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return AssociationsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *CustomResourceProviderClientCreateOrUpdatePoller) Poll(ctx context.Cont
 // If the final GET succeeded then the final CustomResourceProviderClientCreateOrUpdateResponse will be returned.
 func (p *CustomResourceProviderClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (CustomResourceProviderClientCreateOrUpdateResponse, error) {
 	respType := CustomResourceProviderClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.CustomRPManifest)
+	_, err := p.pt.FinalResponse(ctx, &respType.CustomRPManifest)
 	if err != nil {
 		return CustomResourceProviderClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *CustomResourceProviderClientDeletePoller) Poll(ctx context.Context) (*h
 // If the final GET succeeded then the final CustomResourceProviderClientDeleteResponse will be returned.
 func (p *CustomResourceProviderClientDeletePoller) FinalResponse(ctx context.Context) (CustomResourceProviderClientDeleteResponse, error) {
 	respType := CustomResourceProviderClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CustomResourceProviderClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

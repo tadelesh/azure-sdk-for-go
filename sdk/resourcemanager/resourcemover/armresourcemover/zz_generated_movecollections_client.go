@@ -34,17 +34,17 @@ type MoveCollectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMoveCollectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MoveCollectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MoveCollectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -60,9 +60,7 @@ func (client *MoveCollectionsClient) BeginBulkRemove(ctx context.Context, resour
 	if err != nil {
 		return MoveCollectionsClientBulkRemovePollerResponse{}, err
 	}
-	result := MoveCollectionsClientBulkRemovePollerResponse{
-		RawResponse: resp,
-	}
+	result := MoveCollectionsClientBulkRemovePollerResponse{}
 	pt, err := armruntime.NewPoller("MoveCollectionsClient.BulkRemove", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return MoveCollectionsClientBulkRemovePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *MoveCollectionsClient) BeginCommit(ctx context.Context, resourceGr
 	if err != nil {
 		return MoveCollectionsClientCommitPollerResponse{}, err
 	}
-	result := MoveCollectionsClientCommitPollerResponse{
-		RawResponse: resp,
-	}
+	result := MoveCollectionsClientCommitPollerResponse{}
 	pt, err := armruntime.NewPoller("MoveCollectionsClient.Commit", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return MoveCollectionsClientCommitPollerResponse{}, err
@@ -248,7 +244,7 @@ func (client *MoveCollectionsClient) createCreateRequest(ctx context.Context, re
 
 // createHandleResponse handles the Create response.
 func (client *MoveCollectionsClient) createHandleResponse(resp *http.Response) (MoveCollectionsClientCreateResponse, error) {
-	result := MoveCollectionsClientCreateResponse{RawResponse: resp}
+	result := MoveCollectionsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MoveCollection); err != nil {
 		return MoveCollectionsClientCreateResponse{}, err
 	}
@@ -266,9 +262,7 @@ func (client *MoveCollectionsClient) BeginDelete(ctx context.Context, resourceGr
 	if err != nil {
 		return MoveCollectionsClientDeletePollerResponse{}, err
 	}
-	result := MoveCollectionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := MoveCollectionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("MoveCollectionsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return MoveCollectionsClientDeletePollerResponse{}, err
@@ -336,9 +330,7 @@ func (client *MoveCollectionsClient) BeginDiscard(ctx context.Context, resourceG
 	if err != nil {
 		return MoveCollectionsClientDiscardPollerResponse{}, err
 	}
-	result := MoveCollectionsClientDiscardPollerResponse{
-		RawResponse: resp,
-	}
+	result := MoveCollectionsClientDiscardPollerResponse{}
 	pt, err := armruntime.NewPoller("MoveCollectionsClient.Discard", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return MoveCollectionsClientDiscardPollerResponse{}, err
@@ -446,7 +438,7 @@ func (client *MoveCollectionsClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *MoveCollectionsClient) getHandleResponse(resp *http.Response) (MoveCollectionsClientGetResponse, error) {
-	result := MoveCollectionsClientGetResponse{RawResponse: resp}
+	result := MoveCollectionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MoveCollection); err != nil {
 		return MoveCollectionsClientGetResponse{}, err
 	}
@@ -467,9 +459,7 @@ func (client *MoveCollectionsClient) BeginInitiateMove(ctx context.Context, reso
 	if err != nil {
 		return MoveCollectionsClientInitiateMovePollerResponse{}, err
 	}
-	result := MoveCollectionsClientInitiateMovePollerResponse{
-		RawResponse: resp,
-	}
+	result := MoveCollectionsClientInitiateMovePollerResponse{}
 	pt, err := armruntime.NewPoller("MoveCollectionsClient.InitiateMove", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return MoveCollectionsClientInitiateMovePollerResponse{}, err
@@ -570,7 +560,7 @@ func (client *MoveCollectionsClient) listMoveCollectionsByResourceGroupCreateReq
 
 // listMoveCollectionsByResourceGroupHandleResponse handles the ListMoveCollectionsByResourceGroup response.
 func (client *MoveCollectionsClient) listMoveCollectionsByResourceGroupHandleResponse(resp *http.Response) (MoveCollectionsClientListMoveCollectionsByResourceGroupResponse, error) {
-	result := MoveCollectionsClientListMoveCollectionsByResourceGroupResponse{RawResponse: resp}
+	result := MoveCollectionsClientListMoveCollectionsByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MoveCollectionResultList); err != nil {
 		return MoveCollectionsClientListMoveCollectionsByResourceGroupResponse{}, err
 	}
@@ -613,7 +603,7 @@ func (client *MoveCollectionsClient) listMoveCollectionsBySubscriptionCreateRequ
 
 // listMoveCollectionsBySubscriptionHandleResponse handles the ListMoveCollectionsBySubscription response.
 func (client *MoveCollectionsClient) listMoveCollectionsBySubscriptionHandleResponse(resp *http.Response) (MoveCollectionsClientListMoveCollectionsBySubscriptionResponse, error) {
-	result := MoveCollectionsClientListMoveCollectionsBySubscriptionResponse{RawResponse: resp}
+	result := MoveCollectionsClientListMoveCollectionsBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MoveCollectionResultList); err != nil {
 		return MoveCollectionsClientListMoveCollectionsBySubscriptionResponse{}, err
 	}
@@ -671,7 +661,7 @@ func (client *MoveCollectionsClient) listRequiredForCreateRequest(ctx context.Co
 
 // listRequiredForHandleResponse handles the ListRequiredFor response.
 func (client *MoveCollectionsClient) listRequiredForHandleResponse(resp *http.Response) (MoveCollectionsClientListRequiredForResponse, error) {
-	result := MoveCollectionsClientListRequiredForResponse{RawResponse: resp}
+	result := MoveCollectionsClientListRequiredForResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RequiredForResourcesCollection); err != nil {
 		return MoveCollectionsClientListRequiredForResponse{}, err
 	}
@@ -692,9 +682,7 @@ func (client *MoveCollectionsClient) BeginPrepare(ctx context.Context, resourceG
 	if err != nil {
 		return MoveCollectionsClientPreparePollerResponse{}, err
 	}
-	result := MoveCollectionsClientPreparePollerResponse{
-		RawResponse: resp,
-	}
+	result := MoveCollectionsClientPreparePollerResponse{}
 	pt, err := armruntime.NewPoller("MoveCollectionsClient.Prepare", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return MoveCollectionsClientPreparePollerResponse{}, err
@@ -765,9 +753,7 @@ func (client *MoveCollectionsClient) BeginResolveDependencies(ctx context.Contex
 	if err != nil {
 		return MoveCollectionsClientResolveDependenciesPollerResponse{}, err
 	}
-	result := MoveCollectionsClientResolveDependenciesPollerResponse{
-		RawResponse: resp,
-	}
+	result := MoveCollectionsClientResolveDependenciesPollerResponse{}
 	pt, err := armruntime.NewPoller("MoveCollectionsClient.ResolveDependencies", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return MoveCollectionsClientResolveDependenciesPollerResponse{}, err
@@ -872,7 +858,7 @@ func (client *MoveCollectionsClient) updateCreateRequest(ctx context.Context, re
 
 // updateHandleResponse handles the Update response.
 func (client *MoveCollectionsClient) updateHandleResponse(resp *http.Response) (MoveCollectionsClientUpdateResponse, error) {
-	result := MoveCollectionsClientUpdateResponse{RawResponse: resp}
+	result := MoveCollectionsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MoveCollection); err != nil {
 		return MoveCollectionsClientUpdateResponse{}, err
 	}

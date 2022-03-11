@@ -35,17 +35,17 @@ type ExpressRouteCircuitConnectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewExpressRouteCircuitConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ExpressRouteCircuitConnectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ExpressRouteCircuitConnectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -65,9 +65,7 @@ func (client *ExpressRouteCircuitConnectionsClient) BeginCreateOrUpdate(ctx cont
 	if err != nil {
 		return ExpressRouteCircuitConnectionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ExpressRouteCircuitConnectionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ExpressRouteCircuitConnectionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ExpressRouteCircuitConnectionsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ExpressRouteCircuitConnectionsClientCreateOrUpdatePollerResponse{}, err
@@ -142,9 +140,7 @@ func (client *ExpressRouteCircuitConnectionsClient) BeginDelete(ctx context.Cont
 	if err != nil {
 		return ExpressRouteCircuitConnectionsClientDeletePollerResponse{}, err
 	}
-	result := ExpressRouteCircuitConnectionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ExpressRouteCircuitConnectionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ExpressRouteCircuitConnectionsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return ExpressRouteCircuitConnectionsClientDeletePollerResponse{}, err
@@ -265,7 +261,7 @@ func (client *ExpressRouteCircuitConnectionsClient) getCreateRequest(ctx context
 
 // getHandleResponse handles the Get response.
 func (client *ExpressRouteCircuitConnectionsClient) getHandleResponse(resp *http.Response) (ExpressRouteCircuitConnectionsClientGetResponse, error) {
-	result := ExpressRouteCircuitConnectionsClientGetResponse{RawResponse: resp}
+	result := ExpressRouteCircuitConnectionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExpressRouteCircuitConnection); err != nil {
 		return ExpressRouteCircuitConnectionsClientGetResponse{}, err
 	}
@@ -323,7 +319,7 @@ func (client *ExpressRouteCircuitConnectionsClient) listCreateRequest(ctx contex
 
 // listHandleResponse handles the List response.
 func (client *ExpressRouteCircuitConnectionsClient) listHandleResponse(resp *http.Response) (ExpressRouteCircuitConnectionsClientListResponse, error) {
-	result := ExpressRouteCircuitConnectionsClientListResponse{RawResponse: resp}
+	result := ExpressRouteCircuitConnectionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExpressRouteCircuitConnectionListResult); err != nil {
 		return ExpressRouteCircuitConnectionsClientListResponse{}, err
 	}

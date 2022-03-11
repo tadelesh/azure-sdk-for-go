@@ -35,17 +35,17 @@ type DatabasePrincipalAssignmentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDatabasePrincipalAssignmentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DatabasePrincipalAssignmentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DatabasePrincipalAssignmentsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *DatabasePrincipalAssignmentsClient) checkNameAvailabilityCreateReq
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *DatabasePrincipalAssignmentsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (DatabasePrincipalAssignmentsClientCheckNameAvailabilityResponse, error) {
-	result := DatabasePrincipalAssignmentsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := DatabasePrincipalAssignmentsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameResult); err != nil {
 		return DatabasePrincipalAssignmentsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -126,9 +126,7 @@ func (client *DatabasePrincipalAssignmentsClient) BeginCreateOrUpdate(ctx contex
 	if err != nil {
 		return DatabasePrincipalAssignmentsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DatabasePrincipalAssignmentsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasePrincipalAssignmentsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasePrincipalAssignmentsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DatabasePrincipalAssignmentsClientCreateOrUpdatePollerResponse{}, err
@@ -203,9 +201,7 @@ func (client *DatabasePrincipalAssignmentsClient) BeginDelete(ctx context.Contex
 	if err != nil {
 		return DatabasePrincipalAssignmentsClientDeletePollerResponse{}, err
 	}
-	result := DatabasePrincipalAssignmentsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasePrincipalAssignmentsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasePrincipalAssignmentsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DatabasePrincipalAssignmentsClientDeletePollerResponse{}, err
@@ -326,7 +322,7 @@ func (client *DatabasePrincipalAssignmentsClient) getCreateRequest(ctx context.C
 
 // getHandleResponse handles the Get response.
 func (client *DatabasePrincipalAssignmentsClient) getHandleResponse(resp *http.Response) (DatabasePrincipalAssignmentsClientGetResponse, error) {
-	result := DatabasePrincipalAssignmentsClientGetResponse{RawResponse: resp}
+	result := DatabasePrincipalAssignmentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabasePrincipalAssignment); err != nil {
 		return DatabasePrincipalAssignmentsClientGetResponse{}, err
 	}
@@ -340,19 +336,13 @@ func (client *DatabasePrincipalAssignmentsClient) getHandleResponse(resp *http.R
 // databaseName - The name of the database in the Kusto cluster.
 // options - DatabasePrincipalAssignmentsClientListOptions contains the optional parameters for the DatabasePrincipalAssignmentsClient.List
 // method.
-func (client *DatabasePrincipalAssignmentsClient) List(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, options *DatabasePrincipalAssignmentsClientListOptions) (DatabasePrincipalAssignmentsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, clusterName, databaseName, options)
-	if err != nil {
-		return DatabasePrincipalAssignmentsClientListResponse{}, err
+func (client *DatabasePrincipalAssignmentsClient) List(resourceGroupName string, clusterName string, databaseName string, options *DatabasePrincipalAssignmentsClientListOptions) *DatabasePrincipalAssignmentsClientListPager {
+	return &DatabasePrincipalAssignmentsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, clusterName, databaseName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DatabasePrincipalAssignmentsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DatabasePrincipalAssignmentsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -387,7 +377,7 @@ func (client *DatabasePrincipalAssignmentsClient) listCreateRequest(ctx context.
 
 // listHandleResponse handles the List response.
 func (client *DatabasePrincipalAssignmentsClient) listHandleResponse(resp *http.Response) (DatabasePrincipalAssignmentsClientListResponse, error) {
-	result := DatabasePrincipalAssignmentsClientListResponse{RawResponse: resp}
+	result := DatabasePrincipalAssignmentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabasePrincipalAssignmentListResult); err != nil {
 		return DatabasePrincipalAssignmentsClientListResponse{}, err
 	}

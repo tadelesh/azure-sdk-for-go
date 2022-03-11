@@ -1,5 +1,100 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ZonesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ZonesClientListByResourceGroupResponse, error)`
+- Function `*ZonesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ZonesClientListResponse, error)`
+- Function `*RecordSetsClientListByTypePager.NextPage` return value(s) have been changed from `(bool)` to `(RecordSetsClientListByTypeResponse, error)`
+- Function `*RecordSetsClientListAllByDNSZonePager.NextPage` return value(s) have been changed from `(bool)` to `(RecordSetsClientListAllByDNSZoneResponse, error)`
+- Function `*RecordSetsClientListByDNSZonePager.NextPage` return value(s) have been changed from `(bool)` to `(RecordSetsClientListByDNSZoneResponse, error)`
+- Function `*ZonesClientListPager.Err` has been removed
+- Function `*RecordSetsClientListByTypePager.Err` has been removed
+- Function `*RecordSetsClientListAllByDNSZonePager.PageResponse` has been removed
+- Function `*RecordSetsClientListByTypePager.PageResponse` has been removed
+- Function `*RecordSetsClientListByDNSZonePager.PageResponse` has been removed
+- Function `*RecordSetsClientListAllByDNSZonePager.Err` has been removed
+- Function `*ZonesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ZonesClientListPager.PageResponse` has been removed
+- Function `*RecordSetsClientListByDNSZonePager.Err` has been removed
+- Function `*ZonesClientListByResourceGroupPager.Err` has been removed
+- Struct `RecordSetsClientCreateOrUpdateResult` has been removed
+- Struct `RecordSetsClientGetResult` has been removed
+- Struct `RecordSetsClientListAllByDNSZoneResult` has been removed
+- Struct `RecordSetsClientListByDNSZoneResult` has been removed
+- Struct `RecordSetsClientListByTypeResult` has been removed
+- Struct `RecordSetsClientUpdateResult` has been removed
+- Struct `ResourceReferenceClientGetByTargetResourcesResult` has been removed
+- Struct `ZonesClientCreateOrUpdateResult` has been removed
+- Struct `ZonesClientGetResult` has been removed
+- Struct `ZonesClientListByResourceGroupResult` has been removed
+- Struct `ZonesClientListResult` has been removed
+- Struct `ZonesClientUpdateResult` has been removed
+- Field `ZonesClientCreateOrUpdateResult` of struct `ZonesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ZonesClientCreateOrUpdateResponse` has been removed
+- Field `ZonesClientListByResourceGroupResult` of struct `ZonesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ZonesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `RecordSetsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ZonesClientDeletePollerResponse` has been removed
+- Field `RecordSetsClientCreateOrUpdateResult` of struct `RecordSetsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `RecordSetsClientCreateOrUpdateResponse` has been removed
+- Field `RecordSetsClientUpdateResult` of struct `RecordSetsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `RecordSetsClientUpdateResponse` has been removed
+- Field `RecordSetsClientListByDNSZoneResult` of struct `RecordSetsClientListByDNSZoneResponse` has been removed
+- Field `RawResponse` of struct `RecordSetsClientListByDNSZoneResponse` has been removed
+- Field `ResourceReferenceClientGetByTargetResourcesResult` of struct `ResourceReferenceClientGetByTargetResourcesResponse` has been removed
+- Field `RawResponse` of struct `ResourceReferenceClientGetByTargetResourcesResponse` has been removed
+- Field `RecordSetsClientGetResult` of struct `RecordSetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `RecordSetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ZonesClientDeleteResponse` has been removed
+- Field `ZonesClientListResult` of struct `ZonesClientListResponse` has been removed
+- Field `RawResponse` of struct `ZonesClientListResponse` has been removed
+- Field `RecordSetsClientListAllByDNSZoneResult` of struct `RecordSetsClientListAllByDNSZoneResponse` has been removed
+- Field `RawResponse` of struct `RecordSetsClientListAllByDNSZoneResponse` has been removed
+- Field `ZonesClientGetResult` of struct `ZonesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ZonesClientGetResponse` has been removed
+- Field `ZonesClientUpdateResult` of struct `ZonesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ZonesClientUpdateResponse` has been removed
+- Field `RecordSetsClientListByTypeResult` of struct `RecordSetsClientListByTypeResponse` has been removed
+- Field `RawResponse` of struct `RecordSetsClientListByTypeResponse` has been removed
+
+### Features Added
+
+- New function `*RecordSetsClientListByDNSZonePager.More() bool`
+- New function `*RecordSetsClientListByTypePager.More() bool`
+- New function `*ZonesClientListPager.More() bool`
+- New function `*RecordSetsClientListAllByDNSZonePager.More() bool`
+- New function `*ZonesClientListByResourceGroupPager.More() bool`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New struct `RecordSetUpdateParameters`
+- New anonymous field `RecordSet` in struct `RecordSetsClientCreateOrUpdateResponse`
+- New anonymous field `Zone` in struct `ZonesClientGetResponse`
+- New anonymous field `ZoneListResult` in struct `ZonesClientListByResourceGroupResponse`
+- New anonymous field `RecordSet` in struct `RecordSetsClientGetResponse`
+- New anonymous field `RecordSetListResult` in struct `RecordSetsClientListByDNSZoneResponse`
+- New anonymous field `ZoneListResult` in struct `ZonesClientListResponse`
+- New anonymous field `RecordSet` in struct `RecordSetsClientUpdateResponse`
+- New anonymous field `ResourceReferenceResult` in struct `ResourceReferenceClientGetByTargetResourcesResponse`
+- New anonymous field `Zone` in struct `ZonesClientUpdateResponse`
+- New anonymous field `Zone` in struct `ZonesClientCreateOrUpdateResponse`
+- New anonymous field `RecordSetListResult` in struct `RecordSetsClientListAllByDNSZoneResponse`
+- New anonymous field `RecordSetListResult` in struct `RecordSetsClientListByTypeResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+- Struct `RecordSetUpdateParameters` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

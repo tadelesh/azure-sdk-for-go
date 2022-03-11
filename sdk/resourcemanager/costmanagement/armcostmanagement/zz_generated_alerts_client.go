@@ -32,16 +32,16 @@ type AlertsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAlertsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *AlertsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AlertsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -94,7 +94,7 @@ func (client *AlertsClient) dismissCreateRequest(ctx context.Context, scope stri
 
 // dismissHandleResponse handles the Dismiss response.
 func (client *AlertsClient) dismissHandleResponse(resp *http.Response) (AlertsClientDismissResponse, error) {
-	result := AlertsClientDismissResponse{RawResponse: resp}
+	result := AlertsClientDismissResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Alert); err != nil {
 		return AlertsClientDismissResponse{}, err
 	}
@@ -148,7 +148,7 @@ func (client *AlertsClient) getCreateRequest(ctx context.Context, scope string, 
 
 // getHandleResponse handles the Get response.
 func (client *AlertsClient) getHandleResponse(resp *http.Response) (AlertsClientGetResponse, error) {
-	result := AlertsClientGetResponse{RawResponse: resp}
+	result := AlertsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Alert); err != nil {
 		return AlertsClientGetResponse{}, err
 	}
@@ -200,7 +200,7 @@ func (client *AlertsClient) listCreateRequest(ctx context.Context, scope string,
 
 // listHandleResponse handles the List response.
 func (client *AlertsClient) listHandleResponse(resp *http.Response) (AlertsClientListResponse, error) {
-	result := AlertsClientListResponse{RawResponse: resp}
+	result := AlertsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AlertsResult); err != nil {
 		return AlertsClientListResponse{}, err
 	}
@@ -253,7 +253,7 @@ func (client *AlertsClient) listExternalCreateRequest(ctx context.Context, exter
 
 // listExternalHandleResponse handles the ListExternal response.
 func (client *AlertsClient) listExternalHandleResponse(resp *http.Response) (AlertsClientListExternalResponse, error) {
-	result := AlertsClientListExternalResponse{RawResponse: resp}
+	result := AlertsClientListExternalResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AlertsResult); err != nil {
 		return AlertsClientListExternalResponse{}, err
 	}

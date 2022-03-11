@@ -1,5 +1,110 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClient.List` parameter(s) have been changed from `(context.Context, *OperationsClientListOptions)` to `(*OperationsClientListOptions)`
+- Function `*OperationsClient.List` return value(s) have been changed from `(OperationsClientListResponse, error)` to `(*OperationsClientListPager)`
+- Function `*ServicesClient.List` parameter(s) have been changed from `(context.Context, *ServicesClientListOptions)` to `(*ServicesClientListOptions)`
+- Function `*ServicesClient.List` return value(s) have been changed from `(ServicesClientListResponse, error)` to `(*ServicesClientListPager)`
+- Function `*CommunicationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(CommunicationsClientListResponse, error)`
+- Function `*TicketsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(TicketsClientListResponse, error)`
+- Function `*ProblemClassificationsClient.List` parameter(s) have been changed from `(context.Context, string, *ProblemClassificationsClientListOptions)` to `(string, *ProblemClassificationsClientListOptions)`
+- Function `*ProblemClassificationsClient.List` return value(s) have been changed from `(ProblemClassificationsClientListResponse, error)` to `(*ProblemClassificationsClientListPager)`
+- Function `*CommunicationsClientListPager.PageResponse` has been removed
+- Function `*TicketsClientListPager.PageResponse` has been removed
+- Function `*CommunicationsClientListPager.Err` has been removed
+- Function `*TicketsClientListPager.Err` has been removed
+- Struct `CommunicationsClientCheckNameAvailabilityResult` has been removed
+- Struct `CommunicationsClientCreateResult` has been removed
+- Struct `CommunicationsClientGetResult` has been removed
+- Struct `CommunicationsClientListResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `ProblemClassificationsClientGetResult` has been removed
+- Struct `ProblemClassificationsClientListResult` has been removed
+- Struct `ServicesClientGetResult` has been removed
+- Struct `ServicesClientListResult` has been removed
+- Struct `TicketsClientCheckNameAvailabilityResult` has been removed
+- Struct `TicketsClientCreateResult` has been removed
+- Struct `TicketsClientGetResult` has been removed
+- Struct `TicketsClientListResult` has been removed
+- Struct `TicketsClientUpdateResult` has been removed
+- Field `TicketsClientCreateResult` of struct `TicketsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `TicketsClientCreateResponse` has been removed
+- Field `ProblemClassificationsClientListResult` of struct `ProblemClassificationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ProblemClassificationsClientListResponse` has been removed
+- Field `CommunicationsClientGetResult` of struct `CommunicationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `CommunicationsClientGetResponse` has been removed
+- Field `CommunicationsClientCheckNameAvailabilityResult` of struct `CommunicationsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `CommunicationsClientCheckNameAvailabilityResponse` has been removed
+- Field `TicketsClientGetResult` of struct `TicketsClientGetResponse` has been removed
+- Field `RawResponse` of struct `TicketsClientGetResponse` has been removed
+- Field `CommunicationsClientListResult` of struct `CommunicationsClientListResponse` has been removed
+- Field `RawResponse` of struct `CommunicationsClientListResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `ProblemClassificationsClientGetResult` of struct `ProblemClassificationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProblemClassificationsClientGetResponse` has been removed
+- Field `TicketsClientCheckNameAvailabilityResult` of struct `TicketsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `TicketsClientCheckNameAvailabilityResponse` has been removed
+- Field `CommunicationsClientCreateResult` of struct `CommunicationsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `CommunicationsClientCreateResponse` has been removed
+- Field `TicketsClientUpdateResult` of struct `TicketsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `TicketsClientUpdateResponse` has been removed
+- Field `ServicesClientGetResult` of struct `ServicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientGetResponse` has been removed
+- Field `TicketsClientListResult` of struct `TicketsClientListResponse` has been removed
+- Field `RawResponse` of struct `TicketsClientListResponse` has been removed
+- Field `ServicesClientListResult` of struct `ServicesClientListResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientListResponse` has been removed
+- Field `RawResponse` of struct `CommunicationsClientCreatePollerResponse` has been removed
+- Field `RawResponse` of struct `TicketsClientCreatePollerResponse` has been removed
+
+### Features Added
+
+- New function `*ProblemClassificationsClientListPager.NextPage(context.Context) (ProblemClassificationsClientListResponse, error)`
+- New function `*CommunicationsClientListPager.More() bool`
+- New function `*OperationsClientListPager.NextPage(context.Context) (OperationsClientListResponse, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*ProblemClassificationsClientListPager.More() bool`
+- New function `ServiceError.MarshalJSON() ([]byte, error)`
+- New function `*ServicesClientListPager.More() bool`
+- New function `*ServicesClientListPager.NextPage(context.Context) (ServicesClientListResponse, error)`
+- New function `*TicketsClientListPager.More() bool`
+- New struct `ExceptionResponse`
+- New struct `OperationsClientListPager`
+- New struct `ProblemClassificationsClientListPager`
+- New struct `ServiceError`
+- New struct `ServiceErrorDetail`
+- New struct `ServicesClientListPager`
+- New anonymous field `TicketDetails` in struct `TicketsClientGetResponse`
+- New anonymous field `CommunicationsListResult` in struct `CommunicationsClientListResponse`
+- New anonymous field `TicketDetails` in struct `TicketsClientCreateResponse`
+- New anonymous field `CommunicationDetails` in struct `CommunicationsClientGetResponse`
+- New anonymous field `ProblemClassification` in struct `ProblemClassificationsClientGetResponse`
+- New anonymous field `Service` in struct `ServicesClientGetResponse`
+- New anonymous field `TicketDetails` in struct `TicketsClientUpdateResponse`
+- New anonymous field `ProblemClassificationsListResult` in struct `ProblemClassificationsClientListResponse`
+- New anonymous field `ServicesListResult` in struct `ServicesClientListResponse`
+- New anonymous field `OperationsListResult` in struct `OperationsClientListResponse`
+- New anonymous field `CheckNameAvailabilityOutput` in struct `TicketsClientCheckNameAvailabilityResponse`
+- New anonymous field `CheckNameAvailabilityOutput` in struct `CommunicationsClientCheckNameAvailabilityResponse`
+- New anonymous field `CommunicationDetails` in struct `CommunicationsClientCreateResponse`
+- New anonymous field `TicketsListResult` in struct `TicketsClientListResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ServiceError.MarshalJSON` has been removed
+- Struct `ExceptionResponse` has been removed
+- Struct `ServiceError` has been removed
+- Struct `ServiceErrorDetail` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

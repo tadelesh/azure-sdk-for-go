@@ -35,17 +35,17 @@ type ArtifactSourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewArtifactSourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ArtifactSourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ArtifactSourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *ArtifactSourcesClient) createOrUpdateCreateRequest(ctx context.Con
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ArtifactSourcesClient) createOrUpdateHandleResponse(resp *http.Response) (ArtifactSourcesClientCreateOrUpdateResponse, error) {
-	result := ArtifactSourcesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ArtifactSourcesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ArtifactSource); err != nil {
 		return ArtifactSourcesClientCreateOrUpdateResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *ArtifactSourcesClient) Delete(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ArtifactSourcesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ArtifactSourcesClientDeleteResponse{RawResponse: resp}, nil
+	return ArtifactSourcesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -219,7 +219,7 @@ func (client *ArtifactSourcesClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *ArtifactSourcesClient) getHandleResponse(resp *http.Response) (ArtifactSourcesClientGetResponse, error) {
-	result := ArtifactSourcesClientGetResponse{RawResponse: resp}
+	result := ArtifactSourcesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ArtifactSource); err != nil {
 		return ArtifactSourcesClientGetResponse{}, err
 	}
@@ -283,7 +283,7 @@ func (client *ArtifactSourcesClient) listCreateRequest(ctx context.Context, reso
 
 // listHandleResponse handles the List response.
 func (client *ArtifactSourcesClient) listHandleResponse(resp *http.Response) (ArtifactSourcesClientListResponse, error) {
-	result := ArtifactSourcesClientListResponse{RawResponse: resp}
+	result := ArtifactSourcesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ArtifactSourceList); err != nil {
 		return ArtifactSourcesClientListResponse{}, err
 	}
@@ -344,7 +344,7 @@ func (client *ArtifactSourcesClient) updateCreateRequest(ctx context.Context, re
 
 // updateHandleResponse handles the Update response.
 func (client *ArtifactSourcesClient) updateHandleResponse(resp *http.Response) (ArtifactSourcesClientUpdateResponse, error) {
-	result := ArtifactSourcesClientUpdateResponse{RawResponse: resp}
+	result := ArtifactSourcesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ArtifactSource); err != nil {
 		return ArtifactSourcesClientUpdateResponse{}, err
 	}

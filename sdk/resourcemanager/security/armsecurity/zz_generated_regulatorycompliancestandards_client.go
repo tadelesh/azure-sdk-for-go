@@ -93,7 +93,7 @@ func (client *RegulatoryComplianceStandardsClient) getCreateRequest(ctx context.
 
 // getHandleResponse handles the Get response.
 func (client *RegulatoryComplianceStandardsClient) getHandleResponse(resp *http.Response) (RegulatoryComplianceStandardsClientGetResponse, error) {
-	result := RegulatoryComplianceStandardsClientGetResponse{RawResponse: resp}
+	result := RegulatoryComplianceStandardsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegulatoryComplianceStandard); err != nil {
 		return RegulatoryComplianceStandardsClientGetResponse{}, err
 	}
@@ -139,7 +139,7 @@ func (client *RegulatoryComplianceStandardsClient) listCreateRequest(ctx context
 
 // listHandleResponse handles the List response.
 func (client *RegulatoryComplianceStandardsClient) listHandleResponse(resp *http.Response) (RegulatoryComplianceStandardsClientListResponse, error) {
-	result := RegulatoryComplianceStandardsClientListResponse{RawResponse: resp}
+	result := RegulatoryComplianceStandardsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegulatoryComplianceStandardList); err != nil {
 		return RegulatoryComplianceStandardsClientListResponse{}, err
 	}

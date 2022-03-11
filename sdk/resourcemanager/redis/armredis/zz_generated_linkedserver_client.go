@@ -63,9 +63,7 @@ func (client *LinkedServerClient) BeginCreate(ctx context.Context, resourceGroup
 	if err != nil {
 		return LinkedServerClientCreatePollerResponse{}, err
 	}
-	result := LinkedServerClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LinkedServerClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("LinkedServerClient.Create", "", resp, client.pl)
 	if err != nil {
 		return LinkedServerClientCreatePollerResponse{}, err
@@ -141,7 +139,7 @@ func (client *LinkedServerClient) Delete(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return LinkedServerClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return LinkedServerClientDeleteResponse{RawResponse: resp}, nil
+	return LinkedServerClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -227,7 +225,7 @@ func (client *LinkedServerClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *LinkedServerClient) getHandleResponse(resp *http.Response) (LinkedServerClientGetResponse, error) {
-	result := LinkedServerClientGetResponse{RawResponse: resp}
+	result := LinkedServerClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LinkedServerWithProperties); err != nil {
 		return LinkedServerClientGetResponse{}, err
 	}
@@ -279,7 +277,7 @@ func (client *LinkedServerClient) listCreateRequest(ctx context.Context, resourc
 
 // listHandleResponse handles the List response.
 func (client *LinkedServerClient) listHandleResponse(resp *http.Response) (LinkedServerClientListResponse, error) {
-	result := LinkedServerClientListResponse{RawResponse: resp}
+	result := LinkedServerClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LinkedServerWithPropertiesList); err != nil {
 		return LinkedServerClientListResponse{}, err
 	}

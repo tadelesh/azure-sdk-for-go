@@ -34,17 +34,17 @@ type ServerAutomaticTuningClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServerAutomaticTuningClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServerAutomaticTuningClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServerAutomaticTuningClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *ServerAutomaticTuningClient) getCreateRequest(ctx context.Context,
 
 // getHandleResponse handles the Get response.
 func (client *ServerAutomaticTuningClient) getHandleResponse(resp *http.Response) (ServerAutomaticTuningClientGetResponse, error) {
-	result := ServerAutomaticTuningClientGetResponse{RawResponse: resp}
+	result := ServerAutomaticTuningClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerAutomaticTuning); err != nil {
 		return ServerAutomaticTuningClientGetResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *ServerAutomaticTuningClient) updateCreateRequest(ctx context.Conte
 
 // updateHandleResponse handles the Update response.
 func (client *ServerAutomaticTuningClient) updateHandleResponse(resp *http.Response) (ServerAutomaticTuningClientUpdateResponse, error) {
-	result := ServerAutomaticTuningClientUpdateResponse{RawResponse: resp}
+	result := ServerAutomaticTuningClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerAutomaticTuning); err != nil {
 		return ServerAutomaticTuningClientUpdateResponse{}, err
 	}

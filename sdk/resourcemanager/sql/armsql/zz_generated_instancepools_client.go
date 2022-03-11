@@ -34,17 +34,17 @@ type InstancePoolsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewInstancePoolsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *InstancePoolsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &InstancePoolsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *InstancePoolsClient) BeginCreateOrUpdate(ctx context.Context, reso
 	if err != nil {
 		return InstancePoolsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := InstancePoolsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := InstancePoolsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("InstancePoolsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return InstancePoolsClientCreateOrUpdatePollerResponse{}, err
@@ -130,9 +128,7 @@ func (client *InstancePoolsClient) BeginDelete(ctx context.Context, resourceGrou
 	if err != nil {
 		return InstancePoolsClientDeletePollerResponse{}, err
 	}
-	result := InstancePoolsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := InstancePoolsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("InstancePoolsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return InstancePoolsClientDeletePollerResponse{}, err
@@ -234,7 +230,7 @@ func (client *InstancePoolsClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *InstancePoolsClient) getHandleResponse(resp *http.Response) (InstancePoolsClientGetResponse, error) {
-	result := InstancePoolsClientGetResponse{RawResponse: resp}
+	result := InstancePoolsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InstancePool); err != nil {
 		return InstancePoolsClientGetResponse{}, err
 	}
@@ -276,7 +272,7 @@ func (client *InstancePoolsClient) listCreateRequest(ctx context.Context, option
 
 // listHandleResponse handles the List response.
 func (client *InstancePoolsClient) listHandleResponse(resp *http.Response) (InstancePoolsClientListResponse, error) {
-	result := InstancePoolsClientListResponse{RawResponse: resp}
+	result := InstancePoolsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InstancePoolListResult); err != nil {
 		return InstancePoolsClientListResponse{}, err
 	}
@@ -325,7 +321,7 @@ func (client *InstancePoolsClient) listByResourceGroupCreateRequest(ctx context.
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *InstancePoolsClient) listByResourceGroupHandleResponse(resp *http.Response) (InstancePoolsClientListByResourceGroupResponse, error) {
-	result := InstancePoolsClientListByResourceGroupResponse{RawResponse: resp}
+	result := InstancePoolsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InstancePoolListResult); err != nil {
 		return InstancePoolsClientListByResourceGroupResponse{}, err
 	}
@@ -345,9 +341,7 @@ func (client *InstancePoolsClient) BeginUpdate(ctx context.Context, resourceGrou
 	if err != nil {
 		return InstancePoolsClientUpdatePollerResponse{}, err
 	}
-	result := InstancePoolsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := InstancePoolsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("InstancePoolsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return InstancePoolsClientUpdatePollerResponse{}, err

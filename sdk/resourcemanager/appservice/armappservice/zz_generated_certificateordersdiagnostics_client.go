@@ -114,7 +114,7 @@ func (client *CertificateOrdersDiagnosticsClient) getAppServiceCertificateOrderD
 
 // getAppServiceCertificateOrderDetectorResponseHandleResponse handles the GetAppServiceCertificateOrderDetectorResponse response.
 func (client *CertificateOrdersDiagnosticsClient) getAppServiceCertificateOrderDetectorResponseHandleResponse(resp *http.Response) (CertificateOrdersDiagnosticsClientGetAppServiceCertificateOrderDetectorResponseResponse, error) {
-	result := CertificateOrdersDiagnosticsClientGetAppServiceCertificateOrderDetectorResponseResponse{RawResponse: resp}
+	result := CertificateOrdersDiagnosticsClientGetAppServiceCertificateOrderDetectorResponseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DetectorResponse); err != nil {
 		return CertificateOrdersDiagnosticsClientGetAppServiceCertificateOrderDetectorResponseResponse{}, err
 	}
@@ -168,7 +168,7 @@ func (client *CertificateOrdersDiagnosticsClient) listAppServiceCertificateOrder
 
 // listAppServiceCertificateOrderDetectorResponseHandleResponse handles the ListAppServiceCertificateOrderDetectorResponse response.
 func (client *CertificateOrdersDiagnosticsClient) listAppServiceCertificateOrderDetectorResponseHandleResponse(resp *http.Response) (CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponseResponse, error) {
-	result := CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponseResponse{RawResponse: resp}
+	result := CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DetectorResponseCollection); err != nil {
 		return CertificateOrdersDiagnosticsClientListAppServiceCertificateOrderDetectorResponseResponse{}, err
 	}

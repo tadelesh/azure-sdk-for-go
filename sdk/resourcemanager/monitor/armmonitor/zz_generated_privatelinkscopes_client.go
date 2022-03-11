@@ -34,17 +34,17 @@ type PrivateLinkScopesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateLinkScopesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateLinkScopesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateLinkScopesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *PrivateLinkScopesClient) createOrUpdateCreateRequest(ctx context.C
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *PrivateLinkScopesClient) createOrUpdateHandleResponse(resp *http.Response) (PrivateLinkScopesClientCreateOrUpdateResponse, error) {
-	result := PrivateLinkScopesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := PrivateLinkScopesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureMonitorPrivateLinkScope); err != nil {
 		return PrivateLinkScopesClientCreateOrUpdateResponse{}, err
 	}
@@ -118,9 +118,7 @@ func (client *PrivateLinkScopesClient) BeginDelete(ctx context.Context, resource
 	if err != nil {
 		return PrivateLinkScopesClientDeletePollerResponse{}, err
 	}
-	result := PrivateLinkScopesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateLinkScopesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateLinkScopesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return PrivateLinkScopesClientDeletePollerResponse{}, err
@@ -221,7 +219,7 @@ func (client *PrivateLinkScopesClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *PrivateLinkScopesClient) getHandleResponse(resp *http.Response) (PrivateLinkScopesClientGetResponse, error) {
-	result := PrivateLinkScopesClientGetResponse{RawResponse: resp}
+	result := PrivateLinkScopesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureMonitorPrivateLinkScope); err != nil {
 		return PrivateLinkScopesClientGetResponse{}, err
 	}
@@ -263,7 +261,7 @@ func (client *PrivateLinkScopesClient) listCreateRequest(ctx context.Context, op
 
 // listHandleResponse handles the List response.
 func (client *PrivateLinkScopesClient) listHandleResponse(resp *http.Response) (PrivateLinkScopesClientListResponse, error) {
-	result := PrivateLinkScopesClientListResponse{RawResponse: resp}
+	result := PrivateLinkScopesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureMonitorPrivateLinkScopeListResult); err != nil {
 		return PrivateLinkScopesClientListResponse{}, err
 	}
@@ -311,7 +309,7 @@ func (client *PrivateLinkScopesClient) listByResourceGroupCreateRequest(ctx cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *PrivateLinkScopesClient) listByResourceGroupHandleResponse(resp *http.Response) (PrivateLinkScopesClientListByResourceGroupResponse, error) {
-	result := PrivateLinkScopesClientListByResourceGroupResponse{RawResponse: resp}
+	result := PrivateLinkScopesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureMonitorPrivateLinkScopeListResult); err != nil {
 		return PrivateLinkScopesClientListByResourceGroupResponse{}, err
 	}
@@ -368,7 +366,7 @@ func (client *PrivateLinkScopesClient) updateTagsCreateRequest(ctx context.Conte
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *PrivateLinkScopesClient) updateTagsHandleResponse(resp *http.Response) (PrivateLinkScopesClientUpdateTagsResponse, error) {
-	result := PrivateLinkScopesClientUpdateTagsResponse{RawResponse: resp}
+	result := PrivateLinkScopesClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureMonitorPrivateLinkScope); err != nil {
 		return PrivateLinkScopesClientUpdateTagsResponse{}, err
 	}

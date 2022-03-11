@@ -35,17 +35,17 @@ type AppsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAppsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AppsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AppsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *AppsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroup
 	if err != nil {
 		return AppsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := AppsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AppsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AppsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AppsClientCreateOrUpdatePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *AppsClient) BeginDelete(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return AppsClientDeletePollerResponse{}, err
 	}
-	result := AppsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AppsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AppsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AppsClientDeletePollerResponse{}, err
@@ -253,7 +249,7 @@ func (client *AppsClient) getCreateRequest(ctx context.Context, resourceGroupNam
 
 // getHandleResponse handles the Get response.
 func (client *AppsClient) getHandleResponse(resp *http.Response) (AppsClientGetResponse, error) {
-	result := AppsClientGetResponse{RawResponse: resp}
+	result := AppsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AppResource); err != nil {
 		return AppsClientGetResponse{}, err
 	}
@@ -315,7 +311,7 @@ func (client *AppsClient) getResourceUploadURLCreateRequest(ctx context.Context,
 
 // getResourceUploadURLHandleResponse handles the GetResourceUploadURL response.
 func (client *AppsClient) getResourceUploadURLHandleResponse(resp *http.Response) (AppsClientGetResourceUploadURLResponse, error) {
-	result := AppsClientGetResourceUploadURLResponse{RawResponse: resp}
+	result := AppsClientGetResourceUploadURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceUploadDefinition); err != nil {
 		return AppsClientGetResourceUploadURLResponse{}, err
 	}
@@ -368,7 +364,7 @@ func (client *AppsClient) listCreateRequest(ctx context.Context, resourceGroupNa
 
 // listHandleResponse handles the List response.
 func (client *AppsClient) listHandleResponse(resp *http.Response) (AppsClientListResponse, error) {
-	result := AppsClientListResponse{RawResponse: resp}
+	result := AppsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AppResourceCollection); err != nil {
 		return AppsClientListResponse{}, err
 	}
@@ -389,9 +385,7 @@ func (client *AppsClient) BeginSetActiveDeployments(ctx context.Context, resourc
 	if err != nil {
 		return AppsClientSetActiveDeploymentsPollerResponse{}, err
 	}
-	result := AppsClientSetActiveDeploymentsPollerResponse{
-		RawResponse: resp,
-	}
+	result := AppsClientSetActiveDeploymentsPollerResponse{}
 	pt, err := armruntime.NewPoller("AppsClient.SetActiveDeployments", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AppsClientSetActiveDeploymentsPollerResponse{}, err
@@ -462,9 +456,7 @@ func (client *AppsClient) BeginUpdate(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return AppsClientUpdatePollerResponse{}, err
 	}
-	result := AppsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AppsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AppsClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AppsClientUpdatePollerResponse{}, err
@@ -577,7 +569,7 @@ func (client *AppsClient) validateDomainCreateRequest(ctx context.Context, resou
 
 // validateDomainHandleResponse handles the ValidateDomain response.
 func (client *AppsClient) validateDomainHandleResponse(resp *http.Response) (AppsClientValidateDomainResponse, error) {
-	result := AppsClientValidateDomainResponse{RawResponse: resp}
+	result := AppsClientValidateDomainResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomDomainValidateResult); err != nil {
 		return AppsClientValidateDomainResponse{}, err
 	}

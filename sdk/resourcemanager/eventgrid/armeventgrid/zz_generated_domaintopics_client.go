@@ -36,17 +36,17 @@ type DomainTopicsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDomainTopicsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DomainTopicsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DomainTopicsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *DomainTopicsClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return DomainTopicsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DomainTopicsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DomainTopicsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DomainTopicsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DomainTopicsClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *DomainTopicsClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return DomainTopicsClientDeletePollerResponse{}, err
 	}
-	result := DomainTopicsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DomainTopicsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DomainTopicsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DomainTopicsClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *DomainTopicsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *DomainTopicsClient) getHandleResponse(resp *http.Response) (DomainTopicsClientGetResponse, error) {
-	result := DomainTopicsClientGetResponse{RawResponse: resp}
+	result := DomainTopicsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainTopic); err != nil {
 		return DomainTopicsClientGetResponse{}, err
 	}
@@ -306,7 +302,7 @@ func (client *DomainTopicsClient) listByDomainCreateRequest(ctx context.Context,
 
 // listByDomainHandleResponse handles the ListByDomain response.
 func (client *DomainTopicsClient) listByDomainHandleResponse(resp *http.Response) (DomainTopicsClientListByDomainResponse, error) {
-	result := DomainTopicsClientListByDomainResponse{RawResponse: resp}
+	result := DomainTopicsClientListByDomainResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainTopicsListResult); err != nil {
 		return DomainTopicsClientListByDomainResponse{}, err
 	}

@@ -35,17 +35,17 @@ type PublicMaintenanceConfigurationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPublicMaintenanceConfigurationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PublicMaintenanceConfigurationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PublicMaintenanceConfigurationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -94,7 +94,7 @@ func (client *PublicMaintenanceConfigurationsClient) getCreateRequest(ctx contex
 
 // getHandleResponse handles the Get response.
 func (client *PublicMaintenanceConfigurationsClient) getHandleResponse(resp *http.Response) (PublicMaintenanceConfigurationsClientGetResponse, error) {
-	result := PublicMaintenanceConfigurationsClientGetResponse{RawResponse: resp}
+	result := PublicMaintenanceConfigurationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Configuration); err != nil {
 		return PublicMaintenanceConfigurationsClientGetResponse{}, err
 	}
@@ -105,19 +105,13 @@ func (client *PublicMaintenanceConfigurationsClient) getHandleResponse(resp *htt
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - PublicMaintenanceConfigurationsClientListOptions contains the optional parameters for the PublicMaintenanceConfigurationsClient.List
 // method.
-func (client *PublicMaintenanceConfigurationsClient) List(ctx context.Context, options *PublicMaintenanceConfigurationsClientListOptions) (PublicMaintenanceConfigurationsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, options)
-	if err != nil {
-		return PublicMaintenanceConfigurationsClientListResponse{}, err
+func (client *PublicMaintenanceConfigurationsClient) List(options *PublicMaintenanceConfigurationsClientListOptions) *PublicMaintenanceConfigurationsClientListPager {
+	return &PublicMaintenanceConfigurationsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return PublicMaintenanceConfigurationsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return PublicMaintenanceConfigurationsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -140,7 +134,7 @@ func (client *PublicMaintenanceConfigurationsClient) listCreateRequest(ctx conte
 
 // listHandleResponse handles the List response.
 func (client *PublicMaintenanceConfigurationsClient) listHandleResponse(resp *http.Response) (PublicMaintenanceConfigurationsClientListResponse, error) {
-	result := PublicMaintenanceConfigurationsClientListResponse{RawResponse: resp}
+	result := PublicMaintenanceConfigurationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListMaintenanceConfigurationsResult); err != nil {
 		return PublicMaintenanceConfigurationsClientListResponse{}, err
 	}

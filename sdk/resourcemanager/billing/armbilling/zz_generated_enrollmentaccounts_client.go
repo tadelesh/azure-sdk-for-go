@@ -32,16 +32,16 @@ type EnrollmentAccountsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewEnrollmentAccountsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *EnrollmentAccountsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &EnrollmentAccountsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -85,7 +85,7 @@ func (client *EnrollmentAccountsClient) getCreateRequest(ctx context.Context, na
 
 // getHandleResponse handles the Get response.
 func (client *EnrollmentAccountsClient) getHandleResponse(resp *http.Response) (EnrollmentAccountsClientGetResponse, error) {
-	result := EnrollmentAccountsClientGetResponse{RawResponse: resp}
+	result := EnrollmentAccountsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EnrollmentAccountSummary); err != nil {
 		return EnrollmentAccountsClientGetResponse{}, err
 	}
@@ -123,7 +123,7 @@ func (client *EnrollmentAccountsClient) listCreateRequest(ctx context.Context, o
 
 // listHandleResponse handles the List response.
 func (client *EnrollmentAccountsClient) listHandleResponse(resp *http.Response) (EnrollmentAccountsClientListResponse, error) {
-	result := EnrollmentAccountsClientListResponse{RawResponse: resp}
+	result := EnrollmentAccountsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EnrollmentAccountListResult); err != nil {
 		return EnrollmentAccountsClientListResponse{}, err
 	}

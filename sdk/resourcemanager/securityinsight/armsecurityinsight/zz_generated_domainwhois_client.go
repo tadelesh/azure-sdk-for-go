@@ -34,17 +34,17 @@ type DomainWhoisClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDomainWhoisClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DomainWhoisClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DomainWhoisClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -94,7 +94,7 @@ func (client *DomainWhoisClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *DomainWhoisClient) getHandleResponse(resp *http.Response) (DomainWhoisClientGetResponse, error) {
-	result := DomainWhoisClientGetResponse{RawResponse: resp}
+	result := DomainWhoisClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EnrichmentDomainWhois); err != nil {
 		return DomainWhoisClientGetResponse{}, err
 	}

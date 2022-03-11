@@ -35,17 +35,17 @@ type RemediationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRemediationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RemediationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RemediationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *RemediationsClient) cancelAtManagementGroupCreateRequest(ctx conte
 
 // cancelAtManagementGroupHandleResponse handles the CancelAtManagementGroup response.
 func (client *RemediationsClient) cancelAtManagementGroupHandleResponse(resp *http.Response) (RemediationsClientCancelAtManagementGroupResponse, error) {
-	result := RemediationsClientCancelAtManagementGroupResponse{RawResponse: resp}
+	result := RemediationsClientCancelAtManagementGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Remediation); err != nil {
 		return RemediationsClientCancelAtManagementGroupResponse{}, err
 	}
@@ -149,7 +149,7 @@ func (client *RemediationsClient) cancelAtResourceCreateRequest(ctx context.Cont
 
 // cancelAtResourceHandleResponse handles the CancelAtResource response.
 func (client *RemediationsClient) cancelAtResourceHandleResponse(resp *http.Response) (RemediationsClientCancelAtResourceResponse, error) {
-	result := RemediationsClientCancelAtResourceResponse{RawResponse: resp}
+	result := RemediationsClientCancelAtResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Remediation); err != nil {
 		return RemediationsClientCancelAtResourceResponse{}, err
 	}
@@ -205,7 +205,7 @@ func (client *RemediationsClient) cancelAtResourceGroupCreateRequest(ctx context
 
 // cancelAtResourceGroupHandleResponse handles the CancelAtResourceGroup response.
 func (client *RemediationsClient) cancelAtResourceGroupHandleResponse(resp *http.Response) (RemediationsClientCancelAtResourceGroupResponse, error) {
-	result := RemediationsClientCancelAtResourceGroupResponse{RawResponse: resp}
+	result := RemediationsClientCancelAtResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Remediation); err != nil {
 		return RemediationsClientCancelAtResourceGroupResponse{}, err
 	}
@@ -256,7 +256,7 @@ func (client *RemediationsClient) cancelAtSubscriptionCreateRequest(ctx context.
 
 // cancelAtSubscriptionHandleResponse handles the CancelAtSubscription response.
 func (client *RemediationsClient) cancelAtSubscriptionHandleResponse(resp *http.Response) (RemediationsClientCancelAtSubscriptionResponse, error) {
-	result := RemediationsClientCancelAtSubscriptionResponse{RawResponse: resp}
+	result := RemediationsClientCancelAtSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Remediation); err != nil {
 		return RemediationsClientCancelAtSubscriptionResponse{}, err
 	}
@@ -314,7 +314,7 @@ func (client *RemediationsClient) createOrUpdateAtManagementGroupCreateRequest(c
 
 // createOrUpdateAtManagementGroupHandleResponse handles the CreateOrUpdateAtManagementGroup response.
 func (client *RemediationsClient) createOrUpdateAtManagementGroupHandleResponse(resp *http.Response) (RemediationsClientCreateOrUpdateAtManagementGroupResponse, error) {
-	result := RemediationsClientCreateOrUpdateAtManagementGroupResponse{RawResponse: resp}
+	result := RemediationsClientCreateOrUpdateAtManagementGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Remediation); err != nil {
 		return RemediationsClientCreateOrUpdateAtManagementGroupResponse{}, err
 	}
@@ -364,7 +364,7 @@ func (client *RemediationsClient) createOrUpdateAtResourceCreateRequest(ctx cont
 
 // createOrUpdateAtResourceHandleResponse handles the CreateOrUpdateAtResource response.
 func (client *RemediationsClient) createOrUpdateAtResourceHandleResponse(resp *http.Response) (RemediationsClientCreateOrUpdateAtResourceResponse, error) {
-	result := RemediationsClientCreateOrUpdateAtResourceResponse{RawResponse: resp}
+	result := RemediationsClientCreateOrUpdateAtResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Remediation); err != nil {
 		return RemediationsClientCreateOrUpdateAtResourceResponse{}, err
 	}
@@ -421,7 +421,7 @@ func (client *RemediationsClient) createOrUpdateAtResourceGroupCreateRequest(ctx
 
 // createOrUpdateAtResourceGroupHandleResponse handles the CreateOrUpdateAtResourceGroup response.
 func (client *RemediationsClient) createOrUpdateAtResourceGroupHandleResponse(resp *http.Response) (RemediationsClientCreateOrUpdateAtResourceGroupResponse, error) {
-	result := RemediationsClientCreateOrUpdateAtResourceGroupResponse{RawResponse: resp}
+	result := RemediationsClientCreateOrUpdateAtResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Remediation); err != nil {
 		return RemediationsClientCreateOrUpdateAtResourceGroupResponse{}, err
 	}
@@ -473,7 +473,7 @@ func (client *RemediationsClient) createOrUpdateAtSubscriptionCreateRequest(ctx 
 
 // createOrUpdateAtSubscriptionHandleResponse handles the CreateOrUpdateAtSubscription response.
 func (client *RemediationsClient) createOrUpdateAtSubscriptionHandleResponse(resp *http.Response) (RemediationsClientCreateOrUpdateAtSubscriptionResponse, error) {
-	result := RemediationsClientCreateOrUpdateAtSubscriptionResponse{RawResponse: resp}
+	result := RemediationsClientCreateOrUpdateAtSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Remediation); err != nil {
 		return RemediationsClientCreateOrUpdateAtSubscriptionResponse{}, err
 	}
@@ -530,7 +530,7 @@ func (client *RemediationsClient) deleteAtManagementGroupCreateRequest(ctx conte
 
 // deleteAtManagementGroupHandleResponse handles the DeleteAtManagementGroup response.
 func (client *RemediationsClient) deleteAtManagementGroupHandleResponse(resp *http.Response) (RemediationsClientDeleteAtManagementGroupResponse, error) {
-	result := RemediationsClientDeleteAtManagementGroupResponse{RawResponse: resp}
+	result := RemediationsClientDeleteAtManagementGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Remediation); err != nil {
 		return RemediationsClientDeleteAtManagementGroupResponse{}, err
 	}
@@ -579,7 +579,7 @@ func (client *RemediationsClient) deleteAtResourceCreateRequest(ctx context.Cont
 
 // deleteAtResourceHandleResponse handles the DeleteAtResource response.
 func (client *RemediationsClient) deleteAtResourceHandleResponse(resp *http.Response) (RemediationsClientDeleteAtResourceResponse, error) {
-	result := RemediationsClientDeleteAtResourceResponse{RawResponse: resp}
+	result := RemediationsClientDeleteAtResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Remediation); err != nil {
 		return RemediationsClientDeleteAtResourceResponse{}, err
 	}
@@ -635,7 +635,7 @@ func (client *RemediationsClient) deleteAtResourceGroupCreateRequest(ctx context
 
 // deleteAtResourceGroupHandleResponse handles the DeleteAtResourceGroup response.
 func (client *RemediationsClient) deleteAtResourceGroupHandleResponse(resp *http.Response) (RemediationsClientDeleteAtResourceGroupResponse, error) {
-	result := RemediationsClientDeleteAtResourceGroupResponse{RawResponse: resp}
+	result := RemediationsClientDeleteAtResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Remediation); err != nil {
 		return RemediationsClientDeleteAtResourceGroupResponse{}, err
 	}
@@ -686,7 +686,7 @@ func (client *RemediationsClient) deleteAtSubscriptionCreateRequest(ctx context.
 
 // deleteAtSubscriptionHandleResponse handles the DeleteAtSubscription response.
 func (client *RemediationsClient) deleteAtSubscriptionHandleResponse(resp *http.Response) (RemediationsClientDeleteAtSubscriptionResponse, error) {
-	result := RemediationsClientDeleteAtSubscriptionResponse{RawResponse: resp}
+	result := RemediationsClientDeleteAtSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Remediation); err != nil {
 		return RemediationsClientDeleteAtSubscriptionResponse{}, err
 	}
@@ -743,7 +743,7 @@ func (client *RemediationsClient) getAtManagementGroupCreateRequest(ctx context.
 
 // getAtManagementGroupHandleResponse handles the GetAtManagementGroup response.
 func (client *RemediationsClient) getAtManagementGroupHandleResponse(resp *http.Response) (RemediationsClientGetAtManagementGroupResponse, error) {
-	result := RemediationsClientGetAtManagementGroupResponse{RawResponse: resp}
+	result := RemediationsClientGetAtManagementGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Remediation); err != nil {
 		return RemediationsClientGetAtManagementGroupResponse{}, err
 	}
@@ -792,7 +792,7 @@ func (client *RemediationsClient) getAtResourceCreateRequest(ctx context.Context
 
 // getAtResourceHandleResponse handles the GetAtResource response.
 func (client *RemediationsClient) getAtResourceHandleResponse(resp *http.Response) (RemediationsClientGetAtResourceResponse, error) {
-	result := RemediationsClientGetAtResourceResponse{RawResponse: resp}
+	result := RemediationsClientGetAtResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Remediation); err != nil {
 		return RemediationsClientGetAtResourceResponse{}, err
 	}
@@ -848,7 +848,7 @@ func (client *RemediationsClient) getAtResourceGroupCreateRequest(ctx context.Co
 
 // getAtResourceGroupHandleResponse handles the GetAtResourceGroup response.
 func (client *RemediationsClient) getAtResourceGroupHandleResponse(resp *http.Response) (RemediationsClientGetAtResourceGroupResponse, error) {
-	result := RemediationsClientGetAtResourceGroupResponse{RawResponse: resp}
+	result := RemediationsClientGetAtResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Remediation); err != nil {
 		return RemediationsClientGetAtResourceGroupResponse{}, err
 	}
@@ -899,7 +899,7 @@ func (client *RemediationsClient) getAtSubscriptionCreateRequest(ctx context.Con
 
 // getAtSubscriptionHandleResponse handles the GetAtSubscription response.
 func (client *RemediationsClient) getAtSubscriptionHandleResponse(resp *http.Response) (RemediationsClientGetAtSubscriptionResponse, error) {
-	result := RemediationsClientGetAtSubscriptionResponse{RawResponse: resp}
+	result := RemediationsClientGetAtSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Remediation); err != nil {
 		return RemediationsClientGetAtSubscriptionResponse{}, err
 	}
@@ -956,7 +956,7 @@ func (client *RemediationsClient) listDeploymentsAtManagementGroupCreateRequest(
 
 // listDeploymentsAtManagementGroupHandleResponse handles the ListDeploymentsAtManagementGroup response.
 func (client *RemediationsClient) listDeploymentsAtManagementGroupHandleResponse(resp *http.Response) (RemediationsClientListDeploymentsAtManagementGroupResponse, error) {
-	result := RemediationsClientListDeploymentsAtManagementGroupResponse{RawResponse: resp}
+	result := RemediationsClientListDeploymentsAtManagementGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemediationDeploymentsListResult); err != nil {
 		return RemediationsClientListDeploymentsAtManagementGroupResponse{}, err
 	}
@@ -1005,7 +1005,7 @@ func (client *RemediationsClient) listDeploymentsAtResourceCreateRequest(ctx con
 
 // listDeploymentsAtResourceHandleResponse handles the ListDeploymentsAtResource response.
 func (client *RemediationsClient) listDeploymentsAtResourceHandleResponse(resp *http.Response) (RemediationsClientListDeploymentsAtResourceResponse, error) {
-	result := RemediationsClientListDeploymentsAtResourceResponse{RawResponse: resp}
+	result := RemediationsClientListDeploymentsAtResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemediationDeploymentsListResult); err != nil {
 		return RemediationsClientListDeploymentsAtResourceResponse{}, err
 	}
@@ -1061,7 +1061,7 @@ func (client *RemediationsClient) listDeploymentsAtResourceGroupCreateRequest(ct
 
 // listDeploymentsAtResourceGroupHandleResponse handles the ListDeploymentsAtResourceGroup response.
 func (client *RemediationsClient) listDeploymentsAtResourceGroupHandleResponse(resp *http.Response) (RemediationsClientListDeploymentsAtResourceGroupResponse, error) {
-	result := RemediationsClientListDeploymentsAtResourceGroupResponse{RawResponse: resp}
+	result := RemediationsClientListDeploymentsAtResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemediationDeploymentsListResult); err != nil {
 		return RemediationsClientListDeploymentsAtResourceGroupResponse{}, err
 	}
@@ -1112,7 +1112,7 @@ func (client *RemediationsClient) listDeploymentsAtSubscriptionCreateRequest(ctx
 
 // listDeploymentsAtSubscriptionHandleResponse handles the ListDeploymentsAtSubscription response.
 func (client *RemediationsClient) listDeploymentsAtSubscriptionHandleResponse(resp *http.Response) (RemediationsClientListDeploymentsAtSubscriptionResponse, error) {
-	result := RemediationsClientListDeploymentsAtSubscriptionResponse{RawResponse: resp}
+	result := RemediationsClientListDeploymentsAtSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemediationDeploymentsListResult); err != nil {
 		return RemediationsClientListDeploymentsAtSubscriptionResponse{}, err
 	}
@@ -1167,7 +1167,7 @@ func (client *RemediationsClient) listForManagementGroupCreateRequest(ctx contex
 
 // listForManagementGroupHandleResponse handles the ListForManagementGroup response.
 func (client *RemediationsClient) listForManagementGroupHandleResponse(resp *http.Response) (RemediationsClientListForManagementGroupResponse, error) {
-	result := RemediationsClientListForManagementGroupResponse{RawResponse: resp}
+	result := RemediationsClientListForManagementGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemediationListResult); err != nil {
 		return RemediationsClientListForManagementGroupResponse{}, err
 	}
@@ -1214,7 +1214,7 @@ func (client *RemediationsClient) listForResourceCreateRequest(ctx context.Conte
 
 // listForResourceHandleResponse handles the ListForResource response.
 func (client *RemediationsClient) listForResourceHandleResponse(resp *http.Response) (RemediationsClientListForResourceResponse, error) {
-	result := RemediationsClientListForResourceResponse{RawResponse: resp}
+	result := RemediationsClientListForResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemediationListResult); err != nil {
 		return RemediationsClientListForResourceResponse{}, err
 	}
@@ -1268,7 +1268,7 @@ func (client *RemediationsClient) listForResourceGroupCreateRequest(ctx context.
 
 // listForResourceGroupHandleResponse handles the ListForResourceGroup response.
 func (client *RemediationsClient) listForResourceGroupHandleResponse(resp *http.Response) (RemediationsClientListForResourceGroupResponse, error) {
-	result := RemediationsClientListForResourceGroupResponse{RawResponse: resp}
+	result := RemediationsClientListForResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemediationListResult); err != nil {
 		return RemediationsClientListForResourceGroupResponse{}, err
 	}
@@ -1317,7 +1317,7 @@ func (client *RemediationsClient) listForSubscriptionCreateRequest(ctx context.C
 
 // listForSubscriptionHandleResponse handles the ListForSubscription response.
 func (client *RemediationsClient) listForSubscriptionHandleResponse(resp *http.Response) (RemediationsClientListForSubscriptionResponse, error) {
-	result := RemediationsClientListForSubscriptionResponse{RawResponse: resp}
+	result := RemediationsClientListForSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemediationListResult); err != nil {
 		return RemediationsClientListForSubscriptionResponse{}, err
 	}

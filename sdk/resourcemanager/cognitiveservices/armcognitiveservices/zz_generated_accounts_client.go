@@ -34,17 +34,17 @@ type AccountsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAccountsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AccountsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AccountsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *AccountsClient) BeginCreate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return AccountsClientCreatePollerResponse{}, err
 	}
-	result := AccountsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AccountsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("AccountsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return AccountsClientCreatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *AccountsClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return AccountsClientDeletePollerResponse{}, err
 	}
-	result := AccountsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AccountsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AccountsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return AccountsClientDeletePollerResponse{}, err
@@ -232,7 +228,7 @@ func (client *AccountsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *AccountsClient) getHandleResponse(resp *http.Response) (AccountsClientGetResponse, error) {
-	result := AccountsClientGetResponse{RawResponse: resp}
+	result := AccountsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Account); err != nil {
 		return AccountsClientGetResponse{}, err
 	}
@@ -274,7 +270,7 @@ func (client *AccountsClient) listCreateRequest(ctx context.Context, options *Ac
 
 // listHandleResponse handles the List response.
 func (client *AccountsClient) listHandleResponse(resp *http.Response) (AccountsClientListResponse, error) {
-	result := AccountsClientListResponse{RawResponse: resp}
+	result := AccountsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountListResult); err != nil {
 		return AccountsClientListResponse{}, err
 	}
@@ -322,7 +318,7 @@ func (client *AccountsClient) listByResourceGroupCreateRequest(ctx context.Conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *AccountsClient) listByResourceGroupHandleResponse(resp *http.Response) (AccountsClientListByResourceGroupResponse, error) {
-	result := AccountsClientListByResourceGroupResponse{RawResponse: resp}
+	result := AccountsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountListResult); err != nil {
 		return AccountsClientListByResourceGroupResponse{}, err
 	}
@@ -377,7 +373,7 @@ func (client *AccountsClient) listKeysCreateRequest(ctx context.Context, resourc
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *AccountsClient) listKeysHandleResponse(resp *http.Response) (AccountsClientListKeysResponse, error) {
-	result := AccountsClientListKeysResponse{RawResponse: resp}
+	result := AccountsClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIKeys); err != nil {
 		return AccountsClientListKeysResponse{}, err
 	}
@@ -432,7 +428,7 @@ func (client *AccountsClient) listSKUsCreateRequest(ctx context.Context, resourc
 
 // listSKUsHandleResponse handles the ListSKUs response.
 func (client *AccountsClient) listSKUsHandleResponse(resp *http.Response) (AccountsClientListSKUsResponse, error) {
-	result := AccountsClientListSKUsResponse{RawResponse: resp}
+	result := AccountsClientListSKUsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountSKUListResult); err != nil {
 		return AccountsClientListSKUsResponse{}, err
 	}
@@ -490,7 +486,7 @@ func (client *AccountsClient) listUsagesCreateRequest(ctx context.Context, resou
 
 // listUsagesHandleResponse handles the ListUsages response.
 func (client *AccountsClient) listUsagesHandleResponse(resp *http.Response) (AccountsClientListUsagesResponse, error) {
-	result := AccountsClientListUsagesResponse{RawResponse: resp}
+	result := AccountsClientListUsagesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UsageListResult); err != nil {
 		return AccountsClientListUsagesResponse{}, err
 	}
@@ -546,7 +542,7 @@ func (client *AccountsClient) regenerateKeyCreateRequest(ctx context.Context, re
 
 // regenerateKeyHandleResponse handles the RegenerateKey response.
 func (client *AccountsClient) regenerateKeyHandleResponse(resp *http.Response) (AccountsClientRegenerateKeyResponse, error) {
-	result := AccountsClientRegenerateKeyResponse{RawResponse: resp}
+	result := AccountsClientRegenerateKeyResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIKeys); err != nil {
 		return AccountsClientRegenerateKeyResponse{}, err
 	}
@@ -564,9 +560,7 @@ func (client *AccountsClient) BeginUpdate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return AccountsClientUpdatePollerResponse{}, err
 	}
-	result := AccountsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AccountsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AccountsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return AccountsClientUpdatePollerResponse{}, err

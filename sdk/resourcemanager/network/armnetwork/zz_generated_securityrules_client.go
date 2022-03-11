@@ -35,17 +35,17 @@ type SecurityRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSecurityRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SecurityRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SecurityRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *SecurityRulesClient) BeginCreateOrUpdate(ctx context.Context, reso
 	if err != nil {
 		return SecurityRulesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := SecurityRulesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SecurityRulesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SecurityRulesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return SecurityRulesClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *SecurityRulesClient) BeginDelete(ctx context.Context, resourceGrou
 	if err != nil {
 		return SecurityRulesClientDeletePollerResponse{}, err
 	}
-	result := SecurityRulesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SecurityRulesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SecurityRulesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return SecurityRulesClientDeletePollerResponse{}, err
@@ -248,7 +244,7 @@ func (client *SecurityRulesClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *SecurityRulesClient) getHandleResponse(resp *http.Response) (SecurityRulesClientGetResponse, error) {
-	result := SecurityRulesClientGetResponse{RawResponse: resp}
+	result := SecurityRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecurityRule); err != nil {
 		return SecurityRulesClientGetResponse{}, err
 	}
@@ -300,7 +296,7 @@ func (client *SecurityRulesClient) listCreateRequest(ctx context.Context, resour
 
 // listHandleResponse handles the List response.
 func (client *SecurityRulesClient) listHandleResponse(resp *http.Response) (SecurityRulesClientListResponse, error) {
-	result := SecurityRulesClientListResponse{RawResponse: resp}
+	result := SecurityRulesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecurityRuleListResult); err != nil {
 		return SecurityRulesClientListResponse{}, err
 	}

@@ -34,17 +34,17 @@ type HostSettingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewHostSettingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *HostSettingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &HostSettingsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -87,7 +87,7 @@ func (client *HostSettingsClient) getCreateRequest(ctx context.Context, options 
 
 // getHandleResponse handles the Get response.
 func (client *HostSettingsClient) getHandleResponse(resp *http.Response) (HostSettingsClientGetResponse, error) {
-	result := HostSettingsClientGetResponse{RawResponse: resp}
+	result := HostSettingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostSettingsResponse); err != nil {
 		return HostSettingsClientGetResponse{}, err
 	}

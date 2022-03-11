@@ -32,16 +32,16 @@ type ManagementGroupSubscriptionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagementGroupSubscriptionsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ManagementGroupSubscriptionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagementGroupSubscriptionsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -94,7 +94,7 @@ func (client *ManagementGroupSubscriptionsClient) createCreateRequest(ctx contex
 
 // createHandleResponse handles the Create response.
 func (client *ManagementGroupSubscriptionsClient) createHandleResponse(resp *http.Response) (ManagementGroupSubscriptionsClientCreateResponse, error) {
-	result := ManagementGroupSubscriptionsClientCreateResponse{RawResponse: resp}
+	result := ManagementGroupSubscriptionsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SubscriptionUnderManagementGroup); err != nil {
 		return ManagementGroupSubscriptionsClientCreateResponse{}, err
 	}
@@ -119,7 +119,7 @@ func (client *ManagementGroupSubscriptionsClient) Delete(ctx context.Context, gr
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ManagementGroupSubscriptionsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ManagementGroupSubscriptionsClientDeleteResponse{RawResponse: resp}, nil
+	return ManagementGroupSubscriptionsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -195,7 +195,7 @@ func (client *ManagementGroupSubscriptionsClient) getSubscriptionCreateRequest(c
 
 // getSubscriptionHandleResponse handles the GetSubscription response.
 func (client *ManagementGroupSubscriptionsClient) getSubscriptionHandleResponse(resp *http.Response) (ManagementGroupSubscriptionsClientGetSubscriptionResponse, error) {
-	result := ManagementGroupSubscriptionsClientGetSubscriptionResponse{RawResponse: resp}
+	result := ManagementGroupSubscriptionsClientGetSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SubscriptionUnderManagementGroup); err != nil {
 		return ManagementGroupSubscriptionsClientGetSubscriptionResponse{}, err
 	}
@@ -243,7 +243,7 @@ func (client *ManagementGroupSubscriptionsClient) getSubscriptionsUnderManagemen
 
 // getSubscriptionsUnderManagementGroupHandleResponse handles the GetSubscriptionsUnderManagementGroup response.
 func (client *ManagementGroupSubscriptionsClient) getSubscriptionsUnderManagementGroupHandleResponse(resp *http.Response) (ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResponse, error) {
-	result := ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResponse{RawResponse: resp}
+	result := ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListSubscriptionUnderManagementGroup); err != nil {
 		return ManagementGroupSubscriptionsClientGetSubscriptionsUnderManagementGroupResponse{}, err
 	}

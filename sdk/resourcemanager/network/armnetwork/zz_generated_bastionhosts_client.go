@@ -35,17 +35,17 @@ type BastionHostsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBastionHostsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BastionHostsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BastionHostsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *BastionHostsClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return BastionHostsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := BastionHostsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := BastionHostsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("BastionHostsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return BastionHostsClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *BastionHostsClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return BastionHostsClientDeletePollerResponse{}, err
 	}
-	result := BastionHostsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := BastionHostsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("BastionHostsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return BastionHostsClientDeletePollerResponse{}, err
@@ -233,7 +229,7 @@ func (client *BastionHostsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *BastionHostsClient) getHandleResponse(resp *http.Response) (BastionHostsClientGetResponse, error) {
-	result := BastionHostsClientGetResponse{RawResponse: resp}
+	result := BastionHostsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BastionHost); err != nil {
 		return BastionHostsClientGetResponse{}, err
 	}
@@ -275,7 +271,7 @@ func (client *BastionHostsClient) listCreateRequest(ctx context.Context, options
 
 // listHandleResponse handles the List response.
 func (client *BastionHostsClient) listHandleResponse(resp *http.Response) (BastionHostsClientListResponse, error) {
-	result := BastionHostsClientListResponse{RawResponse: resp}
+	result := BastionHostsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BastionHostListResult); err != nil {
 		return BastionHostsClientListResponse{}, err
 	}
@@ -323,7 +319,7 @@ func (client *BastionHostsClient) listByResourceGroupCreateRequest(ctx context.C
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *BastionHostsClient) listByResourceGroupHandleResponse(resp *http.Response) (BastionHostsClientListByResourceGroupResponse, error) {
-	result := BastionHostsClientListByResourceGroupResponse{RawResponse: resp}
+	result := BastionHostsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BastionHostListResult); err != nil {
 		return BastionHostsClientListByResourceGroupResponse{}, err
 	}
@@ -342,9 +338,7 @@ func (client *BastionHostsClient) BeginUpdateTags(ctx context.Context, resourceG
 	if err != nil {
 		return BastionHostsClientUpdateTagsPollerResponse{}, err
 	}
-	result := BastionHostsClientUpdateTagsPollerResponse{
-		RawResponse: resp,
-	}
+	result := BastionHostsClientUpdateTagsPollerResponse{}
 	pt, err := armruntime.NewPoller("BastionHostsClient.UpdateTags", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return BastionHostsClientUpdateTagsPollerResponse{}, err

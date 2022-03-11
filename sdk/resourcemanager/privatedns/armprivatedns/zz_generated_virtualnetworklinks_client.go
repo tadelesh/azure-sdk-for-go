@@ -36,17 +36,17 @@ type VirtualNetworkLinksClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualNetworkLinksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualNetworkLinksClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualNetworkLinksClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *VirtualNetworkLinksClient) BeginCreateOrUpdate(ctx context.Context
 	if err != nil {
 		return VirtualNetworkLinksClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VirtualNetworkLinksClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualNetworkLinksClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualNetworkLinksClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return VirtualNetworkLinksClientCreateOrUpdatePollerResponse{}, err
@@ -144,9 +142,7 @@ func (client *VirtualNetworkLinksClient) BeginDelete(ctx context.Context, resour
 	if err != nil {
 		return VirtualNetworkLinksClientDeletePollerResponse{}, err
 	}
-	result := VirtualNetworkLinksClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualNetworkLinksClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualNetworkLinksClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return VirtualNetworkLinksClientDeletePollerResponse{}, err
@@ -262,7 +258,7 @@ func (client *VirtualNetworkLinksClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *VirtualNetworkLinksClient) getHandleResponse(resp *http.Response) (VirtualNetworkLinksClientGetResponse, error) {
-	result := VirtualNetworkLinksClientGetResponse{RawResponse: resp}
+	result := VirtualNetworkLinksClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkLink); err != nil {
 		return VirtualNetworkLinksClientGetResponse{}, err
 	}
@@ -318,7 +314,7 @@ func (client *VirtualNetworkLinksClient) listCreateRequest(ctx context.Context, 
 
 // listHandleResponse handles the List response.
 func (client *VirtualNetworkLinksClient) listHandleResponse(resp *http.Response) (VirtualNetworkLinksClientListResponse, error) {
-	result := VirtualNetworkLinksClientListResponse{RawResponse: resp}
+	result := VirtualNetworkLinksClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkLinkListResult); err != nil {
 		return VirtualNetworkLinksClientListResponse{}, err
 	}
@@ -338,9 +334,7 @@ func (client *VirtualNetworkLinksClient) BeginUpdate(ctx context.Context, resour
 	if err != nil {
 		return VirtualNetworkLinksClientUpdatePollerResponse{}, err
 	}
-	result := VirtualNetworkLinksClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualNetworkLinksClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualNetworkLinksClient.Update", "", resp, client.pl)
 	if err != nil {
 		return VirtualNetworkLinksClientUpdatePollerResponse{}, err

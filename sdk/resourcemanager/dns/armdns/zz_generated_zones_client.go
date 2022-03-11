@@ -35,17 +35,17 @@ type ZonesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewZonesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ZonesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ZonesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *ZonesClient) createOrUpdateCreateRequest(ctx context.Context, reso
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ZonesClient) createOrUpdateHandleResponse(resp *http.Response) (ZonesClientCreateOrUpdateResponse, error) {
-	result := ZonesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ZonesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Zone); err != nil {
 		return ZonesClientCreateOrUpdateResponse{}, err
 	}
@@ -122,9 +122,7 @@ func (client *ZonesClient) BeginDelete(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return ZonesClientDeletePollerResponse{}, err
 	}
-	result := ZonesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ZonesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ZonesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ZonesClientDeletePollerResponse{}, err
@@ -229,7 +227,7 @@ func (client *ZonesClient) getCreateRequest(ctx context.Context, resourceGroupNa
 
 // getHandleResponse handles the Get response.
 func (client *ZonesClient) getHandleResponse(resp *http.Response) (ZonesClientGetResponse, error) {
-	result := ZonesClientGetResponse{RawResponse: resp}
+	result := ZonesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Zone); err != nil {
 		return ZonesClientGetResponse{}, err
 	}
@@ -274,7 +272,7 @@ func (client *ZonesClient) listCreateRequest(ctx context.Context, options *Zones
 
 // listHandleResponse handles the List response.
 func (client *ZonesClient) listHandleResponse(resp *http.Response) (ZonesClientListResponse, error) {
-	result := ZonesClientListResponse{RawResponse: resp}
+	result := ZonesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ZoneListResult); err != nil {
 		return ZonesClientListResponse{}, err
 	}
@@ -325,7 +323,7 @@ func (client *ZonesClient) listByResourceGroupCreateRequest(ctx context.Context,
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ZonesClient) listByResourceGroupHandleResponse(resp *http.Response) (ZonesClientListByResourceGroupResponse, error) {
-	result := ZonesClientListByResourceGroupResponse{RawResponse: resp}
+	result := ZonesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ZoneListResult); err != nil {
 		return ZonesClientListByResourceGroupResponse{}, err
 	}
@@ -384,7 +382,7 @@ func (client *ZonesClient) updateCreateRequest(ctx context.Context, resourceGrou
 
 // updateHandleResponse handles the Update response.
 func (client *ZonesClient) updateHandleResponse(resp *http.Response) (ZonesClientUpdateResponse, error) {
-	result := ZonesClientUpdateResponse{RawResponse: resp}
+	result := ZonesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Zone); err != nil {
 		return ZonesClientUpdateResponse{}, err
 	}

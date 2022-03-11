@@ -11,31 +11,16 @@ package armconfluent
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // MarketplaceAgreementsClientCreateResponse contains the response from method MarketplaceAgreementsClient.Create.
 type MarketplaceAgreementsClientCreateResponse struct {
-	MarketplaceAgreementsClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MarketplaceAgreementsClientCreateResult contains the result from method MarketplaceAgreementsClient.Create.
-type MarketplaceAgreementsClientCreateResult struct {
 	AgreementResource
 }
 
 // MarketplaceAgreementsClientListResponse contains the response from method MarketplaceAgreementsClient.List.
 type MarketplaceAgreementsClientListResponse struct {
-	MarketplaceAgreementsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// MarketplaceAgreementsClientListResult contains the result from method MarketplaceAgreementsClient.List.
-type MarketplaceAgreementsClientListResult struct {
 	AgreementResourceListResponse
 }
 
@@ -43,9 +28,6 @@ type MarketplaceAgreementsClientListResult struct {
 type OrganizationClientCreatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *OrganizationClientCreatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -53,11 +35,10 @@ type OrganizationClientCreatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l OrganizationClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (OrganizationClientCreateResponse, error) {
 	respType := OrganizationClientCreateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OrganizationResource)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OrganizationResource)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -70,24 +51,16 @@ func (l *OrganizationClientCreatePollerResponse) Resume(ctx context.Context, cli
 	poller := &OrganizationClientCreatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // OrganizationClientCreateResponse contains the response from method OrganizationClient.Create.
 type OrganizationClientCreateResponse struct {
-	OrganizationClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OrganizationClientCreateResult contains the result from method OrganizationClient.Create.
-type OrganizationClientCreateResult struct {
 	OrganizationResource
 }
 
@@ -95,9 +68,6 @@ type OrganizationClientCreateResult struct {
 type OrganizationClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *OrganizationClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -105,11 +75,10 @@ type OrganizationClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l OrganizationClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (OrganizationClientDeleteResponse, error) {
 	respType := OrganizationClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -122,89 +91,45 @@ func (l *OrganizationClientDeletePollerResponse) Resume(ctx context.Context, cli
 	poller := &OrganizationClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // OrganizationClientDeleteResponse contains the response from method OrganizationClient.Delete.
 type OrganizationClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // OrganizationClientGetResponse contains the response from method OrganizationClient.Get.
 type OrganizationClientGetResponse struct {
-	OrganizationClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OrganizationClientGetResult contains the result from method OrganizationClient.Get.
-type OrganizationClientGetResult struct {
 	OrganizationResource
 }
 
 // OrganizationClientListByResourceGroupResponse contains the response from method OrganizationClient.ListByResourceGroup.
 type OrganizationClientListByResourceGroupResponse struct {
-	OrganizationClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OrganizationClientListByResourceGroupResult contains the result from method OrganizationClient.ListByResourceGroup.
-type OrganizationClientListByResourceGroupResult struct {
 	OrganizationResourceListResult
 }
 
 // OrganizationClientListBySubscriptionResponse contains the response from method OrganizationClient.ListBySubscription.
 type OrganizationClientListBySubscriptionResponse struct {
-	OrganizationClientListBySubscriptionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OrganizationClientListBySubscriptionResult contains the result from method OrganizationClient.ListBySubscription.
-type OrganizationClientListBySubscriptionResult struct {
 	OrganizationResourceListResult
 }
 
 // OrganizationClientUpdateResponse contains the response from method OrganizationClient.Update.
 type OrganizationClientUpdateResponse struct {
-	OrganizationClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OrganizationClientUpdateResult contains the result from method OrganizationClient.Update.
-type OrganizationClientUpdateResult struct {
 	OrganizationResource
 }
 
 // OrganizationOperationsClientListResponse contains the response from method OrganizationOperationsClient.List.
 type OrganizationOperationsClientListResponse struct {
-	OrganizationOperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OrganizationOperationsClientListResult contains the result from method OrganizationOperationsClient.List.
-type OrganizationOperationsClientListResult struct {
 	OperationListResult
 }
 
 // ValidationsClientValidateOrganizationResponse contains the response from method ValidationsClient.ValidateOrganization.
 type ValidationsClientValidateOrganizationResponse struct {
-	ValidationsClientValidateOrganizationResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ValidationsClientValidateOrganizationResult contains the result from method ValidationsClient.ValidateOrganization.
-type ValidationsClientValidateOrganizationResult struct {
 	OrganizationResource
 }

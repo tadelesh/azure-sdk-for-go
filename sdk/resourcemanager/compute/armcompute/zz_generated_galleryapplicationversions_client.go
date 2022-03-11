@@ -35,17 +35,17 @@ type GalleryApplicationVersionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGalleryApplicationVersionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *GalleryApplicationVersionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GalleryApplicationVersionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -66,9 +66,7 @@ func (client *GalleryApplicationVersionsClient) BeginCreateOrUpdate(ctx context.
 	if err != nil {
 		return GalleryApplicationVersionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := GalleryApplicationVersionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := GalleryApplicationVersionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("GalleryApplicationVersionsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return GalleryApplicationVersionsClientCreateOrUpdatePollerResponse{}, err
@@ -143,9 +141,7 @@ func (client *GalleryApplicationVersionsClient) BeginDelete(ctx context.Context,
 	if err != nil {
 		return GalleryApplicationVersionsClientDeletePollerResponse{}, err
 	}
-	result := GalleryApplicationVersionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := GalleryApplicationVersionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("GalleryApplicationVersionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return GalleryApplicationVersionsClientDeletePollerResponse{}, err
@@ -269,7 +265,7 @@ func (client *GalleryApplicationVersionsClient) getCreateRequest(ctx context.Con
 
 // getHandleResponse handles the Get response.
 func (client *GalleryApplicationVersionsClient) getHandleResponse(resp *http.Response) (GalleryApplicationVersionsClientGetResponse, error) {
-	result := GalleryApplicationVersionsClientGetResponse{RawResponse: resp}
+	result := GalleryApplicationVersionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GalleryApplicationVersion); err != nil {
 		return GalleryApplicationVersionsClientGetResponse{}, err
 	}
@@ -328,7 +324,7 @@ func (client *GalleryApplicationVersionsClient) listByGalleryApplicationCreateRe
 
 // listByGalleryApplicationHandleResponse handles the ListByGalleryApplication response.
 func (client *GalleryApplicationVersionsClient) listByGalleryApplicationHandleResponse(resp *http.Response) (GalleryApplicationVersionsClientListByGalleryApplicationResponse, error) {
-	result := GalleryApplicationVersionsClientListByGalleryApplicationResponse{RawResponse: resp}
+	result := GalleryApplicationVersionsClientListByGalleryApplicationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GalleryApplicationVersionList); err != nil {
 		return GalleryApplicationVersionsClientListByGalleryApplicationResponse{}, err
 	}
@@ -351,9 +347,7 @@ func (client *GalleryApplicationVersionsClient) BeginUpdate(ctx context.Context,
 	if err != nil {
 		return GalleryApplicationVersionsClientUpdatePollerResponse{}, err
 	}
-	result := GalleryApplicationVersionsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := GalleryApplicationVersionsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("GalleryApplicationVersionsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return GalleryApplicationVersionsClientUpdatePollerResponse{}, err

@@ -34,17 +34,17 @@ type BackupShortTermRetentionPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBackupShortTermRetentionPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BackupShortTermRetentionPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BackupShortTermRetentionPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *BackupShortTermRetentionPoliciesClient) BeginCreateOrUpdate(ctx co
 	if err != nil {
 		return BackupShortTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := BackupShortTermRetentionPoliciesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := BackupShortTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("BackupShortTermRetentionPoliciesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return BackupShortTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}, err
@@ -188,7 +186,7 @@ func (client *BackupShortTermRetentionPoliciesClient) getCreateRequest(ctx conte
 
 // getHandleResponse handles the Get response.
 func (client *BackupShortTermRetentionPoliciesClient) getHandleResponse(resp *http.Response) (BackupShortTermRetentionPoliciesClientGetResponse, error) {
-	result := BackupShortTermRetentionPoliciesClientGetResponse{RawResponse: resp}
+	result := BackupShortTermRetentionPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupShortTermRetentionPolicy); err != nil {
 		return BackupShortTermRetentionPoliciesClientGetResponse{}, err
 	}
@@ -247,7 +245,7 @@ func (client *BackupShortTermRetentionPoliciesClient) listByDatabaseCreateReques
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *BackupShortTermRetentionPoliciesClient) listByDatabaseHandleResponse(resp *http.Response) (BackupShortTermRetentionPoliciesClientListByDatabaseResponse, error) {
-	result := BackupShortTermRetentionPoliciesClientListByDatabaseResponse{RawResponse: resp}
+	result := BackupShortTermRetentionPoliciesClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupShortTermRetentionPolicyListResult); err != nil {
 		return BackupShortTermRetentionPoliciesClientListByDatabaseResponse{}, err
 	}
@@ -269,9 +267,7 @@ func (client *BackupShortTermRetentionPoliciesClient) BeginUpdate(ctx context.Co
 	if err != nil {
 		return BackupShortTermRetentionPoliciesClientUpdatePollerResponse{}, err
 	}
-	result := BackupShortTermRetentionPoliciesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := BackupShortTermRetentionPoliciesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("BackupShortTermRetentionPoliciesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return BackupShortTermRetentionPoliciesClientUpdatePollerResponse{}, err

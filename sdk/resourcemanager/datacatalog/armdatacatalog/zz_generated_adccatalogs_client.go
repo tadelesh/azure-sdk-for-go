@@ -37,18 +37,18 @@ type ADCCatalogsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewADCCatalogsClient(subscriptionID string, catalogName string, credential azcore.TokenCredential, options *arm.ClientOptions) *ADCCatalogsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ADCCatalogsClient{
 		subscriptionID: subscriptionID,
 		catalogName:    catalogName,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *ADCCatalogsClient) createOrUpdateCreateRequest(ctx context.Context
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ADCCatalogsClient) createOrUpdateHandleResponse(resp *http.Response) (ADCCatalogsClientCreateOrUpdateResponse, error) {
-	result := ADCCatalogsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ADCCatalogsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ADCCatalog); err != nil {
 		return ADCCatalogsClientCreateOrUpdateResponse{}, err
 	}
@@ -120,9 +120,7 @@ func (client *ADCCatalogsClient) BeginDelete(ctx context.Context, resourceGroupN
 	if err != nil {
 		return ADCCatalogsClientDeletePollerResponse{}, err
 	}
-	result := ADCCatalogsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ADCCatalogsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ADCCatalogsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ADCCatalogsClientDeletePollerResponse{}, err
@@ -222,7 +220,7 @@ func (client *ADCCatalogsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *ADCCatalogsClient) getHandleResponse(resp *http.Response) (ADCCatalogsClientGetResponse, error) {
-	result := ADCCatalogsClientGetResponse{RawResponse: resp}
+	result := ADCCatalogsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ADCCatalog); err != nil {
 		return ADCCatalogsClientGetResponse{}, err
 	}
@@ -274,7 +272,7 @@ func (client *ADCCatalogsClient) listtByResourceGroupCreateRequest(ctx context.C
 
 // listtByResourceGroupHandleResponse handles the ListtByResourceGroup response.
 func (client *ADCCatalogsClient) listtByResourceGroupHandleResponse(resp *http.Response) (ADCCatalogsClientListtByResourceGroupResponse, error) {
-	result := ADCCatalogsClientListtByResourceGroupResponse{RawResponse: resp}
+	result := ADCCatalogsClientListtByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ADCCatalogsListResult); err != nil {
 		return ADCCatalogsClientListtByResourceGroupResponse{}, err
 	}
@@ -330,7 +328,7 @@ func (client *ADCCatalogsClient) updateCreateRequest(ctx context.Context, resour
 
 // updateHandleResponse handles the Update response.
 func (client *ADCCatalogsClient) updateHandleResponse(resp *http.Response) (ADCCatalogsClientUpdateResponse, error) {
-	result := ADCCatalogsClientUpdateResponse{RawResponse: resp}
+	result := ADCCatalogsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ADCCatalog); err != nil {
 		return ADCCatalogsClientUpdateResponse{}, err
 	}

@@ -36,18 +36,18 @@ type DeviceGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDeviceGroupsClient(subscriptionID string, iotDefenderLocation string, credential azcore.TokenCredential, options *arm.ClientOptions) *DeviceGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DeviceGroupsClient{
 		subscriptionID:      subscriptionID,
 		iotDefenderLocation: iotDefenderLocation,
-		host:                string(cp.Endpoint),
-		pl:                  armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:                string(ep),
+		pl:                  armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -101,7 +101,7 @@ func (client *DeviceGroupsClient) createOrUpdateCreateRequest(ctx context.Contex
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *DeviceGroupsClient) createOrUpdateHandleResponse(resp *http.Response) (DeviceGroupsClientCreateOrUpdateResponse, error) {
-	result := DeviceGroupsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := DeviceGroupsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceGroupModel); err != nil {
 		return DeviceGroupsClientCreateOrUpdateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *DeviceGroupsClient) Delete(ctx context.Context, deviceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DeviceGroupsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DeviceGroupsClientDeleteResponse{RawResponse: resp}, nil
+	return DeviceGroupsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -200,7 +200,7 @@ func (client *DeviceGroupsClient) getCreateRequest(ctx context.Context, deviceGr
 
 // getHandleResponse handles the Get response.
 func (client *DeviceGroupsClient) getHandleResponse(resp *http.Response) (DeviceGroupsClientGetResponse, error) {
-	result := DeviceGroupsClientGetResponse{RawResponse: resp}
+	result := DeviceGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceGroupModel); err != nil {
 		return DeviceGroupsClientGetResponse{}, err
 	}
@@ -246,7 +246,7 @@ func (client *DeviceGroupsClient) listCreateRequest(ctx context.Context, options
 
 // listHandleResponse handles the List response.
 func (client *DeviceGroupsClient) listHandleResponse(resp *http.Response) (DeviceGroupsClientListResponse, error) {
-	result := DeviceGroupsClientListResponse{RawResponse: resp}
+	result := DeviceGroupsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceGroupList); err != nil {
 		return DeviceGroupsClientListResponse{}, err
 	}

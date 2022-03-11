@@ -34,17 +34,17 @@ type ScriptCmdletsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewScriptCmdletsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ScriptCmdletsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ScriptCmdletsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -107,7 +107,7 @@ func (client *ScriptCmdletsClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *ScriptCmdletsClient) getHandleResponse(resp *http.Response) (ScriptCmdletsClientGetResponse, error) {
-	result := ScriptCmdletsClientGetResponse{RawResponse: resp}
+	result := ScriptCmdletsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScriptCmdlet); err != nil {
 		return ScriptCmdletsClientGetResponse{}, err
 	}
@@ -164,7 +164,7 @@ func (client *ScriptCmdletsClient) listCreateRequest(ctx context.Context, resour
 
 // listHandleResponse handles the List response.
 func (client *ScriptCmdletsClient) listHandleResponse(resp *http.Response) (ScriptCmdletsClientListResponse, error) {
-	result := ScriptCmdletsClientListResponse{RawResponse: resp}
+	result := ScriptCmdletsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScriptCmdletsList); err != nil {
 		return ScriptCmdletsClientListResponse{}, err
 	}

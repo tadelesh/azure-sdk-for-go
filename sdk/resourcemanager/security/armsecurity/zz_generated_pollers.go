@@ -43,11 +43,10 @@ func (p *AdaptiveNetworkHardeningsClientEnforcePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final AdaptiveNetworkHardeningsClientEnforceResponse will be returned.
 func (p *AdaptiveNetworkHardeningsClientEnforcePoller) FinalResponse(ctx context.Context) (AdaptiveNetworkHardeningsClientEnforceResponse, error) {
 	respType := AdaptiveNetworkHardeningsClientEnforceResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return AdaptiveNetworkHardeningsClientEnforceResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *AlertsClientSimulatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final AlertsClientSimulateResponse will be returned.
 func (p *AlertsClientSimulatePoller) FinalResponse(ctx context.Context) (AlertsClientSimulateResponse, error) {
 	respType := AlertsClientSimulateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return AlertsClientSimulateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ServerVulnerabilityAssessmentClientDeletePoller) Poll(ctx context.Conte
 // If the final GET succeeded then the final ServerVulnerabilityAssessmentClientDeleteResponse will be returned.
 func (p *ServerVulnerabilityAssessmentClientDeletePoller) FinalResponse(ctx context.Context) (ServerVulnerabilityAssessmentClientDeleteResponse, error) {
 	respType := ServerVulnerabilityAssessmentClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ServerVulnerabilityAssessmentClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

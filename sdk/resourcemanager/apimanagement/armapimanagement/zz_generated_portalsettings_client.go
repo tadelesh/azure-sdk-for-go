@@ -35,17 +35,17 @@ type PortalSettingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPortalSettingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PortalSettingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PortalSettingsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *PortalSettingsClient) listByServiceCreateRequest(ctx context.Conte
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *PortalSettingsClient) listByServiceHandleResponse(resp *http.Response) (PortalSettingsClientListByServiceResponse, error) {
-	result := PortalSettingsClientListByServiceResponse{RawResponse: resp}
+	result := PortalSettingsClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PortalSettingsCollection); err != nil {
 		return PortalSettingsClientListByServiceResponse{}, err
 	}

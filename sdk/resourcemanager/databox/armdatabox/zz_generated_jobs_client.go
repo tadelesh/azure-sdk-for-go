@@ -99,7 +99,7 @@ func (client *JobsClient) bookShipmentPickUpCreateRequest(ctx context.Context, r
 
 // bookShipmentPickUpHandleResponse handles the BookShipmentPickUp response.
 func (client *JobsClient) bookShipmentPickUpHandleResponse(resp *http.Response) (JobsClientBookShipmentPickUpResponse, error) {
-	result := JobsClientBookShipmentPickUpResponse{RawResponse: resp}
+	result := JobsClientBookShipmentPickUpResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ShipmentPickUpResponse); err != nil {
 		return JobsClientBookShipmentPickUpResponse{}, err
 	}
@@ -125,7 +125,7 @@ func (client *JobsClient) Cancel(ctx context.Context, resourceGroupName string, 
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return JobsClientCancelResponse{}, runtime.NewResponseError(resp)
 	}
-	return JobsClientCancelResponse{RawResponse: resp}, nil
+	return JobsClientCancelResponse{}, nil
 }
 
 // cancelCreateRequest creates the Cancel request.
@@ -167,9 +167,7 @@ func (client *JobsClient) BeginCreate(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return JobsClientCreatePollerResponse{}, err
 	}
-	result := JobsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := JobsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("JobsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return JobsClientCreatePollerResponse{}, err
@@ -235,9 +233,7 @@ func (client *JobsClient) BeginDelete(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return JobsClientDeletePollerResponse{}, err
 	}
-	result := JobsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := JobsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("JobsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return JobsClientDeletePollerResponse{}, err
@@ -343,7 +339,7 @@ func (client *JobsClient) getCreateRequest(ctx context.Context, resourceGroupNam
 
 // getHandleResponse handles the Get response.
 func (client *JobsClient) getHandleResponse(resp *http.Response) (JobsClientGetResponse, error) {
-	result := JobsClientGetResponse{RawResponse: resp}
+	result := JobsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobResource); err != nil {
 		return JobsClientGetResponse{}, err
 	}
@@ -388,7 +384,7 @@ func (client *JobsClient) listCreateRequest(ctx context.Context, options *JobsCl
 
 // listHandleResponse handles the List response.
 func (client *JobsClient) listHandleResponse(resp *http.Response) (JobsClientListResponse, error) {
-	result := JobsClientListResponse{RawResponse: resp}
+	result := JobsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobResourceList); err != nil {
 		return JobsClientListResponse{}, err
 	}
@@ -439,7 +435,7 @@ func (client *JobsClient) listByResourceGroupCreateRequest(ctx context.Context, 
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *JobsClient) listByResourceGroupHandleResponse(resp *http.Response) (JobsClientListByResourceGroupResponse, error) {
-	result := JobsClientListByResourceGroupResponse{RawResponse: resp}
+	result := JobsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobResourceList); err != nil {
 		return JobsClientListByResourceGroupResponse{}, err
 	}
@@ -452,19 +448,13 @@ func (client *JobsClient) listByResourceGroupHandleResponse(resp *http.Response)
 // jobName - The name of the job Resource within the specified resource group. job names must be between 3 and 24 characters
 // in length and use any alphanumeric and underscore only
 // options - JobsClientListCredentialsOptions contains the optional parameters for the JobsClient.ListCredentials method.
-func (client *JobsClient) ListCredentials(ctx context.Context, resourceGroupName string, jobName string, options *JobsClientListCredentialsOptions) (JobsClientListCredentialsResponse, error) {
-	req, err := client.listCredentialsCreateRequest(ctx, resourceGroupName, jobName, options)
-	if err != nil {
-		return JobsClientListCredentialsResponse{}, err
+func (client *JobsClient) ListCredentials(resourceGroupName string, jobName string, options *JobsClientListCredentialsOptions) *JobsClientListCredentialsPager {
+	return &JobsClientListCredentialsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCredentialsCreateRequest(ctx, resourceGroupName, jobName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return JobsClientListCredentialsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return JobsClientListCredentialsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listCredentialsHandleResponse(resp)
 }
 
 // listCredentialsCreateRequest creates the ListCredentials request.
@@ -495,7 +485,7 @@ func (client *JobsClient) listCredentialsCreateRequest(ctx context.Context, reso
 
 // listCredentialsHandleResponse handles the ListCredentials response.
 func (client *JobsClient) listCredentialsHandleResponse(resp *http.Response) (JobsClientListCredentialsResponse, error) {
-	result := JobsClientListCredentialsResponse{RawResponse: resp}
+	result := JobsClientListCredentialsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UnencryptedCredentialsList); err != nil {
 		return JobsClientListCredentialsResponse{}, err
 	}
@@ -521,7 +511,7 @@ func (client *JobsClient) MarkDevicesShipped(ctx context.Context, jobName string
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return JobsClientMarkDevicesShippedResponse{}, runtime.NewResponseError(resp)
 	}
-	return JobsClientMarkDevicesShippedResponse{RawResponse: resp}, nil
+	return JobsClientMarkDevicesShippedResponse{}, nil
 }
 
 // markDevicesShippedCreateRequest creates the MarkDevicesShipped request.
@@ -562,9 +552,7 @@ func (client *JobsClient) BeginUpdate(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return JobsClientUpdatePollerResponse{}, err
 	}
-	result := JobsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := JobsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("JobsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return JobsClientUpdatePollerResponse{}, err

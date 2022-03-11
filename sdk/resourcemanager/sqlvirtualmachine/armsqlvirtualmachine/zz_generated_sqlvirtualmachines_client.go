@@ -34,17 +34,17 @@ type SQLVirtualMachinesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLVirtualMachinesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLVirtualMachinesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLVirtualMachinesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *SQLVirtualMachinesClient) BeginCreateOrUpdate(ctx context.Context,
 	if err != nil {
 		return SQLVirtualMachinesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := SQLVirtualMachinesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLVirtualMachinesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLVirtualMachinesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return SQLVirtualMachinesClientCreateOrUpdatePollerResponse{}, err
@@ -130,9 +128,7 @@ func (client *SQLVirtualMachinesClient) BeginDelete(ctx context.Context, resourc
 	if err != nil {
 		return SQLVirtualMachinesClientDeletePollerResponse{}, err
 	}
-	result := SQLVirtualMachinesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLVirtualMachinesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLVirtualMachinesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return SQLVirtualMachinesClientDeletePollerResponse{}, err
@@ -237,7 +233,7 @@ func (client *SQLVirtualMachinesClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *SQLVirtualMachinesClient) getHandleResponse(resp *http.Response) (SQLVirtualMachinesClientGetResponse, error) {
-	result := SQLVirtualMachinesClientGetResponse{RawResponse: resp}
+	result := SQLVirtualMachinesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLVirtualMachine); err != nil {
 		return SQLVirtualMachinesClientGetResponse{}, err
 	}
@@ -279,7 +275,7 @@ func (client *SQLVirtualMachinesClient) listCreateRequest(ctx context.Context, o
 
 // listHandleResponse handles the List response.
 func (client *SQLVirtualMachinesClient) listHandleResponse(resp *http.Response) (SQLVirtualMachinesClientListResponse, error) {
-	result := SQLVirtualMachinesClientListResponse{RawResponse: resp}
+	result := SQLVirtualMachinesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListResult); err != nil {
 		return SQLVirtualMachinesClientListResponse{}, err
 	}
@@ -328,7 +324,7 @@ func (client *SQLVirtualMachinesClient) listByResourceGroupCreateRequest(ctx con
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *SQLVirtualMachinesClient) listByResourceGroupHandleResponse(resp *http.Response) (SQLVirtualMachinesClientListByResourceGroupResponse, error) {
-	result := SQLVirtualMachinesClientListByResourceGroupResponse{RawResponse: resp}
+	result := SQLVirtualMachinesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListResult); err != nil {
 		return SQLVirtualMachinesClientListByResourceGroupResponse{}, err
 	}
@@ -382,7 +378,7 @@ func (client *SQLVirtualMachinesClient) listBySQLVMGroupCreateRequest(ctx contex
 
 // listBySQLVMGroupHandleResponse handles the ListBySQLVMGroup response.
 func (client *SQLVirtualMachinesClient) listBySQLVMGroupHandleResponse(resp *http.Response) (SQLVirtualMachinesClientListBySQLVMGroupResponse, error) {
-	result := SQLVirtualMachinesClientListBySQLVMGroupResponse{RawResponse: resp}
+	result := SQLVirtualMachinesClientListBySQLVMGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListResult); err != nil {
 		return SQLVirtualMachinesClientListBySQLVMGroupResponse{}, err
 	}
@@ -402,9 +398,7 @@ func (client *SQLVirtualMachinesClient) BeginUpdate(ctx context.Context, resourc
 	if err != nil {
 		return SQLVirtualMachinesClientUpdatePollerResponse{}, err
 	}
-	result := SQLVirtualMachinesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLVirtualMachinesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLVirtualMachinesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return SQLVirtualMachinesClientUpdatePollerResponse{}, err

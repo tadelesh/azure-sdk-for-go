@@ -35,17 +35,17 @@ type WorkflowRunsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkflowRunsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkflowRunsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkflowRunsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -68,7 +68,7 @@ func (client *WorkflowRunsClient) Cancel(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WorkflowRunsClientCancelResponse{}, runtime.NewResponseError(resp)
 	}
-	return WorkflowRunsClientCancelResponse{RawResponse: resp}, nil
+	return WorkflowRunsClientCancelResponse{}, nil
 }
 
 // cancelCreateRequest creates the Cancel request.
@@ -154,7 +154,7 @@ func (client *WorkflowRunsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *WorkflowRunsClient) getHandleResponse(resp *http.Response) (WorkflowRunsClientGetResponse, error) {
-	result := WorkflowRunsClientGetResponse{RawResponse: resp}
+	result := WorkflowRunsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowRun); err != nil {
 		return WorkflowRunsClientGetResponse{}, err
 	}
@@ -212,7 +212,7 @@ func (client *WorkflowRunsClient) listCreateRequest(ctx context.Context, resourc
 
 // listHandleResponse handles the List response.
 func (client *WorkflowRunsClient) listHandleResponse(resp *http.Response) (WorkflowRunsClientListResponse, error) {
-	result := WorkflowRunsClientListResponse{RawResponse: resp}
+	result := WorkflowRunsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowRunListResult); err != nil {
 		return WorkflowRunsClientListResponse{}, err
 	}

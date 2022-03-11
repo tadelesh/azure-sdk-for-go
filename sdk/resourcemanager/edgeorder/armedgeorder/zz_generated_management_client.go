@@ -34,17 +34,17 @@ type ManagementClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagementClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagementClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagementClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -68,7 +68,7 @@ func (client *ManagementClient) CancelOrderItem(ctx context.Context, orderItemNa
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ManagementClientCancelOrderItemResponse{}, runtime.NewResponseError(resp)
 	}
-	return ManagementClientCancelOrderItemResponse{RawResponse: resp}, nil
+	return ManagementClientCancelOrderItemResponse{}, nil
 }
 
 // cancelOrderItemCreateRequest creates the CancelOrderItem request.
@@ -110,9 +110,7 @@ func (client *ManagementClient) BeginCreateAddress(ctx context.Context, addressN
 	if err != nil {
 		return ManagementClientCreateAddressPollerResponse{}, err
 	}
-	result := ManagementClientCreateAddressPollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagementClientCreateAddressPollerResponse{}
 	pt, err := armruntime.NewPoller("ManagementClient.CreateAddress", "", resp, client.pl)
 	if err != nil {
 		return ManagementClientCreateAddressPollerResponse{}, err
@@ -179,9 +177,7 @@ func (client *ManagementClient) BeginCreateOrderItem(ctx context.Context, orderI
 	if err != nil {
 		return ManagementClientCreateOrderItemPollerResponse{}, err
 	}
-	result := ManagementClientCreateOrderItemPollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagementClientCreateOrderItemPollerResponse{}
 	pt, err := armruntime.NewPoller("ManagementClient.CreateOrderItem", "", resp, client.pl)
 	if err != nil {
 		return ManagementClientCreateOrderItemPollerResponse{}, err
@@ -248,9 +244,7 @@ func (client *ManagementClient) BeginDeleteAddressByName(ctx context.Context, ad
 	if err != nil {
 		return ManagementClientDeleteAddressByNamePollerResponse{}, err
 	}
-	result := ManagementClientDeleteAddressByNamePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagementClientDeleteAddressByNamePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagementClient.DeleteAddressByName", "", resp, client.pl)
 	if err != nil {
 		return ManagementClientDeleteAddressByNamePollerResponse{}, err
@@ -315,9 +309,7 @@ func (client *ManagementClient) BeginDeleteOrderItemByName(ctx context.Context, 
 	if err != nil {
 		return ManagementClientDeleteOrderItemByNamePollerResponse{}, err
 	}
-	result := ManagementClientDeleteOrderItemByNamePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagementClientDeleteOrderItemByNamePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagementClient.DeleteOrderItemByName", "", resp, client.pl)
 	if err != nil {
 		return ManagementClientDeleteOrderItemByNamePollerResponse{}, err
@@ -421,7 +413,7 @@ func (client *ManagementClient) getAddressByNameCreateRequest(ctx context.Contex
 
 // getAddressByNameHandleResponse handles the GetAddressByName response.
 func (client *ManagementClient) getAddressByNameHandleResponse(resp *http.Response) (ManagementClientGetAddressByNameResponse, error) {
-	result := ManagementClientGetAddressByNameResponse{RawResponse: resp}
+	result := ManagementClientGetAddressByNameResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AddressResource); err != nil {
 		return ManagementClientGetAddressByNameResponse{}, err
 	}
@@ -482,7 +474,7 @@ func (client *ManagementClient) getOrderByNameCreateRequest(ctx context.Context,
 
 // getOrderByNameHandleResponse handles the GetOrderByName response.
 func (client *ManagementClient) getOrderByNameHandleResponse(resp *http.Response) (ManagementClientGetOrderByNameResponse, error) {
-	result := ManagementClientGetOrderByNameResponse{RawResponse: resp}
+	result := ManagementClientGetOrderByNameResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OrderResource); err != nil {
 		return ManagementClientGetOrderByNameResponse{}, err
 	}
@@ -541,7 +533,7 @@ func (client *ManagementClient) getOrderItemByNameCreateRequest(ctx context.Cont
 
 // getOrderItemByNameHandleResponse handles the GetOrderItemByName response.
 func (client *ManagementClient) getOrderItemByNameHandleResponse(resp *http.Response) (ManagementClientGetOrderItemByNameResponse, error) {
-	result := ManagementClientGetOrderItemByNameResponse{RawResponse: resp}
+	result := ManagementClientGetOrderItemByNameResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OrderItemResource); err != nil {
 		return ManagementClientGetOrderItemByNameResponse{}, err
 	}
@@ -595,7 +587,7 @@ func (client *ManagementClient) listAddressesAtResourceGroupLevelCreateRequest(c
 
 // listAddressesAtResourceGroupLevelHandleResponse handles the ListAddressesAtResourceGroupLevel response.
 func (client *ManagementClient) listAddressesAtResourceGroupLevelHandleResponse(resp *http.Response) (ManagementClientListAddressesAtResourceGroupLevelResponse, error) {
-	result := ManagementClientListAddressesAtResourceGroupLevelResponse{RawResponse: resp}
+	result := ManagementClientListAddressesAtResourceGroupLevelResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AddressResourceList); err != nil {
 		return ManagementClientListAddressesAtResourceGroupLevelResponse{}, err
 	}
@@ -644,7 +636,7 @@ func (client *ManagementClient) listAddressesAtSubscriptionLevelCreateRequest(ct
 
 // listAddressesAtSubscriptionLevelHandleResponse handles the ListAddressesAtSubscriptionLevel response.
 func (client *ManagementClient) listAddressesAtSubscriptionLevelHandleResponse(resp *http.Response) (ManagementClientListAddressesAtSubscriptionLevelResponse, error) {
-	result := ManagementClientListAddressesAtSubscriptionLevelResponse{RawResponse: resp}
+	result := ManagementClientListAddressesAtSubscriptionLevelResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AddressResourceList); err != nil {
 		return ManagementClientListAddressesAtSubscriptionLevelResponse{}, err
 	}
@@ -692,7 +684,7 @@ func (client *ManagementClient) listConfigurationsCreateRequest(ctx context.Cont
 
 // listConfigurationsHandleResponse handles the ListConfigurations response.
 func (client *ManagementClient) listConfigurationsHandleResponse(resp *http.Response) (ManagementClientListConfigurationsResponse, error) {
-	result := ManagementClientListConfigurationsResponse{RawResponse: resp}
+	result := ManagementClientListConfigurationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Configurations); err != nil {
 		return ManagementClientListConfigurationsResponse{}, err
 	}
@@ -731,7 +723,7 @@ func (client *ManagementClient) listOperationsCreateRequest(ctx context.Context,
 
 // listOperationsHandleResponse handles the ListOperations response.
 func (client *ManagementClient) listOperationsHandleResponse(resp *http.Response) (ManagementClientListOperationsResponse, error) {
-	result := ManagementClientListOperationsResponse{RawResponse: resp}
+	result := ManagementClientListOperationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OperationListResult); err != nil {
 		return ManagementClientListOperationsResponse{}, err
 	}
@@ -782,7 +774,7 @@ func (client *ManagementClient) listOrderAtResourceGroupLevelCreateRequest(ctx c
 
 // listOrderAtResourceGroupLevelHandleResponse handles the ListOrderAtResourceGroupLevel response.
 func (client *ManagementClient) listOrderAtResourceGroupLevelHandleResponse(resp *http.Response) (ManagementClientListOrderAtResourceGroupLevelResponse, error) {
-	result := ManagementClientListOrderAtResourceGroupLevelResponse{RawResponse: resp}
+	result := ManagementClientListOrderAtResourceGroupLevelResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OrderResourceList); err != nil {
 		return ManagementClientListOrderAtResourceGroupLevelResponse{}, err
 	}
@@ -828,7 +820,7 @@ func (client *ManagementClient) listOrderAtSubscriptionLevelCreateRequest(ctx co
 
 // listOrderAtSubscriptionLevelHandleResponse handles the ListOrderAtSubscriptionLevel response.
 func (client *ManagementClient) listOrderAtSubscriptionLevelHandleResponse(resp *http.Response) (ManagementClientListOrderAtSubscriptionLevelResponse, error) {
-	result := ManagementClientListOrderAtSubscriptionLevelResponse{RawResponse: resp}
+	result := ManagementClientListOrderAtSubscriptionLevelResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OrderResourceList); err != nil {
 		return ManagementClientListOrderAtSubscriptionLevelResponse{}, err
 	}
@@ -885,7 +877,7 @@ func (client *ManagementClient) listOrderItemsAtResourceGroupLevelCreateRequest(
 
 // listOrderItemsAtResourceGroupLevelHandleResponse handles the ListOrderItemsAtResourceGroupLevel response.
 func (client *ManagementClient) listOrderItemsAtResourceGroupLevelHandleResponse(resp *http.Response) (ManagementClientListOrderItemsAtResourceGroupLevelResponse, error) {
-	result := ManagementClientListOrderItemsAtResourceGroupLevelResponse{RawResponse: resp}
+	result := ManagementClientListOrderItemsAtResourceGroupLevelResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OrderItemResourceList); err != nil {
 		return ManagementClientListOrderItemsAtResourceGroupLevelResponse{}, err
 	}
@@ -937,7 +929,7 @@ func (client *ManagementClient) listOrderItemsAtSubscriptionLevelCreateRequest(c
 
 // listOrderItemsAtSubscriptionLevelHandleResponse handles the ListOrderItemsAtSubscriptionLevel response.
 func (client *ManagementClient) listOrderItemsAtSubscriptionLevelHandleResponse(resp *http.Response) (ManagementClientListOrderItemsAtSubscriptionLevelResponse, error) {
-	result := ManagementClientListOrderItemsAtSubscriptionLevelResponse{RawResponse: resp}
+	result := ManagementClientListOrderItemsAtSubscriptionLevelResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OrderItemResourceList); err != nil {
 		return ManagementClientListOrderItemsAtSubscriptionLevelResponse{}, err
 	}
@@ -987,7 +979,7 @@ func (client *ManagementClient) listProductFamiliesCreateRequest(ctx context.Con
 
 // listProductFamiliesHandleResponse handles the ListProductFamilies response.
 func (client *ManagementClient) listProductFamiliesHandleResponse(resp *http.Response) (ManagementClientListProductFamiliesResponse, error) {
-	result := ManagementClientListProductFamiliesResponse{RawResponse: resp}
+	result := ManagementClientListProductFamiliesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProductFamilies); err != nil {
 		return ManagementClientListProductFamiliesResponse{}, err
 	}
@@ -1033,7 +1025,7 @@ func (client *ManagementClient) listProductFamiliesMetadataCreateRequest(ctx con
 
 // listProductFamiliesMetadataHandleResponse handles the ListProductFamiliesMetadata response.
 func (client *ManagementClient) listProductFamiliesMetadataHandleResponse(resp *http.Response) (ManagementClientListProductFamiliesMetadataResponse, error) {
-	result := ManagementClientListProductFamiliesMetadataResponse{RawResponse: resp}
+	result := ManagementClientListProductFamiliesMetadataResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProductFamiliesMetadata); err != nil {
 		return ManagementClientListProductFamiliesMetadataResponse{}, err
 	}
@@ -1052,9 +1044,7 @@ func (client *ManagementClient) BeginReturnOrderItem(ctx context.Context, orderI
 	if err != nil {
 		return ManagementClientReturnOrderItemPollerResponse{}, err
 	}
-	result := ManagementClientReturnOrderItemPollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagementClientReturnOrderItemPollerResponse{}
 	pt, err := armruntime.NewPoller("ManagementClient.ReturnOrderItem", "", resp, client.pl)
 	if err != nil {
 		return ManagementClientReturnOrderItemPollerResponse{}, err
@@ -1121,9 +1111,7 @@ func (client *ManagementClient) BeginUpdateAddress(ctx context.Context, addressN
 	if err != nil {
 		return ManagementClientUpdateAddressPollerResponse{}, err
 	}
-	result := ManagementClientUpdateAddressPollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagementClientUpdateAddressPollerResponse{}
 	pt, err := armruntime.NewPoller("ManagementClient.UpdateAddress", "", resp, client.pl)
 	if err != nil {
 		return ManagementClientUpdateAddressPollerResponse{}, err
@@ -1192,9 +1180,7 @@ func (client *ManagementClient) BeginUpdateOrderItem(ctx context.Context, orderI
 	if err != nil {
 		return ManagementClientUpdateOrderItemPollerResponse{}, err
 	}
-	result := ManagementClientUpdateOrderItemPollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagementClientUpdateOrderItemPollerResponse{}
 	pt, err := armruntime.NewPoller("ManagementClient.UpdateOrderItem", "", resp, client.pl)
 	if err != nil {
 		return ManagementClientUpdateOrderItemPollerResponse{}, err

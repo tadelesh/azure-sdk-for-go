@@ -34,17 +34,17 @@ type ConfigurationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewConfigurationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ConfigurationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ConfigurationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *ConfigurationsClient) createInResourceGroupCreateRequest(ctx conte
 
 // createInResourceGroupHandleResponse handles the CreateInResourceGroup response.
 func (client *ConfigurationsClient) createInResourceGroupHandleResponse(resp *http.Response) (ConfigurationsClientCreateInResourceGroupResponse, error) {
-	result := ConfigurationsClientCreateInResourceGroupResponse{RawResponse: resp}
+	result := ConfigurationsClientCreateInResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigData); err != nil {
 		return ConfigurationsClientCreateInResourceGroupResponse{}, err
 	}
@@ -152,7 +152,7 @@ func (client *ConfigurationsClient) createInSubscriptionCreateRequest(ctx contex
 
 // createInSubscriptionHandleResponse handles the CreateInSubscription response.
 func (client *ConfigurationsClient) createInSubscriptionHandleResponse(resp *http.Response) (ConfigurationsClientCreateInSubscriptionResponse, error) {
-	result := ConfigurationsClientCreateInSubscriptionResponse{RawResponse: resp}
+	result := ConfigurationsClientCreateInSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigData); err != nil {
 		return ConfigurationsClientCreateInSubscriptionResponse{}, err
 	}
@@ -164,19 +164,13 @@ func (client *ConfigurationsClient) createInSubscriptionHandleResponse(resp *htt
 // resourceGroup - The name of the Azure resource group.
 // options - ConfigurationsClientListByResourceGroupOptions contains the optional parameters for the ConfigurationsClient.ListByResourceGroup
 // method.
-func (client *ConfigurationsClient) ListByResourceGroup(ctx context.Context, resourceGroup string, options *ConfigurationsClientListByResourceGroupOptions) (ConfigurationsClientListByResourceGroupResponse, error) {
-	req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroup, options)
-	if err != nil {
-		return ConfigurationsClientListByResourceGroupResponse{}, err
+func (client *ConfigurationsClient) ListByResourceGroup(resourceGroup string, options *ConfigurationsClientListByResourceGroupOptions) *ConfigurationsClientListByResourceGroupPager {
+	return &ConfigurationsClientListByResourceGroupPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByResourceGroupCreateRequest(ctx, resourceGroup, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ConfigurationsClientListByResourceGroupResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ConfigurationsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByResourceGroupHandleResponse(resp)
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -203,7 +197,7 @@ func (client *ConfigurationsClient) listByResourceGroupCreateRequest(ctx context
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ConfigurationsClient) listByResourceGroupHandleResponse(resp *http.Response) (ConfigurationsClientListByResourceGroupResponse, error) {
-	result := ConfigurationsClientListByResourceGroupResponse{RawResponse: resp}
+	result := ConfigurationsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigurationListResult); err != nil {
 		return ConfigurationsClientListByResourceGroupResponse{}, err
 	}
@@ -246,7 +240,7 @@ func (client *ConfigurationsClient) listBySubscriptionCreateRequest(ctx context.
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *ConfigurationsClient) listBySubscriptionHandleResponse(resp *http.Response) (ConfigurationsClientListBySubscriptionResponse, error) {
-	result := ConfigurationsClientListBySubscriptionResponse{RawResponse: resp}
+	result := ConfigurationsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigurationListResult); err != nil {
 		return ConfigurationsClientListBySubscriptionResponse{}, err
 	}

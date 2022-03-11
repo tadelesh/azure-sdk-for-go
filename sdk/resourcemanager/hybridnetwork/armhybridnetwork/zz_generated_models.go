@@ -8,12 +8,7 @@
 
 package armhybridnetwork
 
-import (
-	"encoding/json"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
-	"reflect"
-	"time"
-)
+import "time"
 
 // AzureStackEdgeFormat - The reference to the Azure stack edge device.
 type AzureStackEdgeFormat struct {
@@ -31,59 +26,6 @@ type AzureStackEdgeFormat struct {
 
 	// READ-ONLY; The current device status.
 	Status *Status `json:"status,omitempty" azure:"ro"`
-}
-
-// GetDevicePropertiesFormat implements the DevicePropertiesFormatClassification interface for type AzureStackEdgeFormat.
-func (a *AzureStackEdgeFormat) GetDevicePropertiesFormat() *DevicePropertiesFormat {
-	return &DevicePropertiesFormat{
-		Status:            a.Status,
-		ProvisioningState: a.ProvisioningState,
-		DeviceType:        a.DeviceType,
-		NetworkFunctions:  a.NetworkFunctions,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type AzureStackEdgeFormat.
-func (a AzureStackEdgeFormat) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "azureStackEdge", a.AzureStackEdge)
-	objectMap["deviceType"] = DeviceTypeAzureStackEdge
-	populate(objectMap, "networkFunctions", a.NetworkFunctions)
-	populate(objectMap, "provisioningState", a.ProvisioningState)
-	populate(objectMap, "status", a.Status)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type AzureStackEdgeFormat.
-func (a *AzureStackEdgeFormat) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "azureStackEdge":
-			err = unpopulate(val, &a.AzureStackEdge)
-			delete(rawMsg, key)
-		case "deviceType":
-			err = unpopulate(val, &a.DeviceType)
-			delete(rawMsg, key)
-		case "networkFunctions":
-			err = unpopulate(val, &a.NetworkFunctions)
-			delete(rawMsg, key)
-		case "provisioningState":
-			err = unpopulate(val, &a.ProvisioningState)
-			delete(rawMsg, key)
-		case "status":
-			err = unpopulate(val, &a.Status)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // CustomProfile - Specifies the custom settings for the virtual machine.
@@ -131,57 +73,6 @@ type Device struct {
 	Type *string `json:"type,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type Device.
-func (d Device) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", d.ID)
-	populate(objectMap, "location", d.Location)
-	populate(objectMap, "name", d.Name)
-	populate(objectMap, "properties", d.Properties)
-	populate(objectMap, "systemData", d.SystemData)
-	populate(objectMap, "tags", d.Tags)
-	populate(objectMap, "type", d.Type)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type Device.
-func (d *Device) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "id":
-			err = unpopulate(val, &d.ID)
-			delete(rawMsg, key)
-		case "location":
-			err = unpopulate(val, &d.Location)
-			delete(rawMsg, key)
-		case "name":
-			err = unpopulate(val, &d.Name)
-			delete(rawMsg, key)
-		case "properties":
-			d.Properties, err = unmarshalDevicePropertiesFormatClassification(val)
-			delete(rawMsg, key)
-		case "systemData":
-			err = unpopulate(val, &d.SystemData)
-			delete(rawMsg, key)
-		case "tags":
-			err = unpopulate(val, &d.Tags)
-			delete(rawMsg, key)
-		case "type":
-			err = unpopulate(val, &d.Type)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // DeviceListResult - Response for devices API service call.
 type DeviceListResult struct {
 	// A list of devices.
@@ -189,14 +80,6 @@ type DeviceListResult struct {
 
 	// READ-ONLY; The URL to get the next set of results.
 	NextLink *string `json:"nextLink,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type DeviceListResult.
-func (d DeviceListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", d.NextLink)
-	populate(objectMap, "value", d.Value)
-	return json.Marshal(objectMap)
 }
 
 // DevicePropertiesFormatClassification provides polymorphic access to related types.
@@ -221,19 +104,6 @@ type DevicePropertiesFormat struct {
 
 	// READ-ONLY; The current device status.
 	Status *Status `json:"status,omitempty" azure:"ro"`
-}
-
-// GetDevicePropertiesFormat implements the DevicePropertiesFormatClassification interface for type DevicePropertiesFormat.
-func (d *DevicePropertiesFormat) GetDevicePropertiesFormat() *DevicePropertiesFormat { return d }
-
-// MarshalJSON implements the json.Marshaller interface for type DevicePropertiesFormat.
-func (d DevicePropertiesFormat) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	objectMap["deviceType"] = d.DeviceType
-	populate(objectMap, "networkFunctions", d.NetworkFunctions)
-	populate(objectMap, "provisioningState", d.ProvisioningState)
-	populate(objectMap, "status", d.Status)
-	return json.Marshal(objectMap)
 }
 
 // DeviceRegistrationKey - The device registration key.
@@ -280,7 +150,7 @@ type DevicesClientUpdateTagsOptions struct {
 // ErrorAdditionalInfo - The resource management error additional info.
 type ErrorAdditionalInfo struct {
 	// READ-ONLY; The additional info.
-	Info map[string]interface{} `json:"info,omitempty" azure:"ro"`
+	Info interface{} `json:"info,omitempty" azure:"ro"`
 
 	// READ-ONLY; The additional info type.
 	Type *string `json:"type,omitempty" azure:"ro"`
@@ -302,17 +172,6 @@ type ErrorDetail struct {
 
 	// READ-ONLY; The error target.
 	Target *string `json:"target,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type ErrorDetail.
-func (e ErrorDetail) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "additionalInfo", e.AdditionalInfo)
-	populate(objectMap, "code", e.Code)
-	populate(objectMap, "details", e.Details)
-	populate(objectMap, "message", e.Message)
-	populate(objectMap, "target", e.Target)
-	return json.Marshal(objectMap)
 }
 
 // ErrorResponse - Common error response for all Azure Resource Manager APIs to return error details for failed operations.
@@ -376,20 +235,6 @@ type NetworkFunction struct {
 	Type *string `json:"type,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type NetworkFunction.
-func (n NetworkFunction) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "etag", n.Etag)
-	populate(objectMap, "id", n.ID)
-	populate(objectMap, "location", n.Location)
-	populate(objectMap, "name", n.Name)
-	populate(objectMap, "properties", n.Properties)
-	populate(objectMap, "systemData", n.SystemData)
-	populate(objectMap, "tags", n.Tags)
-	populate(objectMap, "type", n.Type)
-	return json.Marshal(objectMap)
-}
-
 // NetworkFunctionListResult - Response for network function API service call.
 type NetworkFunctionListResult struct {
 	// A list of network function resources in a subscription or resource group.
@@ -399,24 +244,16 @@ type NetworkFunctionListResult struct {
 	NextLink *string `json:"nextLink,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type NetworkFunctionListResult.
-func (n NetworkFunctionListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", n.NextLink)
-	populate(objectMap, "value", n.Value)
-	return json.Marshal(objectMap)
-}
-
 // NetworkFunctionPropertiesFormat - Network function properties.
 type NetworkFunctionPropertiesFormat struct {
 	// The reference to the device resource. Once set, it cannot be updated.
 	Device *SubResource `json:"device,omitempty"`
 
 	// The parameters for the managed application.
-	ManagedApplicationParameters map[string]interface{} `json:"managedApplicationParameters,omitempty"`
+	ManagedApplicationParameters interface{} `json:"managedApplicationParameters,omitempty"`
 
 	// The network function container configurations from the user.
-	NetworkFunctionContainerConfigurations map[string]interface{} `json:"networkFunctionContainerConfigurations,omitempty"`
+	NetworkFunctionContainerConfigurations interface{} `json:"networkFunctionContainerConfigurations,omitempty"`
 
 	// The network function configurations from the user.
 	NetworkFunctionUserConfigurations []*NetworkFunctionUserConfiguration `json:"networkFunctionUserConfigurations,omitempty"`
@@ -443,23 +280,6 @@ type NetworkFunctionPropertiesFormat struct {
 	VendorProvisioningState *VendorProvisioningState `json:"vendorProvisioningState,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type NetworkFunctionPropertiesFormat.
-func (n NetworkFunctionPropertiesFormat) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "device", n.Device)
-	populate(objectMap, "managedApplication", n.ManagedApplication)
-	populate(objectMap, "managedApplicationParameters", n.ManagedApplicationParameters)
-	populate(objectMap, "networkFunctionContainerConfigurations", n.NetworkFunctionContainerConfigurations)
-	populate(objectMap, "networkFunctionUserConfigurations", n.NetworkFunctionUserConfigurations)
-	populate(objectMap, "provisioningState", n.ProvisioningState)
-	populate(objectMap, "skuName", n.SKUName)
-	populate(objectMap, "skuType", n.SKUType)
-	populate(objectMap, "serviceKey", n.ServiceKey)
-	populate(objectMap, "vendorName", n.VendorName)
-	populate(objectMap, "vendorProvisioningState", n.VendorProvisioningState)
-	return json.Marshal(objectMap)
-}
-
 // NetworkFunctionRoleConfiguration - Network function role configuration.
 type NetworkFunctionRoleConfiguration struct {
 	// Specifies the custom settings for the virtual machine.
@@ -482,28 +302,13 @@ type NetworkFunctionRoleConfiguration struct {
 	StorageProfile *StorageProfile `json:"storageProfile,omitempty"`
 
 	// The user parameters for customers. The format of user data parameters has to be matched with the provided user data template.
-	UserDataParameters map[string]interface{} `json:"userDataParameters,omitempty"`
+	UserDataParameters interface{} `json:"userDataParameters,omitempty"`
 
 	// The user data template for customers. This is a json schema template describing the format and data type of user data parameters.
-	UserDataTemplate map[string]interface{} `json:"userDataTemplate,omitempty"`
+	UserDataTemplate interface{} `json:"userDataTemplate,omitempty"`
 
 	// The size of the virtual machine.
 	VirtualMachineSize *VirtualMachineSizeTypes `json:"virtualMachineSize,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type NetworkFunctionRoleConfiguration.
-func (n NetworkFunctionRoleConfiguration) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "customProfile", n.CustomProfile)
-	populate(objectMap, "networkInterfaces", n.NetworkInterfaces)
-	populate(objectMap, "osProfile", n.OSProfile)
-	populate(objectMap, "roleName", n.RoleName)
-	populate(objectMap, "roleType", n.RoleType)
-	populate(objectMap, "storageProfile", n.StorageProfile)
-	populate(objectMap, "userDataParameters", n.UserDataParameters)
-	populate(objectMap, "userDataTemplate", n.UserDataTemplate)
-	populate(objectMap, "virtualMachineSize", n.VirtualMachineSize)
-	return json.Marshal(objectMap)
 }
 
 // NetworkFunctionRoleInstanceListResult - List of role instances of vendor network function.
@@ -513,14 +318,6 @@ type NetworkFunctionRoleInstanceListResult struct {
 
 	// READ-ONLY; A list of role instances.
 	Value []*RoleInstance `json:"value,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type NetworkFunctionRoleInstanceListResult.
-func (n NetworkFunctionRoleInstanceListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", n.NextLink)
-	populate(objectMap, "value", n.Value)
-	return json.Marshal(objectMap)
 }
 
 // NetworkFunctionSKUDetails - The network function sku details.
@@ -535,15 +332,6 @@ type NetworkFunctionSKUDetails struct {
 	NextLink *string `json:"nextLink,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type NetworkFunctionSKUDetails.
-func (n NetworkFunctionSKUDetails) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", n.NextLink)
-	populate(objectMap, "skuType", n.SKUType)
-	populate(objectMap, "value", n.Value)
-	return json.Marshal(objectMap)
-}
-
 // NetworkFunctionSKUListResult - A list of available network function skus.
 type NetworkFunctionSKUListResult struct {
 	// The network function vendor sku overview properties.
@@ -551,14 +339,6 @@ type NetworkFunctionSKUListResult struct {
 
 	// READ-ONLY; The URL to get the next set of results.
 	NextLink *string `json:"nextLink,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type NetworkFunctionSKUListResult.
-func (n NetworkFunctionSKUListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", n.NextLink)
-	populate(objectMap, "value", n.Value)
-	return json.Marshal(objectMap)
 }
 
 // NetworkFunctionSKURoleDetails - The network function user configuration.
@@ -570,33 +350,16 @@ type NetworkFunctionSKURoleDetails struct {
 	RoleName *string `json:"roleName,omitempty"`
 
 	// The user parameters for customers.
-	UserDataParameters map[string]interface{} `json:"userDataParameters,omitempty"`
+	UserDataParameters interface{} `json:"userDataParameters,omitempty"`
 
 	// The user data template for customers.
-	UserDataTemplate map[string]interface{} `json:"userDataTemplate,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type NetworkFunctionSKURoleDetails.
-func (n NetworkFunctionSKURoleDetails) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "networkInterfaces", n.NetworkInterfaces)
-	populate(objectMap, "roleName", n.RoleName)
-	populate(objectMap, "userDataParameters", n.UserDataParameters)
-	populate(objectMap, "userDataTemplate", n.UserDataTemplate)
-	return json.Marshal(objectMap)
+	UserDataTemplate interface{} `json:"userDataTemplate,omitempty"`
 }
 
 // NetworkFunctionTemplate - The network function template.
 type NetworkFunctionTemplate struct {
 	// An array of network function role definitions.
 	NetworkFunctionRoleConfigurations []*NetworkFunctionRoleConfiguration `json:"networkFunctionRoleConfigurations,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type NetworkFunctionTemplate.
-func (n NetworkFunctionTemplate) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "networkFunctionRoleConfigurations", n.NetworkFunctionRoleConfigurations)
-	return json.Marshal(objectMap)
 }
 
 // NetworkFunctionUserConfiguration - The network function user configuration.
@@ -611,17 +374,7 @@ type NetworkFunctionUserConfiguration struct {
 	RoleName *string `json:"roleName,omitempty"`
 
 	// The user data parameters from the customer.
-	UserDataParameters map[string]interface{} `json:"userDataParameters,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type NetworkFunctionUserConfiguration.
-func (n NetworkFunctionUserConfiguration) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "networkInterfaces", n.NetworkInterfaces)
-	populate(objectMap, "osProfile", n.OSProfile)
-	populate(objectMap, "roleName", n.RoleName)
-	populate(objectMap, "userDataParameters", n.UserDataParameters)
-	return json.Marshal(objectMap)
+	UserDataParameters interface{} `json:"userDataParameters,omitempty"`
 }
 
 // NetworkFunctionUserConfigurationOsProfile - Specifies the operating system settings for the role instance.
@@ -655,17 +408,7 @@ type NetworkFunctionVendorConfiguration struct {
 	RoleName *string `json:"roleName,omitempty"`
 
 	// READ-ONLY; The user parameters from the customer.
-	UserDataParameters map[string]interface{} `json:"userDataParameters,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type NetworkFunctionVendorConfiguration.
-func (n NetworkFunctionVendorConfiguration) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "networkInterfaces", n.NetworkInterfaces)
-	populate(objectMap, "osProfile", n.OSProfile)
-	populate(objectMap, "roleName", n.RoleName)
-	populate(objectMap, "userDataParameters", n.UserDataParameters)
-	return json.Marshal(objectMap)
+	UserDataParameters interface{} `json:"userDataParameters,omitempty" azure:"ro"`
 }
 
 // NetworkFunctionVendorListResult - The network function vendor list result.
@@ -675,14 +418,6 @@ type NetworkFunctionVendorListResult struct {
 
 	// READ-ONLY; The URL to get the next set of results.
 	NextLink *string `json:"nextLink,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type NetworkFunctionVendorListResult.
-func (n NetworkFunctionVendorListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", n.NextLink)
-	populate(objectMap, "value", n.Value)
-	return json.Marshal(objectMap)
 }
 
 // NetworkFunctionVendorSKUsClientListBySKUOptions contains the optional parameters for the NetworkFunctionVendorSKUsClient.ListBySKU
@@ -750,16 +485,6 @@ type NetworkInterface struct {
 	VMSwitchType *VMSwitchType `json:"vmSwitchType,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type NetworkInterface.
-func (n NetworkInterface) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "ipConfigurations", n.IPConfigurations)
-	populate(objectMap, "macAddress", n.MacAddress)
-	populate(objectMap, "networkInterfaceName", n.NetworkInterfaceName)
-	populate(objectMap, "vmSwitchType", n.VMSwitchType)
-	return json.Marshal(objectMap)
-}
-
 // NetworkInterfaceIPConfiguration - Network interface IP configuration properties.
 type NetworkInterfaceIPConfiguration struct {
 	// The list of DNS servers IP addresses.
@@ -779,18 +504,6 @@ type NetworkInterfaceIPConfiguration struct {
 
 	// The value of the subnet.
 	Subnet *string `json:"subnet,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type NetworkInterfaceIPConfiguration.
-func (n NetworkInterfaceIPConfiguration) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "dnsServers", n.DNSServers)
-	populate(objectMap, "gateway", n.Gateway)
-	populate(objectMap, "ipAddress", n.IPAddress)
-	populate(objectMap, "ipAllocationMethod", n.IPAllocationMethod)
-	populate(objectMap, "ipVersion", n.IPVersion)
-	populate(objectMap, "subnet", n.Subnet)
-	return json.Marshal(objectMap)
 }
 
 // Operation - Object that describes a single Microsoft.HybridNetwork operation.
@@ -824,14 +537,6 @@ type OperationList struct {
 
 	// READ-ONLY; A list of Microsoft.HybridNetwork operations.
 	Value []*Operation `json:"value,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type OperationList.
-func (o OperationList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", o.NextLink)
-	populate(objectMap, "value", o.Value)
-	return json.Marshal(objectMap)
 }
 
 // OperationsClientListOptions contains the optional parameters for the OperationsClient.List method.
@@ -928,14 +633,6 @@ type PreviewSubscriptionsList struct {
 	NextLink *string `json:"nextLink,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type PreviewSubscriptionsList.
-func (p PreviewSubscriptionsList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", p.NextLink)
-	populate(objectMap, "value", p.Value)
-	return json.Marshal(objectMap)
-}
-
 // ProxyResource - The resource model definition for a Azure Resource Manager proxy resource. It will not have tags and a
 // location
 type ProxyResource struct {
@@ -1028,13 +725,6 @@ type SSHConfiguration struct {
 	PublicKeys []*SSHPublicKey `json:"publicKeys,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type SSHConfiguration.
-func (s SSHConfiguration) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "publicKeys", s.PublicKeys)
-	return json.Marshal(objectMap)
-}
-
 // SSHPublicKey - Contains information about SSH certificate public key and the path on the Linux VM where the public key
 // is placed.
 type SSHPublicKey struct {
@@ -1059,15 +749,6 @@ type StorageProfile struct {
 
 	// Specifies information about the operating system disk used by the virtual machine.
 	OSDisk *OsDisk `json:"osDisk,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type StorageProfile.
-func (s StorageProfile) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "dataDisks", s.DataDisks)
-	populate(objectMap, "imageReference", s.ImageReference)
-	populate(objectMap, "osDisk", s.OSDisk)
-	return json.Marshal(objectMap)
 }
 
 // SubResource - Reference to another sub resource.
@@ -1097,64 +778,10 @@ type SystemData struct {
 	LastModifiedByType *CreatedByType `json:"lastModifiedByType,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type SystemData.
-func (s SystemData) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populateTimeRFC3339(objectMap, "createdAt", s.CreatedAt)
-	populate(objectMap, "createdBy", s.CreatedBy)
-	populate(objectMap, "createdByType", s.CreatedByType)
-	populateTimeRFC3339(objectMap, "lastModifiedAt", s.LastModifiedAt)
-	populate(objectMap, "lastModifiedBy", s.LastModifiedBy)
-	populate(objectMap, "lastModifiedByType", s.LastModifiedByType)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type SystemData.
-func (s *SystemData) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "createdAt":
-			err = unpopulateTimeRFC3339(val, &s.CreatedAt)
-			delete(rawMsg, key)
-		case "createdBy":
-			err = unpopulate(val, &s.CreatedBy)
-			delete(rawMsg, key)
-		case "createdByType":
-			err = unpopulate(val, &s.CreatedByType)
-			delete(rawMsg, key)
-		case "lastModifiedAt":
-			err = unpopulateTimeRFC3339(val, &s.LastModifiedAt)
-			delete(rawMsg, key)
-		case "lastModifiedBy":
-			err = unpopulate(val, &s.LastModifiedBy)
-			delete(rawMsg, key)
-		case "lastModifiedByType":
-			err = unpopulate(val, &s.LastModifiedByType)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // TagsObject - Tags object for patch operations.
 type TagsObject struct {
 	// Resource tags.
 	Tags map[string]*string `json:"tags,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type TagsObject.
-func (t TagsObject) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "tags", t.Tags)
-	return json.Marshal(objectMap)
 }
 
 // TrackedResource - The resource model definition for an Azure Resource Manager tracked top level resource which has 'tags'
@@ -1174,17 +801,6 @@ type TrackedResource struct {
 
 	// READ-ONLY; The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or "Microsoft.Storage/storageAccounts"
 	Type *string `json:"type,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type TrackedResource.
-func (t TrackedResource) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", t.ID)
-	populate(objectMap, "location", t.Location)
-	populate(objectMap, "name", t.Name)
-	populate(objectMap, "tags", t.Tags)
-	populate(objectMap, "type", t.Type)
-	return json.Marshal(objectMap)
 }
 
 // Vendor resource.
@@ -1214,14 +830,6 @@ type VendorDetails struct {
 	VendorName *string `json:"vendorName,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type VendorDetails.
-func (v VendorDetails) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "skuList", v.SKUList)
-	populate(objectMap, "vendorName", v.VendorName)
-	return json.Marshal(objectMap)
-}
-
 // VendorListResult - Response for vendors API service call.
 type VendorListResult struct {
 	// A list of vendors.
@@ -1229,14 +837,6 @@ type VendorListResult struct {
 
 	// READ-ONLY; The URL to get the next set of results.
 	NextLink *string `json:"nextLink,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type VendorListResult.
-func (v VendorListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", v.NextLink)
-	populate(objectMap, "value", v.Value)
-	return json.Marshal(objectMap)
 }
 
 // VendorNetworkFunction - Vendor network function sub resource.
@@ -1266,14 +866,6 @@ type VendorNetworkFunctionListResult struct {
 	NextLink *string `json:"nextLink,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type VendorNetworkFunctionListResult.
-func (v VendorNetworkFunctionListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", v.NextLink)
-	populate(objectMap, "value", v.Value)
-	return json.Marshal(objectMap)
-}
-
 // VendorNetworkFunctionPropertiesFormat - Vendor network function properties.
 type VendorNetworkFunctionPropertiesFormat struct {
 	// An array of network function vendor configurations.
@@ -1290,17 +882,6 @@ type VendorNetworkFunctionPropertiesFormat struct {
 
 	// READ-ONLY; The sku type.
 	SKUType *SKUType `json:"skuType,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type VendorNetworkFunctionPropertiesFormat.
-func (v VendorNetworkFunctionPropertiesFormat) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "networkFunctionVendorConfigurations", v.NetworkFunctionVendorConfigurations)
-	populate(objectMap, "provisioningState", v.ProvisioningState)
-	populate(objectMap, "skuName", v.SKUName)
-	populate(objectMap, "skuType", v.SKUType)
-	populate(objectMap, "vendorProvisioningState", v.VendorProvisioningState)
-	return json.Marshal(objectMap)
 }
 
 // VendorNetworkFunctionsClientBeginCreateOrUpdateOptions contains the optional parameters for the VendorNetworkFunctionsClient.BeginCreateOrUpdate
@@ -1327,14 +908,6 @@ type VendorPropertiesFormat struct {
 
 	// READ-ONLY; A list of IDs of the vendor skus offered by the vendor.
 	SKUs []*SubResource `json:"skus,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type VendorPropertiesFormat.
-func (v VendorPropertiesFormat) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "provisioningState", v.ProvisioningState)
-	populate(objectMap, "skus", v.SKUs)
-	return json.Marshal(objectMap)
 }
 
 // VendorSKU - Sku sub resource.
@@ -1364,14 +937,6 @@ type VendorSKUListResult struct {
 	NextLink *string `json:"nextLink,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type VendorSKUListResult.
-func (v VendorSKUListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", v.NextLink)
-	populate(objectMap, "value", v.Value)
-	return json.Marshal(objectMap)
-}
-
 // VendorSKUPreviewClientBeginCreateOrUpdateOptions contains the optional parameters for the VendorSKUPreviewClient.BeginCreateOrUpdate
 // method.
 type VendorSKUPreviewClientBeginCreateOrUpdateOptions struct {
@@ -1399,10 +964,10 @@ type VendorSKUPropertiesFormat struct {
 	DeploymentMode *SKUDeploymentMode `json:"deploymentMode,omitempty"`
 
 	// The parameters for the managed application to be supplied by the vendor.
-	ManagedApplicationParameters map[string]interface{} `json:"managedApplicationParameters,omitempty"`
+	ManagedApplicationParameters interface{} `json:"managedApplicationParameters,omitempty"`
 
 	// The template for the managed application deployment.
-	ManagedApplicationTemplate map[string]interface{} `json:"managedApplicationTemplate,omitempty"`
+	ManagedApplicationTemplate interface{} `json:"managedApplicationTemplate,omitempty"`
 
 	// The template definition of the network function.
 	NetworkFunctionTemplate *NetworkFunctionTemplate `json:"networkFunctionTemplate,omitempty"`
@@ -1466,21 +1031,4 @@ type VendorsClientListBySubscriptionOptions struct {
 type VirtualHardDisk struct {
 	// Specifies the virtual hard disk's uri.
 	URI *string `json:"uri,omitempty"`
-}
-
-func populate(m map[string]interface{}, k string, v interface{}) {
-	if v == nil {
-		return
-	} else if azcore.IsNullValue(v) {
-		m[k] = nil
-	} else if !reflect.ValueOf(v).IsNil() {
-		m[k] = v
-	}
-}
-
-func unpopulate(data json.RawMessage, v interface{}) error {
-	if data == nil {
-		return nil
-	}
-	return json.Unmarshal(data, v)
 }

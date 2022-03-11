@@ -34,17 +34,17 @@ type DataSetMappingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataSetMappingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataSetMappingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataSetMappingsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *DataSetMappingsClient) createCreateRequest(ctx context.Context, re
 
 // createHandleResponse handles the Create response.
 func (client *DataSetMappingsClient) createHandleResponse(resp *http.Response) (DataSetMappingsClientCreateResponse, error) {
-	result := DataSetMappingsClientCreateResponse{RawResponse: resp}
+	result := DataSetMappingsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return DataSetMappingsClientCreateResponse{}, err
 	}
@@ -134,7 +134,7 @@ func (client *DataSetMappingsClient) Delete(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DataSetMappingsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DataSetMappingsClientDeleteResponse{RawResponse: resp}, nil
+	return DataSetMappingsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -229,7 +229,7 @@ func (client *DataSetMappingsClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *DataSetMappingsClient) getHandleResponse(resp *http.Response) (DataSetMappingsClientGetResponse, error) {
-	result := DataSetMappingsClientGetResponse{RawResponse: resp}
+	result := DataSetMappingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return DataSetMappingsClientGetResponse{}, err
 	}
@@ -296,7 +296,7 @@ func (client *DataSetMappingsClient) listByShareSubscriptionCreateRequest(ctx co
 
 // listByShareSubscriptionHandleResponse handles the ListByShareSubscription response.
 func (client *DataSetMappingsClient) listByShareSubscriptionHandleResponse(resp *http.Response) (DataSetMappingsClientListByShareSubscriptionResponse, error) {
-	result := DataSetMappingsClientListByShareSubscriptionResponse{RawResponse: resp}
+	result := DataSetMappingsClientListByShareSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataSetMappingList); err != nil {
 		return DataSetMappingsClientListByShareSubscriptionResponse{}, err
 	}

@@ -34,17 +34,17 @@ type RestorableMongodbResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRestorableMongodbResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RestorableMongodbResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RestorableMongodbResourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -57,19 +57,13 @@ func NewRestorableMongodbResourcesClient(subscriptionID string, credential azcor
 // instanceID - The instanceId GUID of a restorable database account.
 // options - RestorableMongodbResourcesClientListOptions contains the optional parameters for the RestorableMongodbResourcesClient.List
 // method.
-func (client *RestorableMongodbResourcesClient) List(ctx context.Context, location string, instanceID string, options *RestorableMongodbResourcesClientListOptions) (RestorableMongodbResourcesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, location, instanceID, options)
-	if err != nil {
-		return RestorableMongodbResourcesClientListResponse{}, err
+func (client *RestorableMongodbResourcesClient) List(location string, instanceID string, options *RestorableMongodbResourcesClientListOptions) *RestorableMongodbResourcesClientListPager {
+	return &RestorableMongodbResourcesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, location, instanceID, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return RestorableMongodbResourcesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return RestorableMongodbResourcesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -106,7 +100,7 @@ func (client *RestorableMongodbResourcesClient) listCreateRequest(ctx context.Co
 
 // listHandleResponse handles the List response.
 func (client *RestorableMongodbResourcesClient) listHandleResponse(resp *http.Response) (RestorableMongodbResourcesClientListResponse, error) {
-	result := RestorableMongodbResourcesClientListResponse{RawResponse: resp}
+	result := RestorableMongodbResourcesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorableMongodbResourcesListResult); err != nil {
 		return RestorableMongodbResourcesClientListResponse{}, err
 	}

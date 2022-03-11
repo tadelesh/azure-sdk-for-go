@@ -32,16 +32,16 @@ type TenantConfigurationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTenantConfigurationsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *TenantConfigurationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TenantConfigurationsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -88,7 +88,7 @@ func (client *TenantConfigurationsClient) createCreateRequest(ctx context.Contex
 
 // createHandleResponse handles the Create response.
 func (client *TenantConfigurationsClient) createHandleResponse(resp *http.Response) (TenantConfigurationsClientCreateResponse, error) {
-	result := TenantConfigurationsClientCreateResponse{RawResponse: resp}
+	result := TenantConfigurationsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Configuration); err != nil {
 		return TenantConfigurationsClientCreateResponse{}, err
 	}
@@ -112,7 +112,7 @@ func (client *TenantConfigurationsClient) Delete(ctx context.Context, configurat
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return TenantConfigurationsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return TenantConfigurationsClientDeleteResponse{RawResponse: resp}, nil
+	return TenantConfigurationsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -173,7 +173,7 @@ func (client *TenantConfigurationsClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *TenantConfigurationsClient) getHandleResponse(resp *http.Response) (TenantConfigurationsClientGetResponse, error) {
-	result := TenantConfigurationsClientGetResponse{RawResponse: resp}
+	result := TenantConfigurationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Configuration); err != nil {
 		return TenantConfigurationsClientGetResponse{}, err
 	}
@@ -212,7 +212,7 @@ func (client *TenantConfigurationsClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *TenantConfigurationsClient) listHandleResponse(resp *http.Response) (TenantConfigurationsClientListResponse, error) {
-	result := TenantConfigurationsClientListResponse{RawResponse: resp}
+	result := TenantConfigurationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigurationList); err != nil {
 		return TenantConfigurationsClientListResponse{}, err
 	}

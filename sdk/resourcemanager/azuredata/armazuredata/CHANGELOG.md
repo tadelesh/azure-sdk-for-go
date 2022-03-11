@@ -1,5 +1,104 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*SQLServerRegistrationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SQLServerRegistrationsClientListResponse, error)`
+- Function `*SQLServerRegistrationsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(SQLServerRegistrationsClientListByResourceGroupResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*SQLServersClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(SQLServersClientListByResourceGroupResponse, error)`
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*SQLServerRegistrationsClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*SQLServerRegistrationsClientListPager.PageResponse` has been removed
+- Function `*SQLServersClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*SQLServerRegistrationsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*SQLServersClientListByResourceGroupPager.Err` has been removed
+- Function `*SQLServerRegistrationsClientListByResourceGroupPager.Err` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `SQLServerRegistrationsClientCreateOrUpdateResult` has been removed
+- Struct `SQLServerRegistrationsClientGetResult` has been removed
+- Struct `SQLServerRegistrationsClientListByResourceGroupResult` has been removed
+- Struct `SQLServerRegistrationsClientListResult` has been removed
+- Struct `SQLServerRegistrationsClientUpdateResult` has been removed
+- Struct `SQLServersClientCreateOrUpdateResult` has been removed
+- Struct `SQLServersClientGetResult` has been removed
+- Struct `SQLServersClientListByResourceGroupResult` has been removed
+- Field `SQLServersClientCreateOrUpdateResult` of struct `SQLServersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SQLServersClientCreateOrUpdateResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `SQLServerRegistrationsClientGetResult` of struct `SQLServerRegistrationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SQLServerRegistrationsClientGetResponse` has been removed
+- Field `SQLServerRegistrationsClientUpdateResult` of struct `SQLServerRegistrationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SQLServerRegistrationsClientUpdateResponse` has been removed
+- Field `SQLServerRegistrationsClientListResult` of struct `SQLServerRegistrationsClientListResponse` has been removed
+- Field `RawResponse` of struct `SQLServerRegistrationsClientListResponse` has been removed
+- Field `RawResponse` of struct `SQLServerRegistrationsClientDeleteResponse` has been removed
+- Field `SQLServerRegistrationsClientListByResourceGroupResult` of struct `SQLServerRegistrationsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SQLServerRegistrationsClientListByResourceGroupResponse` has been removed
+- Field `SQLServerRegistrationsClientCreateOrUpdateResult` of struct `SQLServerRegistrationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SQLServerRegistrationsClientCreateOrUpdateResponse` has been removed
+- Field `SQLServersClientListByResourceGroupResult` of struct `SQLServersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SQLServersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SQLServersClientDeleteResponse` has been removed
+- Field `SQLServersClientGetResult` of struct `SQLServersClientGetResponse` has been removed
+- Field `RawResponse` of struct `SQLServersClientGetResponse` has been removed
+
+### Features Added
+
+- New function `ResourceModelWithAllowedPropertySet.MarshalJSON() ([]byte, error)`
+- New function `*SQLServerRegistrationsClientListByResourceGroupPager.More() bool`
+- New function `*SQLServerRegistrationsClientListPager.More() bool`
+- New function `ODataError.MarshalJSON() ([]byte, error)`
+- New function `*SQLServersClientListByResourceGroupPager.More() bool`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New struct `Identity`
+- New struct `ODataError`
+- New struct `Plan`
+- New struct `ResourceModelWithAllowedPropertySet`
+- New struct `ResourceModelWithAllowedPropertySetIdentity`
+- New struct `ResourceModelWithAllowedPropertySetPlan`
+- New struct `ResourceModelWithAllowedPropertySetSKU`
+- New struct `ResourceSKU`
+- New struct `SKU`
+- New anonymous field `SQLServer` in struct `SQLServersClientCreateOrUpdateResponse`
+- New anonymous field `SQLServerListResult` in struct `SQLServersClientListByResourceGroupResponse`
+- New anonymous field `SQLServer` in struct `SQLServersClientGetResponse`
+- New anonymous field `SQLServerRegistration` in struct `SQLServerRegistrationsClientGetResponse`
+- New anonymous field `SQLServerRegistration` in struct `SQLServerRegistrationsClientUpdateResponse`
+- New anonymous field `SQLServerRegistrationListResult` in struct `SQLServerRegistrationsClientListResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `SQLServerRegistrationListResult` in struct `SQLServerRegistrationsClientListByResourceGroupResponse`
+- New anonymous field `SQLServerRegistration` in struct `SQLServerRegistrationsClientCreateOrUpdateResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `Operation.Properties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Function `ODataError.MarshalJSON` has been removed
+- Function `ResourceModelWithAllowedPropertySet.MarshalJSON` has been removed
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+- Struct `Identity` has been removed
+- Struct `ODataError` has been removed
+- Struct `Plan` has been removed
+- Struct `ResourceModelWithAllowedPropertySet` has been removed
+- Struct `ResourceModelWithAllowedPropertySetIdentity` has been removed
+- Struct `ResourceModelWithAllowedPropertySetPlan` has been removed
+- Struct `ResourceModelWithAllowedPropertySetSKU` has been removed
+- Struct `ResourceSKU` has been removed
+- Struct `SKU` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

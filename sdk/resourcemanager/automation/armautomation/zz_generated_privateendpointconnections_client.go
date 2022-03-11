@@ -35,17 +35,17 @@ type PrivateEndpointConnectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateEndpointConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateEndpointConnectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateEndpointConnectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *PrivateEndpointConnectionsClient) BeginCreateOrUpdate(ctx context.
 	if err != nil {
 		return PrivateEndpointConnectionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PrivateEndpointConnectionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateEndpointConnectionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateEndpointConnectionsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return PrivateEndpointConnectionsClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *PrivateEndpointConnectionsClient) BeginDelete(ctx context.Context,
 	if err != nil {
 		return PrivateEndpointConnectionsClientDeletePollerResponse{}, err
 	}
-	result := PrivateEndpointConnectionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateEndpointConnectionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateEndpointConnectionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return PrivateEndpointConnectionsClientDeletePollerResponse{}, err
@@ -248,7 +244,7 @@ func (client *PrivateEndpointConnectionsClient) getCreateRequest(ctx context.Con
 
 // getHandleResponse handles the Get response.
 func (client *PrivateEndpointConnectionsClient) getHandleResponse(resp *http.Response) (PrivateEndpointConnectionsClientGetResponse, error) {
-	result := PrivateEndpointConnectionsClientGetResponse{RawResponse: resp}
+	result := PrivateEndpointConnectionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnection); err != nil {
 		return PrivateEndpointConnectionsClientGetResponse{}, err
 	}
@@ -261,19 +257,13 @@ func (client *PrivateEndpointConnectionsClient) getHandleResponse(resp *http.Res
 // automationAccountName - The name of the automation account.
 // options - PrivateEndpointConnectionsClientListByAutomationAccountOptions contains the optional parameters for the PrivateEndpointConnectionsClient.ListByAutomationAccount
 // method.
-func (client *PrivateEndpointConnectionsClient) ListByAutomationAccount(ctx context.Context, resourceGroupName string, automationAccountName string, options *PrivateEndpointConnectionsClientListByAutomationAccountOptions) (PrivateEndpointConnectionsClientListByAutomationAccountResponse, error) {
-	req, err := client.listByAutomationAccountCreateRequest(ctx, resourceGroupName, automationAccountName, options)
-	if err != nil {
-		return PrivateEndpointConnectionsClientListByAutomationAccountResponse{}, err
+func (client *PrivateEndpointConnectionsClient) ListByAutomationAccount(resourceGroupName string, automationAccountName string, options *PrivateEndpointConnectionsClientListByAutomationAccountOptions) *PrivateEndpointConnectionsClientListByAutomationAccountPager {
+	return &PrivateEndpointConnectionsClientListByAutomationAccountPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByAutomationAccountCreateRequest(ctx, resourceGroupName, automationAccountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return PrivateEndpointConnectionsClientListByAutomationAccountResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return PrivateEndpointConnectionsClientListByAutomationAccountResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByAutomationAccountHandleResponse(resp)
 }
 
 // listByAutomationAccountCreateRequest creates the ListByAutomationAccount request.
@@ -304,7 +294,7 @@ func (client *PrivateEndpointConnectionsClient) listByAutomationAccountCreateReq
 
 // listByAutomationAccountHandleResponse handles the ListByAutomationAccount response.
 func (client *PrivateEndpointConnectionsClient) listByAutomationAccountHandleResponse(resp *http.Response) (PrivateEndpointConnectionsClientListByAutomationAccountResponse, error) {
-	result := PrivateEndpointConnectionsClientListByAutomationAccountResponse{RawResponse: resp}
+	result := PrivateEndpointConnectionsClientListByAutomationAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionListResult); err != nil {
 		return PrivateEndpointConnectionsClientListByAutomationAccountResponse{}, err
 	}

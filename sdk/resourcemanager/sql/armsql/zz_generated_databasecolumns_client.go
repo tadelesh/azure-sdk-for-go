@@ -34,17 +34,17 @@ type DatabaseColumnsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDatabaseColumnsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DatabaseColumnsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DatabaseColumnsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -118,7 +118,7 @@ func (client *DatabaseColumnsClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *DatabaseColumnsClient) getHandleResponse(resp *http.Response) (DatabaseColumnsClientGetResponse, error) {
-	result := DatabaseColumnsClientGetResponse{RawResponse: resp}
+	result := DatabaseColumnsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseColumn); err != nil {
 		return DatabaseColumnsClientGetResponse{}, err
 	}
@@ -200,7 +200,7 @@ func (client *DatabaseColumnsClient) listByDatabaseCreateRequest(ctx context.Con
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *DatabaseColumnsClient) listByDatabaseHandleResponse(resp *http.Response) (DatabaseColumnsClientListByDatabaseResponse, error) {
-	result := DatabaseColumnsClientListByDatabaseResponse{RawResponse: resp}
+	result := DatabaseColumnsClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseColumnListResult); err != nil {
 		return DatabaseColumnsClientListByDatabaseResponse{}, err
 	}
@@ -272,7 +272,7 @@ func (client *DatabaseColumnsClient) listByTableCreateRequest(ctx context.Contex
 
 // listByTableHandleResponse handles the ListByTable response.
 func (client *DatabaseColumnsClient) listByTableHandleResponse(resp *http.Response) (DatabaseColumnsClientListByTableResponse, error) {
-	result := DatabaseColumnsClientListByTableResponse{RawResponse: resp}
+	result := DatabaseColumnsClientListByTableResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseColumnListResult); err != nil {
 		return DatabaseColumnsClientListByTableResponse{}, err
 	}

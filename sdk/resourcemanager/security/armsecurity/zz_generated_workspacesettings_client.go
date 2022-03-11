@@ -94,7 +94,7 @@ func (client *WorkspaceSettingsClient) createCreateRequest(ctx context.Context, 
 
 // createHandleResponse handles the Create response.
 func (client *WorkspaceSettingsClient) createHandleResponse(resp *http.Response) (WorkspaceSettingsClientCreateResponse, error) {
-	result := WorkspaceSettingsClientCreateResponse{RawResponse: resp}
+	result := WorkspaceSettingsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceSetting); err != nil {
 		return WorkspaceSettingsClientCreateResponse{}, err
 	}
@@ -118,7 +118,7 @@ func (client *WorkspaceSettingsClient) Delete(ctx context.Context, workspaceSett
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WorkspaceSettingsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return WorkspaceSettingsClientDeleteResponse{RawResponse: resp}, nil
+	return WorkspaceSettingsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -187,7 +187,7 @@ func (client *WorkspaceSettingsClient) getCreateRequest(ctx context.Context, wor
 
 // getHandleResponse handles the Get response.
 func (client *WorkspaceSettingsClient) getHandleResponse(resp *http.Response) (WorkspaceSettingsClientGetResponse, error) {
-	result := WorkspaceSettingsClientGetResponse{RawResponse: resp}
+	result := WorkspaceSettingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceSetting); err != nil {
 		return WorkspaceSettingsClientGetResponse{}, err
 	}
@@ -230,7 +230,7 @@ func (client *WorkspaceSettingsClient) listCreateRequest(ctx context.Context, op
 
 // listHandleResponse handles the List response.
 func (client *WorkspaceSettingsClient) listHandleResponse(resp *http.Response) (WorkspaceSettingsClientListResponse, error) {
-	result := WorkspaceSettingsClientListResponse{RawResponse: resp}
+	result := WorkspaceSettingsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceSettingList); err != nil {
 		return WorkspaceSettingsClientListResponse{}, err
 	}
@@ -282,7 +282,7 @@ func (client *WorkspaceSettingsClient) updateCreateRequest(ctx context.Context, 
 
 // updateHandleResponse handles the Update response.
 func (client *WorkspaceSettingsClient) updateHandleResponse(resp *http.Response) (WorkspaceSettingsClientUpdateResponse, error) {
-	result := WorkspaceSettingsClientUpdateResponse{RawResponse: resp}
+	result := WorkspaceSettingsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceSetting); err != nil {
 		return WorkspaceSettingsClientUpdateResponse{}, err
 	}

@@ -101,7 +101,7 @@ func (client *BlobServicesClient) getServicePropertiesCreateRequest(ctx context.
 
 // getServicePropertiesHandleResponse handles the GetServiceProperties response.
 func (client *BlobServicesClient) getServicePropertiesHandleResponse(resp *http.Response) (BlobServicesClientGetServicePropertiesResponse, error) {
-	result := BlobServicesClientGetServicePropertiesResponse{RawResponse: resp}
+	result := BlobServicesClientGetServicePropertiesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BlobServiceProperties); err != nil {
 		return BlobServicesClientGetServicePropertiesResponse{}, err
 	}
@@ -114,19 +114,13 @@ func (client *BlobServicesClient) getServicePropertiesHandleResponse(resp *http.
 // accountName - The name of the storage account within the specified resource group. Storage account names must be between
 // 3 and 24 characters in length and use numbers and lower-case letters only.
 // options - BlobServicesClientListOptions contains the optional parameters for the BlobServicesClient.List method.
-func (client *BlobServicesClient) List(ctx context.Context, resourceGroupName string, accountName string, options *BlobServicesClientListOptions) (BlobServicesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return BlobServicesClientListResponse{}, err
+func (client *BlobServicesClient) List(resourceGroupName string, accountName string, options *BlobServicesClientListOptions) *BlobServicesClientListPager {
+	return &BlobServicesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return BlobServicesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return BlobServicesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -157,7 +151,7 @@ func (client *BlobServicesClient) listCreateRequest(ctx context.Context, resourc
 
 // listHandleResponse handles the List response.
 func (client *BlobServicesClient) listHandleResponse(resp *http.Response) (BlobServicesClientListResponse, error) {
-	result := BlobServicesClientListResponse{RawResponse: resp}
+	result := BlobServicesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BlobServiceItems); err != nil {
 		return BlobServicesClientListResponse{}, err
 	}
@@ -218,7 +212,7 @@ func (client *BlobServicesClient) setServicePropertiesCreateRequest(ctx context.
 
 // setServicePropertiesHandleResponse handles the SetServiceProperties response.
 func (client *BlobServicesClient) setServicePropertiesHandleResponse(resp *http.Response) (BlobServicesClientSetServicePropertiesResponse, error) {
-	result := BlobServicesClientSetServicePropertiesResponse{RawResponse: resp}
+	result := BlobServicesClientSetServicePropertiesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BlobServiceProperties); err != nil {
 		return BlobServicesClientSetServicePropertiesResponse{}, err
 	}

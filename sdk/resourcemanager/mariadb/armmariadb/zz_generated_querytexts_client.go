@@ -34,17 +34,17 @@ type QueryTextsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewQueryTextsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *QueryTextsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &QueryTextsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *QueryTextsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *QueryTextsClient) getHandleResponse(resp *http.Response) (QueryTextsClientGetResponse, error) {
-	result := QueryTextsClientGetResponse{RawResponse: resp}
+	result := QueryTextsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QueryText); err != nil {
 		return QueryTextsClientGetResponse{}, err
 	}
@@ -158,7 +158,7 @@ func (client *QueryTextsClient) listByServerCreateRequest(ctx context.Context, r
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *QueryTextsClient) listByServerHandleResponse(resp *http.Response) (QueryTextsClientListByServerResponse, error) {
-	result := QueryTextsClientListByServerResponse{RawResponse: resp}
+	result := QueryTextsClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QueryTextsResultList); err != nil {
 		return QueryTextsClientListByServerResponse{}, err
 	}

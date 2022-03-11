@@ -1,0 +1,298 @@
+# Release History
+
+## 0.2.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClient.List` parameter(s) have been changed from `(context.Context, *OperationsClientListOptions)` to `(*OperationsClientListOptions)`
+- Function `*OperationsClient.List` return value(s) have been changed from `(OperationsClientListResponse, error)` to `(*OperationsClientListPager)`
+- Function `*ProjectsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ProjectsClientListResponse, error)`
+- Function `*AssessmentsClient.ListByProject` parameter(s) have been changed from `(context.Context, string, string, *AssessmentsClientListByProjectOptions)` to `(string, string, *AssessmentsClientListByProjectOptions)`
+- Function `*AssessmentsClient.ListByProject` return value(s) have been changed from `(AssessmentsClientListByProjectResponse, error)` to `(*AssessmentsClientListByProjectPager)`
+- Function `*VMwareCollectorsClient.ListByProject` parameter(s) have been changed from `(context.Context, string, string, *VMwareCollectorsClientListByProjectOptions)` to `(string, string, *VMwareCollectorsClientListByProjectOptions)`
+- Function `*VMwareCollectorsClient.ListByProject` return value(s) have been changed from `(VMwareCollectorsClientListByProjectResponse, error)` to `(*VMwareCollectorsClientListByProjectPager)`
+- Function `*GroupsClient.ListByProject` parameter(s) have been changed from `(context.Context, string, string, *GroupsClientListByProjectOptions)` to `(string, string, *GroupsClientListByProjectOptions)`
+- Function `*GroupsClient.ListByProject` return value(s) have been changed from `(GroupsClientListByProjectResponse, error)` to `(*GroupsClientListByProjectPager)`
+- Function `*ImportCollectorsClient.ListByProject` parameter(s) have been changed from `(context.Context, string, string, *ImportCollectorsClientListByProjectOptions)` to `(string, string, *ImportCollectorsClientListByProjectOptions)`
+- Function `*ImportCollectorsClient.ListByProject` return value(s) have been changed from `(ImportCollectorsClientListByProjectResponse, error)` to `(*ImportCollectorsClientListByProjectPager)`
+- Function `*AssessmentsClient.ListByGroup` parameter(s) have been changed from `(context.Context, string, string, string, *AssessmentsClientListByGroupOptions)` to `(string, string, string, *AssessmentsClientListByGroupOptions)`
+- Function `*AssessmentsClient.ListByGroup` return value(s) have been changed from `(AssessmentsClientListByGroupResponse, error)` to `(*AssessmentsClientListByGroupPager)`
+- Function `*ProjectsClient.AssessmentOptionsList` parameter(s) have been changed from `(context.Context, string, string, *ProjectsClientAssessmentOptionsListOptions)` to `(string, string, *ProjectsClientAssessmentOptionsListOptions)`
+- Function `*ProjectsClient.AssessmentOptionsList` return value(s) have been changed from `(ProjectsClientAssessmentOptionsListResponse, error)` to `(*ProjectsClientAssessmentOptionsListPager)`
+- Function `*AssessedMachinesClientListByAssessmentPager.NextPage` return value(s) have been changed from `(bool)` to `(AssessedMachinesClientListByAssessmentResponse, error)`
+- Function `*ServerCollectorsClient.ListByProject` parameter(s) have been changed from `(context.Context, string, string, *ServerCollectorsClientListByProjectOptions)` to `(string, string, *ServerCollectorsClientListByProjectOptions)`
+- Function `*ServerCollectorsClient.ListByProject` return value(s) have been changed from `(ServerCollectorsClientListByProjectResponse, error)` to `(*ServerCollectorsClientListByProjectPager)`
+- Function `*ProjectsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ProjectsClientListBySubscriptionResponse, error)`
+- Function `*HyperVCollectorsClient.ListByProject` parameter(s) have been changed from `(context.Context, string, string, *HyperVCollectorsClientListByProjectOptions)` to `(string, string, *HyperVCollectorsClientListByProjectOptions)`
+- Function `*HyperVCollectorsClient.ListByProject` return value(s) have been changed from `(HyperVCollectorsClientListByProjectResponse, error)` to `(*HyperVCollectorsClientListByProjectPager)`
+- Function `*MachinesClientListByProjectPager.NextPage` return value(s) have been changed from `(bool)` to `(MachinesClientListByProjectResponse, error)`
+- Function `*ProjectsClientListPager.Err` has been removed
+- Function `*AssessedMachinesClientListByAssessmentPager.PageResponse` has been removed
+- Function `*ProjectsClientListBySubscriptionPager.Err` has been removed
+- Function `*ProjectsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*MachinesClientListByProjectPager.PageResponse` has been removed
+- Function `*MachinesClientListByProjectPager.Err` has been removed
+- Function `*AssessedMachinesClientListByAssessmentPager.Err` has been removed
+- Function `*ProjectsClientListPager.PageResponse` has been removed
+- Struct `AssessedMachinesClientGetResult` has been removed
+- Struct `AssessedMachinesClientListByAssessmentResult` has been removed
+- Struct `AssessmentsClientCreateResult` has been removed
+- Struct `AssessmentsClientDeleteResult` has been removed
+- Struct `AssessmentsClientGetReportDownloadURLResult` has been removed
+- Struct `AssessmentsClientGetResult` has been removed
+- Struct `AssessmentsClientListByGroupResult` has been removed
+- Struct `AssessmentsClientListByProjectResult` has been removed
+- Struct `GroupsClientCreateResult` has been removed
+- Struct `GroupsClientDeleteResult` has been removed
+- Struct `GroupsClientGetResult` has been removed
+- Struct `GroupsClientListByProjectResult` has been removed
+- Struct `GroupsClientUpdateMachinesResult` has been removed
+- Struct `HyperVCollectorsClientCreateResult` has been removed
+- Struct `HyperVCollectorsClientDeleteResult` has been removed
+- Struct `HyperVCollectorsClientGetResult` has been removed
+- Struct `HyperVCollectorsClientListByProjectResult` has been removed
+- Struct `ImportCollectorsClientCreateResult` has been removed
+- Struct `ImportCollectorsClientDeleteResult` has been removed
+- Struct `ImportCollectorsClientGetResult` has been removed
+- Struct `ImportCollectorsClientListByProjectResult` has been removed
+- Struct `MachinesClientGetResult` has been removed
+- Struct `MachinesClientListByProjectResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionClientDeleteResult` has been removed
+- Struct `PrivateEndpointConnectionClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionClientListByProjectResult` has been removed
+- Struct `PrivateEndpointConnectionClientUpdateResult` has been removed
+- Struct `PrivateLinkResourceClientGetResult` has been removed
+- Struct `PrivateLinkResourceClientListByProjectResult` has been removed
+- Struct `ProjectsClientAssessmentOptionsListResult` has been removed
+- Struct `ProjectsClientAssessmentOptionsResult` has been removed
+- Struct `ProjectsClientCreateResult` has been removed
+- Struct `ProjectsClientDeleteResult` has been removed
+- Struct `ProjectsClientGetResult` has been removed
+- Struct `ProjectsClientListBySubscriptionResult` has been removed
+- Struct `ProjectsClientListResult` has been removed
+- Struct `ProjectsClientUpdateResult` has been removed
+- Struct `ServerCollectorsClientCreateResult` has been removed
+- Struct `ServerCollectorsClientDeleteResult` has been removed
+- Struct `ServerCollectorsClientGetResult` has been removed
+- Struct `ServerCollectorsClientListByProjectResult` has been removed
+- Struct `VMwareCollectorsClientCreateResult` has been removed
+- Struct `VMwareCollectorsClientDeleteResult` has been removed
+- Struct `VMwareCollectorsClientGetResult` has been removed
+- Struct `VMwareCollectorsClientListByProjectResult` has been removed
+- Field `PrivateEndpointConnectionClientUpdateResult` of struct `PrivateEndpointConnectionClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientUpdateResponse` has been removed
+- Field `ProjectsClientAssessmentOptionsResult` of struct `ProjectsClientAssessmentOptionsResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientAssessmentOptionsResponse` has been removed
+- Field `AssessedMachinesClientGetResult` of struct `AssessedMachinesClientGetResponse` has been removed
+- Field `RawResponse` of struct `AssessedMachinesClientGetResponse` has been removed
+- Field `ProjectsClientListResult` of struct `ProjectsClientListResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientListResponse` has been removed
+- Field `ProjectsClientAssessmentOptionsListResult` of struct `ProjectsClientAssessmentOptionsListResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientAssessmentOptionsListResponse` has been removed
+- Field `ProjectsClientListBySubscriptionResult` of struct `ProjectsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientListBySubscriptionResponse` has been removed
+- Field `GroupsClientCreateResult` of struct `GroupsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `GroupsClientCreateResponse` has been removed
+- Field `AssessedMachinesClientListByAssessmentResult` of struct `AssessedMachinesClientListByAssessmentResponse` has been removed
+- Field `RawResponse` of struct `AssessedMachinesClientListByAssessmentResponse` has been removed
+- Field `ProjectsClientDeleteResult` of struct `ProjectsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientDeleteResponse` has been removed
+- Field `GroupsClientUpdateMachinesResult` of struct `GroupsClientUpdateMachinesResponse` has been removed
+- Field `RawResponse` of struct `GroupsClientUpdateMachinesResponse` has been removed
+- Field `AssessmentsClientGetResult` of struct `AssessmentsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AssessmentsClientGetResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `ProjectsClientGetResult` of struct `ProjectsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientGetResponse` has been removed
+- Field `ProjectsClientUpdateResult` of struct `ProjectsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientUpdateResponse` has been removed
+- Field `PrivateEndpointConnectionClientGetResult` of struct `PrivateEndpointConnectionClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientGetResponse` has been removed
+- Field `AssessmentsClientDeleteResult` of struct `AssessmentsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `AssessmentsClientDeleteResponse` has been removed
+- Field `AssessmentsClientListByGroupResult` of struct `AssessmentsClientListByGroupResponse` has been removed
+- Field `RawResponse` of struct `AssessmentsClientListByGroupResponse` has been removed
+- Field `ServerCollectorsClientListByProjectResult` of struct `ServerCollectorsClientListByProjectResponse` has been removed
+- Field `RawResponse` of struct `ServerCollectorsClientListByProjectResponse` has been removed
+- Field `PrivateLinkResourceClientListByProjectResult` of struct `PrivateLinkResourceClientListByProjectResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourceClientListByProjectResponse` has been removed
+- Field `ProjectsClientCreateResult` of struct `ProjectsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ProjectsClientCreateResponse` has been removed
+- Field `HyperVCollectorsClientDeleteResult` of struct `HyperVCollectorsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `HyperVCollectorsClientDeleteResponse` has been removed
+- Field `HyperVCollectorsClientGetResult` of struct `HyperVCollectorsClientGetResponse` has been removed
+- Field `RawResponse` of struct `HyperVCollectorsClientGetResponse` has been removed
+- Field `VMwareCollectorsClientCreateResult` of struct `VMwareCollectorsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `VMwareCollectorsClientCreateResponse` has been removed
+- Field `ImportCollectorsClientDeleteResult` of struct `ImportCollectorsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ImportCollectorsClientDeleteResponse` has been removed
+- Field `HyperVCollectorsClientListByProjectResult` of struct `HyperVCollectorsClientListByProjectResponse` has been removed
+- Field `RawResponse` of struct `HyperVCollectorsClientListByProjectResponse` has been removed
+- Field `AssessmentsClientListByProjectResult` of struct `AssessmentsClientListByProjectResponse` has been removed
+- Field `RawResponse` of struct `AssessmentsClientListByProjectResponse` has been removed
+- Field `AssessmentsClientCreateResult` of struct `AssessmentsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `AssessmentsClientCreateResponse` has been removed
+- Field `MachinesClientListByProjectResult` of struct `MachinesClientListByProjectResponse` has been removed
+- Field `RawResponse` of struct `MachinesClientListByProjectResponse` has been removed
+- Field `GroupsClientGetResult` of struct `GroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `GroupsClientGetResponse` has been removed
+- Field `VMwareCollectorsClientGetResult` of struct `VMwareCollectorsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VMwareCollectorsClientGetResponse` has been removed
+- Field `ServerCollectorsClientDeleteResult` of struct `ServerCollectorsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ServerCollectorsClientDeleteResponse` has been removed
+- Field `ImportCollectorsClientListByProjectResult` of struct `ImportCollectorsClientListByProjectResponse` has been removed
+- Field `RawResponse` of struct `ImportCollectorsClientListByProjectResponse` has been removed
+- Field `VMwareCollectorsClientListByProjectResult` of struct `VMwareCollectorsClientListByProjectResponse` has been removed
+- Field `RawResponse` of struct `VMwareCollectorsClientListByProjectResponse` has been removed
+- Field `PrivateLinkResourceClientGetResult` of struct `PrivateLinkResourceClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourceClientGetResponse` has been removed
+- Field `GroupsClientDeleteResult` of struct `GroupsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `GroupsClientDeleteResponse` has been removed
+- Field `ServerCollectorsClientGetResult` of struct `ServerCollectorsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServerCollectorsClientGetResponse` has been removed
+- Field `HyperVCollectorsClientCreateResult` of struct `HyperVCollectorsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `HyperVCollectorsClientCreateResponse` has been removed
+- Field `VMwareCollectorsClientDeleteResult` of struct `VMwareCollectorsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VMwareCollectorsClientDeleteResponse` has been removed
+- Field `ImportCollectorsClientCreateResult` of struct `ImportCollectorsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ImportCollectorsClientCreateResponse` has been removed
+- Field `GroupsClientListByProjectResult` of struct `GroupsClientListByProjectResponse` has been removed
+- Field `RawResponse` of struct `GroupsClientListByProjectResponse` has been removed
+- Field `AssessmentsClientGetReportDownloadURLResult` of struct `AssessmentsClientGetReportDownloadURLResponse` has been removed
+- Field `RawResponse` of struct `AssessmentsClientGetReportDownloadURLResponse` has been removed
+- Field `ImportCollectorsClientGetResult` of struct `ImportCollectorsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ImportCollectorsClientGetResponse` has been removed
+- Field `MachinesClientGetResult` of struct `MachinesClientGetResponse` has been removed
+- Field `RawResponse` of struct `MachinesClientGetResponse` has been removed
+- Field `ServerCollectorsClientCreateResult` of struct `ServerCollectorsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ServerCollectorsClientCreateResponse` has been removed
+- Field `PrivateEndpointConnectionClientDeleteResult` of struct `PrivateEndpointConnectionClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientDeleteResponse` has been removed
+- Field `PrivateEndpointConnectionClientListByProjectResult` of struct `PrivateEndpointConnectionClientListByProjectResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientListByProjectResponse` has been removed
+
+### Features Added
+
+- New function `*AssessmentsClientListByGroupPager.More() bool`
+- New function `*MachinesClientListByProjectPager.More() bool`
+- New function `*VMwareCollectorsClientListByProjectPager.NextPage(context.Context) (VMwareCollectorsClientListByProjectResponse, error)`
+- New function `*ProjectsClientAssessmentOptionsListPager.NextPage(context.Context) (ProjectsClientAssessmentOptionsListResponse, error)`
+- New function `*ImportCollectorsClientListByProjectPager.NextPage(context.Context) (ImportCollectorsClientListByProjectResponse, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*VMwareCollectorsClientListByProjectPager.More() bool`
+- New function `*AssessmentsClientListByProjectPager.More() bool`
+- New function `*AssessedMachinesClientListByAssessmentPager.More() bool`
+- New function `*ServerCollectorsClientListByProjectPager.More() bool`
+- New function `*OperationsClientListPager.NextPage(context.Context) (OperationsClientListResponse, error)`
+- New function `*ProjectsClientAssessmentOptionsListPager.More() bool`
+- New function `*AssessmentsClientListByGroupPager.NextPage(context.Context) (AssessmentsClientListByGroupResponse, error)`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*GroupsClientListByProjectPager.NextPage(context.Context) (GroupsClientListByProjectResponse, error)`
+- New function `*AssessmentsClientListByProjectPager.NextPage(context.Context) (AssessmentsClientListByProjectResponse, error)`
+- New function `*HyperVCollectorsClientListByProjectPager.More() bool`
+- New function `*HyperVCollectorsClientListByProjectPager.NextPage(context.Context) (HyperVCollectorsClientListByProjectResponse, error)`
+- New function `*ImportCollectorsClientListByProjectPager.More() bool`
+- New function `*GroupsClientListByProjectPager.More() bool`
+- New function `*ServerCollectorsClientListByProjectPager.NextPage(context.Context) (ServerCollectorsClientListByProjectResponse, error)`
+- New function `*ProjectsClientListBySubscriptionPager.More() bool`
+- New function `*ProjectsClientListPager.More() bool`
+- New struct `AssessmentsClientListByGroupPager`
+- New struct `AssessmentsClientListByProjectPager`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New struct `GroupsClientListByProjectPager`
+- New struct `HyperVCollectorsClientListByProjectPager`
+- New struct `ImportCollectorsClientListByProjectPager`
+- New struct `OperationsClientListPager`
+- New struct `ProjectsClientAssessmentOptionsListPager`
+- New struct `ServerCollectorsClientListByProjectPager`
+- New struct `VMwareCollectorsClientListByProjectPager`
+- New anonymous field `AssessmentResultList` in struct `AssessmentsClientListByGroupResponse`
+- New field `XMSRequestID` in struct `AssessmentsClientListByGroupResponse`
+- New anonymous field `Group` in struct `GroupsClientUpdateMachinesResponse`
+- New field `XMSRequestID` in struct `GroupsClientUpdateMachinesResponse`
+- New anonymous field `Project` in struct `ProjectsClientUpdateResponse`
+- New field `XMSRequestID` in struct `ProjectsClientUpdateResponse`
+- New anonymous field `ServerCollector` in struct `ServerCollectorsClientCreateResponse`
+- New field `XMSRequestID` in struct `ServerCollectorsClientCreateResponse`
+- New anonymous field `HyperVCollector` in struct `HyperVCollectorsClientGetResponse`
+- New field `XMSRequestID` in struct `HyperVCollectorsClientGetResponse`
+- New anonymous field `ImportCollector` in struct `ImportCollectorsClientGetResponse`
+- New field `XMSRequestID` in struct `ImportCollectorsClientGetResponse`
+- New field `XMSRequestID` in struct `PrivateEndpointConnectionClientDeleteResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionClientGetResponse`
+- New field `XMSRequestID` in struct `PrivateEndpointConnectionClientGetResponse`
+- New field `XMSRequestID` in struct `GroupsClientDeleteResponse`
+- New anonymous field `ImportCollector` in struct `ImportCollectorsClientCreateResponse`
+- New field `XMSRequestID` in struct `ImportCollectorsClientCreateResponse`
+- New anonymous field `ImportCollectorList` in struct `ImportCollectorsClientListByProjectResponse`
+- New field `XMSRequestID` in struct `ImportCollectorsClientListByProjectResponse`
+- New anonymous field `Assessment` in struct `AssessmentsClientGetResponse`
+- New field `XMSRequestID` in struct `AssessmentsClientGetResponse`
+- New field `XMSRequestID` in struct `ProjectsClientDeleteResponse`
+- New anonymous field `HyperVCollector` in struct `HyperVCollectorsClientCreateResponse`
+- New field `XMSRequestID` in struct `HyperVCollectorsClientCreateResponse`
+- New anonymous field `ServerCollectorList` in struct `ServerCollectorsClientListByProjectResponse`
+- New field `XMSRequestID` in struct `ServerCollectorsClientListByProjectResponse`
+- New anonymous field `Project` in struct `ProjectsClientCreateResponse`
+- New field `XMSRequestID` in struct `ProjectsClientCreateResponse`
+- New anonymous field `VMwareCollector` in struct `VMwareCollectorsClientCreateResponse`
+- New field `XMSRequestID` in struct `VMwareCollectorsClientCreateResponse`
+- New anonymous field `AssessmentOptionsResultList` in struct `ProjectsClientAssessmentOptionsListResponse`
+- New field `XMSRequestID` in struct `ProjectsClientAssessmentOptionsListResponse`
+- New anonymous field `PrivateLinkResource` in struct `PrivateLinkResourceClientGetResponse`
+- New field `XMSRequestID` in struct `PrivateLinkResourceClientGetResponse`
+- New anonymous field `MachineResultList` in struct `MachinesClientListByProjectResponse`
+- New field `XMSRequestID` in struct `MachinesClientListByProjectResponse`
+- New anonymous field `OperationResultList` in struct `OperationsClientListResponse`
+- New anonymous field `DownloadURL` in struct `AssessmentsClientGetReportDownloadURLResponse`
+- New field `XMSRequestID` in struct `AssessmentsClientGetReportDownloadURLResponse`
+- New anonymous field `GroupResultList` in struct `GroupsClientListByProjectResponse`
+- New field `XMSRequestID` in struct `GroupsClientListByProjectResponse`
+- New field `XMSRequestID` in struct `VMwareCollectorsClientDeleteResponse`
+- New anonymous field `ServerCollector` in struct `ServerCollectorsClientGetResponse`
+- New field `XMSRequestID` in struct `ServerCollectorsClientGetResponse`
+- New anonymous field `VMwareCollector` in struct `VMwareCollectorsClientGetResponse`
+- New field `XMSRequestID` in struct `VMwareCollectorsClientGetResponse`
+- New anonymous field `Project` in struct `ProjectsClientGetResponse`
+- New field `XMSRequestID` in struct `ProjectsClientGetResponse`
+- New field `XMSRequestID` in struct `HyperVCollectorsClientDeleteResponse`
+- New anonymous field `Machine` in struct `MachinesClientGetResponse`
+- New field `XMSRequestID` in struct `MachinesClientGetResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionClientUpdateResponse`
+- New field `XMSRequestID` in struct `PrivateEndpointConnectionClientUpdateResponse`
+- New anonymous field `HyperVCollectorList` in struct `HyperVCollectorsClientListByProjectResponse`
+- New field `XMSRequestID` in struct `HyperVCollectorsClientListByProjectResponse`
+- New anonymous field `AssessmentResultList` in struct `AssessmentsClientListByProjectResponse`
+- New field `XMSRequestID` in struct `AssessmentsClientListByProjectResponse`
+- New anonymous field `ProjectResultList` in struct `ProjectsClientListResponse`
+- New field `XMSRequestID` in struct `ProjectsClientListResponse`
+- New anonymous field `ProjectResultList` in struct `ProjectsClientListBySubscriptionResponse`
+- New field `XMSRequestID` in struct `ProjectsClientListBySubscriptionResponse`
+- New field `XMSRequestID` in struct `AssessmentsClientDeleteResponse`
+- New anonymous field `Assessment` in struct `AssessmentsClientCreateResponse`
+- New field `XMSRequestID` in struct `AssessmentsClientCreateResponse`
+- New anonymous field `PrivateLinkResourceCollection` in struct `PrivateLinkResourceClientListByProjectResponse`
+- New field `XMSRequestID` in struct `PrivateLinkResourceClientListByProjectResponse`
+- New field `XMSRequestID` in struct `ImportCollectorsClientDeleteResponse`
+- New anonymous field `AssessedMachine` in struct `AssessedMachinesClientGetResponse`
+- New field `XMSRequestID` in struct `AssessedMachinesClientGetResponse`
+- New anonymous field `AssessmentOptions` in struct `ProjectsClientAssessmentOptionsResponse`
+- New field `XMSRequestID` in struct `ProjectsClientAssessmentOptionsResponse`
+- New anonymous field `AssessedMachineResultList` in struct `AssessedMachinesClientListByAssessmentResponse`
+- New field `XMSRequestID` in struct `AssessedMachinesClientListByAssessmentResponse`
+- New anonymous field `PrivateEndpointConnectionCollection` in struct `PrivateEndpointConnectionClientListByProjectResponse`
+- New field `XMSRequestID` in struct `PrivateEndpointConnectionClientListByProjectResponse`
+- New anonymous field `Group` in struct `GroupsClientGetResponse`
+- New field `XMSRequestID` in struct `GroupsClientGetResponse`
+- New anonymous field `Group` in struct `GroupsClientCreateResponse`
+- New field `XMSRequestID` in struct `GroupsClientCreateResponse`
+- New anonymous field `VMwareCollectorList` in struct `VMwareCollectorsClientListByProjectResponse`
+- New field `XMSRequestID` in struct `VMwareCollectorsClientListByProjectResponse`
+- New field `XMSRequestID` in struct `ServerCollectorsClientDeleteResponse`
+
+
+## 0.1.0 (2022-03-10)
+
+- Init release.

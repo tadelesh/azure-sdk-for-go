@@ -34,17 +34,17 @@ type ServerTrustGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServerTrustGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServerTrustGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServerTrustGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ServerTrustGroupsClient) BeginCreateOrUpdate(ctx context.Context, 
 	if err != nil {
 		return ServerTrustGroupsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ServerTrustGroupsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerTrustGroupsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerTrustGroupsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ServerTrustGroupsClientCreateOrUpdatePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *ServerTrustGroupsClient) BeginDelete(ctx context.Context, resource
 	if err != nil {
 		return ServerTrustGroupsClientDeletePollerResponse{}, err
 	}
-	result := ServerTrustGroupsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerTrustGroupsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerTrustGroupsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ServerTrustGroupsClientDeletePollerResponse{}, err
@@ -249,7 +245,7 @@ func (client *ServerTrustGroupsClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *ServerTrustGroupsClient) getHandleResponse(resp *http.Response) (ServerTrustGroupsClientGetResponse, error) {
-	result := ServerTrustGroupsClientGetResponse{RawResponse: resp}
+	result := ServerTrustGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerTrustGroup); err != nil {
 		return ServerTrustGroupsClientGetResponse{}, err
 	}
@@ -303,7 +299,7 @@ func (client *ServerTrustGroupsClient) listByInstanceCreateRequest(ctx context.C
 
 // listByInstanceHandleResponse handles the ListByInstance response.
 func (client *ServerTrustGroupsClient) listByInstanceHandleResponse(resp *http.Response) (ServerTrustGroupsClientListByInstanceResponse, error) {
-	result := ServerTrustGroupsClientListByInstanceResponse{RawResponse: resp}
+	result := ServerTrustGroupsClientListByInstanceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerTrustGroupListResult); err != nil {
 		return ServerTrustGroupsClientListByInstanceResponse{}, err
 	}
@@ -357,7 +353,7 @@ func (client *ServerTrustGroupsClient) listByLocationCreateRequest(ctx context.C
 
 // listByLocationHandleResponse handles the ListByLocation response.
 func (client *ServerTrustGroupsClient) listByLocationHandleResponse(resp *http.Response) (ServerTrustGroupsClientListByLocationResponse, error) {
-	result := ServerTrustGroupsClientListByLocationResponse{RawResponse: resp}
+	result := ServerTrustGroupsClientListByLocationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerTrustGroupListResult); err != nil {
 		return ServerTrustGroupsClientListByLocationResponse{}, err
 	}

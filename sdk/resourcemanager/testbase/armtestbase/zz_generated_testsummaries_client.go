@@ -34,17 +34,17 @@ type TestSummariesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTestSummariesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TestSummariesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TestSummariesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *TestSummariesClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *TestSummariesClient) getHandleResponse(resp *http.Response) (TestSummariesClientGetResponse, error) {
-	result := TestSummariesClientGetResponse{RawResponse: resp}
+	result := TestSummariesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TestSummaryResource); err != nil {
 		return TestSummariesClientGetResponse{}, err
 	}
@@ -154,7 +154,7 @@ func (client *TestSummariesClient) listCreateRequest(ctx context.Context, resour
 
 // listHandleResponse handles the List response.
 func (client *TestSummariesClient) listHandleResponse(resp *http.Response) (TestSummariesClientListResponse, error) {
-	result := TestSummariesClientListResponse{RawResponse: resp}
+	result := TestSummariesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TestSummaryListResult); err != nil {
 		return TestSummariesClientListResponse{}, err
 	}

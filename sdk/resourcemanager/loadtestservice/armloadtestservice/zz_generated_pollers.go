@@ -43,11 +43,10 @@ func (p *LoadTestsClientDeletePoller) Poll(ctx context.Context) (*http.Response,
 // If the final GET succeeded then the final LoadTestsClientDeleteResponse will be returned.
 func (p *LoadTestsClientDeletePoller) FinalResponse(ctx context.Context) (LoadTestsClientDeleteResponse, error) {
 	respType := LoadTestsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return LoadTestsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

@@ -35,17 +35,17 @@ type VolumeGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVolumeGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VolumeGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VolumeGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *VolumeGroupsClient) BeginCreate(ctx context.Context, resourceGroup
 	if err != nil {
 		return VolumeGroupsClientCreatePollerResponse{}, err
 	}
-	result := VolumeGroupsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VolumeGroupsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("VolumeGroupsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return VolumeGroupsClientCreatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *VolumeGroupsClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return VolumeGroupsClientDeletePollerResponse{}, err
 	}
-	result := VolumeGroupsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VolumeGroupsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VolumeGroupsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return VolumeGroupsClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *VolumeGroupsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *VolumeGroupsClient) getHandleResponse(resp *http.Response) (VolumeGroupsClientGetResponse, error) {
-	result := VolumeGroupsClientGetResponse{RawResponse: resp}
+	result := VolumeGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VolumeGroupDetails); err != nil {
 		return VolumeGroupsClientGetResponse{}, err
 	}
@@ -260,19 +256,13 @@ func (client *VolumeGroupsClient) getHandleResponse(resp *http.Response) (Volume
 // accountName - The name of the NetApp account
 // options - VolumeGroupsClientListByNetAppAccountOptions contains the optional parameters for the VolumeGroupsClient.ListByNetAppAccount
 // method.
-func (client *VolumeGroupsClient) ListByNetAppAccount(ctx context.Context, resourceGroupName string, accountName string, options *VolumeGroupsClientListByNetAppAccountOptions) (VolumeGroupsClientListByNetAppAccountResponse, error) {
-	req, err := client.listByNetAppAccountCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return VolumeGroupsClientListByNetAppAccountResponse{}, err
+func (client *VolumeGroupsClient) ListByNetAppAccount(resourceGroupName string, accountName string, options *VolumeGroupsClientListByNetAppAccountOptions) *VolumeGroupsClientListByNetAppAccountPager {
+	return &VolumeGroupsClientListByNetAppAccountPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByNetAppAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return VolumeGroupsClientListByNetAppAccountResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return VolumeGroupsClientListByNetAppAccountResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByNetAppAccountHandleResponse(resp)
 }
 
 // listByNetAppAccountCreateRequest creates the ListByNetAppAccount request.
@@ -303,7 +293,7 @@ func (client *VolumeGroupsClient) listByNetAppAccountCreateRequest(ctx context.C
 
 // listByNetAppAccountHandleResponse handles the ListByNetAppAccount response.
 func (client *VolumeGroupsClient) listByNetAppAccountHandleResponse(resp *http.Response) (VolumeGroupsClientListByNetAppAccountResponse, error) {
-	result := VolumeGroupsClientListByNetAppAccountResponse{RawResponse: resp}
+	result := VolumeGroupsClientListByNetAppAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VolumeGroupList); err != nil {
 		return VolumeGroupsClientListByNetAppAccountResponse{}, err
 	}

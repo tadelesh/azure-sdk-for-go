@@ -1,5 +1,198 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*JobDefinitionsClientListByDataServicePager.NextPage` return value(s) have been changed from `(bool)` to `(JobDefinitionsClientListByDataServiceResponse, error)`
+- Function `*DataManagersClient.List` parameter(s) have been changed from `(context.Context, *DataManagersClientListOptions)` to `(*DataManagersClientListOptions)`
+- Function `*DataManagersClient.List` return value(s) have been changed from `(DataManagersClientListResponse, error)` to `(*DataManagersClientListPager)`
+- Function `*DataStoreTypesClientListByDataManagerPager.NextPage` return value(s) have been changed from `(bool)` to `(DataStoreTypesClientListByDataManagerResponse, error)`
+- Function `*JobsClientListByDataManagerPager.NextPage` return value(s) have been changed from `(bool)` to `(JobsClientListByDataManagerResponse, error)`
+- Function `*DataServicesClientListByDataManagerPager.NextPage` return value(s) have been changed from `(bool)` to `(DataServicesClientListByDataManagerResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*JobsClientListByDataServicePager.NextPage` return value(s) have been changed from `(bool)` to `(JobsClientListByDataServiceResponse, error)`
+- Function `*DataStoresClientListByDataManagerPager.NextPage` return value(s) have been changed from `(bool)` to `(DataStoresClientListByDataManagerResponse, error)`
+- Function `*DataManagersClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *DataManagersClientListByResourceGroupOptions)` to `(string, *DataManagersClientListByResourceGroupOptions)`
+- Function `*DataManagersClient.ListByResourceGroup` return value(s) have been changed from `(DataManagersClientListByResourceGroupResponse, error)` to `(*DataManagersClientListByResourceGroupPager)`
+- Function `*PublicKeysClientListByDataManagerPager.NextPage` return value(s) have been changed from `(bool)` to `(PublicKeysClientListByDataManagerResponse, error)`
+- Function `*JobsClientListByJobDefinitionPager.NextPage` return value(s) have been changed from `(bool)` to `(JobsClientListByJobDefinitionResponse, error)`
+- Function `*JobDefinitionsClientListByDataManagerPager.NextPage` return value(s) have been changed from `(bool)` to `(JobDefinitionsClientListByDataManagerResponse, error)`
+- Function `*JobDefinitionsClientListByDataServicePager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*JobsClientListByDataManagerPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*JobDefinitionsClientListByDataManagerPager.Err` has been removed
+- Function `*DataStoresClientListByDataManagerPager.PageResponse` has been removed
+- Function `*PublicKeysClientListByDataManagerPager.PageResponse` has been removed
+- Function `*PublicKeysClientListByDataManagerPager.Err` has been removed
+- Function `*JobDefinitionsClientListByDataManagerPager.PageResponse` has been removed
+- Function `*DataStoresClientListByDataManagerPager.Err` has been removed
+- Function `*JobDefinitionsClientListByDataServicePager.PageResponse` has been removed
+- Function `*JobsClientListByDataManagerPager.PageResponse` has been removed
+- Function `*JobsClientListByDataServicePager.PageResponse` has been removed
+- Function `*JobsClientListByDataServicePager.Err` has been removed
+- Function `*JobsClientListByJobDefinitionPager.PageResponse` has been removed
+- Function `*DataServicesClientListByDataManagerPager.Err` has been removed
+- Function `*JobsClientListByJobDefinitionPager.Err` has been removed
+- Function `*DataServicesClientListByDataManagerPager.PageResponse` has been removed
+- Function `*DataStoreTypesClientListByDataManagerPager.PageResponse` has been removed
+- Function `*DataStoreTypesClientListByDataManagerPager.Err` has been removed
+- Struct `DataManagersClientCreateResult` has been removed
+- Struct `DataManagersClientGetResult` has been removed
+- Struct `DataManagersClientListByResourceGroupResult` has been removed
+- Struct `DataManagersClientListResult` has been removed
+- Struct `DataManagersClientUpdateResult` has been removed
+- Struct `DataServicesClientGetResult` has been removed
+- Struct `DataServicesClientListByDataManagerResult` has been removed
+- Struct `DataStoreTypesClientGetResult` has been removed
+- Struct `DataStoreTypesClientListByDataManagerResult` has been removed
+- Struct `DataStoresClientCreateOrUpdateResult` has been removed
+- Struct `DataStoresClientGetResult` has been removed
+- Struct `DataStoresClientListByDataManagerResult` has been removed
+- Struct `JobDefinitionsClientCreateOrUpdateResult` has been removed
+- Struct `JobDefinitionsClientGetResult` has been removed
+- Struct `JobDefinitionsClientListByDataManagerResult` has been removed
+- Struct `JobDefinitionsClientListByDataServiceResult` has been removed
+- Struct `JobsClientGetResult` has been removed
+- Struct `JobsClientListByDataManagerResult` has been removed
+- Struct `JobsClientListByDataServiceResult` has been removed
+- Struct `JobsClientListByJobDefinitionResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PublicKeysClientGetResult` has been removed
+- Struct `PublicKeysClientListByDataManagerResult` has been removed
+- Field `RawResponse` of struct `JobDefinitionsClientRunResponse` has been removed
+- Field `RawResponse` of struct `DataManagersClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `JobDefinitionsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `JobDefinitionsClientDeleteResponse` has been removed
+- Field `DataServicesClientListByDataManagerResult` of struct `DataServicesClientListByDataManagerResponse` has been removed
+- Field `RawResponse` of struct `DataServicesClientListByDataManagerResponse` has been removed
+- Field `RawResponse` of struct `DataStoresClientCreateOrUpdatePollerResponse` has been removed
+- Field `DataStoreTypesClientGetResult` of struct `DataStoreTypesClientGetResponse` has been removed
+- Field `RawResponse` of struct `DataStoreTypesClientGetResponse` has been removed
+- Field `JobsClientListByJobDefinitionResult` of struct `JobsClientListByJobDefinitionResponse` has been removed
+- Field `RawResponse` of struct `JobsClientListByJobDefinitionResponse` has been removed
+- Field `RawResponse` of struct `JobsClientCancelResponse` has been removed
+- Field `RawResponse` of struct `JobsClientResumePollerResponse` has been removed
+- Field `JobDefinitionsClientGetResult` of struct `JobDefinitionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `JobDefinitionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `JobsClientResumeResponse` has been removed
+- Field `RawResponse` of struct `DataStoresClientDeletePollerResponse` has been removed
+- Field `DataManagersClientListByResourceGroupResult` of struct `DataManagersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `DataManagersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `JobDefinitionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DataManagersClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `JobDefinitionsClientRunPollerResponse` has been removed
+- Field `DataStoresClientGetResult` of struct `DataStoresClientGetResponse` has been removed
+- Field `RawResponse` of struct `DataStoresClientGetResponse` has been removed
+- Field `JobDefinitionsClientListByDataManagerResult` of struct `JobDefinitionsClientListByDataManagerResponse` has been removed
+- Field `RawResponse` of struct `JobDefinitionsClientListByDataManagerResponse` has been removed
+- Field `RawResponse` of struct `DataManagersClientDeletePollerResponse` has been removed
+- Field `JobDefinitionsClientCreateOrUpdateResult` of struct `JobDefinitionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `JobDefinitionsClientCreateOrUpdateResponse` has been removed
+- Field `DataStoresClientCreateOrUpdateResult` of struct `DataStoresClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DataStoresClientCreateOrUpdateResponse` has been removed
+- Field `DataStoresClientListByDataManagerResult` of struct `DataStoresClientListByDataManagerResponse` has been removed
+- Field `RawResponse` of struct `DataStoresClientListByDataManagerResponse` has been removed
+- Field `JobsClientListByDataServiceResult` of struct `JobsClientListByDataServiceResponse` has been removed
+- Field `RawResponse` of struct `JobsClientListByDataServiceResponse` has been removed
+- Field `DataManagersClientGetResult` of struct `DataManagersClientGetResponse` has been removed
+- Field `RawResponse` of struct `DataManagersClientGetResponse` has been removed
+- Field `RawResponse` of struct `DataManagersClientCreatePollerResponse` has been removed
+- Field `JobsClientGetResult` of struct `JobsClientGetResponse` has been removed
+- Field `RawResponse` of struct `JobsClientGetResponse` has been removed
+- Field `DataManagersClientUpdateResult` of struct `DataManagersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DataManagersClientUpdateResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `PublicKeysClientGetResult` of struct `PublicKeysClientGetResponse` has been removed
+- Field `RawResponse` of struct `PublicKeysClientGetResponse` has been removed
+- Field `DataManagersClientListResult` of struct `DataManagersClientListResponse` has been removed
+- Field `RawResponse` of struct `DataManagersClientListResponse` has been removed
+- Field `JobDefinitionsClientListByDataServiceResult` of struct `JobDefinitionsClientListByDataServiceResponse` has been removed
+- Field `RawResponse` of struct `JobDefinitionsClientListByDataServiceResponse` has been removed
+- Field `DataServicesClientGetResult` of struct `DataServicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `DataServicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `DataStoresClientDeleteResponse` has been removed
+- Field `DataStoreTypesClientListByDataManagerResult` of struct `DataStoreTypesClientListByDataManagerResponse` has been removed
+- Field `RawResponse` of struct `DataStoreTypesClientListByDataManagerResponse` has been removed
+- Field `PublicKeysClientListByDataManagerResult` of struct `PublicKeysClientListByDataManagerResponse` has been removed
+- Field `RawResponse` of struct `PublicKeysClientListByDataManagerResponse` has been removed
+- Field `DataManagersClientCreateResult` of struct `DataManagersClientCreateResponse` has been removed
+- Field `RawResponse` of struct `DataManagersClientCreateResponse` has been removed
+- Field `JobsClientListByDataManagerResult` of struct `JobsClientListByDataManagerResponse` has been removed
+- Field `RawResponse` of struct `JobsClientListByDataManagerResponse` has been removed
+- Field `RawResponse` of struct `JobsClientCancelPollerResponse` has been removed
+
+### Features Added
+
+- New function `JobFilter.MarshalJSON() ([]byte, error)`
+- New function `*JobsClientListByJobDefinitionPager.More() bool`
+- New function `*PublicKeysClientListByDataManagerPager.More() bool`
+- New function `*JobDefinitionFilter.UnmarshalJSON([]byte) error`
+- New function `*JobDefinitionsClientListByDataManagerPager.More() bool`
+- New function `*DataManagersClientListByResourceGroupPager.NextPage(context.Context) (DataManagersClientListByResourceGroupResponse, error)`
+- New function `*DataManagersClientListPager.NextPage(context.Context) (DataManagersClientListResponse, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*DataServicesClientListByDataManagerPager.More() bool`
+- New function `JobDefinitionFilter.MarshalJSON() ([]byte, error)`
+- New function `*JobDefinitionsClientListByDataServicePager.More() bool`
+- New function `*DataStoreTypesClientListByDataManagerPager.More() bool`
+- New function `*JobsClientListByDataServicePager.More() bool`
+- New function `*DataStoresClientListByDataManagerPager.More() bool`
+- New function `*JobFilter.UnmarshalJSON([]byte) error`
+- New function `*JobsClientListByDataManagerPager.More() bool`
+- New function `*DataManagersClientListByResourceGroupPager.More() bool`
+- New function `*DataManagersClientListPager.More() bool`
+- New struct `DataManagersClientListByResourceGroupPager`
+- New struct `DataManagersClientListPager`
+- New struct `DataStoreFilter`
+- New struct `JobDefinitionFilter`
+- New struct `JobFilter`
+- New anonymous field `DataStore` in struct `DataStoresClientCreateOrUpdateResponse`
+- New anonymous field `JobDefinition` in struct `JobDefinitionsClientGetResponse`
+- New anonymous field `JobList` in struct `JobsClientListByDataServiceResponse`
+- New anonymous field `DataManager` in struct `DataManagersClientUpdateResponse`
+- New anonymous field `DataStoreTypeList` in struct `DataStoreTypesClientListByDataManagerResponse`
+- New anonymous field `JobDefinition` in struct `JobDefinitionsClientCreateOrUpdateResponse`
+- New anonymous field `DataStoreType` in struct `DataStoreTypesClientGetResponse`
+- New anonymous field `PublicKeyList` in struct `PublicKeysClientListByDataManagerResponse`
+- New anonymous field `DataManagerList` in struct `DataManagersClientListByResourceGroupResponse`
+- New anonymous field `DataServiceList` in struct `DataServicesClientListByDataManagerResponse`
+- New anonymous field `Job` in struct `JobsClientGetResponse`
+- New anonymous field `DataManager` in struct `DataManagersClientGetResponse`
+- New anonymous field `JobList` in struct `JobsClientListByJobDefinitionResponse`
+- New anonymous field `DataStoreList` in struct `DataStoresClientListByDataManagerResponse`
+- New anonymous field `JobDefinitionList` in struct `JobDefinitionsClientListByDataServiceResponse`
+- New anonymous field `JobList` in struct `JobsClientListByDataManagerResponse`
+- New anonymous field `DataService` in struct `DataServicesClientGetResponse`
+- New anonymous field `PublicKey` in struct `PublicKeysClientGetResponse`
+- New anonymous field `DataStore` in struct `DataStoresClientGetResponse`
+- New anonymous field `DataManagerList` in struct `DataManagersClientListResponse`
+- New anonymous field `AvailableProviderOperations` in struct `OperationsClientListResponse`
+- New anonymous field `DataManager` in struct `DataManagersClientCreateResponse`
+- New anonymous field `JobDefinitionList` in struct `JobDefinitionsClientListByDataManagerResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `AvailableProviderOperation.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `RunParameters.DataServiceInput` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `JobStages.JobStageDetails` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `JobDefinitionProperties.DataServiceInput` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `DataStoreProperties.ExtendedProperties` has been changed from `map[string]interface{}` to `interface{}`
+- Function `JobFilter.MarshalJSON` has been removed
+- Function `JobDefinitionFilter.MarshalJSON` has been removed
+- Function `*JobDefinitionFilter.UnmarshalJSON` has been removed
+- Function `*JobFilter.UnmarshalJSON` has been removed
+- Struct `DataStoreFilter` has been removed
+- Struct `JobDefinitionFilter` has been removed
+- Struct `JobFilter` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

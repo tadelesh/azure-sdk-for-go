@@ -35,17 +35,17 @@ type TenantAccessGitClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTenantAccessGitClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TenantAccessGitClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TenantAccessGitClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -69,7 +69,7 @@ func (client *TenantAccessGitClient) RegeneratePrimaryKey(ctx context.Context, r
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return TenantAccessGitClientRegeneratePrimaryKeyResponse{}, runtime.NewResponseError(resp)
 	}
-	return TenantAccessGitClientRegeneratePrimaryKeyResponse{RawResponse: resp}, nil
+	return TenantAccessGitClientRegeneratePrimaryKeyResponse{}, nil
 }
 
 // regeneratePrimaryKeyCreateRequest creates the RegeneratePrimaryKey request.
@@ -121,7 +121,7 @@ func (client *TenantAccessGitClient) RegenerateSecondaryKey(ctx context.Context,
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return TenantAccessGitClientRegenerateSecondaryKeyResponse{}, runtime.NewResponseError(resp)
 	}
-	return TenantAccessGitClientRegenerateSecondaryKeyResponse{RawResponse: resp}, nil
+	return TenantAccessGitClientRegenerateSecondaryKeyResponse{}, nil
 }
 
 // regenerateSecondaryKeyCreateRequest creates the RegenerateSecondaryKey request.

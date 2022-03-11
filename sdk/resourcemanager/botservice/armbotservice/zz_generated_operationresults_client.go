@@ -34,17 +34,17 @@ type OperationResultsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewOperationResultsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *OperationResultsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &OperationResultsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -59,9 +59,7 @@ func (client *OperationResultsClient) BeginGet(ctx context.Context, operationRes
 	if err != nil {
 		return OperationResultsClientGetPollerResponse{}, err
 	}
-	result := OperationResultsClientGetPollerResponse{
-		RawResponse: resp,
-	}
+	result := OperationResultsClientGetPollerResponse{}
 	pt, err := armruntime.NewPoller("OperationResultsClient.Get", "", resp, client.pl)
 	if err != nil {
 		return OperationResultsClientGetPollerResponse{}, err

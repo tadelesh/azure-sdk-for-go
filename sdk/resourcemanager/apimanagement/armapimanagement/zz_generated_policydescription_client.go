@@ -35,17 +35,17 @@ type PolicyDescriptionClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPolicyDescriptionClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PolicyDescriptionClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PolicyDescriptionClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *PolicyDescriptionClient) listByServiceCreateRequest(ctx context.Co
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *PolicyDescriptionClient) listByServiceHandleResponse(resp *http.Response) (PolicyDescriptionClientListByServiceResponse, error) {
-	result := PolicyDescriptionClientListByServiceResponse{RawResponse: resp}
+	result := PolicyDescriptionClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyDescriptionCollection); err != nil {
 		return PolicyDescriptionClientListByServiceResponse{}, err
 	}

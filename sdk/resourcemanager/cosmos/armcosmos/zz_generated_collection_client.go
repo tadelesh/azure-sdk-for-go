@@ -34,17 +34,17 @@ type CollectionClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCollectionClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CollectionClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CollectionClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -57,19 +57,13 @@ func NewCollectionClient(subscriptionID string, credential azcore.TokenCredentia
 // collectionRid - Cosmos DB collection rid.
 // options - CollectionClientListMetricDefinitionsOptions contains the optional parameters for the CollectionClient.ListMetricDefinitions
 // method.
-func (client *CollectionClient) ListMetricDefinitions(ctx context.Context, resourceGroupName string, accountName string, databaseRid string, collectionRid string, options *CollectionClientListMetricDefinitionsOptions) (CollectionClientListMetricDefinitionsResponse, error) {
-	req, err := client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, accountName, databaseRid, collectionRid, options)
-	if err != nil {
-		return CollectionClientListMetricDefinitionsResponse{}, err
+func (client *CollectionClient) ListMetricDefinitions(resourceGroupName string, accountName string, databaseRid string, collectionRid string, options *CollectionClientListMetricDefinitionsOptions) *CollectionClientListMetricDefinitionsPager {
+	return &CollectionClientListMetricDefinitionsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, accountName, databaseRid, collectionRid, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return CollectionClientListMetricDefinitionsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return CollectionClientListMetricDefinitionsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listMetricDefinitionsHandleResponse(resp)
 }
 
 // listMetricDefinitionsCreateRequest creates the ListMetricDefinitions request.
@@ -108,7 +102,7 @@ func (client *CollectionClient) listMetricDefinitionsCreateRequest(ctx context.C
 
 // listMetricDefinitionsHandleResponse handles the ListMetricDefinitions response.
 func (client *CollectionClient) listMetricDefinitionsHandleResponse(resp *http.Response) (CollectionClientListMetricDefinitionsResponse, error) {
-	result := CollectionClientListMetricDefinitionsResponse{RawResponse: resp}
+	result := CollectionClientListMetricDefinitionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetricDefinitionsListResult); err != nil {
 		return CollectionClientListMetricDefinitionsResponse{}, err
 	}
@@ -125,19 +119,13 @@ func (client *CollectionClient) listMetricDefinitionsHandleResponse(resp *http.R
 // name.value (name of the metric, can have an or of multiple names), startTime, endTime,
 // and timeGrain. The supported operator is eq.
 // options - CollectionClientListMetricsOptions contains the optional parameters for the CollectionClient.ListMetrics method.
-func (client *CollectionClient) ListMetrics(ctx context.Context, resourceGroupName string, accountName string, databaseRid string, collectionRid string, filter string, options *CollectionClientListMetricsOptions) (CollectionClientListMetricsResponse, error) {
-	req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, databaseRid, collectionRid, filter, options)
-	if err != nil {
-		return CollectionClientListMetricsResponse{}, err
+func (client *CollectionClient) ListMetrics(resourceGroupName string, accountName string, databaseRid string, collectionRid string, filter string, options *CollectionClientListMetricsOptions) *CollectionClientListMetricsPager {
+	return &CollectionClientListMetricsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, databaseRid, collectionRid, filter, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return CollectionClientListMetricsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return CollectionClientListMetricsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listMetricsHandleResponse(resp)
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.
@@ -177,7 +165,7 @@ func (client *CollectionClient) listMetricsCreateRequest(ctx context.Context, re
 
 // listMetricsHandleResponse handles the ListMetrics response.
 func (client *CollectionClient) listMetricsHandleResponse(resp *http.Response) (CollectionClientListMetricsResponse, error) {
-	result := CollectionClientListMetricsResponse{RawResponse: resp}
+	result := CollectionClientListMetricsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetricListResult); err != nil {
 		return CollectionClientListMetricsResponse{}, err
 	}
@@ -191,19 +179,13 @@ func (client *CollectionClient) listMetricsHandleResponse(resp *http.Response) (
 // databaseRid - Cosmos DB database rid.
 // collectionRid - Cosmos DB collection rid.
 // options - CollectionClientListUsagesOptions contains the optional parameters for the CollectionClient.ListUsages method.
-func (client *CollectionClient) ListUsages(ctx context.Context, resourceGroupName string, accountName string, databaseRid string, collectionRid string, options *CollectionClientListUsagesOptions) (CollectionClientListUsagesResponse, error) {
-	req, err := client.listUsagesCreateRequest(ctx, resourceGroupName, accountName, databaseRid, collectionRid, options)
-	if err != nil {
-		return CollectionClientListUsagesResponse{}, err
+func (client *CollectionClient) ListUsages(resourceGroupName string, accountName string, databaseRid string, collectionRid string, options *CollectionClientListUsagesOptions) *CollectionClientListUsagesPager {
+	return &CollectionClientListUsagesPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listUsagesCreateRequest(ctx, resourceGroupName, accountName, databaseRid, collectionRid, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return CollectionClientListUsagesResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return CollectionClientListUsagesResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listUsagesHandleResponse(resp)
 }
 
 // listUsagesCreateRequest creates the ListUsages request.
@@ -245,7 +227,7 @@ func (client *CollectionClient) listUsagesCreateRequest(ctx context.Context, res
 
 // listUsagesHandleResponse handles the ListUsages response.
 func (client *CollectionClient) listUsagesHandleResponse(resp *http.Response) (CollectionClientListUsagesResponse, error) {
-	result := CollectionClientListUsagesResponse{RawResponse: resp}
+	result := CollectionClientListUsagesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UsagesResult); err != nil {
 		return CollectionClientListUsagesResponse{}, err
 	}

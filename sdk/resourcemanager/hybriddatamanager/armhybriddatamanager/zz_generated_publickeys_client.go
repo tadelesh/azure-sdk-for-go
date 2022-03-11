@@ -34,17 +34,17 @@ type PublicKeysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPublicKeysClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PublicKeysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PublicKeysClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *PublicKeysClient) getCreateRequest(ctx context.Context, publicKeyN
 
 // getHandleResponse handles the Get response.
 func (client *PublicKeysClient) getHandleResponse(resp *http.Response) (PublicKeysClientGetResponse, error) {
-	result := PublicKeysClientGetResponse{RawResponse: resp}
+	result := PublicKeysClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicKey); err != nil {
 		return PublicKeysClientGetResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *PublicKeysClient) listByDataManagerCreateRequest(ctx context.Conte
 
 // listByDataManagerHandleResponse handles the ListByDataManager response.
 func (client *PublicKeysClient) listByDataManagerHandleResponse(resp *http.Response) (PublicKeysClientListByDataManagerResponse, error) {
-	result := PublicKeysClientListByDataManagerResponse{RawResponse: resp}
+	result := PublicKeysClientListByDataManagerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicKeyList); err != nil {
 		return PublicKeysClientListByDataManagerResponse{}, err
 	}

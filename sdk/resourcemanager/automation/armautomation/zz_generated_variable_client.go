@@ -35,17 +35,17 @@ type VariableClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVariableClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VariableClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VariableClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *VariableClient) createOrUpdateCreateRequest(ctx context.Context, r
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *VariableClient) createOrUpdateHandleResponse(resp *http.Response) (VariableClientCreateOrUpdateResponse, error) {
-	result := VariableClientCreateOrUpdateResponse{RawResponse: resp}
+	result := VariableClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Variable); err != nil {
 		return VariableClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *VariableClient) Delete(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return VariableClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return VariableClientDeleteResponse{RawResponse: resp}, nil
+	return VariableClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *VariableClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *VariableClient) getHandleResponse(resp *http.Response) (VariableClientGetResponse, error) {
-	result := VariableClientGetResponse{RawResponse: resp}
+	result := VariableClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Variable); err != nil {
 		return VariableClientGetResponse{}, err
 	}
@@ -268,7 +268,7 @@ func (client *VariableClient) listByAutomationAccountCreateRequest(ctx context.C
 
 // listByAutomationAccountHandleResponse handles the ListByAutomationAccount response.
 func (client *VariableClient) listByAutomationAccountHandleResponse(resp *http.Response) (VariableClientListByAutomationAccountResponse, error) {
-	result := VariableClientListByAutomationAccountResponse{RawResponse: resp}
+	result := VariableClientListByAutomationAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VariableListResult); err != nil {
 		return VariableClientListByAutomationAccountResponse{}, err
 	}
@@ -329,7 +329,7 @@ func (client *VariableClient) updateCreateRequest(ctx context.Context, resourceG
 
 // updateHandleResponse handles the Update response.
 func (client *VariableClient) updateHandleResponse(resp *http.Response) (VariableClientUpdateResponse, error) {
-	result := VariableClientUpdateResponse{RawResponse: resp}
+	result := VariableClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Variable); err != nil {
 		return VariableClientUpdateResponse{}, err
 	}

@@ -35,17 +35,17 @@ type DatabasesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDatabasesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DatabasesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DatabasesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *DatabasesClient) addPrincipalsCreateRequest(ctx context.Context, r
 
 // addPrincipalsHandleResponse handles the AddPrincipals response.
 func (client *DatabasesClient) addPrincipalsHandleResponse(resp *http.Response) (DatabasesClientAddPrincipalsResponse, error) {
-	result := DatabasesClientAddPrincipalsResponse{RawResponse: resp}
+	result := DatabasesClientAddPrincipalsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabasePrincipalListResult); err != nil {
 		return DatabasesClientAddPrincipalsResponse{}, err
 	}
@@ -161,7 +161,7 @@ func (client *DatabasesClient) checkNameAvailabilityCreateRequest(ctx context.Co
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *DatabasesClient) checkNameAvailabilityHandleResponse(resp *http.Response) (DatabasesClientCheckNameAvailabilityResponse, error) {
-	result := DatabasesClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := DatabasesClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameResult); err != nil {
 		return DatabasesClientCheckNameAvailabilityResponse{}, err
 	}
@@ -181,9 +181,7 @@ func (client *DatabasesClient) BeginCreateOrUpdate(ctx context.Context, resource
 	if err != nil {
 		return DatabasesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DatabasesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DatabasesClientCreateOrUpdatePollerResponse{}, err
@@ -252,9 +250,7 @@ func (client *DatabasesClient) BeginDelete(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DatabasesClientDeletePollerResponse{}, err
 	}
-	result := DatabasesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DatabasesClientDeletePollerResponse{}, err
@@ -365,7 +361,7 @@ func (client *DatabasesClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *DatabasesClient) getHandleResponse(resp *http.Response) (DatabasesClientGetResponse, error) {
-	result := DatabasesClientGetResponse{RawResponse: resp}
+	result := DatabasesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return DatabasesClientGetResponse{}, err
 	}
@@ -377,19 +373,13 @@ func (client *DatabasesClient) getHandleResponse(resp *http.Response) (Databases
 // resourceGroupName - The name of the resource group containing the Kusto cluster.
 // clusterName - The name of the Kusto cluster.
 // options - DatabasesClientListByClusterOptions contains the optional parameters for the DatabasesClient.ListByCluster method.
-func (client *DatabasesClient) ListByCluster(ctx context.Context, resourceGroupName string, clusterName string, options *DatabasesClientListByClusterOptions) (DatabasesClientListByClusterResponse, error) {
-	req, err := client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
-	if err != nil {
-		return DatabasesClientListByClusterResponse{}, err
+func (client *DatabasesClient) ListByCluster(resourceGroupName string, clusterName string, options *DatabasesClientListByClusterOptions) *DatabasesClientListByClusterPager {
+	return &DatabasesClientListByClusterPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DatabasesClientListByClusterResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DatabasesClientListByClusterResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByClusterHandleResponse(resp)
 }
 
 // listByClusterCreateRequest creates the ListByCluster request.
@@ -420,7 +410,7 @@ func (client *DatabasesClient) listByClusterCreateRequest(ctx context.Context, r
 
 // listByClusterHandleResponse handles the ListByCluster response.
 func (client *DatabasesClient) listByClusterHandleResponse(resp *http.Response) (DatabasesClientListByClusterResponse, error) {
-	result := DatabasesClientListByClusterResponse{RawResponse: resp}
+	result := DatabasesClientListByClusterResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseListResult); err != nil {
 		return DatabasesClientListByClusterResponse{}, err
 	}
@@ -434,19 +424,13 @@ func (client *DatabasesClient) listByClusterHandleResponse(resp *http.Response) 
 // databaseName - The name of the database in the Kusto cluster.
 // options - DatabasesClientListPrincipalsOptions contains the optional parameters for the DatabasesClient.ListPrincipals
 // method.
-func (client *DatabasesClient) ListPrincipals(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, options *DatabasesClientListPrincipalsOptions) (DatabasesClientListPrincipalsResponse, error) {
-	req, err := client.listPrincipalsCreateRequest(ctx, resourceGroupName, clusterName, databaseName, options)
-	if err != nil {
-		return DatabasesClientListPrincipalsResponse{}, err
+func (client *DatabasesClient) ListPrincipals(resourceGroupName string, clusterName string, databaseName string, options *DatabasesClientListPrincipalsOptions) *DatabasesClientListPrincipalsPager {
+	return &DatabasesClientListPrincipalsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listPrincipalsCreateRequest(ctx, resourceGroupName, clusterName, databaseName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DatabasesClientListPrincipalsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DatabasesClientListPrincipalsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listPrincipalsHandleResponse(resp)
 }
 
 // listPrincipalsCreateRequest creates the ListPrincipals request.
@@ -481,7 +465,7 @@ func (client *DatabasesClient) listPrincipalsCreateRequest(ctx context.Context, 
 
 // listPrincipalsHandleResponse handles the ListPrincipals response.
 func (client *DatabasesClient) listPrincipalsHandleResponse(resp *http.Response) (DatabasesClientListPrincipalsResponse, error) {
-	result := DatabasesClientListPrincipalsResponse{RawResponse: resp}
+	result := DatabasesClientListPrincipalsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabasePrincipalListResult); err != nil {
 		return DatabasesClientListPrincipalsResponse{}, err
 	}
@@ -543,7 +527,7 @@ func (client *DatabasesClient) removePrincipalsCreateRequest(ctx context.Context
 
 // removePrincipalsHandleResponse handles the RemovePrincipals response.
 func (client *DatabasesClient) removePrincipalsHandleResponse(resp *http.Response) (DatabasesClientRemovePrincipalsResponse, error) {
-	result := DatabasesClientRemovePrincipalsResponse{RawResponse: resp}
+	result := DatabasesClientRemovePrincipalsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabasePrincipalListResult); err != nil {
 		return DatabasesClientRemovePrincipalsResponse{}, err
 	}
@@ -562,9 +546,7 @@ func (client *DatabasesClient) BeginUpdate(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DatabasesClientUpdatePollerResponse{}, err
 	}
-	result := DatabasesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabasesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabasesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return DatabasesClientUpdatePollerResponse{}, err

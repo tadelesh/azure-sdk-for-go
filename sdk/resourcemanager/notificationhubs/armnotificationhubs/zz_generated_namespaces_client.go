@@ -35,17 +35,17 @@ type NamespacesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewNamespacesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *NamespacesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &NamespacesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -91,7 +91,7 @@ func (client *NamespacesClient) checkAvailabilityCreateRequest(ctx context.Conte
 
 // checkAvailabilityHandleResponse handles the CheckAvailability response.
 func (client *NamespacesClient) checkAvailabilityHandleResponse(resp *http.Response) (NamespacesClientCheckAvailabilityResponse, error) {
-	result := NamespacesClientCheckAvailabilityResponse{RawResponse: resp}
+	result := NamespacesClientCheckAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckAvailabilityResult); err != nil {
 		return NamespacesClientCheckAvailabilityResponse{}, err
 	}
@@ -149,7 +149,7 @@ func (client *NamespacesClient) createOrUpdateCreateRequest(ctx context.Context,
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *NamespacesClient) createOrUpdateHandleResponse(resp *http.Response) (NamespacesClientCreateOrUpdateResponse, error) {
-	result := NamespacesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := NamespacesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NamespaceResource); err != nil {
 		return NamespacesClientCreateOrUpdateResponse{}, err
 	}
@@ -211,7 +211,7 @@ func (client *NamespacesClient) createOrUpdateAuthorizationRuleCreateRequest(ctx
 
 // createOrUpdateAuthorizationRuleHandleResponse handles the CreateOrUpdateAuthorizationRule response.
 func (client *NamespacesClient) createOrUpdateAuthorizationRuleHandleResponse(resp *http.Response) (NamespacesClientCreateOrUpdateAuthorizationRuleResponse, error) {
-	result := NamespacesClientCreateOrUpdateAuthorizationRuleResponse{RawResponse: resp}
+	result := NamespacesClientCreateOrUpdateAuthorizationRuleResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedAccessAuthorizationRuleResource); err != nil {
 		return NamespacesClientCreateOrUpdateAuthorizationRuleResponse{}, err
 	}
@@ -228,9 +228,7 @@ func (client *NamespacesClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return NamespacesClientDeletePollerResponse{}, err
 	}
-	result := NamespacesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := NamespacesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("NamespacesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return NamespacesClientDeletePollerResponse{}, err
@@ -302,7 +300,7 @@ func (client *NamespacesClient) DeleteAuthorizationRule(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return NamespacesClientDeleteAuthorizationRuleResponse{}, runtime.NewResponseError(resp)
 	}
-	return NamespacesClientDeleteAuthorizationRuleResponse{RawResponse: resp}, nil
+	return NamespacesClientDeleteAuthorizationRuleResponse{}, nil
 }
 
 // deleteAuthorizationRuleCreateRequest creates the DeleteAuthorizationRule request.
@@ -382,7 +380,7 @@ func (client *NamespacesClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *NamespacesClient) getHandleResponse(resp *http.Response) (NamespacesClientGetResponse, error) {
-	result := NamespacesClientGetResponse{RawResponse: resp}
+	result := NamespacesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NamespaceResource); err != nil {
 		return NamespacesClientGetResponse{}, err
 	}
@@ -443,7 +441,7 @@ func (client *NamespacesClient) getAuthorizationRuleCreateRequest(ctx context.Co
 
 // getAuthorizationRuleHandleResponse handles the GetAuthorizationRule response.
 func (client *NamespacesClient) getAuthorizationRuleHandleResponse(resp *http.Response) (NamespacesClientGetAuthorizationRuleResponse, error) {
-	result := NamespacesClientGetAuthorizationRuleResponse{RawResponse: resp}
+	result := NamespacesClientGetAuthorizationRuleResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedAccessAuthorizationRuleResource); err != nil {
 		return NamespacesClientGetAuthorizationRuleResponse{}, err
 	}
@@ -491,7 +489,7 @@ func (client *NamespacesClient) listCreateRequest(ctx context.Context, resourceG
 
 // listHandleResponse handles the List response.
 func (client *NamespacesClient) listHandleResponse(resp *http.Response) (NamespacesClientListResponse, error) {
-	result := NamespacesClientListResponse{RawResponse: resp}
+	result := NamespacesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NamespaceListResult); err != nil {
 		return NamespacesClientListResponse{}, err
 	}
@@ -533,7 +531,7 @@ func (client *NamespacesClient) listAllCreateRequest(ctx context.Context, option
 
 // listAllHandleResponse handles the ListAll response.
 func (client *NamespacesClient) listAllHandleResponse(resp *http.Response) (NamespacesClientListAllResponse, error) {
-	result := NamespacesClientListAllResponse{RawResponse: resp}
+	result := NamespacesClientListAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NamespaceListResult); err != nil {
 		return NamespacesClientListAllResponse{}, err
 	}
@@ -586,7 +584,7 @@ func (client *NamespacesClient) listAuthorizationRulesCreateRequest(ctx context.
 
 // listAuthorizationRulesHandleResponse handles the ListAuthorizationRules response.
 func (client *NamespacesClient) listAuthorizationRulesHandleResponse(resp *http.Response) (NamespacesClientListAuthorizationRulesResponse, error) {
-	result := NamespacesClientListAuthorizationRulesResponse{RawResponse: resp}
+	result := NamespacesClientListAuthorizationRulesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedAccessAuthorizationRuleListResult); err != nil {
 		return NamespacesClientListAuthorizationRulesResponse{}, err
 	}
@@ -646,7 +644,7 @@ func (client *NamespacesClient) listKeysCreateRequest(ctx context.Context, resou
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *NamespacesClient) listKeysHandleResponse(resp *http.Response) (NamespacesClientListKeysResponse, error) {
-	result := NamespacesClientListKeysResponse{RawResponse: resp}
+	result := NamespacesClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceListKeys); err != nil {
 		return NamespacesClientListKeysResponse{}, err
 	}
@@ -702,7 +700,7 @@ func (client *NamespacesClient) patchCreateRequest(ctx context.Context, resource
 
 // patchHandleResponse handles the Patch response.
 func (client *NamespacesClient) patchHandleResponse(resp *http.Response) (NamespacesClientPatchResponse, error) {
-	result := NamespacesClientPatchResponse{RawResponse: resp}
+	result := NamespacesClientPatchResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NamespaceResource); err != nil {
 		return NamespacesClientPatchResponse{}, err
 	}
@@ -764,7 +762,7 @@ func (client *NamespacesClient) regenerateKeysCreateRequest(ctx context.Context,
 
 // regenerateKeysHandleResponse handles the RegenerateKeys response.
 func (client *NamespacesClient) regenerateKeysHandleResponse(resp *http.Response) (NamespacesClientRegenerateKeysResponse, error) {
-	result := NamespacesClientRegenerateKeysResponse{RawResponse: resp}
+	result := NamespacesClientRegenerateKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceListKeys); err != nil {
 		return NamespacesClientRegenerateKeysResponse{}, err
 	}

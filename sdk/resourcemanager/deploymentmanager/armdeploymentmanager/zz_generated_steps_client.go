@@ -35,17 +35,17 @@ type StepsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewStepsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *StepsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &StepsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -101,7 +101,7 @@ func (client *StepsClient) createOrUpdateCreateRequest(ctx context.Context, reso
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *StepsClient) createOrUpdateHandleResponse(resp *http.Response) (StepsClientCreateOrUpdateResponse, error) {
-	result := StepsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := StepsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StepResource); err != nil {
 		return StepsClientCreateOrUpdateResponse{}, err
 	}
@@ -125,7 +125,7 @@ func (client *StepsClient) Delete(ctx context.Context, resourceGroupName string,
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return StepsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return StepsClientDeleteResponse{RawResponse: resp}, nil
+	return StepsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -202,7 +202,7 @@ func (client *StepsClient) getCreateRequest(ctx context.Context, resourceGroupNa
 
 // getHandleResponse handles the Get response.
 func (client *StepsClient) getHandleResponse(resp *http.Response) (StepsClientGetResponse, error) {
-	result := StepsClientGetResponse{RawResponse: resp}
+	result := StepsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StepResource); err != nil {
 		return StepsClientGetResponse{}, err
 	}
@@ -252,7 +252,7 @@ func (client *StepsClient) listCreateRequest(ctx context.Context, resourceGroupN
 
 // listHandleResponse handles the List response.
 func (client *StepsClient) listHandleResponse(resp *http.Response) (StepsClientListResponse, error) {
-	result := StepsClientListResponse{RawResponse: resp}
+	result := StepsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StepResourceArray); err != nil {
 		return StepsClientListResponse{}, err
 	}

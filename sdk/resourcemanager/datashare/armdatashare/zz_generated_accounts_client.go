@@ -34,17 +34,17 @@ type AccountsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAccountsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AccountsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AccountsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -60,9 +60,7 @@ func (client *AccountsClient) BeginCreate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return AccountsClientCreatePollerResponse{}, err
 	}
-	result := AccountsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AccountsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("AccountsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return AccountsClientCreatePollerResponse{}, err
@@ -126,9 +124,7 @@ func (client *AccountsClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return AccountsClientDeletePollerResponse{}, err
 	}
-	result := AccountsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AccountsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AccountsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return AccountsClientDeletePollerResponse{}, err
@@ -230,7 +226,7 @@ func (client *AccountsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *AccountsClient) getHandleResponse(resp *http.Response) (AccountsClientGetResponse, error) {
-	result := AccountsClientGetResponse{RawResponse: resp}
+	result := AccountsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Account); err != nil {
 		return AccountsClientGetResponse{}, err
 	}
@@ -281,7 +277,7 @@ func (client *AccountsClient) listByResourceGroupCreateRequest(ctx context.Conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *AccountsClient) listByResourceGroupHandleResponse(resp *http.Response) (AccountsClientListByResourceGroupResponse, error) {
-	result := AccountsClientListByResourceGroupResponse{RawResponse: resp}
+	result := AccountsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountList); err != nil {
 		return AccountsClientListByResourceGroupResponse{}, err
 	}
@@ -327,7 +323,7 @@ func (client *AccountsClient) listBySubscriptionCreateRequest(ctx context.Contex
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *AccountsClient) listBySubscriptionHandleResponse(resp *http.Response) (AccountsClientListBySubscriptionResponse, error) {
-	result := AccountsClientListBySubscriptionResponse{RawResponse: resp}
+	result := AccountsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountList); err != nil {
 		return AccountsClientListBySubscriptionResponse{}, err
 	}
@@ -383,7 +379,7 @@ func (client *AccountsClient) updateCreateRequest(ctx context.Context, resourceG
 
 // updateHandleResponse handles the Update response.
 func (client *AccountsClient) updateHandleResponse(resp *http.Response) (AccountsClientUpdateResponse, error) {
-	result := AccountsClientUpdateResponse{RawResponse: resp}
+	result := AccountsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Account); err != nil {
 		return AccountsClientUpdateResponse{}, err
 	}

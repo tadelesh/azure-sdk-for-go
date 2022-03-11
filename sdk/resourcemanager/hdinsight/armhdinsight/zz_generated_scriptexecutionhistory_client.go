@@ -35,17 +35,17 @@ type ScriptExecutionHistoryClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewScriptExecutionHistoryClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ScriptExecutionHistoryClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ScriptExecutionHistoryClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -96,7 +96,7 @@ func (client *ScriptExecutionHistoryClient) listByClusterCreateRequest(ctx conte
 
 // listByClusterHandleResponse handles the ListByCluster response.
 func (client *ScriptExecutionHistoryClient) listByClusterHandleResponse(resp *http.Response) (ScriptExecutionHistoryClientListByClusterResponse, error) {
-	result := ScriptExecutionHistoryClientListByClusterResponse{RawResponse: resp}
+	result := ScriptExecutionHistoryClientListByClusterResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScriptActionExecutionHistoryList); err != nil {
 		return ScriptExecutionHistoryClientListByClusterResponse{}, err
 	}
@@ -122,7 +122,7 @@ func (client *ScriptExecutionHistoryClient) Promote(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ScriptExecutionHistoryClientPromoteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ScriptExecutionHistoryClientPromoteResponse{RawResponse: resp}, nil
+	return ScriptExecutionHistoryClientPromoteResponse{}, nil
 }
 
 // promoteCreateRequest creates the Promote request.

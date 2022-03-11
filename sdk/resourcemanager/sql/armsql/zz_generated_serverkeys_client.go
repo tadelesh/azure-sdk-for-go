@@ -34,17 +34,17 @@ type ServerKeysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServerKeysClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServerKeysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServerKeysClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -66,9 +66,7 @@ func (client *ServerKeysClient) BeginCreateOrUpdate(ctx context.Context, resourc
 	if err != nil {
 		return ServerKeysClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ServerKeysClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerKeysClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerKeysClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ServerKeysClientCreateOrUpdatePollerResponse{}, err
@@ -138,9 +136,7 @@ func (client *ServerKeysClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return ServerKeysClientDeletePollerResponse{}, err
 	}
-	result := ServerKeysClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerKeysClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerKeysClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ServerKeysClientDeletePollerResponse{}, err
@@ -251,7 +247,7 @@ func (client *ServerKeysClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *ServerKeysClient) getHandleResponse(resp *http.Response) (ServerKeysClientGetResponse, error) {
-	result := ServerKeysClientGetResponse{RawResponse: resp}
+	result := ServerKeysClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerKey); err != nil {
 		return ServerKeysClientGetResponse{}, err
 	}
@@ -304,7 +300,7 @@ func (client *ServerKeysClient) listByServerCreateRequest(ctx context.Context, r
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *ServerKeysClient) listByServerHandleResponse(resp *http.Response) (ServerKeysClientListByServerResponse, error) {
-	result := ServerKeysClientListByServerResponse{RawResponse: resp}
+	result := ServerKeysClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerKeyListResult); err != nil {
 		return ServerKeysClientListByServerResponse{}, err
 	}

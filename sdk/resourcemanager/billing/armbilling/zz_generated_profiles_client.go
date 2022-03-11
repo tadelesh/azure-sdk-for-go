@@ -32,16 +32,16 @@ type ProfilesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProfilesClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ProfilesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProfilesClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -59,9 +59,7 @@ func (client *ProfilesClient) BeginCreateOrUpdate(ctx context.Context, billingAc
 	if err != nil {
 		return ProfilesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ProfilesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ProfilesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ProfilesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ProfilesClientCreateOrUpdatePollerResponse{}, err
@@ -160,7 +158,7 @@ func (client *ProfilesClient) getCreateRequest(ctx context.Context, billingAccou
 
 // getHandleResponse handles the Get response.
 func (client *ProfilesClient) getHandleResponse(resp *http.Response) (ProfilesClientGetResponse, error) {
-	result := ProfilesClientGetResponse{RawResponse: resp}
+	result := ProfilesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Profile); err != nil {
 		return ProfilesClientGetResponse{}, err
 	}
@@ -208,7 +206,7 @@ func (client *ProfilesClient) listByBillingAccountCreateRequest(ctx context.Cont
 
 // listByBillingAccountHandleResponse handles the ListByBillingAccount response.
 func (client *ProfilesClient) listByBillingAccountHandleResponse(resp *http.Response) (ProfilesClientListByBillingAccountResponse, error) {
-	result := ProfilesClientListByBillingAccountResponse{RawResponse: resp}
+	result := ProfilesClientListByBillingAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProfileListResult); err != nil {
 		return ProfilesClientListByBillingAccountResponse{}, err
 	}

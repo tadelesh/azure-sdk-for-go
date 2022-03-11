@@ -43,11 +43,10 @@ func (p *OperationResultsClientGetPoller) Poll(ctx context.Context) (*http.Respo
 // If the final GET succeeded then the final OperationResultsClientGetResponse will be returned.
 func (p *OperationResultsClientGetPoller) FinalResponse(ctx context.Context) (OperationResultsClientGetResponse, error) {
 	respType := OperationResultsClientGetResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationResultsDescription)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationResultsDescription)
 	if err != nil {
 		return OperationResultsClientGetResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

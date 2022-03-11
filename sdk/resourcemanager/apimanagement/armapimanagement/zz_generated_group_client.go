@@ -36,17 +36,17 @@ type GroupClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGroupClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *GroupClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GroupClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *GroupClient) createOrUpdateCreateRequest(ctx context.Context, reso
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *GroupClient) createOrUpdateHandleResponse(resp *http.Response) (GroupClientCreateOrUpdateResponse, error) {
-	result := GroupClientCreateOrUpdateResponse{RawResponse: resp}
+	result := GroupClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -138,7 +138,7 @@ func (client *GroupClient) Delete(ctx context.Context, resourceGroupName string,
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return GroupClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return GroupClientDeleteResponse{RawResponse: resp}, nil
+	return GroupClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -225,7 +225,7 @@ func (client *GroupClient) getCreateRequest(ctx context.Context, resourceGroupNa
 
 // getHandleResponse handles the Get response.
 func (client *GroupClient) getHandleResponse(resp *http.Response) (GroupClientGetResponse, error) {
-	result := GroupClientGetResponse{RawResponse: resp}
+	result := GroupClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -284,7 +284,7 @@ func (client *GroupClient) getEntityTagCreateRequest(ctx context.Context, resour
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *GroupClient) getEntityTagHandleResponse(resp *http.Response) (GroupClientGetEntityTagResponse, error) {
-	result := GroupClientGetEntityTagResponse{RawResponse: resp}
+	result := GroupClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -348,7 +348,7 @@ func (client *GroupClient) listByServiceCreateRequest(ctx context.Context, resou
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *GroupClient) listByServiceHandleResponse(resp *http.Response) (GroupClientListByServiceResponse, error) {
-	result := GroupClientListByServiceResponse{RawResponse: resp}
+	result := GroupClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GroupCollection); err != nil {
 		return GroupClientListByServiceResponse{}, err
 	}
@@ -412,7 +412,7 @@ func (client *GroupClient) updateCreateRequest(ctx context.Context, resourceGrou
 
 // updateHandleResponse handles the Update response.
 func (client *GroupClient) updateHandleResponse(resp *http.Response) (GroupClientUpdateResponse, error) {
-	result := GroupClientUpdateResponse{RawResponse: resp}
+	result := GroupClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

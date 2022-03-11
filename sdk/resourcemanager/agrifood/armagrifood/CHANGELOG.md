@@ -1,5 +1,103 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*FarmBeatsExtensionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(FarmBeatsExtensionsClientListResponse, error)`
+- Function `*FarmBeatsModelsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(FarmBeatsModelsClientListBySubscriptionResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ExtensionsClientListByFarmBeatsPager.NextPage` return value(s) have been changed from `(bool)` to `(ExtensionsClientListByFarmBeatsResponse, error)`
+- Function `*FarmBeatsModelsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(FarmBeatsModelsClientListByResourceGroupResponse, error)`
+- Function `*ExtensionsClientListByFarmBeatsPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*FarmBeatsModelsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*FarmBeatsModelsClientListBySubscriptionPager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*ExtensionsClientListByFarmBeatsPager.Err` has been removed
+- Function `*FarmBeatsModelsClientListByResourceGroupPager.Err` has been removed
+- Function `*FarmBeatsExtensionsClientListPager.PageResponse` has been removed
+- Function `*FarmBeatsModelsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*FarmBeatsExtensionsClientListPager.Err` has been removed
+- Struct `ExtensionsClientCreateResult` has been removed
+- Struct `ExtensionsClientGetResult` has been removed
+- Struct `ExtensionsClientListByFarmBeatsResult` has been removed
+- Struct `ExtensionsClientUpdateResult` has been removed
+- Struct `FarmBeatsExtensionsClientGetResult` has been removed
+- Struct `FarmBeatsExtensionsClientListResult` has been removed
+- Struct `FarmBeatsModelsClientCreateOrUpdateResult` has been removed
+- Struct `FarmBeatsModelsClientGetResult` has been removed
+- Struct `FarmBeatsModelsClientListByResourceGroupResult` has been removed
+- Struct `FarmBeatsModelsClientListBySubscriptionResult` has been removed
+- Struct `FarmBeatsModelsClientUpdateResult` has been removed
+- Struct `LocationsClientCheckNameAvailabilityResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `FarmBeatsModelsClientCreateOrUpdateResult` of struct `FarmBeatsModelsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `FarmBeatsModelsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientDeleteResponse` has been removed
+- Field `ExtensionsClientUpdateResult` of struct `ExtensionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientUpdateResponse` has been removed
+- Field `FarmBeatsModelsClientListBySubscriptionResult` of struct `FarmBeatsModelsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `FarmBeatsModelsClientListBySubscriptionResponse` has been removed
+- Field `ExtensionsClientGetResult` of struct `ExtensionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientGetResponse` has been removed
+- Field `FarmBeatsExtensionsClientGetResult` of struct `FarmBeatsExtensionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `FarmBeatsExtensionsClientGetResponse` has been removed
+- Field `FarmBeatsModelsClientUpdateResult` of struct `FarmBeatsModelsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `FarmBeatsModelsClientUpdateResponse` has been removed
+- Field `FarmBeatsModelsClientGetResult` of struct `FarmBeatsModelsClientGetResponse` has been removed
+- Field `RawResponse` of struct `FarmBeatsModelsClientGetResponse` has been removed
+- Field `RawResponse` of struct `FarmBeatsModelsClientDeleteResponse` has been removed
+- Field `ExtensionsClientCreateResult` of struct `ExtensionsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientCreateResponse` has been removed
+- Field `FarmBeatsExtensionsClientListResult` of struct `FarmBeatsExtensionsClientListResponse` has been removed
+- Field `RawResponse` of struct `FarmBeatsExtensionsClientListResponse` has been removed
+- Field `ExtensionsClientListByFarmBeatsResult` of struct `ExtensionsClientListByFarmBeatsResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientListByFarmBeatsResponse` has been removed
+- Field `FarmBeatsModelsClientListByResourceGroupResult` of struct `FarmBeatsModelsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `FarmBeatsModelsClientListByResourceGroupResponse` has been removed
+- Field `LocationsClientCheckNameAvailabilityResult` of struct `LocationsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `LocationsClientCheckNameAvailabilityResponse` has been removed
+
+### Features Added
+
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*ExtensionsClientListByFarmBeatsPager.More() bool`
+- New function `*FarmBeatsModelsClientListBySubscriptionPager.More() bool`
+- New function `*FarmBeatsModelsClientListByResourceGroupPager.More() bool`
+- New function `*FarmBeatsExtensionsClientListPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `FarmBeats` in struct `FarmBeatsModelsClientUpdateResponse`
+- New anonymous field `FarmBeatsListResponse` in struct `FarmBeatsModelsClientListByResourceGroupResponse`
+- New anonymous field `Extension` in struct `ExtensionsClientCreateResponse`
+- New anonymous field `FarmBeats` in struct `FarmBeatsModelsClientCreateOrUpdateResponse`
+- New anonymous field `FarmBeatsListResponse` in struct `FarmBeatsModelsClientListBySubscriptionResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `CheckNameAvailabilityResponse` in struct `LocationsClientCheckNameAvailabilityResponse`
+- New anonymous field `Extension` in struct `ExtensionsClientUpdateResponse`
+- New anonymous field `FarmBeatsExtensionListResponse` in struct `FarmBeatsExtensionsClientListResponse`
+- New anonymous field `FarmBeats` in struct `FarmBeatsModelsClientGetResponse`
+- New anonymous field `ExtensionListResponse` in struct `ExtensionsClientListByFarmBeatsResponse`
+- New anonymous field `FarmBeatsExtension` in struct `FarmBeatsExtensionsClientGetResponse`
+- New anonymous field `Extension` in struct `ExtensionsClientGetResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

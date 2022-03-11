@@ -63,9 +63,7 @@ func (client *AFDCustomDomainsClient) BeginCreate(ctx context.Context, resourceG
 	if err != nil {
 		return AFDCustomDomainsClientCreatePollerResponse{}, err
 	}
-	result := AFDCustomDomainsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AFDCustomDomainsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("AFDCustomDomainsClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AFDCustomDomainsClientCreatePollerResponse{}, err
@@ -137,9 +135,7 @@ func (client *AFDCustomDomainsClient) BeginDelete(ctx context.Context, resourceG
 	if err != nil {
 		return AFDCustomDomainsClientDeletePollerResponse{}, err
 	}
-	result := AFDCustomDomainsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AFDCustomDomainsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AFDCustomDomainsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AFDCustomDomainsClientDeletePollerResponse{}, err
@@ -253,7 +249,7 @@ func (client *AFDCustomDomainsClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *AFDCustomDomainsClient) getHandleResponse(resp *http.Response) (AFDCustomDomainsClientGetResponse, error) {
-	result := AFDCustomDomainsClientGetResponse{RawResponse: resp}
+	result := AFDCustomDomainsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AFDDomain); err != nil {
 		return AFDCustomDomainsClientGetResponse{}, err
 	}
@@ -307,7 +303,7 @@ func (client *AFDCustomDomainsClient) listByProfileCreateRequest(ctx context.Con
 
 // listByProfileHandleResponse handles the ListByProfile response.
 func (client *AFDCustomDomainsClient) listByProfileHandleResponse(resp *http.Response) (AFDCustomDomainsClientListByProfileResponse, error) {
-	result := AFDCustomDomainsClientListByProfileResponse{RawResponse: resp}
+	result := AFDCustomDomainsClientListByProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AFDDomainListResult); err != nil {
 		return AFDCustomDomainsClientListByProfileResponse{}, err
 	}
@@ -327,9 +323,7 @@ func (client *AFDCustomDomainsClient) BeginRefreshValidationToken(ctx context.Co
 	if err != nil {
 		return AFDCustomDomainsClientRefreshValidationTokenPollerResponse{}, err
 	}
-	result := AFDCustomDomainsClientRefreshValidationTokenPollerResponse{
-		RawResponse: resp,
-	}
+	result := AFDCustomDomainsClientRefreshValidationTokenPollerResponse{}
 	pt, err := armruntime.NewPoller("AFDCustomDomainsClient.RefreshValidationToken", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AFDCustomDomainsClientRefreshValidationTokenPollerResponse{}, err
@@ -401,9 +395,7 @@ func (client *AFDCustomDomainsClient) BeginUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return AFDCustomDomainsClientUpdatePollerResponse{}, err
 	}
-	result := AFDCustomDomainsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AFDCustomDomainsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AFDCustomDomainsClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AFDCustomDomainsClientUpdatePollerResponse{}, err

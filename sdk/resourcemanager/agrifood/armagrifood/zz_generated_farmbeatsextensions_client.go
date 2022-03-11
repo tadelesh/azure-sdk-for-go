@@ -33,16 +33,16 @@ type FarmBeatsExtensionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFarmBeatsExtensionsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *FarmBeatsExtensionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FarmBeatsExtensionsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -86,7 +86,7 @@ func (client *FarmBeatsExtensionsClient) getCreateRequest(ctx context.Context, f
 
 // getHandleResponse handles the Get response.
 func (client *FarmBeatsExtensionsClient) getHandleResponse(resp *http.Response) (FarmBeatsExtensionsClientGetResponse, error) {
-	result := FarmBeatsExtensionsClientGetResponse{RawResponse: resp}
+	result := FarmBeatsExtensionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FarmBeatsExtension); err != nil {
 		return FarmBeatsExtensionsClientGetResponse{}, err
 	}
@@ -148,7 +148,7 @@ func (client *FarmBeatsExtensionsClient) listCreateRequest(ctx context.Context, 
 
 // listHandleResponse handles the List response.
 func (client *FarmBeatsExtensionsClient) listHandleResponse(resp *http.Response) (FarmBeatsExtensionsClientListResponse, error) {
-	result := FarmBeatsExtensionsClientListResponse{RawResponse: resp}
+	result := FarmBeatsExtensionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FarmBeatsExtensionListResponse); err != nil {
 		return FarmBeatsExtensionsClientListResponse{}, err
 	}

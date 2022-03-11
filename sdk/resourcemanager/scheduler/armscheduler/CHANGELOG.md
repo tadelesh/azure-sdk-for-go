@@ -1,5 +1,89 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*JobsClientListJobHistoryPager.NextPage` return value(s) have been changed from `(bool)` to `(JobsClientListJobHistoryResponse, error)`
+- Function `*JobsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(JobsClientListResponse, error)`
+- Function `*JobCollectionsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(JobCollectionsClientListBySubscriptionResponse, error)`
+- Function `*JobCollectionsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(JobCollectionsClientListByResourceGroupResponse, error)`
+- Function `*JobCollectionsClientListBySubscriptionPager.Err` has been removed
+- Function `*JobsClientListPager.Err` has been removed
+- Function `*JobsClientListJobHistoryPager.Err` has been removed
+- Function `*JobCollectionsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*JobsClientListPager.PageResponse` has been removed
+- Function `*JobsClientListJobHistoryPager.PageResponse` has been removed
+- Function `*JobCollectionsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*JobCollectionsClientListByResourceGroupPager.Err` has been removed
+- Struct `JobCollectionsClientCreateOrUpdateResult` has been removed
+- Struct `JobCollectionsClientGetResult` has been removed
+- Struct `JobCollectionsClientListByResourceGroupResult` has been removed
+- Struct `JobCollectionsClientListBySubscriptionResult` has been removed
+- Struct `JobCollectionsClientPatchResult` has been removed
+- Struct `JobsClientCreateOrUpdateResult` has been removed
+- Struct `JobsClientGetResult` has been removed
+- Struct `JobsClientListJobHistoryResult` has been removed
+- Struct `JobsClientListResult` has been removed
+- Struct `JobsClientPatchResult` has been removed
+- Field `JobsClientGetResult` of struct `JobsClientGetResponse` has been removed
+- Field `RawResponse` of struct `JobsClientGetResponse` has been removed
+- Field `JobsClientPatchResult` of struct `JobsClientPatchResponse` has been removed
+- Field `RawResponse` of struct `JobsClientPatchResponse` has been removed
+- Field `JobCollectionsClientListByResourceGroupResult` of struct `JobCollectionsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `JobCollectionsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `JobCollectionsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `JobsClientRunResponse` has been removed
+- Field `JobCollectionsClientListBySubscriptionResult` of struct `JobCollectionsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `JobCollectionsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `JobCollectionsClientDisablePollerResponse` has been removed
+- Field `RawResponse` of struct `JobCollectionsClientEnablePollerResponse` has been removed
+- Field `RawResponse` of struct `JobCollectionsClientDeleteResponse` has been removed
+- Field `JobsClientCreateOrUpdateResult` of struct `JobsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `JobsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `JobsClientDeleteResponse` has been removed
+- Field `JobCollectionsClientGetResult` of struct `JobCollectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `JobCollectionsClientGetResponse` has been removed
+- Field `JobCollectionsClientPatchResult` of struct `JobCollectionsClientPatchResponse` has been removed
+- Field `RawResponse` of struct `JobCollectionsClientPatchResponse` has been removed
+- Field `JobsClientListJobHistoryResult` of struct `JobsClientListJobHistoryResponse` has been removed
+- Field `RawResponse` of struct `JobsClientListJobHistoryResponse` has been removed
+- Field `JobsClientListResult` of struct `JobsClientListResponse` has been removed
+- Field `RawResponse` of struct `JobsClientListResponse` has been removed
+- Field `JobCollectionsClientCreateOrUpdateResult` of struct `JobCollectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `JobCollectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `JobCollectionsClientDisableResponse` has been removed
+- Field `RawResponse` of struct `JobCollectionsClientEnableResponse` has been removed
+
+### Features Added
+
+- New function `*JobCollectionsClientListBySubscriptionPager.More() bool`
+- New function `*JobsClientListJobHistoryPager.More() bool`
+- New function `*JobsClientListPager.More() bool`
+- New function `*JobCollectionsClientListByResourceGroupPager.More() bool`
+- New struct `JobHistoryFilter`
+- New struct `JobStateFilter`
+- New anonymous field `JobCollectionListResult` in struct `JobCollectionsClientListByResourceGroupResponse`
+- New anonymous field `JobDefinition` in struct `JobsClientPatchResponse`
+- New anonymous field `JobCollectionDefinition` in struct `JobCollectionsClientPatchResponse`
+- New anonymous field `JobDefinition` in struct `JobsClientCreateOrUpdateResponse`
+- New anonymous field `JobCollectionDefinition` in struct `JobCollectionsClientCreateOrUpdateResponse`
+- New anonymous field `JobHistoryListResult` in struct `JobsClientListJobHistoryResponse`
+- New anonymous field `JobCollectionDefinition` in struct `JobCollectionsClientGetResponse`
+- New anonymous field `JobDefinition` in struct `JobsClientGetResponse`
+- New anonymous field `JobListResult` in struct `JobsClientListResponse`
+- New anonymous field `JobCollectionListResult` in struct `JobCollectionsClientListBySubscriptionResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Struct `JobHistoryFilter` has been removed
+- Struct `JobStateFilter` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

@@ -32,16 +32,16 @@ type RegistrationDefinitionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRegistrationDefinitionsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *RegistrationDefinitionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RegistrationDefinitionsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -58,9 +58,7 @@ func (client *RegistrationDefinitionsClient) BeginCreateOrUpdate(ctx context.Con
 	if err != nil {
 		return RegistrationDefinitionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := RegistrationDefinitionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := RegistrationDefinitionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("RegistrationDefinitionsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return RegistrationDefinitionsClientCreateOrUpdatePollerResponse{}, err
@@ -125,7 +123,7 @@ func (client *RegistrationDefinitionsClient) Delete(ctx context.Context, registr
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return RegistrationDefinitionsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return RegistrationDefinitionsClientDeleteResponse{RawResponse: resp}, nil
+	return RegistrationDefinitionsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -189,7 +187,7 @@ func (client *RegistrationDefinitionsClient) getCreateRequest(ctx context.Contex
 
 // getHandleResponse handles the Get response.
 func (client *RegistrationDefinitionsClient) getHandleResponse(resp *http.Response) (RegistrationDefinitionsClientGetResponse, error) {
-	result := RegistrationDefinitionsClientGetResponse{RawResponse: resp}
+	result := RegistrationDefinitionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegistrationDefinition); err != nil {
 		return RegistrationDefinitionsClientGetResponse{}, err
 	}
@@ -230,7 +228,7 @@ func (client *RegistrationDefinitionsClient) listCreateRequest(ctx context.Conte
 
 // listHandleResponse handles the List response.
 func (client *RegistrationDefinitionsClient) listHandleResponse(resp *http.Response) (RegistrationDefinitionsClientListResponse, error) {
-	result := RegistrationDefinitionsClientListResponse{RawResponse: resp}
+	result := RegistrationDefinitionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegistrationDefinitionList); err != nil {
 		return RegistrationDefinitionsClientListResponse{}, err
 	}

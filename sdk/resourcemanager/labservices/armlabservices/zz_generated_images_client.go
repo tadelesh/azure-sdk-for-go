@@ -104,7 +104,7 @@ func (client *ImagesClient) createOrUpdateCreateRequest(ctx context.Context, res
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ImagesClient) createOrUpdateHandleResponse(resp *http.Response) (ImagesClientCreateOrUpdateResponse, error) {
-	result := ImagesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ImagesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Image); err != nil {
 		return ImagesClientCreateOrUpdateResponse{}, err
 	}
@@ -165,7 +165,7 @@ func (client *ImagesClient) getCreateRequest(ctx context.Context, resourceGroupN
 
 // getHandleResponse handles the Get response.
 func (client *ImagesClient) getHandleResponse(resp *http.Response) (ImagesClientGetResponse, error) {
-	result := ImagesClientGetResponse{RawResponse: resp}
+	result := ImagesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Image); err != nil {
 		return ImagesClientGetResponse{}, err
 	}
@@ -221,7 +221,7 @@ func (client *ImagesClient) listByLabPlanCreateRequest(ctx context.Context, reso
 
 // listByLabPlanHandleResponse handles the ListByLabPlan response.
 func (client *ImagesClient) listByLabPlanHandleResponse(resp *http.Response) (ImagesClientListByLabPlanResponse, error) {
-	result := ImagesClientListByLabPlanResponse{RawResponse: resp}
+	result := ImagesClientListByLabPlanResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PagedImages); err != nil {
 		return ImagesClientListByLabPlanResponse{}, err
 	}
@@ -283,7 +283,7 @@ func (client *ImagesClient) updateCreateRequest(ctx context.Context, resourceGro
 
 // updateHandleResponse handles the Update response.
 func (client *ImagesClient) updateHandleResponse(resp *http.Response) (ImagesClientUpdateResponse, error) {
-	result := ImagesClientUpdateResponse{RawResponse: resp}
+	result := ImagesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Image); err != nil {
 		return ImagesClientUpdateResponse{}, err
 	}

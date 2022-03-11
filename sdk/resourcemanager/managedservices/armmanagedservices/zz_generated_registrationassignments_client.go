@@ -33,16 +33,16 @@ type RegistrationAssignmentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRegistrationAssignmentsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *RegistrationAssignmentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RegistrationAssignmentsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -59,9 +59,7 @@ func (client *RegistrationAssignmentsClient) BeginCreateOrUpdate(ctx context.Con
 	if err != nil {
 		return RegistrationAssignmentsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := RegistrationAssignmentsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := RegistrationAssignmentsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("RegistrationAssignmentsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return RegistrationAssignmentsClientCreateOrUpdatePollerResponse{}, err
@@ -119,9 +117,7 @@ func (client *RegistrationAssignmentsClient) BeginDelete(ctx context.Context, sc
 	if err != nil {
 		return RegistrationAssignmentsClientDeletePollerResponse{}, err
 	}
-	result := RegistrationAssignmentsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := RegistrationAssignmentsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("RegistrationAssignmentsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return RegistrationAssignmentsClientDeletePollerResponse{}, err
@@ -213,7 +209,7 @@ func (client *RegistrationAssignmentsClient) getCreateRequest(ctx context.Contex
 
 // getHandleResponse handles the Get response.
 func (client *RegistrationAssignmentsClient) getHandleResponse(resp *http.Response) (RegistrationAssignmentsClientGetResponse, error) {
-	result := RegistrationAssignmentsClientGetResponse{RawResponse: resp}
+	result := RegistrationAssignmentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegistrationAssignment); err != nil {
 		return RegistrationAssignmentsClientGetResponse{}, err
 	}
@@ -257,7 +253,7 @@ func (client *RegistrationAssignmentsClient) listCreateRequest(ctx context.Conte
 
 // listHandleResponse handles the List response.
 func (client *RegistrationAssignmentsClient) listHandleResponse(resp *http.Response) (RegistrationAssignmentsClientListResponse, error) {
-	result := RegistrationAssignmentsClientListResponse{RawResponse: resp}
+	result := RegistrationAssignmentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegistrationAssignmentList); err != nil {
 		return RegistrationAssignmentsClientListResponse{}, err
 	}

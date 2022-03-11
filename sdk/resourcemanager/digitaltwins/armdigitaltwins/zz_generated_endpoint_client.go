@@ -34,17 +34,17 @@ type EndpointClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewEndpointClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *EndpointClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &EndpointClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *EndpointClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return EndpointClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := EndpointClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := EndpointClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("EndpointClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return EndpointClientCreateOrUpdatePollerResponse{}, err
@@ -116,7 +114,7 @@ func (client *EndpointClient) createOrUpdateCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-12-01")
+	reqQP.Set("api-version", "2021-06-30-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, endpointDescription)
@@ -133,9 +131,7 @@ func (client *EndpointClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return EndpointClientDeletePollerResponse{}, err
 	}
-	result := EndpointClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := EndpointClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("EndpointClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return EndpointClientDeletePollerResponse{}, err
@@ -187,7 +183,7 @@ func (client *EndpointClient) deleteCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-12-01")
+	reqQP.Set("api-version", "2021-06-30-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -238,7 +234,7 @@ func (client *EndpointClient) getCreateRequest(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-12-01")
+	reqQP.Set("api-version", "2021-06-30-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -246,7 +242,7 @@ func (client *EndpointClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *EndpointClient) getHandleResponse(resp *http.Response) (EndpointClientGetResponse, error) {
-	result := EndpointClientGetResponse{RawResponse: resp}
+	result := EndpointClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EndpointResource); err != nil {
 		return EndpointClientGetResponse{}, err
 	}
@@ -290,7 +286,7 @@ func (client *EndpointClient) listCreateRequest(ctx context.Context, resourceGro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-12-01")
+	reqQP.Set("api-version", "2021-06-30-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -298,7 +294,7 @@ func (client *EndpointClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *EndpointClient) listHandleResponse(resp *http.Response) (EndpointClientListResponse, error) {
-	result := EndpointClientListResponse{RawResponse: resp}
+	result := EndpointClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EndpointResourceListResult); err != nil {
 		return EndpointClientListResponse{}, err
 	}

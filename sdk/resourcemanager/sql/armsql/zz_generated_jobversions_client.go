@@ -35,17 +35,17 @@ type JobVersionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewJobVersionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *JobVersionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &JobVersionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -111,7 +111,7 @@ func (client *JobVersionsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *JobVersionsClient) getHandleResponse(resp *http.Response) (JobVersionsClientGetResponse, error) {
-	result := JobVersionsClientGetResponse{RawResponse: resp}
+	result := JobVersionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobVersion); err != nil {
 		return JobVersionsClientGetResponse{}, err
 	}
@@ -174,7 +174,7 @@ func (client *JobVersionsClient) listByJobCreateRequest(ctx context.Context, res
 
 // listByJobHandleResponse handles the ListByJob response.
 func (client *JobVersionsClient) listByJobHandleResponse(resp *http.Response) (JobVersionsClientListByJobResponse, error) {
-	result := JobVersionsClientListByJobResponse{RawResponse: resp}
+	result := JobVersionsClientListByJobResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobVersionListResult); err != nil {
 		return JobVersionsClientListByJobResponse{}, err
 	}

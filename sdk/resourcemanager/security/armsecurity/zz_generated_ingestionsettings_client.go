@@ -94,7 +94,7 @@ func (client *IngestionSettingsClient) createCreateRequest(ctx context.Context, 
 
 // createHandleResponse handles the Create response.
 func (client *IngestionSettingsClient) createHandleResponse(resp *http.Response) (IngestionSettingsClientCreateResponse, error) {
-	result := IngestionSettingsClientCreateResponse{RawResponse: resp}
+	result := IngestionSettingsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IngestionSetting); err != nil {
 		return IngestionSettingsClientCreateResponse{}, err
 	}
@@ -118,7 +118,7 @@ func (client *IngestionSettingsClient) Delete(ctx context.Context, ingestionSett
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return IngestionSettingsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return IngestionSettingsClientDeleteResponse{RawResponse: resp}, nil
+	return IngestionSettingsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -186,7 +186,7 @@ func (client *IngestionSettingsClient) getCreateRequest(ctx context.Context, ing
 
 // getHandleResponse handles the Get response.
 func (client *IngestionSettingsClient) getHandleResponse(resp *http.Response) (IngestionSettingsClientGetResponse, error) {
-	result := IngestionSettingsClientGetResponse{RawResponse: resp}
+	result := IngestionSettingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IngestionSetting); err != nil {
 		return IngestionSettingsClientGetResponse{}, err
 	}
@@ -228,7 +228,7 @@ func (client *IngestionSettingsClient) listCreateRequest(ctx context.Context, op
 
 // listHandleResponse handles the List response.
 func (client *IngestionSettingsClient) listHandleResponse(resp *http.Response) (IngestionSettingsClientListResponse, error) {
-	result := IngestionSettingsClientListResponse{RawResponse: resp}
+	result := IngestionSettingsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IngestionSettingList); err != nil {
 		return IngestionSettingsClientListResponse{}, err
 	}
@@ -279,7 +279,7 @@ func (client *IngestionSettingsClient) listConnectionStringsCreateRequest(ctx co
 
 // listConnectionStringsHandleResponse handles the ListConnectionStrings response.
 func (client *IngestionSettingsClient) listConnectionStringsHandleResponse(resp *http.Response) (IngestionSettingsClientListConnectionStringsResponse, error) {
-	result := IngestionSettingsClientListConnectionStringsResponse{RawResponse: resp}
+	result := IngestionSettingsClientListConnectionStringsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConnectionStrings); err != nil {
 		return IngestionSettingsClientListConnectionStringsResponse{}, err
 	}
@@ -330,7 +330,7 @@ func (client *IngestionSettingsClient) listTokensCreateRequest(ctx context.Conte
 
 // listTokensHandleResponse handles the ListTokens response.
 func (client *IngestionSettingsClient) listTokensHandleResponse(resp *http.Response) (IngestionSettingsClientListTokensResponse, error) {
-	result := IngestionSettingsClientListTokensResponse{RawResponse: resp}
+	result := IngestionSettingsClientListTokensResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IngestionSettingToken); err != nil {
 		return IngestionSettingsClientListTokensResponse{}, err
 	}

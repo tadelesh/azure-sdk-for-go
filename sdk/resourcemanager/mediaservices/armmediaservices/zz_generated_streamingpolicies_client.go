@@ -35,17 +35,17 @@ type StreamingPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewStreamingPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *StreamingPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &StreamingPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *StreamingPoliciesClient) createCreateRequest(ctx context.Context, 
 
 // createHandleResponse handles the Create response.
 func (client *StreamingPoliciesClient) createHandleResponse(resp *http.Response) (StreamingPoliciesClientCreateResponse, error) {
-	result := StreamingPoliciesClientCreateResponse{RawResponse: resp}
+	result := StreamingPoliciesClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StreamingPolicy); err != nil {
 		return StreamingPoliciesClientCreateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *StreamingPoliciesClient) Delete(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return StreamingPoliciesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return StreamingPoliciesClientDeleteResponse{RawResponse: resp}, nil
+	return StreamingPoliciesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -217,7 +217,7 @@ func (client *StreamingPoliciesClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *StreamingPoliciesClient) getHandleResponse(resp *http.Response) (StreamingPoliciesClientGetResponse, error) {
-	result := StreamingPoliciesClientGetResponse{RawResponse: resp}
+	result := StreamingPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StreamingPolicy); err != nil {
 		return StreamingPoliciesClientGetResponse{}, err
 	}
@@ -278,7 +278,7 @@ func (client *StreamingPoliciesClient) listCreateRequest(ctx context.Context, re
 
 // listHandleResponse handles the List response.
 func (client *StreamingPoliciesClient) listHandleResponse(resp *http.Response) (StreamingPoliciesClientListResponse, error) {
-	result := StreamingPoliciesClientListResponse{RawResponse: resp}
+	result := StreamingPoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StreamingPolicyCollection); err != nil {
 		return StreamingPoliciesClientListResponse{}, err
 	}

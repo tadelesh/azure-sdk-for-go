@@ -34,17 +34,17 @@ type DataSourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataSourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataSourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataSourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *DataSourcesClient) createOrUpdateCreateRequest(ctx context.Context
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *DataSourcesClient) createOrUpdateHandleResponse(resp *http.Response) (DataSourcesClientCreateOrUpdateResponse, error) {
-	result := DataSourcesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := DataSourcesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataSource); err != nil {
 		return DataSourcesClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *DataSourcesClient) Delete(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DataSourcesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DataSourcesClientDeleteResponse{RawResponse: resp}, nil
+	return DataSourcesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -214,7 +214,7 @@ func (client *DataSourcesClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *DataSourcesClient) getHandleResponse(resp *http.Response) (DataSourcesClientGetResponse, error) {
-	result := DataSourcesClientGetResponse{RawResponse: resp}
+	result := DataSourcesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataSource); err != nil {
 		return DataSourcesClientGetResponse{}, err
 	}
@@ -272,7 +272,7 @@ func (client *DataSourcesClient) listByWorkspaceCreateRequest(ctx context.Contex
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *DataSourcesClient) listByWorkspaceHandleResponse(resp *http.Response) (DataSourcesClientListByWorkspaceResponse, error) {
-	result := DataSourcesClientListByWorkspaceResponse{RawResponse: resp}
+	result := DataSourcesClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataSourceListResult); err != nil {
 		return DataSourcesClientListByWorkspaceResponse{}, err
 	}

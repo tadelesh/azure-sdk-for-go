@@ -34,17 +34,17 @@ type ManagedServerSecurityAlertPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedServerSecurityAlertPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedServerSecurityAlertPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedServerSecurityAlertPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ManagedServerSecurityAlertPoliciesClient) BeginCreateOrUpdate(ctx 
 	if err != nil {
 		return ManagedServerSecurityAlertPoliciesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ManagedServerSecurityAlertPoliciesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedServerSecurityAlertPoliciesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedServerSecurityAlertPoliciesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ManagedServerSecurityAlertPoliciesClientCreateOrUpdatePollerResponse{}, err
@@ -178,7 +176,7 @@ func (client *ManagedServerSecurityAlertPoliciesClient) getCreateRequest(ctx con
 
 // getHandleResponse handles the Get response.
 func (client *ManagedServerSecurityAlertPoliciesClient) getHandleResponse(resp *http.Response) (ManagedServerSecurityAlertPoliciesClientGetResponse, error) {
-	result := ManagedServerSecurityAlertPoliciesClientGetResponse{RawResponse: resp}
+	result := ManagedServerSecurityAlertPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedServerSecurityAlertPolicy); err != nil {
 		return ManagedServerSecurityAlertPoliciesClientGetResponse{}, err
 	}
@@ -232,7 +230,7 @@ func (client *ManagedServerSecurityAlertPoliciesClient) listByInstanceCreateRequ
 
 // listByInstanceHandleResponse handles the ListByInstance response.
 func (client *ManagedServerSecurityAlertPoliciesClient) listByInstanceHandleResponse(resp *http.Response) (ManagedServerSecurityAlertPoliciesClientListByInstanceResponse, error) {
-	result := ManagedServerSecurityAlertPoliciesClientListByInstanceResponse{RawResponse: resp}
+	result := ManagedServerSecurityAlertPoliciesClientListByInstanceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedServerSecurityAlertPolicyListResult); err != nil {
 		return ManagedServerSecurityAlertPoliciesClientListByInstanceResponse{}, err
 	}

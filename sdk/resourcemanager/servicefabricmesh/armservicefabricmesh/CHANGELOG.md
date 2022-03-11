@@ -1,5 +1,211 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ApplicationClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ApplicationClientListByResourceGroupResponse, error)`
+- Function `*SecretValueClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SecretValueClientListResponse, error)`
+- Function `*VolumeClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(VolumeClientListBySubscriptionResponse, error)`
+- Function `*NetworkClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(NetworkClientListBySubscriptionResponse, error)`
+- Function `*SecretClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(SecretClientListBySubscriptionResponse, error)`
+- Function `*SecretClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(SecretClientListByResourceGroupResponse, error)`
+- Function `*NetworkClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(NetworkClientListByResourceGroupResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*GatewayClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(GatewayClientListBySubscriptionResponse, error)`
+- Function `*VolumeClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(VolumeClientListByResourceGroupResponse, error)`
+- Function `*GatewayClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(GatewayClientListByResourceGroupResponse, error)`
+- Function `*ApplicationClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ApplicationClientListBySubscriptionResponse, error)`
+- Function `*ServiceClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ServiceClientListResponse, error)`
+- Function `*ServiceReplicaClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ServiceReplicaClientListResponse, error)`
+- Function `*ApplicationClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*GatewayClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*VolumeClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*VolumeClientListByResourceGroupPager.Err` has been removed
+- Function `*SecretValueClientListPager.Err` has been removed
+- Function `*ApplicationClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*VolumeClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*NetworkClientListBySubscriptionPager.Err` has been removed
+- Function `*SecretClientListBySubscriptionPager.Err` has been removed
+- Function `*ApplicationClientListBySubscriptionPager.Err` has been removed
+- Function `*GatewayClientListByResourceGroupPager.Err` has been removed
+- Function `*ApplicationClientListByResourceGroupPager.Err` has been removed
+- Function `*VolumeClientListBySubscriptionPager.Err` has been removed
+- Function `*NetworkClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*SecretClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*SecretValueClientListPager.PageResponse` has been removed
+- Function `*ServiceClientListPager.PageResponse` has been removed
+- Function `*ServiceReplicaClientListPager.PageResponse` has been removed
+- Function `*NetworkClientListByResourceGroupPager.Err` has been removed
+- Function `*ServiceClientListPager.Err` has been removed
+- Function `*NetworkClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*SecretClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*ServiceReplicaClientListPager.Err` has been removed
+- Function `*GatewayClientListBySubscriptionPager.Err` has been removed
+- Function `*SecretClientListByResourceGroupPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*GatewayClientListByResourceGroupPager.PageResponse` has been removed
+- Struct `ApplicationClientCreateResult` has been removed
+- Struct `ApplicationClientGetResult` has been removed
+- Struct `ApplicationClientListByResourceGroupResult` has been removed
+- Struct `ApplicationClientListBySubscriptionResult` has been removed
+- Struct `CodePackageClientGetContainerLogsResult` has been removed
+- Struct `GatewayClientCreateResult` has been removed
+- Struct `GatewayClientGetResult` has been removed
+- Struct `GatewayClientListByResourceGroupResult` has been removed
+- Struct `GatewayClientListBySubscriptionResult` has been removed
+- Struct `NetworkClientCreateResult` has been removed
+- Struct `NetworkClientGetResult` has been removed
+- Struct `NetworkClientListByResourceGroupResult` has been removed
+- Struct `NetworkClientListBySubscriptionResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `SecretClientCreateResult` has been removed
+- Struct `SecretClientGetResult` has been removed
+- Struct `SecretClientListByResourceGroupResult` has been removed
+- Struct `SecretClientListBySubscriptionResult` has been removed
+- Struct `SecretValueClientCreateResult` has been removed
+- Struct `SecretValueClientGetResult` has been removed
+- Struct `SecretValueClientListResult` has been removed
+- Struct `SecretValueClientListValueResult` has been removed
+- Struct `ServiceClientGetResult` has been removed
+- Struct `ServiceClientListResult` has been removed
+- Struct `ServiceReplicaClientGetResult` has been removed
+- Struct `ServiceReplicaClientListResult` has been removed
+- Struct `VolumeClientCreateResult` has been removed
+- Struct `VolumeClientGetResult` has been removed
+- Struct `VolumeClientListByResourceGroupResult` has been removed
+- Struct `VolumeClientListBySubscriptionResult` has been removed
+- Field `NetworkClientCreateResult` of struct `NetworkClientCreateResponse` has been removed
+- Field `RawResponse` of struct `NetworkClientCreateResponse` has been removed
+- Field `ApplicationClientCreateResult` of struct `ApplicationClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ApplicationClientCreateResponse` has been removed
+- Field `RawResponse` of struct `SecretClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ApplicationClientDeleteResponse` has been removed
+- Field `ServiceReplicaClientGetResult` of struct `ServiceReplicaClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServiceReplicaClientGetResponse` has been removed
+- Field `CodePackageClientGetContainerLogsResult` of struct `CodePackageClientGetContainerLogsResponse` has been removed
+- Field `RawResponse` of struct `CodePackageClientGetContainerLogsResponse` has been removed
+- Field `GatewayClientGetResult` of struct `GatewayClientGetResponse` has been removed
+- Field `RawResponse` of struct `GatewayClientGetResponse` has been removed
+- Field `SecretClientListByResourceGroupResult` of struct `SecretClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SecretClientListByResourceGroupResponse` has been removed
+- Field `SecretClientListBySubscriptionResult` of struct `SecretClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `SecretClientListBySubscriptionResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `SecretClientCreateResult` of struct `SecretClientCreateResponse` has been removed
+- Field `RawResponse` of struct `SecretClientCreateResponse` has been removed
+- Field `RawResponse` of struct `SecretValueClientDeleteResponse` has been removed
+- Field `GatewayClientListByResourceGroupResult` of struct `GatewayClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `GatewayClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `NetworkClientDeleteResponse` has been removed
+- Field `SecretValueClientCreateResult` of struct `SecretValueClientCreateResponse` has been removed
+- Field `RawResponse` of struct `SecretValueClientCreateResponse` has been removed
+- Field `SecretClientGetResult` of struct `SecretClientGetResponse` has been removed
+- Field `RawResponse` of struct `SecretClientGetResponse` has been removed
+- Field `GatewayClientListBySubscriptionResult` of struct `GatewayClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `GatewayClientListBySubscriptionResponse` has been removed
+- Field `SecretValueClientGetResult` of struct `SecretValueClientGetResponse` has been removed
+- Field `RawResponse` of struct `SecretValueClientGetResponse` has been removed
+- Field `RawResponse` of struct `GatewayClientDeleteResponse` has been removed
+- Field `ServiceClientListResult` of struct `ServiceClientListResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientListResponse` has been removed
+- Field `VolumeClientListBySubscriptionResult` of struct `VolumeClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `VolumeClientListBySubscriptionResponse` has been removed
+- Field `NetworkClientGetResult` of struct `NetworkClientGetResponse` has been removed
+- Field `RawResponse` of struct `NetworkClientGetResponse` has been removed
+- Field `ApplicationClientListBySubscriptionResult` of struct `ApplicationClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ApplicationClientListBySubscriptionResponse` has been removed
+- Field `VolumeClientGetResult` of struct `VolumeClientGetResponse` has been removed
+- Field `RawResponse` of struct `VolumeClientGetResponse` has been removed
+- Field `ServiceClientGetResult` of struct `ServiceClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientGetResponse` has been removed
+- Field `ApplicationClientListByResourceGroupResult` of struct `ApplicationClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ApplicationClientListByResourceGroupResponse` has been removed
+- Field `VolumeClientListByResourceGroupResult` of struct `VolumeClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `VolumeClientListByResourceGroupResponse` has been removed
+- Field `NetworkClientListBySubscriptionResult` of struct `NetworkClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `NetworkClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `VolumeClientDeleteResponse` has been removed
+- Field `SecretValueClientListValueResult` of struct `SecretValueClientListValueResponse` has been removed
+- Field `RawResponse` of struct `SecretValueClientListValueResponse` has been removed
+- Field `ApplicationClientGetResult` of struct `ApplicationClientGetResponse` has been removed
+- Field `RawResponse` of struct `ApplicationClientGetResponse` has been removed
+- Field `NetworkClientListByResourceGroupResult` of struct `NetworkClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `NetworkClientListByResourceGroupResponse` has been removed
+- Field `VolumeClientCreateResult` of struct `VolumeClientCreateResponse` has been removed
+- Field `RawResponse` of struct `VolumeClientCreateResponse` has been removed
+- Field `GatewayClientCreateResult` of struct `GatewayClientCreateResponse` has been removed
+- Field `RawResponse` of struct `GatewayClientCreateResponse` has been removed
+- Field `SecretValueClientListResult` of struct `SecretValueClientListResponse` has been removed
+- Field `RawResponse` of struct `SecretValueClientListResponse` has been removed
+- Field `ServiceReplicaClientListResult` of struct `ServiceReplicaClientListResponse` has been removed
+- Field `RawResponse` of struct `ServiceReplicaClientListResponse` has been removed
+
+### Features Added
+
+- New function `*GatewayClientListByResourceGroupPager.More() bool`
+- New function `*SecretValueClientListPager.More() bool`
+- New function `*ServiceReplicaClientListPager.More() bool`
+- New function `*NetworkClientListBySubscriptionPager.More() bool`
+- New function `*NetworkClientListByResourceGroupPager.More() bool`
+- New function `*ApplicationClientListBySubscriptionPager.More() bool`
+- New function `*SecretClientListBySubscriptionPager.More() bool`
+- New function `*VolumeClientListByResourceGroupPager.More() bool`
+- New function `ErrorErrorModel.MarshalJSON() ([]byte, error)`
+- New function `*VolumeClientListBySubscriptionPager.More() bool`
+- New function `*ApplicationClientListByResourceGroupPager.More() bool`
+- New function `*SecretClientListByResourceGroupPager.More() bool`
+- New function `*ServiceClientListPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*GatewayClientListBySubscriptionPager.More() bool`
+- New struct `ErrorDetailsModel`
+- New struct `ErrorErrorModel`
+- New struct `ErrorModel`
+- New anonymous field `ContainerLogs` in struct `CodePackageClientGetContainerLogsResponse`
+- New anonymous field `SecretValueResourceDescription` in struct `SecretValueClientGetResponse`
+- New anonymous field `NetworkResourceDescription` in struct `NetworkClientCreateResponse`
+- New anonymous field `NetworkResourceDescriptionList` in struct `NetworkClientListByResourceGroupResponse`
+- New anonymous field `SecretValueResourceDescription` in struct `SecretValueClientCreateResponse`
+- New anonymous field `ServiceResourceDescription` in struct `ServiceClientGetResponse`
+- New anonymous field `ApplicationResourceDescriptionList` in struct `ApplicationClientListBySubscriptionResponse`
+- New anonymous field `SecretResourceDescriptionList` in struct `SecretClientListBySubscriptionResponse`
+- New anonymous field `NetworkResourceDescription` in struct `NetworkClientGetResponse`
+- New anonymous field `ServiceReplicaDescription` in struct `ServiceReplicaClientGetResponse`
+- New anonymous field `VolumeResourceDescriptionList` in struct `VolumeClientListBySubscriptionResponse`
+- New anonymous field `SecretValue` in struct `SecretValueClientListValueResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `SecretValueResourceDescriptionList` in struct `SecretValueClientListResponse`
+- New anonymous field `ServiceReplicaDescriptionList` in struct `ServiceReplicaClientListResponse`
+- New anonymous field `ApplicationResourceDescription` in struct `ApplicationClientCreateResponse`
+- New anonymous field `SecretResourceDescription` in struct `SecretClientGetResponse`
+- New anonymous field `VolumeResourceDescription` in struct `VolumeClientGetResponse`
+- New anonymous field `GatewayResourceDescriptionList` in struct `GatewayClientListBySubscriptionResponse`
+- New anonymous field `GatewayResourceDescriptionList` in struct `GatewayClientListByResourceGroupResponse`
+- New anonymous field `GatewayResourceDescription` in struct `GatewayClientGetResponse`
+- New anonymous field `ApplicationResourceDescription` in struct `ApplicationClientGetResponse`
+- New anonymous field `ApplicationResourceDescriptionList` in struct `ApplicationClientListByResourceGroupResponse`
+- New anonymous field `NetworkResourceDescriptionList` in struct `NetworkClientListBySubscriptionResponse`
+- New anonymous field `VolumeResourceDescription` in struct `VolumeClientCreateResponse`
+- New anonymous field `ServiceResourceDescriptionList` in struct `ServiceClientListResponse`
+- New anonymous field `GatewayResourceDescription` in struct `GatewayClientCreateResponse`
+- New anonymous field `SecretResourceDescriptionList` in struct `SecretClientListByResourceGroupResponse`
+- New anonymous field `SecretResourceDescription` in struct `SecretClientCreateResponse`
+- New anonymous field `VolumeResourceDescriptionList` in struct `VolumeClientListByResourceGroupResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorErrorModel.MarshalJSON` has been removed
+- Struct `ErrorDetailsModel` has been removed
+- Struct `ErrorErrorModel` has been removed
+- Struct `ErrorModel` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

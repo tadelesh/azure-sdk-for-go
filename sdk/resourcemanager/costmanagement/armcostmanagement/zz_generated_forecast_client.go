@@ -32,16 +32,16 @@ type ForecastClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewForecastClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ForecastClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ForecastClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -97,7 +97,7 @@ func (client *ForecastClient) externalCloudProviderUsageCreateRequest(ctx contex
 
 // externalCloudProviderUsageHandleResponse handles the ExternalCloudProviderUsage response.
 func (client *ForecastClient) externalCloudProviderUsageHandleResponse(resp *http.Response) (ForecastClientExternalCloudProviderUsageResponse, error) {
-	result := ForecastClientExternalCloudProviderUsageResponse{RawResponse: resp}
+	result := ForecastClientExternalCloudProviderUsageResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QueryResult); err != nil {
 		return ForecastClientExternalCloudProviderUsageResponse{}, err
 	}
@@ -153,7 +153,7 @@ func (client *ForecastClient) usageCreateRequest(ctx context.Context, scope stri
 
 // usageHandleResponse handles the Usage response.
 func (client *ForecastClient) usageHandleResponse(resp *http.Response) (ForecastClientUsageResponse, error) {
-	result := ForecastClientUsageResponse{RawResponse: resp}
+	result := ForecastClientUsageResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QueryResult); err != nil {
 		return ForecastClientUsageResponse{}, err
 	}

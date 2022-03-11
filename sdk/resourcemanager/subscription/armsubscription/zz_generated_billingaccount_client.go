@@ -32,16 +32,16 @@ type BillingAccountClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBillingAccountClient(credential azcore.TokenCredential, options *arm.ClientOptions) *BillingAccountClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BillingAccountClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -86,7 +86,7 @@ func (client *BillingAccountClient) getPolicyCreateRequest(ctx context.Context, 
 
 // getPolicyHandleResponse handles the GetPolicy response.
 func (client *BillingAccountClient) getPolicyHandleResponse(resp *http.Response) (BillingAccountClientGetPolicyResponse, error) {
-	result := BillingAccountClientGetPolicyResponse{RawResponse: resp}
+	result := BillingAccountClientGetPolicyResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BillingAccountPoliciesResponse); err != nil {
 		return BillingAccountClientGetPolicyResponse{}, err
 	}

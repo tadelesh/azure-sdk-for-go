@@ -35,17 +35,17 @@ type CertificatesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCertificatesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CertificatesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CertificatesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *CertificatesClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return CertificatesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := CertificatesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CertificatesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("CertificatesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return CertificatesClientCreateOrUpdatePollerResponse{}, err
@@ -137,9 +135,7 @@ func (client *CertificatesClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return CertificatesClientDeletePollerResponse{}, err
 	}
-	result := CertificatesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CertificatesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CertificatesClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return CertificatesClientDeletePollerResponse{}, err
@@ -251,7 +247,7 @@ func (client *CertificatesClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *CertificatesClient) getHandleResponse(resp *http.Response) (CertificatesClientGetResponse, error) {
-	result := CertificatesClientGetResponse{RawResponse: resp}
+	result := CertificatesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateResource); err != nil {
 		return CertificatesClientGetResponse{}, err
 	}
@@ -304,7 +300,7 @@ func (client *CertificatesClient) listCreateRequest(ctx context.Context, resourc
 
 // listHandleResponse handles the List response.
 func (client *CertificatesClient) listHandleResponse(resp *http.Response) (CertificatesClientListResponse, error) {
-	result := CertificatesClientListResponse{RawResponse: resp}
+	result := CertificatesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateResourceCollection); err != nil {
 		return CertificatesClientListResponse{}, err
 	}

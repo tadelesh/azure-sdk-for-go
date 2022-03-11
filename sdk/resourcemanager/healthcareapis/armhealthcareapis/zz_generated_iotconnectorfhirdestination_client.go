@@ -34,17 +34,17 @@ type IotConnectorFhirDestinationClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIotConnectorFhirDestinationClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IotConnectorFhirDestinationClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IotConnectorFhirDestinationClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *IotConnectorFhirDestinationClient) BeginCreateOrUpdate(ctx context
 	if err != nil {
 		return IotConnectorFhirDestinationClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := IotConnectorFhirDestinationClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := IotConnectorFhirDestinationClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("IotConnectorFhirDestinationClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return IotConnectorFhirDestinationClientCreateOrUpdatePollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *IotConnectorFhirDestinationClient) BeginDelete(ctx context.Context
 	if err != nil {
 		return IotConnectorFhirDestinationClientDeletePollerResponse{}, err
 	}
-	result := IotConnectorFhirDestinationClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := IotConnectorFhirDestinationClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("IotConnectorFhirDestinationClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return IotConnectorFhirDestinationClientDeletePollerResponse{}, err
@@ -263,7 +259,7 @@ func (client *IotConnectorFhirDestinationClient) getCreateRequest(ctx context.Co
 
 // getHandleResponse handles the Get response.
 func (client *IotConnectorFhirDestinationClient) getHandleResponse(resp *http.Response) (IotConnectorFhirDestinationClientGetResponse, error) {
-	result := IotConnectorFhirDestinationClientGetResponse{RawResponse: resp}
+	result := IotConnectorFhirDestinationClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IotFhirDestination); err != nil {
 		return IotConnectorFhirDestinationClientGetResponse{}, err
 	}

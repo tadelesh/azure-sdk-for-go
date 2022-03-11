@@ -32,16 +32,16 @@ type ReservationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReservationsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ReservationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReservationsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -96,7 +96,7 @@ func (client *ReservationsClient) listByBillingAccountCreateRequest(ctx context.
 
 // listByBillingAccountHandleResponse handles the ListByBillingAccount response.
 func (client *ReservationsClient) listByBillingAccountHandleResponse(resp *http.Response) (ReservationsClientListByBillingAccountResponse, error) {
-	result := ReservationsClientListByBillingAccountResponse{RawResponse: resp}
+	result := ReservationsClientListByBillingAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReservationsListResult); err != nil {
 		return ReservationsClientListByBillingAccountResponse{}, err
 	}
@@ -158,7 +158,7 @@ func (client *ReservationsClient) listByBillingProfileCreateRequest(ctx context.
 
 // listByBillingProfileHandleResponse handles the ListByBillingProfile response.
 func (client *ReservationsClient) listByBillingProfileHandleResponse(resp *http.Response) (ReservationsClientListByBillingProfileResponse, error) {
-	result := ReservationsClientListByBillingProfileResponse{RawResponse: resp}
+	result := ReservationsClientListByBillingProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReservationsListResult); err != nil {
 		return ReservationsClientListByBillingProfileResponse{}, err
 	}

@@ -34,17 +34,17 @@ type CassandraResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCassandraResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CassandraResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CassandraResourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *CassandraResourcesClient) BeginCreateUpdateCassandraKeyspace(ctx c
 	if err != nil {
 		return CassandraResourcesClientCreateUpdateCassandraKeyspacePollerResponse{}, err
 	}
-	result := CassandraResourcesClientCreateUpdateCassandraKeyspacePollerResponse{
-		RawResponse: resp,
-	}
+	result := CassandraResourcesClientCreateUpdateCassandraKeyspacePollerResponse{}
 	pt, err := armruntime.NewPoller("CassandraResourcesClient.CreateUpdateCassandraKeyspace", "", resp, client.pl)
 	if err != nil {
 		return CassandraResourcesClientCreateUpdateCassandraKeyspacePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *CassandraResourcesClient) BeginCreateUpdateCassandraTable(ctx cont
 	if err != nil {
 		return CassandraResourcesClientCreateUpdateCassandraTablePollerResponse{}, err
 	}
-	result := CassandraResourcesClientCreateUpdateCassandraTablePollerResponse{
-		RawResponse: resp,
-	}
+	result := CassandraResourcesClientCreateUpdateCassandraTablePollerResponse{}
 	pt, err := armruntime.NewPoller("CassandraResourcesClient.CreateUpdateCassandraTable", "", resp, client.pl)
 	if err != nil {
 		return CassandraResourcesClientCreateUpdateCassandraTablePollerResponse{}, err
@@ -212,9 +208,7 @@ func (client *CassandraResourcesClient) BeginDeleteCassandraKeyspace(ctx context
 	if err != nil {
 		return CassandraResourcesClientDeleteCassandraKeyspacePollerResponse{}, err
 	}
-	result := CassandraResourcesClientDeleteCassandraKeyspacePollerResponse{
-		RawResponse: resp,
-	}
+	result := CassandraResourcesClientDeleteCassandraKeyspacePollerResponse{}
 	pt, err := armruntime.NewPoller("CassandraResourcesClient.DeleteCassandraKeyspace", "", resp, client.pl)
 	if err != nil {
 		return CassandraResourcesClientDeleteCassandraKeyspacePollerResponse{}, err
@@ -284,9 +278,7 @@ func (client *CassandraResourcesClient) BeginDeleteCassandraTable(ctx context.Co
 	if err != nil {
 		return CassandraResourcesClientDeleteCassandraTablePollerResponse{}, err
 	}
-	result := CassandraResourcesClientDeleteCassandraTablePollerResponse{
-		RawResponse: resp,
-	}
+	result := CassandraResourcesClientDeleteCassandraTablePollerResponse{}
 	pt, err := armruntime.NewPoller("CassandraResourcesClient.DeleteCassandraTable", "", resp, client.pl)
 	if err != nil {
 		return CassandraResourcesClientDeleteCassandraTablePollerResponse{}, err
@@ -402,7 +394,7 @@ func (client *CassandraResourcesClient) getCassandraKeyspaceCreateRequest(ctx co
 
 // getCassandraKeyspaceHandleResponse handles the GetCassandraKeyspace response.
 func (client *CassandraResourcesClient) getCassandraKeyspaceHandleResponse(resp *http.Response) (CassandraResourcesClientGetCassandraKeyspaceResponse, error) {
-	result := CassandraResourcesClientGetCassandraKeyspaceResponse{RawResponse: resp}
+	result := CassandraResourcesClientGetCassandraKeyspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CassandraKeyspaceGetResults); err != nil {
 		return CassandraResourcesClientGetCassandraKeyspaceResponse{}, err
 	}
@@ -464,7 +456,7 @@ func (client *CassandraResourcesClient) getCassandraKeyspaceThroughputCreateRequ
 
 // getCassandraKeyspaceThroughputHandleResponse handles the GetCassandraKeyspaceThroughput response.
 func (client *CassandraResourcesClient) getCassandraKeyspaceThroughputHandleResponse(resp *http.Response) (CassandraResourcesClientGetCassandraKeyspaceThroughputResponse, error) {
-	result := CassandraResourcesClientGetCassandraKeyspaceThroughputResponse{RawResponse: resp}
+	result := CassandraResourcesClientGetCassandraKeyspaceThroughputResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ThroughputSettingsGetResults); err != nil {
 		return CassandraResourcesClientGetCassandraKeyspaceThroughputResponse{}, err
 	}
@@ -530,7 +522,7 @@ func (client *CassandraResourcesClient) getCassandraTableCreateRequest(ctx conte
 
 // getCassandraTableHandleResponse handles the GetCassandraTable response.
 func (client *CassandraResourcesClient) getCassandraTableHandleResponse(resp *http.Response) (CassandraResourcesClientGetCassandraTableResponse, error) {
-	result := CassandraResourcesClientGetCassandraTableResponse{RawResponse: resp}
+	result := CassandraResourcesClientGetCassandraTableResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CassandraTableGetResults); err != nil {
 		return CassandraResourcesClientGetCassandraTableResponse{}, err
 	}
@@ -597,7 +589,7 @@ func (client *CassandraResourcesClient) getCassandraTableThroughputCreateRequest
 
 // getCassandraTableThroughputHandleResponse handles the GetCassandraTableThroughput response.
 func (client *CassandraResourcesClient) getCassandraTableThroughputHandleResponse(resp *http.Response) (CassandraResourcesClientGetCassandraTableThroughputResponse, error) {
-	result := CassandraResourcesClientGetCassandraTableThroughputResponse{RawResponse: resp}
+	result := CassandraResourcesClientGetCassandraTableThroughputResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ThroughputSettingsGetResults); err != nil {
 		return CassandraResourcesClientGetCassandraTableThroughputResponse{}, err
 	}
@@ -610,19 +602,13 @@ func (client *CassandraResourcesClient) getCassandraTableThroughputHandleRespons
 // accountName - Cosmos DB database account name.
 // options - CassandraResourcesClientListCassandraKeyspacesOptions contains the optional parameters for the CassandraResourcesClient.ListCassandraKeyspaces
 // method.
-func (client *CassandraResourcesClient) ListCassandraKeyspaces(ctx context.Context, resourceGroupName string, accountName string, options *CassandraResourcesClientListCassandraKeyspacesOptions) (CassandraResourcesClientListCassandraKeyspacesResponse, error) {
-	req, err := client.listCassandraKeyspacesCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return CassandraResourcesClientListCassandraKeyspacesResponse{}, err
+func (client *CassandraResourcesClient) ListCassandraKeyspaces(resourceGroupName string, accountName string, options *CassandraResourcesClientListCassandraKeyspacesOptions) *CassandraResourcesClientListCassandraKeyspacesPager {
+	return &CassandraResourcesClientListCassandraKeyspacesPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCassandraKeyspacesCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return CassandraResourcesClientListCassandraKeyspacesResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return CassandraResourcesClientListCassandraKeyspacesResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listCassandraKeyspacesHandleResponse(resp)
 }
 
 // listCassandraKeyspacesCreateRequest creates the ListCassandraKeyspaces request.
@@ -653,7 +639,7 @@ func (client *CassandraResourcesClient) listCassandraKeyspacesCreateRequest(ctx 
 
 // listCassandraKeyspacesHandleResponse handles the ListCassandraKeyspaces response.
 func (client *CassandraResourcesClient) listCassandraKeyspacesHandleResponse(resp *http.Response) (CassandraResourcesClientListCassandraKeyspacesResponse, error) {
-	result := CassandraResourcesClientListCassandraKeyspacesResponse{RawResponse: resp}
+	result := CassandraResourcesClientListCassandraKeyspacesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CassandraKeyspaceListResult); err != nil {
 		return CassandraResourcesClientListCassandraKeyspacesResponse{}, err
 	}
@@ -667,19 +653,13 @@ func (client *CassandraResourcesClient) listCassandraKeyspacesHandleResponse(res
 // keyspaceName - Cosmos DB keyspace name.
 // options - CassandraResourcesClientListCassandraTablesOptions contains the optional parameters for the CassandraResourcesClient.ListCassandraTables
 // method.
-func (client *CassandraResourcesClient) ListCassandraTables(ctx context.Context, resourceGroupName string, accountName string, keyspaceName string, options *CassandraResourcesClientListCassandraTablesOptions) (CassandraResourcesClientListCassandraTablesResponse, error) {
-	req, err := client.listCassandraTablesCreateRequest(ctx, resourceGroupName, accountName, keyspaceName, options)
-	if err != nil {
-		return CassandraResourcesClientListCassandraTablesResponse{}, err
+func (client *CassandraResourcesClient) ListCassandraTables(resourceGroupName string, accountName string, keyspaceName string, options *CassandraResourcesClientListCassandraTablesOptions) *CassandraResourcesClientListCassandraTablesPager {
+	return &CassandraResourcesClientListCassandraTablesPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCassandraTablesCreateRequest(ctx, resourceGroupName, accountName, keyspaceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return CassandraResourcesClientListCassandraTablesResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return CassandraResourcesClientListCassandraTablesResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listCassandraTablesHandleResponse(resp)
 }
 
 // listCassandraTablesCreateRequest creates the ListCassandraTables request.
@@ -714,7 +694,7 @@ func (client *CassandraResourcesClient) listCassandraTablesCreateRequest(ctx con
 
 // listCassandraTablesHandleResponse handles the ListCassandraTables response.
 func (client *CassandraResourcesClient) listCassandraTablesHandleResponse(resp *http.Response) (CassandraResourcesClientListCassandraTablesResponse, error) {
-	result := CassandraResourcesClientListCassandraTablesResponse{RawResponse: resp}
+	result := CassandraResourcesClientListCassandraTablesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CassandraTableListResult); err != nil {
 		return CassandraResourcesClientListCassandraTablesResponse{}, err
 	}
@@ -733,9 +713,7 @@ func (client *CassandraResourcesClient) BeginMigrateCassandraKeyspaceToAutoscale
 	if err != nil {
 		return CassandraResourcesClientMigrateCassandraKeyspaceToAutoscalePollerResponse{}, err
 	}
-	result := CassandraResourcesClientMigrateCassandraKeyspaceToAutoscalePollerResponse{
-		RawResponse: resp,
-	}
+	result := CassandraResourcesClientMigrateCassandraKeyspaceToAutoscalePollerResponse{}
 	pt, err := armruntime.NewPoller("CassandraResourcesClient.MigrateCassandraKeyspaceToAutoscale", "", resp, client.pl)
 	if err != nil {
 		return CassandraResourcesClientMigrateCassandraKeyspaceToAutoscalePollerResponse{}, err
@@ -806,9 +784,7 @@ func (client *CassandraResourcesClient) BeginMigrateCassandraKeyspaceToManualThr
 	if err != nil {
 		return CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputPollerResponse{}, err
 	}
-	result := CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("CassandraResourcesClient.MigrateCassandraKeyspaceToManualThroughput", "", resp, client.pl)
 	if err != nil {
 		return CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputPollerResponse{}, err
@@ -879,9 +855,7 @@ func (client *CassandraResourcesClient) BeginMigrateCassandraTableToAutoscale(ct
 	if err != nil {
 		return CassandraResourcesClientMigrateCassandraTableToAutoscalePollerResponse{}, err
 	}
-	result := CassandraResourcesClientMigrateCassandraTableToAutoscalePollerResponse{
-		RawResponse: resp,
-	}
+	result := CassandraResourcesClientMigrateCassandraTableToAutoscalePollerResponse{}
 	pt, err := armruntime.NewPoller("CassandraResourcesClient.MigrateCassandraTableToAutoscale", "", resp, client.pl)
 	if err != nil {
 		return CassandraResourcesClientMigrateCassandraTableToAutoscalePollerResponse{}, err
@@ -956,9 +930,7 @@ func (client *CassandraResourcesClient) BeginMigrateCassandraTableToManualThroug
 	if err != nil {
 		return CassandraResourcesClientMigrateCassandraTableToManualThroughputPollerResponse{}, err
 	}
-	result := CassandraResourcesClientMigrateCassandraTableToManualThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := CassandraResourcesClientMigrateCassandraTableToManualThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("CassandraResourcesClient.MigrateCassandraTableToManualThroughput", "", resp, client.pl)
 	if err != nil {
 		return CassandraResourcesClientMigrateCassandraTableToManualThroughputPollerResponse{}, err
@@ -1033,9 +1005,7 @@ func (client *CassandraResourcesClient) BeginUpdateCassandraKeyspaceThroughput(c
 	if err != nil {
 		return CassandraResourcesClientUpdateCassandraKeyspaceThroughputPollerResponse{}, err
 	}
-	result := CassandraResourcesClientUpdateCassandraKeyspaceThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := CassandraResourcesClientUpdateCassandraKeyspaceThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("CassandraResourcesClient.UpdateCassandraKeyspaceThroughput", "", resp, client.pl)
 	if err != nil {
 		return CassandraResourcesClientUpdateCassandraKeyspaceThroughputPollerResponse{}, err
@@ -1107,9 +1077,7 @@ func (client *CassandraResourcesClient) BeginUpdateCassandraTableThroughput(ctx 
 	if err != nil {
 		return CassandraResourcesClientUpdateCassandraTableThroughputPollerResponse{}, err
 	}
-	result := CassandraResourcesClientUpdateCassandraTableThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := CassandraResourcesClientUpdateCassandraTableThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("CassandraResourcesClient.UpdateCassandraTableThroughput", "", resp, client.pl)
 	if err != nil {
 		return CassandraResourcesClientUpdateCassandraTableThroughputPollerResponse{}, err

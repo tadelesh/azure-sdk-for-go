@@ -35,17 +35,17 @@ type RestorePointsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRestorePointsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RestorePointsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RestorePointsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *RestorePointsClient) BeginCreate(ctx context.Context, resourceGrou
 	if err != nil {
 		return RestorePointsClientCreatePollerResponse{}, err
 	}
-	result := RestorePointsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := RestorePointsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("RestorePointsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return RestorePointsClientCreatePollerResponse{}, err
@@ -117,7 +115,7 @@ func (client *RestorePointsClient) createCreateRequest(ctx context.Context, reso
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -135,9 +133,7 @@ func (client *RestorePointsClient) BeginDelete(ctx context.Context, resourceGrou
 	if err != nil {
 		return RestorePointsClientDeletePollerResponse{}, err
 	}
-	result := RestorePointsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := RestorePointsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("RestorePointsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return RestorePointsClientDeletePollerResponse{}, err
@@ -189,7 +185,7 @@ func (client *RestorePointsClient) deleteCreateRequest(ctx context.Context, reso
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -240,7 +236,10 @@ func (client *RestorePointsClient) getCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	if options != nil && options.Expand != nil {
+		reqQP.Set("$expand", string(*options.Expand))
+	}
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -248,7 +247,7 @@ func (client *RestorePointsClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *RestorePointsClient) getHandleResponse(resp *http.Response) (RestorePointsClientGetResponse, error) {
-	result := RestorePointsClientGetResponse{RawResponse: resp}
+	result := RestorePointsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorePoint); err != nil {
 		return RestorePointsClientGetResponse{}, err
 	}

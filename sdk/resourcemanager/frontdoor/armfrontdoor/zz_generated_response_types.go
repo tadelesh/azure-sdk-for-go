@@ -11,7 +11,6 @@ package armfrontdoor
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
@@ -19,9 +18,6 @@ import (
 type EndpointsClientPurgeContentPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *EndpointsClientPurgeContentPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -29,11 +25,10 @@ type EndpointsClientPurgeContentPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l EndpointsClientPurgeContentPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (EndpointsClientPurgeContentResponse, error) {
 	respType := EndpointsClientPurgeContentResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -46,28 +41,23 @@ func (l *EndpointsClientPurgeContentPollerResponse) Resume(ctx context.Context, 
 	poller := &EndpointsClientPurgeContentPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // EndpointsClientPurgeContentResponse contains the response from method EndpointsClient.PurgeContent.
 type EndpointsClientPurgeContentResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // ExperimentsClientCreateOrUpdatePollerResponse contains the response from method ExperimentsClient.CreateOrUpdate.
 type ExperimentsClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ExperimentsClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -75,11 +65,10 @@ type ExperimentsClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ExperimentsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ExperimentsClientCreateOrUpdateResponse, error) {
 	respType := ExperimentsClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Experiment)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Experiment)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -92,24 +81,16 @@ func (l *ExperimentsClientCreateOrUpdatePollerResponse) Resume(ctx context.Conte
 	poller := &ExperimentsClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ExperimentsClientCreateOrUpdateResponse contains the response from method ExperimentsClient.CreateOrUpdate.
 type ExperimentsClientCreateOrUpdateResponse struct {
-	ExperimentsClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ExperimentsClientCreateOrUpdateResult contains the result from method ExperimentsClient.CreateOrUpdate.
-type ExperimentsClientCreateOrUpdateResult struct {
 	Experiment
 }
 
@@ -117,9 +98,6 @@ type ExperimentsClientCreateOrUpdateResult struct {
 type ExperimentsClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ExperimentsClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -127,11 +105,10 @@ type ExperimentsClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ExperimentsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ExperimentsClientDeleteResponse, error) {
 	respType := ExperimentsClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -144,42 +121,26 @@ func (l *ExperimentsClientDeletePollerResponse) Resume(ctx context.Context, clie
 	poller := &ExperimentsClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ExperimentsClientDeleteResponse contains the response from method ExperimentsClient.Delete.
 type ExperimentsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // ExperimentsClientGetResponse contains the response from method ExperimentsClient.Get.
 type ExperimentsClientGetResponse struct {
-	ExperimentsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ExperimentsClientGetResult contains the result from method ExperimentsClient.Get.
-type ExperimentsClientGetResult struct {
 	Experiment
 }
 
 // ExperimentsClientListByProfileResponse contains the response from method ExperimentsClient.ListByProfile.
 type ExperimentsClientListByProfileResponse struct {
-	ExperimentsClientListByProfileResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ExperimentsClientListByProfileResult contains the result from method ExperimentsClient.ListByProfile.
-type ExperimentsClientListByProfileResult struct {
 	ExperimentList
 }
 
@@ -187,9 +148,6 @@ type ExperimentsClientListByProfileResult struct {
 type ExperimentsClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ExperimentsClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -197,11 +155,10 @@ type ExperimentsClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ExperimentsClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ExperimentsClientUpdateResponse, error) {
 	respType := ExperimentsClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Experiment)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Experiment)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -214,24 +171,16 @@ func (l *ExperimentsClientUpdatePollerResponse) Resume(ctx context.Context, clie
 	poller := &ExperimentsClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ExperimentsClientUpdateResponse contains the response from method ExperimentsClient.Update.
 type ExperimentsClientUpdateResponse struct {
-	ExperimentsClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ExperimentsClientUpdateResult contains the result from method ExperimentsClient.Update.
-type ExperimentsClientUpdateResult struct {
 	Experiment
 }
 
@@ -239,9 +188,6 @@ type ExperimentsClientUpdateResult struct {
 type FrontDoorsClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *FrontDoorsClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -249,11 +195,10 @@ type FrontDoorsClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l FrontDoorsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (FrontDoorsClientCreateOrUpdateResponse, error) {
 	respType := FrontDoorsClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.FrontDoor)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.FrontDoor)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -266,24 +211,16 @@ func (l *FrontDoorsClientCreateOrUpdatePollerResponse) Resume(ctx context.Contex
 	poller := &FrontDoorsClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // FrontDoorsClientCreateOrUpdateResponse contains the response from method FrontDoorsClient.CreateOrUpdate.
 type FrontDoorsClientCreateOrUpdateResponse struct {
-	FrontDoorsClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// FrontDoorsClientCreateOrUpdateResult contains the result from method FrontDoorsClient.CreateOrUpdate.
-type FrontDoorsClientCreateOrUpdateResult struct {
 	FrontDoor
 }
 
@@ -291,9 +228,6 @@ type FrontDoorsClientCreateOrUpdateResult struct {
 type FrontDoorsClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *FrontDoorsClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -301,11 +235,10 @@ type FrontDoorsClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l FrontDoorsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (FrontDoorsClientDeleteResponse, error) {
 	respType := FrontDoorsClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -318,66 +251,36 @@ func (l *FrontDoorsClientDeletePollerResponse) Resume(ctx context.Context, clien
 	poller := &FrontDoorsClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // FrontDoorsClientDeleteResponse contains the response from method FrontDoorsClient.Delete.
 type FrontDoorsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // FrontDoorsClientGetResponse contains the response from method FrontDoorsClient.Get.
 type FrontDoorsClientGetResponse struct {
-	FrontDoorsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// FrontDoorsClientGetResult contains the result from method FrontDoorsClient.Get.
-type FrontDoorsClientGetResult struct {
 	FrontDoor
 }
 
 // FrontDoorsClientListByResourceGroupResponse contains the response from method FrontDoorsClient.ListByResourceGroup.
 type FrontDoorsClientListByResourceGroupResponse struct {
-	FrontDoorsClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// FrontDoorsClientListByResourceGroupResult contains the result from method FrontDoorsClient.ListByResourceGroup.
-type FrontDoorsClientListByResourceGroupResult struct {
 	ListResult
 }
 
 // FrontDoorsClientListResponse contains the response from method FrontDoorsClient.List.
 type FrontDoorsClientListResponse struct {
-	FrontDoorsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// FrontDoorsClientListResult contains the result from method FrontDoorsClient.List.
-type FrontDoorsClientListResult struct {
 	ListResult
 }
 
 // FrontDoorsClientValidateCustomDomainResponse contains the response from method FrontDoorsClient.ValidateCustomDomain.
 type FrontDoorsClientValidateCustomDomainResponse struct {
-	FrontDoorsClientValidateCustomDomainResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// FrontDoorsClientValidateCustomDomainResult contains the result from method FrontDoorsClient.ValidateCustomDomain.
-type FrontDoorsClientValidateCustomDomainResult struct {
 	ValidateCustomDomainOutput
 }
 
@@ -385,9 +288,6 @@ type FrontDoorsClientValidateCustomDomainResult struct {
 type FrontendEndpointsClientDisableHTTPSPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *FrontendEndpointsClientDisableHTTPSPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -395,11 +295,10 @@ type FrontendEndpointsClientDisableHTTPSPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l FrontendEndpointsClientDisableHTTPSPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (FrontendEndpointsClientDisableHTTPSResponse, error) {
 	respType := FrontendEndpointsClientDisableHTTPSResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -412,28 +311,23 @@ func (l *FrontendEndpointsClientDisableHTTPSPollerResponse) Resume(ctx context.C
 	poller := &FrontendEndpointsClientDisableHTTPSPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // FrontendEndpointsClientDisableHTTPSResponse contains the response from method FrontendEndpointsClient.DisableHTTPS.
 type FrontendEndpointsClientDisableHTTPSResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // FrontendEndpointsClientEnableHTTPSPollerResponse contains the response from method FrontendEndpointsClient.EnableHTTPS.
 type FrontendEndpointsClientEnableHTTPSPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *FrontendEndpointsClientEnableHTTPSPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -441,11 +335,10 @@ type FrontendEndpointsClientEnableHTTPSPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l FrontendEndpointsClientEnableHTTPSPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (FrontendEndpointsClientEnableHTTPSResponse, error) {
 	respType := FrontendEndpointsClientEnableHTTPSResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -458,78 +351,41 @@ func (l *FrontendEndpointsClientEnableHTTPSPollerResponse) Resume(ctx context.Co
 	poller := &FrontendEndpointsClientEnableHTTPSPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // FrontendEndpointsClientEnableHTTPSResponse contains the response from method FrontendEndpointsClient.EnableHTTPS.
 type FrontendEndpointsClientEnableHTTPSResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // FrontendEndpointsClientGetResponse contains the response from method FrontendEndpointsClient.Get.
 type FrontendEndpointsClientGetResponse struct {
-	FrontendEndpointsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// FrontendEndpointsClientGetResult contains the result from method FrontendEndpointsClient.Get.
-type FrontendEndpointsClientGetResult struct {
 	FrontendEndpoint
 }
 
 // FrontendEndpointsClientListByFrontDoorResponse contains the response from method FrontendEndpointsClient.ListByFrontDoor.
 type FrontendEndpointsClientListByFrontDoorResponse struct {
-	FrontendEndpointsClientListByFrontDoorResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// FrontendEndpointsClientListByFrontDoorResult contains the result from method FrontendEndpointsClient.ListByFrontDoor.
-type FrontendEndpointsClientListByFrontDoorResult struct {
 	FrontendEndpointsListResult
 }
 
 // ManagedRuleSetsClientListResponse contains the response from method ManagedRuleSetsClient.List.
 type ManagedRuleSetsClientListResponse struct {
-	ManagedRuleSetsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagedRuleSetsClientListResult contains the result from method ManagedRuleSetsClient.List.
-type ManagedRuleSetsClientListResult struct {
 	ManagedRuleSetDefinitionList
 }
 
 // NameAvailabilityClientCheckResponse contains the response from method NameAvailabilityClient.Check.
 type NameAvailabilityClientCheckResponse struct {
-	NameAvailabilityClientCheckResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// NameAvailabilityClientCheckResult contains the result from method NameAvailabilityClient.Check.
-type NameAvailabilityClientCheckResult struct {
 	CheckNameAvailabilityOutput
 }
 
 // NameAvailabilityWithSubscriptionClientCheckResponse contains the response from method NameAvailabilityWithSubscriptionClient.Check.
 type NameAvailabilityWithSubscriptionClientCheckResponse struct {
-	NameAvailabilityWithSubscriptionClientCheckResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// NameAvailabilityWithSubscriptionClientCheckResult contains the result from method NameAvailabilityWithSubscriptionClient.Check.
-type NameAvailabilityWithSubscriptionClientCheckResult struct {
 	CheckNameAvailabilityOutput
 }
 
@@ -537,9 +393,6 @@ type NameAvailabilityWithSubscriptionClientCheckResult struct {
 type NetworkExperimentProfilesClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *NetworkExperimentProfilesClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -547,11 +400,10 @@ type NetworkExperimentProfilesClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l NetworkExperimentProfilesClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (NetworkExperimentProfilesClientCreateOrUpdateResponse, error) {
 	respType := NetworkExperimentProfilesClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Profile)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Profile)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -564,24 +416,16 @@ func (l *NetworkExperimentProfilesClientCreateOrUpdatePollerResponse) Resume(ctx
 	poller := &NetworkExperimentProfilesClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // NetworkExperimentProfilesClientCreateOrUpdateResponse contains the response from method NetworkExperimentProfilesClient.CreateOrUpdate.
 type NetworkExperimentProfilesClientCreateOrUpdateResponse struct {
-	NetworkExperimentProfilesClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// NetworkExperimentProfilesClientCreateOrUpdateResult contains the result from method NetworkExperimentProfilesClient.CreateOrUpdate.
-type NetworkExperimentProfilesClientCreateOrUpdateResult struct {
 	Profile
 }
 
@@ -589,9 +433,6 @@ type NetworkExperimentProfilesClientCreateOrUpdateResult struct {
 type NetworkExperimentProfilesClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *NetworkExperimentProfilesClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -599,11 +440,10 @@ type NetworkExperimentProfilesClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l NetworkExperimentProfilesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (NetworkExperimentProfilesClientDeleteResponse, error) {
 	respType := NetworkExperimentProfilesClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -616,54 +456,31 @@ func (l *NetworkExperimentProfilesClientDeletePollerResponse) Resume(ctx context
 	poller := &NetworkExperimentProfilesClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // NetworkExperimentProfilesClientDeleteResponse contains the response from method NetworkExperimentProfilesClient.Delete.
 type NetworkExperimentProfilesClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // NetworkExperimentProfilesClientGetResponse contains the response from method NetworkExperimentProfilesClient.Get.
 type NetworkExperimentProfilesClientGetResponse struct {
-	NetworkExperimentProfilesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// NetworkExperimentProfilesClientGetResult contains the result from method NetworkExperimentProfilesClient.Get.
-type NetworkExperimentProfilesClientGetResult struct {
 	Profile
 }
 
 // NetworkExperimentProfilesClientListByResourceGroupResponse contains the response from method NetworkExperimentProfilesClient.ListByResourceGroup.
 type NetworkExperimentProfilesClientListByResourceGroupResponse struct {
-	NetworkExperimentProfilesClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// NetworkExperimentProfilesClientListByResourceGroupResult contains the result from method NetworkExperimentProfilesClient.ListByResourceGroup.
-type NetworkExperimentProfilesClientListByResourceGroupResult struct {
 	ProfileList
 }
 
 // NetworkExperimentProfilesClientListResponse contains the response from method NetworkExperimentProfilesClient.List.
 type NetworkExperimentProfilesClientListResponse struct {
-	NetworkExperimentProfilesClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// NetworkExperimentProfilesClientListResult contains the result from method NetworkExperimentProfilesClient.List.
-type NetworkExperimentProfilesClientListResult struct {
 	ProfileList
 }
 
@@ -671,9 +488,6 @@ type NetworkExperimentProfilesClientListResult struct {
 type NetworkExperimentProfilesClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *NetworkExperimentProfilesClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -681,11 +495,10 @@ type NetworkExperimentProfilesClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l NetworkExperimentProfilesClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (NetworkExperimentProfilesClientUpdateResponse, error) {
 	respType := NetworkExperimentProfilesClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Profile)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Profile)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -698,24 +511,16 @@ func (l *NetworkExperimentProfilesClientUpdatePollerResponse) Resume(ctx context
 	poller := &NetworkExperimentProfilesClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // NetworkExperimentProfilesClientUpdateResponse contains the response from method NetworkExperimentProfilesClient.Update.
 type NetworkExperimentProfilesClientUpdateResponse struct {
-	NetworkExperimentProfilesClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// NetworkExperimentProfilesClientUpdateResult contains the result from method NetworkExperimentProfilesClient.Update.
-type NetworkExperimentProfilesClientUpdateResult struct {
 	Profile
 }
 
@@ -723,9 +528,6 @@ type NetworkExperimentProfilesClientUpdateResult struct {
 type PoliciesClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *PoliciesClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -733,11 +535,10 @@ type PoliciesClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l PoliciesClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PoliciesClientCreateOrUpdateResponse, error) {
 	respType := PoliciesClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.WebApplicationFirewallPolicy)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.WebApplicationFirewallPolicy)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -750,24 +551,16 @@ func (l *PoliciesClientCreateOrUpdatePollerResponse) Resume(ctx context.Context,
 	poller := &PoliciesClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // PoliciesClientCreateOrUpdateResponse contains the response from method PoliciesClient.CreateOrUpdate.
 type PoliciesClientCreateOrUpdateResponse struct {
-	PoliciesClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PoliciesClientCreateOrUpdateResult contains the result from method PoliciesClient.CreateOrUpdate.
-type PoliciesClientCreateOrUpdateResult struct {
 	WebApplicationFirewallPolicy
 }
 
@@ -775,9 +568,6 @@ type PoliciesClientCreateOrUpdateResult struct {
 type PoliciesClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *PoliciesClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -785,11 +575,10 @@ type PoliciesClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l PoliciesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PoliciesClientDeleteResponse, error) {
 	respType := PoliciesClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -802,78 +591,41 @@ func (l *PoliciesClientDeletePollerResponse) Resume(ctx context.Context, client 
 	poller := &PoliciesClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // PoliciesClientDeleteResponse contains the response from method PoliciesClient.Delete.
 type PoliciesClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // PoliciesClientGetResponse contains the response from method PoliciesClient.Get.
 type PoliciesClientGetResponse struct {
-	PoliciesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PoliciesClientGetResult contains the result from method PoliciesClient.Get.
-type PoliciesClientGetResult struct {
 	WebApplicationFirewallPolicy
 }
 
 // PoliciesClientListResponse contains the response from method PoliciesClient.List.
 type PoliciesClientListResponse struct {
-	PoliciesClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PoliciesClientListResult contains the result from method PoliciesClient.List.
-type PoliciesClientListResult struct {
 	WebApplicationFirewallPolicyList
 }
 
 // PreconfiguredEndpointsClientListResponse contains the response from method PreconfiguredEndpointsClient.List.
 type PreconfiguredEndpointsClientListResponse struct {
-	PreconfiguredEndpointsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PreconfiguredEndpointsClientListResult contains the result from method PreconfiguredEndpointsClient.List.
-type PreconfiguredEndpointsClientListResult struct {
 	PreconfiguredEndpointList
 }
 
 // ReportsClientGetLatencyScorecardsResponse contains the response from method ReportsClient.GetLatencyScorecards.
 type ReportsClientGetLatencyScorecardsResponse struct {
-	ReportsClientGetLatencyScorecardsResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ReportsClientGetLatencyScorecardsResult contains the result from method ReportsClient.GetLatencyScorecards.
-type ReportsClientGetLatencyScorecardsResult struct {
 	LatencyScorecard
 }
 
 // ReportsClientGetTimeseriesResponse contains the response from method ReportsClient.GetTimeseries.
 type ReportsClientGetTimeseriesResponse struct {
-	ReportsClientGetTimeseriesResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ReportsClientGetTimeseriesResult contains the result from method ReportsClient.GetTimeseries.
-type ReportsClientGetTimeseriesResult struct {
 	Timeseries
 }
 
@@ -881,9 +633,6 @@ type ReportsClientGetTimeseriesResult struct {
 type RulesEnginesClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *RulesEnginesClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -891,11 +640,10 @@ type RulesEnginesClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l RulesEnginesClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (RulesEnginesClientCreateOrUpdateResponse, error) {
 	respType := RulesEnginesClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.RulesEngine)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.RulesEngine)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -908,24 +656,16 @@ func (l *RulesEnginesClientCreateOrUpdatePollerResponse) Resume(ctx context.Cont
 	poller := &RulesEnginesClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // RulesEnginesClientCreateOrUpdateResponse contains the response from method RulesEnginesClient.CreateOrUpdate.
 type RulesEnginesClientCreateOrUpdateResponse struct {
-	RulesEnginesClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// RulesEnginesClientCreateOrUpdateResult contains the result from method RulesEnginesClient.CreateOrUpdate.
-type RulesEnginesClientCreateOrUpdateResult struct {
 	RulesEngine
 }
 
@@ -933,9 +673,6 @@ type RulesEnginesClientCreateOrUpdateResult struct {
 type RulesEnginesClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *RulesEnginesClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -943,11 +680,10 @@ type RulesEnginesClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l RulesEnginesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (RulesEnginesClientDeleteResponse, error) {
 	respType := RulesEnginesClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -960,41 +696,25 @@ func (l *RulesEnginesClientDeletePollerResponse) Resume(ctx context.Context, cli
 	poller := &RulesEnginesClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // RulesEnginesClientDeleteResponse contains the response from method RulesEnginesClient.Delete.
 type RulesEnginesClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // RulesEnginesClientGetResponse contains the response from method RulesEnginesClient.Get.
 type RulesEnginesClientGetResponse struct {
-	RulesEnginesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// RulesEnginesClientGetResult contains the result from method RulesEnginesClient.Get.
-type RulesEnginesClientGetResult struct {
 	RulesEngine
 }
 
 // RulesEnginesClientListByFrontDoorResponse contains the response from method RulesEnginesClient.ListByFrontDoor.
 type RulesEnginesClientListByFrontDoorResponse struct {
-	RulesEnginesClientListByFrontDoorResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// RulesEnginesClientListByFrontDoorResult contains the result from method RulesEnginesClient.ListByFrontDoor.
-type RulesEnginesClientListByFrontDoorResult struct {
 	RulesEngineListResult
 }

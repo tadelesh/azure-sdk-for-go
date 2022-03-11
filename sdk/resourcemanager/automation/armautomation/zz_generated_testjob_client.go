@@ -35,17 +35,17 @@ type TestJobClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTestJobClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TestJobClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TestJobClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *TestJobClient) createCreateRequest(ctx context.Context, resourceGr
 
 // createHandleResponse handles the Create response.
 func (client *TestJobClient) createHandleResponse(resp *http.Response) (TestJobClientCreateResponse, error) {
-	result := TestJobClientCreateResponse{RawResponse: resp}
+	result := TestJobClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TestJob); err != nil {
 		return TestJobClientCreateResponse{}, err
 	}
@@ -164,7 +164,7 @@ func (client *TestJobClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *TestJobClient) getHandleResponse(resp *http.Response) (TestJobClientGetResponse, error) {
-	result := TestJobClientGetResponse{RawResponse: resp}
+	result := TestJobClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TestJob); err != nil {
 		return TestJobClientGetResponse{}, err
 	}
@@ -189,7 +189,7 @@ func (client *TestJobClient) Resume(ctx context.Context, resourceGroupName strin
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return TestJobClientResumeResponse{}, runtime.NewResponseError(resp)
 	}
-	return TestJobClientResumeResponse{RawResponse: resp}, nil
+	return TestJobClientResumeResponse{}, nil
 }
 
 // resumeCreateRequest creates the Resume request.
@@ -240,7 +240,7 @@ func (client *TestJobClient) Stop(ctx context.Context, resourceGroupName string,
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return TestJobClientStopResponse{}, runtime.NewResponseError(resp)
 	}
-	return TestJobClientStopResponse{RawResponse: resp}, nil
+	return TestJobClientStopResponse{}, nil
 }
 
 // stopCreateRequest creates the Stop request.
@@ -291,7 +291,7 @@ func (client *TestJobClient) Suspend(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return TestJobClientSuspendResponse{}, runtime.NewResponseError(resp)
 	}
-	return TestJobClientSuspendResponse{RawResponse: resp}, nil
+	return TestJobClientSuspendResponse{}, nil
 }
 
 // suspendCreateRequest creates the Suspend request.

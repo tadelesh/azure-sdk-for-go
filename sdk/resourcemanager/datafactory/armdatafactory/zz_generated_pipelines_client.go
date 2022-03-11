@@ -35,17 +35,17 @@ type PipelinesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPipelinesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PipelinesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PipelinesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *PipelinesClient) createOrUpdateCreateRequest(ctx context.Context, 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *PipelinesClient) createOrUpdateHandleResponse(resp *http.Response) (PipelinesClientCreateOrUpdateResponse, error) {
-	result := PipelinesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := PipelinesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PipelineResource); err != nil {
 		return PipelinesClientCreateOrUpdateResponse{}, err
 	}
@@ -183,7 +183,7 @@ func (client *PipelinesClient) createRunCreateRequest(ctx context.Context, resou
 
 // createRunHandleResponse handles the CreateRun response.
 func (client *PipelinesClient) createRunHandleResponse(resp *http.Response) (PipelinesClientCreateRunResponse, error) {
-	result := PipelinesClientCreateRunResponse{RawResponse: resp}
+	result := PipelinesClientCreateRunResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CreateRunResponse); err != nil {
 		return PipelinesClientCreateRunResponse{}, err
 	}
@@ -208,7 +208,7 @@ func (client *PipelinesClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return PipelinesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return PipelinesClientDeleteResponse{RawResponse: resp}, nil
+	return PipelinesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -297,7 +297,7 @@ func (client *PipelinesClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *PipelinesClient) getHandleResponse(resp *http.Response) (PipelinesClientGetResponse, error) {
-	result := PipelinesClientGetResponse{RawResponse: resp}
+	result := PipelinesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PipelineResource); err != nil {
 		return PipelinesClientGetResponse{}, err
 	}
@@ -349,7 +349,7 @@ func (client *PipelinesClient) listByFactoryCreateRequest(ctx context.Context, r
 
 // listByFactoryHandleResponse handles the ListByFactory response.
 func (client *PipelinesClient) listByFactoryHandleResponse(resp *http.Response) (PipelinesClientListByFactoryResponse, error) {
-	result := PipelinesClientListByFactoryResponse{RawResponse: resp}
+	result := PipelinesClientListByFactoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PipelineListResponse); err != nil {
 		return PipelinesClientListByFactoryResponse{}, err
 	}

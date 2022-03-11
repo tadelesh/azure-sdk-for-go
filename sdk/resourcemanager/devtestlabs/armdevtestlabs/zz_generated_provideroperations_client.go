@@ -29,16 +29,16 @@ type ProviderOperationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProviderOperationsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ProviderOperationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProviderOperationsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -74,7 +74,7 @@ func (client *ProviderOperationsClient) listCreateRequest(ctx context.Context, o
 
 // listHandleResponse handles the List response.
 func (client *ProviderOperationsClient) listHandleResponse(resp *http.Response) (ProviderOperationsClientListResponse, error) {
-	result := ProviderOperationsClientListResponse{RawResponse: resp}
+	result := ProviderOperationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProviderOperationResult); err != nil {
 		return ProviderOperationsClientListResponse{}, err
 	}

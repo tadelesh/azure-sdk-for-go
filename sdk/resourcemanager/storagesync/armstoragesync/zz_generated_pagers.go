@@ -10,62 +10,378 @@ package armstoragesync
 
 import (
 	"context"
+	"errors"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
 	"net/http"
 	"reflect"
 )
 
+// CloudEndpointsClientListBySyncGroupPager provides operations for iterating over paged responses.
+type CloudEndpointsClientListBySyncGroupPager struct {
+	client    *CloudEndpointsClient
+	current   CloudEndpointsClientListBySyncGroupResponse
+	requester func(context.Context) (*policy.Request, error)
+}
+
+// More returns true if there are more pages to retrieve.
+func (p *CloudEndpointsClientListBySyncGroupPager) More() bool {
+	return reflect.ValueOf(p.current).IsZero()
+}
+
+// NextPage advances the pager to the next page.
+func (p *CloudEndpointsClientListBySyncGroupPager) NextPage(ctx context.Context) (CloudEndpointsClientListBySyncGroupResponse, error) {
+	var req *policy.Request
+	var err error
+	if !p.More() {
+		return CloudEndpointsClientListBySyncGroupResponse{}, errors.New("no more pages")
+	} else {
+		req, err = p.requester(ctx)
+	}
+	if err != nil {
+		return CloudEndpointsClientListBySyncGroupResponse{}, err
+	}
+	resp, err := p.client.pl.Do(req)
+	if err != nil {
+		return CloudEndpointsClientListBySyncGroupResponse{}, err
+	}
+	if !runtime.HasStatusCode(resp, http.StatusOK) {
+
+		return CloudEndpointsClientListBySyncGroupResponse{}, runtime.NewResponseError(resp)
+	}
+	result, err := p.client.listBySyncGroupHandleResponse(resp)
+	if err != nil {
+		return CloudEndpointsClientListBySyncGroupResponse{}, err
+	}
+	p.current = result
+	return p.current, nil
+}
+
 // OperationsClientListPager provides operations for iterating over paged responses.
 type OperationsClientListPager struct {
 	client    *OperationsClient
 	current   OperationsClientListResponse
-	err       error
 	requester func(context.Context) (*policy.Request, error)
 	advancer  func(context.Context, OperationsClientListResponse) (*policy.Request, error)
 }
 
-// Err returns the last error encountered while paging.
-func (p *OperationsClientListPager) Err() error {
-	return p.err
-}
-
-// NextPage returns true if the pager advanced to the next page.
-// Returns false if there are no more pages or an error occurred.
-func (p *OperationsClientListPager) NextPage(ctx context.Context) bool {
-	var req *policy.Request
-	var err error
+// More returns true if there are more pages to retrieve.
+func (p *OperationsClientListPager) More() bool {
 	if !reflect.ValueOf(p.current).IsZero() {
 		if p.current.OperationEntityListResult.NextLink == nil || len(*p.current.OperationEntityListResult.NextLink) == 0 {
 			return false
+		}
+	}
+	return true
+}
+
+// NextPage advances the pager to the next page.
+func (p *OperationsClientListPager) NextPage(ctx context.Context) (OperationsClientListResponse, error) {
+	var req *policy.Request
+	var err error
+	if !reflect.ValueOf(p.current).IsZero() {
+		if !p.More() {
+			return OperationsClientListResponse{}, errors.New("no more pages")
 		}
 		req, err = p.advancer(ctx, p.current)
 	} else {
 		req, err = p.requester(ctx)
 	}
 	if err != nil {
-		p.err = err
-		return false
+		return OperationsClientListResponse{}, err
 	}
 	resp, err := p.client.pl.Do(req)
 	if err != nil {
-		p.err = err
-		return false
+		return OperationsClientListResponse{}, err
 	}
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		p.err = runtime.NewResponseError(resp)
-		return false
+
+		return OperationsClientListResponse{}, runtime.NewResponseError(resp)
 	}
 	result, err := p.client.listHandleResponse(resp)
 	if err != nil {
-		p.err = err
-		return false
+		return OperationsClientListResponse{}, err
 	}
 	p.current = result
-	return true
+	return p.current, nil
 }
 
-// PageResponse returns the current OperationsClientListResponse page.
-func (p *OperationsClientListPager) PageResponse() OperationsClientListResponse {
-	return p.current
+// PrivateEndpointConnectionsClientListByStorageSyncServicePager provides operations for iterating over paged responses.
+type PrivateEndpointConnectionsClientListByStorageSyncServicePager struct {
+	client    *PrivateEndpointConnectionsClient
+	current   PrivateEndpointConnectionsClientListByStorageSyncServiceResponse
+	requester func(context.Context) (*policy.Request, error)
+}
+
+// More returns true if there are more pages to retrieve.
+func (p *PrivateEndpointConnectionsClientListByStorageSyncServicePager) More() bool {
+	return reflect.ValueOf(p.current).IsZero()
+}
+
+// NextPage advances the pager to the next page.
+func (p *PrivateEndpointConnectionsClientListByStorageSyncServicePager) NextPage(ctx context.Context) (PrivateEndpointConnectionsClientListByStorageSyncServiceResponse, error) {
+	var req *policy.Request
+	var err error
+	if !p.More() {
+		return PrivateEndpointConnectionsClientListByStorageSyncServiceResponse{}, errors.New("no more pages")
+	} else {
+		req, err = p.requester(ctx)
+	}
+	if err != nil {
+		return PrivateEndpointConnectionsClientListByStorageSyncServiceResponse{}, err
+	}
+	resp, err := p.client.pl.Do(req)
+	if err != nil {
+		return PrivateEndpointConnectionsClientListByStorageSyncServiceResponse{}, err
+	}
+	if !runtime.HasStatusCode(resp, http.StatusOK) {
+
+		return PrivateEndpointConnectionsClientListByStorageSyncServiceResponse{}, runtime.NewResponseError(resp)
+	}
+	result, err := p.client.listByStorageSyncServiceHandleResponse(resp)
+	if err != nil {
+		return PrivateEndpointConnectionsClientListByStorageSyncServiceResponse{}, err
+	}
+	p.current = result
+	return p.current, nil
+}
+
+// RegisteredServersClientListByStorageSyncServicePager provides operations for iterating over paged responses.
+type RegisteredServersClientListByStorageSyncServicePager struct {
+	client    *RegisteredServersClient
+	current   RegisteredServersClientListByStorageSyncServiceResponse
+	requester func(context.Context) (*policy.Request, error)
+}
+
+// More returns true if there are more pages to retrieve.
+func (p *RegisteredServersClientListByStorageSyncServicePager) More() bool {
+	return reflect.ValueOf(p.current).IsZero()
+}
+
+// NextPage advances the pager to the next page.
+func (p *RegisteredServersClientListByStorageSyncServicePager) NextPage(ctx context.Context) (RegisteredServersClientListByStorageSyncServiceResponse, error) {
+	var req *policy.Request
+	var err error
+	if !p.More() {
+		return RegisteredServersClientListByStorageSyncServiceResponse{}, errors.New("no more pages")
+	} else {
+		req, err = p.requester(ctx)
+	}
+	if err != nil {
+		return RegisteredServersClientListByStorageSyncServiceResponse{}, err
+	}
+	resp, err := p.client.pl.Do(req)
+	if err != nil {
+		return RegisteredServersClientListByStorageSyncServiceResponse{}, err
+	}
+	if !runtime.HasStatusCode(resp, http.StatusOK) {
+
+		return RegisteredServersClientListByStorageSyncServiceResponse{}, runtime.NewResponseError(resp)
+	}
+	result, err := p.client.listByStorageSyncServiceHandleResponse(resp)
+	if err != nil {
+		return RegisteredServersClientListByStorageSyncServiceResponse{}, err
+	}
+	p.current = result
+	return p.current, nil
+}
+
+// ServerEndpointsClientListBySyncGroupPager provides operations for iterating over paged responses.
+type ServerEndpointsClientListBySyncGroupPager struct {
+	client    *ServerEndpointsClient
+	current   ServerEndpointsClientListBySyncGroupResponse
+	requester func(context.Context) (*policy.Request, error)
+}
+
+// More returns true if there are more pages to retrieve.
+func (p *ServerEndpointsClientListBySyncGroupPager) More() bool {
+	return reflect.ValueOf(p.current).IsZero()
+}
+
+// NextPage advances the pager to the next page.
+func (p *ServerEndpointsClientListBySyncGroupPager) NextPage(ctx context.Context) (ServerEndpointsClientListBySyncGroupResponse, error) {
+	var req *policy.Request
+	var err error
+	if !p.More() {
+		return ServerEndpointsClientListBySyncGroupResponse{}, errors.New("no more pages")
+	} else {
+		req, err = p.requester(ctx)
+	}
+	if err != nil {
+		return ServerEndpointsClientListBySyncGroupResponse{}, err
+	}
+	resp, err := p.client.pl.Do(req)
+	if err != nil {
+		return ServerEndpointsClientListBySyncGroupResponse{}, err
+	}
+	if !runtime.HasStatusCode(resp, http.StatusOK) {
+
+		return ServerEndpointsClientListBySyncGroupResponse{}, runtime.NewResponseError(resp)
+	}
+	result, err := p.client.listBySyncGroupHandleResponse(resp)
+	if err != nil {
+		return ServerEndpointsClientListBySyncGroupResponse{}, err
+	}
+	p.current = result
+	return p.current, nil
+}
+
+// ServicesClientListByResourceGroupPager provides operations for iterating over paged responses.
+type ServicesClientListByResourceGroupPager struct {
+	client    *ServicesClient
+	current   ServicesClientListByResourceGroupResponse
+	requester func(context.Context) (*policy.Request, error)
+}
+
+// More returns true if there are more pages to retrieve.
+func (p *ServicesClientListByResourceGroupPager) More() bool {
+	return reflect.ValueOf(p.current).IsZero()
+}
+
+// NextPage advances the pager to the next page.
+func (p *ServicesClientListByResourceGroupPager) NextPage(ctx context.Context) (ServicesClientListByResourceGroupResponse, error) {
+	var req *policy.Request
+	var err error
+	if !p.More() {
+		return ServicesClientListByResourceGroupResponse{}, errors.New("no more pages")
+	} else {
+		req, err = p.requester(ctx)
+	}
+	if err != nil {
+		return ServicesClientListByResourceGroupResponse{}, err
+	}
+	resp, err := p.client.pl.Do(req)
+	if err != nil {
+		return ServicesClientListByResourceGroupResponse{}, err
+	}
+	if !runtime.HasStatusCode(resp, http.StatusOK) {
+
+		return ServicesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
+	}
+	result, err := p.client.listByResourceGroupHandleResponse(resp)
+	if err != nil {
+		return ServicesClientListByResourceGroupResponse{}, err
+	}
+	p.current = result
+	return p.current, nil
+}
+
+// ServicesClientListBySubscriptionPager provides operations for iterating over paged responses.
+type ServicesClientListBySubscriptionPager struct {
+	client    *ServicesClient
+	current   ServicesClientListBySubscriptionResponse
+	requester func(context.Context) (*policy.Request, error)
+}
+
+// More returns true if there are more pages to retrieve.
+func (p *ServicesClientListBySubscriptionPager) More() bool {
+	return reflect.ValueOf(p.current).IsZero()
+}
+
+// NextPage advances the pager to the next page.
+func (p *ServicesClientListBySubscriptionPager) NextPage(ctx context.Context) (ServicesClientListBySubscriptionResponse, error) {
+	var req *policy.Request
+	var err error
+	if !p.More() {
+		return ServicesClientListBySubscriptionResponse{}, errors.New("no more pages")
+	} else {
+		req, err = p.requester(ctx)
+	}
+	if err != nil {
+		return ServicesClientListBySubscriptionResponse{}, err
+	}
+	resp, err := p.client.pl.Do(req)
+	if err != nil {
+		return ServicesClientListBySubscriptionResponse{}, err
+	}
+	if !runtime.HasStatusCode(resp, http.StatusOK) {
+
+		return ServicesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
+	}
+	result, err := p.client.listBySubscriptionHandleResponse(resp)
+	if err != nil {
+		return ServicesClientListBySubscriptionResponse{}, err
+	}
+	p.current = result
+	return p.current, nil
+}
+
+// SyncGroupsClientListByStorageSyncServicePager provides operations for iterating over paged responses.
+type SyncGroupsClientListByStorageSyncServicePager struct {
+	client    *SyncGroupsClient
+	current   SyncGroupsClientListByStorageSyncServiceResponse
+	requester func(context.Context) (*policy.Request, error)
+}
+
+// More returns true if there are more pages to retrieve.
+func (p *SyncGroupsClientListByStorageSyncServicePager) More() bool {
+	return reflect.ValueOf(p.current).IsZero()
+}
+
+// NextPage advances the pager to the next page.
+func (p *SyncGroupsClientListByStorageSyncServicePager) NextPage(ctx context.Context) (SyncGroupsClientListByStorageSyncServiceResponse, error) {
+	var req *policy.Request
+	var err error
+	if !p.More() {
+		return SyncGroupsClientListByStorageSyncServiceResponse{}, errors.New("no more pages")
+	} else {
+		req, err = p.requester(ctx)
+	}
+	if err != nil {
+		return SyncGroupsClientListByStorageSyncServiceResponse{}, err
+	}
+	resp, err := p.client.pl.Do(req)
+	if err != nil {
+		return SyncGroupsClientListByStorageSyncServiceResponse{}, err
+	}
+	if !runtime.HasStatusCode(resp, http.StatusOK) {
+
+		return SyncGroupsClientListByStorageSyncServiceResponse{}, runtime.NewResponseError(resp)
+	}
+	result, err := p.client.listByStorageSyncServiceHandleResponse(resp)
+	if err != nil {
+		return SyncGroupsClientListByStorageSyncServiceResponse{}, err
+	}
+	p.current = result
+	return p.current, nil
+}
+
+// WorkflowsClientListByStorageSyncServicePager provides operations for iterating over paged responses.
+type WorkflowsClientListByStorageSyncServicePager struct {
+	client    *WorkflowsClient
+	current   WorkflowsClientListByStorageSyncServiceResponse
+	requester func(context.Context) (*policy.Request, error)
+}
+
+// More returns true if there are more pages to retrieve.
+func (p *WorkflowsClientListByStorageSyncServicePager) More() bool {
+	return reflect.ValueOf(p.current).IsZero()
+}
+
+// NextPage advances the pager to the next page.
+func (p *WorkflowsClientListByStorageSyncServicePager) NextPage(ctx context.Context) (WorkflowsClientListByStorageSyncServiceResponse, error) {
+	var req *policy.Request
+	var err error
+	if !p.More() {
+		return WorkflowsClientListByStorageSyncServiceResponse{}, errors.New("no more pages")
+	} else {
+		req, err = p.requester(ctx)
+	}
+	if err != nil {
+		return WorkflowsClientListByStorageSyncServiceResponse{}, err
+	}
+	resp, err := p.client.pl.Do(req)
+	if err != nil {
+		return WorkflowsClientListByStorageSyncServiceResponse{}, err
+	}
+	if !runtime.HasStatusCode(resp, http.StatusOK) {
+
+		return WorkflowsClientListByStorageSyncServiceResponse{}, runtime.NewResponseError(resp)
+	}
+	result, err := p.client.listByStorageSyncServiceHandleResponse(resp)
+	if err != nil {
+		return WorkflowsClientListByStorageSyncServiceResponse{}, err
+	}
+	p.current = result
+	return p.current, nil
 }

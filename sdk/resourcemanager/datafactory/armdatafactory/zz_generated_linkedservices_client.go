@@ -34,17 +34,17 @@ type LinkedServicesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLinkedServicesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LinkedServicesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LinkedServicesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -107,7 +107,7 @@ func (client *LinkedServicesClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *LinkedServicesClient) createOrUpdateHandleResponse(resp *http.Response) (LinkedServicesClientCreateOrUpdateResponse, error) {
-	result := LinkedServicesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := LinkedServicesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LinkedServiceResource); err != nil {
 		return LinkedServicesClientCreateOrUpdateResponse{}, err
 	}
@@ -132,7 +132,7 @@ func (client *LinkedServicesClient) Delete(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return LinkedServicesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return LinkedServicesClientDeleteResponse{RawResponse: resp}, nil
+	return LinkedServicesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -221,7 +221,7 @@ func (client *LinkedServicesClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *LinkedServicesClient) getHandleResponse(resp *http.Response) (LinkedServicesClientGetResponse, error) {
-	result := LinkedServicesClientGetResponse{RawResponse: resp}
+	result := LinkedServicesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LinkedServiceResource); err != nil {
 		return LinkedServicesClientGetResponse{}, err
 	}
@@ -274,7 +274,7 @@ func (client *LinkedServicesClient) listByFactoryCreateRequest(ctx context.Conte
 
 // listByFactoryHandleResponse handles the ListByFactory response.
 func (client *LinkedServicesClient) listByFactoryHandleResponse(resp *http.Response) (LinkedServicesClientListByFactoryResponse, error) {
-	result := LinkedServicesClientListByFactoryResponse{RawResponse: resp}
+	result := LinkedServicesClientListByFactoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LinkedServiceListResponse); err != nil {
 		return LinkedServicesClientListByFactoryResponse{}, err
 	}

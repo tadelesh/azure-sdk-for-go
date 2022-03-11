@@ -35,17 +35,17 @@ type FirewallRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFirewallRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FirewallRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FirewallRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -106,7 +106,7 @@ func (client *FirewallRulesClient) createOrUpdateCreateRequest(ctx context.Conte
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *FirewallRulesClient) createOrUpdateHandleResponse(resp *http.Response) (FirewallRulesClientCreateOrUpdateResponse, error) {
-	result := FirewallRulesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := FirewallRulesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FirewallRule); err != nil {
 		return FirewallRulesClientCreateOrUpdateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *FirewallRulesClient) Delete(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return FirewallRulesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return FirewallRulesClientDeleteResponse{RawResponse: resp}, nil
+	return FirewallRulesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -217,7 +217,7 @@ func (client *FirewallRulesClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *FirewallRulesClient) getHandleResponse(resp *http.Response) (FirewallRulesClientGetResponse, error) {
-	result := FirewallRulesClientGetResponse{RawResponse: resp}
+	result := FirewallRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FirewallRule); err != nil {
 		return FirewallRulesClientGetResponse{}, err
 	}
@@ -270,7 +270,7 @@ func (client *FirewallRulesClient) listByAccountCreateRequest(ctx context.Contex
 
 // listByAccountHandleResponse handles the ListByAccount response.
 func (client *FirewallRulesClient) listByAccountHandleResponse(resp *http.Response) (FirewallRulesClientListByAccountResponse, error) {
-	result := FirewallRulesClientListByAccountResponse{RawResponse: resp}
+	result := FirewallRulesClientListByAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FirewallRuleListResult); err != nil {
 		return FirewallRulesClientListByAccountResponse{}, err
 	}
@@ -333,7 +333,7 @@ func (client *FirewallRulesClient) updateCreateRequest(ctx context.Context, reso
 
 // updateHandleResponse handles the Update response.
 func (client *FirewallRulesClient) updateHandleResponse(resp *http.Response) (FirewallRulesClientUpdateResponse, error) {
-	result := FirewallRulesClientUpdateResponse{RawResponse: resp}
+	result := FirewallRulesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FirewallRule); err != nil {
 		return FirewallRulesClientUpdateResponse{}, err
 	}

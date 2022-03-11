@@ -32,16 +32,16 @@ type AgreementsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAgreementsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *AgreementsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AgreementsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -93,7 +93,7 @@ func (client *AgreementsClient) getCreateRequest(ctx context.Context, billingAcc
 
 // getHandleResponse handles the Get response.
 func (client *AgreementsClient) getHandleResponse(resp *http.Response) (AgreementsClientGetResponse, error) {
-	result := AgreementsClientGetResponse{RawResponse: resp}
+	result := AgreementsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Agreement); err != nil {
 		return AgreementsClientGetResponse{}, err
 	}
@@ -140,7 +140,7 @@ func (client *AgreementsClient) listByBillingAccountCreateRequest(ctx context.Co
 
 // listByBillingAccountHandleResponse handles the ListByBillingAccount response.
 func (client *AgreementsClient) listByBillingAccountHandleResponse(resp *http.Response) (AgreementsClientListByBillingAccountResponse, error) {
-	result := AgreementsClientListByBillingAccountResponse{RawResponse: resp}
+	result := AgreementsClientListByBillingAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AgreementListResult); err != nil {
 		return AgreementsClientListByBillingAccountResponse{}, err
 	}

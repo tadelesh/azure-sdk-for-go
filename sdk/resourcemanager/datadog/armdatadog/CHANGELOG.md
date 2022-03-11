@@ -1,5 +1,155 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*MonitorsClientListAPIKeysPager.NextPage` return value(s) have been changed from `(bool)` to `(MonitorsClientListAPIKeysResponse, error)`
+- Function `*MonitorsClientListHostsPager.NextPage` return value(s) have been changed from `(bool)` to `(MonitorsClientListHostsResponse, error)`
+- Function `*MonitorsClientListMonitoredResourcesPager.NextPage` return value(s) have been changed from `(bool)` to `(MonitorsClientListMonitoredResourcesResponse, error)`
+- Function `*MonitorsClientListLinkedResourcesPager.NextPage` return value(s) have been changed from `(bool)` to `(MonitorsClientListLinkedResourcesResponse, error)`
+- Function `*TagRulesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(TagRulesClientListResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*MarketplaceAgreementsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(MarketplaceAgreementsClientListResponse, error)`
+- Function `*MonitorsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(MonitorsClientListByResourceGroupResponse, error)`
+- Function `*MonitorsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(MonitorsClientListResponse, error)`
+- Function `*SingleSignOnConfigurationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SingleSignOnConfigurationsClientListResponse, error)`
+- Function `*MonitorsClientListAPIKeysPager.PageResponse` has been removed
+- Function `*MarketplaceAgreementsClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*MonitorsClientListMonitoredResourcesPager.PageResponse` has been removed
+- Function `*SingleSignOnConfigurationsClientListPager.Err` has been removed
+- Function `*MonitorsClientListAPIKeysPager.Err` has been removed
+- Function `*MonitorsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*MonitorsClientListLinkedResourcesPager.PageResponse` has been removed
+- Function `*MarketplaceAgreementsClientListPager.PageResponse` has been removed
+- Function `*MonitorsClientListByResourceGroupPager.Err` has been removed
+- Function `*SingleSignOnConfigurationsClientListPager.PageResponse` has been removed
+- Function `*MonitorsClientListHostsPager.Err` has been removed
+- Function `*MonitorsClientListHostsPager.PageResponse` has been removed
+- Function `*MonitorsClientListLinkedResourcesPager.Err` has been removed
+- Function `*MonitorsClientListPager.PageResponse` has been removed
+- Function `*TagRulesClientListPager.PageResponse` has been removed
+- Function `*TagRulesClientListPager.Err` has been removed
+- Function `*MonitorsClientListPager.Err` has been removed
+- Function `*MonitorsClientListMonitoredResourcesPager.Err` has been removed
+- Struct `MarketplaceAgreementsClientCreateOrUpdateResult` has been removed
+- Struct `MarketplaceAgreementsClientListResult` has been removed
+- Struct `MonitorsClientCreateResult` has been removed
+- Struct `MonitorsClientGetDefaultKeyResult` has been removed
+- Struct `MonitorsClientGetResult` has been removed
+- Struct `MonitorsClientListAPIKeysResult` has been removed
+- Struct `MonitorsClientListByResourceGroupResult` has been removed
+- Struct `MonitorsClientListHostsResult` has been removed
+- Struct `MonitorsClientListLinkedResourcesResult` has been removed
+- Struct `MonitorsClientListMonitoredResourcesResult` has been removed
+- Struct `MonitorsClientListResult` has been removed
+- Struct `MonitorsClientRefreshSetPasswordLinkResult` has been removed
+- Struct `MonitorsClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `SingleSignOnConfigurationsClientCreateOrUpdateResult` has been removed
+- Struct `SingleSignOnConfigurationsClientGetResult` has been removed
+- Struct `SingleSignOnConfigurationsClientListResult` has been removed
+- Struct `TagRulesClientCreateOrUpdateResult` has been removed
+- Struct `TagRulesClientGetResult` has been removed
+- Struct `TagRulesClientListResult` has been removed
+- Field `SingleSignOnConfigurationsClientGetResult` of struct `SingleSignOnConfigurationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SingleSignOnConfigurationsClientGetResponse` has been removed
+- Field `MonitorsClientListAPIKeysResult` of struct `MonitorsClientListAPIKeysResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientListAPIKeysResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientCreatePollerResponse` has been removed
+- Field `MonitorsClientGetResult` of struct `MonitorsClientGetResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientGetResponse` has been removed
+- Field `MarketplaceAgreementsClientCreateOrUpdateResult` of struct `MarketplaceAgreementsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `MarketplaceAgreementsClientCreateOrUpdateResponse` has been removed
+- Field `MonitorsClientListMonitoredResourcesResult` of struct `MonitorsClientListMonitoredResourcesResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientListMonitoredResourcesResponse` has been removed
+- Field `MonitorsClientGetDefaultKeyResult` of struct `MonitorsClientGetDefaultKeyResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientGetDefaultKeyResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientSetDefaultKeyResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientDeletePollerResponse` has been removed
+- Field `MonitorsClientListLinkedResourcesResult` of struct `MonitorsClientListLinkedResourcesResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientListLinkedResourcesResponse` has been removed
+- Field `MonitorsClientListResult` of struct `MonitorsClientListResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientListResponse` has been removed
+- Field `MonitorsClientListHostsResult` of struct `MonitorsClientListHostsResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientListHostsResponse` has been removed
+- Field `SingleSignOnConfigurationsClientCreateOrUpdateResult` of struct `SingleSignOnConfigurationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SingleSignOnConfigurationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientUpdatePollerResponse` has been removed
+- Field `TagRulesClientCreateOrUpdateResult` of struct `TagRulesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `TagRulesClientCreateOrUpdateResponse` has been removed
+- Field `MonitorsClientUpdateResult` of struct `MonitorsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientUpdateResponse` has been removed
+- Field `MonitorsClientCreateResult` of struct `MonitorsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientDeleteResponse` has been removed
+- Field `MonitorsClientRefreshSetPasswordLinkResult` of struct `MonitorsClientRefreshSetPasswordLinkResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientRefreshSetPasswordLinkResponse` has been removed
+- Field `TagRulesClientGetResult` of struct `TagRulesClientGetResponse` has been removed
+- Field `RawResponse` of struct `TagRulesClientGetResponse` has been removed
+- Field `MonitorsClientListByResourceGroupResult` of struct `MonitorsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientListByResourceGroupResponse` has been removed
+- Field `SingleSignOnConfigurationsClientListResult` of struct `SingleSignOnConfigurationsClientListResponse` has been removed
+- Field `RawResponse` of struct `SingleSignOnConfigurationsClientListResponse` has been removed
+- Field `RawResponse` of struct `SingleSignOnConfigurationsClientCreateOrUpdatePollerResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `TagRulesClientListResult` of struct `TagRulesClientListResponse` has been removed
+- Field `RawResponse` of struct `TagRulesClientListResponse` has been removed
+- Field `MarketplaceAgreementsClientListResult` of struct `MarketplaceAgreementsClientListResponse` has been removed
+- Field `RawResponse` of struct `MarketplaceAgreementsClientListResponse` has been removed
+
+### Features Added
+
+- New function `*MonitorsClientListHostsPager.More() bool`
+- New function `*MarketplaceAgreementsClientListPager.More() bool`
+- New function `*MonitorsClientListByResourceGroupPager.More() bool`
+- New function `*MonitorsClientListAPIKeysPager.More() bool`
+- New function `*MonitorsClientListLinkedResourcesPager.More() bool`
+- New function `*TagRulesClientListPager.More() bool`
+- New function `*MonitorsClientListMonitoredResourcesPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*MonitorsClientListPager.More() bool`
+- New function `*SingleSignOnConfigurationsClientListPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `MonitorResource` in struct `MonitorsClientCreateResponse`
+- New anonymous field `MonitoringTagRulesListResponse` in struct `TagRulesClientListResponse`
+- New anonymous field `MonitorResource` in struct `MonitorsClientUpdateResponse`
+- New anonymous field `MonitoringTagRules` in struct `TagRulesClientGetResponse`
+- New anonymous field `APIKeyListResponse` in struct `MonitorsClientListAPIKeysResponse`
+- New anonymous field `AgreementResource` in struct `MarketplaceAgreementsClientCreateOrUpdateResponse`
+- New anonymous field `SingleSignOnResourceListResponse` in struct `SingleSignOnConfigurationsClientListResponse`
+- New anonymous field `AgreementResourceListResponse` in struct `MarketplaceAgreementsClientListResponse`
+- New anonymous field `MonitoredResourceListResponse` in struct `MonitorsClientListMonitoredResourcesResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `SetPasswordLink` in struct `MonitorsClientRefreshSetPasswordLinkResponse`
+- New anonymous field `SingleSignOnResource` in struct `SingleSignOnConfigurationsClientGetResponse`
+- New anonymous field `MonitoringTagRules` in struct `TagRulesClientCreateOrUpdateResponse`
+- New anonymous field `MonitorResourceListResponse` in struct `MonitorsClientListResponse`
+- New anonymous field `SingleSignOnResource` in struct `SingleSignOnConfigurationsClientCreateOrUpdateResponse`
+- New anonymous field `MonitorResource` in struct `MonitorsClientGetResponse`
+- New anonymous field `MonitorResourceListResponse` in struct `MonitorsClientListByResourceGroupResponse`
+- New anonymous field `HostListResponse` in struct `MonitorsClientListHostsResponse`
+- New anonymous field `LinkedResourceListResponse` in struct `MonitorsClientListLinkedResourcesResponse`
+- New anonymous field `APIKey` in struct `MonitorsClientGetDefaultKeyResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

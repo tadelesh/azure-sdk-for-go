@@ -34,17 +34,17 @@ type TriggerRunsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTriggerRunsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TriggerRunsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TriggerRunsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -68,7 +68,7 @@ func (client *TriggerRunsClient) Cancel(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return TriggerRunsClientCancelResponse{}, runtime.NewResponseError(resp)
 	}
-	return TriggerRunsClientCancelResponse{RawResponse: resp}, nil
+	return TriggerRunsClientCancelResponse{}, nil
 }
 
 // cancelCreateRequest creates the Cancel request.
@@ -155,7 +155,7 @@ func (client *TriggerRunsClient) queryByFactoryCreateRequest(ctx context.Context
 
 // queryByFactoryHandleResponse handles the QueryByFactory response.
 func (client *TriggerRunsClient) queryByFactoryHandleResponse(resp *http.Response) (TriggerRunsClientQueryByFactoryResponse, error) {
-	result := TriggerRunsClientQueryByFactoryResponse{RawResponse: resp}
+	result := TriggerRunsClientQueryByFactoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggerRunsQueryResponse); err != nil {
 		return TriggerRunsClientQueryByFactoryResponse{}, err
 	}
@@ -181,7 +181,7 @@ func (client *TriggerRunsClient) Rerun(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return TriggerRunsClientRerunResponse{}, runtime.NewResponseError(resp)
 	}
-	return TriggerRunsClientRerunResponse{RawResponse: resp}, nil
+	return TriggerRunsClientRerunResponse{}, nil
 }
 
 // rerunCreateRequest creates the Rerun request.

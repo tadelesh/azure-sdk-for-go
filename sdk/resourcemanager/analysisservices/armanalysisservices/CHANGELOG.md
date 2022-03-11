@@ -1,5 +1,94 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ServersClient.List` parameter(s) have been changed from `(context.Context, *ServersClientListOptions)` to `(*ServersClientListOptions)`
+- Function `*ServersClient.List` return value(s) have been changed from `(ServersClientListResponse, error)` to `(*ServersClientListPager)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ServersClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *ServersClientListByResourceGroupOptions)` to `(string, *ServersClientListByResourceGroupOptions)`
+- Function `*ServersClient.ListByResourceGroup` return value(s) have been changed from `(ServersClientListByResourceGroupResponse, error)` to `(*ServersClientListByResourceGroupPager)`
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `ServersClientCheckNameAvailabilityResult` has been removed
+- Struct `ServersClientCreateResult` has been removed
+- Struct `ServersClientGetDetailsResult` has been removed
+- Struct `ServersClientListByResourceGroupResult` has been removed
+- Struct `ServersClientListGatewayStatusResult` has been removed
+- Struct `ServersClientListOperationStatusesResult` has been removed
+- Struct `ServersClientListResult` has been removed
+- Struct `ServersClientListSKUsForExistingResult` has been removed
+- Struct `ServersClientListSKUsForNewResult` has been removed
+- Struct `ServersClientUpdateResult` has been removed
+- Field `ServersClientListOperationStatusesResult` of struct `ServersClientListOperationStatusesResponse` has been removed
+- Field `RawResponse` of struct `ServersClientListOperationStatusesResponse` has been removed
+- Field `ServersClientListResult` of struct `ServersClientListResponse` has been removed
+- Field `RawResponse` of struct `ServersClientListResponse` has been removed
+- Field `RawResponse` of struct `ServersClientSuspendResponse` has been removed
+- Field `ServersClientGetDetailsResult` of struct `ServersClientGetDetailsResponse` has been removed
+- Field `RawResponse` of struct `ServersClientGetDetailsResponse` has been removed
+- Field `RawResponse` of struct `ServersClientListOperationResultsResponse` has been removed
+- Field `ServersClientCheckNameAvailabilityResult` of struct `ServersClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ServersClientCheckNameAvailabilityResponse` has been removed
+- Field `ServersClientListSKUsForExistingResult` of struct `ServersClientListSKUsForExistingResponse` has been removed
+- Field `RawResponse` of struct `ServersClientListSKUsForExistingResponse` has been removed
+- Field `RawResponse` of struct `ServersClientResumePollerResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `ServersClientListGatewayStatusResult` of struct `ServersClientListGatewayStatusResponse` has been removed
+- Field `RawResponse` of struct `ServersClientListGatewayStatusResponse` has been removed
+- Field `RawResponse` of struct `ServersClientResumeResponse` has been removed
+- Field `RawResponse` of struct `ServersClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ServersClientUpdatePollerResponse` has been removed
+- Field `ServersClientListSKUsForNewResult` of struct `ServersClientListSKUsForNewResponse` has been removed
+- Field `RawResponse` of struct `ServersClientListSKUsForNewResponse` has been removed
+- Field `ServersClientUpdateResult` of struct `ServersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServersClientUpdateResponse` has been removed
+- Field `ServersClientListByResourceGroupResult` of struct `ServersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ServersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ServersClientCreatePollerResponse` has been removed
+- Field `RawResponse` of struct `ServersClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ServersClientSuspendPollerResponse` has been removed
+- Field `RawResponse` of struct `ServersClientDissociateGatewayResponse` has been removed
+- Field `ServersClientCreateResult` of struct `ServersClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ServersClientCreateResponse` has been removed
+
+### Features Added
+
+- New function `*ServersClientListPager.NextPage(context.Context) (ServersClientListResponse, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*ServersClientListByResourceGroupPager.More() bool`
+- New function `*ServersClientListPager.More() bool`
+- New function `*ServersClientListByResourceGroupPager.NextPage(context.Context) (ServersClientListByResourceGroupResponse, error)`
+- New struct `ErrorResponse`
+- New struct `GatewayListStatusError`
+- New struct `ServersClientListByResourceGroupPager`
+- New struct `ServersClientListPager`
+- New anonymous field `Servers` in struct `ServersClientListResponse`
+- New anonymous field `Server` in struct `ServersClientGetDetailsResponse`
+- New anonymous field `GatewayListStatusLive` in struct `ServersClientListGatewayStatusResponse`
+- New anonymous field `Server` in struct `ServersClientUpdateResponse`
+- New anonymous field `SKUEnumerationForNewResourceResult` in struct `ServersClientListSKUsForNewResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `SKUEnumerationForExistingResourceResult` in struct `ServersClientListSKUsForExistingResponse`
+- New anonymous field `CheckServerNameAvailabilityResult` in struct `ServersClientCheckNameAvailabilityResponse`
+- New anonymous field `Server` in struct `ServersClientCreateResponse`
+- New anonymous field `Servers` in struct `ServersClientListByResourceGroupResponse`
+- New anonymous field `OperationStatus` in struct `ServersClientListOperationStatusesResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `ErrorAdditionalInfo.Info` has been changed from `map[string]interface{}` to `interface{}`
+- Struct `ErrorResponse` has been removed
+- Struct `GatewayListStatusError` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

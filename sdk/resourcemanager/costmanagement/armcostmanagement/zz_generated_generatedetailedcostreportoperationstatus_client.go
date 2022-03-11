@@ -32,16 +32,16 @@ type GenerateDetailedCostReportOperationStatusClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGenerateDetailedCostReportOperationStatusClient(credential azcore.TokenCredential, options *arm.ClientOptions) *GenerateDetailedCostReportOperationStatusClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GenerateDetailedCostReportOperationStatusClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *GenerateDetailedCostReportOperationStatusClient) getCreateRequest(
 
 // getHandleResponse handles the Get response.
 func (client *GenerateDetailedCostReportOperationStatusClient) getHandleResponse(resp *http.Response) (GenerateDetailedCostReportOperationStatusClientGetResponse, error) {
-	result := GenerateDetailedCostReportOperationStatusClientGetResponse{RawResponse: resp}
+	result := GenerateDetailedCostReportOperationStatusClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GenerateDetailedCostReportOperationStatuses); err != nil {
 		return GenerateDetailedCostReportOperationStatusClientGetResponse{}, err
 	}

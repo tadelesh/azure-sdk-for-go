@@ -1,5 +1,212 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*MonitorClientListVMHostsPager.NextPage` return value(s) have been changed from `(bool)` to `(MonitorClientListVMHostsResponse, error)`
+- Function `*MonitorClientListVMHostUpdatePager.NextPage` return value(s) have been changed from `(bool)` to `(MonitorClientListVMHostUpdateResponse, error)`
+- Function `*SingleSignOnClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SingleSignOnClientListResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*MonitorsClientListUserRolesPager.NextPage` return value(s) have been changed from `(bool)` to `(MonitorsClientListUserRolesResponse, error)`
+- Function `*TagRulesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(TagRulesClientListResponse, error)`
+- Function `*SubAccountClientListVMHostUpdatePager.NextPage` return value(s) have been changed from `(bool)` to `(SubAccountClientListVMHostUpdateResponse, error)`
+- Function `*SubAccountClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SubAccountClientListResponse, error)`
+- Function `*MonitorsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(MonitorsClientListByResourceGroupResponse, error)`
+- Function `*SubAccountClientListVMHostsPager.NextPage` return value(s) have been changed from `(bool)` to `(SubAccountClientListVMHostsResponse, error)`
+- Function `*SubAccountTagRulesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SubAccountTagRulesClientListResponse, error)`
+- Function `*SubAccountClientListMonitoredResourcesPager.NextPage` return value(s) have been changed from `(bool)` to `(SubAccountClientListMonitoredResourcesResponse, error)`
+- Function `*MonitorsClientListMonitoredResourcesPager.NextPage` return value(s) have been changed from `(bool)` to `(MonitorsClientListMonitoredResourcesResponse, error)`
+- Function `*MonitorsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(MonitorsClientListBySubscriptionResponse, error)`
+- Function `*SubAccountClientListVMHostsPager.Err` has been removed
+- Function `*SingleSignOnClientListPager.PageResponse` has been removed
+- Function `*SubAccountClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*MonitorClientListVMHostUpdatePager.Err` has been removed
+- Function `*MonitorsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*SubAccountClientListPager.Err` has been removed
+- Function `*SubAccountClientListMonitoredResourcesPager.PageResponse` has been removed
+- Function `*MonitorClientListVMHostsPager.PageResponse` has been removed
+- Function `*MonitorsClientListMonitoredResourcesPager.Err` has been removed
+- Function `*MonitorClientListVMHostUpdatePager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*MonitorsClientListMonitoredResourcesPager.PageResponse` has been removed
+- Function `*SubAccountClientListVMHostUpdatePager.Err` has been removed
+- Function `*MonitorsClientListBySubscriptionPager.Err` has been removed
+- Function `*SingleSignOnClientListPager.Err` has been removed
+- Function `*SubAccountTagRulesClientListPager.PageResponse` has been removed
+- Function `*MonitorClientListVMHostsPager.Err` has been removed
+- Function `*MonitorsClientListUserRolesPager.Err` has been removed
+- Function `*SubAccountTagRulesClientListPager.Err` has been removed
+- Function `*MonitorsClientListUserRolesPager.PageResponse` has been removed
+- Function `*SubAccountClientListVMHostsPager.PageResponse` has been removed
+- Function `*SubAccountClientListVMHostUpdatePager.PageResponse` has been removed
+- Function `*SubAccountClientListMonitoredResourcesPager.Err` has been removed
+- Function `*MonitorsClientListByResourceGroupPager.Err` has been removed
+- Function `*TagRulesClientListPager.Err` has been removed
+- Function `*MonitorsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*TagRulesClientListPager.PageResponse` has been removed
+- Struct `MonitorClientListVMHostUpdateResult` has been removed
+- Struct `MonitorClientListVMHostsResult` has been removed
+- Struct `MonitorClientVMHostPayloadResult` has been removed
+- Struct `MonitorsClientCreateResult` has been removed
+- Struct `MonitorsClientGetResult` has been removed
+- Struct `MonitorsClientListByResourceGroupResult` has been removed
+- Struct `MonitorsClientListBySubscriptionResult` has been removed
+- Struct `MonitorsClientListMonitoredResourcesResult` has been removed
+- Struct `MonitorsClientListUserRolesResult` has been removed
+- Struct `MonitorsClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `SingleSignOnClientCreateOrUpdateResult` has been removed
+- Struct `SingleSignOnClientGetResult` has been removed
+- Struct `SingleSignOnClientListResult` has been removed
+- Struct `SubAccountClientCreateResult` has been removed
+- Struct `SubAccountClientGetResult` has been removed
+- Struct `SubAccountClientListMonitoredResourcesResult` has been removed
+- Struct `SubAccountClientListResult` has been removed
+- Struct `SubAccountClientListVMHostUpdateResult` has been removed
+- Struct `SubAccountClientListVMHostsResult` has been removed
+- Struct `SubAccountClientUpdateResult` has been removed
+- Struct `SubAccountClientVMHostPayloadResult` has been removed
+- Struct `SubAccountTagRulesClientCreateOrUpdateResult` has been removed
+- Struct `SubAccountTagRulesClientDeleteResult` has been removed
+- Struct `SubAccountTagRulesClientGetResult` has been removed
+- Struct `SubAccountTagRulesClientListResult` has been removed
+- Struct `TagRulesClientCreateOrUpdateResult` has been removed
+- Struct `TagRulesClientDeleteResult` has been removed
+- Struct `TagRulesClientGetResult` has been removed
+- Struct `TagRulesClientListResult` has been removed
+- Field `RawResponse` of struct `SubAccountClientCreatePollerResponse` has been removed
+- Field `RawResponse` of struct `SubAccountClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `SubAccountClientDeletePollerResponse` has been removed
+- Field `SingleSignOnClientGetResult` of struct `SingleSignOnClientGetResponse` has been removed
+- Field `RawResponse` of struct `SingleSignOnClientGetResponse` has been removed
+- Field `SubAccountClientVMHostPayloadResult` of struct `SubAccountClientVMHostPayloadResponse` has been removed
+- Field `RawResponse` of struct `SubAccountClientVMHostPayloadResponse` has been removed
+- Field `MonitorsClientGetResult` of struct `MonitorsClientGetResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientGetResponse` has been removed
+- Field `TagRulesClientListResult` of struct `TagRulesClientListResponse` has been removed
+- Field `RawResponse` of struct `TagRulesClientListResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `SubAccountClientListMonitoredResourcesResult` of struct `SubAccountClientListMonitoredResourcesResponse` has been removed
+- Field `RawResponse` of struct `SubAccountClientListMonitoredResourcesResponse` has been removed
+- Field `SingleSignOnClientListResult` of struct `SingleSignOnClientListResponse` has been removed
+- Field `RawResponse` of struct `SingleSignOnClientListResponse` has been removed
+- Field `MonitorsClientUpdateResult` of struct `MonitorsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientUpdateResponse` has been removed
+- Field `TagRulesClientCreateOrUpdateResult` of struct `TagRulesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `TagRulesClientCreateOrUpdateResponse` has been removed
+- Field `SubAccountClientGetResult` of struct `SubAccountClientGetResponse` has been removed
+- Field `RawResponse` of struct `SubAccountClientGetResponse` has been removed
+- Field `MonitorsClientListMonitoredResourcesResult` of struct `MonitorsClientListMonitoredResourcesResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientListMonitoredResourcesResponse` has been removed
+- Field `MonitorClientListVMHostUpdateResult` of struct `MonitorClientListVMHostUpdateResponse` has been removed
+- Field `RawResponse` of struct `MonitorClientListVMHostUpdateResponse` has been removed
+- Field `MonitorClientListVMHostsResult` of struct `MonitorClientListVMHostsResponse` has been removed
+- Field `RawResponse` of struct `MonitorClientListVMHostsResponse` has been removed
+- Field `SubAccountClientUpdateResult` of struct `SubAccountClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SubAccountClientUpdateResponse` has been removed
+- Field `MonitorsClientListUserRolesResult` of struct `MonitorsClientListUserRolesResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientListUserRolesResponse` has been removed
+- Field `SingleSignOnClientCreateOrUpdateResult` of struct `SingleSignOnClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SingleSignOnClientCreateOrUpdateResponse` has been removed
+- Field `TagRulesClientDeleteResult` of struct `TagRulesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `TagRulesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientCreatePollerResponse` has been removed
+- Field `SubAccountClientListVMHostsResult` of struct `SubAccountClientListVMHostsResponse` has been removed
+- Field `RawResponse` of struct `SubAccountClientListVMHostsResponse` has been removed
+- Field `RawResponse` of struct `SingleSignOnClientCreateOrUpdatePollerResponse` has been removed
+- Field `SubAccountTagRulesClientListResult` of struct `SubAccountTagRulesClientListResponse` has been removed
+- Field `RawResponse` of struct `SubAccountTagRulesClientListResponse` has been removed
+- Field `TagRulesClientGetResult` of struct `TagRulesClientGetResponse` has been removed
+- Field `RawResponse` of struct `TagRulesClientGetResponse` has been removed
+- Field `SubAccountClientListVMHostUpdateResult` of struct `SubAccountClientListVMHostUpdateResponse` has been removed
+- Field `RawResponse` of struct `SubAccountClientListVMHostUpdateResponse` has been removed
+- Field `MonitorsClientListByResourceGroupResult` of struct `MonitorsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientListByResourceGroupResponse` has been removed
+- Field `SubAccountTagRulesClientDeleteResult` of struct `SubAccountTagRulesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `SubAccountTagRulesClientDeleteResponse` has been removed
+- Field `MonitorsClientCreateResult` of struct `MonitorsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientCreateResponse` has been removed
+- Field `SubAccountClientListResult` of struct `SubAccountClientListResponse` has been removed
+- Field `RawResponse` of struct `SubAccountClientListResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientDeletePollerResponse` has been removed
+- Field `MonitorClientVMHostPayloadResult` of struct `MonitorClientVMHostPayloadResponse` has been removed
+- Field `RawResponse` of struct `MonitorClientVMHostPayloadResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientDeleteResponse` has been removed
+- Field `MonitorsClientListBySubscriptionResult` of struct `MonitorsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientListBySubscriptionResponse` has been removed
+- Field `SubAccountTagRulesClientCreateOrUpdateResult` of struct `SubAccountTagRulesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SubAccountTagRulesClientCreateOrUpdateResponse` has been removed
+- Field `SubAccountClientCreateResult` of struct `SubAccountClientCreateResponse` has been removed
+- Field `RawResponse` of struct `SubAccountClientCreateResponse` has been removed
+- Field `SubAccountTagRulesClientGetResult` of struct `SubAccountTagRulesClientGetResponse` has been removed
+- Field `RawResponse` of struct `SubAccountTagRulesClientGetResponse` has been removed
+
+### Features Added
+
+- New function `*SingleSignOnClientListPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*SubAccountClientListMonitoredResourcesPager.More() bool`
+- New function `*MonitorsClientListUserRolesPager.More() bool`
+- New function `*MonitorsClientListBySubscriptionPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*SubAccountClientListVMHostUpdatePager.More() bool`
+- New function `*MonitorsClientListByResourceGroupPager.More() bool`
+- New function `*SubAccountClientListVMHostsPager.More() bool`
+- New function `*MonitorClientListVMHostsPager.More() bool`
+- New function `*SubAccountClientListPager.More() bool`
+- New function `*SubAccountTagRulesClientListPager.More() bool`
+- New function `*TagRulesClientListPager.More() bool`
+- New function `*MonitorsClientListMonitoredResourcesPager.More() bool`
+- New function `*MonitorClientListVMHostUpdatePager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `MonitorResource` in struct `MonitorsClientGetResponse`
+- New field `Location` in struct `SubAccountTagRulesClientDeleteResponse`
+- New anonymous field `VMResourcesListResponse` in struct `MonitorClientListVMHostUpdateResponse`
+- New anonymous field `MonitoringTagRulesListResponse` in struct `SubAccountTagRulesClientListResponse`
+- New anonymous field `MonitorResource` in struct `MonitorsClientCreateResponse`
+- New anonymous field `MonitoredResourceListResponse` in struct `MonitorsClientListMonitoredResourcesResponse`
+- New anonymous field `MonitorResource` in struct `SubAccountClientGetResponse`
+- New anonymous field `SingleSignOnResourceListResponse` in struct `SingleSignOnClientListResponse`
+- New anonymous field `MonitoringTagRules` in struct `TagRulesClientCreateOrUpdateResponse`
+- New anonymous field `VMExtensionPayload` in struct `SubAccountClientVMHostPayloadResponse`
+- New anonymous field `VMResourcesListResponse` in struct `SubAccountClientListVMHostsResponse`
+- New anonymous field `MonitoringTagRules` in struct `SubAccountTagRulesClientCreateOrUpdateResponse`
+- New anonymous field `SingleSignOnResource` in struct `SingleSignOnClientCreateOrUpdateResponse`
+- New anonymous field `SingleSignOnResource` in struct `SingleSignOnClientGetResponse`
+- New anonymous field `MonitoringTagRules` in struct `SubAccountTagRulesClientGetResponse`
+- New anonymous field `MonitorResource` in struct `SubAccountClientUpdateResponse`
+- New anonymous field `MonitoringTagRulesListResponse` in struct `TagRulesClientListResponse`
+- New anonymous field `MonitoredResourceListResponse` in struct `SubAccountClientListMonitoredResourcesResponse`
+- New anonymous field `MonitorResource` in struct `MonitorsClientUpdateResponse`
+- New anonymous field `VMResourcesListResponse` in struct `MonitorClientListVMHostsResponse`
+- New anonymous field `MonitorResourceListResponse` in struct `MonitorsClientListBySubscriptionResponse`
+- New anonymous field `VMResourcesListResponse` in struct `SubAccountClientListVMHostUpdateResponse`
+- New anonymous field `VMExtensionPayload` in struct `MonitorClientVMHostPayloadResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `MonitorResource` in struct `SubAccountClientCreateResponse`
+- New anonymous field `UserRoleListResponse` in struct `MonitorsClientListUserRolesResponse`
+- New anonymous field `MonitorResourceListResponse` in struct `SubAccountClientListResponse`
+- New field `Location` in struct `TagRulesClientDeleteResponse`
+- New anonymous field `MonitoringTagRules` in struct `TagRulesClientGetResponse`
+- New anonymous field `MonitorResourceListResponse` in struct `MonitorsClientListByResourceGroupResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

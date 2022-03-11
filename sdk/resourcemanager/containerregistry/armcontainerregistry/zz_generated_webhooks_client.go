@@ -34,17 +34,17 @@ type WebhooksClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWebhooksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WebhooksClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WebhooksClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *WebhooksClient) BeginCreate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return WebhooksClientCreatePollerResponse{}, err
 	}
-	result := WebhooksClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := WebhooksClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("WebhooksClient.Create", "", resp, client.pl)
 	if err != nil {
 		return WebhooksClientCreatePollerResponse{}, err
@@ -115,7 +113,7 @@ func (client *WebhooksClient) createCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, webhookCreateParameters)
@@ -132,9 +130,7 @@ func (client *WebhooksClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return WebhooksClientDeletePollerResponse{}, err
 	}
-	result := WebhooksClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := WebhooksClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("WebhooksClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return WebhooksClientDeletePollerResponse{}, err
@@ -186,7 +182,7 @@ func (client *WebhooksClient) deleteCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	return req, nil
 }
@@ -236,7 +232,7 @@ func (client *WebhooksClient) getCreateRequest(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -244,7 +240,7 @@ func (client *WebhooksClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *WebhooksClient) getHandleResponse(resp *http.Response) (WebhooksClientGetResponse, error) {
-	result := WebhooksClientGetResponse{RawResponse: resp}
+	result := WebhooksClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Webhook); err != nil {
 		return WebhooksClientGetResponse{}, err
 	}
@@ -297,7 +293,7 @@ func (client *WebhooksClient) getCallbackConfigCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -305,7 +301,7 @@ func (client *WebhooksClient) getCallbackConfigCreateRequest(ctx context.Context
 
 // getCallbackConfigHandleResponse handles the GetCallbackConfig response.
 func (client *WebhooksClient) getCallbackConfigHandleResponse(resp *http.Response) (WebhooksClientGetCallbackConfigResponse, error) {
-	result := WebhooksClientGetCallbackConfigResponse{RawResponse: resp}
+	result := WebhooksClientGetCallbackConfigResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CallbackConfig); err != nil {
 		return WebhooksClientGetCallbackConfigResponse{}, err
 	}
@@ -349,7 +345,7 @@ func (client *WebhooksClient) listCreateRequest(ctx context.Context, resourceGro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -357,7 +353,7 @@ func (client *WebhooksClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *WebhooksClient) listHandleResponse(resp *http.Response) (WebhooksClientListResponse, error) {
-	result := WebhooksClientListResponse{RawResponse: resp}
+	result := WebhooksClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebhookListResult); err != nil {
 		return WebhooksClientListResponse{}, err
 	}
@@ -406,7 +402,7 @@ func (client *WebhooksClient) listEventsCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -414,7 +410,7 @@ func (client *WebhooksClient) listEventsCreateRequest(ctx context.Context, resou
 
 // listEventsHandleResponse handles the ListEvents response.
 func (client *WebhooksClient) listEventsHandleResponse(resp *http.Response) (WebhooksClientListEventsResponse, error) {
-	result := WebhooksClientListEventsResponse{RawResponse: resp}
+	result := WebhooksClientListEventsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventListResult); err != nil {
 		return WebhooksClientListEventsResponse{}, err
 	}
@@ -466,7 +462,7 @@ func (client *WebhooksClient) pingCreateRequest(ctx context.Context, resourceGro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -474,7 +470,7 @@ func (client *WebhooksClient) pingCreateRequest(ctx context.Context, resourceGro
 
 // pingHandleResponse handles the Ping response.
 func (client *WebhooksClient) pingHandleResponse(resp *http.Response) (WebhooksClientPingResponse, error) {
-	result := WebhooksClientPingResponse{RawResponse: resp}
+	result := WebhooksClientPingResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventInfo); err != nil {
 		return WebhooksClientPingResponse{}, err
 	}
@@ -493,9 +489,7 @@ func (client *WebhooksClient) BeginUpdate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return WebhooksClientUpdatePollerResponse{}, err
 	}
-	result := WebhooksClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := WebhooksClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("WebhooksClient.Update", "", resp, client.pl)
 	if err != nil {
 		return WebhooksClientUpdatePollerResponse{}, err
@@ -547,7 +541,7 @@ func (client *WebhooksClient) updateCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2021-12-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, webhookUpdateParameters)

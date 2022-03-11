@@ -35,17 +35,17 @@ type VirtualMachinesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualMachinesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualMachinesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualMachinesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *VirtualMachinesClient) BeginAddDataDisk(ctx context.Context, resou
 	if err != nil {
 		return VirtualMachinesClientAddDataDiskPollerResponse{}, err
 	}
-	result := VirtualMachinesClientAddDataDiskPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientAddDataDiskPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.AddDataDisk", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientAddDataDiskPollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *VirtualMachinesClient) BeginApplyArtifacts(ctx context.Context, re
 	if err != nil {
 		return VirtualMachinesClientApplyArtifactsPollerResponse{}, err
 	}
-	result := VirtualMachinesClientApplyArtifactsPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientApplyArtifactsPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.ApplyArtifacts", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientApplyArtifactsPollerResponse{}, err
@@ -208,9 +204,7 @@ func (client *VirtualMachinesClient) BeginClaim(ctx context.Context, resourceGro
 	if err != nil {
 		return VirtualMachinesClientClaimPollerResponse{}, err
 	}
-	result := VirtualMachinesClientClaimPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientClaimPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.Claim", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientClaimPollerResponse{}, err
@@ -281,9 +275,7 @@ func (client *VirtualMachinesClient) BeginCreateOrUpdate(ctx context.Context, re
 	if err != nil {
 		return VirtualMachinesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VirtualMachinesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientCreateOrUpdatePollerResponse{}, err
@@ -353,9 +345,7 @@ func (client *VirtualMachinesClient) BeginDelete(ctx context.Context, resourceGr
 	if err != nil {
 		return VirtualMachinesClientDeletePollerResponse{}, err
 	}
-	result := VirtualMachinesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientDeletePollerResponse{}, err
@@ -426,9 +416,7 @@ func (client *VirtualMachinesClient) BeginDetachDataDisk(ctx context.Context, re
 	if err != nil {
 		return VirtualMachinesClientDetachDataDiskPollerResponse{}, err
 	}
-	result := VirtualMachinesClientDetachDataDiskPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientDetachDataDiskPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.DetachDataDisk", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientDetachDataDiskPollerResponse{}, err
@@ -542,7 +530,7 @@ func (client *VirtualMachinesClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *VirtualMachinesClient) getHandleResponse(resp *http.Response) (VirtualMachinesClientGetResponse, error) {
-	result := VirtualMachinesClientGetResponse{RawResponse: resp}
+	result := VirtualMachinesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LabVirtualMachine); err != nil {
 		return VirtualMachinesClientGetResponse{}, err
 	}
@@ -603,7 +591,7 @@ func (client *VirtualMachinesClient) getRdpFileContentsCreateRequest(ctx context
 
 // getRdpFileContentsHandleResponse handles the GetRdpFileContents response.
 func (client *VirtualMachinesClient) getRdpFileContentsHandleResponse(resp *http.Response) (VirtualMachinesClientGetRdpFileContentsResponse, error) {
-	result := VirtualMachinesClientGetRdpFileContentsResponse{RawResponse: resp}
+	result := VirtualMachinesClientGetRdpFileContentsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RdpConnection); err != nil {
 		return VirtualMachinesClientGetRdpFileContentsResponse{}, err
 	}
@@ -667,7 +655,7 @@ func (client *VirtualMachinesClient) listCreateRequest(ctx context.Context, reso
 
 // listHandleResponse handles the List response.
 func (client *VirtualMachinesClient) listHandleResponse(resp *http.Response) (VirtualMachinesClientListResponse, error) {
-	result := VirtualMachinesClientListResponse{RawResponse: resp}
+	result := VirtualMachinesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LabVirtualMachineList); err != nil {
 		return VirtualMachinesClientListResponse{}, err
 	}
@@ -728,7 +716,7 @@ func (client *VirtualMachinesClient) listApplicableSchedulesCreateRequest(ctx co
 
 // listApplicableSchedulesHandleResponse handles the ListApplicableSchedules response.
 func (client *VirtualMachinesClient) listApplicableSchedulesHandleResponse(resp *http.Response) (VirtualMachinesClientListApplicableSchedulesResponse, error) {
-	result := VirtualMachinesClientListApplicableSchedulesResponse{RawResponse: resp}
+	result := VirtualMachinesClientListApplicableSchedulesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicableSchedule); err != nil {
 		return VirtualMachinesClientListApplicableSchedulesResponse{}, err
 	}
@@ -747,9 +735,7 @@ func (client *VirtualMachinesClient) BeginRedeploy(ctx context.Context, resource
 	if err != nil {
 		return VirtualMachinesClientRedeployPollerResponse{}, err
 	}
-	result := VirtualMachinesClientRedeployPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientRedeployPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.Redeploy", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientRedeployPollerResponse{}, err
@@ -820,9 +806,7 @@ func (client *VirtualMachinesClient) BeginResize(ctx context.Context, resourceGr
 	if err != nil {
 		return VirtualMachinesClientResizePollerResponse{}, err
 	}
-	result := VirtualMachinesClientResizePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientResizePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.Resize", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientResizePollerResponse{}, err
@@ -892,9 +876,7 @@ func (client *VirtualMachinesClient) BeginRestart(ctx context.Context, resourceG
 	if err != nil {
 		return VirtualMachinesClientRestartPollerResponse{}, err
 	}
-	result := VirtualMachinesClientRestartPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientRestartPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.Restart", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientRestartPollerResponse{}, err
@@ -964,9 +946,7 @@ func (client *VirtualMachinesClient) BeginStart(ctx context.Context, resourceGro
 	if err != nil {
 		return VirtualMachinesClientStartPollerResponse{}, err
 	}
-	result := VirtualMachinesClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.Start", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientStartPollerResponse{}, err
@@ -1036,9 +1016,7 @@ func (client *VirtualMachinesClient) BeginStop(ctx context.Context, resourceGrou
 	if err != nil {
 		return VirtualMachinesClientStopPollerResponse{}, err
 	}
-	result := VirtualMachinesClientStopPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientStopPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.Stop", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientStopPollerResponse{}, err
@@ -1109,9 +1087,7 @@ func (client *VirtualMachinesClient) BeginTransferDisks(ctx context.Context, res
 	if err != nil {
 		return VirtualMachinesClientTransferDisksPollerResponse{}, err
 	}
-	result := VirtualMachinesClientTransferDisksPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientTransferDisksPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.TransferDisks", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientTransferDisksPollerResponse{}, err
@@ -1182,9 +1158,7 @@ func (client *VirtualMachinesClient) BeginUnClaim(ctx context.Context, resourceG
 	if err != nil {
 		return VirtualMachinesClientUnClaimPollerResponse{}, err
 	}
-	result := VirtualMachinesClientUnClaimPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientUnClaimPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.UnClaim", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientUnClaimPollerResponse{}, err
@@ -1296,7 +1270,7 @@ func (client *VirtualMachinesClient) updateCreateRequest(ctx context.Context, re
 
 // updateHandleResponse handles the Update response.
 func (client *VirtualMachinesClient) updateHandleResponse(resp *http.Response) (VirtualMachinesClientUpdateResponse, error) {
-	result := VirtualMachinesClientUpdateResponse{RawResponse: resp}
+	result := VirtualMachinesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LabVirtualMachine); err != nil {
 		return VirtualMachinesClientUpdateResponse{}, err
 	}

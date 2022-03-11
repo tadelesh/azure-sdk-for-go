@@ -43,11 +43,10 @@ func (p *PrivateEndpointConnectionsClientDeletePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionsClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointConnectionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *PrivateLinkServiceResourceOperationResultsClientGetPoller) Poll(ctx con
 // If the final GET succeeded then the final PrivateLinkServiceResourceOperationResultsClientGetResponse will be returned.
 func (p *PrivateLinkServiceResourceOperationResultsClientGetPoller) FinalResponse(ctx context.Context) (PrivateLinkServiceResourceOperationResultsClientGetResponse, error) {
 	respType := PrivateLinkServiceResourceOperationResultsClientGetResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.AsyncOperationDetail)
+	_, err := p.pt.FinalResponse(ctx, &respType.AsyncOperationDetail)
 	if err != nil {
 		return PrivateLinkServiceResourceOperationResultsClientGetResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

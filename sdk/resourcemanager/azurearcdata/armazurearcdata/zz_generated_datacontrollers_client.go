@@ -34,17 +34,17 @@ type DataControllersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataControllersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataControllersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataControllersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -59,9 +59,7 @@ func (client *DataControllersClient) BeginDeleteDataController(ctx context.Conte
 	if err != nil {
 		return DataControllersClientDeleteDataControllerPollerResponse{}, err
 	}
-	result := DataControllersClientDeleteDataControllerPollerResponse{
-		RawResponse: resp,
-	}
+	result := DataControllersClientDeleteDataControllerPollerResponse{}
 	pt, err := armruntime.NewPoller("DataControllersClient.DeleteDataController", "", resp, client.pl)
 	if err != nil {
 		return DataControllersClientDeleteDataControllerPollerResponse{}, err
@@ -163,7 +161,7 @@ func (client *DataControllersClient) getDataControllerCreateRequest(ctx context.
 
 // getDataControllerHandleResponse handles the GetDataController response.
 func (client *DataControllersClient) getDataControllerHandleResponse(resp *http.Response) (DataControllersClientGetDataControllerResponse, error) {
-	result := DataControllersClientGetDataControllerResponse{RawResponse: resp}
+	result := DataControllersClientGetDataControllerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataControllerResource); err != nil {
 		return DataControllersClientGetDataControllerResponse{}, err
 	}
@@ -211,7 +209,7 @@ func (client *DataControllersClient) listInGroupCreateRequest(ctx context.Contex
 
 // listInGroupHandleResponse handles the ListInGroup response.
 func (client *DataControllersClient) listInGroupHandleResponse(resp *http.Response) (DataControllersClientListInGroupResponse, error) {
-	result := DataControllersClientListInGroupResponse{RawResponse: resp}
+	result := DataControllersClientListInGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PageOfDataControllerResource); err != nil {
 		return DataControllersClientListInGroupResponse{}, err
 	}
@@ -254,7 +252,7 @@ func (client *DataControllersClient) listInSubscriptionCreateRequest(ctx context
 
 // listInSubscriptionHandleResponse handles the ListInSubscription response.
 func (client *DataControllersClient) listInSubscriptionHandleResponse(resp *http.Response) (DataControllersClientListInSubscriptionResponse, error) {
-	result := DataControllersClientListInSubscriptionResponse{RawResponse: resp}
+	result := DataControllersClientListInSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PageOfDataControllerResource); err != nil {
 		return DataControllersClientListInSubscriptionResponse{}, err
 	}
@@ -310,7 +308,7 @@ func (client *DataControllersClient) patchDataControllerCreateRequest(ctx contex
 
 // patchDataControllerHandleResponse handles the PatchDataController response.
 func (client *DataControllersClient) patchDataControllerHandleResponse(resp *http.Response) (DataControllersClientPatchDataControllerResponse, error) {
-	result := DataControllersClientPatchDataControllerResponse{RawResponse: resp}
+	result := DataControllersClientPatchDataControllerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataControllerResource); err != nil {
 		return DataControllersClientPatchDataControllerResponse{}, err
 	}
@@ -328,9 +326,7 @@ func (client *DataControllersClient) BeginPutDataController(ctx context.Context,
 	if err != nil {
 		return DataControllersClientPutDataControllerPollerResponse{}, err
 	}
-	result := DataControllersClientPutDataControllerPollerResponse{
-		RawResponse: resp,
-	}
+	result := DataControllersClientPutDataControllerPollerResponse{}
 	pt, err := armruntime.NewPoller("DataControllersClient.PutDataController", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DataControllersClientPutDataControllerPollerResponse{}, err

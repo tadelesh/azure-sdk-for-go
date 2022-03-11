@@ -34,17 +34,17 @@ type FirewallRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFirewallRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FirewallRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FirewallRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *FirewallRulesClient) BeginCreateOrUpdate(ctx context.Context, reso
 	if err != nil {
 		return FirewallRulesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := FirewallRulesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := FirewallRulesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("FirewallRulesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return FirewallRulesClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *FirewallRulesClient) BeginDelete(ctx context.Context, resourceGrou
 	if err != nil {
 		return FirewallRulesClientDeletePollerResponse{}, err
 	}
-	result := FirewallRulesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := FirewallRulesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("FirewallRulesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return FirewallRulesClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *FirewallRulesClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *FirewallRulesClient) getHandleResponse(resp *http.Response) (FirewallRulesClientGetResponse, error) {
-	result := FirewallRulesClientGetResponse{RawResponse: resp}
+	result := FirewallRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FirewallRule); err != nil {
 		return FirewallRulesClientGetResponse{}, err
 	}
@@ -260,19 +256,13 @@ func (client *FirewallRulesClient) getHandleResponse(resp *http.Response) (Firew
 // serverName - The name of the server.
 // options - FirewallRulesClientListByServerOptions contains the optional parameters for the FirewallRulesClient.ListByServer
 // method.
-func (client *FirewallRulesClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string, options *FirewallRulesClientListByServerOptions) (FirewallRulesClientListByServerResponse, error) {
-	req, err := client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
-	if err != nil {
-		return FirewallRulesClientListByServerResponse{}, err
+func (client *FirewallRulesClient) ListByServer(resourceGroupName string, serverName string, options *FirewallRulesClientListByServerOptions) *FirewallRulesClientListByServerPager {
+	return &FirewallRulesClientListByServerPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return FirewallRulesClientListByServerResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return FirewallRulesClientListByServerResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByServerHandleResponse(resp)
 }
 
 // listByServerCreateRequest creates the ListByServer request.
@@ -303,7 +293,7 @@ func (client *FirewallRulesClient) listByServerCreateRequest(ctx context.Context
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *FirewallRulesClient) listByServerHandleResponse(resp *http.Response) (FirewallRulesClientListByServerResponse, error) {
-	result := FirewallRulesClientListByServerResponse{RawResponse: resp}
+	result := FirewallRulesClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FirewallRuleListResult); err != nil {
 		return FirewallRulesClientListByServerResponse{}, err
 	}

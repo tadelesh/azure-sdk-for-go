@@ -34,17 +34,17 @@ type TasksClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTasksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TasksClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TasksClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *TasksClient) BeginCreate(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return TasksClientCreatePollerResponse{}, err
 	}
-	result := TasksClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := TasksClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("TasksClient.Create", "", resp, client.pl)
 	if err != nil {
 		return TasksClientCreatePollerResponse{}, err
@@ -132,9 +130,7 @@ func (client *TasksClient) BeginDelete(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return TasksClientDeletePollerResponse{}, err
 	}
-	result := TasksClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := TasksClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("TasksClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return TasksClientDeletePollerResponse{}, err
@@ -245,7 +241,7 @@ func (client *TasksClient) getCreateRequest(ctx context.Context, resourceGroupNa
 
 // getHandleResponse handles the Get response.
 func (client *TasksClient) getHandleResponse(resp *http.Response) (TasksClientGetResponse, error) {
-	result := TasksClientGetResponse{RawResponse: resp}
+	result := TasksClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Task); err != nil {
 		return TasksClientGetResponse{}, err
 	}
@@ -305,7 +301,7 @@ func (client *TasksClient) getDetailsCreateRequest(ctx context.Context, resource
 
 // getDetailsHandleResponse handles the GetDetails response.
 func (client *TasksClient) getDetailsHandleResponse(resp *http.Response) (TasksClientGetDetailsResponse, error) {
-	result := TasksClientGetDetailsResponse{RawResponse: resp}
+	result := TasksClientGetDetailsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Task); err != nil {
 		return TasksClientGetDetailsResponse{}, err
 	}
@@ -357,7 +353,7 @@ func (client *TasksClient) listCreateRequest(ctx context.Context, resourceGroupN
 
 // listHandleResponse handles the List response.
 func (client *TasksClient) listHandleResponse(resp *http.Response) (TasksClientListResponse, error) {
-	result := TasksClientListResponse{RawResponse: resp}
+	result := TasksClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TaskListResult); err != nil {
 		return TasksClientListResponse{}, err
 	}
@@ -376,9 +372,7 @@ func (client *TasksClient) BeginUpdate(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return TasksClientUpdatePollerResponse{}, err
 	}
-	result := TasksClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := TasksClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("TasksClient.Update", "", resp, client.pl)
 	if err != nil {
 		return TasksClientUpdatePollerResponse{}, err

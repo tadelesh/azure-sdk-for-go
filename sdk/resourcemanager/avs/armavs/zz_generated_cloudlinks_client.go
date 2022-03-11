@@ -34,17 +34,17 @@ type CloudLinksClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCloudLinksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CloudLinksClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CloudLinksClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *CloudLinksClient) BeginCreateOrUpdate(ctx context.Context, resourc
 	if err != nil {
 		return CloudLinksClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := CloudLinksClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudLinksClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("CloudLinksClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return CloudLinksClientCreateOrUpdatePollerResponse{}, err
@@ -133,9 +131,7 @@ func (client *CloudLinksClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return CloudLinksClientDeletePollerResponse{}, err
 	}
-	result := CloudLinksClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudLinksClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CloudLinksClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return CloudLinksClientDeletePollerResponse{}, err
@@ -246,7 +242,7 @@ func (client *CloudLinksClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *CloudLinksClient) getHandleResponse(resp *http.Response) (CloudLinksClientGetResponse, error) {
-	result := CloudLinksClientGetResponse{RawResponse: resp}
+	result := CloudLinksClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CloudLink); err != nil {
 		return CloudLinksClientGetResponse{}, err
 	}
@@ -298,7 +294,7 @@ func (client *CloudLinksClient) listCreateRequest(ctx context.Context, resourceG
 
 // listHandleResponse handles the List response.
 func (client *CloudLinksClient) listHandleResponse(resp *http.Response) (CloudLinksClientListResponse, error) {
-	result := CloudLinksClientListResponse{RawResponse: resp}
+	result := CloudLinksClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CloudLinkList); err != nil {
 		return CloudLinksClientListResponse{}, err
 	}

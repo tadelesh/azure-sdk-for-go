@@ -105,7 +105,7 @@ func (client *AssignmentsClient) createOrUpdateCreateRequest(ctx context.Context
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *AssignmentsClient) createOrUpdateHandleResponse(resp *http.Response) (AssignmentsClientCreateOrUpdateResponse, error) {
-	result := AssignmentsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := AssignmentsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Assignment); err != nil {
 		return AssignmentsClientCreateOrUpdateResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *AssignmentsClient) Delete(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return AssignmentsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AssignmentsClientDeleteResponse{RawResponse: resp}, nil
+	return AssignmentsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -216,7 +216,7 @@ func (client *AssignmentsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *AssignmentsClient) getHandleResponse(resp *http.Response) (AssignmentsClientGetResponse, error) {
-	result := AssignmentsClientGetResponse{RawResponse: resp}
+	result := AssignmentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Assignment); err != nil {
 		return AssignmentsClientGetResponse{}, err
 	}
@@ -228,19 +228,13 @@ func (client *AssignmentsClient) getHandleResponse(resp *http.Response) (Assignm
 // resourceGroupName - The resource group name.
 // vmName - The name of the virtual machine.
 // options - AssignmentsClientListOptions contains the optional parameters for the AssignmentsClient.List method.
-func (client *AssignmentsClient) List(ctx context.Context, resourceGroupName string, vmName string, options *AssignmentsClientListOptions) (AssignmentsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, vmName, options)
-	if err != nil {
-		return AssignmentsClientListResponse{}, err
+func (client *AssignmentsClient) List(resourceGroupName string, vmName string, options *AssignmentsClientListOptions) *AssignmentsClientListPager {
+	return &AssignmentsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, vmName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return AssignmentsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return AssignmentsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -271,7 +265,7 @@ func (client *AssignmentsClient) listCreateRequest(ctx context.Context, resource
 
 // listHandleResponse handles the List response.
 func (client *AssignmentsClient) listHandleResponse(resp *http.Response) (AssignmentsClientListResponse, error) {
-	result := AssignmentsClientListResponse{RawResponse: resp}
+	result := AssignmentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssignmentList); err != nil {
 		return AssignmentsClientListResponse{}, err
 	}
@@ -282,19 +276,13 @@ func (client *AssignmentsClient) listHandleResponse(resp *http.Response) (Assign
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - The resource group name.
 // options - AssignmentsClientRGListOptions contains the optional parameters for the AssignmentsClient.RGList method.
-func (client *AssignmentsClient) RGList(ctx context.Context, resourceGroupName string, options *AssignmentsClientRGListOptions) (AssignmentsClientRGListResponse, error) {
-	req, err := client.rgListCreateRequest(ctx, resourceGroupName, options)
-	if err != nil {
-		return AssignmentsClientRGListResponse{}, err
+func (client *AssignmentsClient) RGList(resourceGroupName string, options *AssignmentsClientRGListOptions) *AssignmentsClientRGListPager {
+	return &AssignmentsClientRGListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.rgListCreateRequest(ctx, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return AssignmentsClientRGListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
-		return AssignmentsClientRGListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.rgListHandleResponse(resp)
 }
 
 // rgListCreateRequest creates the RGList request.
@@ -321,7 +309,7 @@ func (client *AssignmentsClient) rgListCreateRequest(ctx context.Context, resour
 
 // rgListHandleResponse handles the RGList response.
 func (client *AssignmentsClient) rgListHandleResponse(resp *http.Response) (AssignmentsClientRGListResponse, error) {
-	result := AssignmentsClientRGListResponse{RawResponse: resp}
+	result := AssignmentsClientRGListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssignmentList); err != nil {
 		return AssignmentsClientRGListResponse{}, err
 	}
@@ -332,19 +320,13 @@ func (client *AssignmentsClient) rgListHandleResponse(resp *http.Response) (Assi
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - AssignmentsClientSubscriptionListOptions contains the optional parameters for the AssignmentsClient.SubscriptionList
 // method.
-func (client *AssignmentsClient) SubscriptionList(ctx context.Context, options *AssignmentsClientSubscriptionListOptions) (AssignmentsClientSubscriptionListResponse, error) {
-	req, err := client.subscriptionListCreateRequest(ctx, options)
-	if err != nil {
-		return AssignmentsClientSubscriptionListResponse{}, err
+func (client *AssignmentsClient) SubscriptionList(options *AssignmentsClientSubscriptionListOptions) *AssignmentsClientSubscriptionListPager {
+	return &AssignmentsClientSubscriptionListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.subscriptionListCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return AssignmentsClientSubscriptionListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
-		return AssignmentsClientSubscriptionListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.subscriptionListHandleResponse(resp)
 }
 
 // subscriptionListCreateRequest creates the SubscriptionList request.
@@ -367,7 +349,7 @@ func (client *AssignmentsClient) subscriptionListCreateRequest(ctx context.Conte
 
 // subscriptionListHandleResponse handles the SubscriptionList response.
 func (client *AssignmentsClient) subscriptionListHandleResponse(resp *http.Response) (AssignmentsClientSubscriptionListResponse, error) {
-	result := AssignmentsClientSubscriptionListResponse{RawResponse: resp}
+	result := AssignmentsClientSubscriptionListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssignmentList); err != nil {
 		return AssignmentsClientSubscriptionListResponse{}, err
 	}

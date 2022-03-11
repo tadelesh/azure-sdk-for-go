@@ -34,17 +34,17 @@ type CostsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCostsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CostsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CostsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *CostsClient) createOrUpdateCreateRequest(ctx context.Context, reso
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *CostsClient) createOrUpdateHandleResponse(resp *http.Response) (CostsClientCreateOrUpdateResponse, error) {
-	result := CostsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := CostsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LabCost); err != nil {
 		return CostsClientCreateOrUpdateResponse{}, err
 	}
@@ -166,7 +166,7 @@ func (client *CostsClient) getCreateRequest(ctx context.Context, resourceGroupNa
 
 // getHandleResponse handles the Get response.
 func (client *CostsClient) getHandleResponse(resp *http.Response) (CostsClientGetResponse, error) {
-	result := CostsClientGetResponse{RawResponse: resp}
+	result := CostsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LabCost); err != nil {
 		return CostsClientGetResponse{}, err
 	}

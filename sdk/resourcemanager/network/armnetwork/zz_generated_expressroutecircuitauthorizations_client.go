@@ -35,17 +35,17 @@ type ExpressRouteCircuitAuthorizationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewExpressRouteCircuitAuthorizationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ExpressRouteCircuitAuthorizationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ExpressRouteCircuitAuthorizationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ExpressRouteCircuitAuthorizationsClient) BeginCreateOrUpdate(ctx c
 	if err != nil {
 		return ExpressRouteCircuitAuthorizationsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ExpressRouteCircuitAuthorizationsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ExpressRouteCircuitAuthorizationsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ExpressRouteCircuitAuthorizationsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ExpressRouteCircuitAuthorizationsClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *ExpressRouteCircuitAuthorizationsClient) BeginDelete(ctx context.C
 	if err != nil {
 		return ExpressRouteCircuitAuthorizationsClientDeletePollerResponse{}, err
 	}
-	result := ExpressRouteCircuitAuthorizationsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ExpressRouteCircuitAuthorizationsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ExpressRouteCircuitAuthorizationsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return ExpressRouteCircuitAuthorizationsClientDeletePollerResponse{}, err
@@ -249,7 +245,7 @@ func (client *ExpressRouteCircuitAuthorizationsClient) getCreateRequest(ctx cont
 
 // getHandleResponse handles the Get response.
 func (client *ExpressRouteCircuitAuthorizationsClient) getHandleResponse(resp *http.Response) (ExpressRouteCircuitAuthorizationsClientGetResponse, error) {
-	result := ExpressRouteCircuitAuthorizationsClientGetResponse{RawResponse: resp}
+	result := ExpressRouteCircuitAuthorizationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExpressRouteCircuitAuthorization); err != nil {
 		return ExpressRouteCircuitAuthorizationsClientGetResponse{}, err
 	}
@@ -302,7 +298,7 @@ func (client *ExpressRouteCircuitAuthorizationsClient) listCreateRequest(ctx con
 
 // listHandleResponse handles the List response.
 func (client *ExpressRouteCircuitAuthorizationsClient) listHandleResponse(resp *http.Response) (ExpressRouteCircuitAuthorizationsClientListResponse, error) {
-	result := ExpressRouteCircuitAuthorizationsClientListResponse{RawResponse: resp}
+	result := ExpressRouteCircuitAuthorizationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AuthorizationListResult); err != nil {
 		return ExpressRouteCircuitAuthorizationsClientListResponse{}, err
 	}

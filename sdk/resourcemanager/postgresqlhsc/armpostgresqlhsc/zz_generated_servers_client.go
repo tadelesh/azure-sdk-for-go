@@ -34,17 +34,17 @@ type ServersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *ServersClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *ServersClient) getHandleResponse(resp *http.Response) (ServersClientGetResponse, error) {
-	result := ServersClientGetResponse{RawResponse: resp}
+	result := ServersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerGroupServer); err != nil {
 		return ServersClientGetResponse{}, err
 	}
@@ -115,19 +115,13 @@ func (client *ServersClient) getHandleResponse(resp *http.Response) (ServersClie
 // serverGroupName - The name of the server group.
 // options - ServersClientListByServerGroupOptions contains the optional parameters for the ServersClient.ListByServerGroup
 // method.
-func (client *ServersClient) ListByServerGroup(ctx context.Context, resourceGroupName string, serverGroupName string, options *ServersClientListByServerGroupOptions) (ServersClientListByServerGroupResponse, error) {
-	req, err := client.listByServerGroupCreateRequest(ctx, resourceGroupName, serverGroupName, options)
-	if err != nil {
-		return ServersClientListByServerGroupResponse{}, err
+func (client *ServersClient) ListByServerGroup(resourceGroupName string, serverGroupName string, options *ServersClientListByServerGroupOptions) *ServersClientListByServerGroupPager {
+	return &ServersClientListByServerGroupPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByServerGroupCreateRequest(ctx, resourceGroupName, serverGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ServersClientListByServerGroupResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ServersClientListByServerGroupResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByServerGroupHandleResponse(resp)
 }
 
 // listByServerGroupCreateRequest creates the ListByServerGroup request.
@@ -158,7 +152,7 @@ func (client *ServersClient) listByServerGroupCreateRequest(ctx context.Context,
 
 // listByServerGroupHandleResponse handles the ListByServerGroup response.
 func (client *ServersClient) listByServerGroupHandleResponse(resp *http.Response) (ServersClientListByServerGroupResponse, error) {
-	result := ServersClientListByServerGroupResponse{RawResponse: resp}
+	result := ServersClientListByServerGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerGroupServerListResult); err != nil {
 		return ServersClientListByServerGroupResponse{}, err
 	}

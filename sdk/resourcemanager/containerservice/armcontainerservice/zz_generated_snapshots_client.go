@@ -35,17 +35,17 @@ type SnapshotsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSnapshotsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SnapshotsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SnapshotsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *SnapshotsClient) createOrUpdateCreateRequest(ctx context.Context, 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *SnapshotsClient) createOrUpdateHandleResponse(resp *http.Response) (SnapshotsClientCreateOrUpdateResponse, error) {
-	result := SnapshotsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := SnapshotsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Snapshot); err != nil {
 		return SnapshotsClientCreateOrUpdateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *SnapshotsClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SnapshotsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SnapshotsClientDeleteResponse{RawResponse: resp}, nil
+	return SnapshotsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -201,7 +201,7 @@ func (client *SnapshotsClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *SnapshotsClient) getHandleResponse(resp *http.Response) (SnapshotsClientGetResponse, error) {
-	result := SnapshotsClientGetResponse{RawResponse: resp}
+	result := SnapshotsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Snapshot); err != nil {
 		return SnapshotsClientGetResponse{}, err
 	}
@@ -243,7 +243,7 @@ func (client *SnapshotsClient) listCreateRequest(ctx context.Context, options *S
 
 // listHandleResponse handles the List response.
 func (client *SnapshotsClient) listHandleResponse(resp *http.Response) (SnapshotsClientListResponse, error) {
-	result := SnapshotsClientListResponse{RawResponse: resp}
+	result := SnapshotsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SnapshotListResult); err != nil {
 		return SnapshotsClientListResponse{}, err
 	}
@@ -291,7 +291,7 @@ func (client *SnapshotsClient) listByResourceGroupCreateRequest(ctx context.Cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *SnapshotsClient) listByResourceGroupHandleResponse(resp *http.Response) (SnapshotsClientListByResourceGroupResponse, error) {
-	result := SnapshotsClientListByResourceGroupResponse{RawResponse: resp}
+	result := SnapshotsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SnapshotListResult); err != nil {
 		return SnapshotsClientListByResourceGroupResponse{}, err
 	}
@@ -347,7 +347,7 @@ func (client *SnapshotsClient) updateTagsCreateRequest(ctx context.Context, reso
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *SnapshotsClient) updateTagsHandleResponse(resp *http.Response) (SnapshotsClientUpdateTagsResponse, error) {
-	result := SnapshotsClientUpdateTagsResponse{RawResponse: resp}
+	result := SnapshotsClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Snapshot); err != nil {
 		return SnapshotsClientUpdateTagsResponse{}, err
 	}

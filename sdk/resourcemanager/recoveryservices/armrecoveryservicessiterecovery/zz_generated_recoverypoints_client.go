@@ -38,19 +38,19 @@ type RecoveryPointsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRecoveryPointsClient(resourceName string, resourceGroupName string, subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RecoveryPointsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RecoveryPointsClient{
 		resourceName:      resourceName,
 		resourceGroupName: resourceGroupName,
 		subscriptionID:    subscriptionID,
-		host:              string(cp.Endpoint),
-		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:              string(ep),
+		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -113,7 +113,7 @@ func (client *RecoveryPointsClient) getCreateRequest(ctx context.Context, fabric
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -121,7 +121,7 @@ func (client *RecoveryPointsClient) getCreateRequest(ctx context.Context, fabric
 
 // getHandleResponse handles the Get response.
 func (client *RecoveryPointsClient) getHandleResponse(resp *http.Response) (RecoveryPointsClientGetResponse, error) {
-	result := RecoveryPointsClientGetResponse{RawResponse: resp}
+	result := RecoveryPointsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecoveryPoint); err != nil {
 		return RecoveryPointsClientGetResponse{}, err
 	}
@@ -179,7 +179,7 @@ func (client *RecoveryPointsClient) listByReplicationProtectedItemsCreateRequest
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -187,7 +187,7 @@ func (client *RecoveryPointsClient) listByReplicationProtectedItemsCreateRequest
 
 // listByReplicationProtectedItemsHandleResponse handles the ListByReplicationProtectedItems response.
 func (client *RecoveryPointsClient) listByReplicationProtectedItemsHandleResponse(resp *http.Response) (RecoveryPointsClientListByReplicationProtectedItemsResponse, error) {
-	result := RecoveryPointsClientListByReplicationProtectedItemsResponse{RawResponse: resp}
+	result := RecoveryPointsClientListByReplicationProtectedItemsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecoveryPointCollection); err != nil {
 		return RecoveryPointsClientListByReplicationProtectedItemsResponse{}, err
 	}

@@ -34,17 +34,17 @@ type IscsiTargetsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIscsiTargetsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IscsiTargetsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IscsiTargetsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *IscsiTargetsClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return IscsiTargetsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := IscsiTargetsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := IscsiTargetsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("IscsiTargetsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return IscsiTargetsClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *IscsiTargetsClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return IscsiTargetsClientDeletePollerResponse{}, err
 	}
-	result := IscsiTargetsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := IscsiTargetsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("IscsiTargetsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return IscsiTargetsClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *IscsiTargetsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *IscsiTargetsClient) getHandleResponse(resp *http.Response) (IscsiTargetsClientGetResponse, error) {
-	result := IscsiTargetsClientGetResponse{RawResponse: resp}
+	result := IscsiTargetsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IscsiTarget); err != nil {
 		return IscsiTargetsClientGetResponse{}, err
 	}
@@ -300,7 +296,7 @@ func (client *IscsiTargetsClient) listByDiskPoolCreateRequest(ctx context.Contex
 
 // listByDiskPoolHandleResponse handles the ListByDiskPool response.
 func (client *IscsiTargetsClient) listByDiskPoolHandleResponse(resp *http.Response) (IscsiTargetsClientListByDiskPoolResponse, error) {
-	result := IscsiTargetsClientListByDiskPoolResponse{RawResponse: resp}
+	result := IscsiTargetsClientListByDiskPoolResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IscsiTargetList); err != nil {
 		return IscsiTargetsClientListByDiskPoolResponse{}, err
 	}
@@ -320,9 +316,7 @@ func (client *IscsiTargetsClient) BeginUpdate(ctx context.Context, resourceGroup
 	if err != nil {
 		return IscsiTargetsClientUpdatePollerResponse{}, err
 	}
-	result := IscsiTargetsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := IscsiTargetsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("IscsiTargetsClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return IscsiTargetsClientUpdatePollerResponse{}, err

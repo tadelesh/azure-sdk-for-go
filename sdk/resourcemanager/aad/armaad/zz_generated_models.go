@@ -8,12 +8,6 @@
 
 package armaad
 
-import (
-	"encoding/json"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
-	"reflect"
-)
-
 // DiagnosticSettings - The diagnostic settings.
 type DiagnosticSettings struct {
 	// The resource Id for the event hub authorization rule.
@@ -35,18 +29,6 @@ type DiagnosticSettings struct {
 	// Diagnostic Logs. Example:
 	// /subscriptions/4b9e8510-67ab-4e9a-95a9-e2f1e570ea9c/resourceGroups/insights-integration/providers/Microsoft.OperationalInsights/workspaces/viruela2
 	WorkspaceID *string `json:"workspaceId,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type DiagnosticSettings.
-func (d DiagnosticSettings) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "eventHubAuthorizationRuleId", d.EventHubAuthorizationRuleID)
-	populate(objectMap, "eventHubName", d.EventHubName)
-	populate(objectMap, "logs", d.Logs)
-	populate(objectMap, "serviceBusRuleId", d.ServiceBusRuleID)
-	populate(objectMap, "storageAccountId", d.StorageAccountID)
-	populate(objectMap, "workspaceId", d.WorkspaceID)
-	return json.Marshal(objectMap)
 }
 
 // DiagnosticSettingsCategory - The diagnostic settings Category.
@@ -80,13 +62,6 @@ type DiagnosticSettingsCategoryResource struct {
 type DiagnosticSettingsCategoryResourceCollection struct {
 	// The collection of diagnostic settings category resources.
 	Value []*DiagnosticSettingsCategoryResource `json:"value,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type DiagnosticSettingsCategoryResourceCollection.
-func (d DiagnosticSettingsCategoryResourceCollection) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "value", d.Value)
-	return json.Marshal(objectMap)
 }
 
 // DiagnosticSettingsClientCreateOrUpdateOptions contains the optional parameters for the DiagnosticSettingsClient.CreateOrUpdate
@@ -129,13 +104,6 @@ type DiagnosticSettingsResource struct {
 type DiagnosticSettingsResourceCollection struct {
 	// The collection of diagnostic settings resources.
 	Value []*DiagnosticSettingsResource `json:"value,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type DiagnosticSettingsResourceCollection.
-func (d DiagnosticSettingsResourceCollection) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "value", d.Value)
-	return json.Marshal(objectMap)
 }
 
 // Display - Contains the localized display information for this particular operation / action. These value will be used by
@@ -181,15 +149,6 @@ type ErrorDefinition struct {
 
 	// READ-ONLY; Description of the error.
 	Message *string `json:"message,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type ErrorDefinition.
-func (e ErrorDefinition) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "code", e.Code)
-	populate(objectMap, "details", e.Details)
-	populate(objectMap, "message", e.Message)
-	return json.Marshal(objectMap)
 }
 
 // ErrorResponse - Error response.
@@ -241,20 +200,13 @@ type OperationsDiscovery struct {
 	Origin *string `json:"origin,omitempty"`
 
 	// Properties. Reserved for future use.
-	Properties map[string]interface{} `json:"properties,omitempty"`
+	Properties interface{} `json:"properties,omitempty"`
 }
 
 // OperationsDiscoveryCollection - Collection of ClientDiscovery details.
 type OperationsDiscoveryCollection struct {
 	// The ClientDiscovery details.
 	Value []*OperationsDiscovery `json:"value,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type OperationsDiscoveryCollection.
-func (o OperationsDiscoveryCollection) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "value", o.Value)
-	return json.Marshal(objectMap)
 }
 
 // ProxyOnlyResource - A proxy only azure resource object.
@@ -276,14 +228,4 @@ type RetentionPolicy struct {
 
 	// REQUIRED; A value indicating whether the retention policy is enabled.
 	Enabled *bool `json:"enabled,omitempty"`
-}
-
-func populate(m map[string]interface{}, k string, v interface{}) {
-	if v == nil {
-		return
-	} else if azcore.IsNullValue(v) {
-		m[k] = nil
-	} else if !reflect.ValueOf(v).IsNil() {
-		m[k] = v
-	}
 }

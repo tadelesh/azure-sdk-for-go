@@ -34,17 +34,17 @@ type OfficeConsentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewOfficeConsentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *OfficeConsentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &OfficeConsentsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -67,7 +67,7 @@ func (client *OfficeConsentsClient) Delete(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return OfficeConsentsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return OfficeConsentsClientDeleteResponse{RawResponse: resp}, nil
+	return OfficeConsentsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -153,7 +153,7 @@ func (client *OfficeConsentsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *OfficeConsentsClient) getHandleResponse(resp *http.Response) (OfficeConsentsClientGetResponse, error) {
-	result := OfficeConsentsClientGetResponse{RawResponse: resp}
+	result := OfficeConsentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OfficeConsent); err != nil {
 		return OfficeConsentsClientGetResponse{}, err
 	}
@@ -205,7 +205,7 @@ func (client *OfficeConsentsClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *OfficeConsentsClient) listHandleResponse(resp *http.Response) (OfficeConsentsClientListResponse, error) {
-	result := OfficeConsentsClientListResponse{RawResponse: resp}
+	result := OfficeConsentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OfficeConsentList); err != nil {
 		return OfficeConsentsClientListResponse{}, err
 	}

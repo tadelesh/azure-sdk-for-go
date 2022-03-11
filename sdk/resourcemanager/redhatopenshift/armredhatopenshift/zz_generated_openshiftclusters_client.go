@@ -34,17 +34,17 @@ type OpenShiftClustersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewOpenShiftClustersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *OpenShiftClustersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &OpenShiftClustersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *OpenShiftClustersClient) BeginCreateOrUpdate(ctx context.Context, 
 	if err != nil {
 		return OpenShiftClustersClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := OpenShiftClustersClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := OpenShiftClustersClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("OpenShiftClustersClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return OpenShiftClustersClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *OpenShiftClustersClient) BeginDelete(ctx context.Context, resource
 	if err != nil {
 		return OpenShiftClustersClientDeletePollerResponse{}, err
 	}
-	result := OpenShiftClustersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := OpenShiftClustersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("OpenShiftClustersClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return OpenShiftClustersClientDeletePollerResponse{}, err
@@ -232,7 +228,7 @@ func (client *OpenShiftClustersClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *OpenShiftClustersClient) getHandleResponse(resp *http.Response) (OpenShiftClustersClientGetResponse, error) {
-	result := OpenShiftClustersClientGetResponse{RawResponse: resp}
+	result := OpenShiftClustersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OpenShiftCluster); err != nil {
 		return OpenShiftClustersClientGetResponse{}, err
 	}
@@ -274,7 +270,7 @@ func (client *OpenShiftClustersClient) listCreateRequest(ctx context.Context, op
 
 // listHandleResponse handles the List response.
 func (client *OpenShiftClustersClient) listHandleResponse(resp *http.Response) (OpenShiftClustersClientListResponse, error) {
-	result := OpenShiftClustersClientListResponse{RawResponse: resp}
+	result := OpenShiftClustersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OpenShiftClusterList); err != nil {
 		return OpenShiftClustersClientListResponse{}, err
 	}
@@ -322,7 +318,7 @@ func (client *OpenShiftClustersClient) listByResourceGroupCreateRequest(ctx cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *OpenShiftClustersClient) listByResourceGroupHandleResponse(resp *http.Response) (OpenShiftClustersClientListByResourceGroupResponse, error) {
-	result := OpenShiftClustersClientListByResourceGroupResponse{RawResponse: resp}
+	result := OpenShiftClustersClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OpenShiftClusterList); err != nil {
 		return OpenShiftClustersClientListByResourceGroupResponse{}, err
 	}
@@ -378,7 +374,7 @@ func (client *OpenShiftClustersClient) listCredentialsCreateRequest(ctx context.
 
 // listCredentialsHandleResponse handles the ListCredentials response.
 func (client *OpenShiftClustersClient) listCredentialsHandleResponse(resp *http.Response) (OpenShiftClustersClientListCredentialsResponse, error) {
-	result := OpenShiftClustersClientListCredentialsResponse{RawResponse: resp}
+	result := OpenShiftClustersClientListCredentialsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OpenShiftClusterCredentials); err != nil {
 		return OpenShiftClustersClientListCredentialsResponse{}, err
 	}
@@ -397,9 +393,7 @@ func (client *OpenShiftClustersClient) BeginUpdate(ctx context.Context, resource
 	if err != nil {
 		return OpenShiftClustersClientUpdatePollerResponse{}, err
 	}
-	result := OpenShiftClustersClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := OpenShiftClustersClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("OpenShiftClustersClient.Update", "", resp, client.pl)
 	if err != nil {
 		return OpenShiftClustersClientUpdatePollerResponse{}, err

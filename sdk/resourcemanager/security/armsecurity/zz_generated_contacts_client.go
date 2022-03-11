@@ -93,7 +93,7 @@ func (client *ContactsClient) createCreateRequest(ctx context.Context, securityC
 
 // createHandleResponse handles the Create response.
 func (client *ContactsClient) createHandleResponse(resp *http.Response) (ContactsClientCreateResponse, error) {
-	result := ContactsClientCreateResponse{RawResponse: resp}
+	result := ContactsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Contact); err != nil {
 		return ContactsClientCreateResponse{}, err
 	}
@@ -116,7 +116,7 @@ func (client *ContactsClient) Delete(ctx context.Context, securityContactName st
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return ContactsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ContactsClientDeleteResponse{RawResponse: resp}, nil
+	return ContactsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -184,7 +184,7 @@ func (client *ContactsClient) getCreateRequest(ctx context.Context, securityCont
 
 // getHandleResponse handles the Get response.
 func (client *ContactsClient) getHandleResponse(resp *http.Response) (ContactsClientGetResponse, error) {
-	result := ContactsClientGetResponse{RawResponse: resp}
+	result := ContactsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Contact); err != nil {
 		return ContactsClientGetResponse{}, err
 	}
@@ -226,7 +226,7 @@ func (client *ContactsClient) listCreateRequest(ctx context.Context, options *Co
 
 // listHandleResponse handles the List response.
 func (client *ContactsClient) listHandleResponse(resp *http.Response) (ContactsClientListResponse, error) {
-	result := ContactsClientListResponse{RawResponse: resp}
+	result := ContactsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContactList); err != nil {
 		return ContactsClientListResponse{}, err
 	}
@@ -277,7 +277,7 @@ func (client *ContactsClient) updateCreateRequest(ctx context.Context, securityC
 
 // updateHandleResponse handles the Update response.
 func (client *ContactsClient) updateHandleResponse(resp *http.Response) (ContactsClientUpdateResponse, error) {
-	result := ContactsClientUpdateResponse{RawResponse: resp}
+	result := ContactsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Contact); err != nil {
 		return ContactsClientUpdateResponse{}, err
 	}

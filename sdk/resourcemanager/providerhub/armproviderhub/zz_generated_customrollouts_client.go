@@ -34,17 +34,17 @@ type CustomRolloutsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCustomRolloutsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CustomRolloutsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CustomRolloutsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *CustomRolloutsClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *CustomRolloutsClient) createOrUpdateHandleResponse(resp *http.Response) (CustomRolloutsClientCreateOrUpdateResponse, error) {
-	result := CustomRolloutsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := CustomRolloutsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomRollout); err != nil {
 		return CustomRolloutsClientCreateOrUpdateResponse{}, err
 	}
@@ -154,7 +154,7 @@ func (client *CustomRolloutsClient) getCreateRequest(ctx context.Context, provid
 
 // getHandleResponse handles the Get response.
 func (client *CustomRolloutsClient) getHandleResponse(resp *http.Response) (CustomRolloutsClientGetResponse, error) {
-	result := CustomRolloutsClientGetResponse{RawResponse: resp}
+	result := CustomRolloutsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomRollout); err != nil {
 		return CustomRolloutsClientGetResponse{}, err
 	}
@@ -202,7 +202,7 @@ func (client *CustomRolloutsClient) listByProviderRegistrationCreateRequest(ctx 
 
 // listByProviderRegistrationHandleResponse handles the ListByProviderRegistration response.
 func (client *CustomRolloutsClient) listByProviderRegistrationHandleResponse(resp *http.Response) (CustomRolloutsClientListByProviderRegistrationResponse, error) {
-	result := CustomRolloutsClientListByProviderRegistrationResponse{RawResponse: resp}
+	result := CustomRolloutsClientListByProviderRegistrationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomRolloutArrayResponseWithContinuation); err != nil {
 		return CustomRolloutsClientListByProviderRegistrationResponse{}, err
 	}

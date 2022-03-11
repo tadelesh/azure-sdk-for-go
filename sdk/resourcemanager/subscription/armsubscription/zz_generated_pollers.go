@@ -43,11 +43,10 @@ func (p *AliasClientCreatePoller) Poll(ctx context.Context) (*http.Response, err
 // If the final GET succeeded then the final AliasClientCreateResponse will be returned.
 func (p *AliasClientCreatePoller) FinalResponse(ctx context.Context) (AliasClientCreateResponse, error) {
 	respType := AliasClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.AliasResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.AliasResponse)
 	if err != nil {
 		return AliasClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ClientAcceptOwnershipPoller) Poll(ctx context.Context) (*http.Response,
 // If the final GET succeeded then the final ClientAcceptOwnershipResponse will be returned.
 func (p *ClientAcceptOwnershipPoller) FinalResponse(ctx context.Context) (ClientAcceptOwnershipResponse, error) {
 	respType := ClientAcceptOwnershipResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClientAcceptOwnershipResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

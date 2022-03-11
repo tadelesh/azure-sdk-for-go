@@ -81,7 +81,7 @@ func (client *SecureScoreControlDefinitionsClient) listCreateRequest(ctx context
 
 // listHandleResponse handles the List response.
 func (client *SecureScoreControlDefinitionsClient) listHandleResponse(resp *http.Response) (SecureScoreControlDefinitionsClientListResponse, error) {
-	result := SecureScoreControlDefinitionsClientListResponse{RawResponse: resp}
+	result := SecureScoreControlDefinitionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecureScoreControlDefinitionList); err != nil {
 		return SecureScoreControlDefinitionsClientListResponse{}, err
 	}
@@ -125,7 +125,7 @@ func (client *SecureScoreControlDefinitionsClient) listBySubscriptionCreateReque
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *SecureScoreControlDefinitionsClient) listBySubscriptionHandleResponse(resp *http.Response) (SecureScoreControlDefinitionsClientListBySubscriptionResponse, error) {
-	result := SecureScoreControlDefinitionsClientListBySubscriptionResponse{RawResponse: resp}
+	result := SecureScoreControlDefinitionsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecureScoreControlDefinitionList); err != nil {
 		return SecureScoreControlDefinitionsClientListBySubscriptionResponse{}, err
 	}

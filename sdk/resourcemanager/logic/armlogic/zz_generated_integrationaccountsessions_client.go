@@ -35,17 +35,17 @@ type IntegrationAccountSessionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIntegrationAccountSessionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IntegrationAccountSessionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IntegrationAccountSessionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *IntegrationAccountSessionsClient) createOrUpdateCreateRequest(ctx 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *IntegrationAccountSessionsClient) createOrUpdateHandleResponse(resp *http.Response) (IntegrationAccountSessionsClientCreateOrUpdateResponse, error) {
-	result := IntegrationAccountSessionsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := IntegrationAccountSessionsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountSession); err != nil {
 		return IntegrationAccountSessionsClientCreateOrUpdateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *IntegrationAccountSessionsClient) Delete(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return IntegrationAccountSessionsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return IntegrationAccountSessionsClientDeleteResponse{RawResponse: resp}, nil
+	return IntegrationAccountSessionsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -218,7 +218,7 @@ func (client *IntegrationAccountSessionsClient) getCreateRequest(ctx context.Con
 
 // getHandleResponse handles the Get response.
 func (client *IntegrationAccountSessionsClient) getHandleResponse(resp *http.Response) (IntegrationAccountSessionsClientGetResponse, error) {
-	result := IntegrationAccountSessionsClientGetResponse{RawResponse: resp}
+	result := IntegrationAccountSessionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountSession); err != nil {
 		return IntegrationAccountSessionsClientGetResponse{}, err
 	}
@@ -277,7 +277,7 @@ func (client *IntegrationAccountSessionsClient) listCreateRequest(ctx context.Co
 
 // listHandleResponse handles the List response.
 func (client *IntegrationAccountSessionsClient) listHandleResponse(resp *http.Response) (IntegrationAccountSessionsClientListResponse, error) {
-	result := IntegrationAccountSessionsClientListResponse{RawResponse: resp}
+	result := IntegrationAccountSessionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountSessionListResult); err != nil {
 		return IntegrationAccountSessionsClientListResponse{}, err
 	}

@@ -43,11 +43,10 @@ func (p *ExperimentsClientCancelPoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final ExperimentsClientCancelResponse will be returned.
 func (p *ExperimentsClientCancelPoller) FinalResponse(ctx context.Context) (ExperimentsClientCancelResponse, error) {
 	respType := ExperimentsClientCancelResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ExperimentCancelOperationResult)
+	_, err := p.pt.FinalResponse(ctx, &respType.ExperimentCancelOperationResult)
 	if err != nil {
 		return ExperimentsClientCancelResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ExperimentsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final ExperimentsClientCreateOrUpdateResponse will be returned.
 func (p *ExperimentsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ExperimentsClientCreateOrUpdateResponse, error) {
 	respType := ExperimentsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Experiment)
+	_, err := p.pt.FinalResponse(ctx, &respType.Experiment)
 	if err != nil {
 		return ExperimentsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

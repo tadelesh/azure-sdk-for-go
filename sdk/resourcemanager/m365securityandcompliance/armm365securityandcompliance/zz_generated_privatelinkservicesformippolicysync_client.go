@@ -34,17 +34,17 @@ type PrivateLinkServicesForMIPPolicySyncClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateLinkServicesForMIPPolicySyncClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateLinkServicesForMIPPolicySyncClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateLinkServicesForMIPPolicySyncClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *PrivateLinkServicesForMIPPolicySyncClient) BeginCreateOrUpdate(ctx
 	if err != nil {
 		return PrivateLinkServicesForMIPPolicySyncClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PrivateLinkServicesForMIPPolicySyncClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateLinkServicesForMIPPolicySyncClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateLinkServicesForMIPPolicySyncClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return PrivateLinkServicesForMIPPolicySyncClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *PrivateLinkServicesForMIPPolicySyncClient) BeginDelete(ctx context
 	if err != nil {
 		return PrivateLinkServicesForMIPPolicySyncClientDeletePollerResponse{}, err
 	}
-	result := PrivateLinkServicesForMIPPolicySyncClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateLinkServicesForMIPPolicySyncClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateLinkServicesForMIPPolicySyncClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return PrivateLinkServicesForMIPPolicySyncClientDeletePollerResponse{}, err
@@ -233,7 +229,7 @@ func (client *PrivateLinkServicesForMIPPolicySyncClient) getCreateRequest(ctx co
 
 // getHandleResponse handles the Get response.
 func (client *PrivateLinkServicesForMIPPolicySyncClient) getHandleResponse(resp *http.Response) (PrivateLinkServicesForMIPPolicySyncClientGetResponse, error) {
-	result := PrivateLinkServicesForMIPPolicySyncClientGetResponse{RawResponse: resp}
+	result := PrivateLinkServicesForMIPPolicySyncClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkServicesForMIPPolicySyncDescription); err != nil {
 		return PrivateLinkServicesForMIPPolicySyncClientGetResponse{}, err
 	}
@@ -276,7 +272,7 @@ func (client *PrivateLinkServicesForMIPPolicySyncClient) listCreateRequest(ctx c
 
 // listHandleResponse handles the List response.
 func (client *PrivateLinkServicesForMIPPolicySyncClient) listHandleResponse(resp *http.Response) (PrivateLinkServicesForMIPPolicySyncClientListResponse, error) {
-	result := PrivateLinkServicesForMIPPolicySyncClientListResponse{RawResponse: resp}
+	result := PrivateLinkServicesForMIPPolicySyncClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkServicesForMIPPolicySyncDescriptionListResult); err != nil {
 		return PrivateLinkServicesForMIPPolicySyncClientListResponse{}, err
 	}
@@ -324,7 +320,7 @@ func (client *PrivateLinkServicesForMIPPolicySyncClient) listByResourceGroupCrea
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *PrivateLinkServicesForMIPPolicySyncClient) listByResourceGroupHandleResponse(resp *http.Response) (PrivateLinkServicesForMIPPolicySyncClientListByResourceGroupResponse, error) {
-	result := PrivateLinkServicesForMIPPolicySyncClientListByResourceGroupResponse{RawResponse: resp}
+	result := PrivateLinkServicesForMIPPolicySyncClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkServicesForMIPPolicySyncDescriptionListResult); err != nil {
 		return PrivateLinkServicesForMIPPolicySyncClientListByResourceGroupResponse{}, err
 	}
@@ -343,9 +339,7 @@ func (client *PrivateLinkServicesForMIPPolicySyncClient) BeginUpdate(ctx context
 	if err != nil {
 		return PrivateLinkServicesForMIPPolicySyncClientUpdatePollerResponse{}, err
 	}
-	result := PrivateLinkServicesForMIPPolicySyncClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateLinkServicesForMIPPolicySyncClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateLinkServicesForMIPPolicySyncClient.Update", "location", resp, client.pl)
 	if err != nil {
 		return PrivateLinkServicesForMIPPolicySyncClientUpdatePollerResponse{}, err

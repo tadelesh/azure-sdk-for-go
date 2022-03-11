@@ -34,17 +34,17 @@ type APISClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAPISClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *APISClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &APISClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -81,7 +81,7 @@ func (client *APISClient) listOperationsPartnerCreateRequest(ctx context.Context
 
 // listOperationsPartnerHandleResponse handles the ListOperationsPartner response.
 func (client *APISClient) listOperationsPartnerHandleResponse(resp *http.Response) (APISClientListOperationsPartnerResponse, error) {
-	result := APISClientListOperationsPartnerResponse{RawResponse: resp}
+	result := APISClientListOperationsPartnerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OperationListResult); err != nil {
 		return APISClientListOperationsPartnerResponse{}, err
 	}
@@ -101,9 +101,7 @@ func (client *APISClient) BeginManageInventoryMetadata(ctx context.Context, fami
 	if err != nil {
 		return APISClientManageInventoryMetadataPollerResponse{}, err
 	}
-	result := APISClientManageInventoryMetadataPollerResponse{
-		RawResponse: resp,
-	}
+	result := APISClientManageInventoryMetadataPollerResponse{}
 	pt, err := armruntime.NewPoller("APISClient.ManageInventoryMetadata", "", resp, client.pl)
 	if err != nil {
 		return APISClientManageInventoryMetadataPollerResponse{}, err
@@ -180,7 +178,7 @@ func (client *APISClient) ManageLink(ctx context.Context, familyIdentifier strin
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return APISClientManageLinkResponse{}, runtime.NewResponseError(resp)
 	}
-	return APISClientManageLinkResponse{RawResponse: resp}, nil
+	return APISClientManageLinkResponse{}, nil
 }
 
 // manageLinkCreateRequest creates the ManageLink request.
@@ -249,7 +247,7 @@ func (client *APISClient) searchInventoriesCreateRequest(ctx context.Context, se
 
 // searchInventoriesHandleResponse handles the SearchInventories response.
 func (client *APISClient) searchInventoriesHandleResponse(resp *http.Response) (APISClientSearchInventoriesResponse, error) {
-	result := APISClientSearchInventoriesResponse{RawResponse: resp}
+	result := APISClientSearchInventoriesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PartnerInventoryList); err != nil {
 		return APISClientSearchInventoriesResponse{}, err
 	}

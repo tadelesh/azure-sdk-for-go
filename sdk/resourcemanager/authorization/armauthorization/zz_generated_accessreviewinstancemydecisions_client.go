@@ -32,16 +32,16 @@ type AccessReviewInstanceMyDecisionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAccessReviewInstanceMyDecisionsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *AccessReviewInstanceMyDecisionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AccessReviewInstanceMyDecisionsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -88,7 +88,7 @@ func (client *AccessReviewInstanceMyDecisionsClient) getByIDCreateRequest(ctx co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-05-01-preview")
+	reqQP.Set("api-version", "2021-11-16-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -96,7 +96,7 @@ func (client *AccessReviewInstanceMyDecisionsClient) getByIDCreateRequest(ctx co
 
 // getByIDHandleResponse handles the GetByID response.
 func (client *AccessReviewInstanceMyDecisionsClient) getByIDHandleResponse(resp *http.Response) (AccessReviewInstanceMyDecisionsClientGetByIDResponse, error) {
-	result := AccessReviewInstanceMyDecisionsClientGetByIDResponse{RawResponse: resp}
+	result := AccessReviewInstanceMyDecisionsClientGetByIDResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessReviewDecision); err != nil {
 		return AccessReviewInstanceMyDecisionsClientGetByIDResponse{}, err
 	}
@@ -137,15 +137,20 @@ func (client *AccessReviewInstanceMyDecisionsClient) listCreateRequest(ctx conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-05-01-preview")
+	reqQP.Set("api-version", "2021-11-16-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
+	unencodedParams := []string{req.Raw().URL.RawQuery}
+	if options != nil && options.Filter != nil {
+		unencodedParams = append(unencodedParams, "$filter="+*options.Filter)
+	}
+	req.Raw().URL.RawQuery = strings.Join(unencodedParams, "&")
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
 func (client *AccessReviewInstanceMyDecisionsClient) listHandleResponse(resp *http.Response) (AccessReviewInstanceMyDecisionsClientListResponse, error) {
-	result := AccessReviewInstanceMyDecisionsClientListResponse{RawResponse: resp}
+	result := AccessReviewInstanceMyDecisionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessReviewDecisionListResult); err != nil {
 		return AccessReviewInstanceMyDecisionsClientListResponse{}, err
 	}
@@ -195,7 +200,7 @@ func (client *AccessReviewInstanceMyDecisionsClient) patchCreateRequest(ctx cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-05-01-preview")
+	reqQP.Set("api-version", "2021-11-16-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, properties)
@@ -203,7 +208,7 @@ func (client *AccessReviewInstanceMyDecisionsClient) patchCreateRequest(ctx cont
 
 // patchHandleResponse handles the Patch response.
 func (client *AccessReviewInstanceMyDecisionsClient) patchHandleResponse(resp *http.Response) (AccessReviewInstanceMyDecisionsClientPatchResponse, error) {
-	result := AccessReviewInstanceMyDecisionsClientPatchResponse{RawResponse: resp}
+	result := AccessReviewInstanceMyDecisionsClientPatchResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessReviewDecision); err != nil {
 		return AccessReviewInstanceMyDecisionsClientPatchResponse{}, err
 	}

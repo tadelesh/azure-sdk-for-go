@@ -1,5 +1,192 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*PrivateLinkResourcesClientListByConfigurationStorePager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateLinkResourcesClientListByConfigurationStoreResponse, error)`
+- Function `*KeyValuesClientListByConfigurationStorePager.NextPage` return value(s) have been changed from `(bool)` to `(KeyValuesClientListByConfigurationStoreResponse, error)`
+- Function `*PrivateEndpointConnectionsClientListByConfigurationStorePager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateEndpointConnectionsClientListByConfigurationStoreResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ConfigurationStoresClientListDeletedPager.NextPage` return value(s) have been changed from `(bool)` to `(ConfigurationStoresClientListDeletedResponse, error)`
+- Function `*ConfigurationStoresClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ConfigurationStoresClientListByResourceGroupResponse, error)`
+- Function `*ConfigurationStoresClientListKeysPager.NextPage` return value(s) have been changed from `(bool)` to `(ConfigurationStoresClientListKeysResponse, error)`
+- Function `*ConfigurationStoresClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ConfigurationStoresClientListResponse, error)`
+- Function `*ConfigurationStoresClientListPager.PageResponse` has been removed
+- Function `*PrivateEndpointConnectionsClientListByConfigurationStorePager.PageResponse` has been removed
+- Function `*PrivateLinkResourcesClientListByConfigurationStorePager.Err` has been removed
+- Function `*ConfigurationStoresClientListKeysPager.Err` has been removed
+- Function `*PrivateEndpointConnectionsClientListByConfigurationStorePager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*KeyValuesClientListByConfigurationStorePager.Err` has been removed
+- Function `*PrivateLinkResourcesClientListByConfigurationStorePager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*ConfigurationStoresClientListKeysPager.PageResponse` has been removed
+- Function `*ConfigurationStoresClientListPager.Err` has been removed
+- Function `*ConfigurationStoresClientListByResourceGroupPager.Err` has been removed
+- Function `*ConfigurationStoresClientListDeletedPager.PageResponse` has been removed
+- Function `*ConfigurationStoresClientListDeletedPager.Err` has been removed
+- Function `*KeyValuesClientListByConfigurationStorePager.PageResponse` has been removed
+- Function `*ConfigurationStoresClientListByResourceGroupPager.PageResponse` has been removed
+- Struct `ConfigurationStoresClientCreateResult` has been removed
+- Struct `ConfigurationStoresClientGetDeletedResult` has been removed
+- Struct `ConfigurationStoresClientGetResult` has been removed
+- Struct `ConfigurationStoresClientListByResourceGroupResult` has been removed
+- Struct `ConfigurationStoresClientListDeletedResult` has been removed
+- Struct `ConfigurationStoresClientListKeysResult` has been removed
+- Struct `ConfigurationStoresClientListResult` has been removed
+- Struct `ConfigurationStoresClientRegenerateKeyResult` has been removed
+- Struct `ConfigurationStoresClientUpdateResult` has been removed
+- Struct `KeyValuesClientCreateOrUpdateResult` has been removed
+- Struct `KeyValuesClientGetResult` has been removed
+- Struct `KeyValuesClientListByConfigurationStoreResult` has been removed
+- Struct `OperationsClientCheckNameAvailabilityResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `OperationsClientRegionalCheckNameAvailabilityResult` has been removed
+- Struct `PrivateEndpointConnectionsClientCreateOrUpdateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListByConfigurationStoreResult` has been removed
+- Struct `PrivateLinkResourcesClientGetResult` has been removed
+- Struct `PrivateLinkResourcesClientListByConfigurationStoreResult` has been removed
+- Field `ConfigurationStoresClientUpdateResult` of struct `ConfigurationStoresClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationStoresClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationStoresClientPurgeDeletedResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationStoresClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationStoresClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `KeyValuesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationStoresClientUpdatePollerResponse` has been removed
+- Field `OperationsClientCheckNameAvailabilityResult` of struct `OperationsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientCheckNameAvailabilityResponse` has been removed
+- Field `OperationsClientRegionalCheckNameAvailabilityResult` of struct `OperationsClientRegionalCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientRegionalCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationStoresClientCreatePollerResponse` has been removed
+- Field `ConfigurationStoresClientRegenerateKeyResult` of struct `ConfigurationStoresClientRegenerateKeyResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationStoresClientRegenerateKeyResponse` has been removed
+- Field `PrivateLinkResourcesClientListByConfigurationStoreResult` of struct `PrivateLinkResourcesClientListByConfigurationStoreResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListByConfigurationStoreResponse` has been removed
+- Field `ConfigurationStoresClientGetResult` of struct `ConfigurationStoresClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationStoresClientGetResponse` has been removed
+- Field `KeyValuesClientGetResult` of struct `KeyValuesClientGetResponse` has been removed
+- Field `RawResponse` of struct `KeyValuesClientGetResponse` has been removed
+- Field `RawResponse` of struct `KeyValuesClientDeleteResponse` has been removed
+- Field `ConfigurationStoresClientListKeysResult` of struct `ConfigurationStoresClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationStoresClientListKeysResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `KeyValuesClientCreateOrUpdateResult` of struct `KeyValuesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `KeyValuesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `ConfigurationStoresClientGetDeletedResult` of struct `ConfigurationStoresClientGetDeletedResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationStoresClientGetDeletedResponse` has been removed
+- Field `ConfigurationStoresClientCreateResult` of struct `ConfigurationStoresClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationStoresClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationStoresClientPurgeDeletedPollerResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `KeyValuesClientListByConfigurationStoreResult` of struct `KeyValuesClientListByConfigurationStoreResponse` has been removed
+- Field `RawResponse` of struct `KeyValuesClientListByConfigurationStoreResponse` has been removed
+- Field `ConfigurationStoresClientListDeletedResult` of struct `ConfigurationStoresClientListDeletedResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationStoresClientListDeletedResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListByConfigurationStoreResult` of struct `PrivateEndpointConnectionsClientListByConfigurationStoreResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListByConfigurationStoreResponse` has been removed
+- Field `PrivateEndpointConnectionsClientCreateOrUpdateResult` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `ConfigurationStoresClientListResult` of struct `ConfigurationStoresClientListResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationStoresClientListResponse` has been removed
+- Field `ConfigurationStoresClientListByResourceGroupResult` of struct `ConfigurationStoresClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationStoresClientListByResourceGroupResponse` has been removed
+- Field `PrivateLinkResourcesClientGetResult` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeletePollerResponse` has been removed
+
+### Features Added
+
+- New function `*ConfigurationStoresClientListPager.More() bool`
+- New function `*PrivateLinkResourcesClientListByConfigurationStorePager.More() bool`
+- New function `ErrorDetails.MarshalJSON() ([]byte, error)`
+- New function `*PrivateEndpointConnectionsClientListByConfigurationStorePager.More() bool`
+- New function `*ConfigurationStoresClientListByResourceGroupPager.More() bool`
+- New function `*ConfigurationStoresClientListDeletedPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*KeyValuesClientListByConfigurationStorePager.More() bool`
+- New function `*ConfigurationStoresClientListKeysPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetails`
+- New struct `ErrorResponse`
+- New anonymous field `DeletedConfigurationStore` in struct `ConfigurationStoresClientGetDeletedResponse`
+- New anonymous field `ConfigurationStore` in struct `ConfigurationStoresClientGetResponse`
+- New anonymous field `NameAvailabilityStatus` in struct `OperationsClientRegionalCheckNameAvailabilityResponse`
+- New anonymous field `APIKey` in struct `ConfigurationStoresClientRegenerateKeyResponse`
+- New anonymous field `ConfigurationStore` in struct `ConfigurationStoresClientCreateResponse`
+- New anonymous field `ConfigurationStore` in struct `ConfigurationStoresClientUpdateResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListByConfigurationStoreResponse`
+- New anonymous field `KeyValueListResult` in struct `KeyValuesClientListByConfigurationStoreResponse`
+- New anonymous field `OperationDefinitionListResult` in struct `OperationsClientListResponse`
+- New anonymous field `NameAvailabilityStatus` in struct `OperationsClientCheckNameAvailabilityResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `PrivateLinkResourcesClientListByConfigurationStoreResponse`
+- New anonymous field `KeyValue` in struct `KeyValuesClientCreateOrUpdateResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `ConfigurationStoreListResult` in struct `ConfigurationStoresClientListResponse`
+- New anonymous field `APIKeyListResult` in struct `ConfigurationStoresClientListKeysResponse`
+- New anonymous field `KeyValue` in struct `KeyValuesClientGetResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse`
+- New anonymous field `PrivateLinkResource` in struct `PrivateLinkResourcesClientGetResponse`
+- New anonymous field `ConfigurationStoreListResult` in struct `ConfigurationStoresClientListByResourceGroupResponse`
+- New anonymous field `DeletedConfigurationStoreListResult` in struct `ConfigurationStoresClientListDeletedResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDetails.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetails` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+- New const `CreateModeRecover`
+- New const `CreateModeDefault`
+- New function `*ConfigurationStoresClientPurgeDeletedPoller.ResumeToken() (string, error)`
+- New function `CreateMode.ToPtr() *CreateMode`
+- New function `DeletedConfigurationStoreProperties.MarshalJSON() ([]byte, error)`
+- New function `*OperationsClient.RegionalCheckNameAvailability(context.Context, string, CheckNameAvailabilityParameters, *OperationsClientRegionalCheckNameAvailabilityOptions) (OperationsClientRegionalCheckNameAvailabilityResponse, error)`
+- New function `*ConfigurationStoresClientListDeletedPager.NextPage(context.Context) bool`
+- New function `*ConfigurationStoresClientListDeletedPager.Err() error`
+- New function `*ConfigurationStoresClient.ListDeleted(*ConfigurationStoresClientListDeletedOptions) *ConfigurationStoresClientListDeletedPager`
+- New function `*ConfigurationStoresClient.BeginPurgeDeleted(context.Context, string, string, *ConfigurationStoresClientBeginPurgeDeletedOptions) (ConfigurationStoresClientPurgeDeletedPollerResponse, error)`
+- New function `ConfigurationStoresClientPurgeDeletedPollerResponse.PollUntilDone(context.Context, time.Duration) (ConfigurationStoresClientPurgeDeletedResponse, error)`
+- New function `*ConfigurationStoresClientPurgeDeletedPoller.Done() bool`
+- New function `*ConfigurationStoresClientPurgeDeletedPoller.Poll(context.Context) (*http.Response, error)`
+- New function `DeletedConfigurationStoreListResult.MarshalJSON() ([]byte, error)`
+- New function `*DeletedConfigurationStoreProperties.UnmarshalJSON([]byte) error`
+- New function `*ConfigurationStoresClientPurgeDeletedPoller.FinalResponse(context.Context) (ConfigurationStoresClientPurgeDeletedResponse, error)`
+- New function `*ConfigurationStoresClientListDeletedPager.PageResponse() ConfigurationStoresClientListDeletedResponse`
+- New function `*ConfigurationStoresClientPurgeDeletedPollerResponse.Resume(context.Context, *ConfigurationStoresClient, string) error`
+- New function `PossibleCreateModeValues() []CreateMode`
+- New function `*ConfigurationStoresClient.GetDeleted(context.Context, string, string, *ConfigurationStoresClientGetDeletedOptions) (ConfigurationStoresClientGetDeletedResponse, error)`
+- New struct `ConfigurationStoresClientBeginPurgeDeletedOptions`
+- New struct `ConfigurationStoresClientGetDeletedOptions`
+- New struct `ConfigurationStoresClientGetDeletedResponse`
+- New struct `ConfigurationStoresClientGetDeletedResult`
+- New struct `ConfigurationStoresClientListDeletedOptions`
+- New struct `ConfigurationStoresClientListDeletedPager`
+- New struct `ConfigurationStoresClientListDeletedResponse`
+- New struct `ConfigurationStoresClientListDeletedResult`
+- New struct `ConfigurationStoresClientPurgeDeletedPoller`
+- New struct `ConfigurationStoresClientPurgeDeletedPollerResponse`
+- New struct `ConfigurationStoresClientPurgeDeletedResponse`
+- New struct `DeletedConfigurationStore`
+- New struct `DeletedConfigurationStoreListResult`
+- New struct `DeletedConfigurationStoreProperties`
+- New struct `OperationsClientRegionalCheckNameAvailabilityOptions`
+- New struct `OperationsClientRegionalCheckNameAvailabilityResponse`
+- New struct `OperationsClientRegionalCheckNameAvailabilityResult`
+- New field `CreateMode` in struct `ConfigurationStoreProperties`
+- New field `EnablePurgeProtection` in struct `ConfigurationStoreProperties`
+- New field `SoftDeleteRetentionInDays` in struct `ConfigurationStoreProperties`
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

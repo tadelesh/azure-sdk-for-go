@@ -35,17 +35,17 @@ type FavoritesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFavoritesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FavoritesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FavoritesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *FavoritesClient) addCreateRequest(ctx context.Context, resourceGro
 
 // addHandleResponse handles the Add response.
 func (client *FavoritesClient) addHandleResponse(resp *http.Response) (FavoritesClientAddResponse, error) {
-	result := FavoritesClientAddResponse{RawResponse: resp}
+	result := FavoritesClientAddResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentFavorite); err != nil {
 		return FavoritesClientAddResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *FavoritesClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return FavoritesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return FavoritesClientDeleteResponse{RawResponse: resp}, nil
+	return FavoritesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *FavoritesClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *FavoritesClient) getHandleResponse(resp *http.Response) (FavoritesClientGetResponse, error) {
-	result := FavoritesClientGetResponse{RawResponse: resp}
+	result := FavoritesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentFavorite); err != nil {
 		return FavoritesClientGetResponse{}, err
 	}
@@ -282,7 +282,7 @@ func (client *FavoritesClient) listCreateRequest(ctx context.Context, resourceGr
 
 // listHandleResponse handles the List response.
 func (client *FavoritesClient) listHandleResponse(resp *http.Response) (FavoritesClientListResponse, error) {
-	result := FavoritesClientListResponse{RawResponse: resp}
+	result := FavoritesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentFavoriteArray); err != nil {
 		return FavoritesClientListResponse{}, err
 	}
@@ -343,7 +343,7 @@ func (client *FavoritesClient) updateCreateRequest(ctx context.Context, resource
 
 // updateHandleResponse handles the Update response.
 func (client *FavoritesClient) updateHandleResponse(resp *http.Response) (FavoritesClientUpdateResponse, error) {
-	result := FavoritesClientUpdateResponse{RawResponse: resp}
+	result := FavoritesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentFavorite); err != nil {
 		return FavoritesClientUpdateResponse{}, err
 	}

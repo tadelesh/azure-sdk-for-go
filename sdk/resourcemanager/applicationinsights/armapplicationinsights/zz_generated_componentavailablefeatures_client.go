@@ -34,17 +34,17 @@ type ComponentAvailableFeaturesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewComponentAvailableFeaturesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ComponentAvailableFeaturesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ComponentAvailableFeaturesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *ComponentAvailableFeaturesClient) getCreateRequest(ctx context.Con
 
 // getHandleResponse handles the Get response.
 func (client *ComponentAvailableFeaturesClient) getHandleResponse(resp *http.Response) (ComponentAvailableFeaturesClientGetResponse, error) {
-	result := ComponentAvailableFeaturesClientGetResponse{RawResponse: resp}
+	result := ComponentAvailableFeaturesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentAvailableFeatures); err != nil {
 		return ComponentAvailableFeaturesClientGetResponse{}, err
 	}

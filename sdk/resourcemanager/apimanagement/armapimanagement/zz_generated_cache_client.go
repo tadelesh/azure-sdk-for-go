@@ -36,17 +36,17 @@ type CacheClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCacheClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CacheClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CacheClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *CacheClient) createOrUpdateCreateRequest(ctx context.Context, reso
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *CacheClient) createOrUpdateHandleResponse(resp *http.Response) (CacheClientCreateOrUpdateResponse, error) {
-	result := CacheClientCreateOrUpdateResponse{RawResponse: resp}
+	result := CacheClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -138,7 +138,7 @@ func (client *CacheClient) Delete(ctx context.Context, resourceGroupName string,
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return CacheClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return CacheClientDeleteResponse{RawResponse: resp}, nil
+	return CacheClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -225,7 +225,7 @@ func (client *CacheClient) getCreateRequest(ctx context.Context, resourceGroupNa
 
 // getHandleResponse handles the Get response.
 func (client *CacheClient) getHandleResponse(resp *http.Response) (CacheClientGetResponse, error) {
-	result := CacheClientGetResponse{RawResponse: resp}
+	result := CacheClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -284,7 +284,7 @@ func (client *CacheClient) getEntityTagCreateRequest(ctx context.Context, resour
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *CacheClient) getEntityTagHandleResponse(resp *http.Response) (CacheClientGetEntityTagResponse, error) {
-	result := CacheClientGetEntityTagResponse{RawResponse: resp}
+	result := CacheClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -345,7 +345,7 @@ func (client *CacheClient) listByServiceCreateRequest(ctx context.Context, resou
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *CacheClient) listByServiceHandleResponse(resp *http.Response) (CacheClientListByServiceResponse, error) {
-	result := CacheClientListByServiceResponse{RawResponse: resp}
+	result := CacheClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CacheCollection); err != nil {
 		return CacheClientListByServiceResponse{}, err
 	}
@@ -409,7 +409,7 @@ func (client *CacheClient) updateCreateRequest(ctx context.Context, resourceGrou
 
 // updateHandleResponse handles the Update response.
 func (client *CacheClient) updateHandleResponse(resp *http.Response) (CacheClientUpdateResponse, error) {
-	result := CacheClientUpdateResponse{RawResponse: resp}
+	result := CacheClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

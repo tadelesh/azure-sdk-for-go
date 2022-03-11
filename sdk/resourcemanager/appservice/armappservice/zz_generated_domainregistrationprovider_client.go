@@ -76,7 +76,7 @@ func (client *DomainRegistrationProviderClient) listOperationsCreateRequest(ctx 
 
 // listOperationsHandleResponse handles the ListOperations response.
 func (client *DomainRegistrationProviderClient) listOperationsHandleResponse(resp *http.Response) (DomainRegistrationProviderClientListOperationsResponse, error) {
-	result := DomainRegistrationProviderClientListOperationsResponse{RawResponse: resp}
+	result := DomainRegistrationProviderClientListOperationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CsmOperationCollection); err != nil {
 		return DomainRegistrationProviderClientListOperationsResponse{}, err
 	}

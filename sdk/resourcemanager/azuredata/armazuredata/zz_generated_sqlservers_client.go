@@ -34,17 +34,17 @@ type SQLServersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLServersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLServersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLServersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *SQLServersClient) createOrUpdateCreateRequest(ctx context.Context,
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *SQLServersClient) createOrUpdateHandleResponse(resp *http.Response) (SQLServersClientCreateOrUpdateResponse, error) {
-	result := SQLServersClientCreateOrUpdateResponse{RawResponse: resp}
+	result := SQLServersClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLServer); err != nil {
 		return SQLServersClientCreateOrUpdateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *SQLServersClient) Delete(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SQLServersClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SQLServersClientDeleteResponse{RawResponse: resp}, nil
+	return SQLServersClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -221,7 +221,7 @@ func (client *SQLServersClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *SQLServersClient) getHandleResponse(resp *http.Response) (SQLServersClientGetResponse, error) {
-	result := SQLServersClientGetResponse{RawResponse: resp}
+	result := SQLServersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLServer); err != nil {
 		return SQLServersClientGetResponse{}, err
 	}
@@ -278,7 +278,7 @@ func (client *SQLServersClient) listByResourceGroupCreateRequest(ctx context.Con
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *SQLServersClient) listByResourceGroupHandleResponse(resp *http.Response) (SQLServersClientListByResourceGroupResponse, error) {
-	result := SQLServersClientListByResourceGroupResponse{RawResponse: resp}
+	result := SQLServersClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLServerListResult); err != nil {
 		return SQLServersClientListByResourceGroupResponse{}, err
 	}

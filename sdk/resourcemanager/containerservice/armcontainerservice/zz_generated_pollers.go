@@ -43,11 +43,10 @@ func (p *AgentPoolsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final AgentPoolsClientCreateOrUpdateResponse will be returned.
 func (p *AgentPoolsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (AgentPoolsClientCreateOrUpdateResponse, error) {
 	respType := AgentPoolsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.AgentPool)
+	_, err := p.pt.FinalResponse(ctx, &respType.AgentPool)
 	if err != nil {
 		return AgentPoolsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *AgentPoolsClientDeletePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final AgentPoolsClientDeleteResponse will be returned.
 func (p *AgentPoolsClientDeletePoller) FinalResponse(ctx context.Context) (AgentPoolsClientDeleteResponse, error) {
 	respType := AgentPoolsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return AgentPoolsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *AgentPoolsClientUpgradeNodeImageVersionPoller) Poll(ctx context.Context
 // If the final GET succeeded then the final AgentPoolsClientUpgradeNodeImageVersionResponse will be returned.
 func (p *AgentPoolsClientUpgradeNodeImageVersionPoller) FinalResponse(ctx context.Context) (AgentPoolsClientUpgradeNodeImageVersionResponse, error) {
 	respType := AgentPoolsClientUpgradeNodeImageVersionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.AgentPool)
+	_, err := p.pt.FinalResponse(ctx, &respType.AgentPool)
 	if err != nil {
 		return AgentPoolsClientUpgradeNodeImageVersionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *ManagedClustersClientCreateOrUpdatePoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final ManagedClustersClientCreateOrUpdateResponse will be returned.
 func (p *ManagedClustersClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ManagedClustersClientCreateOrUpdateResponse, error) {
 	respType := ManagedClustersClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ManagedCluster)
+	_, err := p.pt.FinalResponse(ctx, &respType.ManagedCluster)
 	if err != nil {
 		return ManagedClustersClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *ManagedClustersClientDeletePoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final ManagedClustersClientDeleteResponse will be returned.
 func (p *ManagedClustersClientDeletePoller) FinalResponse(ctx context.Context) (ManagedClustersClientDeleteResponse, error) {
 	respType := ManagedClustersClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ManagedClustersClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *ManagedClustersClientResetAADProfilePoller) Poll(ctx context.Context) (
 // If the final GET succeeded then the final ManagedClustersClientResetAADProfileResponse will be returned.
 func (p *ManagedClustersClientResetAADProfilePoller) FinalResponse(ctx context.Context) (ManagedClustersClientResetAADProfileResponse, error) {
 	respType := ManagedClustersClientResetAADProfileResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ManagedClustersClientResetAADProfileResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *ManagedClustersClientResetServicePrincipalProfilePoller) Poll(ctx conte
 // If the final GET succeeded then the final ManagedClustersClientResetServicePrincipalProfileResponse will be returned.
 func (p *ManagedClustersClientResetServicePrincipalProfilePoller) FinalResponse(ctx context.Context) (ManagedClustersClientResetServicePrincipalProfileResponse, error) {
 	respType := ManagedClustersClientResetServicePrincipalProfileResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ManagedClustersClientResetServicePrincipalProfileResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *ManagedClustersClientRotateClusterCertificatesPoller) Poll(ctx context.
 // If the final GET succeeded then the final ManagedClustersClientRotateClusterCertificatesResponse will be returned.
 func (p *ManagedClustersClientRotateClusterCertificatesPoller) FinalResponse(ctx context.Context) (ManagedClustersClientRotateClusterCertificatesResponse, error) {
 	respType := ManagedClustersClientRotateClusterCertificatesResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ManagedClustersClientRotateClusterCertificatesResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *ManagedClustersClientRunCommandPoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final ManagedClustersClientRunCommandResponse will be returned.
 func (p *ManagedClustersClientRunCommandPoller) FinalResponse(ctx context.Context) (ManagedClustersClientRunCommandResponse, error) {
 	respType := ManagedClustersClientRunCommandResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RunCommandResult)
+	_, err := p.pt.FinalResponse(ctx, &respType.RunCommandResult)
 	if err != nil {
 		return ManagedClustersClientRunCommandResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -430,11 +421,10 @@ func (p *ManagedClustersClientStartPoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final ManagedClustersClientStartResponse will be returned.
 func (p *ManagedClustersClientStartPoller) FinalResponse(ctx context.Context) (ManagedClustersClientStartResponse, error) {
 	respType := ManagedClustersClientStartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ManagedClustersClientStartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -473,11 +463,10 @@ func (p *ManagedClustersClientStopPoller) Poll(ctx context.Context) (*http.Respo
 // If the final GET succeeded then the final ManagedClustersClientStopResponse will be returned.
 func (p *ManagedClustersClientStopPoller) FinalResponse(ctx context.Context) (ManagedClustersClientStopResponse, error) {
 	respType := ManagedClustersClientStopResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ManagedClustersClientStopResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -516,11 +505,10 @@ func (p *ManagedClustersClientUpdateTagsPoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final ManagedClustersClientUpdateTagsResponse will be returned.
 func (p *ManagedClustersClientUpdateTagsPoller) FinalResponse(ctx context.Context) (ManagedClustersClientUpdateTagsResponse, error) {
 	respType := ManagedClustersClientUpdateTagsResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ManagedCluster)
+	_, err := p.pt.FinalResponse(ctx, &respType.ManagedCluster)
 	if err != nil {
 		return ManagedClustersClientUpdateTagsResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -559,11 +547,10 @@ func (p *PrivateEndpointConnectionsClientDeletePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionsClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointConnectionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

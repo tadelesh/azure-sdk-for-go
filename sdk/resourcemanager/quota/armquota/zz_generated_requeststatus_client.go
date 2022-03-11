@@ -33,16 +33,16 @@ type RequestStatusClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRequestStatusClient(credential azcore.TokenCredential, options *arm.ClientOptions) *RequestStatusClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RequestStatusClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -93,7 +93,7 @@ func (client *RequestStatusClient) getCreateRequest(ctx context.Context, id stri
 
 // getHandleResponse handles the Get response.
 func (client *RequestStatusClient) getHandleResponse(resp *http.Response) (RequestStatusClientGetResponse, error) {
-	result := RequestStatusClientGetResponse{RawResponse: resp}
+	result := RequestStatusClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RequestDetails); err != nil {
 		return RequestStatusClientGetResponse{}, err
 	}
@@ -146,7 +146,7 @@ func (client *RequestStatusClient) listCreateRequest(ctx context.Context, scope 
 
 // listHandleResponse handles the List response.
 func (client *RequestStatusClient) listHandleResponse(resp *http.Response) (RequestStatusClientListResponse, error) {
-	result := RequestStatusClientListResponse{RawResponse: resp}
+	result := RequestStatusClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RequestDetailsList); err != nil {
 		return RequestStatusClientListResponse{}, err
 	}

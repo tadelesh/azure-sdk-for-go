@@ -1,5 +1,114 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*AutoScaleVCoresClient.ListBySubscription` parameter(s) have been changed from `(context.Context, *AutoScaleVCoresClientListBySubscriptionOptions)` to `(*AutoScaleVCoresClientListBySubscriptionOptions)`
+- Function `*AutoScaleVCoresClient.ListBySubscription` return value(s) have been changed from `(AutoScaleVCoresClientListBySubscriptionResponse, error)` to `(*AutoScaleVCoresClientListBySubscriptionPager)`
+- Function `*CapacitiesClient.List` parameter(s) have been changed from `(context.Context, *CapacitiesClientListOptions)` to `(*CapacitiesClientListOptions)`
+- Function `*CapacitiesClient.List` return value(s) have been changed from `(CapacitiesClientListResponse, error)` to `(*CapacitiesClientListPager)`
+- Function `*AutoScaleVCoresClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *AutoScaleVCoresClientListByResourceGroupOptions)` to `(string, *AutoScaleVCoresClientListByResourceGroupOptions)`
+- Function `*AutoScaleVCoresClient.ListByResourceGroup` return value(s) have been changed from `(AutoScaleVCoresClientListByResourceGroupResponse, error)` to `(*AutoScaleVCoresClientListByResourceGroupPager)`
+- Function `*CapacitiesClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *CapacitiesClientListByResourceGroupOptions)` to `(string, *CapacitiesClientListByResourceGroupOptions)`
+- Function `*CapacitiesClient.ListByResourceGroup` return value(s) have been changed from `(CapacitiesClientListByResourceGroupResponse, error)` to `(*CapacitiesClientListByResourceGroupPager)`
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Struct `AutoScaleVCoresClientCreateResult` has been removed
+- Struct `AutoScaleVCoresClientGetResult` has been removed
+- Struct `AutoScaleVCoresClientListByResourceGroupResult` has been removed
+- Struct `AutoScaleVCoresClientListBySubscriptionResult` has been removed
+- Struct `AutoScaleVCoresClientUpdateResult` has been removed
+- Struct `CapacitiesClientCheckNameAvailabilityResult` has been removed
+- Struct `CapacitiesClientCreateResult` has been removed
+- Struct `CapacitiesClientGetDetailsResult` has been removed
+- Struct `CapacitiesClientListByResourceGroupResult` has been removed
+- Struct `CapacitiesClientListResult` has been removed
+- Struct `CapacitiesClientListSKUsForCapacityResult` has been removed
+- Struct `CapacitiesClientListSKUsResult` has been removed
+- Struct `CapacitiesClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `CapacitiesClientListSKUsForCapacityResult` of struct `CapacitiesClientListSKUsForCapacityResponse` has been removed
+- Field `RawResponse` of struct `CapacitiesClientListSKUsForCapacityResponse` has been removed
+- Field `CapacitiesClientCheckNameAvailabilityResult` of struct `CapacitiesClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `CapacitiesClientCheckNameAvailabilityResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `AutoScaleVCoresClientListByResourceGroupResult` of struct `AutoScaleVCoresClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `AutoScaleVCoresClientListByResourceGroupResponse` has been removed
+- Field `AutoScaleVCoresClientCreateResult` of struct `AutoScaleVCoresClientCreateResponse` has been removed
+- Field `RawResponse` of struct `AutoScaleVCoresClientCreateResponse` has been removed
+- Field `CapacitiesClientListResult` of struct `CapacitiesClientListResponse` has been removed
+- Field `RawResponse` of struct `CapacitiesClientListResponse` has been removed
+- Field `RawResponse` of struct `AutoScaleVCoresClientDeleteResponse` has been removed
+- Field `AutoScaleVCoresClientUpdateResult` of struct `AutoScaleVCoresClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AutoScaleVCoresClientUpdateResponse` has been removed
+- Field `CapacitiesClientListSKUsResult` of struct `CapacitiesClientListSKUsResponse` has been removed
+- Field `RawResponse` of struct `CapacitiesClientListSKUsResponse` has been removed
+- Field `CapacitiesClientListByResourceGroupResult` of struct `CapacitiesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `CapacitiesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `CapacitiesClientResumeResponse` has been removed
+- Field `RawResponse` of struct `CapacitiesClientSuspendPollerResponse` has been removed
+- Field `RawResponse` of struct `CapacitiesClientSuspendResponse` has been removed
+- Field `RawResponse` of struct `CapacitiesClientUpdatePollerResponse` has been removed
+- Field `AutoScaleVCoresClientListBySubscriptionResult` of struct `AutoScaleVCoresClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `AutoScaleVCoresClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `CapacitiesClientDeleteResponse` has been removed
+- Field `CapacitiesClientGetDetailsResult` of struct `CapacitiesClientGetDetailsResponse` has been removed
+- Field `RawResponse` of struct `CapacitiesClientGetDetailsResponse` has been removed
+- Field `CapacitiesClientCreateResult` of struct `CapacitiesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `CapacitiesClientCreateResponse` has been removed
+- Field `AutoScaleVCoresClientGetResult` of struct `AutoScaleVCoresClientGetResponse` has been removed
+- Field `RawResponse` of struct `AutoScaleVCoresClientGetResponse` has been removed
+- Field `CapacitiesClientUpdateResult` of struct `CapacitiesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `CapacitiesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `CapacitiesClientResumePollerResponse` has been removed
+- Field `RawResponse` of struct `CapacitiesClientCreatePollerResponse` has been removed
+- Field `RawResponse` of struct `CapacitiesClientDeletePollerResponse` has been removed
+
+### Features Added
+
+- New function `*AutoScaleVCoresClientListBySubscriptionPager.More() bool`
+- New function `*AutoScaleVCoresClientListByResourceGroupPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*AutoScaleVCoresClientListBySubscriptionPager.NextPage(context.Context) (AutoScaleVCoresClientListBySubscriptionResponse, error)`
+- New function `*AutoScaleVCoresClientListByResourceGroupPager.NextPage(context.Context) (AutoScaleVCoresClientListByResourceGroupResponse, error)`
+- New function `*CapacitiesClientListPager.NextPage(context.Context) (CapacitiesClientListResponse, error)`
+- New function `*CapacitiesClientListByResourceGroupPager.NextPage(context.Context) (CapacitiesClientListByResourceGroupResponse, error)`
+- New function `*CapacitiesClientListByResourceGroupPager.More() bool`
+- New function `*CapacitiesClientListPager.More() bool`
+- New struct `AutoScaleVCoresClientListByResourceGroupPager`
+- New struct `AutoScaleVCoresClientListBySubscriptionPager`
+- New struct `CapacitiesClientListByResourceGroupPager`
+- New struct `CapacitiesClientListPager`
+- New struct `ErrorResponse`
+- New struct `ErrorResponseError`
+- New anonymous field `AutoScaleVCore` in struct `AutoScaleVCoresClientCreateResponse`
+- New anonymous field `AutoScaleVCoreListResult` in struct `AutoScaleVCoresClientListByResourceGroupResponse`
+- New anonymous field `DedicatedCapacity` in struct `CapacitiesClientCreateResponse`
+- New anonymous field `AutoScaleVCore` in struct `AutoScaleVCoresClientUpdateResponse`
+- New anonymous field `AutoScaleVCoreListResult` in struct `AutoScaleVCoresClientListBySubscriptionResponse`
+- New anonymous field `SKUEnumerationForNewResourceResult` in struct `CapacitiesClientListSKUsResponse`
+- New anonymous field `AutoScaleVCore` in struct `AutoScaleVCoresClientGetResponse`
+- New anonymous field `DedicatedCapacity` in struct `CapacitiesClientGetDetailsResponse`
+- New anonymous field `DedicatedCapacities` in struct `CapacitiesClientListByResourceGroupResponse`
+- New anonymous field `SKUEnumerationForExistingResourceResult` in struct `CapacitiesClientListSKUsForCapacityResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `CheckCapacityNameAvailabilityResult` in struct `CapacitiesClientCheckNameAvailabilityResponse`
+- New anonymous field `DedicatedCapacity` in struct `CapacitiesClientUpdateResponse`
+- New anonymous field `DedicatedCapacities` in struct `CapacitiesClientListResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Struct `ErrorResponse` has been removed
+- Struct `ErrorResponseError` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

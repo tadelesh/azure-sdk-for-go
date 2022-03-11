@@ -34,17 +34,17 @@ type SQLPoolConnectionPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLPoolConnectionPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLPoolConnectionPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLPoolConnectionPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *SQLPoolConnectionPoliciesClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *SQLPoolConnectionPoliciesClient) getHandleResponse(resp *http.Response) (SQLPoolConnectionPoliciesClientGetResponse, error) {
-	result := SQLPoolConnectionPoliciesClientGetResponse{RawResponse: resp}
+	result := SQLPoolConnectionPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLPoolConnectionPolicy); err != nil {
 		return SQLPoolConnectionPoliciesClientGetResponse{}, err
 	}

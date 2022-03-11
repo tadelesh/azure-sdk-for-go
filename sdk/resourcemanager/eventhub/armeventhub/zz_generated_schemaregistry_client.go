@@ -36,17 +36,17 @@ type SchemaRegistryClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSchemaRegistryClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SchemaRegistryClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SchemaRegistryClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -106,7 +106,7 @@ func (client *SchemaRegistryClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *SchemaRegistryClient) createOrUpdateHandleResponse(resp *http.Response) (SchemaRegistryClientCreateOrUpdateResponse, error) {
-	result := SchemaRegistryClientCreateOrUpdateResponse{RawResponse: resp}
+	result := SchemaRegistryClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SchemaGroup); err != nil {
 		return SchemaRegistryClientCreateOrUpdateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *SchemaRegistryClient) Delete(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SchemaRegistryClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SchemaRegistryClientDeleteResponse{RawResponse: resp}, nil
+	return SchemaRegistryClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -217,7 +217,7 @@ func (client *SchemaRegistryClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *SchemaRegistryClient) getHandleResponse(resp *http.Response) (SchemaRegistryClientGetResponse, error) {
-	result := SchemaRegistryClientGetResponse{RawResponse: resp}
+	result := SchemaRegistryClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SchemaGroup); err != nil {
 		return SchemaRegistryClientGetResponse{}, err
 	}
@@ -276,7 +276,7 @@ func (client *SchemaRegistryClient) listByNamespaceCreateRequest(ctx context.Con
 
 // listByNamespaceHandleResponse handles the ListByNamespace response.
 func (client *SchemaRegistryClient) listByNamespaceHandleResponse(resp *http.Response) (SchemaRegistryClientListByNamespaceResponse, error) {
-	result := SchemaRegistryClientListByNamespaceResponse{RawResponse: resp}
+	result := SchemaRegistryClientListByNamespaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SchemaGroupListResult); err != nil {
 		return SchemaRegistryClientListByNamespaceResponse{}, err
 	}

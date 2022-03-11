@@ -10,7 +10,7 @@ package armappplatform
 
 const (
 	moduleName    = "armappplatform"
-	moduleVersion = "v0.3.0"
+	moduleVersion = "v0.4.0"
 )
 
 // APIPortalProvisioningState - State of the API portal.
@@ -37,6 +37,25 @@ func PossibleAPIPortalProvisioningStateValues() []APIPortalProvisioningState {
 
 // ToPtr returns a *APIPortalProvisioningState pointing to the current value.
 func (c APIPortalProvisioningState) ToPtr() *APIPortalProvisioningState {
+	return &c
+}
+
+// ActionType - Enum. Indicates the action type. "Internal" refers to actions that are for internal only APIs.
+type ActionType string
+
+const (
+	ActionTypeInternal ActionType = "Internal"
+)
+
+// PossibleActionTypeValues returns the possible values for the ActionType const type.
+func PossibleActionTypeValues() []ActionType {
+	return []ActionType{
+		ActionTypeInternal,
+	}
+}
+
+// ToPtr returns a *ActionType pointing to the current value.
+func (c ActionType) ToPtr() *ActionType {
 	return &c
 }
 

@@ -36,17 +36,17 @@ type TagClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTagClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TagClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TagClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -110,7 +110,7 @@ func (client *TagClient) assignToAPICreateRequest(ctx context.Context, resourceG
 
 // assignToAPIHandleResponse handles the AssignToAPI response.
 func (client *TagClient) assignToAPIHandleResponse(resp *http.Response) (TagClientAssignToAPIResponse, error) {
-	result := TagClientAssignToAPIResponse{RawResponse: resp}
+	result := TagClientAssignToAPIResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -184,7 +184,7 @@ func (client *TagClient) assignToOperationCreateRequest(ctx context.Context, res
 
 // assignToOperationHandleResponse handles the AssignToOperation response.
 func (client *TagClient) assignToOperationHandleResponse(resp *http.Response) (TagClientAssignToOperationResponse, error) {
-	result := TagClientAssignToOperationResponse{RawResponse: resp}
+	result := TagClientAssignToOperationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TagContract); err != nil {
 		return TagClientAssignToOperationResponse{}, err
 	}
@@ -249,7 +249,7 @@ func (client *TagClient) assignToProductCreateRequest(ctx context.Context, resou
 
 // assignToProductHandleResponse handles the AssignToProduct response.
 func (client *TagClient) assignToProductHandleResponse(resp *http.Response) (TagClientAssignToProductResponse, error) {
-	result := TagClientAssignToProductResponse{RawResponse: resp}
+	result := TagClientAssignToProductResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TagContract); err != nil {
 		return TagClientAssignToProductResponse{}, err
 	}
@@ -313,7 +313,7 @@ func (client *TagClient) createOrUpdateCreateRequest(ctx context.Context, resour
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *TagClient) createOrUpdateHandleResponse(resp *http.Response) (TagClientCreateOrUpdateResponse, error) {
-	result := TagClientCreateOrUpdateResponse{RawResponse: resp}
+	result := TagClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -343,7 +343,7 @@ func (client *TagClient) Delete(ctx context.Context, resourceGroupName string, s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return TagClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return TagClientDeleteResponse{RawResponse: resp}, nil
+	return TagClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -397,7 +397,7 @@ func (client *TagClient) DetachFromAPI(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return TagClientDetachFromAPIResponse{}, runtime.NewResponseError(resp)
 	}
-	return TagClientDetachFromAPIResponse{RawResponse: resp}, nil
+	return TagClientDetachFromAPIResponse{}, nil
 }
 
 // detachFromAPICreateRequest creates the DetachFromAPI request.
@@ -455,7 +455,7 @@ func (client *TagClient) DetachFromOperation(ctx context.Context, resourceGroupN
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return TagClientDetachFromOperationResponse{}, runtime.NewResponseError(resp)
 	}
-	return TagClientDetachFromOperationResponse{RawResponse: resp}, nil
+	return TagClientDetachFromOperationResponse{}, nil
 }
 
 // detachFromOperationCreateRequest creates the DetachFromOperation request.
@@ -515,7 +515,7 @@ func (client *TagClient) DetachFromProduct(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return TagClientDetachFromProductResponse{}, runtime.NewResponseError(resp)
 	}
-	return TagClientDetachFromProductResponse{RawResponse: resp}, nil
+	return TagClientDetachFromProductResponse{}, nil
 }
 
 // detachFromProductCreateRequest creates the DetachFromProduct request.
@@ -605,7 +605,7 @@ func (client *TagClient) getCreateRequest(ctx context.Context, resourceGroupName
 
 // getHandleResponse handles the Get response.
 func (client *TagClient) getHandleResponse(resp *http.Response) (TagClientGetResponse, error) {
-	result := TagClientGetResponse{RawResponse: resp}
+	result := TagClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -674,7 +674,7 @@ func (client *TagClient) getByAPICreateRequest(ctx context.Context, resourceGrou
 
 // getByAPIHandleResponse handles the GetByAPI response.
 func (client *TagClient) getByAPIHandleResponse(resp *http.Response) (TagClientGetByAPIResponse, error) {
-	result := TagClientGetByAPIResponse{RawResponse: resp}
+	result := TagClientGetByAPIResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -748,7 +748,7 @@ func (client *TagClient) getByOperationCreateRequest(ctx context.Context, resour
 
 // getByOperationHandleResponse handles the GetByOperation response.
 func (client *TagClient) getByOperationHandleResponse(resp *http.Response) (TagClientGetByOperationResponse, error) {
-	result := TagClientGetByOperationResponse{RawResponse: resp}
+	result := TagClientGetByOperationResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -816,7 +816,7 @@ func (client *TagClient) getByProductCreateRequest(ctx context.Context, resource
 
 // getByProductHandleResponse handles the GetByProduct response.
 func (client *TagClient) getByProductHandleResponse(resp *http.Response) (TagClientGetByProductResponse, error) {
-	result := TagClientGetByProductResponse{RawResponse: resp}
+	result := TagClientGetByProductResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -875,7 +875,7 @@ func (client *TagClient) getEntityStateCreateRequest(ctx context.Context, resour
 
 // getEntityStateHandleResponse handles the GetEntityState response.
 func (client *TagClient) getEntityStateHandleResponse(resp *http.Response) (TagClientGetEntityStateResponse, error) {
-	result := TagClientGetEntityStateResponse{RawResponse: resp}
+	result := TagClientGetEntityStateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -940,7 +940,7 @@ func (client *TagClient) getEntityStateByAPICreateRequest(ctx context.Context, r
 
 // getEntityStateByAPIHandleResponse handles the GetEntityStateByAPI response.
 func (client *TagClient) getEntityStateByAPIHandleResponse(resp *http.Response) (TagClientGetEntityStateByAPIResponse, error) {
-	result := TagClientGetEntityStateByAPIResponse{RawResponse: resp}
+	result := TagClientGetEntityStateByAPIResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -1011,7 +1011,7 @@ func (client *TagClient) getEntityStateByOperationCreateRequest(ctx context.Cont
 
 // getEntityStateByOperationHandleResponse handles the GetEntityStateByOperation response.
 func (client *TagClient) getEntityStateByOperationHandleResponse(resp *http.Response) (TagClientGetEntityStateByOperationResponse, error) {
-	result := TagClientGetEntityStateByOperationResponse{RawResponse: resp}
+	result := TagClientGetEntityStateByOperationResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -1076,7 +1076,7 @@ func (client *TagClient) getEntityStateByProductCreateRequest(ctx context.Contex
 
 // getEntityStateByProductHandleResponse handles the GetEntityStateByProduct response.
 func (client *TagClient) getEntityStateByProductHandleResponse(resp *http.Response) (TagClientGetEntityStateByProductResponse, error) {
-	result := TagClientGetEntityStateByProductResponse{RawResponse: resp}
+	result := TagClientGetEntityStateByProductResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -1146,7 +1146,7 @@ func (client *TagClient) listByAPICreateRequest(ctx context.Context, resourceGro
 
 // listByAPIHandleResponse handles the ListByAPI response.
 func (client *TagClient) listByAPIHandleResponse(resp *http.Response) (TagClientListByAPIResponse, error) {
-	result := TagClientListByAPIResponse{RawResponse: resp}
+	result := TagClientListByAPIResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TagCollection); err != nil {
 		return TagClientListByAPIResponse{}, err
 	}
@@ -1218,7 +1218,7 @@ func (client *TagClient) listByOperationCreateRequest(ctx context.Context, resou
 
 // listByOperationHandleResponse handles the ListByOperation response.
 func (client *TagClient) listByOperationHandleResponse(resp *http.Response) (TagClientListByOperationResponse, error) {
-	result := TagClientListByOperationResponse{RawResponse: resp}
+	result := TagClientListByOperationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TagCollection); err != nil {
 		return TagClientListByOperationResponse{}, err
 	}
@@ -1284,7 +1284,7 @@ func (client *TagClient) listByProductCreateRequest(ctx context.Context, resourc
 
 // listByProductHandleResponse handles the ListByProduct response.
 func (client *TagClient) listByProductHandleResponse(resp *http.Response) (TagClientListByProductResponse, error) {
-	result := TagClientListByProductResponse{RawResponse: resp}
+	result := TagClientListByProductResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TagCollection); err != nil {
 		return TagClientListByProductResponse{}, err
 	}
@@ -1348,7 +1348,7 @@ func (client *TagClient) listByServiceCreateRequest(ctx context.Context, resourc
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *TagClient) listByServiceHandleResponse(resp *http.Response) (TagClientListByServiceResponse, error) {
-	result := TagClientListByServiceResponse{RawResponse: resp}
+	result := TagClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TagCollection); err != nil {
 		return TagClientListByServiceResponse{}, err
 	}
@@ -1412,7 +1412,7 @@ func (client *TagClient) updateCreateRequest(ctx context.Context, resourceGroupN
 
 // updateHandleResponse handles the Update response.
 func (client *TagClient) updateHandleResponse(resp *http.Response) (TagClientUpdateResponse, error) {
-	result := TagClientUpdateResponse{RawResponse: resp}
+	result := TagClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

@@ -35,17 +35,17 @@ type CodePackageClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCodePackageClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CodePackageClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CodePackageClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *CodePackageClient) getContainerLogsCreateRequest(ctx context.Conte
 
 // getContainerLogsHandleResponse handles the GetContainerLogs response.
 func (client *CodePackageClient) getContainerLogsHandleResponse(resp *http.Response) (CodePackageClientGetContainerLogsResponse, error) {
-	result := CodePackageClientGetContainerLogsResponse{RawResponse: resp}
+	result := CodePackageClientGetContainerLogsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContainerLogs); err != nil {
 		return CodePackageClientGetContainerLogsResponse{}, err
 	}

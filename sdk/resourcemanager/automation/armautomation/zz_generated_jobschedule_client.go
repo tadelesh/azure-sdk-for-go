@@ -35,17 +35,17 @@ type JobScheduleClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewJobScheduleClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *JobScheduleClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &JobScheduleClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -101,7 +101,7 @@ func (client *JobScheduleClient) createCreateRequest(ctx context.Context, resour
 
 // createHandleResponse handles the Create response.
 func (client *JobScheduleClient) createHandleResponse(resp *http.Response) (JobScheduleClientCreateResponse, error) {
-	result := JobScheduleClientCreateResponse{RawResponse: resp}
+	result := JobScheduleClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobSchedule); err != nil {
 		return JobScheduleClientCreateResponse{}, err
 	}
@@ -126,7 +126,7 @@ func (client *JobScheduleClient) Delete(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return JobScheduleClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return JobScheduleClientDeleteResponse{RawResponse: resp}, nil
+	return JobScheduleClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -206,7 +206,7 @@ func (client *JobScheduleClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *JobScheduleClient) getHandleResponse(resp *http.Response) (JobScheduleClientGetResponse, error) {
-	result := JobScheduleClientGetResponse{RawResponse: resp}
+	result := JobScheduleClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobSchedule); err != nil {
 		return JobScheduleClientGetResponse{}, err
 	}
@@ -262,7 +262,7 @@ func (client *JobScheduleClient) listByAutomationAccountCreateRequest(ctx contex
 
 // listByAutomationAccountHandleResponse handles the ListByAutomationAccount response.
 func (client *JobScheduleClient) listByAutomationAccountHandleResponse(resp *http.Response) (JobScheduleClientListByAutomationAccountResponse, error) {
-	result := JobScheduleClientListByAutomationAccountResponse{RawResponse: resp}
+	result := JobScheduleClientListByAutomationAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobScheduleListResult); err != nil {
 		return JobScheduleClientListByAutomationAccountResponse{}, err
 	}

@@ -103,7 +103,7 @@ func (client *VirtualMachinesClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *VirtualMachinesClient) getHandleResponse(resp *http.Response) (VirtualMachinesClientGetResponse, error) {
-	result := VirtualMachinesClientGetResponse{RawResponse: resp}
+	result := VirtualMachinesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualMachine); err != nil {
 		return VirtualMachinesClientGetResponse{}, err
 	}
@@ -159,7 +159,7 @@ func (client *VirtualMachinesClient) listByLabCreateRequest(ctx context.Context,
 
 // listByLabHandleResponse handles the ListByLab response.
 func (client *VirtualMachinesClient) listByLabHandleResponse(resp *http.Response) (VirtualMachinesClientListByLabResponse, error) {
-	result := VirtualMachinesClientListByLabResponse{RawResponse: resp}
+	result := VirtualMachinesClientListByLabResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PagedVirtualMachines); err != nil {
 		return VirtualMachinesClientListByLabResponse{}, err
 	}
@@ -179,9 +179,7 @@ func (client *VirtualMachinesClient) BeginRedeploy(ctx context.Context, resource
 	if err != nil {
 		return VirtualMachinesClientRedeployPollerResponse{}, err
 	}
-	result := VirtualMachinesClientRedeployPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientRedeployPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.Redeploy", "location", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientRedeployPollerResponse{}, err
@@ -253,9 +251,7 @@ func (client *VirtualMachinesClient) BeginReimage(ctx context.Context, resourceG
 	if err != nil {
 		return VirtualMachinesClientReimagePollerResponse{}, err
 	}
-	result := VirtualMachinesClientReimagePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientReimagePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.Reimage", "location", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientReimagePollerResponse{}, err
@@ -328,9 +324,7 @@ func (client *VirtualMachinesClient) BeginResetPassword(ctx context.Context, res
 	if err != nil {
 		return VirtualMachinesClientResetPasswordPollerResponse{}, err
 	}
-	result := VirtualMachinesClientResetPasswordPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientResetPasswordPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.ResetPassword", "location", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientResetPasswordPollerResponse{}, err
@@ -401,9 +395,7 @@ func (client *VirtualMachinesClient) BeginStart(ctx context.Context, resourceGro
 	if err != nil {
 		return VirtualMachinesClientStartPollerResponse{}, err
 	}
-	result := VirtualMachinesClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.Start", "location", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientStartPollerResponse{}, err
@@ -474,9 +466,7 @@ func (client *VirtualMachinesClient) BeginStop(ctx context.Context, resourceGrou
 	if err != nil {
 		return VirtualMachinesClientStopPollerResponse{}, err
 	}
-	result := VirtualMachinesClientStopPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientStopPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.Stop", "location", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientStopPollerResponse{}, err

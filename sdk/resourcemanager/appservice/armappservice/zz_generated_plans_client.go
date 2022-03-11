@@ -62,9 +62,7 @@ func (client *PlansClient) BeginCreateOrUpdate(ctx context.Context, resourceGrou
 	if err != nil {
 		return PlansClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PlansClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PlansClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PlansClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return PlansClientCreateOrUpdatePollerResponse{}, err
@@ -178,7 +176,7 @@ func (client *PlansClient) createOrUpdateVnetRouteCreateRequest(ctx context.Cont
 
 // createOrUpdateVnetRouteHandleResponse handles the CreateOrUpdateVnetRoute response.
 func (client *PlansClient) createOrUpdateVnetRouteHandleResponse(resp *http.Response) (PlansClientCreateOrUpdateVnetRouteResponse, error) {
-	result := PlansClientCreateOrUpdateVnetRouteResponse{RawResponse: resp}
+	result := PlansClientCreateOrUpdateVnetRouteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetRoute); err != nil {
 		return PlansClientCreateOrUpdateVnetRouteResponse{}, err
 	}
@@ -202,7 +200,7 @@ func (client *PlansClient) Delete(ctx context.Context, resourceGroupName string,
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return PlansClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return PlansClientDeleteResponse{RawResponse: resp}, nil
+	return PlansClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -251,7 +249,7 @@ func (client *PlansClient) DeleteHybridConnection(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return PlansClientDeleteHybridConnectionResponse{}, runtime.NewResponseError(resp)
 	}
-	return PlansClientDeleteHybridConnectionResponse{RawResponse: resp}, nil
+	return PlansClientDeleteHybridConnectionResponse{}, nil
 }
 
 // deleteHybridConnectionCreateRequest creates the DeleteHybridConnection request.
@@ -307,7 +305,7 @@ func (client *PlansClient) DeleteVnetRoute(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return PlansClientDeleteVnetRouteResponse{}, runtime.NewResponseError(resp)
 	}
-	return PlansClientDeleteVnetRouteResponse{RawResponse: resp}, nil
+	return PlansClientDeleteVnetRouteResponse{}, nil
 }
 
 // deleteVnetRouteCreateRequest creates the DeleteVnetRoute request.
@@ -392,7 +390,7 @@ func (client *PlansClient) getCreateRequest(ctx context.Context, resourceGroupNa
 
 // getHandleResponse handles the Get response.
 func (client *PlansClient) getHandleResponse(resp *http.Response) (PlansClientGetResponse, error) {
-	result := PlansClientGetResponse{RawResponse: resp}
+	result := PlansClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Plan); err != nil {
 		return PlansClientGetResponse{}, err
 	}
@@ -458,7 +456,7 @@ func (client *PlansClient) getHybridConnectionCreateRequest(ctx context.Context,
 
 // getHybridConnectionHandleResponse handles the GetHybridConnection response.
 func (client *PlansClient) getHybridConnectionHandleResponse(resp *http.Response) (PlansClientGetHybridConnectionResponse, error) {
-	result := PlansClientGetHybridConnectionResponse{RawResponse: resp}
+	result := PlansClientGetHybridConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridConnection); err != nil {
 		return PlansClientGetHybridConnectionResponse{}, err
 	}
@@ -514,7 +512,7 @@ func (client *PlansClient) getHybridConnectionPlanLimitCreateRequest(ctx context
 
 // getHybridConnectionPlanLimitHandleResponse handles the GetHybridConnectionPlanLimit response.
 func (client *PlansClient) getHybridConnectionPlanLimitHandleResponse(resp *http.Response) (PlansClientGetHybridConnectionPlanLimitResponse, error) {
-	result := PlansClientGetHybridConnectionPlanLimitResponse{RawResponse: resp}
+	result := PlansClientGetHybridConnectionPlanLimitResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridConnectionLimits); err != nil {
 		return PlansClientGetHybridConnectionPlanLimitResponse{}, err
 	}
@@ -579,7 +577,7 @@ func (client *PlansClient) getRouteForVnetCreateRequest(ctx context.Context, res
 
 // getRouteForVnetHandleResponse handles the GetRouteForVnet response.
 func (client *PlansClient) getRouteForVnetHandleResponse(resp *http.Response) (PlansClientGetRouteForVnetResponse, error) {
-	result := PlansClientGetRouteForVnetResponse{RawResponse: resp}
+	result := PlansClientGetRouteForVnetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetRouteArray); err != nil {
 		return PlansClientGetRouteForVnetResponse{}, err
 	}
@@ -634,7 +632,7 @@ func (client *PlansClient) getServerFarmSKUsCreateRequest(ctx context.Context, r
 
 // getServerFarmSKUsHandleResponse handles the GetServerFarmSKUs response.
 func (client *PlansClient) getServerFarmSKUsHandleResponse(resp *http.Response) (PlansClientGetServerFarmSKUsResponse, error) {
-	result := PlansClientGetServerFarmSKUsResponse{RawResponse: resp}
+	result := PlansClientGetServerFarmSKUsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Interface); err != nil {
 		return PlansClientGetServerFarmSKUsResponse{}, err
 	}
@@ -695,7 +693,7 @@ func (client *PlansClient) getVnetFromServerFarmCreateRequest(ctx context.Contex
 
 // getVnetFromServerFarmHandleResponse handles the GetVnetFromServerFarm response.
 func (client *PlansClient) getVnetFromServerFarmHandleResponse(resp *http.Response) (PlansClientGetVnetFromServerFarmResponse, error) {
-	result := PlansClientGetVnetFromServerFarmResponse{RawResponse: resp}
+	result := PlansClientGetVnetFromServerFarmResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetInfoResource); err != nil {
 		return PlansClientGetVnetFromServerFarmResponse{}, err
 	}
@@ -760,7 +758,7 @@ func (client *PlansClient) getVnetGatewayCreateRequest(ctx context.Context, reso
 
 // getVnetGatewayHandleResponse handles the GetVnetGateway response.
 func (client *PlansClient) getVnetGatewayHandleResponse(resp *http.Response) (PlansClientGetVnetGatewayResponse, error) {
-	result := PlansClientGetVnetGatewayResponse{RawResponse: resp}
+	result := PlansClientGetVnetGatewayResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetGateway); err != nil {
 		return PlansClientGetVnetGatewayResponse{}, err
 	}
@@ -805,7 +803,7 @@ func (client *PlansClient) listCreateRequest(ctx context.Context, options *Plans
 
 // listHandleResponse handles the List response.
 func (client *PlansClient) listHandleResponse(resp *http.Response) (PlansClientListResponse, error) {
-	result := PlansClientListResponse{RawResponse: resp}
+	result := PlansClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PlanCollection); err != nil {
 		return PlansClientListResponse{}, err
 	}
@@ -853,7 +851,7 @@ func (client *PlansClient) listByResourceGroupCreateRequest(ctx context.Context,
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *PlansClient) listByResourceGroupHandleResponse(resp *http.Response) (PlansClientListByResourceGroupResponse, error) {
-	result := PlansClientListByResourceGroupResponse{RawResponse: resp}
+	result := PlansClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PlanCollection); err != nil {
 		return PlansClientListByResourceGroupResponse{}, err
 	}
@@ -908,7 +906,7 @@ func (client *PlansClient) listCapabilitiesCreateRequest(ctx context.Context, re
 
 // listCapabilitiesHandleResponse handles the ListCapabilities response.
 func (client *PlansClient) listCapabilitiesHandleResponse(resp *http.Response) (PlansClientListCapabilitiesResponse, error) {
-	result := PlansClientListCapabilitiesResponse{RawResponse: resp}
+	result := PlansClientListCapabilitiesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CapabilityArray); err != nil {
 		return PlansClientListCapabilitiesResponse{}, err
 	}
@@ -974,7 +972,7 @@ func (client *PlansClient) listHybridConnectionKeysCreateRequest(ctx context.Con
 
 // listHybridConnectionKeysHandleResponse handles the ListHybridConnectionKeys response.
 func (client *PlansClient) listHybridConnectionKeysHandleResponse(resp *http.Response) (PlansClientListHybridConnectionKeysResponse, error) {
-	result := PlansClientListHybridConnectionKeysResponse{RawResponse: resp}
+	result := PlansClientListHybridConnectionKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridConnectionKey); err != nil {
 		return PlansClientListHybridConnectionKeysResponse{}, err
 	}
@@ -1027,7 +1025,7 @@ func (client *PlansClient) listHybridConnectionsCreateRequest(ctx context.Contex
 
 // listHybridConnectionsHandleResponse handles the ListHybridConnections response.
 func (client *PlansClient) listHybridConnectionsHandleResponse(resp *http.Response) (PlansClientListHybridConnectionsResponse, error) {
-	result := PlansClientListHybridConnectionsResponse{RawResponse: resp}
+	result := PlansClientListHybridConnectionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridConnectionCollection); err != nil {
 		return PlansClientListHybridConnectionsResponse{}, err
 	}
@@ -1087,7 +1085,7 @@ func (client *PlansClient) listRoutesForVnetCreateRequest(ctx context.Context, r
 
 // listRoutesForVnetHandleResponse handles the ListRoutesForVnet response.
 func (client *PlansClient) listRoutesForVnetHandleResponse(resp *http.Response) (PlansClientListRoutesForVnetResponse, error) {
-	result := PlansClientListRoutesForVnetResponse{RawResponse: resp}
+	result := PlansClientListRoutesForVnetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetRouteArray); err != nil {
 		return PlansClientListRoutesForVnetResponse{}, err
 	}
@@ -1144,7 +1142,7 @@ func (client *PlansClient) listUsagesCreateRequest(ctx context.Context, resource
 
 // listUsagesHandleResponse handles the ListUsages response.
 func (client *PlansClient) listUsagesHandleResponse(resp *http.Response) (PlansClientListUsagesResponse, error) {
-	result := PlansClientListUsagesResponse{RawResponse: resp}
+	result := PlansClientListUsagesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CsmUsageQuotaCollection); err != nil {
 		return PlansClientListUsagesResponse{}, err
 	}
@@ -1199,7 +1197,7 @@ func (client *PlansClient) listVnetsCreateRequest(ctx context.Context, resourceG
 
 // listVnetsHandleResponse handles the ListVnets response.
 func (client *PlansClient) listVnetsHandleResponse(resp *http.Response) (PlansClientListVnetsResponse, error) {
-	result := PlansClientListVnetsResponse{RawResponse: resp}
+	result := PlansClientListVnetsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetInfoResourceArray); err != nil {
 		return PlansClientListVnetsResponse{}, err
 	}
@@ -1262,7 +1260,7 @@ func (client *PlansClient) listWebAppsCreateRequest(ctx context.Context, resourc
 
 // listWebAppsHandleResponse handles the ListWebApps response.
 func (client *PlansClient) listWebAppsHandleResponse(resp *http.Response) (PlansClientListWebAppsResponse, error) {
-	result := PlansClientListWebAppsResponse{RawResponse: resp}
+	result := PlansClientListWebAppsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebAppCollection); err != nil {
 		return PlansClientListWebAppsResponse{}, err
 	}
@@ -1325,7 +1323,7 @@ func (client *PlansClient) listWebAppsByHybridConnectionCreateRequest(ctx contex
 
 // listWebAppsByHybridConnectionHandleResponse handles the ListWebAppsByHybridConnection response.
 func (client *PlansClient) listWebAppsByHybridConnectionHandleResponse(resp *http.Response) (PlansClientListWebAppsByHybridConnectionResponse, error) {
-	result := PlansClientListWebAppsByHybridConnectionResponse{RawResponse: resp}
+	result := PlansClientListWebAppsByHybridConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceCollection); err != nil {
 		return PlansClientListWebAppsByHybridConnectionResponse{}, err
 	}
@@ -1350,7 +1348,7 @@ func (client *PlansClient) RebootWorker(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return PlansClientRebootWorkerResponse{}, runtime.NewResponseError(resp)
 	}
-	return PlansClientRebootWorkerResponse{RawResponse: resp}, nil
+	return PlansClientRebootWorkerResponse{}, nil
 }
 
 // rebootWorkerCreateRequest creates the RebootWorker request.
@@ -1400,7 +1398,7 @@ func (client *PlansClient) RestartWebApps(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return PlansClientRestartWebAppsResponse{}, runtime.NewResponseError(resp)
 	}
-	return PlansClientRestartWebAppsResponse{RawResponse: resp}, nil
+	return PlansClientRestartWebAppsResponse{}, nil
 }
 
 // restartWebAppsCreateRequest creates the RestartWebApps request.
@@ -1481,7 +1479,7 @@ func (client *PlansClient) updateCreateRequest(ctx context.Context, resourceGrou
 
 // updateHandleResponse handles the Update response.
 func (client *PlansClient) updateHandleResponse(resp *http.Response) (PlansClientUpdateResponse, error) {
-	result := PlansClientUpdateResponse{RawResponse: resp}
+	result := PlansClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Plan); err != nil {
 		return PlansClientUpdateResponse{}, err
 	}
@@ -1547,7 +1545,7 @@ func (client *PlansClient) updateVnetGatewayCreateRequest(ctx context.Context, r
 
 // updateVnetGatewayHandleResponse handles the UpdateVnetGateway response.
 func (client *PlansClient) updateVnetGatewayHandleResponse(resp *http.Response) (PlansClientUpdateVnetGatewayResponse, error) {
-	result := PlansClientUpdateVnetGatewayResponse{RawResponse: resp}
+	result := PlansClientUpdateVnetGatewayResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetGateway); err != nil {
 		return PlansClientUpdateVnetGatewayResponse{}, err
 	}
@@ -1613,7 +1611,7 @@ func (client *PlansClient) updateVnetRouteCreateRequest(ctx context.Context, res
 
 // updateVnetRouteHandleResponse handles the UpdateVnetRoute response.
 func (client *PlansClient) updateVnetRouteHandleResponse(resp *http.Response) (PlansClientUpdateVnetRouteResponse, error) {
-	result := PlansClientUpdateVnetRouteResponse{RawResponse: resp}
+	result := PlansClientUpdateVnetRouteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetRoute); err != nil {
 		return PlansClientUpdateVnetRouteResponse{}, err
 	}

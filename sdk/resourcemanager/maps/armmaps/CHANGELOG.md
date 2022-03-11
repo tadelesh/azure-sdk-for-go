@@ -1,5 +1,107 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*CreatorsClientListByAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(CreatorsClientListByAccountResponse, error)`
+- Function `*AccountsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(AccountsClientListByResourceGroupResponse, error)`
+- Function `*ClientListSubscriptionOperationsPager.NextPage` return value(s) have been changed from `(bool)` to `(ClientListSubscriptionOperationsResponse, error)`
+- Function `*AccountsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(AccountsClientListBySubscriptionResponse, error)`
+- Function `*ClientListOperationsPager.NextPage` return value(s) have been changed from `(bool)` to `(ClientListOperationsResponse, error)`
+- Function `*CreatorsClientListByAccountPager.PageResponse` has been removed
+- Function `*ClientListOperationsPager.PageResponse` has been removed
+- Function `*CreatorsClientListByAccountPager.Err` has been removed
+- Function `*AccountsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*AccountsClientListByResourceGroupPager.Err` has been removed
+- Function `*ClientListSubscriptionOperationsPager.Err` has been removed
+- Function `*ClientListSubscriptionOperationsPager.PageResponse` has been removed
+- Function `*AccountsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*AccountsClientListBySubscriptionPager.Err` has been removed
+- Function `*ClientListOperationsPager.Err` has been removed
+- Struct `AccountsClientCreateOrUpdateResult` has been removed
+- Struct `AccountsClientGetResult` has been removed
+- Struct `AccountsClientListByResourceGroupResult` has been removed
+- Struct `AccountsClientListBySubscriptionResult` has been removed
+- Struct `AccountsClientListKeysResult` has been removed
+- Struct `AccountsClientListSasResult` has been removed
+- Struct `AccountsClientRegenerateKeysResult` has been removed
+- Struct `AccountsClientUpdateResult` has been removed
+- Struct `ClientListOperationsResult` has been removed
+- Struct `ClientListSubscriptionOperationsResult` has been removed
+- Struct `CreatorsClientCreateOrUpdateResult` has been removed
+- Struct `CreatorsClientGetResult` has been removed
+- Struct `CreatorsClientListByAccountResult` has been removed
+- Struct `CreatorsClientUpdateResult` has been removed
+- Field `CreatorsClientListByAccountResult` of struct `CreatorsClientListByAccountResponse` has been removed
+- Field `RawResponse` of struct `CreatorsClientListByAccountResponse` has been removed
+- Field `CreatorsClientGetResult` of struct `CreatorsClientGetResponse` has been removed
+- Field `RawResponse` of struct `CreatorsClientGetResponse` has been removed
+- Field `AccountsClientRegenerateKeysResult` of struct `AccountsClientRegenerateKeysResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientRegenerateKeysResponse` has been removed
+- Field `AccountsClientListByResourceGroupResult` of struct `AccountsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientListByResourceGroupResponse` has been removed
+- Field `AccountsClientCreateOrUpdateResult` of struct `AccountsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientCreateOrUpdateResponse` has been removed
+- Field `ClientListOperationsResult` of struct `ClientListOperationsResponse` has been removed
+- Field `RawResponse` of struct `ClientListOperationsResponse` has been removed
+- Field `CreatorsClientCreateOrUpdateResult` of struct `CreatorsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `CreatorsClientCreateOrUpdateResponse` has been removed
+- Field `AccountsClientListSasResult` of struct `AccountsClientListSasResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientListSasResponse` has been removed
+- Field `RawResponse` of struct `CreatorsClientDeleteResponse` has been removed
+- Field `AccountsClientListBySubscriptionResult` of struct `AccountsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientListBySubscriptionResponse` has been removed
+- Field `AccountsClientUpdateResult` of struct `AccountsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientDeleteResponse` has been removed
+- Field `AccountsClientGetResult` of struct `AccountsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientGetResponse` has been removed
+- Field `ClientListSubscriptionOperationsResult` of struct `ClientListSubscriptionOperationsResponse` has been removed
+- Field `RawResponse` of struct `ClientListSubscriptionOperationsResponse` has been removed
+- Field `CreatorsClientUpdateResult` of struct `CreatorsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `CreatorsClientUpdateResponse` has been removed
+- Field `AccountsClientListKeysResult` of struct `AccountsClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientListKeysResponse` has been removed
+
+### Features Added
+
+- New function `*CreatorsClientListByAccountPager.More() bool`
+- New function `*ClientListOperationsPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*AccountsClientListBySubscriptionPager.More() bool`
+- New function `*ClientListSubscriptionOperationsPager.More() bool`
+- New function `*AccountsClientListByResourceGroupPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `AccountKeys` in struct `AccountsClientRegenerateKeysResponse`
+- New anonymous field `Operations` in struct `ClientListSubscriptionOperationsResponse`
+- New anonymous field `Creator` in struct `CreatorsClientGetResponse`
+- New anonymous field `Account` in struct `AccountsClientCreateOrUpdateResponse`
+- New anonymous field `Accounts` in struct `AccountsClientListBySubscriptionResponse`
+- New anonymous field `Creator` in struct `CreatorsClientCreateOrUpdateResponse`
+- New anonymous field `AccountSasToken` in struct `AccountsClientListSasResponse`
+- New anonymous field `Accounts` in struct `AccountsClientListByResourceGroupResponse`
+- New anonymous field `Operations` in struct `ClientListOperationsResponse`
+- New anonymous field `Account` in struct `AccountsClientGetResponse`
+- New anonymous field `CreatorList` in struct `CreatorsClientListByAccountResponse`
+- New anonymous field `AccountKeys` in struct `AccountsClientListKeysResponse`
+- New anonymous field `Account` in struct `AccountsClientUpdateResponse`
+- New anonymous field `Creator` in struct `CreatorsClientUpdateResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

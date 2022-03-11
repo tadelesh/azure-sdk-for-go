@@ -36,17 +36,17 @@ type CloudServicesUpdateDomainClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCloudServicesUpdateDomainClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CloudServicesUpdateDomainClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CloudServicesUpdateDomainClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *CloudServicesUpdateDomainClient) getUpdateDomainCreateRequest(ctx 
 
 // getUpdateDomainHandleResponse handles the GetUpdateDomain response.
 func (client *CloudServicesUpdateDomainClient) getUpdateDomainHandleResponse(resp *http.Response) (CloudServicesUpdateDomainClientGetUpdateDomainResponse, error) {
-	result := CloudServicesUpdateDomainClientGetUpdateDomainResponse{RawResponse: resp}
+	result := CloudServicesUpdateDomainClientGetUpdateDomainResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UpdateDomain); err != nil {
 		return CloudServicesUpdateDomainClientGetUpdateDomainResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *CloudServicesUpdateDomainClient) listUpdateDomainsCreateRequest(ct
 
 // listUpdateDomainsHandleResponse handles the ListUpdateDomains response.
 func (client *CloudServicesUpdateDomainClient) listUpdateDomainsHandleResponse(resp *http.Response) (CloudServicesUpdateDomainClientListUpdateDomainsResponse, error) {
-	result := CloudServicesUpdateDomainClientListUpdateDomainsResponse{RawResponse: resp}
+	result := CloudServicesUpdateDomainClientListUpdateDomainsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UpdateDomainListResult); err != nil {
 		return CloudServicesUpdateDomainClientListUpdateDomainsResponse{}, err
 	}
@@ -177,9 +177,7 @@ func (client *CloudServicesUpdateDomainClient) BeginWalkUpdateDomain(ctx context
 	if err != nil {
 		return CloudServicesUpdateDomainClientWalkUpdateDomainPollerResponse{}, err
 	}
-	result := CloudServicesUpdateDomainClientWalkUpdateDomainPollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudServicesUpdateDomainClientWalkUpdateDomainPollerResponse{}
 	pt, err := armruntime.NewPoller("CloudServicesUpdateDomainClient.WalkUpdateDomain", "", resp, client.pl)
 	if err != nil {
 		return CloudServicesUpdateDomainClientWalkUpdateDomainPollerResponse{}, err

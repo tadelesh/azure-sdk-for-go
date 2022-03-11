@@ -34,17 +34,17 @@ type CreatorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCreatorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CreatorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CreatorsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *CreatorsClient) createOrUpdateCreateRequest(ctx context.Context, r
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *CreatorsClient) createOrUpdateHandleResponse(resp *http.Response) (CreatorsClientCreateOrUpdateResponse, error) {
-	result := CreatorsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := CreatorsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Creator); err != nil {
 		return CreatorsClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *CreatorsClient) Delete(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return CreatorsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return CreatorsClientDeleteResponse{RawResponse: resp}, nil
+	return CreatorsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *CreatorsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *CreatorsClient) getHandleResponse(resp *http.Response) (CreatorsClientGetResponse, error) {
-	result := CreatorsClientGetResponse{RawResponse: resp}
+	result := CreatorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Creator); err != nil {
 		return CreatorsClientGetResponse{}, err
 	}
@@ -267,7 +267,7 @@ func (client *CreatorsClient) listByAccountCreateRequest(ctx context.Context, re
 
 // listByAccountHandleResponse handles the ListByAccount response.
 func (client *CreatorsClient) listByAccountHandleResponse(resp *http.Response) (CreatorsClientListByAccountResponse, error) {
-	result := CreatorsClientListByAccountResponse{RawResponse: resp}
+	result := CreatorsClientListByAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CreatorList); err != nil {
 		return CreatorsClientListByAccountResponse{}, err
 	}
@@ -328,7 +328,7 @@ func (client *CreatorsClient) updateCreateRequest(ctx context.Context, resourceG
 
 // updateHandleResponse handles the Update response.
 func (client *CreatorsClient) updateHandleResponse(resp *http.Response) (CreatorsClientUpdateResponse, error) {
-	result := CreatorsClientUpdateResponse{RawResponse: resp}
+	result := CreatorsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Creator); err != nil {
 		return CreatorsClientUpdateResponse{}, err
 	}

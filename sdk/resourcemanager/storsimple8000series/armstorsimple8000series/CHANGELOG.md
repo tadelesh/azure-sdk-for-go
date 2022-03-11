@@ -1,0 +1,490 @@
+# Release History
+
+## 0.2.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*CloudAppliancesClient.ListSupportedConfigurations` parameter(s) have been changed from `(context.Context, string, string, *CloudAppliancesClientListSupportedConfigurationsOptions)` to `(string, string, *CloudAppliancesClientListSupportedConfigurationsOptions)`
+- Function `*CloudAppliancesClient.ListSupportedConfigurations` return value(s) have been changed from `(CloudAppliancesClientListSupportedConfigurationsResponse, error)` to `(*CloudAppliancesClientListSupportedConfigurationsPager)`
+- Function `*VolumeContainersClient.ListMetrics` parameter(s) have been changed from `(context.Context, string, string, string, string, string, *VolumeContainersClientListMetricsOptions)` to `(string, string, string, string, string, *VolumeContainersClientListMetricsOptions)`
+- Function `*VolumeContainersClient.ListMetrics` return value(s) have been changed from `(VolumeContainersClientListMetricsResponse, error)` to `(*VolumeContainersClientListMetricsPager)`
+- Function `*BandwidthSettingsClient.ListByManager` parameter(s) have been changed from `(context.Context, string, string, *BandwidthSettingsClientListByManagerOptions)` to `(string, string, *BandwidthSettingsClientListByManagerOptions)`
+- Function `*BandwidthSettingsClient.ListByManager` return value(s) have been changed from `(BandwidthSettingsClientListByManagerResponse, error)` to `(*BandwidthSettingsClientListByManagerPager)`
+- Function `*VolumesClient.ListMetrics` parameter(s) have been changed from `(context.Context, string, string, string, string, string, string, *VolumesClientListMetricsOptions)` to `(string, string, string, string, string, string, *VolumesClientListMetricsOptions)`
+- Function `*VolumesClient.ListMetrics` return value(s) have been changed from `(VolumesClientListMetricsResponse, error)` to `(*VolumesClientListMetricsPager)`
+- Function `*ManagersClient.ListMetrics` parameter(s) have been changed from `(context.Context, string, string, string, *ManagersClientListMetricsOptions)` to `(string, string, string, *ManagersClientListMetricsOptions)`
+- Function `*ManagersClient.ListMetrics` return value(s) have been changed from `(ManagersClientListMetricsResponse, error)` to `(*ManagersClientListMetricsPager)`
+- Function `*JobsClientListByManagerPager.NextPage` return value(s) have been changed from `(bool)` to `(JobsClientListByManagerResponse, error)`
+- Function `*ManagersClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *ManagersClientListByResourceGroupOptions)` to `(string, *ManagersClientListByResourceGroupOptions)`
+- Function `*ManagersClient.ListByResourceGroup` return value(s) have been changed from `(ManagersClientListByResourceGroupResponse, error)` to `(*ManagersClientListByResourceGroupPager)`
+- Function `*VolumeContainersClient.ListMetricDefinition` parameter(s) have been changed from `(context.Context, string, string, string, string, *VolumeContainersClientListMetricDefinitionOptions)` to `(string, string, string, string, *VolumeContainersClientListMetricDefinitionOptions)`
+- Function `*VolumeContainersClient.ListMetricDefinition` return value(s) have been changed from `(VolumeContainersClientListMetricDefinitionResponse, error)` to `(*VolumeContainersClientListMetricDefinitionPager)`
+- Function `*VolumesClient.ListMetricDefinition` parameter(s) have been changed from `(context.Context, string, string, string, string, string, *VolumesClientListMetricDefinitionOptions)` to `(string, string, string, string, string, *VolumesClientListMetricDefinitionOptions)`
+- Function `*VolumesClient.ListMetricDefinition` return value(s) have been changed from `(VolumesClientListMetricDefinitionResponse, error)` to `(*VolumesClientListMetricDefinitionPager)`
+- Function `*ManagersClient.ListFeatureSupportStatus` parameter(s) have been changed from `(context.Context, string, string, *ManagersClientListFeatureSupportStatusOptions)` to `(string, string, *ManagersClientListFeatureSupportStatusOptions)`
+- Function `*ManagersClient.ListFeatureSupportStatus` return value(s) have been changed from `(ManagersClientListFeatureSupportStatusResponse, error)` to `(*ManagersClientListFeatureSupportStatusPager)`
+- Function `*BackupSchedulesClient.ListByBackupPolicy` parameter(s) have been changed from `(context.Context, string, string, string, string, *BackupSchedulesClientListByBackupPolicyOptions)` to `(string, string, string, string, *BackupSchedulesClientListByBackupPolicyOptions)`
+- Function `*BackupSchedulesClient.ListByBackupPolicy` return value(s) have been changed from `(BackupSchedulesClientListByBackupPolicyResponse, error)` to `(*BackupSchedulesClientListByBackupPolicyPager)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*BackupsClientListByDevicePager.NextPage` return value(s) have been changed from `(bool)` to `(BackupsClientListByDeviceResponse, error)`
+- Function `*ManagersClient.ListMetricDefinition` parameter(s) have been changed from `(context.Context, string, string, *ManagersClientListMetricDefinitionOptions)` to `(string, string, *ManagersClientListMetricDefinitionOptions)`
+- Function `*ManagersClient.ListMetricDefinition` return value(s) have been changed from `(ManagersClientListMetricDefinitionResponse, error)` to `(*ManagersClientListMetricDefinitionPager)`
+- Function `*ManagersClient.List` parameter(s) have been changed from `(context.Context, *ManagersClientListOptions)` to `(*ManagersClientListOptions)`
+- Function `*ManagersClient.List` return value(s) have been changed from `(ManagersClientListResponse, error)` to `(*ManagersClientListPager)`
+- Function `*VolumesClient.ListByDevice` parameter(s) have been changed from `(context.Context, string, string, string, *VolumesClientListByDeviceOptions)` to `(string, string, string, *VolumesClientListByDeviceOptions)`
+- Function `*VolumesClient.ListByDevice` return value(s) have been changed from `(VolumesClientListByDeviceResponse, error)` to `(*VolumesClientListByDevicePager)`
+- Function `*BackupPoliciesClient.ListByDevice` parameter(s) have been changed from `(context.Context, string, string, string, *BackupPoliciesClientListByDeviceOptions)` to `(string, string, string, *BackupPoliciesClientListByDeviceOptions)`
+- Function `*BackupPoliciesClient.ListByDevice` return value(s) have been changed from `(BackupPoliciesClientListByDeviceResponse, error)` to `(*BackupPoliciesClientListByDevicePager)`
+- Function `*DevicesClient.ListMetricDefinition` parameter(s) have been changed from `(context.Context, string, string, string, *DevicesClientListMetricDefinitionOptions)` to `(string, string, string, *DevicesClientListMetricDefinitionOptions)`
+- Function `*DevicesClient.ListMetricDefinition` return value(s) have been changed from `(DevicesClientListMetricDefinitionResponse, error)` to `(*DevicesClientListMetricDefinitionPager)`
+- Function `*DevicesClient.ListMetrics` parameter(s) have been changed from `(context.Context, string, string, string, string, *DevicesClientListMetricsOptions)` to `(string, string, string, string, *DevicesClientListMetricsOptions)`
+- Function `*DevicesClient.ListMetrics` return value(s) have been changed from `(DevicesClientListMetricsResponse, error)` to `(*DevicesClientListMetricsPager)`
+- Function `*DevicesClient.ListFailoverSets` parameter(s) have been changed from `(context.Context, string, string, string, *DevicesClientListFailoverSetsOptions)` to `(string, string, string, *DevicesClientListFailoverSetsOptions)`
+- Function `*DevicesClient.ListFailoverSets` return value(s) have been changed from `(DevicesClientListFailoverSetsResponse, error)` to `(*DevicesClientListFailoverSetsPager)`
+- Function `*StorageAccountCredentialsClient.ListByManager` parameter(s) have been changed from `(context.Context, string, string, *StorageAccountCredentialsClientListByManagerOptions)` to `(string, string, *StorageAccountCredentialsClientListByManagerOptions)`
+- Function `*StorageAccountCredentialsClient.ListByManager` return value(s) have been changed from `(StorageAccountCredentialsClientListByManagerResponse, error)` to `(*StorageAccountCredentialsClientListByManagerPager)`
+- Function `*AlertsClientListByManagerPager.NextPage` return value(s) have been changed from `(bool)` to `(AlertsClientListByManagerResponse, error)`
+- Function `*DevicesClient.ListByManager` parameter(s) have been changed from `(context.Context, string, string, *DevicesClientListByManagerOptions)` to `(string, string, *DevicesClientListByManagerOptions)`
+- Function `*DevicesClient.ListByManager` return value(s) have been changed from `(DevicesClientListByManagerResponse, error)` to `(*DevicesClientListByManagerPager)`
+- Function `*VolumesClient.ListByVolumeContainer` parameter(s) have been changed from `(context.Context, string, string, string, string, *VolumesClientListByVolumeContainerOptions)` to `(string, string, string, string, *VolumesClientListByVolumeContainerOptions)`
+- Function `*VolumesClient.ListByVolumeContainer` return value(s) have been changed from `(VolumesClientListByVolumeContainerResponse, error)` to `(*VolumesClientListByVolumeContainerPager)`
+- Function `*HardwareComponentGroupsClient.ListByDevice` parameter(s) have been changed from `(context.Context, string, string, string, *HardwareComponentGroupsClientListByDeviceOptions)` to `(string, string, string, *HardwareComponentGroupsClientListByDeviceOptions)`
+- Function `*HardwareComponentGroupsClient.ListByDevice` return value(s) have been changed from `(HardwareComponentGroupsClientListByDeviceResponse, error)` to `(*HardwareComponentGroupsClientListByDevicePager)`
+- Function `*AccessControlRecordsClient.ListByManager` parameter(s) have been changed from `(context.Context, string, string, *AccessControlRecordsClientListByManagerOptions)` to `(string, string, *AccessControlRecordsClientListByManagerOptions)`
+- Function `*AccessControlRecordsClient.ListByManager` return value(s) have been changed from `(AccessControlRecordsClientListByManagerResponse, error)` to `(*AccessControlRecordsClientListByManagerPager)`
+- Function `*JobsClientListByDevicePager.NextPage` return value(s) have been changed from `(bool)` to `(JobsClientListByDeviceResponse, error)`
+- Function `*DevicesClient.ListFailoverTargets` parameter(s) have been changed from `(context.Context, string, string, string, ListFailoverTargetsRequest, *DevicesClientListFailoverTargetsOptions)` to `(string, string, string, ListFailoverTargetsRequest, *DevicesClientListFailoverTargetsOptions)`
+- Function `*DevicesClient.ListFailoverTargets` return value(s) have been changed from `(DevicesClientListFailoverTargetsResponse, error)` to `(*DevicesClientListFailoverTargetsPager)`
+- Function `*VolumeContainersClient.ListByDevice` parameter(s) have been changed from `(context.Context, string, string, string, *VolumeContainersClientListByDeviceOptions)` to `(string, string, string, *VolumeContainersClientListByDeviceOptions)`
+- Function `*VolumeContainersClient.ListByDevice` return value(s) have been changed from `(VolumeContainersClientListByDeviceResponse, error)` to `(*VolumeContainersClientListByDevicePager)`
+- Function `*AlertsClientListByManagerPager.Err` has been removed
+- Function `*JobsClientListByManagerPager.PageResponse` has been removed
+- Function `*JobsClientListByDevicePager.Err` has been removed
+- Function `*JobsClientListByDevicePager.PageResponse` has been removed
+- Function `*AlertsClientListByManagerPager.PageResponse` has been removed
+- Function `*BackupsClientListByDevicePager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*JobsClientListByManagerPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*BackupsClientListByDevicePager.Err` has been removed
+- Struct `AccessControlRecordsClientCreateOrUpdateResult` has been removed
+- Struct `AccessControlRecordsClientGetResult` has been removed
+- Struct `AccessControlRecordsClientListByManagerResult` has been removed
+- Struct `AlertsClientListByManagerResult` has been removed
+- Struct `BackupPoliciesClientCreateOrUpdateResult` has been removed
+- Struct `BackupPoliciesClientGetResult` has been removed
+- Struct `BackupPoliciesClientListByDeviceResult` has been removed
+- Struct `BackupSchedulesClientCreateOrUpdateResult` has been removed
+- Struct `BackupSchedulesClientGetResult` has been removed
+- Struct `BackupSchedulesClientListByBackupPolicyResult` has been removed
+- Struct `BackupsClientListByDeviceResult` has been removed
+- Struct `BandwidthSettingsClientCreateOrUpdateResult` has been removed
+- Struct `BandwidthSettingsClientGetResult` has been removed
+- Struct `BandwidthSettingsClientListByManagerResult` has been removed
+- Struct `CloudAppliancesClientListSupportedConfigurationsResult` has been removed
+- Struct `DeviceSettingsClientCreateOrUpdateAlertSettingsResult` has been removed
+- Struct `DeviceSettingsClientCreateOrUpdateTimeSettingsResult` has been removed
+- Struct `DeviceSettingsClientGetAlertSettingsResult` has been removed
+- Struct `DeviceSettingsClientGetNetworkSettingsResult` has been removed
+- Struct `DeviceSettingsClientGetSecuritySettingsResult` has been removed
+- Struct `DeviceSettingsClientGetTimeSettingsResult` has been removed
+- Struct `DeviceSettingsClientUpdateNetworkSettingsResult` has been removed
+- Struct `DeviceSettingsClientUpdateSecuritySettingsResult` has been removed
+- Struct `DevicesClientGetResult` has been removed
+- Struct `DevicesClientGetUpdateSummaryResult` has been removed
+- Struct `DevicesClientListByManagerResult` has been removed
+- Struct `DevicesClientListFailoverSetsResult` has been removed
+- Struct `DevicesClientListFailoverTargetsResult` has been removed
+- Struct `DevicesClientListMetricDefinitionResult` has been removed
+- Struct `DevicesClientListMetricsResult` has been removed
+- Struct `DevicesClientUpdateResult` has been removed
+- Struct `HardwareComponentGroupsClientListByDeviceResult` has been removed
+- Struct `JobsClientGetResult` has been removed
+- Struct `JobsClientListByDeviceResult` has been removed
+- Struct `JobsClientListByManagerResult` has been removed
+- Struct `ManagersClientCreateExtendedInfoResult` has been removed
+- Struct `ManagersClientCreateOrUpdateResult` has been removed
+- Struct `ManagersClientGetActivationKeyResult` has been removed
+- Struct `ManagersClientGetDevicePublicEncryptionKeyResult` has been removed
+- Struct `ManagersClientGetEncryptionSettingsResult` has been removed
+- Struct `ManagersClientGetExtendedInfoResult` has been removed
+- Struct `ManagersClientGetPublicEncryptionKeyResult` has been removed
+- Struct `ManagersClientGetResult` has been removed
+- Struct `ManagersClientListByResourceGroupResult` has been removed
+- Struct `ManagersClientListFeatureSupportStatusResult` has been removed
+- Struct `ManagersClientListMetricDefinitionResult` has been removed
+- Struct `ManagersClientListMetricsResult` has been removed
+- Struct `ManagersClientListResult` has been removed
+- Struct `ManagersClientRegenerateActivationKeyResult` has been removed
+- Struct `ManagersClientUpdateExtendedInfoResult` has been removed
+- Struct `ManagersClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `StorageAccountCredentialsClientCreateOrUpdateResult` has been removed
+- Struct `StorageAccountCredentialsClientGetResult` has been removed
+- Struct `StorageAccountCredentialsClientListByManagerResult` has been removed
+- Struct `VolumeContainersClientCreateOrUpdateResult` has been removed
+- Struct `VolumeContainersClientGetResult` has been removed
+- Struct `VolumeContainersClientListByDeviceResult` has been removed
+- Struct `VolumeContainersClientListMetricDefinitionResult` has been removed
+- Struct `VolumeContainersClientListMetricsResult` has been removed
+- Struct `VolumesClientCreateOrUpdateResult` has been removed
+- Struct `VolumesClientGetResult` has been removed
+- Struct `VolumesClientListByDeviceResult` has been removed
+- Struct `VolumesClientListByVolumeContainerResult` has been removed
+- Struct `VolumesClientListMetricDefinitionResult` has been removed
+- Struct `VolumesClientListMetricsResult` has been removed
+- Field `ManagersClientGetDevicePublicEncryptionKeyResult` of struct `ManagersClientGetDevicePublicEncryptionKeyResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientGetDevicePublicEncryptionKeyResponse` has been removed
+- Field `VolumesClientListByVolumeContainerResult` of struct `VolumesClientListByVolumeContainerResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientListByVolumeContainerResponse` has been removed
+- Field `AccessControlRecordsClientListByManagerResult` of struct `AccessControlRecordsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `AccessControlRecordsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientInstallUpdatesResponse` has been removed
+- Field `BackupPoliciesClientListByDeviceResult` of struct `BackupPoliciesClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `BackupPoliciesClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientScanForUpdatesResponse` has been removed
+- Field `RawResponse` of struct `AccessControlRecordsClientDeletePollerResponse` has been removed
+- Field `ManagersClientRegenerateActivationKeyResult` of struct `ManagersClientRegenerateActivationKeyResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientRegenerateActivationKeyResponse` has been removed
+- Field `ManagersClientUpdateResult` of struct `ManagersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientDeleteResponse` has been removed
+- Field `DevicesClientListFailoverTargetsResult` of struct `DevicesClientListFailoverTargetsResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientListFailoverTargetsResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientConfigureResponse` has been removed
+- Field `RawResponse` of struct `BackupSchedulesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `HardwareComponentGroupsClientChangeControllerPowerStatePollerResponse` has been removed
+- Field `VolumesClientListMetricsResult` of struct `VolumesClientListMetricsResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientListMetricsResponse` has been removed
+- Field `ManagersClientListMetricDefinitionResult` of struct `ManagersClientListMetricDefinitionResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientListMetricDefinitionResponse` has been removed
+- Field `ManagersClientGetExtendedInfoResult` of struct `ManagersClientGetExtendedInfoResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientGetExtendedInfoResponse` has been removed
+- Field `BandwidthSettingsClientGetResult` of struct `BandwidthSettingsClientGetResponse` has been removed
+- Field `RawResponse` of struct `BandwidthSettingsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `BackupPoliciesClientBackupNowPollerResponse` has been removed
+- Field `VolumeContainersClientListByDeviceResult` of struct `VolumeContainersClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `VolumeContainersClientListByDeviceResponse` has been removed
+- Field `BackupPoliciesClientGetResult` of struct `BackupPoliciesClientGetResponse` has been removed
+- Field `RawResponse` of struct `BackupPoliciesClientGetResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `DeviceSettingsClientUpdateNetworkSettingsPollerResponse` has been removed
+- Field `RawResponse` of struct `DeviceSettingsClientSyncRemotemanagementCertificatePollerResponse` has been removed
+- Field `RawResponse` of struct `VolumeContainersClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientInstallUpdatesPollerResponse` has been removed
+- Field `RawResponse` of struct `BackupPoliciesClientBackupNowResponse` has been removed
+- Field `BandwidthSettingsClientListByManagerResult` of struct `BandwidthSettingsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `BandwidthSettingsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `VolumeContainersClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientFailoverPollerResponse` has been removed
+- Field `RawResponse` of struct `AccessControlRecordsClientDeleteResponse` has been removed
+- Field `JobsClientGetResult` of struct `JobsClientGetResponse` has been removed
+- Field `RawResponse` of struct `JobsClientGetResponse` has been removed
+- Field `DeviceSettingsClientCreateOrUpdateAlertSettingsResult` of struct `DeviceSettingsClientCreateOrUpdateAlertSettingsResponse` has been removed
+- Field `RawResponse` of struct `DeviceSettingsClientCreateOrUpdateAlertSettingsResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientRestorePollerResponse` has been removed
+- Field `VolumesClientGetResult` of struct `VolumesClientGetResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientGetResponse` has been removed
+- Field `ManagersClientGetResult` of struct `ManagersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientGetResponse` has been removed
+- Field `StorageAccountCredentialsClientCreateOrUpdateResult` of struct `StorageAccountCredentialsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientCreateOrUpdateResponse` has been removed
+- Field `DeviceSettingsClientUpdateSecuritySettingsResult` of struct `DeviceSettingsClientUpdateSecuritySettingsResponse` has been removed
+- Field `RawResponse` of struct `DeviceSettingsClientUpdateSecuritySettingsResponse` has been removed
+- Field `RawResponse` of struct `AccessControlRecordsClientCreateOrUpdatePollerResponse` has been removed
+- Field `HardwareComponentGroupsClientListByDeviceResult` of struct `HardwareComponentGroupsClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `HardwareComponentGroupsClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientDeleteResponse` has been removed
+- Field `VolumeContainersClientListMetricDefinitionResult` of struct `VolumeContainersClientListMetricDefinitionResponse` has been removed
+- Field `RawResponse` of struct `VolumeContainersClientListMetricDefinitionResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientFailoverResponse` has been removed
+- Field `ManagersClientCreateOrUpdateResult` of struct `ManagersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientCloneResponse` has been removed
+- Field `ManagersClientListResult` of struct `ManagersClientListResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientListResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientConfigurePollerResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientCreateOrUpdatePollerResponse` has been removed
+- Field `DeviceSettingsClientCreateOrUpdateTimeSettingsResult` of struct `DeviceSettingsClientCreateOrUpdateTimeSettingsResponse` has been removed
+- Field `RawResponse` of struct `DeviceSettingsClientCreateOrUpdateTimeSettingsResponse` has been removed
+- Field `RawResponse` of struct `HardwareComponentGroupsClientChangeControllerPowerStateResponse` has been removed
+- Field `StorageAccountCredentialsClientListByManagerResult` of struct `StorageAccountCredentialsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientListByManagerResponse` has been removed
+- Field `BackupSchedulesClientCreateOrUpdateResult` of struct `BackupSchedulesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `BackupSchedulesClientCreateOrUpdateResponse` has been removed
+- Field `VolumesClientCreateOrUpdateResult` of struct `VolumesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientCreateOrUpdateResponse` has been removed
+- Field `BackupPoliciesClientCreateOrUpdateResult` of struct `BackupPoliciesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `BackupPoliciesClientCreateOrUpdateResponse` has been removed
+- Field `DevicesClientListMetricsResult` of struct `DevicesClientListMetricsResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientListMetricsResponse` has been removed
+- Field `RawResponse` of struct `JobsClientCancelResponse` has been removed
+- Field `ManagersClientListFeatureSupportStatusResult` of struct `ManagersClientListFeatureSupportStatusResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientListFeatureSupportStatusResponse` has been removed
+- Field `RawResponse` of struct `BandwidthSettingsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DeviceSettingsClientUpdateSecuritySettingsPollerResponse` has been removed
+- Field `RawResponse` of struct `BackupPoliciesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `JobsClientCancelPollerResponse` has been removed
+- Field `ManagersClientListMetricsResult` of struct `ManagersClientListMetricsResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientListMetricsResponse` has been removed
+- Field `JobsClientListByDeviceResult` of struct `JobsClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `JobsClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientDeleteExtendedInfoResponse` has been removed
+- Field `DevicesClientListByManagerResult` of struct `DevicesClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientListByManagerResponse` has been removed
+- Field `DevicesClientListFailoverSetsResult` of struct `DevicesClientListFailoverSetsResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientListFailoverSetsResponse` has been removed
+- Field `RawResponse` of struct `BackupSchedulesClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientRestoreResponse` has been removed
+- Field `VolumesClientListByDeviceResult` of struct `VolumesClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientListByDeviceResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `CloudAppliancesClientProvisionResponse` has been removed
+- Field `VolumeContainersClientGetResult` of struct `VolumeContainersClientGetResponse` has been removed
+- Field `RawResponse` of struct `VolumeContainersClientGetResponse` has been removed
+- Field `DevicesClientListMetricDefinitionResult` of struct `DevicesClientListMetricDefinitionResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientListMetricDefinitionResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DeviceSettingsClientCreateOrUpdateTimeSettingsPollerResponse` has been removed
+- Field `RawResponse` of struct `CloudAppliancesClientProvisionPollerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientScanForUpdatesPollerResponse` has been removed
+- Field `RawResponse` of struct `BackupSchedulesClientDeleteResponse` has been removed
+- Field `AlertsClientListByManagerResult` of struct `AlertsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `AlertsClientListByManagerResponse` has been removed
+- Field `DeviceSettingsClientGetAlertSettingsResult` of struct `DeviceSettingsClientGetAlertSettingsResponse` has been removed
+- Field `RawResponse` of struct `DeviceSettingsClientGetAlertSettingsResponse` has been removed
+- Field `RawResponse` of struct `BandwidthSettingsClientDeleteResponse` has been removed
+- Field `JobsClientListByManagerResult` of struct `JobsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `JobsClientListByManagerResponse` has been removed
+- Field `RawResponse` of struct `DeviceSettingsClientCreateOrUpdateAlertSettingsPollerResponse` has been removed
+- Field `ManagersClientCreateExtendedInfoResult` of struct `ManagersClientCreateExtendedInfoResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientCreateExtendedInfoResponse` has been removed
+- Field `VolumeContainersClientListMetricsResult` of struct `VolumeContainersClientListMetricsResponse` has been removed
+- Field `RawResponse` of struct `VolumeContainersClientListMetricsResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientDeleteResponse` has been removed
+- Field `ManagersClientGetActivationKeyResult` of struct `ManagersClientGetActivationKeyResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientGetActivationKeyResponse` has been removed
+- Field `DevicesClientGetUpdateSummaryResult` of struct `DevicesClientGetUpdateSummaryResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientGetUpdateSummaryResponse` has been removed
+- Field `RawResponse` of struct `AlertsClientClearResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientClonePollerResponse` has been removed
+- Field `RawResponse` of struct `BackupPoliciesClientDeletePollerResponse` has been removed
+- Field `DeviceSettingsClientUpdateNetworkSettingsResult` of struct `DeviceSettingsClientUpdateNetworkSettingsResponse` has been removed
+- Field `RawResponse` of struct `DeviceSettingsClientUpdateNetworkSettingsResponse` has been removed
+- Field `VolumesClientListMetricDefinitionResult` of struct `VolumesClientListMetricDefinitionResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientListMetricDefinitionResponse` has been removed
+- Field `DeviceSettingsClientGetSecuritySettingsResult` of struct `DeviceSettingsClientGetSecuritySettingsResponse` has been removed
+- Field `RawResponse` of struct `DeviceSettingsClientGetSecuritySettingsResponse` has been removed
+- Field `StorageAccountCredentialsClientGetResult` of struct `StorageAccountCredentialsClientGetResponse` has been removed
+- Field `RawResponse` of struct `StorageAccountCredentialsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientDeactivatePollerResponse` has been removed
+- Field `BandwidthSettingsClientCreateOrUpdateResult` of struct `BandwidthSettingsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `BandwidthSettingsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientDeleteResponse` has been removed
+- Field `DevicesClientGetResult` of struct `DevicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientGetResponse` has been removed
+- Field `VolumeContainersClientCreateOrUpdateResult` of struct `VolumeContainersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VolumeContainersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `BandwidthSettingsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `DeviceSettingsClientSyncRemotemanagementCertificateResponse` has been removed
+- Field `BackupSchedulesClientGetResult` of struct `BackupSchedulesClientGetResponse` has been removed
+- Field `RawResponse` of struct `BackupSchedulesClientGetResponse` has been removed
+- Field `ManagersClientGetPublicEncryptionKeyResult` of struct `ManagersClientGetPublicEncryptionKeyResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientGetPublicEncryptionKeyResponse` has been removed
+- Field `DeviceSettingsClientGetNetworkSettingsResult` of struct `DeviceSettingsClientGetNetworkSettingsResponse` has been removed
+- Field `RawResponse` of struct `DeviceSettingsClientGetNetworkSettingsResponse` has been removed
+- Field `AccessControlRecordsClientCreateOrUpdateResult` of struct `AccessControlRecordsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccessControlRecordsClientCreateOrUpdateResponse` has been removed
+- Field `ManagersClientUpdateExtendedInfoResult` of struct `ManagersClientUpdateExtendedInfoResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientUpdateExtendedInfoResponse` has been removed
+- Field `RawResponse` of struct `BackupPoliciesClientCreateOrUpdatePollerResponse` has been removed
+- Field `CloudAppliancesClientListSupportedConfigurationsResult` of struct `CloudAppliancesClientListSupportedConfigurationsResponse` has been removed
+- Field `RawResponse` of struct `CloudAppliancesClientListSupportedConfigurationsResponse` has been removed
+- Field `RawResponse` of struct `AlertsClientSendTestEmailResponse` has been removed
+- Field `AccessControlRecordsClientGetResult` of struct `AccessControlRecordsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AccessControlRecordsClientGetResponse` has been removed
+- Field `BackupsClientListByDeviceResult` of struct `BackupsClientListByDeviceResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientListByDeviceResponse` has been removed
+- Field `DeviceSettingsClientGetTimeSettingsResult` of struct `DeviceSettingsClientGetTimeSettingsResponse` has been removed
+- Field `RawResponse` of struct `DeviceSettingsClientGetTimeSettingsResponse` has been removed
+- Field `BackupSchedulesClientListByBackupPolicyResult` of struct `BackupSchedulesClientListByBackupPolicyResponse` has been removed
+- Field `RawResponse` of struct `BackupSchedulesClientListByBackupPolicyResponse` has been removed
+- Field `ManagersClientGetEncryptionSettingsResult` of struct `ManagersClientGetEncryptionSettingsResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientGetEncryptionSettingsResponse` has been removed
+- Field `ManagersClientListByResourceGroupResult` of struct `ManagersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ManagersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientDeactivateResponse` has been removed
+- Field `DevicesClientUpdateResult` of struct `DevicesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientAuthorizeForServiceEncryptionKeyRolloverResponse` has been removed
+- Field `RawResponse` of struct `VolumeContainersClientDeletePollerResponse` has been removed
+
+### Features Added
+
+- New function `*AccessControlRecordsClientListByManagerPager.More() bool`
+- New function `*ManagersClientListFeatureSupportStatusPager.More() bool`
+- New function `*ManagersClientListMetricsPager.More() bool`
+- New function `MetricFilter.MarshalJSON() ([]byte, error)`
+- New function `BackupFilter.MarshalJSON() ([]byte, error)`
+- New function `*VolumesClientListMetricsPager.More() bool`
+- New function `*CloudAppliancesClientListSupportedConfigurationsPager.More() bool`
+- New function `*DevicesClientListMetricDefinitionPager.More() bool`
+- New function `*AlertFilter.UnmarshalJSON([]byte) error`
+- New function `*VolumeContainersClientListMetricDefinitionPager.More() bool`
+- New function `*AlertsClientListByManagerPager.More() bool`
+- New function `*DevicesClientListByManagerPager.NextPage(context.Context) (DevicesClientListByManagerResponse, error)`
+- New function `*ManagersClientListPager.NextPage(context.Context) (ManagersClientListResponse, error)`
+- New function `*DevicesClientListMetricsPager.More() bool`
+- New function `*VolumeContainersClientListMetricsPager.More() bool`
+- New function `*BandwidthSettingsClientListByManagerPager.More() bool`
+- New function `*JobsClientListByManagerPager.More() bool`
+- New function `*VolumesClientListByVolumeContainerPager.NextPage(context.Context) (VolumesClientListByVolumeContainerResponse, error)`
+- New function `*MetricFilter.UnmarshalJSON([]byte) error`
+- New function `*ManagersClientListByResourceGroupPager.NextPage(context.Context) (ManagersClientListByResourceGroupResponse, error)`
+- New function `*VolumesClientListByVolumeContainerPager.More() bool`
+- New function `*HardwareComponentGroupsClientListByDevicePager.NextPage(context.Context) (HardwareComponentGroupsClientListByDeviceResponse, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*VolumesClientListMetricDefinitionPager.More() bool`
+- New function `*DevicesClientListFailoverTargetsPager.NextPage(context.Context) (DevicesClientListFailoverTargetsResponse, error)`
+- New function `*ManagersClientListMetricDefinitionPager.More() bool`
+- New function `*BackupSchedulesClientListByBackupPolicyPager.NextPage(context.Context) (BackupSchedulesClientListByBackupPolicyResponse, error)`
+- New function `*VolumesClientListByDevicePager.NextPage(context.Context) (VolumesClientListByDeviceResponse, error)`
+- New function `*VolumesClientListMetricsPager.NextPage(context.Context) (VolumesClientListMetricsResponse, error)`
+- New function `*DevicesClientListMetricsPager.NextPage(context.Context) (DevicesClientListMetricsResponse, error)`
+- New function `*StorageAccountCredentialsClientListByManagerPager.NextPage(context.Context) (StorageAccountCredentialsClientListByManagerResponse, error)`
+- New function `*BackupPoliciesClientListByDevicePager.More() bool`
+- New function `*DevicesClientListMetricDefinitionPager.NextPage(context.Context) (DevicesClientListMetricDefinitionResponse, error)`
+- New function `*VolumeContainersClientListByDevicePager.NextPage(context.Context) (VolumeContainersClientListByDeviceResponse, error)`
+- New function `*DevicesClientListFailoverSetsPager.More() bool`
+- New function `*BackupPoliciesClientListByDevicePager.NextPage(context.Context) (BackupPoliciesClientListByDeviceResponse, error)`
+- New function `*ManagersClientListFeatureSupportStatusPager.NextPage(context.Context) (ManagersClientListFeatureSupportStatusResponse, error)`
+- New function `*DevicesClientListFailoverSetsPager.NextPage(context.Context) (DevicesClientListFailoverSetsResponse, error)`
+- New function `*ManagersClientListMetricDefinitionPager.NextPage(context.Context) (ManagersClientListMetricDefinitionResponse, error)`
+- New function `*VolumeContainersClientListByDevicePager.More() bool`
+- New function `*VolumesClientListByDevicePager.More() bool`
+- New function `*HardwareComponentGroupsClientListByDevicePager.More() bool`
+- New function `*JobFilter.UnmarshalJSON([]byte) error`
+- New function `*CloudAppliancesClientListSupportedConfigurationsPager.NextPage(context.Context) (CloudAppliancesClientListSupportedConfigurationsResponse, error)`
+- New function `*BackupSchedulesClientListByBackupPolicyPager.More() bool`
+- New function `*AccessControlRecordsClientListByManagerPager.NextPage(context.Context) (AccessControlRecordsClientListByManagerResponse, error)`
+- New function `*ManagersClientListPager.More() bool`
+- New function `*ManagersClientListMetricsPager.NextPage(context.Context) (ManagersClientListMetricsResponse, error)`
+- New function `*BackupsClientListByDevicePager.More() bool`
+- New function `*VolumeContainersClientListMetricDefinitionPager.NextPage(context.Context) (VolumeContainersClientListMetricDefinitionResponse, error)`
+- New function `*StorageAccountCredentialsClientListByManagerPager.More() bool`
+- New function `AlertFilter.MarshalJSON() ([]byte, error)`
+- New function `*DevicesClientListByManagerPager.More() bool`
+- New function `JobFilter.MarshalJSON() ([]byte, error)`
+- New function `*BackupFilter.UnmarshalJSON([]byte) error`
+- New function `*JobsClientListByDevicePager.More() bool`
+- New function `*BandwidthSettingsClientListByManagerPager.NextPage(context.Context) (BandwidthSettingsClientListByManagerResponse, error)`
+- New function `*VolumesClientListMetricDefinitionPager.NextPage(context.Context) (VolumesClientListMetricDefinitionResponse, error)`
+- New function `*ManagersClientListByResourceGroupPager.More() bool`
+- New function `*DevicesClientListFailoverTargetsPager.More() bool`
+- New function `*VolumeContainersClientListMetricsPager.NextPage(context.Context) (VolumeContainersClientListMetricsResponse, error)`
+- New struct `AccessControlRecordsClientListByManagerPager`
+- New struct `AlertFilter`
+- New struct `BackupFilter`
+- New struct `BackupPoliciesClientListByDevicePager`
+- New struct `BackupSchedulesClientListByBackupPolicyPager`
+- New struct `BandwidthSettingsClientListByManagerPager`
+- New struct `CloudAppliancesClientListSupportedConfigurationsPager`
+- New struct `DevicesClientListByManagerPager`
+- New struct `DevicesClientListFailoverSetsPager`
+- New struct `DevicesClientListFailoverTargetsPager`
+- New struct `DevicesClientListMetricDefinitionPager`
+- New struct `DevicesClientListMetricsPager`
+- New struct `DimensionFilter`
+- New struct `FeatureFilter`
+- New struct `HardwareComponentGroupsClientListByDevicePager`
+- New struct `JobFilter`
+- New struct `ManagersClientListByResourceGroupPager`
+- New struct `ManagersClientListFeatureSupportStatusPager`
+- New struct `ManagersClientListMetricDefinitionPager`
+- New struct `ManagersClientListMetricsPager`
+- New struct `ManagersClientListPager`
+- New struct `MetricFilter`
+- New struct `MetricNameFilter`
+- New struct `StorageAccountCredentialsClientListByManagerPager`
+- New struct `VolumeContainersClientListByDevicePager`
+- New struct `VolumeContainersClientListMetricDefinitionPager`
+- New struct `VolumeContainersClientListMetricsPager`
+- New struct `VolumesClientListByDevicePager`
+- New struct `VolumesClientListByVolumeContainerPager`
+- New struct `VolumesClientListMetricDefinitionPager`
+- New struct `VolumesClientListMetricsPager`
+- New anonymous field `AccessControlRecordList` in struct `AccessControlRecordsClientListByManagerResponse`
+- New anonymous field `BackupScheduleList` in struct `BackupSchedulesClientListByBackupPolicyResponse`
+- New anonymous field `ManagerExtendedInfo` in struct `ManagersClientUpdateExtendedInfoResponse`
+- New anonymous field `AlertSettings` in struct `DeviceSettingsClientGetAlertSettingsResponse`
+- New anonymous field `JobList` in struct `JobsClientListByManagerResponse`
+- New anonymous field `BackupPolicy` in struct `BackupPoliciesClientGetResponse`
+- New anonymous field `BandwidthSetting` in struct `BandwidthSettingsClientCreateOrUpdateResponse`
+- New anonymous field `BandwidthSetting` in struct `BandwidthSettingsClientGetResponse`
+- New anonymous field `CloudApplianceConfigurationList` in struct `CloudAppliancesClientListSupportedConfigurationsResponse`
+- New anonymous field `Job` in struct `JobsClientGetResponse`
+- New anonymous field `VolumeList` in struct `VolumesClientListByVolumeContainerResponse`
+- New anonymous field `BackupList` in struct `BackupsClientListByDeviceResponse`
+- New anonymous field `SecuritySettings` in struct `DeviceSettingsClientGetSecuritySettingsResponse`
+- New anonymous field `StorageAccountCredential` in struct `StorageAccountCredentialsClientCreateOrUpdateResponse`
+- New anonymous field `FailoverTargetsList` in struct `DevicesClientListFailoverTargetsResponse`
+- New anonymous field `FailoverSetsList` in struct `DevicesClientListFailoverSetsResponse`
+- New anonymous field `MetricList` in struct `DevicesClientListMetricsResponse`
+- New anonymous field `BackupPolicyList` in struct `BackupPoliciesClientListByDeviceResponse`
+- New anonymous field `AccessControlRecord` in struct `AccessControlRecordsClientCreateOrUpdateResponse`
+- New anonymous field `Volume` in struct `VolumesClientCreateOrUpdateResponse`
+- New anonymous field `ManagerList` in struct `ManagersClientListResponse`
+- New anonymous field `FeatureList` in struct `ManagersClientListFeatureSupportStatusResponse`
+- New anonymous field `SymmetricEncryptedSecret` in struct `ManagersClientGetPublicEncryptionKeyResponse`
+- New anonymous field `MetricList` in struct `VolumesClientListMetricsResponse`
+- New anonymous field `AvailableProviderOperationList` in struct `OperationsClientListResponse`
+- New anonymous field `PublicKey` in struct `ManagersClientGetDevicePublicEncryptionKeyResponse`
+- New anonymous field `MetricList` in struct `VolumeContainersClientListMetricsResponse`
+- New anonymous field `EncryptionSettings` in struct `ManagersClientGetEncryptionSettingsResponse`
+- New anonymous field `MetricDefinitionList` in struct `ManagersClientListMetricDefinitionResponse`
+- New anonymous field `BackupSchedule` in struct `BackupSchedulesClientGetResponse`
+- New anonymous field `TimeSettings` in struct `DeviceSettingsClientCreateOrUpdateTimeSettingsResponse`
+- New anonymous field `TimeSettings` in struct `DeviceSettingsClientGetTimeSettingsResponse`
+- New anonymous field `Manager` in struct `ManagersClientUpdateResponse`
+- New anonymous field `MetricDefinitionList` in struct `VolumeContainersClientListMetricDefinitionResponse`
+- New anonymous field `Key` in struct `ManagersClientRegenerateActivationKeyResponse`
+- New anonymous field `StorageAccountCredential` in struct `StorageAccountCredentialsClientGetResponse`
+- New anonymous field `StorageAccountCredentialList` in struct `StorageAccountCredentialsClientListByManagerResponse`
+- New anonymous field `AlertSettings` in struct `DeviceSettingsClientCreateOrUpdateAlertSettingsResponse`
+- New anonymous field `VolumeContainer` in struct `VolumeContainersClientGetResponse`
+- New anonymous field `ManagerExtendedInfo` in struct `ManagersClientGetExtendedInfoResponse`
+- New anonymous field `Manager` in struct `ManagersClientCreateOrUpdateResponse`
+- New anonymous field `AccessControlRecord` in struct `AccessControlRecordsClientGetResponse`
+- New anonymous field `VolumeList` in struct `VolumesClientListByDeviceResponse`
+- New anonymous field `ManagerExtendedInfo` in struct `ManagersClientCreateExtendedInfoResponse`
+- New anonymous field `Device` in struct `DevicesClientGetResponse`
+- New anonymous field `Manager` in struct `ManagersClientGetResponse`
+- New anonymous field `BackupPolicy` in struct `BackupPoliciesClientCreateOrUpdateResponse`
+- New anonymous field `Device` in struct `DevicesClientUpdateResponse`
+- New anonymous field `MetricDefinitionList` in struct `VolumesClientListMetricDefinitionResponse`
+- New anonymous field `MetricDefinitionList` in struct `DevicesClientListMetricDefinitionResponse`
+- New anonymous field `Updates` in struct `DevicesClientGetUpdateSummaryResponse`
+- New anonymous field `MetricList` in struct `ManagersClientListMetricsResponse`
+- New anonymous field `NetworkSettings` in struct `DeviceSettingsClientUpdateNetworkSettingsResponse`
+- New anonymous field `VolumeContainerList` in struct `VolumeContainersClientListByDeviceResponse`
+- New anonymous field `ManagerList` in struct `ManagersClientListByResourceGroupResponse`
+- New anonymous field `BandwidthSettingList` in struct `BandwidthSettingsClientListByManagerResponse`
+- New anonymous field `SecuritySettings` in struct `DeviceSettingsClientUpdateSecuritySettingsResponse`
+- New anonymous field `DeviceList` in struct `DevicesClientListByManagerResponse`
+- New anonymous field `AlertList` in struct `AlertsClientListByManagerResponse`
+- New anonymous field `BackupSchedule` in struct `BackupSchedulesClientCreateOrUpdateResponse`
+- New anonymous field `Key` in struct `ManagersClientGetActivationKeyResponse`
+- New anonymous field `VolumeContainer` in struct `VolumeContainersClientCreateOrUpdateResponse`
+- New anonymous field `Volume` in struct `VolumesClientGetResponse`
+- New anonymous field `HardwareComponentGroupList` in struct `HardwareComponentGroupsClientListByDeviceResponse`
+- New anonymous field `JobList` in struct `JobsClientListByDeviceResponse`
+- New anonymous field `NetworkSettings` in struct `DeviceSettingsClientGetNetworkSettingsResponse`
+
+
+## 0.1.0 (2022-03-10)
+
+- Init release.

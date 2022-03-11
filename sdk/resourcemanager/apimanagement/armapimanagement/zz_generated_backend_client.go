@@ -36,17 +36,17 @@ type BackendClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBackendClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BackendClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BackendClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *BackendClient) createOrUpdateCreateRequest(ctx context.Context, re
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *BackendClient) createOrUpdateHandleResponse(resp *http.Response) (BackendClientCreateOrUpdateResponse, error) {
-	result := BackendClientCreateOrUpdateResponse{RawResponse: resp}
+	result := BackendClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -138,7 +138,7 @@ func (client *BackendClient) Delete(ctx context.Context, resourceGroupName strin
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return BackendClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return BackendClientDeleteResponse{RawResponse: resp}, nil
+	return BackendClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -225,7 +225,7 @@ func (client *BackendClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *BackendClient) getHandleResponse(resp *http.Response) (BackendClientGetResponse, error) {
-	result := BackendClientGetResponse{RawResponse: resp}
+	result := BackendClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -284,7 +284,7 @@ func (client *BackendClient) getEntityTagCreateRequest(ctx context.Context, reso
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *BackendClient) getEntityTagHandleResponse(resp *http.Response) (BackendClientGetEntityTagResponse, error) {
-	result := BackendClientGetEntityTagResponse{RawResponse: resp}
+	result := BackendClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -348,7 +348,7 @@ func (client *BackendClient) listByServiceCreateRequest(ctx context.Context, res
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *BackendClient) listByServiceHandleResponse(resp *http.Response) (BackendClientListByServiceResponse, error) {
-	result := BackendClientListByServiceResponse{RawResponse: resp}
+	result := BackendClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackendCollection); err != nil {
 		return BackendClientListByServiceResponse{}, err
 	}
@@ -374,7 +374,7 @@ func (client *BackendClient) Reconnect(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusAccepted) {
 		return BackendClientReconnectResponse{}, runtime.NewResponseError(resp)
 	}
-	return BackendClientReconnectResponse{RawResponse: resp}, nil
+	return BackendClientReconnectResponse{}, nil
 }
 
 // reconnectCreateRequest creates the Reconnect request.
@@ -467,7 +467,7 @@ func (client *BackendClient) updateCreateRequest(ctx context.Context, resourceGr
 
 // updateHandleResponse handles the Update response.
 func (client *BackendClient) updateHandleResponse(resp *http.Response) (BackendClientUpdateResponse, error) {
-	result := BackendClientUpdateResponse{RawResponse: resp}
+	result := BackendClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

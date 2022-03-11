@@ -43,11 +43,10 @@ func (p *SolutionsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final SolutionsClientCreateOrUpdateResponse will be returned.
 func (p *SolutionsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (SolutionsClientCreateOrUpdateResponse, error) {
 	respType := SolutionsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Solution)
+	_, err := p.pt.FinalResponse(ctx, &respType.Solution)
 	if err != nil {
 		return SolutionsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *SolutionsClientDeletePoller) Poll(ctx context.Context) (*http.Response,
 // If the final GET succeeded then the final SolutionsClientDeleteResponse will be returned.
 func (p *SolutionsClientDeletePoller) FinalResponse(ctx context.Context) (SolutionsClientDeleteResponse, error) {
 	respType := SolutionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SolutionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *SolutionsClientUpdatePoller) Poll(ctx context.Context) (*http.Response,
 // If the final GET succeeded then the final SolutionsClientUpdateResponse will be returned.
 func (p *SolutionsClientUpdatePoller) FinalResponse(ctx context.Context) (SolutionsClientUpdateResponse, error) {
 	respType := SolutionsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Solution)
+	_, err := p.pt.FinalResponse(ctx, &respType.Solution)
 	if err != nil {
 		return SolutionsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

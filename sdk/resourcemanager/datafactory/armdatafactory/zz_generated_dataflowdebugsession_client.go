@@ -34,17 +34,17 @@ type DataFlowDebugSessionClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataFlowDebugSessionClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataFlowDebugSessionClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataFlowDebugSessionClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *DataFlowDebugSessionClient) addDataFlowCreateRequest(ctx context.C
 
 // addDataFlowHandleResponse handles the AddDataFlow response.
 func (client *DataFlowDebugSessionClient) addDataFlowHandleResponse(resp *http.Response) (DataFlowDebugSessionClientAddDataFlowResponse, error) {
-	result := DataFlowDebugSessionClientAddDataFlowResponse{RawResponse: resp}
+	result := DataFlowDebugSessionClientAddDataFlowResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AddDataFlowToDebugSessionResponse); err != nil {
 		return DataFlowDebugSessionClientAddDataFlowResponse{}, err
 	}
@@ -118,9 +118,7 @@ func (client *DataFlowDebugSessionClient) BeginCreate(ctx context.Context, resou
 	if err != nil {
 		return DataFlowDebugSessionClientCreatePollerResponse{}, err
 	}
-	result := DataFlowDebugSessionClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DataFlowDebugSessionClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("DataFlowDebugSessionClient.Create", "", resp, client.pl)
 	if err != nil {
 		return DataFlowDebugSessionClientCreatePollerResponse{}, err
@@ -193,7 +191,7 @@ func (client *DataFlowDebugSessionClient) Delete(ctx context.Context, resourceGr
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return DataFlowDebugSessionClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DataFlowDebugSessionClientDeleteResponse{RawResponse: resp}, nil
+	return DataFlowDebugSessionClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -234,9 +232,7 @@ func (client *DataFlowDebugSessionClient) BeginExecuteCommand(ctx context.Contex
 	if err != nil {
 		return DataFlowDebugSessionClientExecuteCommandPollerResponse{}, err
 	}
-	result := DataFlowDebugSessionClientExecuteCommandPollerResponse{
-		RawResponse: resp,
-	}
+	result := DataFlowDebugSessionClientExecuteCommandPollerResponse{}
 	pt, err := armruntime.NewPoller("DataFlowDebugSessionClient.ExecuteCommand", "", resp, client.pl)
 	if err != nil {
 		return DataFlowDebugSessionClientExecuteCommandPollerResponse{}, err
@@ -336,7 +332,7 @@ func (client *DataFlowDebugSessionClient) queryByFactoryCreateRequest(ctx contex
 
 // queryByFactoryHandleResponse handles the QueryByFactory response.
 func (client *DataFlowDebugSessionClient) queryByFactoryHandleResponse(resp *http.Response) (DataFlowDebugSessionClientQueryByFactoryResponse, error) {
-	result := DataFlowDebugSessionClientQueryByFactoryResponse{RawResponse: resp}
+	result := DataFlowDebugSessionClientQueryByFactoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QueryDataFlowDebugSessionsResponse); err != nil {
 		return DataFlowDebugSessionClientQueryByFactoryResponse{}, err
 	}

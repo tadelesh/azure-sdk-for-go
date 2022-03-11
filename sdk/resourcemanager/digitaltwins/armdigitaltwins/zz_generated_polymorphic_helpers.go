@@ -31,3 +31,21 @@ func unmarshalEndpointResourcePropertiesClassification(rawMsg json.RawMessage) (
 	}
 	return b, json.Unmarshal(rawMsg, b)
 }
+
+func unmarshalTimeSeriesDatabaseConnectionPropertiesClassification(rawMsg json.RawMessage) (TimeSeriesDatabaseConnectionPropertiesClassification, error) {
+	if rawMsg == nil {
+		return nil, nil
+	}
+	var m map[string]interface{}
+	if err := json.Unmarshal(rawMsg, &m); err != nil {
+		return nil, err
+	}
+	var b TimeSeriesDatabaseConnectionPropertiesClassification
+	switch m["connectionType"] {
+	case string(ConnectionTypeAzureDataExplorer):
+		b = &AzureDataExplorerConnectionProperties{}
+	default:
+		b = &TimeSeriesDatabaseConnectionProperties{}
+	}
+	return b, json.Unmarshal(rawMsg, b)
+}

@@ -35,17 +35,17 @@ type VirtualMachineImageTemplatesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualMachineImageTemplatesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualMachineImageTemplatesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualMachineImageTemplatesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *VirtualMachineImageTemplatesClient) BeginCancel(ctx context.Contex
 	if err != nil {
 		return VirtualMachineImageTemplatesClientCancelPollerResponse{}, err
 	}
-	result := VirtualMachineImageTemplatesClientCancelPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachineImageTemplatesClientCancelPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachineImageTemplatesClient.Cancel", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VirtualMachineImageTemplatesClientCancelPollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *VirtualMachineImageTemplatesClient) BeginCreateOrUpdate(ctx contex
 	if err != nil {
 		return VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachineImageTemplatesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse{}, err
@@ -196,9 +192,7 @@ func (client *VirtualMachineImageTemplatesClient) BeginDelete(ctx context.Contex
 	if err != nil {
 		return VirtualMachineImageTemplatesClientDeletePollerResponse{}, err
 	}
-	result := VirtualMachineImageTemplatesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachineImageTemplatesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachineImageTemplatesClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VirtualMachineImageTemplatesClientDeletePollerResponse{}, err
@@ -301,7 +295,7 @@ func (client *VirtualMachineImageTemplatesClient) getCreateRequest(ctx context.C
 
 // getHandleResponse handles the Get response.
 func (client *VirtualMachineImageTemplatesClient) getHandleResponse(resp *http.Response) (VirtualMachineImageTemplatesClientGetResponse, error) {
-	result := VirtualMachineImageTemplatesClientGetResponse{RawResponse: resp}
+	result := VirtualMachineImageTemplatesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ImageTemplate); err != nil {
 		return VirtualMachineImageTemplatesClientGetResponse{}, err
 	}
@@ -362,7 +356,7 @@ func (client *VirtualMachineImageTemplatesClient) getRunOutputCreateRequest(ctx 
 
 // getRunOutputHandleResponse handles the GetRunOutput response.
 func (client *VirtualMachineImageTemplatesClient) getRunOutputHandleResponse(resp *http.Response) (VirtualMachineImageTemplatesClientGetRunOutputResponse, error) {
-	result := VirtualMachineImageTemplatesClientGetRunOutputResponse{RawResponse: resp}
+	result := VirtualMachineImageTemplatesClientGetRunOutputResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RunOutput); err != nil {
 		return VirtualMachineImageTemplatesClientGetRunOutputResponse{}, err
 	}
@@ -405,7 +399,7 @@ func (client *VirtualMachineImageTemplatesClient) listCreateRequest(ctx context.
 
 // listHandleResponse handles the List response.
 func (client *VirtualMachineImageTemplatesClient) listHandleResponse(resp *http.Response) (VirtualMachineImageTemplatesClientListResponse, error) {
-	result := VirtualMachineImageTemplatesClientListResponse{RawResponse: resp}
+	result := VirtualMachineImageTemplatesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ImageTemplateListResult); err != nil {
 		return VirtualMachineImageTemplatesClientListResponse{}, err
 	}
@@ -453,7 +447,7 @@ func (client *VirtualMachineImageTemplatesClient) listByResourceGroupCreateReque
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *VirtualMachineImageTemplatesClient) listByResourceGroupHandleResponse(resp *http.Response) (VirtualMachineImageTemplatesClientListByResourceGroupResponse, error) {
-	result := VirtualMachineImageTemplatesClientListByResourceGroupResponse{RawResponse: resp}
+	result := VirtualMachineImageTemplatesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ImageTemplateListResult); err != nil {
 		return VirtualMachineImageTemplatesClientListByResourceGroupResponse{}, err
 	}
@@ -506,7 +500,7 @@ func (client *VirtualMachineImageTemplatesClient) listRunOutputsCreateRequest(ct
 
 // listRunOutputsHandleResponse handles the ListRunOutputs response.
 func (client *VirtualMachineImageTemplatesClient) listRunOutputsHandleResponse(resp *http.Response) (VirtualMachineImageTemplatesClientListRunOutputsResponse, error) {
-	result := VirtualMachineImageTemplatesClientListRunOutputsResponse{RawResponse: resp}
+	result := VirtualMachineImageTemplatesClientListRunOutputsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RunOutputCollection); err != nil {
 		return VirtualMachineImageTemplatesClientListRunOutputsResponse{}, err
 	}
@@ -524,9 +518,7 @@ func (client *VirtualMachineImageTemplatesClient) BeginRun(ctx context.Context, 
 	if err != nil {
 		return VirtualMachineImageTemplatesClientRunPollerResponse{}, err
 	}
-	result := VirtualMachineImageTemplatesClientRunPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachineImageTemplatesClientRunPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachineImageTemplatesClient.Run", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VirtualMachineImageTemplatesClientRunPollerResponse{}, err
@@ -592,9 +584,7 @@ func (client *VirtualMachineImageTemplatesClient) BeginUpdate(ctx context.Contex
 	if err != nil {
 		return VirtualMachineImageTemplatesClientUpdatePollerResponse{}, err
 	}
-	result := VirtualMachineImageTemplatesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachineImageTemplatesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachineImageTemplatesClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VirtualMachineImageTemplatesClientUpdatePollerResponse{}, err

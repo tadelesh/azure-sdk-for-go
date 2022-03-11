@@ -1,5 +1,99 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ClientListResponse, error)`
+- Function `*DomainServiceOperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(DomainServiceOperationsClientListResponse, error)`
+- Function `*OuContainerClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OuContainerClientListResponse, error)`
+- Function `*ClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ClientListByResourceGroupResponse, error)`
+- Function `*OuContainerOperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OuContainerOperationsClientListResponse, error)`
+- Function `*DomainServiceOperationsClientListPager.Err` has been removed
+- Function `*ClientListByResourceGroupPager.Err` has been removed
+- Function `*OuContainerOperationsClientListPager.PageResponse` has been removed
+- Function `*ClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ClientListPager.PageResponse` has been removed
+- Function `*DomainServiceOperationsClientListPager.PageResponse` has been removed
+- Function `*ClientListPager.Err` has been removed
+- Function `*OuContainerClientListPager.PageResponse` has been removed
+- Function `*OuContainerOperationsClientListPager.Err` has been removed
+- Function `*OuContainerClientListPager.Err` has been removed
+- Struct `ClientCreateOrUpdateResult` has been removed
+- Struct `ClientGetResult` has been removed
+- Struct `ClientListByResourceGroupResult` has been removed
+- Struct `ClientListResult` has been removed
+- Struct `ClientUpdateResult` has been removed
+- Struct `DomainServiceOperationsClientListResult` has been removed
+- Struct `OuContainerClientCreateResult` has been removed
+- Struct `OuContainerClientGetResult` has been removed
+- Struct `OuContainerClientListResult` has been removed
+- Struct `OuContainerClientUpdateResult` has been removed
+- Struct `OuContainerOperationsClientListResult` has been removed
+- Field `RawResponse` of struct `ClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `OuContainerClientDeleteResponse` has been removed
+- Field `ClientListResult` of struct `ClientListResponse` has been removed
+- Field `RawResponse` of struct `ClientListResponse` has been removed
+- Field `OuContainerOperationsClientListResult` of struct `OuContainerOperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OuContainerOperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `OuContainerClientCreatePollerResponse` has been removed
+- Field `DomainServiceOperationsClientListResult` of struct `DomainServiceOperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `DomainServiceOperationsClientListResponse` has been removed
+- Field `OuContainerClientUpdateResult` of struct `OuContainerClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `OuContainerClientUpdateResponse` has been removed
+- Field `ClientCreateOrUpdateResult` of struct `ClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `OuContainerClientDeletePollerResponse` has been removed
+- Field `ClientGetResult` of struct `ClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClientGetResponse` has been removed
+- Field `OuContainerClientGetResult` of struct `OuContainerClientGetResponse` has been removed
+- Field `RawResponse` of struct `OuContainerClientGetResponse` has been removed
+- Field `RawResponse` of struct `OuContainerClientUpdatePollerResponse` has been removed
+- Field `ClientListByResourceGroupResult` of struct `ClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ClientUpdatePollerResponse` has been removed
+- Field `OuContainerClientCreateResult` of struct `OuContainerClientCreateResponse` has been removed
+- Field `RawResponse` of struct `OuContainerClientCreateResponse` has been removed
+- Field `OuContainerClientListResult` of struct `OuContainerClientListResponse` has been removed
+- Field `RawResponse` of struct `OuContainerClientListResponse` has been removed
+- Field `ClientUpdateResult` of struct `ClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientUpdateResponse` has been removed
+
+### Features Added
+
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*OuContainerOperationsClientListPager.More() bool`
+- New function `*ClientListByResourceGroupPager.More() bool`
+- New function `*ClientListPager.More() bool`
+- New function `*OuContainerClientListPager.More() bool`
+- New function `*DomainServiceOperationsClientListPager.More() bool`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New anonymous field `OuContainer` in struct `OuContainerClientUpdateResponse`
+- New anonymous field `DomainService` in struct `ClientGetResponse`
+- New anonymous field `OuContainerListResult` in struct `OuContainerClientListResponse`
+- New anonymous field `DomainService` in struct `ClientUpdateResponse`
+- New anonymous field `DomainServiceListResult` in struct `ClientListByResourceGroupResponse`
+- New anonymous field `DomainService` in struct `ClientCreateOrUpdateResponse`
+- New anonymous field `DomainServiceListResult` in struct `ClientListResponse`
+- New anonymous field `OperationEntityListResult` in struct `DomainServiceOperationsClientListResponse`
+- New anonymous field `OuContainer` in struct `OuContainerClientGetResponse`
+- New anonymous field `OperationEntityListResult` in struct `OuContainerOperationsClientListResponse`
+- New anonymous field `OuContainer` in struct `OuContainerClientCreateResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

@@ -36,17 +36,17 @@ type DscNodeClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDscNodeClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DscNodeClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DscNodeClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -69,7 +69,7 @@ func (client *DscNodeClient) Delete(ctx context.Context, resourceGroupName strin
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return DscNodeClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DscNodeClientDeleteResponse{RawResponse: resp}, nil
+	return DscNodeClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -155,7 +155,7 @@ func (client *DscNodeClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *DscNodeClient) getHandleResponse(resp *http.Response) (DscNodeClientGetResponse, error) {
-	result := DscNodeClientGetResponse{RawResponse: resp}
+	result := DscNodeClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DscNode); err != nil {
 		return DscNodeClientGetResponse{}, err
 	}
@@ -220,7 +220,7 @@ func (client *DscNodeClient) listByAutomationAccountCreateRequest(ctx context.Co
 
 // listByAutomationAccountHandleResponse handles the ListByAutomationAccount response.
 func (client *DscNodeClient) listByAutomationAccountHandleResponse(resp *http.Response) (DscNodeClientListByAutomationAccountResponse, error) {
-	result := DscNodeClientListByAutomationAccountResponse{RawResponse: resp}
+	result := DscNodeClientListByAutomationAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DscNodeListResult); err != nil {
 		return DscNodeClientListByAutomationAccountResponse{}, err
 	}
@@ -281,7 +281,7 @@ func (client *DscNodeClient) updateCreateRequest(ctx context.Context, resourceGr
 
 // updateHandleResponse handles the Update response.
 func (client *DscNodeClient) updateHandleResponse(resp *http.Response) (DscNodeClientUpdateResponse, error) {
-	result := DscNodeClientUpdateResponse{RawResponse: resp}
+	result := DscNodeClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DscNode); err != nil {
 		return DscNodeClientUpdateResponse{}, err
 	}

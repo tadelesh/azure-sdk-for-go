@@ -43,11 +43,10 @@ func (p *PrivateEndpointConnectionsClientCreatePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientCreateResponse will be returned.
 func (p *PrivateEndpointConnectionsClientCreatePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientCreateResponse, error) {
 	respType := PrivateEndpointConnectionsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return PrivateEndpointConnectionsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *PrivateEndpointConnectionsClientDeletePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionsClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointConnectionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *VNetPeeringClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final VNetPeeringClientCreateOrUpdateResponse will be returned.
 func (p *VNetPeeringClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (VNetPeeringClientCreateOrUpdateResponse, error) {
 	respType := VNetPeeringClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.VirtualNetworkPeering)
+	_, err := p.pt.FinalResponse(ctx, &respType.VirtualNetworkPeering)
 	if err != nil {
 		return VNetPeeringClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *VNetPeeringClientDeletePoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final VNetPeeringClientDeleteResponse will be returned.
 func (p *VNetPeeringClientDeletePoller) FinalResponse(ctx context.Context) (VNetPeeringClientDeleteResponse, error) {
 	respType := VNetPeeringClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return VNetPeeringClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *WorkspacesClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final WorkspacesClientCreateOrUpdateResponse will be returned.
 func (p *WorkspacesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (WorkspacesClientCreateOrUpdateResponse, error) {
 	respType := WorkspacesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Workspace)
+	_, err := p.pt.FinalResponse(ctx, &respType.Workspace)
 	if err != nil {
 		return WorkspacesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *WorkspacesClientDeletePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final WorkspacesClientDeleteResponse will be returned.
 func (p *WorkspacesClientDeletePoller) FinalResponse(ctx context.Context) (WorkspacesClientDeleteResponse, error) {
 	respType := WorkspacesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return WorkspacesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *WorkspacesClientUpdatePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final WorkspacesClientUpdateResponse will be returned.
 func (p *WorkspacesClientUpdatePoller) FinalResponse(ctx context.Context) (WorkspacesClientUpdateResponse, error) {
 	respType := WorkspacesClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Workspace)
+	_, err := p.pt.FinalResponse(ctx, &respType.Workspace)
 	if err != nil {
 		return WorkspacesClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

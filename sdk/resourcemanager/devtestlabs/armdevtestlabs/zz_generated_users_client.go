@@ -35,17 +35,17 @@ type UsersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewUsersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *UsersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &UsersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *UsersClient) BeginCreateOrUpdate(ctx context.Context, resourceGrou
 	if err != nil {
 		return UsersClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := UsersClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := UsersClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("UsersClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return UsersClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *UsersClient) BeginDelete(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return UsersClientDeletePollerResponse{}, err
 	}
-	result := UsersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := UsersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("UsersClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return UsersClientDeletePollerResponse{}, err
@@ -250,7 +246,7 @@ func (client *UsersClient) getCreateRequest(ctx context.Context, resourceGroupNa
 
 // getHandleResponse handles the Get response.
 func (client *UsersClient) getHandleResponse(resp *http.Response) (UsersClientGetResponse, error) {
-	result := UsersClientGetResponse{RawResponse: resp}
+	result := UsersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.User); err != nil {
 		return UsersClientGetResponse{}, err
 	}
@@ -314,7 +310,7 @@ func (client *UsersClient) listCreateRequest(ctx context.Context, resourceGroupN
 
 // listHandleResponse handles the List response.
 func (client *UsersClient) listHandleResponse(resp *http.Response) (UsersClientListResponse, error) {
-	result := UsersClientListResponse{RawResponse: resp}
+	result := UsersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UserList); err != nil {
 		return UsersClientListResponse{}, err
 	}
@@ -375,7 +371,7 @@ func (client *UsersClient) updateCreateRequest(ctx context.Context, resourceGrou
 
 // updateHandleResponse handles the Update response.
 func (client *UsersClient) updateHandleResponse(resp *http.Response) (UsersClientUpdateResponse, error) {
-	result := UsersClientUpdateResponse{RawResponse: resp}
+	result := UsersClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.User); err != nil {
 		return UsersClientUpdateResponse{}, err
 	}

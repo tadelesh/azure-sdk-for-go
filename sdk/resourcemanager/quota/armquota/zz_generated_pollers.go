@@ -43,11 +43,10 @@ func (p *ClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ClientCreateOrUpdateResponse will be returned.
 func (p *ClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ClientCreateOrUpdateResponse, error) {
 	respType := ClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.CurrentQuotaLimitBase)
+	_, err := p.pt.FinalResponse(ctx, &respType.CurrentQuotaLimitBase)
 	if err != nil {
 		return ClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ClientUpdatePoller) Poll(ctx context.Context) (*http.Response, error) {
 // If the final GET succeeded then the final ClientUpdateResponse will be returned.
 func (p *ClientUpdatePoller) FinalResponse(ctx context.Context) (ClientUpdateResponse, error) {
 	respType := ClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.CurrentQuotaLimitBase)
+	_, err := p.pt.FinalResponse(ctx, &respType.CurrentQuotaLimitBase)
 	if err != nil {
 		return ClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

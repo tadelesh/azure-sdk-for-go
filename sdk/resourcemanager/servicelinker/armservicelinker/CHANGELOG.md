@@ -1,5 +1,70 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*LinkerClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(LinkerClientListResponse, error)`
+- Function `*LinkerClientListPager.Err` has been removed
+- Function `*LinkerClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Struct `LinkerClientCreateOrUpdateResult` has been removed
+- Struct `LinkerClientGetResult` has been removed
+- Struct `LinkerClientListConfigurationsResult` has been removed
+- Struct `LinkerClientListResult` has been removed
+- Struct `LinkerClientUpdateResult` has been removed
+- Struct `LinkerClientValidateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `LinkerClientListConfigurationsResult` of struct `LinkerClientListConfigurationsResponse` has been removed
+- Field `RawResponse` of struct `LinkerClientListConfigurationsResponse` has been removed
+- Field `RawResponse` of struct `LinkerClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `LinkerClientDeleteResponse` has been removed
+- Field `LinkerClientUpdateResult` of struct `LinkerClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `LinkerClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `LinkerClientCreateOrUpdatePollerResponse` has been removed
+- Field `LinkerClientValidateResult` of struct `LinkerClientValidateResponse` has been removed
+- Field `RawResponse` of struct `LinkerClientValidateResponse` has been removed
+- Field `LinkerClientListResult` of struct `LinkerClientListResponse` has been removed
+- Field `RawResponse` of struct `LinkerClientListResponse` has been removed
+- Field `RawResponse` of struct `LinkerClientValidatePollerResponse` has been removed
+- Field `RawResponse` of struct `LinkerClientDeletePollerResponse` has been removed
+- Field `LinkerClientCreateOrUpdateResult` of struct `LinkerClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `LinkerClientCreateOrUpdateResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `LinkerClientGetResult` of struct `LinkerClientGetResponse` has been removed
+- Field `RawResponse` of struct `LinkerClientGetResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*LinkerClientListPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `LinkerList` in struct `LinkerClientListResponse`
+- New anonymous field `LinkerResource` in struct `LinkerClientCreateOrUpdateResponse`
+- New anonymous field `LinkerResource` in struct `LinkerClientGetResponse`
+- New anonymous field `ValidateResult` in struct `LinkerClientValidateResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `LinkerResource` in struct `LinkerClientUpdateResponse`
+- New anonymous field `SourceConfigurationResult` in struct `LinkerClientListConfigurationsResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

@@ -35,17 +35,17 @@ type SmartGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSmartGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SmartGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SmartGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *SmartGroupsClient) changeStateCreateRequest(ctx context.Context, s
 
 // changeStateHandleResponse handles the ChangeState response.
 func (client *SmartGroupsClient) changeStateHandleResponse(resp *http.Response) (SmartGroupsClientChangeStateResponse, error) {
-	result := SmartGroupsClientChangeStateResponse{RawResponse: resp}
+	result := SmartGroupsClientChangeStateResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -173,7 +173,7 @@ func (client *SmartGroupsClient) getAllCreateRequest(ctx context.Context, option
 
 // getAllHandleResponse handles the GetAll response.
 func (client *SmartGroupsClient) getAllHandleResponse(resp *http.Response) (SmartGroupsClientGetAllResponse, error) {
-	result := SmartGroupsClientGetAllResponse{RawResponse: resp}
+	result := SmartGroupsClientGetAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SmartGroupsList); err != nil {
 		return SmartGroupsClientGetAllResponse{}, err
 	}
@@ -223,7 +223,7 @@ func (client *SmartGroupsClient) getByIDCreateRequest(ctx context.Context, smart
 
 // getByIDHandleResponse handles the GetByID response.
 func (client *SmartGroupsClient) getByIDHandleResponse(resp *http.Response) (SmartGroupsClientGetByIDResponse, error) {
-	result := SmartGroupsClientGetByIDResponse{RawResponse: resp}
+	result := SmartGroupsClientGetByIDResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -276,7 +276,7 @@ func (client *SmartGroupsClient) getHistoryCreateRequest(ctx context.Context, sm
 
 // getHistoryHandleResponse handles the GetHistory response.
 func (client *SmartGroupsClient) getHistoryHandleResponse(resp *http.Response) (SmartGroupsClientGetHistoryResponse, error) {
-	result := SmartGroupsClientGetHistoryResponse{RawResponse: resp}
+	result := SmartGroupsClientGetHistoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SmartGroupModification); err != nil {
 		return SmartGroupsClientGetHistoryResponse{}, err
 	}

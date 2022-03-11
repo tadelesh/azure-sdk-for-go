@@ -35,17 +35,17 @@ type LocationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLocationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LocationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LocationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -94,7 +94,7 @@ func (client *LocationsClient) checkNameAvailabilityCreateRequest(ctx context.Co
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *LocationsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (LocationsClientCheckNameAvailabilityResponse, error) {
-	result := LocationsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := LocationsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NameAvailabilityCheckResult); err != nil {
 		return LocationsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -150,7 +150,7 @@ func (client *LocationsClient) getAzureAsyncOperationStatusCreateRequest(ctx con
 
 // getAzureAsyncOperationStatusHandleResponse handles the GetAzureAsyncOperationStatus response.
 func (client *LocationsClient) getAzureAsyncOperationStatusHandleResponse(resp *http.Response) (LocationsClientGetAzureAsyncOperationStatusResponse, error) {
-	result := LocationsClientGetAzureAsyncOperationStatusResponse{RawResponse: resp}
+	result := LocationsClientGetAzureAsyncOperationStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AsyncOperationResult); err != nil {
 		return LocationsClientGetAzureAsyncOperationStatusResponse{}, err
 	}
@@ -201,7 +201,7 @@ func (client *LocationsClient) getCapabilitiesCreateRequest(ctx context.Context,
 
 // getCapabilitiesHandleResponse handles the GetCapabilities response.
 func (client *LocationsClient) getCapabilitiesHandleResponse(resp *http.Response) (LocationsClientGetCapabilitiesResponse, error) {
-	result := LocationsClientGetCapabilitiesResponse{RawResponse: resp}
+	result := LocationsClientGetCapabilitiesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CapabilitiesResult); err != nil {
 		return LocationsClientGetCapabilitiesResponse{}, err
 	}
@@ -252,7 +252,7 @@ func (client *LocationsClient) listBillingSpecsCreateRequest(ctx context.Context
 
 // listBillingSpecsHandleResponse handles the ListBillingSpecs response.
 func (client *LocationsClient) listBillingSpecsHandleResponse(resp *http.Response) (LocationsClientListBillingSpecsResponse, error) {
-	result := LocationsClientListBillingSpecsResponse{RawResponse: resp}
+	result := LocationsClientListBillingSpecsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BillingResponseListResult); err != nil {
 		return LocationsClientListBillingSpecsResponse{}, err
 	}
@@ -302,7 +302,7 @@ func (client *LocationsClient) listUsagesCreateRequest(ctx context.Context, loca
 
 // listUsagesHandleResponse handles the ListUsages response.
 func (client *LocationsClient) listUsagesHandleResponse(resp *http.Response) (LocationsClientListUsagesResponse, error) {
-	result := LocationsClientListUsagesResponse{RawResponse: resp}
+	result := LocationsClientListUsagesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UsagesListResult); err != nil {
 		return LocationsClientListUsagesResponse{}, err
 	}
@@ -353,7 +353,7 @@ func (client *LocationsClient) validateClusterCreateRequestCreateRequest(ctx con
 
 // validateClusterCreateRequestHandleResponse handles the ValidateClusterCreateRequest response.
 func (client *LocationsClient) validateClusterCreateRequestHandleResponse(resp *http.Response) (LocationsClientValidateClusterCreateRequestResponse, error) {
-	result := LocationsClientValidateClusterCreateRequestResponse{RawResponse: resp}
+	result := LocationsClientValidateClusterCreateRequestResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ClusterCreateValidationResult); err != nil {
 		return LocationsClientValidateClusterCreateRequestResponse{}, err
 	}

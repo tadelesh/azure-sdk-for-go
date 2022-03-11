@@ -35,17 +35,17 @@ type ContentKeyPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewContentKeyPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ContentKeyPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ContentKeyPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *ContentKeyPoliciesClient) createOrUpdateCreateRequest(ctx context.
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ContentKeyPoliciesClient) createOrUpdateHandleResponse(resp *http.Response) (ContentKeyPoliciesClientCreateOrUpdateResponse, error) {
-	result := ContentKeyPoliciesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ContentKeyPoliciesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContentKeyPolicy); err != nil {
 		return ContentKeyPoliciesClientCreateOrUpdateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *ContentKeyPoliciesClient) Delete(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ContentKeyPoliciesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ContentKeyPoliciesClientDeleteResponse{RawResponse: resp}, nil
+	return ContentKeyPoliciesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -217,7 +217,7 @@ func (client *ContentKeyPoliciesClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *ContentKeyPoliciesClient) getHandleResponse(resp *http.Response) (ContentKeyPoliciesClientGetResponse, error) {
-	result := ContentKeyPoliciesClientGetResponse{RawResponse: resp}
+	result := ContentKeyPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContentKeyPolicy); err != nil {
 		return ContentKeyPoliciesClientGetResponse{}, err
 	}
@@ -278,7 +278,7 @@ func (client *ContentKeyPoliciesClient) getPolicyPropertiesWithSecretsCreateRequ
 
 // getPolicyPropertiesWithSecretsHandleResponse handles the GetPolicyPropertiesWithSecrets response.
 func (client *ContentKeyPoliciesClient) getPolicyPropertiesWithSecretsHandleResponse(resp *http.Response) (ContentKeyPoliciesClientGetPolicyPropertiesWithSecretsResponse, error) {
-	result := ContentKeyPoliciesClientGetPolicyPropertiesWithSecretsResponse{RawResponse: resp}
+	result := ContentKeyPoliciesClientGetPolicyPropertiesWithSecretsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContentKeyPolicyProperties); err != nil {
 		return ContentKeyPoliciesClientGetPolicyPropertiesWithSecretsResponse{}, err
 	}
@@ -339,7 +339,7 @@ func (client *ContentKeyPoliciesClient) listCreateRequest(ctx context.Context, r
 
 // listHandleResponse handles the List response.
 func (client *ContentKeyPoliciesClient) listHandleResponse(resp *http.Response) (ContentKeyPoliciesClientListResponse, error) {
-	result := ContentKeyPoliciesClientListResponse{RawResponse: resp}
+	result := ContentKeyPoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContentKeyPolicyCollection); err != nil {
 		return ContentKeyPoliciesClientListResponse{}, err
 	}
@@ -401,7 +401,7 @@ func (client *ContentKeyPoliciesClient) updateCreateRequest(ctx context.Context,
 
 // updateHandleResponse handles the Update response.
 func (client *ContentKeyPoliciesClient) updateHandleResponse(resp *http.Response) (ContentKeyPoliciesClientUpdateResponse, error) {
-	result := ContentKeyPoliciesClientUpdateResponse{RawResponse: resp}
+	result := ContentKeyPoliciesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContentKeyPolicy); err != nil {
 		return ContentKeyPoliciesClientUpdateResponse{}, err
 	}

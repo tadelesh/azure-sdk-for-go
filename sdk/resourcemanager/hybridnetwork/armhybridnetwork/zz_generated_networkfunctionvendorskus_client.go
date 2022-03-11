@@ -34,17 +34,17 @@ type NetworkFunctionVendorSKUsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewNetworkFunctionVendorSKUsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *NetworkFunctionVendorSKUsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &NetworkFunctionVendorSKUsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *NetworkFunctionVendorSKUsClient) listBySKUCreateRequest(ctx contex
 
 // listBySKUHandleResponse handles the ListBySKU response.
 func (client *NetworkFunctionVendorSKUsClient) listBySKUHandleResponse(resp *http.Response) (NetworkFunctionVendorSKUsClientListBySKUResponse, error) {
-	result := NetworkFunctionVendorSKUsClientListBySKUResponse{RawResponse: resp}
+	result := NetworkFunctionVendorSKUsClientListBySKUResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkFunctionSKUDetails); err != nil {
 		return NetworkFunctionVendorSKUsClientListBySKUResponse{}, err
 	}
@@ -143,7 +143,7 @@ func (client *NetworkFunctionVendorSKUsClient) listByVendorCreateRequest(ctx con
 
 // listByVendorHandleResponse handles the ListByVendor response.
 func (client *NetworkFunctionVendorSKUsClient) listByVendorHandleResponse(resp *http.Response) (NetworkFunctionVendorSKUsClientListByVendorResponse, error) {
-	result := NetworkFunctionVendorSKUsClientListByVendorResponse{RawResponse: resp}
+	result := NetworkFunctionVendorSKUsClientListByVendorResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkFunctionSKUListResult); err != nil {
 		return NetworkFunctionVendorSKUsClientListByVendorResponse{}, err
 	}

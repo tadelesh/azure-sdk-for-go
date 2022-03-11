@@ -43,11 +43,10 @@ func (p *ConfigurationsClientUpdatePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final ConfigurationsClientUpdateResponse will be returned.
 func (p *ConfigurationsClientUpdatePoller) FinalResponse(ctx context.Context) (ConfigurationsClientUpdateResponse, error) {
 	respType := ConfigurationsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ServerGroupConfiguration)
+	_, err := p.pt.FinalResponse(ctx, &respType.ServerGroupConfiguration)
 	if err != nil {
 		return ConfigurationsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *FirewallRulesClientCreateOrUpdatePoller) Poll(ctx context.Context) (*ht
 // If the final GET succeeded then the final FirewallRulesClientCreateOrUpdateResponse will be returned.
 func (p *FirewallRulesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (FirewallRulesClientCreateOrUpdateResponse, error) {
 	respType := FirewallRulesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.FirewallRule)
+	_, err := p.pt.FinalResponse(ctx, &respType.FirewallRule)
 	if err != nil {
 		return FirewallRulesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *FirewallRulesClientDeletePoller) Poll(ctx context.Context) (*http.Respo
 // If the final GET succeeded then the final FirewallRulesClientDeleteResponse will be returned.
 func (p *FirewallRulesClientDeletePoller) FinalResponse(ctx context.Context) (FirewallRulesClientDeleteResponse, error) {
 	respType := FirewallRulesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return FirewallRulesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *RolesClientCreatePoller) Poll(ctx context.Context) (*http.Response, err
 // If the final GET succeeded then the final RolesClientCreateResponse will be returned.
 func (p *RolesClientCreatePoller) FinalResponse(ctx context.Context) (RolesClientCreateResponse, error) {
 	respType := RolesClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Role)
+	_, err := p.pt.FinalResponse(ctx, &respType.Role)
 	if err != nil {
 		return RolesClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *RolesClientDeletePoller) Poll(ctx context.Context) (*http.Response, err
 // If the final GET succeeded then the final RolesClientDeleteResponse will be returned.
 func (p *RolesClientDeletePoller) FinalResponse(ctx context.Context) (RolesClientDeleteResponse, error) {
 	respType := RolesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return RolesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *ServerGroupsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final ServerGroupsClientCreateOrUpdateResponse will be returned.
 func (p *ServerGroupsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ServerGroupsClientCreateOrUpdateResponse, error) {
 	respType := ServerGroupsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ServerGroup)
+	_, err := p.pt.FinalResponse(ctx, &respType.ServerGroup)
 	if err != nil {
 		return ServerGroupsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *ServerGroupsClientDeletePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final ServerGroupsClientDeleteResponse will be returned.
 func (p *ServerGroupsClientDeletePoller) FinalResponse(ctx context.Context) (ServerGroupsClientDeleteResponse, error) {
 	respType := ServerGroupsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ServerGroupsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *ServerGroupsClientRestartPoller) Poll(ctx context.Context) (*http.Respo
 // If the final GET succeeded then the final ServerGroupsClientRestartResponse will be returned.
 func (p *ServerGroupsClientRestartPoller) FinalResponse(ctx context.Context) (ServerGroupsClientRestartResponse, error) {
 	respType := ServerGroupsClientRestartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ServerGroupsClientRestartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *ServerGroupsClientStartPoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final ServerGroupsClientStartResponse will be returned.
 func (p *ServerGroupsClientStartPoller) FinalResponse(ctx context.Context) (ServerGroupsClientStartResponse, error) {
 	respType := ServerGroupsClientStartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ServerGroupsClientStartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -430,11 +421,10 @@ func (p *ServerGroupsClientStopPoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final ServerGroupsClientStopResponse will be returned.
 func (p *ServerGroupsClientStopPoller) FinalResponse(ctx context.Context) (ServerGroupsClientStopResponse, error) {
 	respType := ServerGroupsClientStopResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ServerGroupsClientStopResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -473,11 +463,10 @@ func (p *ServerGroupsClientUpdatePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final ServerGroupsClientUpdateResponse will be returned.
 func (p *ServerGroupsClientUpdatePoller) FinalResponse(ctx context.Context) (ServerGroupsClientUpdateResponse, error) {
 	respType := ServerGroupsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ServerGroup)
+	_, err := p.pt.FinalResponse(ctx, &respType.ServerGroup)
 	if err != nil {
 		return ServerGroupsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

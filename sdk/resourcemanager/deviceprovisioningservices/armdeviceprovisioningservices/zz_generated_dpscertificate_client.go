@@ -37,17 +37,17 @@ type DpsCertificateClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDpsCertificateClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DpsCertificateClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DpsCertificateClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *DpsCertificateClient) createOrUpdateCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header.Set("If-Match", *options.IfMatch)
@@ -110,7 +110,7 @@ func (client *DpsCertificateClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *DpsCertificateClient) createOrUpdateHandleResponse(resp *http.Response) (DpsCertificateClientCreateOrUpdateResponse, error) {
-	result := DpsCertificateClientCreateOrUpdateResponse{RawResponse: resp}
+	result := DpsCertificateClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateResponse); err != nil {
 		return DpsCertificateClientCreateOrUpdateResponse{}, err
 	}
@@ -137,7 +137,7 @@ func (client *DpsCertificateClient) Delete(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DpsCertificateClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DpsCertificateClientDeleteResponse{RawResponse: resp}, nil
+	return DpsCertificateClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -188,7 +188,7 @@ func (client *DpsCertificateClient) deleteCreateRequest(ctx context.Context, res
 	if options != nil && options.CertificateNonce != nil {
 		reqQP.Set("certificate.nonce", *options.CertificateNonce)
 	}
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("If-Match", ifMatch)
 	req.Raw().Header.Set("Accept", "application/json")
@@ -267,7 +267,7 @@ func (client *DpsCertificateClient) generateVerificationCodeCreateRequest(ctx co
 	if options != nil && options.CertificateNonce != nil {
 		reqQP.Set("certificate.nonce", *options.CertificateNonce)
 	}
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("If-Match", ifMatch)
 	req.Raw().Header.Set("Accept", "application/json")
@@ -276,7 +276,7 @@ func (client *DpsCertificateClient) generateVerificationCodeCreateRequest(ctx co
 
 // generateVerificationCodeHandleResponse handles the GenerateVerificationCode response.
 func (client *DpsCertificateClient) generateVerificationCodeHandleResponse(resp *http.Response) (DpsCertificateClientGenerateVerificationCodeResponse, error) {
-	result := DpsCertificateClientGenerateVerificationCodeResponse{RawResponse: resp}
+	result := DpsCertificateClientGenerateVerificationCodeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VerificationCodeResponse); err != nil {
 		return DpsCertificateClientGenerateVerificationCodeResponse{}, err
 	}
@@ -328,7 +328,7 @@ func (client *DpsCertificateClient) getCreateRequest(ctx context.Context, certif
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header.Set("If-Match", *options.IfMatch)
@@ -339,7 +339,7 @@ func (client *DpsCertificateClient) getCreateRequest(ctx context.Context, certif
 
 // getHandleResponse handles the Get response.
 func (client *DpsCertificateClient) getHandleResponse(resp *http.Response) (DpsCertificateClientGetResponse, error) {
-	result := DpsCertificateClientGetResponse{RawResponse: resp}
+	result := DpsCertificateClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateResponse); err != nil {
 		return DpsCertificateClientGetResponse{}, err
 	}
@@ -386,7 +386,7 @@ func (client *DpsCertificateClient) listCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -394,7 +394,7 @@ func (client *DpsCertificateClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *DpsCertificateClient) listHandleResponse(resp *http.Response) (DpsCertificateClientListResponse, error) {
-	result := DpsCertificateClientListResponse{RawResponse: resp}
+	result := DpsCertificateClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateListDescription); err != nil {
 		return DpsCertificateClientListResponse{}, err
 	}
@@ -474,7 +474,7 @@ func (client *DpsCertificateClient) verifyCertificateCreateRequest(ctx context.C
 	if options != nil && options.CertificateNonce != nil {
 		reqQP.Set("certificate.nonce", *options.CertificateNonce)
 	}
-	reqQP.Set("api-version", "2020-03-01")
+	reqQP.Set("api-version", "2021-10-15")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("If-Match", ifMatch)
 	req.Raw().Header.Set("Accept", "application/json")
@@ -483,7 +483,7 @@ func (client *DpsCertificateClient) verifyCertificateCreateRequest(ctx context.C
 
 // verifyCertificateHandleResponse handles the VerifyCertificate response.
 func (client *DpsCertificateClient) verifyCertificateHandleResponse(resp *http.Response) (DpsCertificateClientVerifyCertificateResponse, error) {
-	result := DpsCertificateClientVerifyCertificateResponse{RawResponse: resp}
+	result := DpsCertificateClientVerifyCertificateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateResponse); err != nil {
 		return DpsCertificateClientVerifyCertificateResponse{}, err
 	}

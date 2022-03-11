@@ -35,17 +35,17 @@ type ObjectDataTypesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewObjectDataTypesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ObjectDataTypesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ObjectDataTypesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -58,19 +58,13 @@ func NewObjectDataTypesClient(subscriptionID string, credential azcore.TokenCred
 // typeName - The name of type.
 // options - ObjectDataTypesClientListFieldsByModuleAndTypeOptions contains the optional parameters for the ObjectDataTypesClient.ListFieldsByModuleAndType
 // method.
-func (client *ObjectDataTypesClient) ListFieldsByModuleAndType(ctx context.Context, resourceGroupName string, automationAccountName string, moduleName string, typeName string, options *ObjectDataTypesClientListFieldsByModuleAndTypeOptions) (ObjectDataTypesClientListFieldsByModuleAndTypeResponse, error) {
-	req, err := client.listFieldsByModuleAndTypeCreateRequest(ctx, resourceGroupName, automationAccountName, moduleName, typeName, options)
-	if err != nil {
-		return ObjectDataTypesClientListFieldsByModuleAndTypeResponse{}, err
+func (client *ObjectDataTypesClient) ListFieldsByModuleAndType(resourceGroupName string, automationAccountName string, moduleName string, typeName string, options *ObjectDataTypesClientListFieldsByModuleAndTypeOptions) *ObjectDataTypesClientListFieldsByModuleAndTypePager {
+	return &ObjectDataTypesClientListFieldsByModuleAndTypePager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listFieldsByModuleAndTypeCreateRequest(ctx, resourceGroupName, automationAccountName, moduleName, typeName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ObjectDataTypesClientListFieldsByModuleAndTypeResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ObjectDataTypesClientListFieldsByModuleAndTypeResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listFieldsByModuleAndTypeHandleResponse(resp)
 }
 
 // listFieldsByModuleAndTypeCreateRequest creates the ListFieldsByModuleAndType request.
@@ -109,7 +103,7 @@ func (client *ObjectDataTypesClient) listFieldsByModuleAndTypeCreateRequest(ctx 
 
 // listFieldsByModuleAndTypeHandleResponse handles the ListFieldsByModuleAndType response.
 func (client *ObjectDataTypesClient) listFieldsByModuleAndTypeHandleResponse(resp *http.Response) (ObjectDataTypesClientListFieldsByModuleAndTypeResponse, error) {
-	result := ObjectDataTypesClientListFieldsByModuleAndTypeResponse{RawResponse: resp}
+	result := ObjectDataTypesClientListFieldsByModuleAndTypeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TypeFieldListResult); err != nil {
 		return ObjectDataTypesClientListFieldsByModuleAndTypeResponse{}, err
 	}
@@ -123,19 +117,13 @@ func (client *ObjectDataTypesClient) listFieldsByModuleAndTypeHandleResponse(res
 // typeName - The name of type.
 // options - ObjectDataTypesClientListFieldsByTypeOptions contains the optional parameters for the ObjectDataTypesClient.ListFieldsByType
 // method.
-func (client *ObjectDataTypesClient) ListFieldsByType(ctx context.Context, resourceGroupName string, automationAccountName string, typeName string, options *ObjectDataTypesClientListFieldsByTypeOptions) (ObjectDataTypesClientListFieldsByTypeResponse, error) {
-	req, err := client.listFieldsByTypeCreateRequest(ctx, resourceGroupName, automationAccountName, typeName, options)
-	if err != nil {
-		return ObjectDataTypesClientListFieldsByTypeResponse{}, err
+func (client *ObjectDataTypesClient) ListFieldsByType(resourceGroupName string, automationAccountName string, typeName string, options *ObjectDataTypesClientListFieldsByTypeOptions) *ObjectDataTypesClientListFieldsByTypePager {
+	return &ObjectDataTypesClientListFieldsByTypePager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listFieldsByTypeCreateRequest(ctx, resourceGroupName, automationAccountName, typeName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ObjectDataTypesClientListFieldsByTypeResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ObjectDataTypesClientListFieldsByTypeResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listFieldsByTypeHandleResponse(resp)
 }
 
 // listFieldsByTypeCreateRequest creates the ListFieldsByType request.
@@ -170,7 +158,7 @@ func (client *ObjectDataTypesClient) listFieldsByTypeCreateRequest(ctx context.C
 
 // listFieldsByTypeHandleResponse handles the ListFieldsByType response.
 func (client *ObjectDataTypesClient) listFieldsByTypeHandleResponse(resp *http.Response) (ObjectDataTypesClientListFieldsByTypeResponse, error) {
-	result := ObjectDataTypesClientListFieldsByTypeResponse{RawResponse: resp}
+	result := ObjectDataTypesClientListFieldsByTypeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TypeFieldListResult); err != nil {
 		return ObjectDataTypesClientListFieldsByTypeResponse{}, err
 	}

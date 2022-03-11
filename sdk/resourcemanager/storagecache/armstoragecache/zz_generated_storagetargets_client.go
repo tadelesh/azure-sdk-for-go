@@ -35,17 +35,17 @@ type StorageTargetsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewStorageTargetsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *StorageTargetsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &StorageTargetsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *StorageTargetsClient) BeginCreateOrUpdate(ctx context.Context, res
 	if err != nil {
 		return StorageTargetsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := StorageTargetsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := StorageTargetsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("StorageTargetsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return StorageTargetsClientCreateOrUpdatePollerResponse{}, err
@@ -141,9 +139,7 @@ func (client *StorageTargetsClient) BeginDNSRefresh(ctx context.Context, resourc
 	if err != nil {
 		return StorageTargetsClientDNSRefreshPollerResponse{}, err
 	}
-	result := StorageTargetsClientDNSRefreshPollerResponse{
-		RawResponse: resp,
-	}
+	result := StorageTargetsClientDNSRefreshPollerResponse{}
 	pt, err := armruntime.NewPoller("StorageTargetsClient.DNSRefresh", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return StorageTargetsClientDNSRefreshPollerResponse{}, err
@@ -216,9 +212,7 @@ func (client *StorageTargetsClient) BeginDelete(ctx context.Context, resourceGro
 	if err != nil {
 		return StorageTargetsClientDeletePollerResponse{}, err
 	}
-	result := StorageTargetsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := StorageTargetsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("StorageTargetsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return StorageTargetsClientDeletePollerResponse{}, err
@@ -335,7 +329,7 @@ func (client *StorageTargetsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *StorageTargetsClient) getHandleResponse(resp *http.Response) (StorageTargetsClientGetResponse, error) {
-	result := StorageTargetsClientGetResponse{RawResponse: resp}
+	result := StorageTargetsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StorageTarget); err != nil {
 		return StorageTargetsClientGetResponse{}, err
 	}
@@ -388,7 +382,7 @@ func (client *StorageTargetsClient) listByCacheCreateRequest(ctx context.Context
 
 // listByCacheHandleResponse handles the ListByCache response.
 func (client *StorageTargetsClient) listByCacheHandleResponse(resp *http.Response) (StorageTargetsClientListByCacheResponse, error) {
-	result := StorageTargetsClientListByCacheResponse{RawResponse: resp}
+	result := StorageTargetsClientListByCacheResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StorageTargetsResult); err != nil {
 		return StorageTargetsClientListByCacheResponse{}, err
 	}

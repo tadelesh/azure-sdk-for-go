@@ -43,11 +43,10 @@ func (p *CertificateOrdersClientCreateOrUpdateCertificatePoller) Poll(ctx contex
 // If the final GET succeeded then the final CertificateOrdersClientCreateOrUpdateCertificateResponse will be returned.
 func (p *CertificateOrdersClientCreateOrUpdateCertificatePoller) FinalResponse(ctx context.Context) (CertificateOrdersClientCreateOrUpdateCertificateResponse, error) {
 	respType := CertificateOrdersClientCreateOrUpdateCertificateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.CertificateResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.CertificateResource)
 	if err != nil {
 		return CertificateOrdersClientCreateOrUpdateCertificateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *CertificateOrdersClientCreateOrUpdatePoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final CertificateOrdersClientCreateOrUpdateResponse will be returned.
 func (p *CertificateOrdersClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (CertificateOrdersClientCreateOrUpdateResponse, error) {
 	respType := CertificateOrdersClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.CertificateOrder)
+	_, err := p.pt.FinalResponse(ctx, &respType.CertificateOrder)
 	if err != nil {
 		return CertificateOrdersClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ContainerAppsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*ht
 // If the final GET succeeded then the final ContainerAppsClientCreateOrUpdateResponse will be returned.
 func (p *ContainerAppsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ContainerAppsClientCreateOrUpdateResponse, error) {
 	respType := ContainerAppsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ContainerApp)
+	_, err := p.pt.FinalResponse(ctx, &respType.ContainerApp)
 	if err != nil {
 		return ContainerAppsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *ContainerAppsClientDeletePoller) Poll(ctx context.Context) (*http.Respo
 // If the final GET succeeded then the final ContainerAppsClientDeleteResponse will be returned.
 func (p *ContainerAppsClientDeletePoller) FinalResponse(ctx context.Context) (ContainerAppsClientDeleteResponse, error) {
 	respType := ContainerAppsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ContainerAppsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *DomainsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final DomainsClientCreateOrUpdateResponse will be returned.
 func (p *DomainsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (DomainsClientCreateOrUpdateResponse, error) {
 	respType := DomainsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Domain)
+	_, err := p.pt.FinalResponse(ctx, &respType.Domain)
 	if err != nil {
 		return DomainsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPoller) Poll(
 // If the final GET succeeded then the final EnvironmentsClientApproveOrRejectPrivateEndpointConnectionResponse will be returned.
 func (p *EnvironmentsClientApproveOrRejectPrivateEndpointConnectionPoller) FinalResponse(ctx context.Context) (EnvironmentsClientApproveOrRejectPrivateEndpointConnectionResponse, error) {
 	respType := EnvironmentsClientApproveOrRejectPrivateEndpointConnectionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RemotePrivateEndpointConnectionARMResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.RemotePrivateEndpointConnectionARMResource)
 	if err != nil {
 		return EnvironmentsClientApproveOrRejectPrivateEndpointConnectionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -343,11 +337,10 @@ func (p *EnvironmentsClientCreateOrUpdateMultiRolePoolPoller) Poll(ctx context.C
 // If the final GET succeeded then the final EnvironmentsClientCreateOrUpdateMultiRolePoolResponse will be returned.
 func (p *EnvironmentsClientCreateOrUpdateMultiRolePoolPoller) FinalResponse(ctx context.Context) (EnvironmentsClientCreateOrUpdateMultiRolePoolResponse, error) {
 	respType := EnvironmentsClientCreateOrUpdateMultiRolePoolResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.WorkerPoolResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.WorkerPoolResource)
 	if err != nil {
 		return EnvironmentsClientCreateOrUpdateMultiRolePoolResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -386,11 +379,10 @@ func (p *EnvironmentsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final EnvironmentsClientCreateOrUpdateResponse will be returned.
 func (p *EnvironmentsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (EnvironmentsClientCreateOrUpdateResponse, error) {
 	respType := EnvironmentsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.EnvironmentResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.EnvironmentResource)
 	if err != nil {
 		return EnvironmentsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -429,11 +421,10 @@ func (p *EnvironmentsClientCreateOrUpdateWorkerPoolPoller) Poll(ctx context.Cont
 // If the final GET succeeded then the final EnvironmentsClientCreateOrUpdateWorkerPoolResponse will be returned.
 func (p *EnvironmentsClientCreateOrUpdateWorkerPoolPoller) FinalResponse(ctx context.Context) (EnvironmentsClientCreateOrUpdateWorkerPoolResponse, error) {
 	respType := EnvironmentsClientCreateOrUpdateWorkerPoolResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.WorkerPoolResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.WorkerPoolResource)
 	if err != nil {
 		return EnvironmentsClientCreateOrUpdateWorkerPoolResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -472,11 +463,10 @@ func (p *EnvironmentsClientDeletePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final EnvironmentsClientDeleteResponse will be returned.
 func (p *EnvironmentsClientDeletePoller) FinalResponse(ctx context.Context) (EnvironmentsClientDeleteResponse, error) {
 	respType := EnvironmentsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return EnvironmentsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -515,11 +505,10 @@ func (p *EnvironmentsClientDeletePrivateEndpointConnectionPoller) Poll(ctx conte
 // If the final GET succeeded then the final EnvironmentsClientDeletePrivateEndpointConnectionResponse will be returned.
 func (p *EnvironmentsClientDeletePrivateEndpointConnectionPoller) FinalResponse(ctx context.Context) (EnvironmentsClientDeletePrivateEndpointConnectionResponse, error) {
 	respType := EnvironmentsClientDeletePrivateEndpointConnectionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Interface)
+	_, err := p.pt.FinalResponse(ctx, &respType.Interface)
 	if err != nil {
 		return EnvironmentsClientDeletePrivateEndpointConnectionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -642,11 +631,10 @@ func (p *KubeEnvironmentsClientCreateOrUpdatePoller) Poll(ctx context.Context) (
 // If the final GET succeeded then the final KubeEnvironmentsClientCreateOrUpdateResponse will be returned.
 func (p *KubeEnvironmentsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (KubeEnvironmentsClientCreateOrUpdateResponse, error) {
 	respType := KubeEnvironmentsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.KubeEnvironment)
+	_, err := p.pt.FinalResponse(ctx, &respType.KubeEnvironment)
 	if err != nil {
 		return KubeEnvironmentsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -685,11 +673,10 @@ func (p *KubeEnvironmentsClientDeletePoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final KubeEnvironmentsClientDeleteResponse will be returned.
 func (p *KubeEnvironmentsClientDeletePoller) FinalResponse(ctx context.Context) (KubeEnvironmentsClientDeleteResponse, error) {
 	respType := KubeEnvironmentsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return KubeEnvironmentsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -728,11 +715,10 @@ func (p *PlansClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Respo
 // If the final GET succeeded then the final PlansClientCreateOrUpdateResponse will be returned.
 func (p *PlansClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PlansClientCreateOrUpdateResponse, error) {
 	respType := PlansClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Plan)
+	_, err := p.pt.FinalResponse(ctx, &respType.Plan)
 	if err != nil {
 		return PlansClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -771,11 +757,10 @@ func (p *StaticSitesClientApproveOrRejectPrivateEndpointConnectionPoller) Poll(c
 // If the final GET succeeded then the final StaticSitesClientApproveOrRejectPrivateEndpointConnectionResponse will be returned.
 func (p *StaticSitesClientApproveOrRejectPrivateEndpointConnectionPoller) FinalResponse(ctx context.Context) (StaticSitesClientApproveOrRejectPrivateEndpointConnectionResponse, error) {
 	respType := StaticSitesClientApproveOrRejectPrivateEndpointConnectionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RemotePrivateEndpointConnectionARMResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.RemotePrivateEndpointConnectionARMResource)
 	if err != nil {
 		return StaticSitesClientApproveOrRejectPrivateEndpointConnectionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -814,11 +799,10 @@ func (p *StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPoller) Poll(ctx c
 // If the final GET succeeded then the final StaticSitesClientCreateOrUpdateStaticSiteCustomDomainResponse will be returned.
 func (p *StaticSitesClientCreateOrUpdateStaticSiteCustomDomainPoller) FinalResponse(ctx context.Context) (StaticSitesClientCreateOrUpdateStaticSiteCustomDomainResponse, error) {
 	respType := StaticSitesClientCreateOrUpdateStaticSiteCustomDomainResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.StaticSiteCustomDomainOverviewARMResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.StaticSiteCustomDomainOverviewARMResource)
 	if err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSiteCustomDomainResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -857,11 +841,10 @@ func (p *StaticSitesClientCreateOrUpdateStaticSitePoller) Poll(ctx context.Conte
 // If the final GET succeeded then the final StaticSitesClientCreateOrUpdateStaticSiteResponse will be returned.
 func (p *StaticSitesClientCreateOrUpdateStaticSitePoller) FinalResponse(ctx context.Context) (StaticSitesClientCreateOrUpdateStaticSiteResponse, error) {
 	respType := StaticSitesClientCreateOrUpdateStaticSiteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.StaticSiteARMResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.StaticSiteARMResource)
 	if err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSiteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -900,11 +883,10 @@ func (p *StaticSitesClientCreateZipDeploymentForStaticSiteBuildPoller) Poll(ctx 
 // If the final GET succeeded then the final StaticSitesClientCreateZipDeploymentForStaticSiteBuildResponse will be returned.
 func (p *StaticSitesClientCreateZipDeploymentForStaticSiteBuildPoller) FinalResponse(ctx context.Context) (StaticSitesClientCreateZipDeploymentForStaticSiteBuildResponse, error) {
 	respType := StaticSitesClientCreateZipDeploymentForStaticSiteBuildResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StaticSitesClientCreateZipDeploymentForStaticSiteBuildResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -943,11 +925,10 @@ func (p *StaticSitesClientCreateZipDeploymentForStaticSitePoller) Poll(ctx conte
 // If the final GET succeeded then the final StaticSitesClientCreateZipDeploymentForStaticSiteResponse will be returned.
 func (p *StaticSitesClientCreateZipDeploymentForStaticSitePoller) FinalResponse(ctx context.Context) (StaticSitesClientCreateZipDeploymentForStaticSiteResponse, error) {
 	respType := StaticSitesClientCreateZipDeploymentForStaticSiteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StaticSitesClientCreateZipDeploymentForStaticSiteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -986,11 +967,10 @@ func (p *StaticSitesClientDeletePrivateEndpointConnectionPoller) Poll(ctx contex
 // If the final GET succeeded then the final StaticSitesClientDeletePrivateEndpointConnectionResponse will be returned.
 func (p *StaticSitesClientDeletePrivateEndpointConnectionPoller) FinalResponse(ctx context.Context) (StaticSitesClientDeletePrivateEndpointConnectionResponse, error) {
 	respType := StaticSitesClientDeletePrivateEndpointConnectionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Interface)
+	_, err := p.pt.FinalResponse(ctx, &respType.Interface)
 	if err != nil {
 		return StaticSitesClientDeletePrivateEndpointConnectionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1029,11 +1009,10 @@ func (p *StaticSitesClientDeleteStaticSiteBuildPoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final StaticSitesClientDeleteStaticSiteBuildResponse will be returned.
 func (p *StaticSitesClientDeleteStaticSiteBuildPoller) FinalResponse(ctx context.Context) (StaticSitesClientDeleteStaticSiteBuildResponse, error) {
 	respType := StaticSitesClientDeleteStaticSiteBuildResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StaticSitesClientDeleteStaticSiteBuildResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1072,11 +1051,10 @@ func (p *StaticSitesClientDeleteStaticSiteCustomDomainPoller) Poll(ctx context.C
 // If the final GET succeeded then the final StaticSitesClientDeleteStaticSiteCustomDomainResponse will be returned.
 func (p *StaticSitesClientDeleteStaticSiteCustomDomainPoller) FinalResponse(ctx context.Context) (StaticSitesClientDeleteStaticSiteCustomDomainResponse, error) {
 	respType := StaticSitesClientDeleteStaticSiteCustomDomainResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StaticSitesClientDeleteStaticSiteCustomDomainResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1115,11 +1093,10 @@ func (p *StaticSitesClientDeleteStaticSitePoller) Poll(ctx context.Context) (*ht
 // If the final GET succeeded then the final StaticSitesClientDeleteStaticSiteResponse will be returned.
 func (p *StaticSitesClientDeleteStaticSitePoller) FinalResponse(ctx context.Context) (StaticSitesClientDeleteStaticSiteResponse, error) {
 	respType := StaticSitesClientDeleteStaticSiteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StaticSitesClientDeleteStaticSiteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1158,11 +1135,10 @@ func (p *StaticSitesClientDetachStaticSitePoller) Poll(ctx context.Context) (*ht
 // If the final GET succeeded then the final StaticSitesClientDetachStaticSiteResponse will be returned.
 func (p *StaticSitesClientDetachStaticSitePoller) FinalResponse(ctx context.Context) (StaticSitesClientDetachStaticSiteResponse, error) {
 	respType := StaticSitesClientDetachStaticSiteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StaticSitesClientDetachStaticSiteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1201,11 +1177,10 @@ func (p *StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPoll
 // If the final GET succeeded then the final StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildResponse will be returned.
 func (p *StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildPoller) FinalResponse(ctx context.Context) (StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildResponse, error) {
 	respType := StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.StaticSiteUserProvidedFunctionAppARMResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.StaticSiteUserProvidedFunctionAppARMResource)
 	if err != nil {
 		return StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1244,11 +1219,10 @@ func (p *StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePoller) P
 // If the final GET succeeded then the final StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteResponse will be returned.
 func (p *StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSitePoller) FinalResponse(ctx context.Context) (StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteResponse, error) {
 	respType := StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.StaticSiteUserProvidedFunctionAppARMResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.StaticSiteUserProvidedFunctionAppARMResource)
 	if err != nil {
 		return StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1287,11 +1261,10 @@ func (p *StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePoller) Poll
 // If the final GET succeeded then the final StaticSitesClientValidateCustomDomainCanBeAddedToStaticSiteResponse will be returned.
 func (p *StaticSitesClientValidateCustomDomainCanBeAddedToStaticSitePoller) FinalResponse(ctx context.Context) (StaticSitesClientValidateCustomDomainCanBeAddedToStaticSiteResponse, error) {
 	respType := StaticSitesClientValidateCustomDomainCanBeAddedToStaticSiteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StaticSitesClientValidateCustomDomainCanBeAddedToStaticSiteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1330,11 +1303,10 @@ func (p *WebAppsClientApproveOrRejectPrivateEndpointConnectionPoller) Poll(ctx c
 // If the final GET succeeded then the final WebAppsClientApproveOrRejectPrivateEndpointConnectionResponse will be returned.
 func (p *WebAppsClientApproveOrRejectPrivateEndpointConnectionPoller) FinalResponse(ctx context.Context) (WebAppsClientApproveOrRejectPrivateEndpointConnectionResponse, error) {
 	respType := WebAppsClientApproveOrRejectPrivateEndpointConnectionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RemotePrivateEndpointConnectionARMResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.RemotePrivateEndpointConnectionARMResource)
 	if err != nil {
 		return WebAppsClientApproveOrRejectPrivateEndpointConnectionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1373,11 +1345,10 @@ func (p *WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotPoller) Poll(c
 // If the final GET succeeded then the final WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotResponse will be returned.
 func (p *WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotPoller) FinalResponse(ctx context.Context) (WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotResponse, error) {
 	respType := WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RemotePrivateEndpointConnectionARMResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.RemotePrivateEndpointConnectionARMResource)
 	if err != nil {
 		return WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1416,11 +1387,10 @@ func (p *WebAppsClientCreateFunctionPoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final WebAppsClientCreateFunctionResponse will be returned.
 func (p *WebAppsClientCreateFunctionPoller) FinalResponse(ctx context.Context) (WebAppsClientCreateFunctionResponse, error) {
 	respType := WebAppsClientCreateFunctionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.FunctionEnvelope)
+	_, err := p.pt.FinalResponse(ctx, &respType.FunctionEnvelope)
 	if err != nil {
 		return WebAppsClientCreateFunctionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1459,11 +1429,10 @@ func (p *WebAppsClientCreateInstanceFunctionSlotPoller) Poll(ctx context.Context
 // If the final GET succeeded then the final WebAppsClientCreateInstanceFunctionSlotResponse will be returned.
 func (p *WebAppsClientCreateInstanceFunctionSlotPoller) FinalResponse(ctx context.Context) (WebAppsClientCreateInstanceFunctionSlotResponse, error) {
 	respType := WebAppsClientCreateInstanceFunctionSlotResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.FunctionEnvelope)
+	_, err := p.pt.FinalResponse(ctx, &respType.FunctionEnvelope)
 	if err != nil {
 		return WebAppsClientCreateInstanceFunctionSlotResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1502,11 +1471,10 @@ func (p *WebAppsClientCreateInstanceMSDeployOperationPoller) Poll(ctx context.Co
 // If the final GET succeeded then the final WebAppsClientCreateInstanceMSDeployOperationResponse will be returned.
 func (p *WebAppsClientCreateInstanceMSDeployOperationPoller) FinalResponse(ctx context.Context) (WebAppsClientCreateInstanceMSDeployOperationResponse, error) {
 	respType := WebAppsClientCreateInstanceMSDeployOperationResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MSDeployStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.MSDeployStatus)
 	if err != nil {
 		return WebAppsClientCreateInstanceMSDeployOperationResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1545,11 +1513,10 @@ func (p *WebAppsClientCreateInstanceMSDeployOperationSlotPoller) Poll(ctx contex
 // If the final GET succeeded then the final WebAppsClientCreateInstanceMSDeployOperationSlotResponse will be returned.
 func (p *WebAppsClientCreateInstanceMSDeployOperationSlotPoller) FinalResponse(ctx context.Context) (WebAppsClientCreateInstanceMSDeployOperationSlotResponse, error) {
 	respType := WebAppsClientCreateInstanceMSDeployOperationSlotResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MSDeployStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.MSDeployStatus)
 	if err != nil {
 		return WebAppsClientCreateInstanceMSDeployOperationSlotResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1588,11 +1555,10 @@ func (p *WebAppsClientCreateMSDeployOperationPoller) Poll(ctx context.Context) (
 // If the final GET succeeded then the final WebAppsClientCreateMSDeployOperationResponse will be returned.
 func (p *WebAppsClientCreateMSDeployOperationPoller) FinalResponse(ctx context.Context) (WebAppsClientCreateMSDeployOperationResponse, error) {
 	respType := WebAppsClientCreateMSDeployOperationResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MSDeployStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.MSDeployStatus)
 	if err != nil {
 		return WebAppsClientCreateMSDeployOperationResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1631,11 +1597,10 @@ func (p *WebAppsClientCreateMSDeployOperationSlotPoller) Poll(ctx context.Contex
 // If the final GET succeeded then the final WebAppsClientCreateMSDeployOperationSlotResponse will be returned.
 func (p *WebAppsClientCreateMSDeployOperationSlotPoller) FinalResponse(ctx context.Context) (WebAppsClientCreateMSDeployOperationSlotResponse, error) {
 	respType := WebAppsClientCreateMSDeployOperationSlotResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MSDeployStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.MSDeployStatus)
 	if err != nil {
 		return WebAppsClientCreateMSDeployOperationSlotResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1674,11 +1639,10 @@ func (p *WebAppsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final WebAppsClientCreateOrUpdateResponse will be returned.
 func (p *WebAppsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (WebAppsClientCreateOrUpdateResponse, error) {
 	respType := WebAppsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Site)
+	_, err := p.pt.FinalResponse(ctx, &respType.Site)
 	if err != nil {
 		return WebAppsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1717,11 +1681,10 @@ func (p *WebAppsClientCreateOrUpdateSlotPoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final WebAppsClientCreateOrUpdateSlotResponse will be returned.
 func (p *WebAppsClientCreateOrUpdateSlotPoller) FinalResponse(ctx context.Context) (WebAppsClientCreateOrUpdateSlotResponse, error) {
 	respType := WebAppsClientCreateOrUpdateSlotResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Site)
+	_, err := p.pt.FinalResponse(ctx, &respType.Site)
 	if err != nil {
 		return WebAppsClientCreateOrUpdateSlotResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1760,11 +1723,10 @@ func (p *WebAppsClientCreateOrUpdateSourceControlPoller) Poll(ctx context.Contex
 // If the final GET succeeded then the final WebAppsClientCreateOrUpdateSourceControlResponse will be returned.
 func (p *WebAppsClientCreateOrUpdateSourceControlPoller) FinalResponse(ctx context.Context) (WebAppsClientCreateOrUpdateSourceControlResponse, error) {
 	respType := WebAppsClientCreateOrUpdateSourceControlResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SiteSourceControl)
+	_, err := p.pt.FinalResponse(ctx, &respType.SiteSourceControl)
 	if err != nil {
 		return WebAppsClientCreateOrUpdateSourceControlResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1803,11 +1765,10 @@ func (p *WebAppsClientCreateOrUpdateSourceControlSlotPoller) Poll(ctx context.Co
 // If the final GET succeeded then the final WebAppsClientCreateOrUpdateSourceControlSlotResponse will be returned.
 func (p *WebAppsClientCreateOrUpdateSourceControlSlotPoller) FinalResponse(ctx context.Context) (WebAppsClientCreateOrUpdateSourceControlSlotResponse, error) {
 	respType := WebAppsClientCreateOrUpdateSourceControlSlotResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SiteSourceControl)
+	_, err := p.pt.FinalResponse(ctx, &respType.SiteSourceControl)
 	if err != nil {
 		return WebAppsClientCreateOrUpdateSourceControlSlotResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1846,11 +1807,10 @@ func (p *WebAppsClientDeletePrivateEndpointConnectionPoller) Poll(ctx context.Co
 // If the final GET succeeded then the final WebAppsClientDeletePrivateEndpointConnectionResponse will be returned.
 func (p *WebAppsClientDeletePrivateEndpointConnectionPoller) FinalResponse(ctx context.Context) (WebAppsClientDeletePrivateEndpointConnectionResponse, error) {
 	respType := WebAppsClientDeletePrivateEndpointConnectionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Interface)
+	_, err := p.pt.FinalResponse(ctx, &respType.Interface)
 	if err != nil {
 		return WebAppsClientDeletePrivateEndpointConnectionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1889,11 +1849,10 @@ func (p *WebAppsClientDeletePrivateEndpointConnectionSlotPoller) Poll(ctx contex
 // If the final GET succeeded then the final WebAppsClientDeletePrivateEndpointConnectionSlotResponse will be returned.
 func (p *WebAppsClientDeletePrivateEndpointConnectionSlotPoller) FinalResponse(ctx context.Context) (WebAppsClientDeletePrivateEndpointConnectionSlotResponse, error) {
 	respType := WebAppsClientDeletePrivateEndpointConnectionSlotResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Interface)
+	_, err := p.pt.FinalResponse(ctx, &respType.Interface)
 	if err != nil {
 		return WebAppsClientDeletePrivateEndpointConnectionSlotResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1932,11 +1891,10 @@ func (p *WebAppsClientInstallSiteExtensionPoller) Poll(ctx context.Context) (*ht
 // If the final GET succeeded then the final WebAppsClientInstallSiteExtensionResponse will be returned.
 func (p *WebAppsClientInstallSiteExtensionPoller) FinalResponse(ctx context.Context) (WebAppsClientInstallSiteExtensionResponse, error) {
 	respType := WebAppsClientInstallSiteExtensionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SiteExtensionInfo)
+	_, err := p.pt.FinalResponse(ctx, &respType.SiteExtensionInfo)
 	if err != nil {
 		return WebAppsClientInstallSiteExtensionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1975,11 +1933,10 @@ func (p *WebAppsClientInstallSiteExtensionSlotPoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final WebAppsClientInstallSiteExtensionSlotResponse will be returned.
 func (p *WebAppsClientInstallSiteExtensionSlotPoller) FinalResponse(ctx context.Context) (WebAppsClientInstallSiteExtensionSlotResponse, error) {
 	respType := WebAppsClientInstallSiteExtensionSlotResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SiteExtensionInfo)
+	_, err := p.pt.FinalResponse(ctx, &respType.SiteExtensionInfo)
 	if err != nil {
 		return WebAppsClientInstallSiteExtensionSlotResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2018,11 +1975,10 @@ func (p *WebAppsClientListPublishingCredentialsPoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final WebAppsClientListPublishingCredentialsResponse will be returned.
 func (p *WebAppsClientListPublishingCredentialsPoller) FinalResponse(ctx context.Context) (WebAppsClientListPublishingCredentialsResponse, error) {
 	respType := WebAppsClientListPublishingCredentialsResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.User)
+	_, err := p.pt.FinalResponse(ctx, &respType.User)
 	if err != nil {
 		return WebAppsClientListPublishingCredentialsResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2061,11 +2017,10 @@ func (p *WebAppsClientListPublishingCredentialsSlotPoller) Poll(ctx context.Cont
 // If the final GET succeeded then the final WebAppsClientListPublishingCredentialsSlotResponse will be returned.
 func (p *WebAppsClientListPublishingCredentialsSlotPoller) FinalResponse(ctx context.Context) (WebAppsClientListPublishingCredentialsSlotResponse, error) {
 	respType := WebAppsClientListPublishingCredentialsSlotResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.User)
+	_, err := p.pt.FinalResponse(ctx, &respType.User)
 	if err != nil {
 		return WebAppsClientListPublishingCredentialsSlotResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2104,11 +2059,10 @@ func (p *WebAppsClientMigrateMySQLPoller) Poll(ctx context.Context) (*http.Respo
 // If the final GET succeeded then the final WebAppsClientMigrateMySQLResponse will be returned.
 func (p *WebAppsClientMigrateMySQLPoller) FinalResponse(ctx context.Context) (WebAppsClientMigrateMySQLResponse, error) {
 	respType := WebAppsClientMigrateMySQLResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Operation)
+	_, err := p.pt.FinalResponse(ctx, &respType.Operation)
 	if err != nil {
 		return WebAppsClientMigrateMySQLResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2147,11 +2101,10 @@ func (p *WebAppsClientMigrateStoragePoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final WebAppsClientMigrateStorageResponse will be returned.
 func (p *WebAppsClientMigrateStoragePoller) FinalResponse(ctx context.Context) (WebAppsClientMigrateStorageResponse, error) {
 	respType := WebAppsClientMigrateStorageResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.StorageMigrationResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.StorageMigrationResponse)
 	if err != nil {
 		return WebAppsClientMigrateStorageResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2190,11 +2143,10 @@ func (p *WebAppsClientRestoreFromBackupBlobPoller) Poll(ctx context.Context) (*h
 // If the final GET succeeded then the final WebAppsClientRestoreFromBackupBlobResponse will be returned.
 func (p *WebAppsClientRestoreFromBackupBlobPoller) FinalResponse(ctx context.Context) (WebAppsClientRestoreFromBackupBlobResponse, error) {
 	respType := WebAppsClientRestoreFromBackupBlobResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return WebAppsClientRestoreFromBackupBlobResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2233,11 +2185,10 @@ func (p *WebAppsClientRestoreFromBackupBlobSlotPoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final WebAppsClientRestoreFromBackupBlobSlotResponse will be returned.
 func (p *WebAppsClientRestoreFromBackupBlobSlotPoller) FinalResponse(ctx context.Context) (WebAppsClientRestoreFromBackupBlobSlotResponse, error) {
 	respType := WebAppsClientRestoreFromBackupBlobSlotResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return WebAppsClientRestoreFromBackupBlobSlotResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2276,11 +2227,10 @@ func (p *WebAppsClientRestoreFromDeletedAppPoller) Poll(ctx context.Context) (*h
 // If the final GET succeeded then the final WebAppsClientRestoreFromDeletedAppResponse will be returned.
 func (p *WebAppsClientRestoreFromDeletedAppPoller) FinalResponse(ctx context.Context) (WebAppsClientRestoreFromDeletedAppResponse, error) {
 	respType := WebAppsClientRestoreFromDeletedAppResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return WebAppsClientRestoreFromDeletedAppResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2319,11 +2269,10 @@ func (p *WebAppsClientRestoreFromDeletedAppSlotPoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final WebAppsClientRestoreFromDeletedAppSlotResponse will be returned.
 func (p *WebAppsClientRestoreFromDeletedAppSlotPoller) FinalResponse(ctx context.Context) (WebAppsClientRestoreFromDeletedAppSlotResponse, error) {
 	respType := WebAppsClientRestoreFromDeletedAppSlotResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return WebAppsClientRestoreFromDeletedAppSlotResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2362,11 +2311,10 @@ func (p *WebAppsClientRestorePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final WebAppsClientRestoreResponse will be returned.
 func (p *WebAppsClientRestorePoller) FinalResponse(ctx context.Context) (WebAppsClientRestoreResponse, error) {
 	respType := WebAppsClientRestoreResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return WebAppsClientRestoreResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2405,11 +2353,10 @@ func (p *WebAppsClientRestoreSlotPoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final WebAppsClientRestoreSlotResponse will be returned.
 func (p *WebAppsClientRestoreSlotPoller) FinalResponse(ctx context.Context) (WebAppsClientRestoreSlotResponse, error) {
 	respType := WebAppsClientRestoreSlotResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return WebAppsClientRestoreSlotResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2448,11 +2395,10 @@ func (p *WebAppsClientRestoreSnapshotPoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final WebAppsClientRestoreSnapshotResponse will be returned.
 func (p *WebAppsClientRestoreSnapshotPoller) FinalResponse(ctx context.Context) (WebAppsClientRestoreSnapshotResponse, error) {
 	respType := WebAppsClientRestoreSnapshotResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return WebAppsClientRestoreSnapshotResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2491,11 +2437,10 @@ func (p *WebAppsClientRestoreSnapshotSlotPoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final WebAppsClientRestoreSnapshotSlotResponse will be returned.
 func (p *WebAppsClientRestoreSnapshotSlotPoller) FinalResponse(ctx context.Context) (WebAppsClientRestoreSnapshotSlotResponse, error) {
 	respType := WebAppsClientRestoreSnapshotSlotResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return WebAppsClientRestoreSnapshotSlotResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2534,11 +2479,10 @@ func (p *WebAppsClientStartNetworkTracePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final WebAppsClientStartNetworkTraceResponse will be returned.
 func (p *WebAppsClientStartNetworkTracePoller) FinalResponse(ctx context.Context) (WebAppsClientStartNetworkTraceResponse, error) {
 	respType := WebAppsClientStartNetworkTraceResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.NetworkTraceArray)
+	_, err := p.pt.FinalResponse(ctx, &respType.NetworkTraceArray)
 	if err != nil {
 		return WebAppsClientStartNetworkTraceResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2577,11 +2521,10 @@ func (p *WebAppsClientStartNetworkTraceSlotPoller) Poll(ctx context.Context) (*h
 // If the final GET succeeded then the final WebAppsClientStartNetworkTraceSlotResponse will be returned.
 func (p *WebAppsClientStartNetworkTraceSlotPoller) FinalResponse(ctx context.Context) (WebAppsClientStartNetworkTraceSlotResponse, error) {
 	respType := WebAppsClientStartNetworkTraceSlotResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.NetworkTraceArray)
+	_, err := p.pt.FinalResponse(ctx, &respType.NetworkTraceArray)
 	if err != nil {
 		return WebAppsClientStartNetworkTraceSlotResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2620,11 +2563,10 @@ func (p *WebAppsClientStartWebSiteNetworkTraceOperationPoller) Poll(ctx context.
 // If the final GET succeeded then the final WebAppsClientStartWebSiteNetworkTraceOperationResponse will be returned.
 func (p *WebAppsClientStartWebSiteNetworkTraceOperationPoller) FinalResponse(ctx context.Context) (WebAppsClientStartWebSiteNetworkTraceOperationResponse, error) {
 	respType := WebAppsClientStartWebSiteNetworkTraceOperationResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.NetworkTraceArray)
+	_, err := p.pt.FinalResponse(ctx, &respType.NetworkTraceArray)
 	if err != nil {
 		return WebAppsClientStartWebSiteNetworkTraceOperationResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2663,11 +2605,10 @@ func (p *WebAppsClientStartWebSiteNetworkTraceOperationSlotPoller) Poll(ctx cont
 // If the final GET succeeded then the final WebAppsClientStartWebSiteNetworkTraceOperationSlotResponse will be returned.
 func (p *WebAppsClientStartWebSiteNetworkTraceOperationSlotPoller) FinalResponse(ctx context.Context) (WebAppsClientStartWebSiteNetworkTraceOperationSlotResponse, error) {
 	respType := WebAppsClientStartWebSiteNetworkTraceOperationSlotResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.NetworkTraceArray)
+	_, err := p.pt.FinalResponse(ctx, &respType.NetworkTraceArray)
 	if err != nil {
 		return WebAppsClientStartWebSiteNetworkTraceOperationSlotResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2706,11 +2647,10 @@ func (p *WebAppsClientSwapSlotPoller) Poll(ctx context.Context) (*http.Response,
 // If the final GET succeeded then the final WebAppsClientSwapSlotResponse will be returned.
 func (p *WebAppsClientSwapSlotPoller) FinalResponse(ctx context.Context) (WebAppsClientSwapSlotResponse, error) {
 	respType := WebAppsClientSwapSlotResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return WebAppsClientSwapSlotResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2749,11 +2689,10 @@ func (p *WebAppsClientSwapSlotWithProductionPoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final WebAppsClientSwapSlotWithProductionResponse will be returned.
 func (p *WebAppsClientSwapSlotWithProductionPoller) FinalResponse(ctx context.Context) (WebAppsClientSwapSlotWithProductionResponse, error) {
 	respType := WebAppsClientSwapSlotWithProductionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return WebAppsClientSwapSlotWithProductionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

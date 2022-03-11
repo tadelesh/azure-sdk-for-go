@@ -34,17 +34,17 @@ type WorkflowRunActionRequestHistoriesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkflowRunActionRequestHistoriesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkflowRunActionRequestHistoriesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkflowRunActionRequestHistoriesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -113,7 +113,7 @@ func (client *WorkflowRunActionRequestHistoriesClient) getCreateRequest(ctx cont
 
 // getHandleResponse handles the Get response.
 func (client *WorkflowRunActionRequestHistoriesClient) getHandleResponse(resp *http.Response) (WorkflowRunActionRequestHistoriesClientGetResponse, error) {
-	result := WorkflowRunActionRequestHistoriesClientGetResponse{RawResponse: resp}
+	result := WorkflowRunActionRequestHistoriesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RequestHistory); err != nil {
 		return WorkflowRunActionRequestHistoriesClientGetResponse{}, err
 	}
@@ -176,7 +176,7 @@ func (client *WorkflowRunActionRequestHistoriesClient) listCreateRequest(ctx con
 
 // listHandleResponse handles the List response.
 func (client *WorkflowRunActionRequestHistoriesClient) listHandleResponse(resp *http.Response) (WorkflowRunActionRequestHistoriesClientListResponse, error) {
-	result := WorkflowRunActionRequestHistoriesClientListResponse{RawResponse: resp}
+	result := WorkflowRunActionRequestHistoriesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RequestHistoryListResult); err != nil {
 		return WorkflowRunActionRequestHistoriesClientListResponse{}, err
 	}

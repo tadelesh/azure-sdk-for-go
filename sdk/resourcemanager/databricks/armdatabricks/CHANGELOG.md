@@ -1,5 +1,124 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*VNetPeeringClientListByWorkspacePager.NextPage` return value(s) have been changed from `(bool)` to `(VNetPeeringClientListByWorkspaceResponse, error)`
+- Function `*WorkspacesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(WorkspacesClientListByResourceGroupResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*PrivateEndpointConnectionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateEndpointConnectionsClientListResponse, error)`
+- Function `*WorkspacesClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(WorkspacesClientListBySubscriptionResponse, error)`
+- Function `*PrivateLinkResourcesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateLinkResourcesClientListResponse, error)`
+- Function `*VNetPeeringClientListByWorkspacePager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*PrivateEndpointConnectionsClientListPager.PageResponse` has been removed
+- Function `*WorkspacesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*PrivateEndpointConnectionsClientListPager.Err` has been removed
+- Function `*WorkspacesClientListBySubscriptionPager.Err` has been removed
+- Function `*WorkspacesClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*PrivateLinkResourcesClientListPager.PageResponse` has been removed
+- Function `*PrivateLinkResourcesClientListPager.Err` has been removed
+- Function `*VNetPeeringClientListByWorkspacePager.PageResponse` has been removed
+- Function `*WorkspacesClientListByResourceGroupPager.Err` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `OutboundNetworkDependenciesEndpointsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientCreateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListResult` has been removed
+- Struct `PrivateLinkResourcesClientGetResult` has been removed
+- Struct `PrivateLinkResourcesClientListResult` has been removed
+- Struct `VNetPeeringClientCreateOrUpdateResult` has been removed
+- Struct `VNetPeeringClientGetResult` has been removed
+- Struct `VNetPeeringClientListByWorkspaceResult` has been removed
+- Struct `WorkspacesClientCreateOrUpdateResult` has been removed
+- Struct `WorkspacesClientGetResult` has been removed
+- Struct `WorkspacesClientListByResourceGroupResult` has been removed
+- Struct `WorkspacesClientListBySubscriptionResult` has been removed
+- Struct `WorkspacesClientUpdateResult` has been removed
+- Field `RawResponse` of struct `WorkspacesClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VNetPeeringClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `VNetPeeringClientCreateOrUpdateResult` of struct `VNetPeeringClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VNetPeeringClientCreateOrUpdateResponse` has been removed
+- Field `WorkspacesClientGetResult` of struct `WorkspacesClientGetResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientGetResponse` has been removed
+- Field `RawResponse` of struct `VNetPeeringClientDeletePollerResponse` has been removed
+- Field `PrivateLinkResourcesClientListResult` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `PrivateLinkResourcesClientGetResult` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeletePollerResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VNetPeeringClientDeleteResponse` has been removed
+- Field `WorkspacesClientCreateOrUpdateResult` of struct `WorkspacesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientCreateOrUpdateResponse` has been removed
+- Field `WorkspacesClientListByResourceGroupResult` of struct `WorkspacesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreatePollerResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientCreateOrUpdatePollerResponse` has been removed
+- Field `PrivateEndpointConnectionsClientCreateResult` of struct `PrivateEndpointConnectionsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateResponse` has been removed
+- Field `WorkspacesClientListBySubscriptionResult` of struct `WorkspacesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientListBySubscriptionResponse` has been removed
+- Field `VNetPeeringClientGetResult` of struct `VNetPeeringClientGetResponse` has been removed
+- Field `RawResponse` of struct `VNetPeeringClientGetResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientDeletePollerResponse` has been removed
+- Field `WorkspacesClientUpdateResult` of struct `WorkspacesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientUpdateResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListResult` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `OutboundNetworkDependenciesEndpointsClientListResult` of struct `OutboundNetworkDependenciesEndpointsClientListResponse` has been removed
+- Field `RawResponse` of struct `OutboundNetworkDependenciesEndpointsClientListResponse` has been removed
+- Field `VNetPeeringClientListByWorkspaceResult` of struct `VNetPeeringClientListByWorkspaceResponse` has been removed
+- Field `RawResponse` of struct `VNetPeeringClientListByWorkspaceResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New function `ErrorInfo.MarshalJSON() ([]byte, error)`
+- New function `*WorkspacesClientListBySubscriptionPager.More() bool`
+- New function `*PrivateEndpointConnectionsClientListPager.More() bool`
+- New function `*PrivateLinkResourcesClientListPager.More() bool`
+- New function `*VNetPeeringClientListByWorkspacePager.More() bool`
+- New function `*WorkspacesClientListByResourceGroupPager.More() bool`
+- New struct `ErrorDetail`
+- New struct `ErrorInfo`
+- New struct `ErrorResponse`
+- New anonymous field `PrivateLinkResourcesList` in struct `PrivateLinkResourcesClientListResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `GroupIDInformation` in struct `PrivateLinkResourcesClientGetResponse`
+- New anonymous field `PrivateEndpointConnectionsList` in struct `PrivateEndpointConnectionsClientListResponse`
+- New anonymous field `WorkspaceListResult` in struct `WorkspacesClientListBySubscriptionResponse`
+- New anonymous field `WorkspaceListResult` in struct `WorkspacesClientListByResourceGroupResponse`
+- New field `OutboundEnvironmentEndpointArray` in struct `OutboundNetworkDependenciesEndpointsClientListResponse`
+- New anonymous field `Workspace` in struct `WorkspacesClientCreateOrUpdateResponse`
+- New anonymous field `Workspace` in struct `WorkspacesClientGetResponse`
+- New anonymous field `VirtualNetworkPeering` in struct `VNetPeeringClientGetResponse`
+- New anonymous field `Workspace` in struct `WorkspacesClientUpdateResponse`
+- New anonymous field `VirtualNetworkPeeringList` in struct `VNetPeeringClientListByWorkspaceResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientCreateResponse`
+- New anonymous field `VirtualNetworkPeering` in struct `VNetPeeringClientCreateOrUpdateResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `WorkspaceCustomObjectParameter.Value` has been changed from `map[string]interface{}` to `interface{}`
+- Function `ErrorInfo.MarshalJSON` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorInfo` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

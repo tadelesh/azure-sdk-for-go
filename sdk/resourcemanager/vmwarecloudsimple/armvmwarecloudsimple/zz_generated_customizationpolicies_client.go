@@ -34,17 +34,17 @@ type CustomizationPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCustomizationPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CustomizationPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CustomizationPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *CustomizationPoliciesClient) getCreateRequest(ctx context.Context,
 
 // getHandleResponse handles the Get response.
 func (client *CustomizationPoliciesClient) getHandleResponse(resp *http.Response) (CustomizationPoliciesClientGetResponse, error) {
-	result := CustomizationPoliciesClientGetResponse{RawResponse: resp}
+	result := CustomizationPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomizationPolicy); err != nil {
 		return CustomizationPoliciesClientGetResponse{}, err
 	}
@@ -159,7 +159,7 @@ func (client *CustomizationPoliciesClient) listCreateRequest(ctx context.Context
 
 // listHandleResponse handles the List response.
 func (client *CustomizationPoliciesClient) listHandleResponse(resp *http.Response) (CustomizationPoliciesClientListResponse, error) {
-	result := CustomizationPoliciesClientListResponse{RawResponse: resp}
+	result := CustomizationPoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomizationPoliciesListResponse); err != nil {
 		return CustomizationPoliciesClientListResponse{}, err
 	}

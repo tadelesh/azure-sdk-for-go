@@ -32,16 +32,16 @@ type ProblemClassificationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProblemClassificationsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ProblemClassificationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProblemClassificationsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -91,7 +91,7 @@ func (client *ProblemClassificationsClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *ProblemClassificationsClient) getHandleResponse(resp *http.Response) (ProblemClassificationsClientGetResponse, error) {
-	result := ProblemClassificationsClientGetResponse{RawResponse: resp}
+	result := ProblemClassificationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProblemClassification); err != nil {
 		return ProblemClassificationsClientGetResponse{}, err
 	}
@@ -105,19 +105,13 @@ func (client *ProblemClassificationsClient) getHandleResponse(resp *http.Respons
 // serviceName - Name of the Azure service for which the problem classifications need to be retrieved.
 // options - ProblemClassificationsClientListOptions contains the optional parameters for the ProblemClassificationsClient.List
 // method.
-func (client *ProblemClassificationsClient) List(ctx context.Context, serviceName string, options *ProblemClassificationsClientListOptions) (ProblemClassificationsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, serviceName, options)
-	if err != nil {
-		return ProblemClassificationsClientListResponse{}, err
+func (client *ProblemClassificationsClient) List(serviceName string, options *ProblemClassificationsClientListOptions) *ProblemClassificationsClientListPager {
+	return &ProblemClassificationsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, serviceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ProblemClassificationsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ProblemClassificationsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -140,7 +134,7 @@ func (client *ProblemClassificationsClient) listCreateRequest(ctx context.Contex
 
 // listHandleResponse handles the List response.
 func (client *ProblemClassificationsClient) listHandleResponse(resp *http.Response) (ProblemClassificationsClientListResponse, error) {
-	result := ProblemClassificationsClientListResponse{RawResponse: resp}
+	result := ProblemClassificationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProblemClassificationsListResult); err != nil {
 		return ProblemClassificationsClientListResponse{}, err
 	}

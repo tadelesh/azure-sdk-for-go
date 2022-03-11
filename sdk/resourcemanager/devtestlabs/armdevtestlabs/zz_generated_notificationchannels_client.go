@@ -35,17 +35,17 @@ type NotificationChannelsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewNotificationChannelsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *NotificationChannelsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &NotificationChannelsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *NotificationChannelsClient) createOrUpdateCreateRequest(ctx contex
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *NotificationChannelsClient) createOrUpdateHandleResponse(resp *http.Response) (NotificationChannelsClientCreateOrUpdateResponse, error) {
-	result := NotificationChannelsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := NotificationChannelsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotificationChannel); err != nil {
 		return NotificationChannelsClientCreateOrUpdateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *NotificationChannelsClient) Delete(ctx context.Context, resourceGr
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return NotificationChannelsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return NotificationChannelsClientDeleteResponse{RawResponse: resp}, nil
+	return NotificationChannelsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -221,7 +221,7 @@ func (client *NotificationChannelsClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *NotificationChannelsClient) getHandleResponse(resp *http.Response) (NotificationChannelsClientGetResponse, error) {
-	result := NotificationChannelsClientGetResponse{RawResponse: resp}
+	result := NotificationChannelsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotificationChannel); err != nil {
 		return NotificationChannelsClientGetResponse{}, err
 	}
@@ -286,7 +286,7 @@ func (client *NotificationChannelsClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *NotificationChannelsClient) listHandleResponse(resp *http.Response) (NotificationChannelsClientListResponse, error) {
-	result := NotificationChannelsClientListResponse{RawResponse: resp}
+	result := NotificationChannelsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotificationChannelList); err != nil {
 		return NotificationChannelsClientListResponse{}, err
 	}
@@ -313,7 +313,7 @@ func (client *NotificationChannelsClient) Notify(ctx context.Context, resourceGr
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return NotificationChannelsClientNotifyResponse{}, runtime.NewResponseError(resp)
 	}
-	return NotificationChannelsClientNotifyResponse{RawResponse: resp}, nil
+	return NotificationChannelsClientNotifyResponse{}, nil
 }
 
 // notifyCreateRequest creates the Notify request.
@@ -401,7 +401,7 @@ func (client *NotificationChannelsClient) updateCreateRequest(ctx context.Contex
 
 // updateHandleResponse handles the Update response.
 func (client *NotificationChannelsClient) updateHandleResponse(resp *http.Response) (NotificationChannelsClientUpdateResponse, error) {
-	result := NotificationChannelsClientUpdateResponse{RawResponse: resp}
+	result := NotificationChannelsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotificationChannel); err != nil {
 		return NotificationChannelsClientUpdateResponse{}, err
 	}

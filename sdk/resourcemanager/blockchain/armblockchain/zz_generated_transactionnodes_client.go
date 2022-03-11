@@ -35,17 +35,17 @@ type TransactionNodesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTransactionNodesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TransactionNodesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TransactionNodesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *TransactionNodesClient) BeginCreate(ctx context.Context, blockchai
 	if err != nil {
 		return TransactionNodesClientCreatePollerResponse{}, err
 	}
-	result := TransactionNodesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := TransactionNodesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("TransactionNodesClient.Create", "", resp, client.pl)
 	if err != nil {
 		return TransactionNodesClientCreatePollerResponse{}, err
@@ -139,9 +137,7 @@ func (client *TransactionNodesClient) BeginDelete(ctx context.Context, blockchai
 	if err != nil {
 		return TransactionNodesClientDeletePollerResponse{}, err
 	}
-	result := TransactionNodesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := TransactionNodesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("TransactionNodesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return TransactionNodesClientDeletePollerResponse{}, err
@@ -252,7 +248,7 @@ func (client *TransactionNodesClient) getCreateRequest(ctx context.Context, bloc
 
 // getHandleResponse handles the Get response.
 func (client *TransactionNodesClient) getHandleResponse(resp *http.Response) (TransactionNodesClientGetResponse, error) {
-	result := TransactionNodesClientGetResponse{RawResponse: resp}
+	result := TransactionNodesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TransactionNode); err != nil {
 		return TransactionNodesClientGetResponse{}, err
 	}
@@ -305,7 +301,7 @@ func (client *TransactionNodesClient) listCreateRequest(ctx context.Context, blo
 
 // listHandleResponse handles the List response.
 func (client *TransactionNodesClient) listHandleResponse(resp *http.Response) (TransactionNodesClientListResponse, error) {
-	result := TransactionNodesClientListResponse{RawResponse: resp}
+	result := TransactionNodesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TransactionNodeCollection); err != nil {
 		return TransactionNodesClientListResponse{}, err
 	}
@@ -367,7 +363,7 @@ func (client *TransactionNodesClient) listAPIKeysCreateRequest(ctx context.Conte
 
 // listAPIKeysHandleResponse handles the ListAPIKeys response.
 func (client *TransactionNodesClient) listAPIKeysHandleResponse(resp *http.Response) (TransactionNodesClientListAPIKeysResponse, error) {
-	result := TransactionNodesClientListAPIKeysResponse{RawResponse: resp}
+	result := TransactionNodesClientListAPIKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIKeyCollection); err != nil {
 		return TransactionNodesClientListAPIKeysResponse{}, err
 	}
@@ -432,7 +428,7 @@ func (client *TransactionNodesClient) listRegenerateAPIKeysCreateRequest(ctx con
 
 // listRegenerateAPIKeysHandleResponse handles the ListRegenerateAPIKeys response.
 func (client *TransactionNodesClient) listRegenerateAPIKeysHandleResponse(resp *http.Response) (TransactionNodesClientListRegenerateAPIKeysResponse, error) {
-	result := TransactionNodesClientListRegenerateAPIKeysResponse{RawResponse: resp}
+	result := TransactionNodesClientListRegenerateAPIKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIKeyCollection); err != nil {
 		return TransactionNodesClientListRegenerateAPIKeysResponse{}, err
 	}
@@ -496,7 +492,7 @@ func (client *TransactionNodesClient) updateCreateRequest(ctx context.Context, b
 
 // updateHandleResponse handles the Update response.
 func (client *TransactionNodesClient) updateHandleResponse(resp *http.Response) (TransactionNodesClientUpdateResponse, error) {
-	result := TransactionNodesClientUpdateResponse{RawResponse: resp}
+	result := TransactionNodesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TransactionNode); err != nil {
 		return TransactionNodesClientUpdateResponse{}, err
 	}

@@ -92,7 +92,7 @@ func (client *PricingsClient) getCreateRequest(ctx context.Context, pricingName 
 
 // getHandleResponse handles the Get response.
 func (client *PricingsClient) getHandleResponse(resp *http.Response) (PricingsClientGetResponse, error) {
-	result := PricingsClientGetResponse{RawResponse: resp}
+	result := PricingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Pricing); err != nil {
 		return PricingsClientGetResponse{}, err
 	}
@@ -137,7 +137,7 @@ func (client *PricingsClient) listCreateRequest(ctx context.Context, options *Pr
 
 // listHandleResponse handles the List response.
 func (client *PricingsClient) listHandleResponse(resp *http.Response) (PricingsClientListResponse, error) {
-	result := PricingsClientListResponse{RawResponse: resp}
+	result := PricingsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PricingList); err != nil {
 		return PricingsClientListResponse{}, err
 	}
@@ -188,7 +188,7 @@ func (client *PricingsClient) updateCreateRequest(ctx context.Context, pricingNa
 
 // updateHandleResponse handles the Update response.
 func (client *PricingsClient) updateHandleResponse(resp *http.Response) (PricingsClientUpdateResponse, error) {
-	result := PricingsClientUpdateResponse{RawResponse: resp}
+	result := PricingsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Pricing); err != nil {
 		return PricingsClientUpdateResponse{}, err
 	}

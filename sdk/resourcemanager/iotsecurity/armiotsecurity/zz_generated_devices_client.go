@@ -36,18 +36,18 @@ type DevicesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDevicesClient(subscriptionID string, iotDefenderLocation string, credential azcore.TokenCredential, options *arm.ClientOptions) *DevicesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DevicesClient{
 		subscriptionID:      subscriptionID,
 		iotDefenderLocation: iotDefenderLocation,
-		host:                string(cp.Endpoint),
-		pl:                  armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:                string(ep),
+		pl:                  armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *DevicesClient) getCreateRequest(ctx context.Context, deviceGroupNa
 
 // getHandleResponse handles the Get response.
 func (client *DevicesClient) getHandleResponse(resp *http.Response) (DevicesClientGetResponse, error) {
-	result := DevicesClientGetResponse{RawResponse: resp}
+	result := DevicesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceModel); err != nil {
 		return DevicesClientGetResponse{}, err
 	}
@@ -158,7 +158,7 @@ func (client *DevicesClient) listCreateRequest(ctx context.Context, deviceGroupN
 
 // listHandleResponse handles the List response.
 func (client *DevicesClient) listHandleResponse(resp *http.Response) (DevicesClientListResponse, error) {
-	result := DevicesClientListResponse{RawResponse: resp}
+	result := DevicesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceList); err != nil {
 		return DevicesClientListResponse{}, err
 	}

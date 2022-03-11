@@ -43,11 +43,10 @@ func (p *MembersClientCreatePoller) Poll(ctx context.Context) (*http.Response, e
 // If the final GET succeeded then the final MembersClientCreateResponse will be returned.
 func (p *MembersClientCreatePoller) FinalResponse(ctx context.Context) (MembersClientCreateResponse, error) {
 	respType := MembersClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Member)
+	_, err := p.pt.FinalResponse(ctx, &respType.Member)
 	if err != nil {
 		return MembersClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *MembersClientDeletePoller) Poll(ctx context.Context) (*http.Response, e
 // If the final GET succeeded then the final MembersClientDeleteResponse will be returned.
 func (p *MembersClientDeletePoller) FinalResponse(ctx context.Context) (MembersClientDeleteResponse, error) {
 	respType := MembersClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return MembersClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *TransactionNodesClientCreatePoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final TransactionNodesClientCreateResponse will be returned.
 func (p *TransactionNodesClientCreatePoller) FinalResponse(ctx context.Context) (TransactionNodesClientCreateResponse, error) {
 	respType := TransactionNodesClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.TransactionNode)
+	_, err := p.pt.FinalResponse(ctx, &respType.TransactionNode)
 	if err != nil {
 		return TransactionNodesClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *TransactionNodesClientDeletePoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final TransactionNodesClientDeleteResponse will be returned.
 func (p *TransactionNodesClientDeletePoller) FinalResponse(ctx context.Context) (TransactionNodesClientDeleteResponse, error) {
 	respType := TransactionNodesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return TransactionNodesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

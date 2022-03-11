@@ -32,16 +32,16 @@ type PartnerClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPartnerClient(credential azcore.TokenCredential, options *arm.ClientOptions) *PartnerClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PartnerClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -85,7 +85,7 @@ func (client *PartnerClient) createCreateRequest(ctx context.Context, partnerID 
 
 // createHandleResponse handles the Create response.
 func (client *PartnerClient) createHandleResponse(resp *http.Response) (PartnerClientCreateResponse, error) {
-	result := PartnerClientCreateResponse{RawResponse: resp}
+	result := PartnerClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PartnerResponse); err != nil {
 		return PartnerClientCreateResponse{}, err
 	}
@@ -108,7 +108,7 @@ func (client *PartnerClient) Delete(ctx context.Context, partnerID string, optio
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return PartnerClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return PartnerClientDeleteResponse{RawResponse: resp}, nil
+	return PartnerClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -168,7 +168,7 @@ func (client *PartnerClient) getCreateRequest(ctx context.Context, partnerID str
 
 // getHandleResponse handles the Get response.
 func (client *PartnerClient) getHandleResponse(resp *http.Response) (PartnerClientGetResponse, error) {
-	result := PartnerClientGetResponse{RawResponse: resp}
+	result := PartnerClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PartnerResponse); err != nil {
 		return PartnerClientGetResponse{}, err
 	}
@@ -214,7 +214,7 @@ func (client *PartnerClient) updateCreateRequest(ctx context.Context, partnerID 
 
 // updateHandleResponse handles the Update response.
 func (client *PartnerClient) updateHandleResponse(resp *http.Response) (PartnerClientUpdateResponse, error) {
-	result := PartnerClientUpdateResponse{RawResponse: resp}
+	result := PartnerClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PartnerResponse); err != nil {
 		return PartnerClientUpdateResponse{}, err
 	}

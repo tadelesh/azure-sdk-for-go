@@ -34,17 +34,17 @@ type DicomServicesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDicomServicesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DicomServicesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DicomServicesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *DicomServicesClient) BeginCreateOrUpdate(ctx context.Context, reso
 	if err != nil {
 		return DicomServicesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DicomServicesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DicomServicesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DicomServicesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DicomServicesClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *DicomServicesClient) BeginDelete(ctx context.Context, resourceGrou
 	if err != nil {
 		return DicomServicesClientDeletePollerResponse{}, err
 	}
-	result := DicomServicesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DicomServicesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DicomServicesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DicomServicesClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *DicomServicesClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *DicomServicesClient) getHandleResponse(resp *http.Response) (DicomServicesClientGetResponse, error) {
-	result := DicomServicesClientGetResponse{RawResponse: resp}
+	result := DicomServicesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DicomService); err != nil {
 		return DicomServicesClientGetResponse{}, err
 	}
@@ -300,7 +296,7 @@ func (client *DicomServicesClient) listByWorkspaceCreateRequest(ctx context.Cont
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *DicomServicesClient) listByWorkspaceHandleResponse(resp *http.Response) (DicomServicesClientListByWorkspaceResponse, error) {
-	result := DicomServicesClientListByWorkspaceResponse{RawResponse: resp}
+	result := DicomServicesClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DicomServiceCollection); err != nil {
 		return DicomServicesClientListByWorkspaceResponse{}, err
 	}
@@ -320,9 +316,7 @@ func (client *DicomServicesClient) BeginUpdate(ctx context.Context, resourceGrou
 	if err != nil {
 		return DicomServicesClientUpdatePollerResponse{}, err
 	}
-	result := DicomServicesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DicomServicesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DicomServicesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return DicomServicesClientUpdatePollerResponse{}, err

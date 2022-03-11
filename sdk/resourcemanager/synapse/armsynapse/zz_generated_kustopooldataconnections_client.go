@@ -34,17 +34,17 @@ type KustoPoolDataConnectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewKustoPoolDataConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *KustoPoolDataConnectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &KustoPoolDataConnectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *KustoPoolDataConnectionsClient) checkNameAvailabilityCreateRequest
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *KustoPoolDataConnectionsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (KustoPoolDataConnectionsClientCheckNameAvailabilityResponse, error) {
-	result := KustoPoolDataConnectionsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := KustoPoolDataConnectionsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameResult); err != nil {
 		return KustoPoolDataConnectionsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -131,9 +131,7 @@ func (client *KustoPoolDataConnectionsClient) BeginCreateOrUpdate(ctx context.Co
 	if err != nil {
 		return KustoPoolDataConnectionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := KustoPoolDataConnectionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := KustoPoolDataConnectionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("KustoPoolDataConnectionsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return KustoPoolDataConnectionsClientCreateOrUpdatePollerResponse{}, err
@@ -213,9 +211,7 @@ func (client *KustoPoolDataConnectionsClient) BeginDataConnectionValidation(ctx 
 	if err != nil {
 		return KustoPoolDataConnectionsClientDataConnectionValidationPollerResponse{}, err
 	}
-	result := KustoPoolDataConnectionsClientDataConnectionValidationPollerResponse{
-		RawResponse: resp,
-	}
+	result := KustoPoolDataConnectionsClientDataConnectionValidationPollerResponse{}
 	pt, err := armruntime.NewPoller("KustoPoolDataConnectionsClient.DataConnectionValidation", "location", resp, client.pl)
 	if err != nil {
 		return KustoPoolDataConnectionsClientDataConnectionValidationPollerResponse{}, err
@@ -291,9 +287,7 @@ func (client *KustoPoolDataConnectionsClient) BeginDelete(ctx context.Context, r
 	if err != nil {
 		return KustoPoolDataConnectionsClientDeletePollerResponse{}, err
 	}
-	result := KustoPoolDataConnectionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := KustoPoolDataConnectionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("KustoPoolDataConnectionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return KustoPoolDataConnectionsClientDeletePollerResponse{}, err
@@ -423,7 +417,7 @@ func (client *KustoPoolDataConnectionsClient) getCreateRequest(ctx context.Conte
 
 // getHandleResponse handles the Get response.
 func (client *KustoPoolDataConnectionsClient) getHandleResponse(resp *http.Response) (KustoPoolDataConnectionsClientGetResponse, error) {
-	result := KustoPoolDataConnectionsClientGetResponse{RawResponse: resp}
+	result := KustoPoolDataConnectionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return KustoPoolDataConnectionsClientGetResponse{}, err
 	}
@@ -438,19 +432,13 @@ func (client *KustoPoolDataConnectionsClient) getHandleResponse(resp *http.Respo
 // databaseName - The name of the database in the Kusto pool.
 // options - KustoPoolDataConnectionsClientListByDatabaseOptions contains the optional parameters for the KustoPoolDataConnectionsClient.ListByDatabase
 // method.
-func (client *KustoPoolDataConnectionsClient) ListByDatabase(ctx context.Context, resourceGroupName string, workspaceName string, kustoPoolName string, databaseName string, options *KustoPoolDataConnectionsClientListByDatabaseOptions) (KustoPoolDataConnectionsClientListByDatabaseResponse, error) {
-	req, err := client.listByDatabaseCreateRequest(ctx, resourceGroupName, workspaceName, kustoPoolName, databaseName, options)
-	if err != nil {
-		return KustoPoolDataConnectionsClientListByDatabaseResponse{}, err
+func (client *KustoPoolDataConnectionsClient) ListByDatabase(resourceGroupName string, workspaceName string, kustoPoolName string, databaseName string, options *KustoPoolDataConnectionsClientListByDatabaseOptions) *KustoPoolDataConnectionsClientListByDatabasePager {
+	return &KustoPoolDataConnectionsClientListByDatabasePager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, workspaceName, kustoPoolName, databaseName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return KustoPoolDataConnectionsClientListByDatabaseResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return KustoPoolDataConnectionsClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByDatabaseHandleResponse(resp)
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.
@@ -489,7 +477,7 @@ func (client *KustoPoolDataConnectionsClient) listByDatabaseCreateRequest(ctx co
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *KustoPoolDataConnectionsClient) listByDatabaseHandleResponse(resp *http.Response) (KustoPoolDataConnectionsClientListByDatabaseResponse, error) {
-	result := KustoPoolDataConnectionsClientListByDatabaseResponse{RawResponse: resp}
+	result := KustoPoolDataConnectionsClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataConnectionListResult); err != nil {
 		return KustoPoolDataConnectionsClientListByDatabaseResponse{}, err
 	}
@@ -511,9 +499,7 @@ func (client *KustoPoolDataConnectionsClient) BeginUpdate(ctx context.Context, r
 	if err != nil {
 		return KustoPoolDataConnectionsClientUpdatePollerResponse{}, err
 	}
-	result := KustoPoolDataConnectionsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := KustoPoolDataConnectionsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("KustoPoolDataConnectionsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return KustoPoolDataConnectionsClientUpdatePollerResponse{}, err

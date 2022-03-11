@@ -29,16 +29,16 @@ type CalculateExchangeClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCalculateExchangeClient(credential azcore.TokenCredential, options *arm.ClientOptions) *CalculateExchangeClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CalculateExchangeClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -53,9 +53,7 @@ func (client *CalculateExchangeClient) BeginPost(ctx context.Context, body Calcu
 	if err != nil {
 		return CalculateExchangeClientPostPollerResponse{}, err
 	}
-	result := CalculateExchangeClientPostPollerResponse{
-		RawResponse: resp,
-	}
+	result := CalculateExchangeClientPostPollerResponse{}
 	pt, err := armruntime.NewPoller("CalculateExchangeClient.Post", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return CalculateExchangeClientPostPollerResponse{}, err

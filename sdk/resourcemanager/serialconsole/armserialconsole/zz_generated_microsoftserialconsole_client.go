@@ -36,17 +36,17 @@ type MicrosoftSerialConsoleClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMicrosoftSerialConsoleClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MicrosoftSerialConsoleClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MicrosoftSerialConsoleClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *MicrosoftSerialConsoleClient) disableConsoleCreateRequest(ctx cont
 
 // disableConsoleHandleResponse handles the DisableConsole response.
 func (client *MicrosoftSerialConsoleClient) disableConsoleHandleResponse(resp *http.Response) (MicrosoftSerialConsoleClientDisableConsoleResponse, error) {
-	result := MicrosoftSerialConsoleClientDisableConsoleResponse{RawResponse: resp}
+	result := MicrosoftSerialConsoleClientDisableConsoleResponse{}
 	switch resp.StatusCode {
 	case http.StatusOK:
 		var val DisableSerialConsoleResult
@@ -159,7 +159,7 @@ func (client *MicrosoftSerialConsoleClient) enableConsoleCreateRequest(ctx conte
 
 // enableConsoleHandleResponse handles the EnableConsole response.
 func (client *MicrosoftSerialConsoleClient) enableConsoleHandleResponse(resp *http.Response) (MicrosoftSerialConsoleClientEnableConsoleResponse, error) {
-	result := MicrosoftSerialConsoleClientEnableConsoleResponse{RawResponse: resp}
+	result := MicrosoftSerialConsoleClientEnableConsoleResponse{}
 	switch resp.StatusCode {
 	case http.StatusOK:
 		var val EnableSerialConsoleResult
@@ -223,7 +223,7 @@ func (client *MicrosoftSerialConsoleClient) getConsoleStatusCreateRequest(ctx co
 
 // getConsoleStatusHandleResponse handles the GetConsoleStatus response.
 func (client *MicrosoftSerialConsoleClient) getConsoleStatusHandleResponse(resp *http.Response) (MicrosoftSerialConsoleClientGetConsoleStatusResponse, error) {
-	result := MicrosoftSerialConsoleClientGetConsoleStatusResponse{RawResponse: resp}
+	result := MicrosoftSerialConsoleClientGetConsoleStatusResponse{}
 	switch resp.StatusCode {
 	case http.StatusOK:
 		var val Status
@@ -278,7 +278,7 @@ func (client *MicrosoftSerialConsoleClient) listOperationsCreateRequest(ctx cont
 
 // listOperationsHandleResponse handles the ListOperations response.
 func (client *MicrosoftSerialConsoleClient) listOperationsHandleResponse(resp *http.Response) (MicrosoftSerialConsoleClientListOperationsResponse, error) {
-	result := MicrosoftSerialConsoleClientListOperationsResponse{RawResponse: resp}
+	result := MicrosoftSerialConsoleClientListOperationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Operations); err != nil {
 		return MicrosoftSerialConsoleClientListOperationsResponse{}, err
 	}

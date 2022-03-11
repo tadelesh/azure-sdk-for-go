@@ -35,17 +35,17 @@ type RecommendationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRecommendationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RecommendationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RecommendationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -90,7 +90,7 @@ func (client *RecommendationsClient) generateCreateRequest(ctx context.Context, 
 
 // generateHandleResponse handles the Generate response.
 func (client *RecommendationsClient) generateHandleResponse(resp *http.Response) (RecommendationsClientGenerateResponse, error) {
-	result := RecommendationsClientGenerateResponse{RawResponse: resp}
+	result := RecommendationsClientGenerateResponse{}
 	if val := resp.Header.Get("Location"); val != "" {
 		result.Location = &val
 	}
@@ -144,7 +144,7 @@ func (client *RecommendationsClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *RecommendationsClient) getHandleResponse(resp *http.Response) (RecommendationsClientGetResponse, error) {
-	result := RecommendationsClientGetResponse{RawResponse: resp}
+	result := RecommendationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceRecommendationBase); err != nil {
 		return RecommendationsClientGetResponse{}, err
 	}
@@ -170,7 +170,7 @@ func (client *RecommendationsClient) GetGenerateStatus(ctx context.Context, oper
 	if !runtime.HasStatusCode(resp, http.StatusAccepted, http.StatusNoContent) {
 		return RecommendationsClientGetGenerateStatusResponse{}, runtime.NewResponseError(resp)
 	}
-	return RecommendationsClientGetGenerateStatusResponse{RawResponse: resp}, nil
+	return RecommendationsClientGetGenerateStatusResponse{}, nil
 }
 
 // getGenerateStatusCreateRequest creates the GetGenerateStatus request.
@@ -236,7 +236,7 @@ func (client *RecommendationsClient) listCreateRequest(ctx context.Context, opti
 
 // listHandleResponse handles the List response.
 func (client *RecommendationsClient) listHandleResponse(resp *http.Response) (RecommendationsClientListResponse, error) {
-	result := RecommendationsClientListResponse{RawResponse: resp}
+	result := RecommendationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceRecommendationBaseListResult); err != nil {
 		return RecommendationsClientListResponse{}, err
 	}

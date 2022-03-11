@@ -97,7 +97,7 @@ func (client *PrivateLinkResourcesClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *PrivateLinkResourcesClient) listHandleResponse(resp *http.Response) (PrivateLinkResourcesClientListResponse, error) {
-	result := PrivateLinkResourcesClientListResponse{RawResponse: resp}
+	result := PrivateLinkResourcesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourceList); err != nil {
 		return PrivateLinkResourcesClientListResponse{}, err
 	}

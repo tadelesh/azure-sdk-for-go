@@ -1,5 +1,179 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ClusterExtensionTypesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ClusterExtensionTypesClientListResponse, error)`
+- Function `*ExtensionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ExtensionsClientListResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*SourceControlConfigurationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SourceControlConfigurationsClientListResponse, error)`
+- Function `*LocationExtensionTypesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(LocationExtensionTypesClientListResponse, error)`
+- Function `*FluxConfigurationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(FluxConfigurationsClientListResponse, error)`
+- Function `*ExtensionTypeVersionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ExtensionTypeVersionsClientListResponse, error)`
+- Function `*OperationStatusClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationStatusClientListResponse, error)`
+- Function `*ExtensionTypeVersionsClientListPager.Err` has been removed
+- Function `*ExtensionsClientListPager.PageResponse` has been removed
+- Function `*OperationStatusClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*OperationStatusClientListPager.PageResponse` has been removed
+- Function `*LocationExtensionTypesClientListPager.Err` has been removed
+- Function `*SourceControlConfigurationsClientListPager.PageResponse` has been removed
+- Function `*FluxConfigurationsClientListPager.PageResponse` has been removed
+- Function `*ExtensionTypeVersionsClientListPager.PageResponse` has been removed
+- Function `*ExtensionsClientListPager.Err` has been removed
+- Function `*LocationExtensionTypesClientListPager.PageResponse` has been removed
+- Function `*ClusterExtensionTypesClientListPager.PageResponse` has been removed
+- Function `*FluxConfigurationsClientListPager.Err` has been removed
+- Function `*SourceControlConfigurationsClientListPager.Err` has been removed
+- Function `*ClusterExtensionTypesClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Struct `ClusterExtensionTypeClientGetResult` has been removed
+- Struct `ClusterExtensionTypesClientListResult` has been removed
+- Struct `ExtensionTypeVersionsClientListResult` has been removed
+- Struct `ExtensionsClientCreateResult` has been removed
+- Struct `ExtensionsClientGetResult` has been removed
+- Struct `ExtensionsClientListResult` has been removed
+- Struct `ExtensionsClientUpdateResult` has been removed
+- Struct `FluxConfigOperationStatusClientGetResult` has been removed
+- Struct `FluxConfigurationsClientCreateOrUpdateResult` has been removed
+- Struct `FluxConfigurationsClientGetResult` has been removed
+- Struct `FluxConfigurationsClientListResult` has been removed
+- Struct `FluxConfigurationsClientUpdateResult` has been removed
+- Struct `LocationExtensionTypesClientListResult` has been removed
+- Struct `OperationStatusClientGetResult` has been removed
+- Struct `OperationStatusClientListResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `SourceControlConfigurationsClientCreateOrUpdateResult` has been removed
+- Struct `SourceControlConfigurationsClientGetResult` has been removed
+- Struct `SourceControlConfigurationsClientListResult` has been removed
+- Field `SourceControlConfigurationsClientListResult` of struct `SourceControlConfigurationsClientListResponse` has been removed
+- Field `RawResponse` of struct `SourceControlConfigurationsClientListResponse` has been removed
+- Field `SourceControlConfigurationsClientCreateOrUpdateResult` of struct `SourceControlConfigurationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SourceControlConfigurationsClientCreateOrUpdateResponse` has been removed
+- Field `ExtensionTypeVersionsClientListResult` of struct `ExtensionTypeVersionsClientListResponse` has been removed
+- Field `RawResponse` of struct `ExtensionTypeVersionsClientListResponse` has been removed
+- Field `FluxConfigOperationStatusClientGetResult` of struct `FluxConfigOperationStatusClientGetResponse` has been removed
+- Field `RawResponse` of struct `FluxConfigOperationStatusClientGetResponse` has been removed
+- Field `ExtensionsClientGetResult` of struct `ExtensionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientGetResponse` has been removed
+- Field `ExtensionsClientListResult` of struct `ExtensionsClientListResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientListResponse` has been removed
+- Field `RawResponse` of struct `SourceControlConfigurationsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientDeleteResponse` has been removed
+- Field `OperationStatusClientGetResult` of struct `OperationStatusClientGetResponse` has been removed
+- Field `RawResponse` of struct `OperationStatusClientGetResponse` has been removed
+- Field `FluxConfigurationsClientUpdateResult` of struct `FluxConfigurationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `FluxConfigurationsClientUpdateResponse` has been removed
+- Field `OperationStatusClientListResult` of struct `OperationStatusClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationStatusClientListResponse` has been removed
+- Field `LocationExtensionTypesClientListResult` of struct `LocationExtensionTypesClientListResponse` has been removed
+- Field `RawResponse` of struct `LocationExtensionTypesClientListResponse` has been removed
+- Field `RawResponse` of struct `FluxConfigurationsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `SourceControlConfigurationsClientDeleteResponse` has been removed
+- Field `ClusterExtensionTypesClientListResult` of struct `ClusterExtensionTypesClientListResponse` has been removed
+- Field `RawResponse` of struct `ClusterExtensionTypesClientListResponse` has been removed
+- Field `FluxConfigurationsClientCreateOrUpdateResult` of struct `FluxConfigurationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `FluxConfigurationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `FluxConfigurationsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientUpdatePollerResponse` has been removed
+- Field `ExtensionsClientUpdateResult` of struct `ExtensionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `FluxConfigurationsClientDeletePollerResponse` has been removed
+- Field `SourceControlConfigurationsClientGetResult` of struct `SourceControlConfigurationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SourceControlConfigurationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `FluxConfigurationsClientUpdatePollerResponse` has been removed
+- Field `ClusterExtensionTypeClientGetResult` of struct `ClusterExtensionTypeClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClusterExtensionTypeClientGetResponse` has been removed
+- Field `FluxConfigurationsClientGetResult` of struct `FluxConfigurationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `FluxConfigurationsClientGetResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `FluxConfigurationsClientListResult` of struct `FluxConfigurationsClientListResponse` has been removed
+- Field `RawResponse` of struct `FluxConfigurationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientCreatePollerResponse` has been removed
+- Field `ExtensionsClientCreateResult` of struct `ExtensionsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientCreateResponse` has been removed
+
+### Features Added
+
+- New function `*ExtensionTypeVersionsClientListPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*SourceControlConfigurationsClientListPager.More() bool`
+- New function `*FluxConfigurationsClientListPager.More() bool`
+- New function `*OperationStatusClientListPager.More() bool`
+- New function `*LocationExtensionTypesClientListPager.More() bool`
+- New function `*ClusterExtensionTypesClientListPager.More() bool`
+- New function `*ExtensionsClientListPager.More() bool`
+- New struct `BucketPatchDefinition`
+- New struct `ErrorResponse`
+- New anonymous field `ResourceProviderOperationList` in struct `OperationsClientListResponse`
+- New anonymous field `ExtensionTypeList` in struct `ClusterExtensionTypesClientListResponse`
+- New anonymous field `OperationStatusList` in struct `OperationStatusClientListResponse`
+- New anonymous field `SourceControlConfigurationList` in struct `SourceControlConfigurationsClientListResponse`
+- New anonymous field `ExtensionsList` in struct `ExtensionsClientListResponse`
+- New anonymous field `FluxConfiguration` in struct `FluxConfigurationsClientGetResponse`
+- New anonymous field `ExtensionTypeList` in struct `LocationExtensionTypesClientListResponse`
+- New anonymous field `OperationStatusResult` in struct `FluxConfigOperationStatusClientGetResponse`
+- New anonymous field `Extension` in struct `ExtensionsClientGetResponse`
+- New anonymous field `SourceControlConfiguration` in struct `SourceControlConfigurationsClientGetResponse`
+- New anonymous field `Extension` in struct `ExtensionsClientCreateResponse`
+- New anonymous field `FluxConfiguration` in struct `FluxConfigurationsClientCreateOrUpdateResponse`
+- New anonymous field `Extension` in struct `ExtensionsClientUpdateResponse`
+- New anonymous field `OperationStatusResult` in struct `OperationStatusClientGetResponse`
+- New anonymous field `ExtensionVersionList` in struct `ExtensionTypeVersionsClientListResponse`
+- New anonymous field `SourceControlConfiguration` in struct `SourceControlConfigurationsClientCreateOrUpdateResponse`
+- New anonymous field `FluxConfiguration` in struct `FluxConfigurationsClientUpdateResponse`
+- New anonymous field `FluxConfigurationsList` in struct `FluxConfigurationsClientListResponse`
+- New anonymous field `ExtensionType` in struct `ClusterExtensionTypeClientGetResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ExtensionsClient.BeginUpdate` parameter(s) have been changed from `(context.Context, string, Enum0, Enum1, string, string, PatchExtension, *ExtensionsClientBeginUpdateOptions)` to `(context.Context, string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, string, PatchExtension, *ExtensionsClientBeginUpdateOptions)`
+- Function `*ExtensionsClient.Get` parameter(s) have been changed from `(context.Context, string, Enum0, Enum1, string, string, *ExtensionsClientGetOptions)` to `(context.Context, string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, string, *ExtensionsClientGetOptions)`
+- Function `*ExtensionsClient.BeginDelete` parameter(s) have been changed from `(context.Context, string, Enum0, Enum1, string, string, *ExtensionsClientBeginDeleteOptions)` to `(context.Context, string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, string, *ExtensionsClientBeginDeleteOptions)`
+- Function `*ClusterExtensionTypeClient.Get` parameter(s) have been changed from `(context.Context, string, Enum0, Enum1, string, string, *ClusterExtensionTypeClientGetOptions)` to `(context.Context, string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, string, *ClusterExtensionTypeClientGetOptions)`
+- Function `*FluxConfigurationsClient.BeginUpdate` parameter(s) have been changed from `(context.Context, string, Enum0, Enum1, string, string, FluxConfigurationPatch, *FluxConfigurationsClientBeginUpdateOptions)` to `(context.Context, string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, string, FluxConfigurationPatch, *FluxConfigurationsClientBeginUpdateOptions)`
+- Function `*SourceControlConfigurationsClient.Get` parameter(s) have been changed from `(context.Context, string, Enum0, Enum1, string, string, *SourceControlConfigurationsClientGetOptions)` to `(context.Context, string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, string, *SourceControlConfigurationsClientGetOptions)`
+- Function `*FluxConfigurationsClient.BeginDelete` parameter(s) have been changed from `(context.Context, string, Enum0, Enum1, string, string, *FluxConfigurationsClientBeginDeleteOptions)` to `(context.Context, string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, string, *FluxConfigurationsClientBeginDeleteOptions)`
+- Function `*ExtensionsClient.List` parameter(s) have been changed from `(string, Enum0, Enum1, string, *ExtensionsClientListOptions)` to `(string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, *ExtensionsClientListOptions)`
+- Function `*SourceControlConfigurationsClient.CreateOrUpdate` parameter(s) have been changed from `(context.Context, string, Enum0, Enum1, string, string, SourceControlConfiguration, *SourceControlConfigurationsClientCreateOrUpdateOptions)` to `(context.Context, string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, string, SourceControlConfiguration, *SourceControlConfigurationsClientCreateOrUpdateOptions)`
+- Function `*FluxConfigurationsClient.Get` parameter(s) have been changed from `(context.Context, string, Enum0, Enum1, string, string, *FluxConfigurationsClientGetOptions)` to `(context.Context, string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, string, *FluxConfigurationsClientGetOptions)`
+- Function `*FluxConfigurationsClient.List` parameter(s) have been changed from `(string, Enum0, Enum1, string, *FluxConfigurationsClientListOptions)` to `(string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, *FluxConfigurationsClientListOptions)`
+- Function `*OperationStatusClient.List` parameter(s) have been changed from `(string, Enum0, Enum1, string, *OperationStatusClientListOptions)` to `(string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, *OperationStatusClientListOptions)`
+- Function `*OperationStatusClient.Get` parameter(s) have been changed from `(context.Context, string, Enum0, Enum1, string, string, string, *OperationStatusClientGetOptions)` to `(context.Context, string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, string, string, *OperationStatusClientGetOptions)`
+- Function `*FluxConfigurationsClient.BeginCreateOrUpdate` parameter(s) have been changed from `(context.Context, string, Enum0, Enum1, string, string, FluxConfiguration, *FluxConfigurationsClientBeginCreateOrUpdateOptions)` to `(context.Context, string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, string, FluxConfiguration, *FluxConfigurationsClientBeginCreateOrUpdateOptions)`
+- Function `*ExtensionsClient.BeginCreate` parameter(s) have been changed from `(context.Context, string, Enum0, Enum1, string, string, Extension, *ExtensionsClientBeginCreateOptions)` to `(context.Context, string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, string, Extension, *ExtensionsClientBeginCreateOptions)`
+- Function `*FluxConfigOperationStatusClient.Get` parameter(s) have been changed from `(context.Context, string, Enum0, Enum1, string, string, string, *FluxConfigOperationStatusClientGetOptions)` to `(context.Context, string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, string, string, *FluxConfigOperationStatusClientGetOptions)`
+- Function `*SourceControlConfigurationsClient.BeginDelete` parameter(s) have been changed from `(context.Context, string, Enum0, Enum1, string, string, *SourceControlConfigurationsClientBeginDeleteOptions)` to `(context.Context, string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, string, *SourceControlConfigurationsClientBeginDeleteOptions)`
+- Function `*SourceControlConfigurationsClient.List` parameter(s) have been changed from `(string, Enum0, Enum1, string, *SourceControlConfigurationsClientListOptions)` to `(string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, *SourceControlConfigurationsClientListOptions)`
+- Function `*ClusterExtensionTypesClient.List` parameter(s) have been changed from `(string, Enum0, Enum1, string, *ClusterExtensionTypesClientListOptions)` to `(string, ExtensionsClusterRp, ExtensionsClusterResourceName, string, *ClusterExtensionTypesClientListOptions)`
+- Type of `ErrorAdditionalInfo.Info` has been changed from `map[string]interface{}` to `interface{}`
+- Const `Enum1ConnectedClusters` has been removed
+- Const `Enum0MicrosoftContainerService` has been removed
+- Const `Enum1ManagedClusters` has been removed
+- Const `Enum0MicrosoftKubernetes` has been removed
+- Function `Enum0.ToPtr` has been removed
+- Function `Enum1.ToPtr` has been removed
+- Function `PossibleEnum1Values` has been removed
+- Function `PossibleEnum0Values` has been removed
+- Struct `BucketPatchDefinition` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+- New const `ExtensionsClusterResourceNameManagedClusters`
+- New const `ExtensionsClusterRpMicrosoftKubernetes`
+- New const `ExtensionsClusterRpMicrosoftContainerService`
+- New const `ExtensionsClusterResourceNameConnectedClusters`
+- New function `PossibleExtensionsClusterRpValues() []ExtensionsClusterRp`
+- New function `ExtensionsClusterRp.ToPtr() *ExtensionsClusterRp`
+- New function `PossibleExtensionsClusterResourceNameValues() []ExtensionsClusterResourceName`
+- New function `ExtensionsClusterResourceName.ToPtr() *ExtensionsClusterResourceName`
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

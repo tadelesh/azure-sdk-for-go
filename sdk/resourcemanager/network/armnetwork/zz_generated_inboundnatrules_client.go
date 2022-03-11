@@ -35,17 +35,17 @@ type InboundNatRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewInboundNatRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *InboundNatRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &InboundNatRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *InboundNatRulesClient) BeginCreateOrUpdate(ctx context.Context, re
 	if err != nil {
 		return InboundNatRulesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := InboundNatRulesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := InboundNatRulesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("InboundNatRulesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return InboundNatRulesClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *InboundNatRulesClient) BeginDelete(ctx context.Context, resourceGr
 	if err != nil {
 		return InboundNatRulesClientDeletePollerResponse{}, err
 	}
-	result := InboundNatRulesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := InboundNatRulesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("InboundNatRulesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return InboundNatRulesClientDeletePollerResponse{}, err
@@ -251,7 +247,7 @@ func (client *InboundNatRulesClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *InboundNatRulesClient) getHandleResponse(resp *http.Response) (InboundNatRulesClientGetResponse, error) {
-	result := InboundNatRulesClientGetResponse{RawResponse: resp}
+	result := InboundNatRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InboundNatRule); err != nil {
 		return InboundNatRulesClientGetResponse{}, err
 	}
@@ -303,7 +299,7 @@ func (client *InboundNatRulesClient) listCreateRequest(ctx context.Context, reso
 
 // listHandleResponse handles the List response.
 func (client *InboundNatRulesClient) listHandleResponse(resp *http.Response) (InboundNatRulesClientListResponse, error) {
-	result := InboundNatRulesClientListResponse{RawResponse: resp}
+	result := InboundNatRulesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InboundNatRuleListResult); err != nil {
 		return InboundNatRulesClientListResponse{}, err
 	}

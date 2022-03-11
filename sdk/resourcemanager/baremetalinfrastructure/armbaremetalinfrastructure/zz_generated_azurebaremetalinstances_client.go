@@ -34,17 +34,17 @@ type AzureBareMetalInstancesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAzureBareMetalInstancesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AzureBareMetalInstancesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AzureBareMetalInstancesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *AzureBareMetalInstancesClient) getCreateRequest(ctx context.Contex
 
 // getHandleResponse handles the Get response.
 func (client *AzureBareMetalInstancesClient) getHandleResponse(resp *http.Response) (AzureBareMetalInstancesClientGetResponse, error) {
-	result := AzureBareMetalInstancesClientGetResponse{RawResponse: resp}
+	result := AzureBareMetalInstancesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureBareMetalInstance); err != nil {
 		return AzureBareMetalInstancesClientGetResponse{}, err
 	}
@@ -147,7 +147,7 @@ func (client *AzureBareMetalInstancesClient) listByResourceGroupCreateRequest(ct
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *AzureBareMetalInstancesClient) listByResourceGroupHandleResponse(resp *http.Response) (AzureBareMetalInstancesClientListByResourceGroupResponse, error) {
-	result := AzureBareMetalInstancesClientListByResourceGroupResponse{RawResponse: resp}
+	result := AzureBareMetalInstancesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureBareMetalInstancesListResult); err != nil {
 		return AzureBareMetalInstancesClientListByResourceGroupResponse{}, err
 	}
@@ -191,7 +191,7 @@ func (client *AzureBareMetalInstancesClient) listBySubscriptionCreateRequest(ctx
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *AzureBareMetalInstancesClient) listBySubscriptionHandleResponse(resp *http.Response) (AzureBareMetalInstancesClientListBySubscriptionResponse, error) {
-	result := AzureBareMetalInstancesClientListBySubscriptionResponse{RawResponse: resp}
+	result := AzureBareMetalInstancesClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureBareMetalInstancesListResult); err != nil {
 		return AzureBareMetalInstancesClientListBySubscriptionResponse{}, err
 	}
@@ -249,7 +249,7 @@ func (client *AzureBareMetalInstancesClient) updateCreateRequest(ctx context.Con
 
 // updateHandleResponse handles the Update response.
 func (client *AzureBareMetalInstancesClient) updateHandleResponse(resp *http.Response) (AzureBareMetalInstancesClientUpdateResponse, error) {
-	result := AzureBareMetalInstancesClientUpdateResponse{RawResponse: resp}
+	result := AzureBareMetalInstancesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureBareMetalInstance); err != nil {
 		return AzureBareMetalInstancesClientUpdateResponse{}, err
 	}

@@ -34,17 +34,17 @@ type AzureADOnlyAuthenticationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAzureADOnlyAuthenticationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AzureADOnlyAuthenticationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AzureADOnlyAuthenticationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *AzureADOnlyAuthenticationsClient) BeginCreate(ctx context.Context,
 	if err != nil {
 		return AzureADOnlyAuthenticationsClientCreatePollerResponse{}, err
 	}
-	result := AzureADOnlyAuthenticationsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AzureADOnlyAuthenticationsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("AzureADOnlyAuthenticationsClient.Create", "location", resp, client.pl)
 	if err != nil {
 		return AzureADOnlyAuthenticationsClientCreatePollerResponse{}, err
@@ -176,7 +174,7 @@ func (client *AzureADOnlyAuthenticationsClient) getCreateRequest(ctx context.Con
 
 // getHandleResponse handles the Get response.
 func (client *AzureADOnlyAuthenticationsClient) getHandleResponse(resp *http.Response) (AzureADOnlyAuthenticationsClientGetResponse, error) {
-	result := AzureADOnlyAuthenticationsClientGetResponse{RawResponse: resp}
+	result := AzureADOnlyAuthenticationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureADOnlyAuthentication); err != nil {
 		return AzureADOnlyAuthenticationsClientGetResponse{}, err
 	}
@@ -229,7 +227,7 @@ func (client *AzureADOnlyAuthenticationsClient) listCreateRequest(ctx context.Co
 
 // listHandleResponse handles the List response.
 func (client *AzureADOnlyAuthenticationsClient) listHandleResponse(resp *http.Response) (AzureADOnlyAuthenticationsClientListResponse, error) {
-	result := AzureADOnlyAuthenticationsClientListResponse{RawResponse: resp}
+	result := AzureADOnlyAuthenticationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureADOnlyAuthenticationListResult); err != nil {
 		return AzureADOnlyAuthenticationsClientListResponse{}, err
 	}

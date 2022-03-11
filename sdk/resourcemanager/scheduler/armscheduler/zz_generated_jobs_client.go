@@ -35,17 +35,17 @@ type JobsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewJobsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *JobsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &JobsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *JobsClient) createOrUpdateCreateRequest(ctx context.Context, resou
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *JobsClient) createOrUpdateHandleResponse(resp *http.Response) (JobsClientCreateOrUpdateResponse, error) {
-	result := JobsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := JobsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobDefinition); err != nil {
 		return JobsClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *JobsClient) Delete(ctx context.Context, resourceGroupName string, 
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return JobsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return JobsClientDeleteResponse{RawResponse: resp}, nil
+	return JobsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -214,7 +214,7 @@ func (client *JobsClient) getCreateRequest(ctx context.Context, resourceGroupNam
 
 // getHandleResponse handles the Get response.
 func (client *JobsClient) getHandleResponse(resp *http.Response) (JobsClientGetResponse, error) {
-	result := JobsClientGetResponse{RawResponse: resp}
+	result := JobsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobDefinition); err != nil {
 		return JobsClientGetResponse{}, err
 	}
@@ -275,7 +275,7 @@ func (client *JobsClient) listCreateRequest(ctx context.Context, resourceGroupNa
 
 // listHandleResponse handles the List response.
 func (client *JobsClient) listHandleResponse(resp *http.Response) (JobsClientListResponse, error) {
-	result := JobsClientListResponse{RawResponse: resp}
+	result := JobsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobListResult); err != nil {
 		return JobsClientListResponse{}, err
 	}
@@ -341,7 +341,7 @@ func (client *JobsClient) listJobHistoryCreateRequest(ctx context.Context, resou
 
 // listJobHistoryHandleResponse handles the ListJobHistory response.
 func (client *JobsClient) listJobHistoryHandleResponse(resp *http.Response) (JobsClientListJobHistoryResponse, error) {
-	result := JobsClientListJobHistoryResponse{RawResponse: resp}
+	result := JobsClientListJobHistoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobHistoryListResult); err != nil {
 		return JobsClientListJobHistoryResponse{}, err
 	}
@@ -402,7 +402,7 @@ func (client *JobsClient) patchCreateRequest(ctx context.Context, resourceGroupN
 
 // patchHandleResponse handles the Patch response.
 func (client *JobsClient) patchHandleResponse(resp *http.Response) (JobsClientPatchResponse, error) {
-	result := JobsClientPatchResponse{RawResponse: resp}
+	result := JobsClientPatchResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobDefinition); err != nil {
 		return JobsClientPatchResponse{}, err
 	}
@@ -427,7 +427,7 @@ func (client *JobsClient) Run(ctx context.Context, resourceGroupName string, job
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return JobsClientRunResponse{}, runtime.NewResponseError(resp)
 	}
-	return JobsClientRunResponse{RawResponse: resp}, nil
+	return JobsClientRunResponse{}, nil
 }
 
 // runCreateRequest creates the Run request.

@@ -34,17 +34,17 @@ type WorkbookTemplatesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkbookTemplatesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkbookTemplatesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkbookTemplatesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *WorkbookTemplatesClient) createOrUpdateCreateRequest(ctx context.C
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *WorkbookTemplatesClient) createOrUpdateHandleResponse(resp *http.Response) (WorkbookTemplatesClientCreateOrUpdateResponse, error) {
-	result := WorkbookTemplatesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := WorkbookTemplatesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkbookTemplate); err != nil {
 		return WorkbookTemplatesClientCreateOrUpdateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *WorkbookTemplatesClient) Delete(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WorkbookTemplatesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return WorkbookTemplatesClientDeleteResponse{RawResponse: resp}, nil
+	return WorkbookTemplatesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -201,7 +201,7 @@ func (client *WorkbookTemplatesClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *WorkbookTemplatesClient) getHandleResponse(resp *http.Response) (WorkbookTemplatesClientGetResponse, error) {
-	result := WorkbookTemplatesClientGetResponse{RawResponse: resp}
+	result := WorkbookTemplatesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkbookTemplate); err != nil {
 		return WorkbookTemplatesClientGetResponse{}, err
 	}
@@ -213,19 +213,13 @@ func (client *WorkbookTemplatesClient) getHandleResponse(resp *http.Response) (W
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - WorkbookTemplatesClientListByResourceGroupOptions contains the optional parameters for the WorkbookTemplatesClient.ListByResourceGroup
 // method.
-func (client *WorkbookTemplatesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, options *WorkbookTemplatesClientListByResourceGroupOptions) (WorkbookTemplatesClientListByResourceGroupResponse, error) {
-	req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-	if err != nil {
-		return WorkbookTemplatesClientListByResourceGroupResponse{}, err
+func (client *WorkbookTemplatesClient) ListByResourceGroup(resourceGroupName string, options *WorkbookTemplatesClientListByResourceGroupOptions) *WorkbookTemplatesClientListByResourceGroupPager {
+	return &WorkbookTemplatesClientListByResourceGroupPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return WorkbookTemplatesClientListByResourceGroupResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return WorkbookTemplatesClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByResourceGroupHandleResponse(resp)
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -252,7 +246,7 @@ func (client *WorkbookTemplatesClient) listByResourceGroupCreateRequest(ctx cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *WorkbookTemplatesClient) listByResourceGroupHandleResponse(resp *http.Response) (WorkbookTemplatesClientListByResourceGroupResponse, error) {
-	result := WorkbookTemplatesClientListByResourceGroupResponse{RawResponse: resp}
+	result := WorkbookTemplatesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkbookTemplatesListResult); err != nil {
 		return WorkbookTemplatesClientListByResourceGroupResponse{}, err
 	}
@@ -311,7 +305,7 @@ func (client *WorkbookTemplatesClient) updateCreateRequest(ctx context.Context, 
 
 // updateHandleResponse handles the Update response.
 func (client *WorkbookTemplatesClient) updateHandleResponse(resp *http.Response) (WorkbookTemplatesClientUpdateResponse, error) {
-	result := WorkbookTemplatesClientUpdateResponse{RawResponse: resp}
+	result := WorkbookTemplatesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkbookTemplate); err != nil {
 		return WorkbookTemplatesClientUpdateResponse{}, err
 	}

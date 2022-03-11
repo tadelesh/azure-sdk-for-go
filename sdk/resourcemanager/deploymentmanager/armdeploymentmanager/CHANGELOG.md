@@ -1,5 +1,116 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Struct `ArtifactSourcesClientCreateOrUpdateResult` has been removed
+- Struct `ArtifactSourcesClientGetResult` has been removed
+- Struct `ArtifactSourcesClientListResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `RolloutsClientCancelResult` has been removed
+- Struct `RolloutsClientCreateOrUpdateResult` has been removed
+- Struct `RolloutsClientGetResult` has been removed
+- Struct `RolloutsClientListResult` has been removed
+- Struct `RolloutsClientRestartResult` has been removed
+- Struct `ServiceTopologiesClientCreateOrUpdateResult` has been removed
+- Struct `ServiceTopologiesClientGetResult` has been removed
+- Struct `ServiceTopologiesClientListResult` has been removed
+- Struct `ServiceUnitsClientCreateOrUpdateResult` has been removed
+- Struct `ServiceUnitsClientGetResult` has been removed
+- Struct `ServiceUnitsClientListResult` has been removed
+- Struct `ServicesClientCreateOrUpdateResult` has been removed
+- Struct `ServicesClientGetResult` has been removed
+- Struct `ServicesClientListResult` has been removed
+- Struct `StepsClientCreateOrUpdateResult` has been removed
+- Struct `StepsClientGetResult` has been removed
+- Struct `StepsClientListResult` has been removed
+- Field `RawResponse` of struct `StepsClientDeleteResponse` has been removed
+- Field `RolloutsClientCreateOrUpdateResult` of struct `RolloutsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `RolloutsClientCreateOrUpdateResponse` has been removed
+- Field `ArtifactSourcesClientGetResult` of struct `ArtifactSourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ArtifactSourcesClientGetResponse` has been removed
+- Field `StepsClientGetResult` of struct `StepsClientGetResponse` has been removed
+- Field `RawResponse` of struct `StepsClientGetResponse` has been removed
+- Field `ServicesClientListResult` of struct `ServicesClientListResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientListResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientDeleteResponse` has been removed
+- Field `ServiceTopologiesClientListResult` of struct `ServiceTopologiesClientListResponse` has been removed
+- Field `RawResponse` of struct `ServiceTopologiesClientListResponse` has been removed
+- Field `ServiceUnitsClientListResult` of struct `ServiceUnitsClientListResponse` has been removed
+- Field `RawResponse` of struct `ServiceUnitsClientListResponse` has been removed
+- Field `RolloutsClientRestartResult` of struct `RolloutsClientRestartResponse` has been removed
+- Field `RawResponse` of struct `RolloutsClientRestartResponse` has been removed
+- Field `RolloutsClientGetResult` of struct `RolloutsClientGetResponse` has been removed
+- Field `RawResponse` of struct `RolloutsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServiceUnitsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `RolloutsClientCreateOrUpdatePollerResponse` has been removed
+- Field `StepsClientListResult` of struct `StepsClientListResponse` has been removed
+- Field `RawResponse` of struct `StepsClientListResponse` has been removed
+- Field `ServiceUnitsClientCreateOrUpdateResult` of struct `ServiceUnitsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServiceUnitsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServiceUnitsClientDeleteResponse` has been removed
+- Field `ServiceTopologiesClientCreateOrUpdateResult` of struct `ServiceTopologiesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServiceTopologiesClientCreateOrUpdateResponse` has been removed
+- Field `StepsClientCreateOrUpdateResult` of struct `StepsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `StepsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ArtifactSourcesClientDeleteResponse` has been removed
+- Field `ServicesClientGetResult` of struct `ServicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientGetResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `RolloutsClientDeleteResponse` has been removed
+- Field `ServiceTopologiesClientGetResult` of struct `ServiceTopologiesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServiceTopologiesClientGetResponse` has been removed
+- Field `ServicesClientCreateOrUpdateResult` of struct `ServicesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCreateOrUpdateResponse` has been removed
+- Field `ArtifactSourcesClientListResult` of struct `ArtifactSourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `ArtifactSourcesClientListResponse` has been removed
+- Field `ArtifactSourcesClientCreateOrUpdateResult` of struct `ArtifactSourcesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ArtifactSourcesClientCreateOrUpdateResponse` has been removed
+- Field `RolloutsClientListResult` of struct `RolloutsClientListResponse` has been removed
+- Field `RawResponse` of struct `RolloutsClientListResponse` has been removed
+- Field `RawResponse` of struct `ServiceTopologiesClientDeleteResponse` has been removed
+- Field `ServiceUnitsClientGetResult` of struct `ServiceUnitsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServiceUnitsClientGetResponse` has been removed
+- Field `RolloutsClientCancelResult` of struct `RolloutsClientCancelResponse` has been removed
+- Field `RawResponse` of struct `RolloutsClientCancelResponse` has been removed
+
+### Features Added
+
+- New struct `CloudError`
+- New anonymous field `Rollout` in struct `RolloutsClientCancelResponse`
+- New anonymous field `ServiceUnitResource` in struct `ServiceUnitsClientCreateOrUpdateResponse`
+- New anonymous field `Rollout` in struct `RolloutsClientRestartResponse`
+- New field `ServiceTopologyResourceArray` in struct `ServiceTopologiesClientListResponse`
+- New anonymous field `ServiceUnitResource` in struct `ServiceUnitsClientGetResponse`
+- New anonymous field `ServiceTopologyResource` in struct `ServiceTopologiesClientGetResponse`
+- New anonymous field `StepResource` in struct `StepsClientCreateOrUpdateResponse`
+- New field `ServiceUnitResourceArray` in struct `ServiceUnitsClientListResponse`
+- New anonymous field `ServiceResource` in struct `ServicesClientGetResponse`
+- New field `StepResourceArray` in struct `StepsClientListResponse`
+- New anonymous field `StepResource` in struct `StepsClientGetResponse`
+- New anonymous field `ArtifactSource` in struct `ArtifactSourcesClientCreateOrUpdateResponse`
+- New anonymous field `ServiceTopologyResource` in struct `ServiceTopologiesClientCreateOrUpdateResponse`
+- New anonymous field `RolloutRequest` in struct `RolloutsClientCreateOrUpdateResponse`
+- New field `ArtifactSourceArray` in struct `ArtifactSourcesClientListResponse`
+- New anonymous field `Rollout` in struct `RolloutsClientGetResponse`
+- New anonymous field `OperationsList` in struct `OperationsClientListResponse`
+- New anonymous field `ArtifactSource` in struct `ArtifactSourcesClientGetResponse`
+- New anonymous field `ServiceResource` in struct `ServicesClientCreateOrUpdateResponse`
+- New field `ServiceResourceArray` in struct `ServicesClientListResponse`
+- New field `RolloutArray` in struct `RolloutsClientListResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `Operation.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Struct `CloudError` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

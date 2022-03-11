@@ -35,17 +35,17 @@ type DiskRestorePointClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDiskRestorePointClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DiskRestorePointClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DiskRestorePointClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *DiskRestorePointClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *DiskRestorePointClient) getHandleResponse(resp *http.Response) (DiskRestorePointClientGetResponse, error) {
-	result := DiskRestorePointClientGetResponse{RawResponse: resp}
+	result := DiskRestorePointClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiskRestorePoint); err != nil {
 		return DiskRestorePointClientGetResponse{}, err
 	}
@@ -129,9 +129,7 @@ func (client *DiskRestorePointClient) BeginGrantAccess(ctx context.Context, reso
 	if err != nil {
 		return DiskRestorePointClientGrantAccessPollerResponse{}, err
 	}
-	result := DiskRestorePointClientGrantAccessPollerResponse{
-		RawResponse: resp,
-	}
+	result := DiskRestorePointClientGrantAccessPollerResponse{}
 	pt, err := armruntime.NewPoller("DiskRestorePointClient.GrantAccess", "location", resp, client.pl)
 	if err != nil {
 		return DiskRestorePointClientGrantAccessPollerResponse{}, err
@@ -244,7 +242,7 @@ func (client *DiskRestorePointClient) listByRestorePointCreateRequest(ctx contex
 
 // listByRestorePointHandleResponse handles the ListByRestorePoint response.
 func (client *DiskRestorePointClient) listByRestorePointHandleResponse(resp *http.Response) (DiskRestorePointClientListByRestorePointResponse, error) {
-	result := DiskRestorePointClientListByRestorePointResponse{RawResponse: resp}
+	result := DiskRestorePointClientListByRestorePointResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiskRestorePointList); err != nil {
 		return DiskRestorePointClientListByRestorePointResponse{}, err
 	}
@@ -264,9 +262,7 @@ func (client *DiskRestorePointClient) BeginRevokeAccess(ctx context.Context, res
 	if err != nil {
 		return DiskRestorePointClientRevokeAccessPollerResponse{}, err
 	}
-	result := DiskRestorePointClientRevokeAccessPollerResponse{
-		RawResponse: resp,
-	}
+	result := DiskRestorePointClientRevokeAccessPollerResponse{}
 	pt, err := armruntime.NewPoller("DiskRestorePointClient.RevokeAccess", "location", resp, client.pl)
 	if err != nil {
 		return DiskRestorePointClientRevokeAccessPollerResponse{}, err

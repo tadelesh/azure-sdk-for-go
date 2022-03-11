@@ -34,17 +34,17 @@ type WorkspaceClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkspaceClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkspaceClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkspaceClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -94,7 +94,7 @@ func (client *WorkspaceClient) checkNameAvailabilityCreateRequest(ctx context.Co
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *WorkspaceClient) checkNameAvailabilityHandleResponse(resp *http.Response) (WorkspaceClientCheckNameAvailabilityResponse, error) {
-	result := WorkspaceClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := WorkspaceClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameAvailabilityResult); err != nil {
 		return WorkspaceClientCheckNameAvailabilityResponse{}, err
 	}

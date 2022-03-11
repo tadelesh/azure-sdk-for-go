@@ -35,17 +35,17 @@ type DisasterRecoveryConfigsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDisasterRecoveryConfigsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DisasterRecoveryConfigsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DisasterRecoveryConfigsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -69,7 +69,7 @@ func (client *DisasterRecoveryConfigsClient) BreakPairing(ctx context.Context, r
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return DisasterRecoveryConfigsClientBreakPairingResponse{}, runtime.NewResponseError(resp)
 	}
-	return DisasterRecoveryConfigsClientBreakPairingResponse{RawResponse: resp}, nil
+	return DisasterRecoveryConfigsClientBreakPairingResponse{}, nil
 }
 
 // breakPairingCreateRequest creates the BreakPairing request.
@@ -152,7 +152,7 @@ func (client *DisasterRecoveryConfigsClient) checkNameAvailabilityCreateRequest(
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *DisasterRecoveryConfigsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (DisasterRecoveryConfigsClientCheckNameAvailabilityResponse, error) {
-	result := DisasterRecoveryConfigsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := DisasterRecoveryConfigsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameAvailabilityResult); err != nil {
 		return DisasterRecoveryConfigsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -214,7 +214,7 @@ func (client *DisasterRecoveryConfigsClient) createOrUpdateCreateRequest(ctx con
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *DisasterRecoveryConfigsClient) createOrUpdateHandleResponse(resp *http.Response) (DisasterRecoveryConfigsClientCreateOrUpdateResponse, error) {
-	result := DisasterRecoveryConfigsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := DisasterRecoveryConfigsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ArmDisasterRecovery); err != nil {
 		return DisasterRecoveryConfigsClientCreateOrUpdateResponse{}, err
 	}
@@ -240,7 +240,7 @@ func (client *DisasterRecoveryConfigsClient) Delete(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DisasterRecoveryConfigsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DisasterRecoveryConfigsClientDeleteResponse{RawResponse: resp}, nil
+	return DisasterRecoveryConfigsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -292,7 +292,7 @@ func (client *DisasterRecoveryConfigsClient) FailOver(ctx context.Context, resou
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return DisasterRecoveryConfigsClientFailOverResponse{}, runtime.NewResponseError(resp)
 	}
-	return DisasterRecoveryConfigsClientFailOverResponse{RawResponse: resp}, nil
+	return DisasterRecoveryConfigsClientFailOverResponse{}, nil
 }
 
 // failOverCreateRequest creates the FailOver request.
@@ -379,7 +379,7 @@ func (client *DisasterRecoveryConfigsClient) getCreateRequest(ctx context.Contex
 
 // getHandleResponse handles the Get response.
 func (client *DisasterRecoveryConfigsClient) getHandleResponse(resp *http.Response) (DisasterRecoveryConfigsClientGetResponse, error) {
-	result := DisasterRecoveryConfigsClientGetResponse{RawResponse: resp}
+	result := DisasterRecoveryConfigsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ArmDisasterRecovery); err != nil {
 		return DisasterRecoveryConfigsClientGetResponse{}, err
 	}
@@ -445,7 +445,7 @@ func (client *DisasterRecoveryConfigsClient) getAuthorizationRuleCreateRequest(c
 
 // getAuthorizationRuleHandleResponse handles the GetAuthorizationRule response.
 func (client *DisasterRecoveryConfigsClient) getAuthorizationRuleHandleResponse(resp *http.Response) (DisasterRecoveryConfigsClientGetAuthorizationRuleResponse, error) {
-	result := DisasterRecoveryConfigsClientGetAuthorizationRuleResponse{RawResponse: resp}
+	result := DisasterRecoveryConfigsClientGetAuthorizationRuleResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AuthorizationRule); err != nil {
 		return DisasterRecoveryConfigsClientGetAuthorizationRuleResponse{}, err
 	}
@@ -498,7 +498,7 @@ func (client *DisasterRecoveryConfigsClient) listCreateRequest(ctx context.Conte
 
 // listHandleResponse handles the List response.
 func (client *DisasterRecoveryConfigsClient) listHandleResponse(resp *http.Response) (DisasterRecoveryConfigsClientListResponse, error) {
-	result := DisasterRecoveryConfigsClientListResponse{RawResponse: resp}
+	result := DisasterRecoveryConfigsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ArmDisasterRecoveryListResult); err != nil {
 		return DisasterRecoveryConfigsClientListResponse{}, err
 	}
@@ -556,7 +556,7 @@ func (client *DisasterRecoveryConfigsClient) listAuthorizationRulesCreateRequest
 
 // listAuthorizationRulesHandleResponse handles the ListAuthorizationRules response.
 func (client *DisasterRecoveryConfigsClient) listAuthorizationRulesHandleResponse(resp *http.Response) (DisasterRecoveryConfigsClientListAuthorizationRulesResponse, error) {
-	result := DisasterRecoveryConfigsClientListAuthorizationRulesResponse{RawResponse: resp}
+	result := DisasterRecoveryConfigsClientListAuthorizationRulesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AuthorizationRuleListResult); err != nil {
 		return DisasterRecoveryConfigsClientListAuthorizationRulesResponse{}, err
 	}
@@ -622,7 +622,7 @@ func (client *DisasterRecoveryConfigsClient) listKeysCreateRequest(ctx context.C
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *DisasterRecoveryConfigsClient) listKeysHandleResponse(resp *http.Response) (DisasterRecoveryConfigsClientListKeysResponse, error) {
-	result := DisasterRecoveryConfigsClientListKeysResponse{RawResponse: resp}
+	result := DisasterRecoveryConfigsClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessKeys); err != nil {
 		return DisasterRecoveryConfigsClientListKeysResponse{}, err
 	}

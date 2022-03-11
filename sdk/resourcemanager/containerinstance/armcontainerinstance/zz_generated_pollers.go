@@ -43,11 +43,10 @@ func (p *ContainerGroupsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final ContainerGroupsClientCreateOrUpdateResponse will be returned.
 func (p *ContainerGroupsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ContainerGroupsClientCreateOrUpdateResponse, error) {
 	respType := ContainerGroupsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ContainerGroup)
+	_, err := p.pt.FinalResponse(ctx, &respType.ContainerGroup)
 	if err != nil {
 		return ContainerGroupsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ContainerGroupsClientDeletePoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final ContainerGroupsClientDeleteResponse will be returned.
 func (p *ContainerGroupsClientDeletePoller) FinalResponse(ctx context.Context) (ContainerGroupsClientDeleteResponse, error) {
 	respType := ContainerGroupsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ContainerGroup)
+	_, err := p.pt.FinalResponse(ctx, &respType.ContainerGroup)
 	if err != nil {
 		return ContainerGroupsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ContainerGroupsClientRestartPoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final ContainerGroupsClientRestartResponse will be returned.
 func (p *ContainerGroupsClientRestartPoller) FinalResponse(ctx context.Context) (ContainerGroupsClientRestartResponse, error) {
 	respType := ContainerGroupsClientRestartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ContainerGroupsClientRestartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *ContainerGroupsClientStartPoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final ContainerGroupsClientStartResponse will be returned.
 func (p *ContainerGroupsClientStartPoller) FinalResponse(ctx context.Context) (ContainerGroupsClientStartResponse, error) {
 	respType := ContainerGroupsClientStartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ContainerGroupsClientStartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

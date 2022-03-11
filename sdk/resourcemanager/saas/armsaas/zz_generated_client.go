@@ -32,16 +32,16 @@ type Client struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewClient(credential azcore.TokenCredential, options *arm.ClientOptions) *Client {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &Client{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -55,9 +55,7 @@ func (client *Client) BeginCreateResource(ctx context.Context, parameters Resour
 	if err != nil {
 		return ClientCreateResourcePollerResponse{}, err
 	}
-	result := ClientCreateResourcePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientCreateResourcePollerResponse{}
 	pt, err := armruntime.NewPoller("Client.CreateResource", "location", resp, client.pl)
 	if err != nil {
 		return ClientCreateResourcePollerResponse{}, err
@@ -109,9 +107,7 @@ func (client *Client) BeginDelete(ctx context.Context, resourceID string, parame
 	if err != nil {
 		return ClientDeletePollerResponse{}, err
 	}
-	result := ClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("Client.Delete", "location", resp, client.pl)
 	if err != nil {
 		return ClientDeletePollerResponse{}, err
@@ -196,7 +192,7 @@ func (client *Client) getResourceCreateRequest(ctx context.Context, resourceID s
 
 // getResourceHandleResponse handles the GetResource response.
 func (client *Client) getResourceHandleResponse(resp *http.Response) (ClientGetResourceResponse, error) {
-	result := ClientGetResourceResponse{RawResponse: resp}
+	result := ClientGetResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Resource); err != nil {
 		return ClientGetResourceResponse{}, err
 	}
@@ -213,9 +209,7 @@ func (client *Client) BeginUpdateResource(ctx context.Context, resourceID string
 	if err != nil {
 		return ClientUpdateResourcePollerResponse{}, err
 	}
-	result := ClientUpdateResourcePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientUpdateResourcePollerResponse{}
 	pt, err := armruntime.NewPoller("Client.UpdateResource", "location", resp, client.pl)
 	if err != nil {
 		return ClientUpdateResourcePollerResponse{}, err

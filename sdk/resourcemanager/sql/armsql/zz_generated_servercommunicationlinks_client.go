@@ -34,17 +34,17 @@ type ServerCommunicationLinksClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServerCommunicationLinksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServerCommunicationLinksClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServerCommunicationLinksClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ServerCommunicationLinksClient) BeginCreateOrUpdate(ctx context.Co
 	if err != nil {
 		return ServerCommunicationLinksClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ServerCommunicationLinksClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerCommunicationLinksClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerCommunicationLinksClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ServerCommunicationLinksClientCreateOrUpdatePollerResponse{}, err
@@ -143,7 +141,7 @@ func (client *ServerCommunicationLinksClient) Delete(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ServerCommunicationLinksClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ServerCommunicationLinksClientDeleteResponse{RawResponse: resp}, nil
+	return ServerCommunicationLinksClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -230,7 +228,7 @@ func (client *ServerCommunicationLinksClient) getCreateRequest(ctx context.Conte
 
 // getHandleResponse handles the Get response.
 func (client *ServerCommunicationLinksClient) getHandleResponse(resp *http.Response) (ServerCommunicationLinksClientGetResponse, error) {
-	result := ServerCommunicationLinksClientGetResponse{RawResponse: resp}
+	result := ServerCommunicationLinksClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerCommunicationLink); err != nil {
 		return ServerCommunicationLinksClientGetResponse{}, err
 	}
@@ -244,19 +242,13 @@ func (client *ServerCommunicationLinksClient) getHandleResponse(resp *http.Respo
 // serverName - The name of the server.
 // options - ServerCommunicationLinksClientListByServerOptions contains the optional parameters for the ServerCommunicationLinksClient.ListByServer
 // method.
-func (client *ServerCommunicationLinksClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string, options *ServerCommunicationLinksClientListByServerOptions) (ServerCommunicationLinksClientListByServerResponse, error) {
-	req, err := client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
-	if err != nil {
-		return ServerCommunicationLinksClientListByServerResponse{}, err
+func (client *ServerCommunicationLinksClient) ListByServer(resourceGroupName string, serverName string, options *ServerCommunicationLinksClientListByServerOptions) *ServerCommunicationLinksClientListByServerPager {
+	return &ServerCommunicationLinksClientListByServerPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ServerCommunicationLinksClientListByServerResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ServerCommunicationLinksClientListByServerResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByServerHandleResponse(resp)
 }
 
 // listByServerCreateRequest creates the ListByServer request.
@@ -287,7 +279,7 @@ func (client *ServerCommunicationLinksClient) listByServerCreateRequest(ctx cont
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *ServerCommunicationLinksClient) listByServerHandleResponse(resp *http.Response) (ServerCommunicationLinksClientListByServerResponse, error) {
-	result := ServerCommunicationLinksClientListByServerResponse{RawResponse: resp}
+	result := ServerCommunicationLinksClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerCommunicationLinkListResult); err != nil {
 		return ServerCommunicationLinksClientListByServerResponse{}, err
 	}

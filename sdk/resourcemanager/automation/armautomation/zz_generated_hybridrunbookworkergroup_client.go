@@ -35,17 +35,17 @@ type HybridRunbookWorkerGroupClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewHybridRunbookWorkerGroupClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *HybridRunbookWorkerGroupClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &HybridRunbookWorkerGroupClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *HybridRunbookWorkerGroupClient) createCreateRequest(ctx context.Co
 
 // createHandleResponse handles the Create response.
 func (client *HybridRunbookWorkerGroupClient) createHandleResponse(resp *http.Response) (HybridRunbookWorkerGroupClientCreateResponse, error) {
-	result := HybridRunbookWorkerGroupClientCreateResponse{RawResponse: resp}
+	result := HybridRunbookWorkerGroupClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridRunbookWorkerGroup); err != nil {
 		return HybridRunbookWorkerGroupClientCreateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *HybridRunbookWorkerGroupClient) Delete(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return HybridRunbookWorkerGroupClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return HybridRunbookWorkerGroupClientDeleteResponse{RawResponse: resp}, nil
+	return HybridRunbookWorkerGroupClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -218,7 +218,7 @@ func (client *HybridRunbookWorkerGroupClient) getCreateRequest(ctx context.Conte
 
 // getHandleResponse handles the Get response.
 func (client *HybridRunbookWorkerGroupClient) getHandleResponse(resp *http.Response) (HybridRunbookWorkerGroupClientGetResponse, error) {
-	result := HybridRunbookWorkerGroupClientGetResponse{RawResponse: resp}
+	result := HybridRunbookWorkerGroupClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridRunbookWorkerGroup); err != nil {
 		return HybridRunbookWorkerGroupClientGetResponse{}, err
 	}
@@ -274,7 +274,7 @@ func (client *HybridRunbookWorkerGroupClient) listByAutomationAccountCreateReque
 
 // listByAutomationAccountHandleResponse handles the ListByAutomationAccount response.
 func (client *HybridRunbookWorkerGroupClient) listByAutomationAccountHandleResponse(resp *http.Response) (HybridRunbookWorkerGroupClientListByAutomationAccountResponse, error) {
-	result := HybridRunbookWorkerGroupClientListByAutomationAccountResponse{RawResponse: resp}
+	result := HybridRunbookWorkerGroupClientListByAutomationAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridRunbookWorkerGroupsListResult); err != nil {
 		return HybridRunbookWorkerGroupClientListByAutomationAccountResponse{}, err
 	}
@@ -336,7 +336,7 @@ func (client *HybridRunbookWorkerGroupClient) updateCreateRequest(ctx context.Co
 
 // updateHandleResponse handles the Update response.
 func (client *HybridRunbookWorkerGroupClient) updateHandleResponse(resp *http.Response) (HybridRunbookWorkerGroupClientUpdateResponse, error) {
-	result := HybridRunbookWorkerGroupClientUpdateResponse{RawResponse: resp}
+	result := HybridRunbookWorkerGroupClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridRunbookWorkerGroup); err != nil {
 		return HybridRunbookWorkerGroupClientUpdateResponse{}, err
 	}

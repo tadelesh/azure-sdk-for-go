@@ -34,17 +34,17 @@ type IntegrationRuntimeMonitoringDataClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIntegrationRuntimeMonitoringDataClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IntegrationRuntimeMonitoringDataClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IntegrationRuntimeMonitoringDataClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *IntegrationRuntimeMonitoringDataClient) listCreateRequest(ctx cont
 
 // listHandleResponse handles the List response.
 func (client *IntegrationRuntimeMonitoringDataClient) listHandleResponse(resp *http.Response) (IntegrationRuntimeMonitoringDataClientListResponse, error) {
-	result := IntegrationRuntimeMonitoringDataClientListResponse{RawResponse: resp}
+	result := IntegrationRuntimeMonitoringDataClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationRuntimeMonitoringData); err != nil {
 		return IntegrationRuntimeMonitoringDataClientListResponse{}, err
 	}

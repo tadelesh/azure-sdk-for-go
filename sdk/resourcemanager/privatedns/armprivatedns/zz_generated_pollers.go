@@ -43,11 +43,10 @@ func (p *PrivateZonesClientCreateOrUpdatePoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final PrivateZonesClientCreateOrUpdateResponse will be returned.
 func (p *PrivateZonesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateZonesClientCreateOrUpdateResponse, error) {
 	respType := PrivateZonesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateZone)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateZone)
 	if err != nil {
 		return PrivateZonesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *PrivateZonesClientDeletePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final PrivateZonesClientDeleteResponse will be returned.
 func (p *PrivateZonesClientDeletePoller) FinalResponse(ctx context.Context) (PrivateZonesClientDeleteResponse, error) {
 	respType := PrivateZonesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateZonesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *PrivateZonesClientUpdatePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final PrivateZonesClientUpdateResponse will be returned.
 func (p *PrivateZonesClientUpdatePoller) FinalResponse(ctx context.Context) (PrivateZonesClientUpdateResponse, error) {
 	respType := PrivateZonesClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateZone)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateZone)
 	if err != nil {
 		return PrivateZonesClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *VirtualNetworkLinksClientCreateOrUpdatePoller) Poll(ctx context.Context
 // If the final GET succeeded then the final VirtualNetworkLinksClientCreateOrUpdateResponse will be returned.
 func (p *VirtualNetworkLinksClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (VirtualNetworkLinksClientCreateOrUpdateResponse, error) {
 	respType := VirtualNetworkLinksClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.VirtualNetworkLink)
+	_, err := p.pt.FinalResponse(ctx, &respType.VirtualNetworkLink)
 	if err != nil {
 		return VirtualNetworkLinksClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *VirtualNetworkLinksClientDeletePoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final VirtualNetworkLinksClientDeleteResponse will be returned.
 func (p *VirtualNetworkLinksClientDeletePoller) FinalResponse(ctx context.Context) (VirtualNetworkLinksClientDeleteResponse, error) {
 	respType := VirtualNetworkLinksClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return VirtualNetworkLinksClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *VirtualNetworkLinksClientUpdatePoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final VirtualNetworkLinksClientUpdateResponse will be returned.
 func (p *VirtualNetworkLinksClientUpdatePoller) FinalResponse(ctx context.Context) (VirtualNetworkLinksClientUpdateResponse, error) {
 	respType := VirtualNetworkLinksClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.VirtualNetworkLink)
+	_, err := p.pt.FinalResponse(ctx, &respType.VirtualNetworkLink)
 	if err != nil {
 		return VirtualNetworkLinksClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

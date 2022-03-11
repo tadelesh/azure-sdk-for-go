@@ -34,17 +34,17 @@ type ApplicationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewApplicationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ApplicationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ApplicationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *ApplicationsClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return ApplicationsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ApplicationsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ApplicationsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ApplicationsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ApplicationsClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *ApplicationsClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return ApplicationsClientDeletePollerResponse{}, err
 	}
-	result := ApplicationsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ApplicationsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ApplicationsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ApplicationsClientDeletePollerResponse{}, err
@@ -232,7 +228,7 @@ func (client *ApplicationsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *ApplicationsClient) getHandleResponse(resp *http.Response) (ApplicationsClientGetResponse, error) {
-	result := ApplicationsClientGetResponse{RawResponse: resp}
+	result := ApplicationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Application); err != nil {
 		return ApplicationsClientGetResponse{}, err
 	}
@@ -257,7 +253,7 @@ func (client *ApplicationsClient) ListAllowedUpgradePlans(ctx context.Context, r
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ApplicationsClientListAllowedUpgradePlansResponse{}, runtime.NewResponseError(resp)
 	}
-	return ApplicationsClientListAllowedUpgradePlansResponse{RawResponse: resp}, nil
+	return ApplicationsClientListAllowedUpgradePlansResponse{}, nil
 }
 
 // listAllowedUpgradePlansCreateRequest creates the ListAllowedUpgradePlans request.
@@ -327,7 +323,7 @@ func (client *ApplicationsClient) listByResourceGroupCreateRequest(ctx context.C
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ApplicationsClient) listByResourceGroupHandleResponse(resp *http.Response) (ApplicationsClientListByResourceGroupResponse, error) {
-	result := ApplicationsClientListByResourceGroupResponse{RawResponse: resp}
+	result := ApplicationsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationListResult); err != nil {
 		return ApplicationsClientListByResourceGroupResponse{}, err
 	}
@@ -370,7 +366,7 @@ func (client *ApplicationsClient) listBySubscriptionCreateRequest(ctx context.Co
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *ApplicationsClient) listBySubscriptionHandleResponse(resp *http.Response) (ApplicationsClientListBySubscriptionResponse, error) {
-	result := ApplicationsClientListBySubscriptionResponse{RawResponse: resp}
+	result := ApplicationsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationListResult); err != nil {
 		return ApplicationsClientListBySubscriptionResponse{}, err
 	}
@@ -388,9 +384,7 @@ func (client *ApplicationsClient) BeginRefreshPermissions(ctx context.Context, r
 	if err != nil {
 		return ApplicationsClientRefreshPermissionsPollerResponse{}, err
 	}
-	result := ApplicationsClientRefreshPermissionsPollerResponse{
-		RawResponse: resp,
-	}
+	result := ApplicationsClientRefreshPermissionsPollerResponse{}
 	pt, err := armruntime.NewPoller("ApplicationsClient.RefreshPermissions", "", resp, client.pl)
 	if err != nil {
 		return ApplicationsClientRefreshPermissionsPollerResponse{}, err
@@ -495,7 +489,7 @@ func (client *ApplicationsClient) updateCreateRequest(ctx context.Context, resou
 
 // updateHandleResponse handles the Update response.
 func (client *ApplicationsClient) updateHandleResponse(resp *http.Response) (ApplicationsClientUpdateResponse, error) {
-	result := ApplicationsClientUpdateResponse{RawResponse: resp}
+	result := ApplicationsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Application); err != nil {
 		return ApplicationsClientUpdateResponse{}, err
 	}

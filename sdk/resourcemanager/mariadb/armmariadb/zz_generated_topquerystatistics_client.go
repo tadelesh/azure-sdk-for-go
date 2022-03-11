@@ -34,17 +34,17 @@ type TopQueryStatisticsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTopQueryStatisticsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TopQueryStatisticsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TopQueryStatisticsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *TopQueryStatisticsClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *TopQueryStatisticsClient) getHandleResponse(resp *http.Response) (TopQueryStatisticsClientGetResponse, error) {
-	result := TopQueryStatisticsClientGetResponse{RawResponse: resp}
+	result := TopQueryStatisticsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QueryStatistic); err != nil {
 		return TopQueryStatisticsClientGetResponse{}, err
 	}
@@ -156,7 +156,7 @@ func (client *TopQueryStatisticsClient) listByServerCreateRequest(ctx context.Co
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *TopQueryStatisticsClient) listByServerHandleResponse(resp *http.Response) (TopQueryStatisticsClientListByServerResponse, error) {
-	result := TopQueryStatisticsClientListByServerResponse{RawResponse: resp}
+	result := TopQueryStatisticsClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TopQueryStatisticsResultList); err != nil {
 		return TopQueryStatisticsClientListByServerResponse{}, err
 	}

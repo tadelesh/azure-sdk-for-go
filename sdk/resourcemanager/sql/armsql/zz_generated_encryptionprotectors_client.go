@@ -34,17 +34,17 @@ type EncryptionProtectorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewEncryptionProtectorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *EncryptionProtectorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &EncryptionProtectorsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *EncryptionProtectorsClient) BeginCreateOrUpdate(ctx context.Contex
 	if err != nil {
 		return EncryptionProtectorsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := EncryptionProtectorsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := EncryptionProtectorsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("EncryptionProtectorsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return EncryptionProtectorsClientCreateOrUpdatePollerResponse{}, err
@@ -178,7 +176,7 @@ func (client *EncryptionProtectorsClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *EncryptionProtectorsClient) getHandleResponse(resp *http.Response) (EncryptionProtectorsClientGetResponse, error) {
-	result := EncryptionProtectorsClientGetResponse{RawResponse: resp}
+	result := EncryptionProtectorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EncryptionProtector); err != nil {
 		return EncryptionProtectorsClientGetResponse{}, err
 	}
@@ -232,7 +230,7 @@ func (client *EncryptionProtectorsClient) listByServerCreateRequest(ctx context.
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *EncryptionProtectorsClient) listByServerHandleResponse(resp *http.Response) (EncryptionProtectorsClientListByServerResponse, error) {
-	result := EncryptionProtectorsClientListByServerResponse{RawResponse: resp}
+	result := EncryptionProtectorsClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EncryptionProtectorListResult); err != nil {
 		return EncryptionProtectorsClientListByServerResponse{}, err
 	}
@@ -252,9 +250,7 @@ func (client *EncryptionProtectorsClient) BeginRevalidate(ctx context.Context, r
 	if err != nil {
 		return EncryptionProtectorsClientRevalidatePollerResponse{}, err
 	}
-	result := EncryptionProtectorsClientRevalidatePollerResponse{
-		RawResponse: resp,
-	}
+	result := EncryptionProtectorsClientRevalidatePollerResponse{}
 	pt, err := armruntime.NewPoller("EncryptionProtectorsClient.Revalidate", "", resp, client.pl)
 	if err != nil {
 		return EncryptionProtectorsClientRevalidatePollerResponse{}, err

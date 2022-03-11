@@ -11,23 +11,18 @@ package armedgeorder
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // ManagementClientCancelOrderItemResponse contains the response from method ManagementClient.CancelOrderItem.
 type ManagementClientCancelOrderItemResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // ManagementClientCreateAddressPollerResponse contains the response from method ManagementClient.CreateAddress.
 type ManagementClientCreateAddressPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ManagementClientCreateAddressPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -35,11 +30,10 @@ type ManagementClientCreateAddressPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ManagementClientCreateAddressPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagementClientCreateAddressResponse, error) {
 	respType := ManagementClientCreateAddressResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.AddressResource)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.AddressResource)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -52,24 +46,16 @@ func (l *ManagementClientCreateAddressPollerResponse) Resume(ctx context.Context
 	poller := &ManagementClientCreateAddressPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ManagementClientCreateAddressResponse contains the response from method ManagementClient.CreateAddress.
 type ManagementClientCreateAddressResponse struct {
-	ManagementClientCreateAddressResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagementClientCreateAddressResult contains the result from method ManagementClient.CreateAddress.
-type ManagementClientCreateAddressResult struct {
 	AddressResource
 }
 
@@ -77,9 +63,6 @@ type ManagementClientCreateAddressResult struct {
 type ManagementClientCreateOrderItemPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ManagementClientCreateOrderItemPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -87,11 +70,10 @@ type ManagementClientCreateOrderItemPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ManagementClientCreateOrderItemPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagementClientCreateOrderItemResponse, error) {
 	respType := ManagementClientCreateOrderItemResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OrderItemResource)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OrderItemResource)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -104,24 +86,16 @@ func (l *ManagementClientCreateOrderItemPollerResponse) Resume(ctx context.Conte
 	poller := &ManagementClientCreateOrderItemPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ManagementClientCreateOrderItemResponse contains the response from method ManagementClient.CreateOrderItem.
 type ManagementClientCreateOrderItemResponse struct {
-	ManagementClientCreateOrderItemResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagementClientCreateOrderItemResult contains the result from method ManagementClient.CreateOrderItem.
-type ManagementClientCreateOrderItemResult struct {
 	OrderItemResource
 }
 
@@ -129,9 +103,6 @@ type ManagementClientCreateOrderItemResult struct {
 type ManagementClientDeleteAddressByNamePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ManagementClientDeleteAddressByNamePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -139,11 +110,10 @@ type ManagementClientDeleteAddressByNamePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ManagementClientDeleteAddressByNamePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagementClientDeleteAddressByNameResponse, error) {
 	respType := ManagementClientDeleteAddressByNameResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -156,28 +126,23 @@ func (l *ManagementClientDeleteAddressByNamePollerResponse) Resume(ctx context.C
 	poller := &ManagementClientDeleteAddressByNamePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ManagementClientDeleteAddressByNameResponse contains the response from method ManagementClient.DeleteAddressByName.
 type ManagementClientDeleteAddressByNameResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // ManagementClientDeleteOrderItemByNamePollerResponse contains the response from method ManagementClient.DeleteOrderItemByName.
 type ManagementClientDeleteOrderItemByNamePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ManagementClientDeleteOrderItemByNamePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -185,11 +150,10 @@ type ManagementClientDeleteOrderItemByNamePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ManagementClientDeleteOrderItemByNamePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagementClientDeleteOrderItemByNameResponse, error) {
 	respType := ManagementClientDeleteOrderItemByNameResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -202,174 +166,81 @@ func (l *ManagementClientDeleteOrderItemByNamePollerResponse) Resume(ctx context
 	poller := &ManagementClientDeleteOrderItemByNamePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ManagementClientDeleteOrderItemByNameResponse contains the response from method ManagementClient.DeleteOrderItemByName.
 type ManagementClientDeleteOrderItemByNameResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // ManagementClientGetAddressByNameResponse contains the response from method ManagementClient.GetAddressByName.
 type ManagementClientGetAddressByNameResponse struct {
-	ManagementClientGetAddressByNameResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagementClientGetAddressByNameResult contains the result from method ManagementClient.GetAddressByName.
-type ManagementClientGetAddressByNameResult struct {
 	AddressResource
 }
 
 // ManagementClientGetOrderByNameResponse contains the response from method ManagementClient.GetOrderByName.
 type ManagementClientGetOrderByNameResponse struct {
-	ManagementClientGetOrderByNameResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagementClientGetOrderByNameResult contains the result from method ManagementClient.GetOrderByName.
-type ManagementClientGetOrderByNameResult struct {
 	OrderResource
 }
 
 // ManagementClientGetOrderItemByNameResponse contains the response from method ManagementClient.GetOrderItemByName.
 type ManagementClientGetOrderItemByNameResponse struct {
-	ManagementClientGetOrderItemByNameResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagementClientGetOrderItemByNameResult contains the result from method ManagementClient.GetOrderItemByName.
-type ManagementClientGetOrderItemByNameResult struct {
 	OrderItemResource
 }
 
 // ManagementClientListAddressesAtResourceGroupLevelResponse contains the response from method ManagementClient.ListAddressesAtResourceGroupLevel.
 type ManagementClientListAddressesAtResourceGroupLevelResponse struct {
-	ManagementClientListAddressesAtResourceGroupLevelResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagementClientListAddressesAtResourceGroupLevelResult contains the result from method ManagementClient.ListAddressesAtResourceGroupLevel.
-type ManagementClientListAddressesAtResourceGroupLevelResult struct {
 	AddressResourceList
 }
 
 // ManagementClientListAddressesAtSubscriptionLevelResponse contains the response from method ManagementClient.ListAddressesAtSubscriptionLevel.
 type ManagementClientListAddressesAtSubscriptionLevelResponse struct {
-	ManagementClientListAddressesAtSubscriptionLevelResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagementClientListAddressesAtSubscriptionLevelResult contains the result from method ManagementClient.ListAddressesAtSubscriptionLevel.
-type ManagementClientListAddressesAtSubscriptionLevelResult struct {
 	AddressResourceList
 }
 
 // ManagementClientListConfigurationsResponse contains the response from method ManagementClient.ListConfigurations.
 type ManagementClientListConfigurationsResponse struct {
-	ManagementClientListConfigurationsResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagementClientListConfigurationsResult contains the result from method ManagementClient.ListConfigurations.
-type ManagementClientListConfigurationsResult struct {
 	Configurations
 }
 
 // ManagementClientListOperationsResponse contains the response from method ManagementClient.ListOperations.
 type ManagementClientListOperationsResponse struct {
-	ManagementClientListOperationsResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagementClientListOperationsResult contains the result from method ManagementClient.ListOperations.
-type ManagementClientListOperationsResult struct {
 	OperationListResult
 }
 
 // ManagementClientListOrderAtResourceGroupLevelResponse contains the response from method ManagementClient.ListOrderAtResourceGroupLevel.
 type ManagementClientListOrderAtResourceGroupLevelResponse struct {
-	ManagementClientListOrderAtResourceGroupLevelResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagementClientListOrderAtResourceGroupLevelResult contains the result from method ManagementClient.ListOrderAtResourceGroupLevel.
-type ManagementClientListOrderAtResourceGroupLevelResult struct {
 	OrderResourceList
 }
 
 // ManagementClientListOrderAtSubscriptionLevelResponse contains the response from method ManagementClient.ListOrderAtSubscriptionLevel.
 type ManagementClientListOrderAtSubscriptionLevelResponse struct {
-	ManagementClientListOrderAtSubscriptionLevelResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagementClientListOrderAtSubscriptionLevelResult contains the result from method ManagementClient.ListOrderAtSubscriptionLevel.
-type ManagementClientListOrderAtSubscriptionLevelResult struct {
 	OrderResourceList
 }
 
 // ManagementClientListOrderItemsAtResourceGroupLevelResponse contains the response from method ManagementClient.ListOrderItemsAtResourceGroupLevel.
 type ManagementClientListOrderItemsAtResourceGroupLevelResponse struct {
-	ManagementClientListOrderItemsAtResourceGroupLevelResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagementClientListOrderItemsAtResourceGroupLevelResult contains the result from method ManagementClient.ListOrderItemsAtResourceGroupLevel.
-type ManagementClientListOrderItemsAtResourceGroupLevelResult struct {
 	OrderItemResourceList
 }
 
 // ManagementClientListOrderItemsAtSubscriptionLevelResponse contains the response from method ManagementClient.ListOrderItemsAtSubscriptionLevel.
 type ManagementClientListOrderItemsAtSubscriptionLevelResponse struct {
-	ManagementClientListOrderItemsAtSubscriptionLevelResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagementClientListOrderItemsAtSubscriptionLevelResult contains the result from method ManagementClient.ListOrderItemsAtSubscriptionLevel.
-type ManagementClientListOrderItemsAtSubscriptionLevelResult struct {
 	OrderItemResourceList
 }
 
 // ManagementClientListProductFamiliesMetadataResponse contains the response from method ManagementClient.ListProductFamiliesMetadata.
 type ManagementClientListProductFamiliesMetadataResponse struct {
-	ManagementClientListProductFamiliesMetadataResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagementClientListProductFamiliesMetadataResult contains the result from method ManagementClient.ListProductFamiliesMetadata.
-type ManagementClientListProductFamiliesMetadataResult struct {
 	ProductFamiliesMetadata
 }
 
 // ManagementClientListProductFamiliesResponse contains the response from method ManagementClient.ListProductFamilies.
 type ManagementClientListProductFamiliesResponse struct {
-	ManagementClientListProductFamiliesResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagementClientListProductFamiliesResult contains the result from method ManagementClient.ListProductFamilies.
-type ManagementClientListProductFamiliesResult struct {
 	ProductFamilies
 }
 
@@ -377,9 +248,6 @@ type ManagementClientListProductFamiliesResult struct {
 type ManagementClientReturnOrderItemPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ManagementClientReturnOrderItemPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -387,11 +255,10 @@ type ManagementClientReturnOrderItemPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ManagementClientReturnOrderItemPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagementClientReturnOrderItemResponse, error) {
 	respType := ManagementClientReturnOrderItemResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -404,28 +271,23 @@ func (l *ManagementClientReturnOrderItemPollerResponse) Resume(ctx context.Conte
 	poller := &ManagementClientReturnOrderItemPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ManagementClientReturnOrderItemResponse contains the response from method ManagementClient.ReturnOrderItem.
 type ManagementClientReturnOrderItemResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // ManagementClientUpdateAddressPollerResponse contains the response from method ManagementClient.UpdateAddress.
 type ManagementClientUpdateAddressPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ManagementClientUpdateAddressPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -433,11 +295,10 @@ type ManagementClientUpdateAddressPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ManagementClientUpdateAddressPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagementClientUpdateAddressResponse, error) {
 	respType := ManagementClientUpdateAddressResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.AddressResource)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.AddressResource)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -450,24 +311,16 @@ func (l *ManagementClientUpdateAddressPollerResponse) Resume(ctx context.Context
 	poller := &ManagementClientUpdateAddressPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ManagementClientUpdateAddressResponse contains the response from method ManagementClient.UpdateAddress.
 type ManagementClientUpdateAddressResponse struct {
-	ManagementClientUpdateAddressResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagementClientUpdateAddressResult contains the result from method ManagementClient.UpdateAddress.
-type ManagementClientUpdateAddressResult struct {
 	AddressResource
 }
 
@@ -475,9 +328,6 @@ type ManagementClientUpdateAddressResult struct {
 type ManagementClientUpdateOrderItemPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ManagementClientUpdateOrderItemPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -485,11 +335,10 @@ type ManagementClientUpdateOrderItemPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ManagementClientUpdateOrderItemPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ManagementClientUpdateOrderItemResponse, error) {
 	respType := ManagementClientUpdateOrderItemResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OrderItemResource)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.OrderItemResource)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -502,23 +351,15 @@ func (l *ManagementClientUpdateOrderItemPollerResponse) Resume(ctx context.Conte
 	poller := &ManagementClientUpdateOrderItemPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ManagementClientUpdateOrderItemResponse contains the response from method ManagementClient.UpdateOrderItem.
 type ManagementClientUpdateOrderItemResponse struct {
-	ManagementClientUpdateOrderItemResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ManagementClientUpdateOrderItemResult contains the result from method ManagementClient.UpdateOrderItem.
-type ManagementClientUpdateOrderItemResult struct {
 	OrderItemResource
 }

@@ -34,17 +34,17 @@ type ApplicationTypesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewApplicationTypesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ApplicationTypesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ApplicationTypesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *ApplicationTypesClient) createOrUpdateCreateRequest(ctx context.Co
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ApplicationTypesClient) createOrUpdateHandleResponse(resp *http.Response) (ApplicationTypesClientCreateOrUpdateResponse, error) {
-	result := ApplicationTypesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ApplicationTypesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationTypeResource); err != nil {
 		return ApplicationTypesClientCreateOrUpdateResponse{}, err
 	}
@@ -123,9 +123,7 @@ func (client *ApplicationTypesClient) BeginDelete(ctx context.Context, resourceG
 	if err != nil {
 		return ApplicationTypesClientDeletePollerResponse{}, err
 	}
-	result := ApplicationTypesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ApplicationTypesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ApplicationTypesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ApplicationTypesClientDeletePollerResponse{}, err
@@ -237,7 +235,7 @@ func (client *ApplicationTypesClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *ApplicationTypesClient) getHandleResponse(resp *http.Response) (ApplicationTypesClientGetResponse, error) {
-	result := ApplicationTypesClientGetResponse{RawResponse: resp}
+	result := ApplicationTypesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationTypeResource); err != nil {
 		return ApplicationTypesClientGetResponse{}, err
 	}
@@ -293,7 +291,7 @@ func (client *ApplicationTypesClient) listCreateRequest(ctx context.Context, res
 
 // listHandleResponse handles the List response.
 func (client *ApplicationTypesClient) listHandleResponse(resp *http.Response) (ApplicationTypesClientListResponse, error) {
-	result := ApplicationTypesClientListResponse{RawResponse: resp}
+	result := ApplicationTypesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationTypeResourceList); err != nil {
 		return ApplicationTypesClientListResponse{}, err
 	}

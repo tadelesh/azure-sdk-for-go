@@ -34,17 +34,17 @@ type SKUsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSKUsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SKUsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SKUsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *SKUsClient) createOrUpdateCreateRequest(ctx context.Context, provi
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *SKUsClient) createOrUpdateHandleResponse(resp *http.Response) (SKUsClientCreateOrUpdateResponse, error) {
-	result := SKUsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := SKUsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUResource); err != nil {
 		return SKUsClientCreateOrUpdateResponse{}, err
 	}
@@ -170,7 +170,7 @@ func (client *SKUsClient) createOrUpdateNestedResourceTypeFirstCreateRequest(ctx
 
 // createOrUpdateNestedResourceTypeFirstHandleResponse handles the CreateOrUpdateNestedResourceTypeFirst response.
 func (client *SKUsClient) createOrUpdateNestedResourceTypeFirstHandleResponse(resp *http.Response) (SKUsClientCreateOrUpdateNestedResourceTypeFirstResponse, error) {
-	result := SKUsClientCreateOrUpdateNestedResourceTypeFirstResponse{RawResponse: resp}
+	result := SKUsClientCreateOrUpdateNestedResourceTypeFirstResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUResource); err != nil {
 		return SKUsClientCreateOrUpdateNestedResourceTypeFirstResponse{}, err
 	}
@@ -242,7 +242,7 @@ func (client *SKUsClient) createOrUpdateNestedResourceTypeSecondCreateRequest(ct
 
 // createOrUpdateNestedResourceTypeSecondHandleResponse handles the CreateOrUpdateNestedResourceTypeSecond response.
 func (client *SKUsClient) createOrUpdateNestedResourceTypeSecondHandleResponse(resp *http.Response) (SKUsClientCreateOrUpdateNestedResourceTypeSecondResponse, error) {
-	result := SKUsClientCreateOrUpdateNestedResourceTypeSecondResponse{RawResponse: resp}
+	result := SKUsClientCreateOrUpdateNestedResourceTypeSecondResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUResource); err != nil {
 		return SKUsClientCreateOrUpdateNestedResourceTypeSecondResponse{}, err
 	}
@@ -319,7 +319,7 @@ func (client *SKUsClient) createOrUpdateNestedResourceTypeThirdCreateRequest(ctx
 
 // createOrUpdateNestedResourceTypeThirdHandleResponse handles the CreateOrUpdateNestedResourceTypeThird response.
 func (client *SKUsClient) createOrUpdateNestedResourceTypeThirdHandleResponse(resp *http.Response) (SKUsClientCreateOrUpdateNestedResourceTypeThirdResponse, error) {
-	result := SKUsClientCreateOrUpdateNestedResourceTypeThirdResponse{RawResponse: resp}
+	result := SKUsClientCreateOrUpdateNestedResourceTypeThirdResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUResource); err != nil {
 		return SKUsClientCreateOrUpdateNestedResourceTypeThirdResponse{}, err
 	}
@@ -344,7 +344,7 @@ func (client *SKUsClient) Delete(ctx context.Context, providerNamespace string, 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SKUsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SKUsClientDeleteResponse{RawResponse: resp}, nil
+	return SKUsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -397,7 +397,7 @@ func (client *SKUsClient) DeleteNestedResourceTypeFirst(ctx context.Context, pro
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SKUsClientDeleteNestedResourceTypeFirstResponse{}, runtime.NewResponseError(resp)
 	}
-	return SKUsClientDeleteNestedResourceTypeFirstResponse{RawResponse: resp}, nil
+	return SKUsClientDeleteNestedResourceTypeFirstResponse{}, nil
 }
 
 // deleteNestedResourceTypeFirstCreateRequest creates the DeleteNestedResourceTypeFirst request.
@@ -455,7 +455,7 @@ func (client *SKUsClient) DeleteNestedResourceTypeSecond(ctx context.Context, pr
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SKUsClientDeleteNestedResourceTypeSecondResponse{}, runtime.NewResponseError(resp)
 	}
-	return SKUsClientDeleteNestedResourceTypeSecondResponse{RawResponse: resp}, nil
+	return SKUsClientDeleteNestedResourceTypeSecondResponse{}, nil
 }
 
 // deleteNestedResourceTypeSecondCreateRequest creates the DeleteNestedResourceTypeSecond request.
@@ -518,7 +518,7 @@ func (client *SKUsClient) DeleteNestedResourceTypeThird(ctx context.Context, pro
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SKUsClientDeleteNestedResourceTypeThirdResponse{}, runtime.NewResponseError(resp)
 	}
-	return SKUsClientDeleteNestedResourceTypeThirdResponse{RawResponse: resp}, nil
+	return SKUsClientDeleteNestedResourceTypeThirdResponse{}, nil
 }
 
 // deleteNestedResourceTypeThirdCreateRequest creates the DeleteNestedResourceTypeThird request.
@@ -616,7 +616,7 @@ func (client *SKUsClient) getCreateRequest(ctx context.Context, providerNamespac
 
 // getHandleResponse handles the Get response.
 func (client *SKUsClient) getHandleResponse(resp *http.Response) (SKUsClientGetResponse, error) {
-	result := SKUsClientGetResponse{RawResponse: resp}
+	result := SKUsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUResource); err != nil {
 		return SKUsClientGetResponse{}, err
 	}
@@ -682,7 +682,7 @@ func (client *SKUsClient) getNestedResourceTypeFirstCreateRequest(ctx context.Co
 
 // getNestedResourceTypeFirstHandleResponse handles the GetNestedResourceTypeFirst response.
 func (client *SKUsClient) getNestedResourceTypeFirstHandleResponse(resp *http.Response) (SKUsClientGetNestedResourceTypeFirstResponse, error) {
-	result := SKUsClientGetNestedResourceTypeFirstResponse{RawResponse: resp}
+	result := SKUsClientGetNestedResourceTypeFirstResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUResource); err != nil {
 		return SKUsClientGetNestedResourceTypeFirstResponse{}, err
 	}
@@ -753,7 +753,7 @@ func (client *SKUsClient) getNestedResourceTypeSecondCreateRequest(ctx context.C
 
 // getNestedResourceTypeSecondHandleResponse handles the GetNestedResourceTypeSecond response.
 func (client *SKUsClient) getNestedResourceTypeSecondHandleResponse(resp *http.Response) (SKUsClientGetNestedResourceTypeSecondResponse, error) {
-	result := SKUsClientGetNestedResourceTypeSecondResponse{RawResponse: resp}
+	result := SKUsClientGetNestedResourceTypeSecondResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUResource); err != nil {
 		return SKUsClientGetNestedResourceTypeSecondResponse{}, err
 	}
@@ -829,7 +829,7 @@ func (client *SKUsClient) getNestedResourceTypeThirdCreateRequest(ctx context.Co
 
 // getNestedResourceTypeThirdHandleResponse handles the GetNestedResourceTypeThird response.
 func (client *SKUsClient) getNestedResourceTypeThirdHandleResponse(resp *http.Response) (SKUsClientGetNestedResourceTypeThirdResponse, error) {
-	result := SKUsClientGetNestedResourceTypeThirdResponse{RawResponse: resp}
+	result := SKUsClientGetNestedResourceTypeThirdResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUResource); err != nil {
 		return SKUsClientGetNestedResourceTypeThirdResponse{}, err
 	}
@@ -882,7 +882,7 @@ func (client *SKUsClient) listByResourceTypeRegistrationsCreateRequest(ctx conte
 
 // listByResourceTypeRegistrationsHandleResponse handles the ListByResourceTypeRegistrations response.
 func (client *SKUsClient) listByResourceTypeRegistrationsHandleResponse(resp *http.Response) (SKUsClientListByResourceTypeRegistrationsResponse, error) {
-	result := SKUsClientListByResourceTypeRegistrationsResponse{RawResponse: resp}
+	result := SKUsClientListByResourceTypeRegistrationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUResourceArrayResponseWithContinuation); err != nil {
 		return SKUsClientListByResourceTypeRegistrationsResponse{}, err
 	}
@@ -940,7 +940,7 @@ func (client *SKUsClient) listByResourceTypeRegistrationsNestedResourceTypeFirst
 
 // listByResourceTypeRegistrationsNestedResourceTypeFirstHandleResponse handles the ListByResourceTypeRegistrationsNestedResourceTypeFirst response.
 func (client *SKUsClient) listByResourceTypeRegistrationsNestedResourceTypeFirstHandleResponse(resp *http.Response) (SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstResponse, error) {
-	result := SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstResponse{RawResponse: resp}
+	result := SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUResourceArrayResponseWithContinuation); err != nil {
 		return SKUsClientListByResourceTypeRegistrationsNestedResourceTypeFirstResponse{}, err
 	}
@@ -1003,7 +1003,7 @@ func (client *SKUsClient) listByResourceTypeRegistrationsNestedResourceTypeSecon
 
 // listByResourceTypeRegistrationsNestedResourceTypeSecondHandleResponse handles the ListByResourceTypeRegistrationsNestedResourceTypeSecond response.
 func (client *SKUsClient) listByResourceTypeRegistrationsNestedResourceTypeSecondHandleResponse(resp *http.Response) (SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondResponse, error) {
-	result := SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondResponse{RawResponse: resp}
+	result := SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUResourceArrayResponseWithContinuation); err != nil {
 		return SKUsClientListByResourceTypeRegistrationsNestedResourceTypeSecondResponse{}, err
 	}
@@ -1071,7 +1071,7 @@ func (client *SKUsClient) listByResourceTypeRegistrationsNestedResourceTypeThird
 
 // listByResourceTypeRegistrationsNestedResourceTypeThirdHandleResponse handles the ListByResourceTypeRegistrationsNestedResourceTypeThird response.
 func (client *SKUsClient) listByResourceTypeRegistrationsNestedResourceTypeThirdHandleResponse(resp *http.Response) (SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdResponse, error) {
-	result := SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdResponse{RawResponse: resp}
+	result := SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUResourceArrayResponseWithContinuation); err != nil {
 		return SKUsClientListByResourceTypeRegistrationsNestedResourceTypeThirdResponse{}, err
 	}

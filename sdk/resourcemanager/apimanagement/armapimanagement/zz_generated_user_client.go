@@ -36,17 +36,17 @@ type UserClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewUserClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *UserClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &UserClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -111,7 +111,7 @@ func (client *UserClient) createOrUpdateCreateRequest(ctx context.Context, resou
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *UserClient) createOrUpdateHandleResponse(resp *http.Response) (UserClientCreateOrUpdateResponse, error) {
-	result := UserClientCreateOrUpdateResponse{RawResponse: resp}
+	result := UserClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -141,7 +141,7 @@ func (client *UserClient) Delete(ctx context.Context, resourceGroupName string, 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return UserClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return UserClientDeleteResponse{RawResponse: resp}, nil
+	return UserClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -238,7 +238,7 @@ func (client *UserClient) generateSsoURLCreateRequest(ctx context.Context, resou
 
 // generateSsoURLHandleResponse handles the GenerateSsoURL response.
 func (client *UserClient) generateSsoURLHandleResponse(resp *http.Response) (UserClientGenerateSsoURLResponse, error) {
-	result := UserClientGenerateSsoURLResponse{RawResponse: resp}
+	result := UserClientGenerateSsoURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GenerateSsoURLResult); err != nil {
 		return UserClientGenerateSsoURLResponse{}, err
 	}
@@ -298,7 +298,7 @@ func (client *UserClient) getCreateRequest(ctx context.Context, resourceGroupNam
 
 // getHandleResponse handles the Get response.
 func (client *UserClient) getHandleResponse(resp *http.Response) (UserClientGetResponse, error) {
-	result := UserClientGetResponse{RawResponse: resp}
+	result := UserClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -357,7 +357,7 @@ func (client *UserClient) getEntityTagCreateRequest(ctx context.Context, resourc
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *UserClient) getEntityTagHandleResponse(resp *http.Response) (UserClientGetEntityTagResponse, error) {
-	result := UserClientGetEntityTagResponse{RawResponse: resp}
+	result := UserClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -422,7 +422,7 @@ func (client *UserClient) getSharedAccessTokenCreateRequest(ctx context.Context,
 
 // getSharedAccessTokenHandleResponse handles the GetSharedAccessToken response.
 func (client *UserClient) getSharedAccessTokenHandleResponse(resp *http.Response) (UserClientGetSharedAccessTokenResponse, error) {
-	result := UserClientGetSharedAccessTokenResponse{RawResponse: resp}
+	result := UserClientGetSharedAccessTokenResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UserTokenResult); err != nil {
 		return UserClientGetSharedAccessTokenResponse{}, err
 	}
@@ -486,7 +486,7 @@ func (client *UserClient) listByServiceCreateRequest(ctx context.Context, resour
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *UserClient) listByServiceHandleResponse(resp *http.Response) (UserClientListByServiceResponse, error) {
-	result := UserClientListByServiceResponse{RawResponse: resp}
+	result := UserClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UserCollection); err != nil {
 		return UserClientListByServiceResponse{}, err
 	}
@@ -550,7 +550,7 @@ func (client *UserClient) updateCreateRequest(ctx context.Context, resourceGroup
 
 // updateHandleResponse handles the Update response.
 func (client *UserClient) updateHandleResponse(resp *http.Response) (UserClientUpdateResponse, error) {
-	result := UserClientUpdateResponse{RawResponse: resp}
+	result := UserClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

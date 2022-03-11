@@ -1,5 +1,110 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*RecommendationMetadataClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(RecommendationMetadataClientListResponse, error)`
+- Function `*RecommendationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(RecommendationsClientListResponse, error)`
+- Function `*ConfigurationsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ConfigurationsClientListBySubscriptionResponse, error)`
+- Function `*SuppressionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SuppressionsClientListResponse, error)`
+- Function `*ConfigurationsClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *ConfigurationsClientListByResourceGroupOptions)` to `(string, *ConfigurationsClientListByResourceGroupOptions)`
+- Function `*ConfigurationsClient.ListByResourceGroup` return value(s) have been changed from `(ConfigurationsClientListByResourceGroupResponse, error)` to `(*ConfigurationsClientListByResourceGroupPager)`
+- Function `*ConfigurationsClientListBySubscriptionPager.Err` has been removed
+- Function `*ConfigurationsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*RecommendationsClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*SuppressionsClientListPager.PageResponse` has been removed
+- Function `*SuppressionsClientListPager.Err` has been removed
+- Function `*RecommendationMetadataClientListPager.Err` has been removed
+- Function `*RecommendationsClientListPager.Err` has been removed
+- Function `*RecommendationMetadataClientListPager.PageResponse` has been removed
+- Struct `ConfigurationsClientCreateInResourceGroupResult` has been removed
+- Struct `ConfigurationsClientCreateInSubscriptionResult` has been removed
+- Struct `ConfigurationsClientListByResourceGroupResult` has been removed
+- Struct `ConfigurationsClientListBySubscriptionResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `RecommendationMetadataClientGetResult` has been removed
+- Struct `RecommendationMetadataClientListResult` has been removed
+- Struct `RecommendationsClientGenerateResult` has been removed
+- Struct `RecommendationsClientGetResult` has been removed
+- Struct `RecommendationsClientListResult` has been removed
+- Struct `SuppressionsClientCreateResult` has been removed
+- Struct `SuppressionsClientGetResult` has been removed
+- Struct `SuppressionsClientListResult` has been removed
+- Field `SuppressionsClientCreateResult` of struct `SuppressionsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `SuppressionsClientCreateResponse` has been removed
+- Field `ConfigurationsClientCreateInSubscriptionResult` of struct `ConfigurationsClientCreateInSubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientCreateInSubscriptionResponse` has been removed
+- Field `RecommendationMetadataClientListResult` of struct `RecommendationMetadataClientListResponse` has been removed
+- Field `RawResponse` of struct `RecommendationMetadataClientListResponse` has been removed
+- Field `RawResponse` of struct `RecommendationsClientGetGenerateStatusResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `ConfigurationsClientCreateInResourceGroupResult` of struct `ConfigurationsClientCreateInResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientCreateInResourceGroupResponse` has been removed
+- Field `RecommendationsClientGetResult` of struct `RecommendationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `RecommendationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SuppressionsClientDeleteResponse` has been removed
+- Field `SuppressionsClientGetResult` of struct `SuppressionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SuppressionsClientGetResponse` has been removed
+- Field `RecommendationsClientGenerateResult` of struct `RecommendationsClientGenerateResponse` has been removed
+- Field `RawResponse` of struct `RecommendationsClientGenerateResponse` has been removed
+- Field `SuppressionsClientListResult` of struct `SuppressionsClientListResponse` has been removed
+- Field `RawResponse` of struct `SuppressionsClientListResponse` has been removed
+- Field `RecommendationsClientListResult` of struct `RecommendationsClientListResponse` has been removed
+- Field `RawResponse` of struct `RecommendationsClientListResponse` has been removed
+- Field `RecommendationMetadataClientGetResult` of struct `RecommendationMetadataClientGetResponse` has been removed
+- Field `RawResponse` of struct `RecommendationMetadataClientGetResponse` has been removed
+- Field `ConfigurationsClientListBySubscriptionResult` of struct `ConfigurationsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientListBySubscriptionResponse` has been removed
+- Field `ConfigurationsClientListByResourceGroupResult` of struct `ConfigurationsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientListByResourceGroupResponse` has been removed
+
+### Features Added
+
+- New function `*RecommendationsClientListPager.More() bool`
+- New function `*ConfigurationsClientListByResourceGroupPager.NextPage(context.Context) (ConfigurationsClientListByResourceGroupResponse, error)`
+- New function `*ConfigurationsClientListByResourceGroupPager.More() bool`
+- New function `*SuppressionsClientListPager.More() bool`
+- New function `*ConfigurationsClientListBySubscriptionPager.More() bool`
+- New function `*RecommendationMetadataClientListPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New struct `ARMErrorResponseBody`
+- New struct `ArmErrorResponse`
+- New struct `ConfigurationsClientListByResourceGroupPager`
+- New anonymous field `ConfigData` in struct `ConfigurationsClientCreateInResourceGroupResponse`
+- New anonymous field `SuppressionContract` in struct `SuppressionsClientCreateResponse`
+- New anonymous field `SuppressionContract` in struct `SuppressionsClientGetResponse`
+- New anonymous field `MetadataEntity` in struct `RecommendationMetadataClientGetResponse`
+- New anonymous field `ResourceRecommendationBase` in struct `RecommendationsClientGetResponse`
+- New anonymous field `MetadataEntityListResult` in struct `RecommendationMetadataClientListResponse`
+- New anonymous field `ConfigurationListResult` in struct `ConfigurationsClientListBySubscriptionResponse`
+- New anonymous field `ConfigurationListResult` in struct `ConfigurationsClientListByResourceGroupResponse`
+- New anonymous field `ConfigData` in struct `ConfigurationsClientCreateInSubscriptionResponse`
+- New anonymous field `OperationEntityListResult` in struct `OperationsClientListResponse`
+- New anonymous field `ResourceRecommendationBaseListResult` in struct `RecommendationsClientListResponse`
+- New anonymous field `SuppressionContractListResult` in struct `SuppressionsClientListResponse`
+- New field `RetryAfter` in struct `RecommendationsClientGenerateResponse`
+- New field `Location` in struct `RecommendationsClientGenerateResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `RecommendationProperties.ExposedMetadataProperties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `RecommendationProperties.Remediation` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `RecommendationProperties.Metadata` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `RecommendationProperties.Actions` has been changed from `[]map[string]map[string]interface{}` to `[]map[string]interface{}`
+- Type of `ResourceMetadata.Action` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Struct `ARMErrorResponseBody` has been removed
+- Struct `ArmErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

@@ -97,7 +97,7 @@ func (client *OperationResultsClient) getCreateRequest(ctx context.Context, loca
 
 // getHandleResponse handles the Get response.
 func (client *OperationResultsClient) getHandleResponse(resp *http.Response) (OperationResultsClientGetResponse, error) {
-	result := OperationResultsClientGetResponse{RawResponse: resp}
+	result := OperationResultsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VideoAnalyzer); err != nil {
 		return OperationResultsClientGetResponse{}, err
 	}

@@ -34,17 +34,17 @@ type MonitorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMonitorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MonitorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MonitorsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -59,9 +59,7 @@ func (client *MonitorsClient) BeginCreate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return MonitorsClientCreatePollerResponse{}, err
 	}
-	result := MonitorsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := MonitorsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("MonitorsClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return MonitorsClientCreatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *MonitorsClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return MonitorsClientDeletePollerResponse{}, err
 	}
-	result := MonitorsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := MonitorsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("MonitorsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return MonitorsClientDeletePollerResponse{}, err
@@ -232,7 +228,7 @@ func (client *MonitorsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *MonitorsClient) getHandleResponse(resp *http.Response) (MonitorsClientGetResponse, error) {
-	result := MonitorsClientGetResponse{RawResponse: resp}
+	result := MonitorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MonitorResource); err != nil {
 		return MonitorsClientGetResponse{}, err
 	}
@@ -287,7 +283,7 @@ func (client *MonitorsClient) getDefaultKeyCreateRequest(ctx context.Context, re
 
 // getDefaultKeyHandleResponse handles the GetDefaultKey response.
 func (client *MonitorsClient) getDefaultKeyHandleResponse(resp *http.Response) (MonitorsClientGetDefaultKeyResponse, error) {
-	result := MonitorsClientGetDefaultKeyResponse{RawResponse: resp}
+	result := MonitorsClientGetDefaultKeyResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIKey); err != nil {
 		return MonitorsClientGetDefaultKeyResponse{}, err
 	}
@@ -329,7 +325,7 @@ func (client *MonitorsClient) listCreateRequest(ctx context.Context, options *Mo
 
 // listHandleResponse handles the List response.
 func (client *MonitorsClient) listHandleResponse(resp *http.Response) (MonitorsClientListResponse, error) {
-	result := MonitorsClientListResponse{RawResponse: resp}
+	result := MonitorsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MonitorResourceListResponse); err != nil {
 		return MonitorsClientListResponse{}, err
 	}
@@ -381,7 +377,7 @@ func (client *MonitorsClient) listAPIKeysCreateRequest(ctx context.Context, reso
 
 // listAPIKeysHandleResponse handles the ListAPIKeys response.
 func (client *MonitorsClient) listAPIKeysHandleResponse(resp *http.Response) (MonitorsClientListAPIKeysResponse, error) {
-	result := MonitorsClientListAPIKeysResponse{RawResponse: resp}
+	result := MonitorsClientListAPIKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIKeyListResponse); err != nil {
 		return MonitorsClientListAPIKeysResponse{}, err
 	}
@@ -429,7 +425,7 @@ func (client *MonitorsClient) listByResourceGroupCreateRequest(ctx context.Conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *MonitorsClient) listByResourceGroupHandleResponse(resp *http.Response) (MonitorsClientListByResourceGroupResponse, error) {
-	result := MonitorsClientListByResourceGroupResponse{RawResponse: resp}
+	result := MonitorsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MonitorResourceListResponse); err != nil {
 		return MonitorsClientListByResourceGroupResponse{}, err
 	}
@@ -481,7 +477,7 @@ func (client *MonitorsClient) listHostsCreateRequest(ctx context.Context, resour
 
 // listHostsHandleResponse handles the ListHosts response.
 func (client *MonitorsClient) listHostsHandleResponse(resp *http.Response) (MonitorsClientListHostsResponse, error) {
-	result := MonitorsClientListHostsResponse{RawResponse: resp}
+	result := MonitorsClientListHostsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostListResponse); err != nil {
 		return MonitorsClientListHostsResponse{}, err
 	}
@@ -534,7 +530,7 @@ func (client *MonitorsClient) listLinkedResourcesCreateRequest(ctx context.Conte
 
 // listLinkedResourcesHandleResponse handles the ListLinkedResources response.
 func (client *MonitorsClient) listLinkedResourcesHandleResponse(resp *http.Response) (MonitorsClientListLinkedResourcesResponse, error) {
-	result := MonitorsClientListLinkedResourcesResponse{RawResponse: resp}
+	result := MonitorsClientListLinkedResourcesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LinkedResourceListResponse); err != nil {
 		return MonitorsClientListLinkedResourcesResponse{}, err
 	}
@@ -587,7 +583,7 @@ func (client *MonitorsClient) listMonitoredResourcesCreateRequest(ctx context.Co
 
 // listMonitoredResourcesHandleResponse handles the ListMonitoredResources response.
 func (client *MonitorsClient) listMonitoredResourcesHandleResponse(resp *http.Response) (MonitorsClientListMonitoredResourcesResponse, error) {
-	result := MonitorsClientListMonitoredResourcesResponse{RawResponse: resp}
+	result := MonitorsClientListMonitoredResourcesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MonitoredResourceListResponse); err != nil {
 		return MonitorsClientListMonitoredResourcesResponse{}, err
 	}
@@ -643,7 +639,7 @@ func (client *MonitorsClient) refreshSetPasswordLinkCreateRequest(ctx context.Co
 
 // refreshSetPasswordLinkHandleResponse handles the RefreshSetPasswordLink response.
 func (client *MonitorsClient) refreshSetPasswordLinkHandleResponse(resp *http.Response) (MonitorsClientRefreshSetPasswordLinkResponse, error) {
-	result := MonitorsClientRefreshSetPasswordLinkResponse{RawResponse: resp}
+	result := MonitorsClientRefreshSetPasswordLinkResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SetPasswordLink); err != nil {
 		return MonitorsClientRefreshSetPasswordLinkResponse{}, err
 	}
@@ -667,7 +663,7 @@ func (client *MonitorsClient) SetDefaultKey(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return MonitorsClientSetDefaultKeyResponse{}, runtime.NewResponseError(resp)
 	}
-	return MonitorsClientSetDefaultKeyResponse{RawResponse: resp}, nil
+	return MonitorsClientSetDefaultKeyResponse{}, nil
 }
 
 // setDefaultKeyCreateRequest creates the SetDefaultKey request.
@@ -709,9 +705,7 @@ func (client *MonitorsClient) BeginUpdate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return MonitorsClientUpdatePollerResponse{}, err
 	}
-	result := MonitorsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := MonitorsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("MonitorsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return MonitorsClientUpdatePollerResponse{}, err

@@ -34,17 +34,17 @@ type DataStoreTypesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataStoreTypesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataStoreTypesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataStoreTypesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *DataStoreTypesClient) getCreateRequest(ctx context.Context, dataSt
 
 // getHandleResponse handles the Get response.
 func (client *DataStoreTypesClient) getHandleResponse(resp *http.Response) (DataStoreTypesClientGetResponse, error) {
-	result := DataStoreTypesClientGetResponse{RawResponse: resp}
+	result := DataStoreTypesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataStoreType); err != nil {
 		return DataStoreTypesClientGetResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *DataStoreTypesClient) listByDataManagerCreateRequest(ctx context.C
 
 // listByDataManagerHandleResponse handles the ListByDataManager response.
 func (client *DataStoreTypesClient) listByDataManagerHandleResponse(resp *http.Response) (DataStoreTypesClientListByDataManagerResponse, error) {
-	result := DataStoreTypesClientListByDataManagerResponse{RawResponse: resp}
+	result := DataStoreTypesClientListByDataManagerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataStoreTypeList); err != nil {
 		return DataStoreTypesClientListByDataManagerResponse{}, err
 	}

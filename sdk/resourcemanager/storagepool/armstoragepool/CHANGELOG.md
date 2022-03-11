@@ -1,5 +1,124 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ResourceSKUsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ResourceSKUsClientListResponse, error)`
+- Function `*DiskPoolsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(DiskPoolsClientListByResourceGroupResponse, error)`
+- Function `*OperationsClient.List` parameter(s) have been changed from `(context.Context, *OperationsClientListOptions)` to `(*OperationsClientListOptions)`
+- Function `*OperationsClient.List` return value(s) have been changed from `(OperationsClientListResponse, error)` to `(*OperationsClientListPager)`
+- Function `*DiskPoolZonesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(DiskPoolZonesClientListResponse, error)`
+- Function `*DiskPoolsClientListOutboundNetworkDependenciesEndpointsPager.NextPage` return value(s) have been changed from `(bool)` to `(DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse, error)`
+- Function `*DiskPoolsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(DiskPoolsClientListBySubscriptionResponse, error)`
+- Function `*IscsiTargetsClientListByDiskPoolPager.NextPage` return value(s) have been changed from `(bool)` to `(IscsiTargetsClientListByDiskPoolResponse, error)`
+- Function `*DiskPoolsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*DiskPoolsClientListByResourceGroupPager.Err` has been removed
+- Function `*DiskPoolsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*DiskPoolZonesClientListPager.Err` has been removed
+- Function `*DiskPoolsClientListOutboundNetworkDependenciesEndpointsPager.PageResponse` has been removed
+- Function `*IscsiTargetsClientListByDiskPoolPager.PageResponse` has been removed
+- Function `*ResourceSKUsClientListPager.Err` has been removed
+- Function `*IscsiTargetsClientListByDiskPoolPager.Err` has been removed
+- Function `*DiskPoolsClientListBySubscriptionPager.Err` has been removed
+- Function `*ResourceSKUsClientListPager.PageResponse` has been removed
+- Function `*DiskPoolZonesClientListPager.PageResponse` has been removed
+- Function `*DiskPoolsClientListOutboundNetworkDependenciesEndpointsPager.Err` has been removed
+- Struct `DiskPoolZonesClientListResult` has been removed
+- Struct `DiskPoolsClientCreateOrUpdateResult` has been removed
+- Struct `DiskPoolsClientGetResult` has been removed
+- Struct `DiskPoolsClientListByResourceGroupResult` has been removed
+- Struct `DiskPoolsClientListBySubscriptionResult` has been removed
+- Struct `DiskPoolsClientListOutboundNetworkDependenciesEndpointsResult` has been removed
+- Struct `DiskPoolsClientUpdateResult` has been removed
+- Struct `IscsiTargetsClientCreateOrUpdateResult` has been removed
+- Struct `IscsiTargetsClientGetResult` has been removed
+- Struct `IscsiTargetsClientListByDiskPoolResult` has been removed
+- Struct `IscsiTargetsClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `ResourceSKUsClientListResult` has been removed
+- Field `RawResponse` of struct `DiskPoolsClientDeallocateResponse` has been removed
+- Field `IscsiTargetsClientCreateOrUpdateResult` of struct `IscsiTargetsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `IscsiTargetsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DiskPoolsClientCreateOrUpdatePollerResponse` has been removed
+- Field `IscsiTargetsClientGetResult` of struct `IscsiTargetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `IscsiTargetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DiskPoolsClientDeleteResponse` has been removed
+- Field `IscsiTargetsClientUpdateResult` of struct `IscsiTargetsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `IscsiTargetsClientUpdateResponse` has been removed
+- Field `IscsiTargetsClientListByDiskPoolResult` of struct `IscsiTargetsClientListByDiskPoolResponse` has been removed
+- Field `RawResponse` of struct `IscsiTargetsClientListByDiskPoolResponse` has been removed
+- Field `DiskPoolZonesClientListResult` of struct `DiskPoolZonesClientListResponse` has been removed
+- Field `RawResponse` of struct `DiskPoolZonesClientListResponse` has been removed
+- Field `RawResponse` of struct `DiskPoolsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `IscsiTargetsClientUpdatePollerResponse` has been removed
+- Field `DiskPoolsClientListBySubscriptionResult` of struct `DiskPoolsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `DiskPoolsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `DiskPoolsClientStartResponse` has been removed
+- Field `RawResponse` of struct `DiskPoolsClientDeletePollerResponse` has been removed
+- Field `DiskPoolsClientCreateOrUpdateResult` of struct `DiskPoolsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DiskPoolsClientCreateOrUpdateResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `DiskPoolsClientUpgradePollerResponse` has been removed
+- Field `DiskPoolsClientUpdateResult` of struct `DiskPoolsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DiskPoolsClientUpdateResponse` has been removed
+- Field `DiskPoolsClientListByResourceGroupResult` of struct `DiskPoolsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `DiskPoolsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `IscsiTargetsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DiskPoolsClientDeallocatePollerResponse` has been removed
+- Field `DiskPoolsClientListOutboundNetworkDependenciesEndpointsResult` of struct `DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse` has been removed
+- Field `RawResponse` of struct `DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse` has been removed
+- Field `ResourceSKUsClientListResult` of struct `ResourceSKUsClientListResponse` has been removed
+- Field `RawResponse` of struct `ResourceSKUsClientListResponse` has been removed
+- Field `RawResponse` of struct `DiskPoolsClientStartPollerResponse` has been removed
+- Field `DiskPoolsClientGetResult` of struct `DiskPoolsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DiskPoolsClientGetResponse` has been removed
+- Field `RawResponse` of struct `IscsiTargetsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `IscsiTargetsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `DiskPoolsClientUpgradeResponse` has been removed
+
+### Features Added
+
+- New function `ErrorResponse.MarshalJSON() ([]byte, error)`
+- New function `*ResourceSKUsClientListPager.More() bool`
+- New function `*DiskPoolsClientListOutboundNetworkDependenciesEndpointsPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*DiskPoolsClientListByResourceGroupPager.More() bool`
+- New function `*OperationsClientListPager.NextPage(context.Context) (OperationsClientListResponse, error)`
+- New function `*DiskPoolsClientListBySubscriptionPager.More() bool`
+- New function `*IscsiTargetsClientListByDiskPoolPager.More() bool`
+- New function `*DiskPoolZonesClientListPager.More() bool`
+- New struct `Error`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorResponse`
+- New struct `OperationsClientListPager`
+- New anonymous field `DiskPoolListResult` in struct `DiskPoolsClientListBySubscriptionResponse`
+- New anonymous field `OutboundEnvironmentEndpointList` in struct `DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse`
+- New anonymous field `DiskPool` in struct `DiskPoolsClientUpdateResponse`
+- New anonymous field `IscsiTargetList` in struct `IscsiTargetsClientListByDiskPoolResponse`
+- New anonymous field `DiskPool` in struct `DiskPoolsClientCreateOrUpdateResponse`
+- New anonymous field `IscsiTarget` in struct `IscsiTargetsClientCreateOrUpdateResponse`
+- New anonymous field `IscsiTarget` in struct `IscsiTargetsClientUpdateResponse`
+- New anonymous field `DiskPoolListResult` in struct `DiskPoolsClientListByResourceGroupResponse`
+- New anonymous field `ResourceSKUListResult` in struct `ResourceSKUsClientListResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `IscsiTarget` in struct `IscsiTargetsClientGetResponse`
+- New anonymous field `DiskPoolZoneListResult` in struct `DiskPoolZonesClientListResponse`
+- New anonymous field `DiskPool` in struct `DiskPoolsClientGetResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorResponse.MarshalJSON` has been removed
+- Struct `Error` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

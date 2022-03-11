@@ -36,17 +36,17 @@ type EventSubscriptionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewEventSubscriptionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *EventSubscriptionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &EventSubscriptionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -72,9 +72,7 @@ func (client *EventSubscriptionsClient) BeginCreateOrUpdate(ctx context.Context,
 	if err != nil {
 		return EventSubscriptionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := EventSubscriptionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := EventSubscriptionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("EventSubscriptionsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return EventSubscriptionsClientCreateOrUpdatePollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *EventSubscriptionsClient) BeginDelete(ctx context.Context, scope s
 	if err != nil {
 		return EventSubscriptionsClientDeletePollerResponse{}, err
 	}
-	result := EventSubscriptionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := EventSubscriptionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("EventSubscriptionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return EventSubscriptionsClientDeletePollerResponse{}, err
@@ -236,7 +232,7 @@ func (client *EventSubscriptionsClient) getCreateRequest(ctx context.Context, sc
 
 // getHandleResponse handles the Get response.
 func (client *EventSubscriptionsClient) getHandleResponse(resp *http.Response) (EventSubscriptionsClientGetResponse, error) {
-	result := EventSubscriptionsClientGetResponse{RawResponse: resp}
+	result := EventSubscriptionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscription); err != nil {
 		return EventSubscriptionsClientGetResponse{}, err
 	}
@@ -292,7 +288,7 @@ func (client *EventSubscriptionsClient) getDeliveryAttributesCreateRequest(ctx c
 
 // getDeliveryAttributesHandleResponse handles the GetDeliveryAttributes response.
 func (client *EventSubscriptionsClient) getDeliveryAttributesHandleResponse(resp *http.Response) (EventSubscriptionsClientGetDeliveryAttributesResponse, error) {
-	result := EventSubscriptionsClientGetDeliveryAttributesResponse{RawResponse: resp}
+	result := EventSubscriptionsClientGetDeliveryAttributesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeliveryAttributeListResult); err != nil {
 		return EventSubscriptionsClientGetDeliveryAttributesResponse{}, err
 	}
@@ -348,7 +344,7 @@ func (client *EventSubscriptionsClient) getFullURLCreateRequest(ctx context.Cont
 
 // getFullURLHandleResponse handles the GetFullURL response.
 func (client *EventSubscriptionsClient) getFullURLHandleResponse(resp *http.Response) (EventSubscriptionsClientGetFullURLResponse, error) {
-	result := EventSubscriptionsClientGetFullURLResponse{RawResponse: resp}
+	result := EventSubscriptionsClientGetFullURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionFullURL); err != nil {
 		return EventSubscriptionsClientGetFullURLResponse{}, err
 	}
@@ -412,7 +408,7 @@ func (client *EventSubscriptionsClient) listByDomainTopicCreateRequest(ctx conte
 
 // listByDomainTopicHandleResponse handles the ListByDomainTopic response.
 func (client *EventSubscriptionsClient) listByDomainTopicHandleResponse(resp *http.Response) (EventSubscriptionsClientListByDomainTopicResponse, error) {
-	result := EventSubscriptionsClientListByDomainTopicResponse{RawResponse: resp}
+	result := EventSubscriptionsClientListByDomainTopicResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionsListResult); err != nil {
 		return EventSubscriptionsClientListByDomainTopicResponse{}, err
 	}
@@ -481,7 +477,7 @@ func (client *EventSubscriptionsClient) listByResourceCreateRequest(ctx context.
 
 // listByResourceHandleResponse handles the ListByResource response.
 func (client *EventSubscriptionsClient) listByResourceHandleResponse(resp *http.Response) (EventSubscriptionsClientListByResourceResponse, error) {
-	result := EventSubscriptionsClientListByResourceResponse{RawResponse: resp}
+	result := EventSubscriptionsClientListByResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionsListResult); err != nil {
 		return EventSubscriptionsClientListByResourceResponse{}, err
 	}
@@ -535,7 +531,7 @@ func (client *EventSubscriptionsClient) listGlobalByResourceGroupCreateRequest(c
 
 // listGlobalByResourceGroupHandleResponse handles the ListGlobalByResourceGroup response.
 func (client *EventSubscriptionsClient) listGlobalByResourceGroupHandleResponse(resp *http.Response) (EventSubscriptionsClientListGlobalByResourceGroupResponse, error) {
-	result := EventSubscriptionsClientListGlobalByResourceGroupResponse{RawResponse: resp}
+	result := EventSubscriptionsClientListGlobalByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionsListResult); err != nil {
 		return EventSubscriptionsClientListGlobalByResourceGroupResponse{}, err
 	}
@@ -595,7 +591,7 @@ func (client *EventSubscriptionsClient) listGlobalByResourceGroupForTopicTypeCre
 
 // listGlobalByResourceGroupForTopicTypeHandleResponse handles the ListGlobalByResourceGroupForTopicType response.
 func (client *EventSubscriptionsClient) listGlobalByResourceGroupForTopicTypeHandleResponse(resp *http.Response) (EventSubscriptionsClientListGlobalByResourceGroupForTopicTypeResponse, error) {
-	result := EventSubscriptionsClientListGlobalByResourceGroupForTopicTypeResponse{RawResponse: resp}
+	result := EventSubscriptionsClientListGlobalByResourceGroupForTopicTypeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionsListResult); err != nil {
 		return EventSubscriptionsClientListGlobalByResourceGroupForTopicTypeResponse{}, err
 	}
@@ -644,7 +640,7 @@ func (client *EventSubscriptionsClient) listGlobalBySubscriptionCreateRequest(ct
 
 // listGlobalBySubscriptionHandleResponse handles the ListGlobalBySubscription response.
 func (client *EventSubscriptionsClient) listGlobalBySubscriptionHandleResponse(resp *http.Response) (EventSubscriptionsClientListGlobalBySubscriptionResponse, error) {
-	result := EventSubscriptionsClientListGlobalBySubscriptionResponse{RawResponse: resp}
+	result := EventSubscriptionsClientListGlobalBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionsListResult); err != nil {
 		return EventSubscriptionsClientListGlobalBySubscriptionResponse{}, err
 	}
@@ -698,7 +694,7 @@ func (client *EventSubscriptionsClient) listGlobalBySubscriptionForTopicTypeCrea
 
 // listGlobalBySubscriptionForTopicTypeHandleResponse handles the ListGlobalBySubscriptionForTopicType response.
 func (client *EventSubscriptionsClient) listGlobalBySubscriptionForTopicTypeHandleResponse(resp *http.Response) (EventSubscriptionsClientListGlobalBySubscriptionForTopicTypeResponse, error) {
-	result := EventSubscriptionsClientListGlobalBySubscriptionForTopicTypeResponse{RawResponse: resp}
+	result := EventSubscriptionsClientListGlobalBySubscriptionForTopicTypeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionsListResult); err != nil {
 		return EventSubscriptionsClientListGlobalBySubscriptionForTopicTypeResponse{}, err
 	}
@@ -758,7 +754,7 @@ func (client *EventSubscriptionsClient) listRegionalByResourceGroupCreateRequest
 
 // listRegionalByResourceGroupHandleResponse handles the ListRegionalByResourceGroup response.
 func (client *EventSubscriptionsClient) listRegionalByResourceGroupHandleResponse(resp *http.Response) (EventSubscriptionsClientListRegionalByResourceGroupResponse, error) {
-	result := EventSubscriptionsClientListRegionalByResourceGroupResponse{RawResponse: resp}
+	result := EventSubscriptionsClientListRegionalByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionsListResult); err != nil {
 		return EventSubscriptionsClientListRegionalByResourceGroupResponse{}, err
 	}
@@ -823,7 +819,7 @@ func (client *EventSubscriptionsClient) listRegionalByResourceGroupForTopicTypeC
 
 // listRegionalByResourceGroupForTopicTypeHandleResponse handles the ListRegionalByResourceGroupForTopicType response.
 func (client *EventSubscriptionsClient) listRegionalByResourceGroupForTopicTypeHandleResponse(resp *http.Response) (EventSubscriptionsClientListRegionalByResourceGroupForTopicTypeResponse, error) {
-	result := EventSubscriptionsClientListRegionalByResourceGroupForTopicTypeResponse{RawResponse: resp}
+	result := EventSubscriptionsClientListRegionalByResourceGroupForTopicTypeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionsListResult); err != nil {
 		return EventSubscriptionsClientListRegionalByResourceGroupForTopicTypeResponse{}, err
 	}
@@ -877,7 +873,7 @@ func (client *EventSubscriptionsClient) listRegionalBySubscriptionCreateRequest(
 
 // listRegionalBySubscriptionHandleResponse handles the ListRegionalBySubscription response.
 func (client *EventSubscriptionsClient) listRegionalBySubscriptionHandleResponse(resp *http.Response) (EventSubscriptionsClientListRegionalBySubscriptionResponse, error) {
-	result := EventSubscriptionsClientListRegionalBySubscriptionResponse{RawResponse: resp}
+	result := EventSubscriptionsClientListRegionalBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionsListResult); err != nil {
 		return EventSubscriptionsClientListRegionalBySubscriptionResponse{}, err
 	}
@@ -937,7 +933,7 @@ func (client *EventSubscriptionsClient) listRegionalBySubscriptionForTopicTypeCr
 
 // listRegionalBySubscriptionForTopicTypeHandleResponse handles the ListRegionalBySubscriptionForTopicType response.
 func (client *EventSubscriptionsClient) listRegionalBySubscriptionForTopicTypeHandleResponse(resp *http.Response) (EventSubscriptionsClientListRegionalBySubscriptionForTopicTypeResponse, error) {
-	result := EventSubscriptionsClientListRegionalBySubscriptionForTopicTypeResponse{RawResponse: resp}
+	result := EventSubscriptionsClientListRegionalBySubscriptionForTopicTypeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionsListResult); err != nil {
 		return EventSubscriptionsClientListRegionalBySubscriptionForTopicTypeResponse{}, err
 	}
@@ -963,9 +959,7 @@ func (client *EventSubscriptionsClient) BeginUpdate(ctx context.Context, scope s
 	if err != nil {
 		return EventSubscriptionsClientUpdatePollerResponse{}, err
 	}
-	result := EventSubscriptionsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := EventSubscriptionsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("EventSubscriptionsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return EventSubscriptionsClientUpdatePollerResponse{}, err

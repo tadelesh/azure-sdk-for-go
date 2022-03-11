@@ -34,17 +34,17 @@ type BackupVaultsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBackupVaultsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BackupVaultsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BackupVaultsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *BackupVaultsClient) checkNameAvailabilityCreateRequest(ctx context
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *BackupVaultsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (BackupVaultsClientCheckNameAvailabilityResponse, error) {
-	result := BackupVaultsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := BackupVaultsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameAvailabilityResult); err != nil {
 		return BackupVaultsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -118,9 +118,7 @@ func (client *BackupVaultsClient) BeginCreateOrUpdate(ctx context.Context, vault
 	if err != nil {
 		return BackupVaultsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := BackupVaultsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := BackupVaultsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("BackupVaultsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return BackupVaultsClientCreateOrUpdatePollerResponse{}, err
@@ -191,7 +189,7 @@ func (client *BackupVaultsClient) Delete(ctx context.Context, vaultName string, 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return BackupVaultsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return BackupVaultsClientDeleteResponse{RawResponse: resp}, nil
+	return BackupVaultsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -268,7 +266,7 @@ func (client *BackupVaultsClient) getCreateRequest(ctx context.Context, vaultNam
 
 // getHandleResponse handles the Get response.
 func (client *BackupVaultsClient) getHandleResponse(resp *http.Response) (BackupVaultsClientGetResponse, error) {
-	result := BackupVaultsClientGetResponse{RawResponse: resp}
+	result := BackupVaultsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupVaultResource); err != nil {
 		return BackupVaultsClientGetResponse{}, err
 	}
@@ -316,7 +314,7 @@ func (client *BackupVaultsClient) getInResourceGroupCreateRequest(ctx context.Co
 
 // getInResourceGroupHandleResponse handles the GetInResourceGroup response.
 func (client *BackupVaultsClient) getInResourceGroupHandleResponse(resp *http.Response) (BackupVaultsClientGetInResourceGroupResponse, error) {
-	result := BackupVaultsClientGetInResourceGroupResponse{RawResponse: resp}
+	result := BackupVaultsClientGetInResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupVaultResourceList); err != nil {
 		return BackupVaultsClientGetInResourceGroupResponse{}, err
 	}
@@ -359,7 +357,7 @@ func (client *BackupVaultsClient) getInSubscriptionCreateRequest(ctx context.Con
 
 // getInSubscriptionHandleResponse handles the GetInSubscription response.
 func (client *BackupVaultsClient) getInSubscriptionHandleResponse(resp *http.Response) (BackupVaultsClientGetInSubscriptionResponse, error) {
-	result := BackupVaultsClientGetInSubscriptionResponse{RawResponse: resp}
+	result := BackupVaultsClientGetInSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupVaultResourceList); err != nil {
 		return BackupVaultsClientGetInSubscriptionResponse{}, err
 	}
@@ -378,9 +376,7 @@ func (client *BackupVaultsClient) BeginUpdate(ctx context.Context, vaultName str
 	if err != nil {
 		return BackupVaultsClientUpdatePollerResponse{}, err
 	}
-	result := BackupVaultsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := BackupVaultsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("BackupVaultsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return BackupVaultsClientUpdatePollerResponse{}, err

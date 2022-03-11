@@ -35,17 +35,17 @@ type VirtualMachineRunCommandsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualMachineRunCommandsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualMachineRunCommandsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualMachineRunCommandsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *VirtualMachineRunCommandsClient) BeginCreateOrUpdate(ctx context.C
 	if err != nil {
 		return VirtualMachineRunCommandsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VirtualMachineRunCommandsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachineRunCommandsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachineRunCommandsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachineRunCommandsClientCreateOrUpdatePollerResponse{}, err
@@ -117,7 +115,7 @@ func (client *VirtualMachineRunCommandsClient) createOrUpdateCreateRequest(ctx c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json, text/json")
 	return req, runtime.MarshalAsJSON(req, runCommand)
@@ -135,9 +133,7 @@ func (client *VirtualMachineRunCommandsClient) BeginDelete(ctx context.Context, 
 	if err != nil {
 		return VirtualMachineRunCommandsClientDeletePollerResponse{}, err
 	}
-	result := VirtualMachineRunCommandsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachineRunCommandsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachineRunCommandsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachineRunCommandsClientDeletePollerResponse{}, err
@@ -189,7 +185,7 @@ func (client *VirtualMachineRunCommandsClient) deleteCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json, text/json")
 	return req, nil
@@ -236,7 +232,7 @@ func (client *VirtualMachineRunCommandsClient) getCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json, text/json")
 	return req, nil
@@ -244,7 +240,7 @@ func (client *VirtualMachineRunCommandsClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *VirtualMachineRunCommandsClient) getHandleResponse(resp *http.Response) (VirtualMachineRunCommandsClientGetResponse, error) {
-	result := VirtualMachineRunCommandsClientGetResponse{RawResponse: resp}
+	result := VirtualMachineRunCommandsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RunCommandDocument); err != nil {
 		return VirtualMachineRunCommandsClientGetResponse{}, err
 	}
@@ -300,7 +296,7 @@ func (client *VirtualMachineRunCommandsClient) getByVirtualMachineCreateRequest(
 	if options != nil && options.Expand != nil {
 		reqQP.Set("$expand", *options.Expand)
 	}
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json, text/json")
 	return req, nil
@@ -308,7 +304,7 @@ func (client *VirtualMachineRunCommandsClient) getByVirtualMachineCreateRequest(
 
 // getByVirtualMachineHandleResponse handles the GetByVirtualMachine response.
 func (client *VirtualMachineRunCommandsClient) getByVirtualMachineHandleResponse(resp *http.Response) (VirtualMachineRunCommandsClientGetByVirtualMachineResponse, error) {
-	result := VirtualMachineRunCommandsClientGetByVirtualMachineResponse{RawResponse: resp}
+	result := VirtualMachineRunCommandsClientGetByVirtualMachineResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualMachineRunCommand); err != nil {
 		return VirtualMachineRunCommandsClientGetByVirtualMachineResponse{}, err
 	}
@@ -348,7 +344,7 @@ func (client *VirtualMachineRunCommandsClient) listCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json, text/json")
 	return req, nil
@@ -356,7 +352,7 @@ func (client *VirtualMachineRunCommandsClient) listCreateRequest(ctx context.Con
 
 // listHandleResponse handles the List response.
 func (client *VirtualMachineRunCommandsClient) listHandleResponse(resp *http.Response) (VirtualMachineRunCommandsClientListResponse, error) {
-	result := VirtualMachineRunCommandsClientListResponse{RawResponse: resp}
+	result := VirtualMachineRunCommandsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RunCommandListResult); err != nil {
 		return VirtualMachineRunCommandsClientListResponse{}, err
 	}
@@ -404,7 +400,7 @@ func (client *VirtualMachineRunCommandsClient) listByVirtualMachineCreateRequest
 	if options != nil && options.Expand != nil {
 		reqQP.Set("$expand", *options.Expand)
 	}
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json, text/json")
 	return req, nil
@@ -412,7 +408,7 @@ func (client *VirtualMachineRunCommandsClient) listByVirtualMachineCreateRequest
 
 // listByVirtualMachineHandleResponse handles the ListByVirtualMachine response.
 func (client *VirtualMachineRunCommandsClient) listByVirtualMachineHandleResponse(resp *http.Response) (VirtualMachineRunCommandsClientListByVirtualMachineResponse, error) {
-	result := VirtualMachineRunCommandsClientListByVirtualMachineResponse{RawResponse: resp}
+	result := VirtualMachineRunCommandsClientListByVirtualMachineResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualMachineRunCommandsListResult); err != nil {
 		return VirtualMachineRunCommandsClientListByVirtualMachineResponse{}, err
 	}
@@ -432,9 +428,7 @@ func (client *VirtualMachineRunCommandsClient) BeginUpdate(ctx context.Context, 
 	if err != nil {
 		return VirtualMachineRunCommandsClientUpdatePollerResponse{}, err
 	}
-	result := VirtualMachineRunCommandsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachineRunCommandsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachineRunCommandsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return VirtualMachineRunCommandsClientUpdatePollerResponse{}, err
@@ -486,7 +480,7 @@ func (client *VirtualMachineRunCommandsClient) updateCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01")
+	reqQP.Set("api-version", "2021-11-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json, text/json")
 	return req, runtime.MarshalAsJSON(req, runCommand)

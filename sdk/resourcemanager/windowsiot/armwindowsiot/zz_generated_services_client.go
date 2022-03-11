@@ -34,17 +34,17 @@ type ServicesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServicesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServicesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServicesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -90,7 +90,7 @@ func (client *ServicesClient) checkDeviceServiceNameAvailabilityCreateRequest(ct
 
 // checkDeviceServiceNameAvailabilityHandleResponse handles the CheckDeviceServiceNameAvailability response.
 func (client *ServicesClient) checkDeviceServiceNameAvailabilityHandleResponse(resp *http.Response) (ServicesClientCheckDeviceServiceNameAvailabilityResponse, error) {
-	result := ServicesClientCheckDeviceServiceNameAvailabilityResponse{RawResponse: resp}
+	result := ServicesClientCheckDeviceServiceNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceServiceNameAvailabilityInfo); err != nil {
 		return ServicesClientCheckDeviceServiceNameAvailabilityResponse{}, err
 	}
@@ -151,7 +151,7 @@ func (client *ServicesClient) createOrUpdateCreateRequest(ctx context.Context, r
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ServicesClient) createOrUpdateHandleResponse(resp *http.Response) (ServicesClientCreateOrUpdateResponse, error) {
-	result := ServicesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ServicesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceService); err != nil {
 		return ServicesClientCreateOrUpdateResponse{}, err
 	}
@@ -206,7 +206,7 @@ func (client *ServicesClient) deleteCreateRequest(ctx context.Context, resourceG
 
 // deleteHandleResponse handles the Delete response.
 func (client *ServicesClient) deleteHandleResponse(resp *http.Response) (ServicesClientDeleteResponse, error) {
-	result := ServicesClientDeleteResponse{RawResponse: resp}
+	result := ServicesClientDeleteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceService); err != nil {
 		return ServicesClientDeleteResponse{}, err
 	}
@@ -261,7 +261,7 @@ func (client *ServicesClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *ServicesClient) getHandleResponse(resp *http.Response) (ServicesClientGetResponse, error) {
-	result := ServicesClientGetResponse{RawResponse: resp}
+	result := ServicesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceService); err != nil {
 		return ServicesClientGetResponse{}, err
 	}
@@ -303,7 +303,7 @@ func (client *ServicesClient) listCreateRequest(ctx context.Context, options *Se
 
 // listHandleResponse handles the List response.
 func (client *ServicesClient) listHandleResponse(resp *http.Response) (ServicesClientListResponse, error) {
-	result := ServicesClientListResponse{RawResponse: resp}
+	result := ServicesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceServiceDescriptionListResult); err != nil {
 		return ServicesClientListResponse{}, err
 	}
@@ -351,7 +351,7 @@ func (client *ServicesClient) listByResourceGroupCreateRequest(ctx context.Conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ServicesClient) listByResourceGroupHandleResponse(resp *http.Response) (ServicesClientListByResourceGroupResponse, error) {
-	result := ServicesClientListByResourceGroupResponse{RawResponse: resp}
+	result := ServicesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceServiceDescriptionListResult); err != nil {
 		return ServicesClientListByResourceGroupResponse{}, err
 	}
@@ -412,7 +412,7 @@ func (client *ServicesClient) updateCreateRequest(ctx context.Context, resourceG
 
 // updateHandleResponse handles the Update response.
 func (client *ServicesClient) updateHandleResponse(resp *http.Response) (ServicesClientUpdateResponse, error) {
-	result := ServicesClientUpdateResponse{RawResponse: resp}
+	result := ServicesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceService); err != nil {
 		return ServicesClientUpdateResponse{}, err
 	}

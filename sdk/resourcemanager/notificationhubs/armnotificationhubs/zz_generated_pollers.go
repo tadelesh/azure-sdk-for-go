@@ -43,11 +43,10 @@ func (p *NamespacesClientDeletePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final NamespacesClientDeleteResponse will be returned.
 func (p *NamespacesClientDeletePoller) FinalResponse(ctx context.Context) (NamespacesClientDeleteResponse, error) {
 	respType := NamespacesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return NamespacesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

@@ -35,17 +35,17 @@ type SnapshotPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSnapshotPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SnapshotPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SnapshotPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *SnapshotPoliciesClient) createCreateRequest(ctx context.Context, r
 
 // createHandleResponse handles the Create response.
 func (client *SnapshotPoliciesClient) createHandleResponse(resp *http.Response) (SnapshotPoliciesClientCreateResponse, error) {
-	result := SnapshotPoliciesClientCreateResponse{RawResponse: resp}
+	result := SnapshotPoliciesClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SnapshotPolicy); err != nil {
 		return SnapshotPoliciesClientCreateResponse{}, err
 	}
@@ -123,9 +123,7 @@ func (client *SnapshotPoliciesClient) BeginDelete(ctx context.Context, resourceG
 	if err != nil {
 		return SnapshotPoliciesClientDeletePollerResponse{}, err
 	}
-	result := SnapshotPoliciesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SnapshotPoliciesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SnapshotPoliciesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return SnapshotPoliciesClientDeletePollerResponse{}, err
@@ -235,7 +233,7 @@ func (client *SnapshotPoliciesClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *SnapshotPoliciesClient) getHandleResponse(resp *http.Response) (SnapshotPoliciesClientGetResponse, error) {
-	result := SnapshotPoliciesClientGetResponse{RawResponse: resp}
+	result := SnapshotPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SnapshotPolicy); err != nil {
 		return SnapshotPoliciesClientGetResponse{}, err
 	}
@@ -247,19 +245,13 @@ func (client *SnapshotPoliciesClient) getHandleResponse(resp *http.Response) (Sn
 // resourceGroupName - The name of the resource group.
 // accountName - The name of the NetApp account
 // options - SnapshotPoliciesClientListOptions contains the optional parameters for the SnapshotPoliciesClient.List method.
-func (client *SnapshotPoliciesClient) List(ctx context.Context, resourceGroupName string, accountName string, options *SnapshotPoliciesClientListOptions) (SnapshotPoliciesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return SnapshotPoliciesClientListResponse{}, err
+func (client *SnapshotPoliciesClient) List(resourceGroupName string, accountName string, options *SnapshotPoliciesClientListOptions) *SnapshotPoliciesClientListPager {
+	return &SnapshotPoliciesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return SnapshotPoliciesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return SnapshotPoliciesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -290,7 +282,7 @@ func (client *SnapshotPoliciesClient) listCreateRequest(ctx context.Context, res
 
 // listHandleResponse handles the List response.
 func (client *SnapshotPoliciesClient) listHandleResponse(resp *http.Response) (SnapshotPoliciesClientListResponse, error) {
-	result := SnapshotPoliciesClientListResponse{RawResponse: resp}
+	result := SnapshotPoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SnapshotPoliciesList); err != nil {
 		return SnapshotPoliciesClientListResponse{}, err
 	}
@@ -351,7 +343,7 @@ func (client *SnapshotPoliciesClient) listVolumesCreateRequest(ctx context.Conte
 
 // listVolumesHandleResponse handles the ListVolumes response.
 func (client *SnapshotPoliciesClient) listVolumesHandleResponse(resp *http.Response) (SnapshotPoliciesClientListVolumesResponse, error) {
-	result := SnapshotPoliciesClientListVolumesResponse{RawResponse: resp}
+	result := SnapshotPoliciesClientListVolumesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SnapshotPolicyVolumeList); err != nil {
 		return SnapshotPoliciesClientListVolumesResponse{}, err
 	}
@@ -371,9 +363,7 @@ func (client *SnapshotPoliciesClient) BeginUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return SnapshotPoliciesClientUpdatePollerResponse{}, err
 	}
-	result := SnapshotPoliciesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SnapshotPoliciesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SnapshotPoliciesClient.Update", "location", resp, client.pl)
 	if err != nil {
 		return SnapshotPoliciesClientUpdatePollerResponse{}, err

@@ -35,17 +35,17 @@ type DataConnectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataConnectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataConnectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *DataConnectionsClient) checkNameAvailabilityCreateRequest(ctx cont
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *DataConnectionsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (DataConnectionsClientCheckNameAvailabilityResponse, error) {
-	result := DataConnectionsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := DataConnectionsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameResult); err != nil {
 		return DataConnectionsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -126,9 +126,7 @@ func (client *DataConnectionsClient) BeginCreateOrUpdate(ctx context.Context, re
 	if err != nil {
 		return DataConnectionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DataConnectionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DataConnectionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DataConnectionsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DataConnectionsClientCreateOrUpdatePollerResponse{}, err
@@ -203,9 +201,7 @@ func (client *DataConnectionsClient) BeginDataConnectionValidation(ctx context.C
 	if err != nil {
 		return DataConnectionsClientDataConnectionValidationPollerResponse{}, err
 	}
-	result := DataConnectionsClientDataConnectionValidationPollerResponse{
-		RawResponse: resp,
-	}
+	result := DataConnectionsClientDataConnectionValidationPollerResponse{}
 	pt, err := armruntime.NewPoller("DataConnectionsClient.DataConnectionValidation", "location", resp, client.pl)
 	if err != nil {
 		return DataConnectionsClientDataConnectionValidationPollerResponse{}, err
@@ -276,9 +272,7 @@ func (client *DataConnectionsClient) BeginDelete(ctx context.Context, resourceGr
 	if err != nil {
 		return DataConnectionsClientDeletePollerResponse{}, err
 	}
-	result := DataConnectionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DataConnectionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DataConnectionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DataConnectionsClientDeletePollerResponse{}, err
@@ -398,7 +392,7 @@ func (client *DataConnectionsClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *DataConnectionsClient) getHandleResponse(resp *http.Response) (DataConnectionsClientGetResponse, error) {
-	result := DataConnectionsClientGetResponse{RawResponse: resp}
+	result := DataConnectionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return DataConnectionsClientGetResponse{}, err
 	}
@@ -412,19 +406,13 @@ func (client *DataConnectionsClient) getHandleResponse(resp *http.Response) (Dat
 // databaseName - The name of the database in the Kusto cluster.
 // options - DataConnectionsClientListByDatabaseOptions contains the optional parameters for the DataConnectionsClient.ListByDatabase
 // method.
-func (client *DataConnectionsClient) ListByDatabase(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, options *DataConnectionsClientListByDatabaseOptions) (DataConnectionsClientListByDatabaseResponse, error) {
-	req, err := client.listByDatabaseCreateRequest(ctx, resourceGroupName, clusterName, databaseName, options)
-	if err != nil {
-		return DataConnectionsClientListByDatabaseResponse{}, err
+func (client *DataConnectionsClient) ListByDatabase(resourceGroupName string, clusterName string, databaseName string, options *DataConnectionsClientListByDatabaseOptions) *DataConnectionsClientListByDatabasePager {
+	return &DataConnectionsClientListByDatabasePager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, clusterName, databaseName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DataConnectionsClientListByDatabaseResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DataConnectionsClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByDatabaseHandleResponse(resp)
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.
@@ -459,7 +447,7 @@ func (client *DataConnectionsClient) listByDatabaseCreateRequest(ctx context.Con
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *DataConnectionsClient) listByDatabaseHandleResponse(resp *http.Response) (DataConnectionsClientListByDatabaseResponse, error) {
-	result := DataConnectionsClientListByDatabaseResponse{RawResponse: resp}
+	result := DataConnectionsClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataConnectionListResult); err != nil {
 		return DataConnectionsClientListByDatabaseResponse{}, err
 	}
@@ -480,9 +468,7 @@ func (client *DataConnectionsClient) BeginUpdate(ctx context.Context, resourceGr
 	if err != nil {
 		return DataConnectionsClientUpdatePollerResponse{}, err
 	}
-	result := DataConnectionsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DataConnectionsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DataConnectionsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return DataConnectionsClientUpdatePollerResponse{}, err

@@ -34,17 +34,17 @@ type CustomerEventsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCustomerEventsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CustomerEventsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CustomerEventsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *CustomerEventsClient) BeginCreate(ctx context.Context, resourceGro
 	if err != nil {
 		return CustomerEventsClientCreatePollerResponse{}, err
 	}
-	result := CustomerEventsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CustomerEventsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("CustomerEventsClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return CustomerEventsClientCreatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *CustomerEventsClient) BeginDelete(ctx context.Context, resourceGro
 	if err != nil {
 		return CustomerEventsClientDeletePollerResponse{}, err
 	}
-	result := CustomerEventsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CustomerEventsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CustomerEventsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return CustomerEventsClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *CustomerEventsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *CustomerEventsClient) getHandleResponse(resp *http.Response) (CustomerEventsClientGetResponse, error) {
-	result := CustomerEventsClientGetResponse{RawResponse: resp}
+	result := CustomerEventsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomerEventResource); err != nil {
 		return CustomerEventsClientGetResponse{}, err
 	}
@@ -300,7 +296,7 @@ func (client *CustomerEventsClient) listByTestBaseAccountCreateRequest(ctx conte
 
 // listByTestBaseAccountHandleResponse handles the ListByTestBaseAccount response.
 func (client *CustomerEventsClient) listByTestBaseAccountHandleResponse(resp *http.Response) (CustomerEventsClientListByTestBaseAccountResponse, error) {
-	result := CustomerEventsClientListByTestBaseAccountResponse{RawResponse: resp}
+	result := CustomerEventsClientListByTestBaseAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomerEventListResult); err != nil {
 		return CustomerEventsClientListByTestBaseAccountResponse{}, err
 	}

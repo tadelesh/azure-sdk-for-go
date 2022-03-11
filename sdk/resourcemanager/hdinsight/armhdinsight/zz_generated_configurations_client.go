@@ -35,17 +35,17 @@ type ConfigurationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewConfigurationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ConfigurationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ConfigurationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *ConfigurationsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *ConfigurationsClient) getHandleResponse(resp *http.Response) (ConfigurationsClientGetResponse, error) {
-	result := ConfigurationsClientGetResponse{RawResponse: resp}
+	result := ConfigurationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Value); err != nil {
 		return ConfigurationsClientGetResponse{}, err
 	}
@@ -159,7 +159,7 @@ func (client *ConfigurationsClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *ConfigurationsClient) listHandleResponse(resp *http.Response) (ConfigurationsClientListResponse, error) {
-	result := ConfigurationsClientListResponse{RawResponse: resp}
+	result := ConfigurationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ClusterConfigurations); err != nil {
 		return ConfigurationsClientListResponse{}, err
 	}
@@ -180,9 +180,7 @@ func (client *ConfigurationsClient) BeginUpdate(ctx context.Context, resourceGro
 	if err != nil {
 		return ConfigurationsClientUpdatePollerResponse{}, err
 	}
-	result := ConfigurationsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ConfigurationsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ConfigurationsClient.Update", "location", resp, client.pl)
 	if err != nil {
 		return ConfigurationsClientUpdatePollerResponse{}, err

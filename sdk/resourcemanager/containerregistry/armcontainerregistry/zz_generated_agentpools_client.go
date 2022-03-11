@@ -34,17 +34,17 @@ type AgentPoolsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAgentPoolsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AgentPoolsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AgentPoolsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *AgentPoolsClient) BeginCreate(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return AgentPoolsClientCreatePollerResponse{}, err
 	}
-	result := AgentPoolsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AgentPoolsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("AgentPoolsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return AgentPoolsClientCreatePollerResponse{}, err
@@ -132,9 +130,7 @@ func (client *AgentPoolsClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return AgentPoolsClientDeletePollerResponse{}, err
 	}
-	result := AgentPoolsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AgentPoolsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AgentPoolsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return AgentPoolsClientDeletePollerResponse{}, err
@@ -245,7 +241,7 @@ func (client *AgentPoolsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *AgentPoolsClient) getHandleResponse(resp *http.Response) (AgentPoolsClientGetResponse, error) {
-	result := AgentPoolsClientGetResponse{RawResponse: resp}
+	result := AgentPoolsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AgentPool); err != nil {
 		return AgentPoolsClientGetResponse{}, err
 	}
@@ -306,7 +302,7 @@ func (client *AgentPoolsClient) getQueueStatusCreateRequest(ctx context.Context,
 
 // getQueueStatusHandleResponse handles the GetQueueStatus response.
 func (client *AgentPoolsClient) getQueueStatusHandleResponse(resp *http.Response) (AgentPoolsClientGetQueueStatusResponse, error) {
-	result := AgentPoolsClientGetQueueStatusResponse{RawResponse: resp}
+	result := AgentPoolsClientGetQueueStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AgentPoolQueueStatus); err != nil {
 		return AgentPoolsClientGetQueueStatusResponse{}, err
 	}
@@ -358,7 +354,7 @@ func (client *AgentPoolsClient) listCreateRequest(ctx context.Context, resourceG
 
 // listHandleResponse handles the List response.
 func (client *AgentPoolsClient) listHandleResponse(resp *http.Response) (AgentPoolsClientListResponse, error) {
-	result := AgentPoolsClientListResponse{RawResponse: resp}
+	result := AgentPoolsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AgentPoolListResult); err != nil {
 		return AgentPoolsClientListResponse{}, err
 	}
@@ -377,9 +373,7 @@ func (client *AgentPoolsClient) BeginUpdate(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return AgentPoolsClientUpdatePollerResponse{}, err
 	}
-	result := AgentPoolsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AgentPoolsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AgentPoolsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return AgentPoolsClientUpdatePollerResponse{}, err

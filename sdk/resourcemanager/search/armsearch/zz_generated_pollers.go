@@ -43,11 +43,10 @@ func (p *ServicesClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final ServicesClientCreateOrUpdateResponse will be returned.
 func (p *ServicesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ServicesClientCreateOrUpdateResponse, error) {
 	respType := ServicesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Service)
+	_, err := p.pt.FinalResponse(ctx, &respType.Service)
 	if err != nil {
 		return ServicesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *SharedPrivateLinkResourcesClientCreateOrUpdatePoller) Poll(ctx context.
 // If the final GET succeeded then the final SharedPrivateLinkResourcesClientCreateOrUpdateResponse will be returned.
 func (p *SharedPrivateLinkResourcesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (SharedPrivateLinkResourcesClientCreateOrUpdateResponse, error) {
 	respType := SharedPrivateLinkResourcesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SharedPrivateLinkResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.SharedPrivateLinkResource)
 	if err != nil {
 		return SharedPrivateLinkResourcesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *SharedPrivateLinkResourcesClientDeletePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final SharedPrivateLinkResourcesClientDeleteResponse will be returned.
 func (p *SharedPrivateLinkResourcesClientDeletePoller) FinalResponse(ctx context.Context) (SharedPrivateLinkResourcesClientDeleteResponse, error) {
 	respType := SharedPrivateLinkResourcesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SharedPrivateLinkResourcesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

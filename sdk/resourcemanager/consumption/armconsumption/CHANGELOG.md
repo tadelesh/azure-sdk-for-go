@@ -1,5 +1,216 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*EventsClientListByBillingAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(EventsClientListByBillingAccountResponse, error)`
+- Function `*MarketplacesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(MarketplacesClientListResponse, error)`
+- Function `*ReservationsDetailsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ReservationsDetailsClientListResponse, error)`
+- Function `*EventsClientListByBillingProfilePager.NextPage` return value(s) have been changed from `(bool)` to `(EventsClientListByBillingProfileResponse, error)`
+- Function `*ReservationTransactionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ReservationTransactionsClientListResponse, error)`
+- Function `*ReservationsSummariesClientListByReservationOrderAndReservationPager.NextPage` return value(s) have been changed from `(bool)` to `(ReservationsSummariesClientListByReservationOrderAndReservationResponse, error)`
+- Function `*ReservationsSummariesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ReservationsSummariesClientListResponse, error)`
+- Function `*BudgetsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(BudgetsClientListResponse, error)`
+- Function `*UsageDetailsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(UsageDetailsClientListResponse, error)`
+- Function `*LotsClientListByBillingAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(LotsClientListByBillingAccountResponse, error)`
+- Function `*LotsClientListByBillingProfilePager.NextPage` return value(s) have been changed from `(bool)` to `(LotsClientListByBillingProfileResponse, error)`
+- Function `*ReservationsSummariesClientListByReservationOrderPager.NextPage` return value(s) have been changed from `(bool)` to `(ReservationsSummariesClientListByReservationOrderResponse, error)`
+- Function `*ReservationsDetailsClientListByReservationOrderPager.NextPage` return value(s) have been changed from `(bool)` to `(ReservationsDetailsClientListByReservationOrderResponse, error)`
+- Function `*ReservationRecommendationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ReservationRecommendationsClientListResponse, error)`
+- Function `*ReservationsDetailsClientListByReservationOrderAndReservationPager.NextPage` return value(s) have been changed from `(bool)` to `(ReservationsDetailsClientListByReservationOrderAndReservationResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ReservationTransactionsClientListByBillingProfilePager.NextPage` return value(s) have been changed from `(bool)` to `(ReservationTransactionsClientListByBillingProfileResponse, error)`
+- Function `*MarketplacesClientListPager.Err` has been removed
+- Function `*LotsClientListByBillingAccountPager.PageResponse` has been removed
+- Function `*LotsClientListByBillingProfilePager.Err` has been removed
+- Function `*LotsClientListByBillingAccountPager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*UsageDetailsClientListPager.PageResponse` has been removed
+- Function `*ReservationsDetailsClientListPager.PageResponse` has been removed
+- Function `*ReservationsSummariesClientListPager.PageResponse` has been removed
+- Function `*ReservationsDetailsClientListPager.Err` has been removed
+- Function `*ReservationsDetailsClientListByReservationOrderPager.Err` has been removed
+- Function `*ReservationTransactionsClientListByBillingProfilePager.Err` has been removed
+- Function `*EventsClientListByBillingProfilePager.PageResponse` has been removed
+- Function `*ReservationsSummariesClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*BudgetsClientListPager.Err` has been removed
+- Function `*ReservationTransactionsClientListByBillingProfilePager.PageResponse` has been removed
+- Function `*ReservationsDetailsClientListByReservationOrderPager.PageResponse` has been removed
+- Function `*ReservationsDetailsClientListByReservationOrderAndReservationPager.PageResponse` has been removed
+- Function `*ReservationsDetailsClientListByReservationOrderAndReservationPager.Err` has been removed
+- Function `*BudgetsClientListPager.PageResponse` has been removed
+- Function `*ReservationsSummariesClientListByReservationOrderAndReservationPager.PageResponse` has been removed
+- Function `*LotsClientListByBillingProfilePager.PageResponse` has been removed
+- Function `*ReservationTransactionsClientListPager.Err` has been removed
+- Function `*EventsClientListByBillingAccountPager.PageResponse` has been removed
+- Function `*ReservationRecommendationsClientListPager.Err` has been removed
+- Function `*EventsClientListByBillingProfilePager.Err` has been removed
+- Function `*MarketplacesClientListPager.PageResponse` has been removed
+- Function `*ReservationRecommendationsClientListPager.PageResponse` has been removed
+- Function `*ReservationTransactionsClientListPager.PageResponse` has been removed
+- Function `*ReservationsSummariesClientListByReservationOrderPager.PageResponse` has been removed
+- Function `*EventsClientListByBillingAccountPager.Err` has been removed
+- Function `*ReservationsSummariesClientListByReservationOrderPager.Err` has been removed
+- Function `*ReservationsSummariesClientListByReservationOrderAndReservationPager.Err` has been removed
+- Function `*UsageDetailsClientListPager.Err` has been removed
+- Struct `AggregatedCostClientGetByManagementGroupResult` has been removed
+- Struct `AggregatedCostClientGetForBillingPeriodByManagementGroupResult` has been removed
+- Struct `BalancesClientGetByBillingAccountResult` has been removed
+- Struct `BalancesClientGetForBillingPeriodByBillingAccountResult` has been removed
+- Struct `BudgetsClientCreateOrUpdateResult` has been removed
+- Struct `BudgetsClientGetResult` has been removed
+- Struct `BudgetsClientListResult` has been removed
+- Struct `ChargesClientListResult` has been removed
+- Struct `CreditsClientGetResult` has been removed
+- Struct `EventsClientListByBillingAccountResult` has been removed
+- Struct `EventsClientListByBillingProfileResult` has been removed
+- Struct `LotsClientListByBillingAccountResult` has been removed
+- Struct `LotsClientListByBillingProfileResult` has been removed
+- Struct `MarketplacesClientListResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PriceSheetClientGetByBillingPeriodResult` has been removed
+- Struct `PriceSheetClientGetResult` has been removed
+- Struct `ReservationRecommendationDetailsClientGetResult` has been removed
+- Struct `ReservationRecommendationsClientListResult` has been removed
+- Struct `ReservationTransactionsClientListByBillingProfileResult` has been removed
+- Struct `ReservationTransactionsClientListResult` has been removed
+- Struct `ReservationsDetailsClientListByReservationOrderAndReservationResult` has been removed
+- Struct `ReservationsDetailsClientListByReservationOrderResult` has been removed
+- Struct `ReservationsDetailsClientListResult` has been removed
+- Struct `ReservationsSummariesClientListByReservationOrderAndReservationResult` has been removed
+- Struct `ReservationsSummariesClientListByReservationOrderResult` has been removed
+- Struct `ReservationsSummariesClientListResult` has been removed
+- Struct `TagsClientGetResult` has been removed
+- Struct `UsageDetailsClientListResult` has been removed
+- Field `PriceSheetClientGetByBillingPeriodResult` of struct `PriceSheetClientGetByBillingPeriodResponse` has been removed
+- Field `RawResponse` of struct `PriceSheetClientGetByBillingPeriodResponse` has been removed
+- Field `LotsClientListByBillingProfileResult` of struct `LotsClientListByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `LotsClientListByBillingProfileResponse` has been removed
+- Field `PriceSheetClientGetResult` of struct `PriceSheetClientGetResponse` has been removed
+- Field `RawResponse` of struct `PriceSheetClientGetResponse` has been removed
+- Field `RawResponse` of struct `BudgetsClientDeleteResponse` has been removed
+- Field `ReservationsDetailsClientListByReservationOrderAndReservationResult` of struct `ReservationsDetailsClientListByReservationOrderAndReservationResponse` has been removed
+- Field `RawResponse` of struct `ReservationsDetailsClientListByReservationOrderAndReservationResponse` has been removed
+- Field `EventsClientListByBillingProfileResult` of struct `EventsClientListByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `EventsClientListByBillingProfileResponse` has been removed
+- Field `ChargesClientListResult` of struct `ChargesClientListResponse` has been removed
+- Field `RawResponse` of struct `ChargesClientListResponse` has been removed
+- Field `UsageDetailsClientListResult` of struct `UsageDetailsClientListResponse` has been removed
+- Field `RawResponse` of struct `UsageDetailsClientListResponse` has been removed
+- Field `ReservationsSummariesClientListByReservationOrderAndReservationResult` of struct `ReservationsSummariesClientListByReservationOrderAndReservationResponse` has been removed
+- Field `RawResponse` of struct `ReservationsSummariesClientListByReservationOrderAndReservationResponse` has been removed
+- Field `TagsClientGetResult` of struct `TagsClientGetResponse` has been removed
+- Field `RawResponse` of struct `TagsClientGetResponse` has been removed
+- Field `ReservationRecommendationDetailsClientGetResult` of struct `ReservationRecommendationDetailsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ReservationRecommendationDetailsClientGetResponse` has been removed
+- Field `ReservationsSummariesClientListByReservationOrderResult` of struct `ReservationsSummariesClientListByReservationOrderResponse` has been removed
+- Field `RawResponse` of struct `ReservationsSummariesClientListByReservationOrderResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `EventsClientListByBillingAccountResult` of struct `EventsClientListByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `EventsClientListByBillingAccountResponse` has been removed
+- Field `BudgetsClientCreateOrUpdateResult` of struct `BudgetsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `BudgetsClientCreateOrUpdateResponse` has been removed
+- Field `ReservationTransactionsClientListByBillingProfileResult` of struct `ReservationTransactionsClientListByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `ReservationTransactionsClientListByBillingProfileResponse` has been removed
+- Field `BudgetsClientGetResult` of struct `BudgetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `BudgetsClientGetResponse` has been removed
+- Field `CreditsClientGetResult` of struct `CreditsClientGetResponse` has been removed
+- Field `RawResponse` of struct `CreditsClientGetResponse` has been removed
+- Field `ReservationsDetailsClientListResult` of struct `ReservationsDetailsClientListResponse` has been removed
+- Field `RawResponse` of struct `ReservationsDetailsClientListResponse` has been removed
+- Field `ReservationRecommendationsClientListResult` of struct `ReservationRecommendationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ReservationRecommendationsClientListResponse` has been removed
+- Field `BudgetsClientListResult` of struct `BudgetsClientListResponse` has been removed
+- Field `RawResponse` of struct `BudgetsClientListResponse` has been removed
+- Field `LotsClientListByBillingAccountResult` of struct `LotsClientListByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `LotsClientListByBillingAccountResponse` has been removed
+- Field `ReservationsDetailsClientListByReservationOrderResult` of struct `ReservationsDetailsClientListByReservationOrderResponse` has been removed
+- Field `RawResponse` of struct `ReservationsDetailsClientListByReservationOrderResponse` has been removed
+- Field `AggregatedCostClientGetForBillingPeriodByManagementGroupResult` of struct `AggregatedCostClientGetForBillingPeriodByManagementGroupResponse` has been removed
+- Field `RawResponse` of struct `AggregatedCostClientGetForBillingPeriodByManagementGroupResponse` has been removed
+- Field `MarketplacesClientListResult` of struct `MarketplacesClientListResponse` has been removed
+- Field `RawResponse` of struct `MarketplacesClientListResponse` has been removed
+- Field `BalancesClientGetByBillingAccountResult` of struct `BalancesClientGetByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `BalancesClientGetByBillingAccountResponse` has been removed
+- Field `AggregatedCostClientGetByManagementGroupResult` of struct `AggregatedCostClientGetByManagementGroupResponse` has been removed
+- Field `RawResponse` of struct `AggregatedCostClientGetByManagementGroupResponse` has been removed
+- Field `ReservationTransactionsClientListResult` of struct `ReservationTransactionsClientListResponse` has been removed
+- Field `RawResponse` of struct `ReservationTransactionsClientListResponse` has been removed
+- Field `ReservationsSummariesClientListResult` of struct `ReservationsSummariesClientListResponse` has been removed
+- Field `RawResponse` of struct `ReservationsSummariesClientListResponse` has been removed
+- Field `BalancesClientGetForBillingPeriodByBillingAccountResult` of struct `BalancesClientGetForBillingPeriodByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `BalancesClientGetForBillingPeriodByBillingAccountResponse` has been removed
+
+### Features Added
+
+- New function `*BudgetsClientListPager.More() bool`
+- New function `*ReservationsSummariesClientListByReservationOrderPager.More() bool`
+- New function `*ReservationRecommendationsClientListPager.More() bool`
+- New function `*ReservationsDetailsClientListByReservationOrderAndReservationPager.More() bool`
+- New function `*ReservationsDetailsClientListByReservationOrderPager.More() bool`
+- New function `*ReservationTransactionsClientListPager.More() bool`
+- New function `*ReservationsSummariesClientListPager.More() bool`
+- New function `*EventsClientListByBillingAccountPager.More() bool`
+- New function `*ReservationsDetailsClientListPager.More() bool`
+- New function `*MarketplacesClientListPager.More() bool`
+- New function `*ReservationTransactionsClientListByBillingProfilePager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*UsageDetailsClientListPager.More() bool`
+- New function `*LotsClientListByBillingAccountPager.More() bool`
+- New function `*LotsClientListByBillingProfilePager.More() bool`
+- New function `*ReservationsSummariesClientListByReservationOrderAndReservationPager.More() bool`
+- New function `*EventsClientListByBillingProfilePager.More() bool`
+- New struct `DownloadProperties`
+- New struct `ErrorDetails`
+- New struct `ErrorResponse`
+- New struct `HighCasedErrorDetails`
+- New struct `HighCasedErrorResponse`
+- New anonymous field `ReservationSummariesListResult` in struct `ReservationsSummariesClientListResponse`
+- New anonymous field `CreditSummary` in struct `CreditsClientGetResponse`
+- New anonymous field `PriceSheetResult` in struct `PriceSheetClientGetResponse`
+- New anonymous field `MarketplacesListResult` in struct `MarketplacesClientListResponse`
+- New anonymous field `ReservationDetailsListResult` in struct `ReservationsDetailsClientListByReservationOrderAndReservationResponse`
+- New anonymous field `Balance` in struct `BalancesClientGetForBillingPeriodByBillingAccountResponse`
+- New anonymous field `ReservationRecommendationDetailsModel` in struct `ReservationRecommendationDetailsClientGetResponse`
+- New anonymous field `ReservationRecommendationsListResult` in struct `ReservationRecommendationsClientListResponse`
+- New anonymous field `ReservationDetailsListResult` in struct `ReservationsDetailsClientListByReservationOrderResponse`
+- New anonymous field `UsageDetailsListResult` in struct `UsageDetailsClientListResponse`
+- New anonymous field `ReservationSummariesListResult` in struct `ReservationsSummariesClientListByReservationOrderResponse`
+- New anonymous field `Events` in struct `EventsClientListByBillingProfileResponse`
+- New anonymous field `Lots` in struct `LotsClientListByBillingAccountResponse`
+- New anonymous field `ManagementGroupAggregatedCostResult` in struct `AggregatedCostClientGetByManagementGroupResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `PriceSheetResult` in struct `PriceSheetClientGetByBillingPeriodResponse`
+- New anonymous field `ReservationSummariesListResult` in struct `ReservationsSummariesClientListByReservationOrderAndReservationResponse`
+- New anonymous field `Budget` in struct `BudgetsClientCreateOrUpdateResponse`
+- New anonymous field `ManagementGroupAggregatedCostResult` in struct `AggregatedCostClientGetForBillingPeriodByManagementGroupResponse`
+- New anonymous field `BudgetsListResult` in struct `BudgetsClientListResponse`
+- New anonymous field `Budget` in struct `BudgetsClientGetResponse`
+- New anonymous field `ModernReservationTransactionsListResult` in struct `ReservationTransactionsClientListByBillingProfileResponse`
+- New anonymous field `Events` in struct `EventsClientListByBillingAccountResponse`
+- New anonymous field `ReservationTransactionsListResult` in struct `ReservationTransactionsClientListResponse`
+- New anonymous field `ChargesListResult` in struct `ChargesClientListResponse`
+- New anonymous field `Balance` in struct `BalancesClientGetByBillingAccountResponse`
+- New anonymous field `Lots` in struct `LotsClientListByBillingProfileResponse`
+- New anonymous field `TagsResult` in struct `TagsClientGetResponse`
+- New anonymous field `ReservationDetailsListResult` in struct `ReservationsDetailsClientListResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Struct `DownloadProperties` has been removed
+- Struct `ErrorDetails` has been removed
+- Struct `ErrorResponse` has been removed
+- Struct `HighCasedErrorDetails` has been removed
+- Struct `HighCasedErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

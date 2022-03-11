@@ -36,17 +36,17 @@ type PrivateZonesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateZonesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateZonesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateZonesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *PrivateZonesClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return PrivateZonesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PrivateZonesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateZonesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateZonesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return PrivateZonesClientCreateOrUpdatePollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *PrivateZonesClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return PrivateZonesClientDeletePollerResponse{}, err
 	}
-	result := PrivateZonesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateZonesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateZonesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return PrivateZonesClientDeletePollerResponse{}, err
@@ -250,7 +246,7 @@ func (client *PrivateZonesClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *PrivateZonesClient) getHandleResponse(resp *http.Response) (PrivateZonesClientGetResponse, error) {
-	result := PrivateZonesClientGetResponse{RawResponse: resp}
+	result := PrivateZonesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateZone); err != nil {
 		return PrivateZonesClientGetResponse{}, err
 	}
@@ -295,7 +291,7 @@ func (client *PrivateZonesClient) listCreateRequest(ctx context.Context, options
 
 // listHandleResponse handles the List response.
 func (client *PrivateZonesClient) listHandleResponse(resp *http.Response) (PrivateZonesClientListResponse, error) {
-	result := PrivateZonesClientListResponse{RawResponse: resp}
+	result := PrivateZonesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateZoneListResult); err != nil {
 		return PrivateZonesClientListResponse{}, err
 	}
@@ -346,7 +342,7 @@ func (client *PrivateZonesClient) listByResourceGroupCreateRequest(ctx context.C
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *PrivateZonesClient) listByResourceGroupHandleResponse(resp *http.Response) (PrivateZonesClientListByResourceGroupResponse, error) {
-	result := PrivateZonesClientListByResourceGroupResponse{RawResponse: resp}
+	result := PrivateZonesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateZoneListResult); err != nil {
 		return PrivateZonesClientListByResourceGroupResponse{}, err
 	}
@@ -365,9 +361,7 @@ func (client *PrivateZonesClient) BeginUpdate(ctx context.Context, resourceGroup
 	if err != nil {
 		return PrivateZonesClientUpdatePollerResponse{}, err
 	}
-	result := PrivateZonesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateZonesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateZonesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return PrivateZonesClientUpdatePollerResponse{}, err

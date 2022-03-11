@@ -35,17 +35,17 @@ type UserMetricsKeysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewUserMetricsKeysClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *UserMetricsKeysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &UserMetricsKeysClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -89,7 +89,7 @@ func (client *UserMetricsKeysClient) createOrUpdateCreateRequest(ctx context.Con
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *UserMetricsKeysClient) createOrUpdateHandleResponse(resp *http.Response) (UserMetricsKeysClientCreateOrUpdateResponse, error) {
-	result := UserMetricsKeysClientCreateOrUpdateResponse{RawResponse: resp}
+	result := UserMetricsKeysClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UserMetricsModel); err != nil {
 		return UserMetricsKeysClientCreateOrUpdateResponse{}, err
 	}
@@ -134,7 +134,7 @@ func (client *UserMetricsKeysClient) deleteCreateRequest(ctx context.Context, op
 
 // deleteHandleResponse handles the Delete response.
 func (client *UserMetricsKeysClient) deleteHandleResponse(resp *http.Response) (UserMetricsKeysClientDeleteResponse, error) {
-	result := UserMetricsKeysClientDeleteResponse{RawResponse: resp}
+	result := UserMetricsKeysClientDeleteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeleteOperationResult); err != nil {
 		return UserMetricsKeysClientDeleteResponse{}, err
 	}
@@ -179,7 +179,7 @@ func (client *UserMetricsKeysClient) getCreateRequest(ctx context.Context, optio
 
 // getHandleResponse handles the Get response.
 func (client *UserMetricsKeysClient) getHandleResponse(resp *http.Response) (UserMetricsKeysClientGetResponse, error) {
-	result := UserMetricsKeysClientGetResponse{RawResponse: resp}
+	result := UserMetricsKeysClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UserMetricsModel); err != nil {
 		return UserMetricsKeysClientGetResponse{}, err
 	}

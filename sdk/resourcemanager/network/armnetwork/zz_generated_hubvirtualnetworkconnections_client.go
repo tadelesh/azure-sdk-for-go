@@ -35,17 +35,17 @@ type HubVirtualNetworkConnectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewHubVirtualNetworkConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *HubVirtualNetworkConnectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &HubVirtualNetworkConnectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *HubVirtualNetworkConnectionsClient) BeginCreateOrUpdate(ctx contex
 	if err != nil {
 		return HubVirtualNetworkConnectionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := HubVirtualNetworkConnectionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := HubVirtualNetworkConnectionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("HubVirtualNetworkConnectionsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return HubVirtualNetworkConnectionsClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *HubVirtualNetworkConnectionsClient) BeginDelete(ctx context.Contex
 	if err != nil {
 		return HubVirtualNetworkConnectionsClientDeletePollerResponse{}, err
 	}
-	result := HubVirtualNetworkConnectionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := HubVirtualNetworkConnectionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("HubVirtualNetworkConnectionsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return HubVirtualNetworkConnectionsClientDeletePollerResponse{}, err
@@ -249,7 +245,7 @@ func (client *HubVirtualNetworkConnectionsClient) getCreateRequest(ctx context.C
 
 // getHandleResponse handles the Get response.
 func (client *HubVirtualNetworkConnectionsClient) getHandleResponse(resp *http.Response) (HubVirtualNetworkConnectionsClientGetResponse, error) {
-	result := HubVirtualNetworkConnectionsClientGetResponse{RawResponse: resp}
+	result := HubVirtualNetworkConnectionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HubVirtualNetworkConnection); err != nil {
 		return HubVirtualNetworkConnectionsClientGetResponse{}, err
 	}
@@ -302,7 +298,7 @@ func (client *HubVirtualNetworkConnectionsClient) listCreateRequest(ctx context.
 
 // listHandleResponse handles the List response.
 func (client *HubVirtualNetworkConnectionsClient) listHandleResponse(resp *http.Response) (HubVirtualNetworkConnectionsClientListResponse, error) {
-	result := HubVirtualNetworkConnectionsClientListResponse{RawResponse: resp}
+	result := HubVirtualNetworkConnectionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListHubVirtualNetworkConnectionsResult); err != nil {
 		return HubVirtualNetworkConnectionsClientListResponse{}, err
 	}

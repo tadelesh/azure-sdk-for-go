@@ -1,5 +1,154 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ExperimentsClientListAllPager.NextPage` return value(s) have been changed from `(bool)` to `(ExperimentsClientListAllResponse, error)`
+- Function `*CapabilitiesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(CapabilitiesClientListResponse, error)`
+- Function `*CapabilityTypesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(CapabilityTypesClientListResponse, error)`
+- Function `*ExperimentsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ExperimentsClientListResponse, error)`
+- Function `*OperationsClientListAllPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListAllResponse, error)`
+- Function `*ExperimentsClientListExecutionDetailsPager.NextPage` return value(s) have been changed from `(bool)` to `(ExperimentsClientListExecutionDetailsResponse, error)`
+- Function `*TargetTypesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(TargetTypesClientListResponse, error)`
+- Function `*ExperimentsClientListAllStatusesPager.NextPage` return value(s) have been changed from `(bool)` to `(ExperimentsClientListAllStatusesResponse, error)`
+- Function `*TargetsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(TargetsClientListResponse, error)`
+- Function `*CapabilityTypesClientListPager.Err` has been removed
+- Function `*CapabilityTypesClientListPager.PageResponse` has been removed
+- Function `*ExperimentsClientListExecutionDetailsPager.PageResponse` has been removed
+- Function `*ExperimentsClientListAllStatusesPager.PageResponse` has been removed
+- Function `*CapabilitiesClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListAllPager.PageResponse` has been removed
+- Function `*TargetTypesClientListPager.PageResponse` has been removed
+- Function `*ExperimentsClientListAllStatusesPager.Err` has been removed
+- Function `*OperationsClientListAllPager.Err` has been removed
+- Function `*ExperimentsClientListAllPager.Err` has been removed
+- Function `*ExperimentsClientListAllPager.PageResponse` has been removed
+- Function `*ExperimentsClientListPager.PageResponse` has been removed
+- Function `*ExperimentsClientListExecutionDetailsPager.Err` has been removed
+- Function `*TargetTypesClientListPager.Err` has been removed
+- Function `*TargetsClientListPager.Err` has been removed
+- Function `*ExperimentsClientListPager.Err` has been removed
+- Function `*TargetsClientListPager.PageResponse` has been removed
+- Function `*CapabilitiesClientListPager.Err` has been removed
+- Struct `CapabilitiesClientCreateOrUpdateResult` has been removed
+- Struct `CapabilitiesClientGetResult` has been removed
+- Struct `CapabilitiesClientListResult` has been removed
+- Struct `CapabilityTypesClientGetResult` has been removed
+- Struct `CapabilityTypesClientListResult` has been removed
+- Struct `ExperimentsClientCancelResult` has been removed
+- Struct `ExperimentsClientCreateOrUpdateResult` has been removed
+- Struct `ExperimentsClientGetExecutionDetailsResult` has been removed
+- Struct `ExperimentsClientGetResult` has been removed
+- Struct `ExperimentsClientGetStatusResult` has been removed
+- Struct `ExperimentsClientListAllResult` has been removed
+- Struct `ExperimentsClientListAllStatusesResult` has been removed
+- Struct `ExperimentsClientListExecutionDetailsResult` has been removed
+- Struct `ExperimentsClientListResult` has been removed
+- Struct `ExperimentsClientStartResult` has been removed
+- Struct `OperationsClientListAllResult` has been removed
+- Struct `TargetTypesClientGetResult` has been removed
+- Struct `TargetTypesClientListResult` has been removed
+- Struct `TargetsClientCreateOrUpdateResult` has been removed
+- Struct `TargetsClientGetResult` has been removed
+- Struct `TargetsClientListResult` has been removed
+- Field `ExperimentsClientListAllResult` of struct `ExperimentsClientListAllResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientListAllResponse` has been removed
+- Field `TargetsClientListResult` of struct `TargetsClientListResponse` has been removed
+- Field `RawResponse` of struct `TargetsClientListResponse` has been removed
+- Field `ExperimentsClientGetExecutionDetailsResult` of struct `ExperimentsClientGetExecutionDetailsResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientGetExecutionDetailsResponse` has been removed
+- Field `ExperimentsClientGetResult` of struct `ExperimentsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientGetResponse` has been removed
+- Field `ExperimentsClientListExecutionDetailsResult` of struct `ExperimentsClientListExecutionDetailsResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientListExecutionDetailsResponse` has been removed
+- Field `ExperimentsClientCreateOrUpdateResult` of struct `ExperimentsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientCreateOrUpdateResponse` has been removed
+- Field `TargetsClientGetResult` of struct `TargetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `TargetsClientGetResponse` has been removed
+- Field `ExperimentsClientListResult` of struct `ExperimentsClientListResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientListResponse` has been removed
+- Field `TargetTypesClientListResult` of struct `TargetTypesClientListResponse` has been removed
+- Field `RawResponse` of struct `TargetTypesClientListResponse` has been removed
+- Field `CapabilityTypesClientGetResult` of struct `CapabilityTypesClientGetResponse` has been removed
+- Field `RawResponse` of struct `CapabilityTypesClientGetResponse` has been removed
+- Field `ExperimentsClientCancelResult` of struct `ExperimentsClientCancelResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientCancelResponse` has been removed
+- Field `RawResponse` of struct `TargetsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientCreateOrUpdatePollerResponse` has been removed
+- Field `TargetsClientCreateOrUpdateResult` of struct `TargetsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `TargetsClientCreateOrUpdateResponse` has been removed
+- Field `CapabilitiesClientListResult` of struct `CapabilitiesClientListResponse` has been removed
+- Field `RawResponse` of struct `CapabilitiesClientListResponse` has been removed
+- Field `OperationsClientListAllResult` of struct `OperationsClientListAllResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListAllResponse` has been removed
+- Field `RawResponse` of struct `CapabilitiesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientDeleteResponse` has been removed
+- Field `CapabilityTypesClientListResult` of struct `CapabilityTypesClientListResponse` has been removed
+- Field `RawResponse` of struct `CapabilityTypesClientListResponse` has been removed
+- Field `ExperimentsClientStartResult` of struct `ExperimentsClientStartResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientStartResponse` has been removed
+- Field `TargetTypesClientGetResult` of struct `TargetTypesClientGetResponse` has been removed
+- Field `RawResponse` of struct `TargetTypesClientGetResponse` has been removed
+- Field `CapabilitiesClientCreateOrUpdateResult` of struct `CapabilitiesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `CapabilitiesClientCreateOrUpdateResponse` has been removed
+- Field `ExperimentsClientListAllStatusesResult` of struct `ExperimentsClientListAllStatusesResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientListAllStatusesResponse` has been removed
+- Field `ExperimentsClientGetStatusResult` of struct `ExperimentsClientGetStatusResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientGetStatusResponse` has been removed
+- Field `CapabilitiesClientGetResult` of struct `CapabilitiesClientGetResponse` has been removed
+- Field `RawResponse` of struct `CapabilitiesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientCancelPollerResponse` has been removed
+
+### Features Added
+
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*ExperimentsClientListAllStatusesPager.More() bool`
+- New function `*ExperimentsClientListPager.More() bool`
+- New function `*ExperimentsClientListExecutionDetailsPager.More() bool`
+- New function `*TargetTypesClientListPager.More() bool`
+- New function `*OperationsClientListAllPager.More() bool`
+- New function `*CapabilityTypesClientListPager.More() bool`
+- New function `*CapabilitiesClientListPager.More() bool`
+- New function `*TargetsClientListPager.More() bool`
+- New function `*ExperimentsClientListAllPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `CapabilityType` in struct `CapabilityTypesClientGetResponse`
+- New anonymous field `TargetType` in struct `TargetTypesClientGetResponse`
+- New anonymous field `Experiment` in struct `ExperimentsClientGetResponse`
+- New anonymous field `ExperimentStartOperationResult` in struct `ExperimentsClientStartResponse`
+- New anonymous field `ExperimentListResult` in struct `ExperimentsClientListAllResponse`
+- New anonymous field `ExperimentExecutionDetailsListResult` in struct `ExperimentsClientListExecutionDetailsResponse`
+- New anonymous field `ExperimentStatus` in struct `ExperimentsClientGetStatusResponse`
+- New anonymous field `Capability` in struct `CapabilitiesClientCreateOrUpdateResponse`
+- New anonymous field `ExperimentStatusListResult` in struct `ExperimentsClientListAllStatusesResponse`
+- New anonymous field `ExperimentExecutionDetails` in struct `ExperimentsClientGetExecutionDetailsResponse`
+- New anonymous field `CapabilityTypeListResult` in struct `CapabilityTypesClientListResponse`
+- New anonymous field `Target` in struct `TargetsClientCreateOrUpdateResponse`
+- New anonymous field `Capability` in struct `CapabilitiesClientGetResponse`
+- New anonymous field `ExperimentListResult` in struct `ExperimentsClientListResponse`
+- New anonymous field `ExperimentCancelOperationResult` in struct `ExperimentsClientCancelResponse`
+- New anonymous field `TargetTypeListResult` in struct `TargetTypesClientListResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListAllResponse`
+- New anonymous field `TargetListResult` in struct `TargetsClientListResponse`
+- New anonymous field `Target` in struct `TargetsClientGetResponse`
+- New anonymous field `CapabilityListResult` in struct `CapabilitiesClientListResponse`
+- New anonymous field `Experiment` in struct `ExperimentsClientCreateOrUpdateResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

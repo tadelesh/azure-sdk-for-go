@@ -34,17 +34,17 @@ type DesktopsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDesktopsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DesktopsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DesktopsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *DesktopsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *DesktopsClient) getHandleResponse(resp *http.Response) (DesktopsClientGetResponse, error) {
-	result := DesktopsClientGetResponse{RawResponse: resp}
+	result := DesktopsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Desktop); err != nil {
 		return DesktopsClientGetResponse{}, err
 	}
@@ -154,7 +154,7 @@ func (client *DesktopsClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *DesktopsClient) listHandleResponse(resp *http.Response) (DesktopsClientListResponse, error) {
-	result := DesktopsClientListResponse{RawResponse: resp}
+	result := DesktopsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DesktopList); err != nil {
 		return DesktopsClientListResponse{}, err
 	}
@@ -217,7 +217,7 @@ func (client *DesktopsClient) updateCreateRequest(ctx context.Context, resourceG
 
 // updateHandleResponse handles the Update response.
 func (client *DesktopsClient) updateHandleResponse(resp *http.Response) (DesktopsClientUpdateResponse, error) {
-	result := DesktopsClientUpdateResponse{RawResponse: resp}
+	result := DesktopsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Desktop); err != nil {
 		return DesktopsClientUpdateResponse{}, err
 	}

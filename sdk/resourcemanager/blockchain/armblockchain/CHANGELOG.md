@@ -1,5 +1,119 @@
 # Release History
 
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*MembersClientListConsortiumMembersPager.NextPage` return value(s) have been changed from `(bool)` to `(MembersClientListConsortiumMembersResponse, error)`
+- Function `*MembersClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(MembersClientListResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*MembersClientListAllPager.NextPage` return value(s) have been changed from `(bool)` to `(MembersClientListAllResponse, error)`
+- Function `*TransactionNodesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(TransactionNodesClientListResponse, error)`
+- Function `*MembersClientListPager.Err` has been removed
+- Function `*MembersClientListPager.PageResponse` has been removed
+- Function `*TransactionNodesClientListPager.PageResponse` has been removed
+- Function `*MembersClientListAllPager.Err` has been removed
+- Function `*MembersClientListAllPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*TransactionNodesClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*MembersClientListConsortiumMembersPager.Err` has been removed
+- Function `*MembersClientListConsortiumMembersPager.PageResponse` has been removed
+- Struct `LocationsClientCheckNameAvailabilityResult` has been removed
+- Struct `LocationsClientListConsortiumsResult` has been removed
+- Struct `MemberOperationResultsClientGetResult` has been removed
+- Struct `MembersClientCreateResult` has been removed
+- Struct `MembersClientGetResult` has been removed
+- Struct `MembersClientListAPIKeysResult` has been removed
+- Struct `MembersClientListAllResult` has been removed
+- Struct `MembersClientListConsortiumMembersResult` has been removed
+- Struct `MembersClientListRegenerateAPIKeysResult` has been removed
+- Struct `MembersClientListResult` has been removed
+- Struct `MembersClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `SKUsClientListResult` has been removed
+- Struct `TransactionNodesClientCreateResult` has been removed
+- Struct `TransactionNodesClientGetResult` has been removed
+- Struct `TransactionNodesClientListAPIKeysResult` has been removed
+- Struct `TransactionNodesClientListRegenerateAPIKeysResult` has been removed
+- Struct `TransactionNodesClientListResult` has been removed
+- Struct `TransactionNodesClientUpdateResult` has been removed
+- Field `LocationsClientListConsortiumsResult` of struct `LocationsClientListConsortiumsResponse` has been removed
+- Field `RawResponse` of struct `LocationsClientListConsortiumsResponse` has been removed
+- Field `TransactionNodesClientUpdateResult` of struct `TransactionNodesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `TransactionNodesClientUpdateResponse` has been removed
+- Field `MembersClientListAPIKeysResult` of struct `MembersClientListAPIKeysResponse` has been removed
+- Field `RawResponse` of struct `MembersClientListAPIKeysResponse` has been removed
+- Field `MembersClientListRegenerateAPIKeysResult` of struct `MembersClientListRegenerateAPIKeysResponse` has been removed
+- Field `RawResponse` of struct `MembersClientListRegenerateAPIKeysResponse` has been removed
+- Field `RawResponse` of struct `TransactionNodesClientCreatePollerResponse` has been removed
+- Field `MembersClientListResult` of struct `MembersClientListResponse` has been removed
+- Field `RawResponse` of struct `MembersClientListResponse` has been removed
+- Field `MembersClientGetResult` of struct `MembersClientGetResponse` has been removed
+- Field `RawResponse` of struct `MembersClientGetResponse` has been removed
+- Field `TransactionNodesClientListAPIKeysResult` of struct `TransactionNodesClientListAPIKeysResponse` has been removed
+- Field `RawResponse` of struct `TransactionNodesClientListAPIKeysResponse` has been removed
+- Field `MembersClientCreateResult` of struct `MembersClientCreateResponse` has been removed
+- Field `RawResponse` of struct `MembersClientCreateResponse` has been removed
+- Field `TransactionNodesClientGetResult` of struct `TransactionNodesClientGetResponse` has been removed
+- Field `RawResponse` of struct `TransactionNodesClientGetResponse` has been removed
+- Field `RawResponse` of struct `MembersClientCreatePollerResponse` has been removed
+- Field `RawResponse` of struct `MembersClientDeletePollerResponse` has been removed
+- Field `SKUsClientListResult` of struct `SKUsClientListResponse` has been removed
+- Field `RawResponse` of struct `SKUsClientListResponse` has been removed
+- Field `TransactionNodesClientListRegenerateAPIKeysResult` of struct `TransactionNodesClientListRegenerateAPIKeysResponse` has been removed
+- Field `RawResponse` of struct `TransactionNodesClientListRegenerateAPIKeysResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `TransactionNodesClientDeletePollerResponse` has been removed
+- Field `MembersClientUpdateResult` of struct `MembersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `MembersClientUpdateResponse` has been removed
+- Field `MembersClientListConsortiumMembersResult` of struct `MembersClientListConsortiumMembersResponse` has been removed
+- Field `RawResponse` of struct `MembersClientListConsortiumMembersResponse` has been removed
+- Field `RawResponse` of struct `TransactionNodesClientDeleteResponse` has been removed
+- Field `TransactionNodesClientCreateResult` of struct `TransactionNodesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `TransactionNodesClientCreateResponse` has been removed
+- Field `TransactionNodesClientListResult` of struct `TransactionNodesClientListResponse` has been removed
+- Field `RawResponse` of struct `TransactionNodesClientListResponse` has been removed
+- Field `MemberOperationResultsClientGetResult` of struct `MemberOperationResultsClientGetResponse` has been removed
+- Field `RawResponse` of struct `MemberOperationResultsClientGetResponse` has been removed
+- Field `LocationsClientCheckNameAvailabilityResult` of struct `LocationsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `LocationsClientCheckNameAvailabilityResponse` has been removed
+- Field `MembersClientListAllResult` of struct `MembersClientListAllResponse` has been removed
+- Field `RawResponse` of struct `MembersClientListAllResponse` has been removed
+- Field `RawResponse` of struct `MembersClientDeleteResponse` has been removed
+
+### Features Added
+
+- New function `*MembersClientListConsortiumMembersPager.More() bool`
+- New function `*MembersClientListAllPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*MembersClientListPager.More() bool`
+- New function `*TransactionNodesClientListPager.More() bool`
+- New anonymous field `APIKeyCollection` in struct `MembersClientListRegenerateAPIKeysResponse`
+- New anonymous field `ResourceProviderOperationCollection` in struct `OperationsClientListResponse`
+- New anonymous field `TransactionNode` in struct `TransactionNodesClientGetResponse`
+- New anonymous field `Member` in struct `MembersClientUpdateResponse`
+- New anonymous field `NameAvailability` in struct `LocationsClientCheckNameAvailabilityResponse`
+- New anonymous field `ResourceTypeSKUCollection` in struct `SKUsClientListResponse`
+- New anonymous field `Member` in struct `MembersClientGetResponse`
+- New anonymous field `APIKeyCollection` in struct `MembersClientListAPIKeysResponse`
+- New anonymous field `TransactionNodeCollection` in struct `TransactionNodesClientListResponse`
+- New anonymous field `ConsortiumMemberCollection` in struct `MembersClientListConsortiumMembersResponse`
+- New anonymous field `TransactionNode` in struct `TransactionNodesClientCreateResponse`
+- New anonymous field `ConsortiumCollection` in struct `LocationsClientListConsortiumsResponse`
+- New anonymous field `MemberCollection` in struct `MembersClientListResponse`
+- New anonymous field `TransactionNode` in struct `TransactionNodesClientUpdateResponse`
+- New anonymous field `MemberCollection` in struct `MembersClientListAllResponse`
+- New anonymous field `Member` in struct `MembersClientCreateResponse`
+- New anonymous field `APIKeyCollection` in struct `TransactionNodesClientListRegenerateAPIKeysResponse`
+- New anonymous field `APIKeyCollection` in struct `TransactionNodesClientListAPIKeysResponse`
+- New anonymous field `OperationResult` in struct `MemberOperationResultsClientGetResponse`
+
+
+## 0.2.1 (2022-03-10)
+### Other Changes
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

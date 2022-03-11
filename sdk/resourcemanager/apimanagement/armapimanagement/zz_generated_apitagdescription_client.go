@@ -36,17 +36,17 @@ type APITagDescriptionClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAPITagDescriptionClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *APITagDescriptionClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &APITagDescriptionClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -116,7 +116,7 @@ func (client *APITagDescriptionClient) createOrUpdateCreateRequest(ctx context.C
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *APITagDescriptionClient) createOrUpdateHandleResponse(resp *http.Response) (APITagDescriptionClientCreateOrUpdateResponse, error) {
-	result := APITagDescriptionClientCreateOrUpdateResponse{RawResponse: resp}
+	result := APITagDescriptionClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -150,7 +150,7 @@ func (client *APITagDescriptionClient) Delete(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return APITagDescriptionClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return APITagDescriptionClientDeleteResponse{RawResponse: resp}, nil
+	return APITagDescriptionClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -248,7 +248,7 @@ func (client *APITagDescriptionClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *APITagDescriptionClient) getHandleResponse(resp *http.Response) (APITagDescriptionClientGetResponse, error) {
-	result := APITagDescriptionClientGetResponse{RawResponse: resp}
+	result := APITagDescriptionClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -315,7 +315,7 @@ func (client *APITagDescriptionClient) getEntityTagCreateRequest(ctx context.Con
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *APITagDescriptionClient) getEntityTagHandleResponse(resp *http.Response) (APITagDescriptionClientGetEntityTagResponse, error) {
-	result := APITagDescriptionClientGetEntityTagResponse{RawResponse: resp}
+	result := APITagDescriptionClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -387,7 +387,7 @@ func (client *APITagDescriptionClient) listByServiceCreateRequest(ctx context.Co
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *APITagDescriptionClient) listByServiceHandleResponse(resp *http.Response) (APITagDescriptionClientListByServiceResponse, error) {
-	result := APITagDescriptionClientListByServiceResponse{RawResponse: resp}
+	result := APITagDescriptionClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TagDescriptionCollection); err != nil {
 		return APITagDescriptionClientListByServiceResponse{}, err
 	}

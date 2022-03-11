@@ -38,19 +38,19 @@ type ReplicationNetworksClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReplicationNetworksClient(resourceName string, resourceGroupName string, subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReplicationNetworksClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReplicationNetworksClient{
 		resourceName:      resourceName,
 		resourceGroupName: resourceGroupName,
 		subscriptionID:    subscriptionID,
-		host:              string(cp.Endpoint),
-		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:              string(ep),
+		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *ReplicationNetworksClient) getCreateRequest(ctx context.Context, f
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -111,7 +111,7 @@ func (client *ReplicationNetworksClient) getCreateRequest(ctx context.Context, f
 
 // getHandleResponse handles the Get response.
 func (client *ReplicationNetworksClient) getHandleResponse(resp *http.Response) (ReplicationNetworksClientGetResponse, error) {
-	result := ReplicationNetworksClientGetResponse{RawResponse: resp}
+	result := ReplicationNetworksClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Network); err != nil {
 		return ReplicationNetworksClientGetResponse{}, err
 	}
@@ -154,7 +154,7 @@ func (client *ReplicationNetworksClient) listCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -162,7 +162,7 @@ func (client *ReplicationNetworksClient) listCreateRequest(ctx context.Context, 
 
 // listHandleResponse handles the List response.
 func (client *ReplicationNetworksClient) listHandleResponse(resp *http.Response) (ReplicationNetworksClientListResponse, error) {
-	result := ReplicationNetworksClientListResponse{RawResponse: resp}
+	result := ReplicationNetworksClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkCollection); err != nil {
 		return ReplicationNetworksClientListResponse{}, err
 	}
@@ -210,7 +210,7 @@ func (client *ReplicationNetworksClient) listByReplicationFabricsCreateRequest(c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -218,7 +218,7 @@ func (client *ReplicationNetworksClient) listByReplicationFabricsCreateRequest(c
 
 // listByReplicationFabricsHandleResponse handles the ListByReplicationFabrics response.
 func (client *ReplicationNetworksClient) listByReplicationFabricsHandleResponse(resp *http.Response) (ReplicationNetworksClientListByReplicationFabricsResponse, error) {
-	result := ReplicationNetworksClientListByReplicationFabricsResponse{RawResponse: resp}
+	result := ReplicationNetworksClientListByReplicationFabricsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkCollection); err != nil {
 		return ReplicationNetworksClientListByReplicationFabricsResponse{}, err
 	}

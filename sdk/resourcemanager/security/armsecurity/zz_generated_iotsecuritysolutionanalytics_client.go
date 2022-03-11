@@ -98,7 +98,7 @@ func (client *IotSecuritySolutionAnalyticsClient) getCreateRequest(ctx context.C
 
 // getHandleResponse handles the Get response.
 func (client *IotSecuritySolutionAnalyticsClient) getHandleResponse(resp *http.Response) (IotSecuritySolutionAnalyticsClientGetResponse, error) {
-	result := IotSecuritySolutionAnalyticsClientGetResponse{RawResponse: resp}
+	result := IotSecuritySolutionAnalyticsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IoTSecuritySolutionAnalyticsModel); err != nil {
 		return IotSecuritySolutionAnalyticsClientGetResponse{}, err
 	}
@@ -154,7 +154,7 @@ func (client *IotSecuritySolutionAnalyticsClient) listCreateRequest(ctx context.
 
 // listHandleResponse handles the List response.
 func (client *IotSecuritySolutionAnalyticsClient) listHandleResponse(resp *http.Response) (IotSecuritySolutionAnalyticsClientListResponse, error) {
-	result := IotSecuritySolutionAnalyticsClientListResponse{RawResponse: resp}
+	result := IotSecuritySolutionAnalyticsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IoTSecuritySolutionAnalyticsModelList); err != nil {
 		return IotSecuritySolutionAnalyticsClientListResponse{}, err
 	}

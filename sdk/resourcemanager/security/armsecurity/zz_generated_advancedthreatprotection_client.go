@@ -89,7 +89,7 @@ func (client *AdvancedThreatProtectionClient) createCreateRequest(ctx context.Co
 
 // createHandleResponse handles the Create response.
 func (client *AdvancedThreatProtectionClient) createHandleResponse(resp *http.Response) (AdvancedThreatProtectionClientCreateResponse, error) {
-	result := AdvancedThreatProtectionClientCreateResponse{RawResponse: resp}
+	result := AdvancedThreatProtectionClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdvancedThreatProtectionSetting); err != nil {
 		return AdvancedThreatProtectionClientCreateResponse{}, err
 	}
@@ -138,7 +138,7 @@ func (client *AdvancedThreatProtectionClient) getCreateRequest(ctx context.Conte
 
 // getHandleResponse handles the Get response.
 func (client *AdvancedThreatProtectionClient) getHandleResponse(resp *http.Response) (AdvancedThreatProtectionClientGetResponse, error) {
-	result := AdvancedThreatProtectionClientGetResponse{RawResponse: resp}
+	result := AdvancedThreatProtectionClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdvancedThreatProtectionSetting); err != nil {
 		return AdvancedThreatProtectionClientGetResponse{}, err
 	}

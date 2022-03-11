@@ -34,17 +34,17 @@ type AddonsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAddonsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AddonsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AddonsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *AddonsClient) BeginCreateOrUpdate(ctx context.Context, resourceGro
 	if err != nil {
 		return AddonsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := AddonsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AddonsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AddonsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return AddonsClientCreateOrUpdatePollerResponse{}, err
@@ -133,9 +131,7 @@ func (client *AddonsClient) BeginDelete(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return AddonsClientDeletePollerResponse{}, err
 	}
-	result := AddonsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AddonsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AddonsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return AddonsClientDeletePollerResponse{}, err
@@ -246,7 +242,7 @@ func (client *AddonsClient) getCreateRequest(ctx context.Context, resourceGroupN
 
 // getHandleResponse handles the Get response.
 func (client *AddonsClient) getHandleResponse(resp *http.Response) (AddonsClientGetResponse, error) {
-	result := AddonsClientGetResponse{RawResponse: resp}
+	result := AddonsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Addon); err != nil {
 		return AddonsClientGetResponse{}, err
 	}
@@ -298,7 +294,7 @@ func (client *AddonsClient) listCreateRequest(ctx context.Context, resourceGroup
 
 // listHandleResponse handles the List response.
 func (client *AddonsClient) listHandleResponse(resp *http.Response) (AddonsClientListResponse, error) {
-	result := AddonsClientListResponse{RawResponse: resp}
+	result := AddonsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AddonList); err != nil {
 		return AddonsClientListResponse{}, err
 	}

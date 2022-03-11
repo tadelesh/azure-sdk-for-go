@@ -34,17 +34,17 @@ type WorkItemConfigurationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkItemConfigurationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkItemConfigurationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkItemConfigurationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *WorkItemConfigurationsClient) createCreateRequest(ctx context.Cont
 
 // createHandleResponse handles the Create response.
 func (client *WorkItemConfigurationsClient) createHandleResponse(resp *http.Response) (WorkItemConfigurationsClientCreateResponse, error) {
-	result := WorkItemConfigurationsClientCreateResponse{RawResponse: resp}
+	result := WorkItemConfigurationsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkItemConfiguration); err != nil {
 		return WorkItemConfigurationsClientCreateResponse{}, err
 	}
@@ -127,7 +127,7 @@ func (client *WorkItemConfigurationsClient) Delete(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WorkItemConfigurationsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return WorkItemConfigurationsClientDeleteResponse{RawResponse: resp}, nil
+	return WorkItemConfigurationsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -208,7 +208,7 @@ func (client *WorkItemConfigurationsClient) getDefaultCreateRequest(ctx context.
 
 // getDefaultHandleResponse handles the GetDefault response.
 func (client *WorkItemConfigurationsClient) getDefaultHandleResponse(resp *http.Response) (WorkItemConfigurationsClientGetDefaultResponse, error) {
-	result := WorkItemConfigurationsClientGetDefaultResponse{RawResponse: resp}
+	result := WorkItemConfigurationsClientGetDefaultResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkItemConfiguration); err != nil {
 		return WorkItemConfigurationsClientGetDefaultResponse{}, err
 	}
@@ -270,7 +270,7 @@ func (client *WorkItemConfigurationsClient) getItemCreateRequest(ctx context.Con
 
 // getItemHandleResponse handles the GetItem response.
 func (client *WorkItemConfigurationsClient) getItemHandleResponse(resp *http.Response) (WorkItemConfigurationsClientGetItemResponse, error) {
-	result := WorkItemConfigurationsClientGetItemResponse{RawResponse: resp}
+	result := WorkItemConfigurationsClientGetItemResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkItemConfiguration); err != nil {
 		return WorkItemConfigurationsClientGetItemResponse{}, err
 	}
@@ -283,19 +283,13 @@ func (client *WorkItemConfigurationsClient) getItemHandleResponse(resp *http.Res
 // resourceName - The name of the Application Insights component resource.
 // options - WorkItemConfigurationsClientListOptions contains the optional parameters for the WorkItemConfigurationsClient.List
 // method.
-func (client *WorkItemConfigurationsClient) List(ctx context.Context, resourceGroupName string, resourceName string, options *WorkItemConfigurationsClientListOptions) (WorkItemConfigurationsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return WorkItemConfigurationsClientListResponse{}, err
+func (client *WorkItemConfigurationsClient) List(resourceGroupName string, resourceName string, options *WorkItemConfigurationsClientListOptions) *WorkItemConfigurationsClientListPager {
+	return &WorkItemConfigurationsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return WorkItemConfigurationsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return WorkItemConfigurationsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -326,7 +320,7 @@ func (client *WorkItemConfigurationsClient) listCreateRequest(ctx context.Contex
 
 // listHandleResponse handles the List response.
 func (client *WorkItemConfigurationsClient) listHandleResponse(resp *http.Response) (WorkItemConfigurationsClientListResponse, error) {
-	result := WorkItemConfigurationsClientListResponse{RawResponse: resp}
+	result := WorkItemConfigurationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkItemConfigurationsListResult); err != nil {
 		return WorkItemConfigurationsClientListResponse{}, err
 	}
@@ -390,7 +384,7 @@ func (client *WorkItemConfigurationsClient) updateItemCreateRequest(ctx context.
 
 // updateItemHandleResponse handles the UpdateItem response.
 func (client *WorkItemConfigurationsClient) updateItemHandleResponse(resp *http.Response) (WorkItemConfigurationsClientUpdateItemResponse, error) {
-	result := WorkItemConfigurationsClientUpdateItemResponse{RawResponse: resp}
+	result := WorkItemConfigurationsClientUpdateItemResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkItemConfiguration); err != nil {
 		return WorkItemConfigurationsClientUpdateItemResponse{}, err
 	}

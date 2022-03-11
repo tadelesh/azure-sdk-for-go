@@ -34,17 +34,17 @@ type ScriptPackagesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewScriptPackagesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ScriptPackagesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ScriptPackagesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *ScriptPackagesClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *ScriptPackagesClient) getHandleResponse(resp *http.Response) (ScriptPackagesClientGetResponse, error) {
-	result := ScriptPackagesClientGetResponse{RawResponse: resp}
+	result := ScriptPackagesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScriptPackage); err != nil {
 		return ScriptPackagesClientGetResponse{}, err
 	}
@@ -154,7 +154,7 @@ func (client *ScriptPackagesClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *ScriptPackagesClient) listHandleResponse(resp *http.Response) (ScriptPackagesClientListResponse, error) {
-	result := ScriptPackagesClientListResponse{RawResponse: resp}
+	result := ScriptPackagesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScriptPackagesList); err != nil {
 		return ScriptPackagesClientListResponse{}, err
 	}

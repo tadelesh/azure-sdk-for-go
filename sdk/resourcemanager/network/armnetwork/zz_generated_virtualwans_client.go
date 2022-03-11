@@ -35,17 +35,17 @@ type VirtualWansClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualWansClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualWansClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualWansClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *VirtualWansClient) BeginCreateOrUpdate(ctx context.Context, resour
 	if err != nil {
 		return VirtualWansClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VirtualWansClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualWansClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualWansClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VirtualWansClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *VirtualWansClient) BeginDelete(ctx context.Context, resourceGroupN
 	if err != nil {
 		return VirtualWansClientDeletePollerResponse{}, err
 	}
-	result := VirtualWansClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualWansClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualWansClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return VirtualWansClientDeletePollerResponse{}, err
@@ -232,7 +228,7 @@ func (client *VirtualWansClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *VirtualWansClient) getHandleResponse(resp *http.Response) (VirtualWansClientGetResponse, error) {
-	result := VirtualWansClientGetResponse{RawResponse: resp}
+	result := VirtualWansClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualWAN); err != nil {
 		return VirtualWansClientGetResponse{}, err
 	}
@@ -274,7 +270,7 @@ func (client *VirtualWansClient) listCreateRequest(ctx context.Context, options 
 
 // listHandleResponse handles the List response.
 func (client *VirtualWansClient) listHandleResponse(resp *http.Response) (VirtualWansClientListResponse, error) {
-	result := VirtualWansClientListResponse{RawResponse: resp}
+	result := VirtualWansClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListVirtualWANsResult); err != nil {
 		return VirtualWansClientListResponse{}, err
 	}
@@ -322,7 +318,7 @@ func (client *VirtualWansClient) listByResourceGroupCreateRequest(ctx context.Co
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *VirtualWansClient) listByResourceGroupHandleResponse(resp *http.Response) (VirtualWansClientListByResourceGroupResponse, error) {
-	result := VirtualWansClientListByResourceGroupResponse{RawResponse: resp}
+	result := VirtualWansClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListVirtualWANsResult); err != nil {
 		return VirtualWansClientListByResourceGroupResponse{}, err
 	}
@@ -378,7 +374,7 @@ func (client *VirtualWansClient) updateTagsCreateRequest(ctx context.Context, re
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *VirtualWansClient) updateTagsHandleResponse(resp *http.Response) (VirtualWansClientUpdateTagsResponse, error) {
-	result := VirtualWansClientUpdateTagsResponse{RawResponse: resp}
+	result := VirtualWansClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualWAN); err != nil {
 		return VirtualWansClientUpdateTagsResponse{}, err
 	}

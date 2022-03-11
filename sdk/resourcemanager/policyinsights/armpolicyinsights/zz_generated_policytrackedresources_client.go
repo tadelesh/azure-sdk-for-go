@@ -35,17 +35,17 @@ type PolicyTrackedResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPolicyTrackedResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PolicyTrackedResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PolicyTrackedResourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *PolicyTrackedResourcesClient) listQueryResultsForManagementGroupCr
 
 // listQueryResultsForManagementGroupHandleResponse handles the ListQueryResultsForManagementGroup response.
 func (client *PolicyTrackedResourcesClient) listQueryResultsForManagementGroupHandleResponse(resp *http.Response) (PolicyTrackedResourcesClientListQueryResultsForManagementGroupResponse, error) {
-	result := PolicyTrackedResourcesClientListQueryResultsForManagementGroupResponse{RawResponse: resp}
+	result := PolicyTrackedResourcesClientListQueryResultsForManagementGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyTrackedResourcesQueryResults); err != nil {
 		return PolicyTrackedResourcesClientListQueryResultsForManagementGroupResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *PolicyTrackedResourcesClient) listQueryResultsForResourceCreateReq
 
 // listQueryResultsForResourceHandleResponse handles the ListQueryResultsForResource response.
 func (client *PolicyTrackedResourcesClient) listQueryResultsForResourceHandleResponse(resp *http.Response) (PolicyTrackedResourcesClientListQueryResultsForResourceResponse, error) {
-	result := PolicyTrackedResourcesClientListQueryResultsForResourceResponse{RawResponse: resp}
+	result := PolicyTrackedResourcesClientListQueryResultsForResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyTrackedResourcesQueryResults); err != nil {
 		return PolicyTrackedResourcesClientListQueryResultsForResourceResponse{}, err
 	}
@@ -217,7 +217,7 @@ func (client *PolicyTrackedResourcesClient) listQueryResultsForResourceGroupCrea
 
 // listQueryResultsForResourceGroupHandleResponse handles the ListQueryResultsForResourceGroup response.
 func (client *PolicyTrackedResourcesClient) listQueryResultsForResourceGroupHandleResponse(resp *http.Response) (PolicyTrackedResourcesClientListQueryResultsForResourceGroupResponse, error) {
-	result := PolicyTrackedResourcesClientListQueryResultsForResourceGroupResponse{RawResponse: resp}
+	result := PolicyTrackedResourcesClientListQueryResultsForResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyTrackedResourcesQueryResults); err != nil {
 		return PolicyTrackedResourcesClientListQueryResultsForResourceGroupResponse{}, err
 	}
@@ -272,7 +272,7 @@ func (client *PolicyTrackedResourcesClient) listQueryResultsForSubscriptionCreat
 
 // listQueryResultsForSubscriptionHandleResponse handles the ListQueryResultsForSubscription response.
 func (client *PolicyTrackedResourcesClient) listQueryResultsForSubscriptionHandleResponse(resp *http.Response) (PolicyTrackedResourcesClientListQueryResultsForSubscriptionResponse, error) {
-	result := PolicyTrackedResourcesClientListQueryResultsForSubscriptionResponse{RawResponse: resp}
+	result := PolicyTrackedResourcesClientListQueryResultsForSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyTrackedResourcesQueryResults); err != nil {
 		return PolicyTrackedResourcesClientListQueryResultsForSubscriptionResponse{}, err
 	}

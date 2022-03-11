@@ -34,17 +34,17 @@ type DeletedAccountsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDeletedAccountsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DeletedAccountsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DeletedAccountsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *DeletedAccountsClient) getCreateRequest(ctx context.Context, locat
 
 // getHandleResponse handles the Get response.
 func (client *DeletedAccountsClient) getHandleResponse(resp *http.Response) (DeletedAccountsClientGetResponse, error) {
-	result := DeletedAccountsClientGetResponse{RawResponse: resp}
+	result := DeletedAccountsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Account); err != nil {
 		return DeletedAccountsClientGetResponse{}, err
 	}
@@ -144,7 +144,7 @@ func (client *DeletedAccountsClient) listCreateRequest(ctx context.Context, opti
 
 // listHandleResponse handles the List response.
 func (client *DeletedAccountsClient) listHandleResponse(resp *http.Response) (DeletedAccountsClientListResponse, error) {
-	result := DeletedAccountsClientListResponse{RawResponse: resp}
+	result := DeletedAccountsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountListResult); err != nil {
 		return DeletedAccountsClientListResponse{}, err
 	}
@@ -163,9 +163,7 @@ func (client *DeletedAccountsClient) BeginPurge(ctx context.Context, location st
 	if err != nil {
 		return DeletedAccountsClientPurgePollerResponse{}, err
 	}
-	result := DeletedAccountsClientPurgePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeletedAccountsClientPurgePollerResponse{}
 	pt, err := armruntime.NewPoller("DeletedAccountsClient.Purge", "", resp, client.pl)
 	if err != nil {
 		return DeletedAccountsClientPurgePollerResponse{}, err

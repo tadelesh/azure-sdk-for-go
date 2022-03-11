@@ -35,17 +35,17 @@ type SoftwareUpdateConfigurationRunsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSoftwareUpdateConfigurationRunsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SoftwareUpdateConfigurationRunsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SoftwareUpdateConfigurationRunsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *SoftwareUpdateConfigurationRunsClient) getByIDCreateRequest(ctx co
 
 // getByIDHandleResponse handles the GetByID response.
 func (client *SoftwareUpdateConfigurationRunsClient) getByIDHandleResponse(resp *http.Response) (SoftwareUpdateConfigurationRunsClientGetByIDResponse, error) {
-	result := SoftwareUpdateConfigurationRunsClientGetByIDResponse{RawResponse: resp}
+	result := SoftwareUpdateConfigurationRunsClientGetByIDResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SoftwareUpdateConfigurationRun); err != nil {
 		return SoftwareUpdateConfigurationRunsClientGetByIDResponse{}, err
 	}
@@ -172,7 +172,7 @@ func (client *SoftwareUpdateConfigurationRunsClient) listCreateRequest(ctx conte
 
 // listHandleResponse handles the List response.
 func (client *SoftwareUpdateConfigurationRunsClient) listHandleResponse(resp *http.Response) (SoftwareUpdateConfigurationRunsClientListResponse, error) {
-	result := SoftwareUpdateConfigurationRunsClientListResponse{RawResponse: resp}
+	result := SoftwareUpdateConfigurationRunsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SoftwareUpdateConfigurationRunListResult); err != nil {
 		return SoftwareUpdateConfigurationRunsClientListResponse{}, err
 	}

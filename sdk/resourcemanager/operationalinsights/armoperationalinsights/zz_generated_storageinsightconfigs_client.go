@@ -34,17 +34,17 @@ type StorageInsightConfigsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewStorageInsightConfigsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *StorageInsightConfigsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &StorageInsightConfigsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *StorageInsightConfigsClient) createOrUpdateCreateRequest(ctx conte
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *StorageInsightConfigsClient) createOrUpdateHandleResponse(resp *http.Response) (StorageInsightConfigsClientCreateOrUpdateResponse, error) {
-	result := StorageInsightConfigsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := StorageInsightConfigsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StorageInsight); err != nil {
 		return StorageInsightConfigsClientCreateOrUpdateResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *StorageInsightConfigsClient) Delete(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return StorageInsightConfigsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return StorageInsightConfigsClientDeleteResponse{RawResponse: resp}, nil
+	return StorageInsightConfigsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -216,7 +216,7 @@ func (client *StorageInsightConfigsClient) getCreateRequest(ctx context.Context,
 
 // getHandleResponse handles the Get response.
 func (client *StorageInsightConfigsClient) getHandleResponse(resp *http.Response) (StorageInsightConfigsClientGetResponse, error) {
-	result := StorageInsightConfigsClientGetResponse{RawResponse: resp}
+	result := StorageInsightConfigsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StorageInsight); err != nil {
 		return StorageInsightConfigsClientGetResponse{}, err
 	}
@@ -269,7 +269,7 @@ func (client *StorageInsightConfigsClient) listByWorkspaceCreateRequest(ctx cont
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *StorageInsightConfigsClient) listByWorkspaceHandleResponse(resp *http.Response) (StorageInsightConfigsClientListByWorkspaceResponse, error) {
-	result := StorageInsightConfigsClientListByWorkspaceResponse{RawResponse: resp}
+	result := StorageInsightConfigsClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StorageInsightListResult); err != nil {
 		return StorageInsightConfigsClientListByWorkspaceResponse{}, err
 	}

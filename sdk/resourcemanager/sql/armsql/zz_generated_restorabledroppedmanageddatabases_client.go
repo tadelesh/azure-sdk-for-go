@@ -34,17 +34,17 @@ type RestorableDroppedManagedDatabasesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRestorableDroppedManagedDatabasesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RestorableDroppedManagedDatabasesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RestorableDroppedManagedDatabasesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *RestorableDroppedManagedDatabasesClient) getCreateRequest(ctx cont
 
 // getHandleResponse handles the Get response.
 func (client *RestorableDroppedManagedDatabasesClient) getHandleResponse(resp *http.Response) (RestorableDroppedManagedDatabasesClientGetResponse, error) {
-	result := RestorableDroppedManagedDatabasesClientGetResponse{RawResponse: resp}
+	result := RestorableDroppedManagedDatabasesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorableDroppedManagedDatabase); err != nil {
 		return RestorableDroppedManagedDatabasesClientGetResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *RestorableDroppedManagedDatabasesClient) listByInstanceCreateReque
 
 // listByInstanceHandleResponse handles the ListByInstance response.
 func (client *RestorableDroppedManagedDatabasesClient) listByInstanceHandleResponse(resp *http.Response) (RestorableDroppedManagedDatabasesClientListByInstanceResponse, error) {
-	result := RestorableDroppedManagedDatabasesClientListByInstanceResponse{RawResponse: resp}
+	result := RestorableDroppedManagedDatabasesClientListByInstanceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorableDroppedManagedDatabaseListResult); err != nil {
 		return RestorableDroppedManagedDatabasesClientListByInstanceResponse{}, err
 	}

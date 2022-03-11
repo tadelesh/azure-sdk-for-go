@@ -36,17 +36,17 @@ type PortalRevisionClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPortalRevisionClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PortalRevisionClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PortalRevisionClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *PortalRevisionClient) BeginCreateOrUpdate(ctx context.Context, res
 	if err != nil {
 		return PortalRevisionClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PortalRevisionClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PortalRevisionClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PortalRevisionClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return PortalRevisionClientCreateOrUpdatePollerResponse{}, err
@@ -178,7 +176,7 @@ func (client *PortalRevisionClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *PortalRevisionClient) getHandleResponse(resp *http.Response) (PortalRevisionClientGetResponse, error) {
-	result := PortalRevisionClientGetResponse{RawResponse: resp}
+	result := PortalRevisionClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -238,7 +236,7 @@ func (client *PortalRevisionClient) getEntityTagCreateRequest(ctx context.Contex
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *PortalRevisionClient) getEntityTagHandleResponse(resp *http.Response) (PortalRevisionClientGetEntityTagResponse, error) {
-	result := PortalRevisionClientGetEntityTagResponse{RawResponse: resp}
+	result := PortalRevisionClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -303,7 +301,7 @@ func (client *PortalRevisionClient) listByServiceCreateRequest(ctx context.Conte
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *PortalRevisionClient) listByServiceHandleResponse(resp *http.Response) (PortalRevisionClientListByServiceResponse, error) {
-	result := PortalRevisionClientListByServiceResponse{RawResponse: resp}
+	result := PortalRevisionClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PortalRevisionCollection); err != nil {
 		return PortalRevisionClientListByServiceResponse{}, err
 	}
@@ -324,9 +322,7 @@ func (client *PortalRevisionClient) BeginUpdate(ctx context.Context, resourceGro
 	if err != nil {
 		return PortalRevisionClientUpdatePollerResponse{}, err
 	}
-	result := PortalRevisionClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PortalRevisionClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PortalRevisionClient.Update", "location", resp, client.pl)
 	if err != nil {
 		return PortalRevisionClientUpdatePollerResponse{}, err

@@ -38,19 +38,19 @@ type ReplicationProtectionContainerMappingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReplicationProtectionContainerMappingsClient(resourceName string, resourceGroupName string, subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReplicationProtectionContainerMappingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReplicationProtectionContainerMappingsClient{
 		resourceName:      resourceName,
 		resourceGroupName: resourceGroupName,
 		subscriptionID:    subscriptionID,
-		host:              string(cp.Endpoint),
-		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:              string(ep),
+		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -68,9 +68,7 @@ func (client *ReplicationProtectionContainerMappingsClient) BeginCreate(ctx cont
 	if err != nil {
 		return ReplicationProtectionContainerMappingsClientCreatePollerResponse{}, err
 	}
-	result := ReplicationProtectionContainerMappingsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectionContainerMappingsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectionContainerMappingsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectionContainerMappingsClientCreatePollerResponse{}, err
@@ -130,7 +128,7 @@ func (client *ReplicationProtectionContainerMappingsClient) createCreateRequest(
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, creationInput)
@@ -149,9 +147,7 @@ func (client *ReplicationProtectionContainerMappingsClient) BeginDelete(ctx cont
 	if err != nil {
 		return ReplicationProtectionContainerMappingsClientDeletePollerResponse{}, err
 	}
-	result := ReplicationProtectionContainerMappingsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectionContainerMappingsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectionContainerMappingsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectionContainerMappingsClientDeletePollerResponse{}, err
@@ -211,7 +207,7 @@ func (client *ReplicationProtectionContainerMappingsClient) deleteCreateRequest(
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	return req, runtime.MarshalAsJSON(req, removalInput)
 }
@@ -270,7 +266,7 @@ func (client *ReplicationProtectionContainerMappingsClient) getCreateRequest(ctx
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -278,7 +274,7 @@ func (client *ReplicationProtectionContainerMappingsClient) getCreateRequest(ctx
 
 // getHandleResponse handles the Get response.
 func (client *ReplicationProtectionContainerMappingsClient) getHandleResponse(resp *http.Response) (ReplicationProtectionContainerMappingsClientGetResponse, error) {
-	result := ReplicationProtectionContainerMappingsClientGetResponse{RawResponse: resp}
+	result := ReplicationProtectionContainerMappingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProtectionContainerMapping); err != nil {
 		return ReplicationProtectionContainerMappingsClientGetResponse{}, err
 	}
@@ -321,7 +317,7 @@ func (client *ReplicationProtectionContainerMappingsClient) listCreateRequest(ct
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -329,7 +325,7 @@ func (client *ReplicationProtectionContainerMappingsClient) listCreateRequest(ct
 
 // listHandleResponse handles the List response.
 func (client *ReplicationProtectionContainerMappingsClient) listHandleResponse(resp *http.Response) (ReplicationProtectionContainerMappingsClientListResponse, error) {
-	result := ReplicationProtectionContainerMappingsClientListResponse{RawResponse: resp}
+	result := ReplicationProtectionContainerMappingsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProtectionContainerMappingCollection); err != nil {
 		return ReplicationProtectionContainerMappingsClientListResponse{}, err
 	}
@@ -382,7 +378,7 @@ func (client *ReplicationProtectionContainerMappingsClient) listByReplicationPro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -390,7 +386,7 @@ func (client *ReplicationProtectionContainerMappingsClient) listByReplicationPro
 
 // listByReplicationProtectionContainersHandleResponse handles the ListByReplicationProtectionContainers response.
 func (client *ReplicationProtectionContainerMappingsClient) listByReplicationProtectionContainersHandleResponse(resp *http.Response) (ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersResponse, error) {
-	result := ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersResponse{RawResponse: resp}
+	result := ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProtectionContainerMappingCollection); err != nil {
 		return ReplicationProtectionContainerMappingsClientListByReplicationProtectionContainersResponse{}, err
 	}
@@ -409,9 +405,7 @@ func (client *ReplicationProtectionContainerMappingsClient) BeginPurge(ctx conte
 	if err != nil {
 		return ReplicationProtectionContainerMappingsClientPurgePollerResponse{}, err
 	}
-	result := ReplicationProtectionContainerMappingsClientPurgePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectionContainerMappingsClientPurgePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectionContainerMappingsClient.Purge", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectionContainerMappingsClientPurgePollerResponse{}, err
@@ -471,7 +465,7 @@ func (client *ReplicationProtectionContainerMappingsClient) purgeCreateRequest(c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	return req, nil
 }
@@ -489,9 +483,7 @@ func (client *ReplicationProtectionContainerMappingsClient) BeginUpdate(ctx cont
 	if err != nil {
 		return ReplicationProtectionContainerMappingsClientUpdatePollerResponse{}, err
 	}
-	result := ReplicationProtectionContainerMappingsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectionContainerMappingsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectionContainerMappingsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectionContainerMappingsClientUpdatePollerResponse{}, err
@@ -551,7 +543,7 @@ func (client *ReplicationProtectionContainerMappingsClient) updateCreateRequest(
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, updateInput)

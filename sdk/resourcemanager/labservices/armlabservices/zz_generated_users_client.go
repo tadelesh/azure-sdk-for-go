@@ -62,9 +62,7 @@ func (client *UsersClient) BeginCreateOrUpdate(ctx context.Context, resourceGrou
 	if err != nil {
 		return UsersClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := UsersClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := UsersClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("UsersClient.CreateOrUpdate", "original-uri", resp, client.pl)
 	if err != nil {
 		return UsersClientCreateOrUpdatePollerResponse{}, err
@@ -133,9 +131,7 @@ func (client *UsersClient) BeginDelete(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return UsersClientDeletePollerResponse{}, err
 	}
-	result := UsersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := UsersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("UsersClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return UsersClientDeletePollerResponse{}, err
@@ -246,7 +242,7 @@ func (client *UsersClient) getCreateRequest(ctx context.Context, resourceGroupNa
 
 // getHandleResponse handles the Get response.
 func (client *UsersClient) getHandleResponse(resp *http.Response) (UsersClientGetResponse, error) {
-	result := UsersClientGetResponse{RawResponse: resp}
+	result := UsersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.User); err != nil {
 		return UsersClientGetResponse{}, err
 	}
@@ -265,9 +261,7 @@ func (client *UsersClient) BeginInvite(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return UsersClientInvitePollerResponse{}, err
 	}
-	result := UsersClientInvitePollerResponse{
-		RawResponse: resp,
-	}
+	result := UsersClientInvitePollerResponse{}
 	pt, err := armruntime.NewPoller("UsersClient.Invite", "location", resp, client.pl)
 	if err != nil {
 		return UsersClientInvitePollerResponse{}, err
@@ -373,7 +367,7 @@ func (client *UsersClient) listByLabCreateRequest(ctx context.Context, resourceG
 
 // listByLabHandleResponse handles the ListByLab response.
 func (client *UsersClient) listByLabHandleResponse(resp *http.Response) (UsersClientListByLabResponse, error) {
-	result := UsersClientListByLabResponse{RawResponse: resp}
+	result := UsersClientListByLabResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PagedUsers); err != nil {
 		return UsersClientListByLabResponse{}, err
 	}
@@ -392,9 +386,7 @@ func (client *UsersClient) BeginUpdate(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return UsersClientUpdatePollerResponse{}, err
 	}
-	result := UsersClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := UsersClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("UsersClient.Update", "location", resp, client.pl)
 	if err != nil {
 		return UsersClientUpdatePollerResponse{}, err

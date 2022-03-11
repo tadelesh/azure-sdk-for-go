@@ -35,17 +35,17 @@ type WatcherClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWatcherClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WatcherClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WatcherClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *WatcherClient) createOrUpdateCreateRequest(ctx context.Context, re
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *WatcherClient) createOrUpdateHandleResponse(resp *http.Response) (WatcherClientCreateOrUpdateResponse, error) {
-	result := WatcherClientCreateOrUpdateResponse{RawResponse: resp}
+	result := WatcherClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Watcher); err != nil {
 		return WatcherClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *WatcherClient) Delete(ctx context.Context, resourceGroupName strin
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WatcherClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return WatcherClientDeleteResponse{RawResponse: resp}, nil
+	return WatcherClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *WatcherClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *WatcherClient) getHandleResponse(resp *http.Response) (WatcherClientGetResponse, error) {
-	result := WatcherClientGetResponse{RawResponse: resp}
+	result := WatcherClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Watcher); err != nil {
 		return WatcherClientGetResponse{}, err
 	}
@@ -271,7 +271,7 @@ func (client *WatcherClient) listByAutomationAccountCreateRequest(ctx context.Co
 
 // listByAutomationAccountHandleResponse handles the ListByAutomationAccount response.
 func (client *WatcherClient) listByAutomationAccountHandleResponse(resp *http.Response) (WatcherClientListByAutomationAccountResponse, error) {
-	result := WatcherClientListByAutomationAccountResponse{RawResponse: resp}
+	result := WatcherClientListByAutomationAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WatcherListResult); err != nil {
 		return WatcherClientListByAutomationAccountResponse{}, err
 	}
@@ -296,7 +296,7 @@ func (client *WatcherClient) Start(ctx context.Context, resourceGroupName string
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WatcherClientStartResponse{}, runtime.NewResponseError(resp)
 	}
-	return WatcherClientStartResponse{RawResponse: resp}, nil
+	return WatcherClientStartResponse{}, nil
 }
 
 // startCreateRequest creates the Start request.
@@ -347,7 +347,7 @@ func (client *WatcherClient) Stop(ctx context.Context, resourceGroupName string,
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WatcherClientStopResponse{}, runtime.NewResponseError(resp)
 	}
-	return WatcherClientStopResponse{RawResponse: resp}, nil
+	return WatcherClientStopResponse{}, nil
 }
 
 // stopCreateRequest creates the Stop request.
@@ -434,7 +434,7 @@ func (client *WatcherClient) updateCreateRequest(ctx context.Context, resourceGr
 
 // updateHandleResponse handles the Update response.
 func (client *WatcherClient) updateHandleResponse(resp *http.Response) (WatcherClientUpdateResponse, error) {
-	result := WatcherClientUpdateResponse{RawResponse: resp}
+	result := WatcherClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Watcher); err != nil {
 		return WatcherClientUpdateResponse{}, err
 	}

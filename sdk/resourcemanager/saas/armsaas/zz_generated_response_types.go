@@ -11,19 +11,11 @@ package armsaas
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // ApplicationsClientListResponse contains the response from method ApplicationsClient.List.
 type ApplicationsClientListResponse struct {
-	ApplicationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ApplicationsClientListResult contains the result from method ApplicationsClient.List.
-type ApplicationsClientListResult struct {
 	AppResponseWithContinuation
 }
 
@@ -31,9 +23,6 @@ type ApplicationsClientListResult struct {
 type ClientCreateResourcePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ClientCreateResourcePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -41,11 +30,10 @@ type ClientCreateResourcePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ClientCreateResourcePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ClientCreateResourceResponse, error) {
 	respType := ClientCreateResourceResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Resource)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Resource)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -58,24 +46,16 @@ func (l *ClientCreateResourcePollerResponse) Resume(ctx context.Context, client 
 	poller := &ClientCreateResourcePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ClientCreateResourceResponse contains the response from method Client.CreateResource.
 type ClientCreateResourceResponse struct {
-	ClientCreateResourceResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ClientCreateResourceResult contains the result from method Client.CreateResource.
-type ClientCreateResourceResult struct {
 	Resource
 }
 
@@ -83,9 +63,6 @@ type ClientCreateResourceResult struct {
 type ClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -93,11 +70,10 @@ type ClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ClientDeleteResponse, error) {
 	respType := ClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -110,30 +86,21 @@ func (l *ClientDeletePollerResponse) Resume(ctx context.Context, client *Client,
 	poller := &ClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ClientDeleteResponse contains the response from method Client.Delete.
 type ClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // ClientGetResourceResponse contains the response from method Client.GetResource.
 type ClientGetResourceResponse struct {
-	ClientGetResourceResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ClientGetResourceResult contains the result from method Client.GetResource.
-type ClientGetResourceResult struct {
 	Resource
 }
 
@@ -141,9 +108,6 @@ type ClientGetResourceResult struct {
 type ClientUpdateResourcePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ClientUpdateResourcePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -151,11 +115,10 @@ type ClientUpdateResourcePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ClientUpdateResourcePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ClientUpdateResourceResponse, error) {
 	respType := ClientUpdateResourceResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Resource)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Resource)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -168,24 +131,16 @@ func (l *ClientUpdateResourcePollerResponse) Resume(ctx context.Context, client 
 	poller := &ClientUpdateResourcePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ClientUpdateResourceResponse contains the response from method Client.UpdateResource.
 type ClientUpdateResourceResponse struct {
-	ClientUpdateResourceResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ClientUpdateResourceResult contains the result from method Client.UpdateResource.
-type ClientUpdateResourceResult struct {
 	Resource
 }
 
@@ -193,9 +148,6 @@ type ClientUpdateResourceResult struct {
 type OperationClientGetPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *OperationClientGetPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -203,11 +155,10 @@ type OperationClientGetPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l OperationClientGetPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (OperationClientGetResponse, error) {
 	respType := OperationClientGetResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Resource)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Resource)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -220,60 +171,31 @@ func (l *OperationClientGetPollerResponse) Resume(ctx context.Context, client *O
 	poller := &OperationClientGetPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // OperationClientGetResponse contains the response from method OperationClient.Get.
 type OperationClientGetResponse struct {
-	OperationClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationClientGetResult contains the result from method OperationClient.Get.
-type OperationClientGetResult struct {
 	Resource
 }
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	AppOperationsResponseWithContinuation
 }
 
 // ResourcesClientListAccessTokenResponse contains the response from method ResourcesClient.ListAccessToken.
 type ResourcesClientListAccessTokenResponse struct {
-	ResourcesClientListAccessTokenResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ResourcesClientListAccessTokenResult contains the result from method ResourcesClient.ListAccessToken.
-type ResourcesClientListAccessTokenResult struct {
 	AccessTokenResult
 }
 
 // ResourcesClientListResponse contains the response from method ResourcesClient.List.
 type ResourcesClientListResponse struct {
-	ResourcesClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ResourcesClientListResult contains the result from method ResourcesClient.List.
-type ResourcesClientListResult struct {
 	ResourceResponseWithContinuation
 }
 
@@ -281,9 +203,6 @@ type ResourcesClientListResult struct {
 type SubscriptionLevelClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *SubscriptionLevelClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -291,11 +210,10 @@ type SubscriptionLevelClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l SubscriptionLevelClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SubscriptionLevelClientCreateOrUpdateResponse, error) {
 	respType := SubscriptionLevelClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Resource)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Resource)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -308,24 +226,16 @@ func (l *SubscriptionLevelClientCreateOrUpdatePollerResponse) Resume(ctx context
 	poller := &SubscriptionLevelClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // SubscriptionLevelClientCreateOrUpdateResponse contains the response from method SubscriptionLevelClient.CreateOrUpdate.
 type SubscriptionLevelClientCreateOrUpdateResponse struct {
-	SubscriptionLevelClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// SubscriptionLevelClientCreateOrUpdateResult contains the result from method SubscriptionLevelClient.CreateOrUpdate.
-type SubscriptionLevelClientCreateOrUpdateResult struct {
 	Resource
 }
 
@@ -333,9 +243,6 @@ type SubscriptionLevelClientCreateOrUpdateResult struct {
 type SubscriptionLevelClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *SubscriptionLevelClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -343,11 +250,10 @@ type SubscriptionLevelClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l SubscriptionLevelClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SubscriptionLevelClientDeleteResponse, error) {
 	respType := SubscriptionLevelClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -360,66 +266,36 @@ func (l *SubscriptionLevelClientDeletePollerResponse) Resume(ctx context.Context
 	poller := &SubscriptionLevelClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // SubscriptionLevelClientDeleteResponse contains the response from method SubscriptionLevelClient.Delete.
 type SubscriptionLevelClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // SubscriptionLevelClientGetResponse contains the response from method SubscriptionLevelClient.Get.
 type SubscriptionLevelClientGetResponse struct {
-	SubscriptionLevelClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// SubscriptionLevelClientGetResult contains the result from method SubscriptionLevelClient.Get.
-type SubscriptionLevelClientGetResult struct {
 	Resource
 }
 
 // SubscriptionLevelClientListAccessTokenResponse contains the response from method SubscriptionLevelClient.ListAccessToken.
 type SubscriptionLevelClientListAccessTokenResponse struct {
-	SubscriptionLevelClientListAccessTokenResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// SubscriptionLevelClientListAccessTokenResult contains the result from method SubscriptionLevelClient.ListAccessToken.
-type SubscriptionLevelClientListAccessTokenResult struct {
 	AccessTokenResult
 }
 
 // SubscriptionLevelClientListByAzureSubscriptionResponse contains the response from method SubscriptionLevelClient.ListByAzureSubscription.
 type SubscriptionLevelClientListByAzureSubscriptionResponse struct {
-	SubscriptionLevelClientListByAzureSubscriptionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// SubscriptionLevelClientListByAzureSubscriptionResult contains the result from method SubscriptionLevelClient.ListByAzureSubscription.
-type SubscriptionLevelClientListByAzureSubscriptionResult struct {
 	ResourceResponseWithContinuation
 }
 
 // SubscriptionLevelClientListByResourceGroupResponse contains the response from method SubscriptionLevelClient.ListByResourceGroup.
 type SubscriptionLevelClientListByResourceGroupResponse struct {
-	SubscriptionLevelClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// SubscriptionLevelClientListByResourceGroupResult contains the result from method SubscriptionLevelClient.ListByResourceGroup.
-type SubscriptionLevelClientListByResourceGroupResult struct {
 	ResourceResponseWithContinuation
 }
 
@@ -427,9 +303,6 @@ type SubscriptionLevelClientListByResourceGroupResult struct {
 type SubscriptionLevelClientMoveResourcesPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *SubscriptionLevelClientMoveResourcesPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -437,11 +310,10 @@ type SubscriptionLevelClientMoveResourcesPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l SubscriptionLevelClientMoveResourcesPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SubscriptionLevelClientMoveResourcesResponse, error) {
 	respType := SubscriptionLevelClientMoveResourcesResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -454,28 +326,23 @@ func (l *SubscriptionLevelClientMoveResourcesPollerResponse) Resume(ctx context.
 	poller := &SubscriptionLevelClientMoveResourcesPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // SubscriptionLevelClientMoveResourcesResponse contains the response from method SubscriptionLevelClient.MoveResources.
 type SubscriptionLevelClientMoveResourcesResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // SubscriptionLevelClientUpdatePollerResponse contains the response from method SubscriptionLevelClient.Update.
 type SubscriptionLevelClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *SubscriptionLevelClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -483,11 +350,10 @@ type SubscriptionLevelClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l SubscriptionLevelClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SubscriptionLevelClientUpdateResponse, error) {
 	respType := SubscriptionLevelClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Resource)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Resource)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -500,24 +366,16 @@ func (l *SubscriptionLevelClientUpdatePollerResponse) Resume(ctx context.Context
 	poller := &SubscriptionLevelClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // SubscriptionLevelClientUpdateResponse contains the response from method SubscriptionLevelClient.Update.
 type SubscriptionLevelClientUpdateResponse struct {
-	SubscriptionLevelClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// SubscriptionLevelClientUpdateResult contains the result from method SubscriptionLevelClient.Update.
-type SubscriptionLevelClientUpdateResult struct {
 	Resource
 }
 
@@ -525,9 +383,6 @@ type SubscriptionLevelClientUpdateResult struct {
 type SubscriptionLevelClientUpdateToUnsubscribedPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *SubscriptionLevelClientUpdateToUnsubscribedPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -535,11 +390,10 @@ type SubscriptionLevelClientUpdateToUnsubscribedPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l SubscriptionLevelClientUpdateToUnsubscribedPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SubscriptionLevelClientUpdateToUnsubscribedResponse, error) {
 	respType := SubscriptionLevelClientUpdateToUnsubscribedResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -552,23 +406,20 @@ func (l *SubscriptionLevelClientUpdateToUnsubscribedPollerResponse) Resume(ctx c
 	poller := &SubscriptionLevelClientUpdateToUnsubscribedPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // SubscriptionLevelClientUpdateToUnsubscribedResponse contains the response from method SubscriptionLevelClient.UpdateToUnsubscribed.
 type SubscriptionLevelClientUpdateToUnsubscribedResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // SubscriptionLevelClientValidateMoveResourcesResponse contains the response from method SubscriptionLevelClient.ValidateMoveResources.
 type SubscriptionLevelClientValidateMoveResourcesResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }

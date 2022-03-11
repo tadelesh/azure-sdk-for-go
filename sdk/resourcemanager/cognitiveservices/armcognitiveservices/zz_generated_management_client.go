@@ -34,17 +34,17 @@ type ManagementClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagementClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagementClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagementClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -89,7 +89,7 @@ func (client *ManagementClient) checkDomainAvailabilityCreateRequest(ctx context
 
 // checkDomainAvailabilityHandleResponse handles the CheckDomainAvailability response.
 func (client *ManagementClient) checkDomainAvailabilityHandleResponse(resp *http.Response) (ManagementClientCheckDomainAvailabilityResponse, error) {
-	result := ManagementClientCheckDomainAvailabilityResponse{RawResponse: resp}
+	result := ManagementClientCheckDomainAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainAvailability); err != nil {
 		return ManagementClientCheckDomainAvailabilityResponse{}, err
 	}
@@ -141,7 +141,7 @@ func (client *ManagementClient) checkSKUAvailabilityCreateRequest(ctx context.Co
 
 // checkSKUAvailabilityHandleResponse handles the CheckSKUAvailability response.
 func (client *ManagementClient) checkSKUAvailabilityHandleResponse(resp *http.Response) (ManagementClientCheckSKUAvailabilityResponse, error) {
-	result := ManagementClientCheckSKUAvailabilityResponse{RawResponse: resp}
+	result := ManagementClientCheckSKUAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUAvailabilityListResult); err != nil {
 		return ManagementClientCheckSKUAvailabilityResponse{}, err
 	}

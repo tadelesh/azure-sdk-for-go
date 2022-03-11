@@ -35,17 +35,17 @@ type DisksClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDisksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DisksClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DisksClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *DisksClient) BeginAttach(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return DisksClientAttachPollerResponse{}, err
 	}
-	result := DisksClientAttachPollerResponse{
-		RawResponse: resp,
-	}
+	result := DisksClientAttachPollerResponse{}
 	pt, err := armruntime.NewPoller("DisksClient.Attach", "", resp, client.pl)
 	if err != nil {
 		return DisksClientAttachPollerResponse{}, err
@@ -141,9 +139,7 @@ func (client *DisksClient) BeginCreateOrUpdate(ctx context.Context, resourceGrou
 	if err != nil {
 		return DisksClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DisksClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DisksClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DisksClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DisksClientCreateOrUpdatePollerResponse{}, err
@@ -217,9 +213,7 @@ func (client *DisksClient) BeginDelete(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return DisksClientDeletePollerResponse{}, err
 	}
-	result := DisksClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DisksClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DisksClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DisksClientDeletePollerResponse{}, err
@@ -295,9 +289,7 @@ func (client *DisksClient) BeginDetach(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return DisksClientDetachPollerResponse{}, err
 	}
-	result := DisksClientDetachPollerResponse{
-		RawResponse: resp,
-	}
+	result := DisksClientDetachPollerResponse{}
 	pt, err := armruntime.NewPoller("DisksClient.Detach", "", resp, client.pl)
 	if err != nil {
 		return DisksClientDetachPollerResponse{}, err
@@ -420,7 +412,7 @@ func (client *DisksClient) getCreateRequest(ctx context.Context, resourceGroupNa
 
 // getHandleResponse handles the Get response.
 func (client *DisksClient) getHandleResponse(resp *http.Response) (DisksClientGetResponse, error) {
-	result := DisksClientGetResponse{RawResponse: resp}
+	result := DisksClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Disk); err != nil {
 		return DisksClientGetResponse{}, err
 	}
@@ -489,7 +481,7 @@ func (client *DisksClient) listCreateRequest(ctx context.Context, resourceGroupN
 
 // listHandleResponse handles the List response.
 func (client *DisksClient) listHandleResponse(resp *http.Response) (DisksClientListResponse, error) {
-	result := DisksClientListResponse{RawResponse: resp}
+	result := DisksClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiskList); err != nil {
 		return DisksClientListResponse{}, err
 	}
@@ -555,7 +547,7 @@ func (client *DisksClient) updateCreateRequest(ctx context.Context, resourceGrou
 
 // updateHandleResponse handles the Update response.
 func (client *DisksClient) updateHandleResponse(resp *http.Response) (DisksClientUpdateResponse, error) {
-	result := DisksClientUpdateResponse{RawResponse: resp}
+	result := DisksClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Disk); err != nil {
 		return DisksClientUpdateResponse{}, err
 	}

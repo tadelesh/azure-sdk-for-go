@@ -34,17 +34,17 @@ type ManagedDatabaseTablesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedDatabaseTablesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedDatabaseTablesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedDatabaseTablesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -114,7 +114,7 @@ func (client *ManagedDatabaseTablesClient) getCreateRequest(ctx context.Context,
 
 // getHandleResponse handles the Get response.
 func (client *ManagedDatabaseTablesClient) getHandleResponse(resp *http.Response) (ManagedDatabaseTablesClientGetResponse, error) {
-	result := ManagedDatabaseTablesClientGetResponse{RawResponse: resp}
+	result := ManagedDatabaseTablesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseTable); err != nil {
 		return ManagedDatabaseTablesClientGetResponse{}, err
 	}
@@ -181,7 +181,7 @@ func (client *ManagedDatabaseTablesClient) listBySchemaCreateRequest(ctx context
 
 // listBySchemaHandleResponse handles the ListBySchema response.
 func (client *ManagedDatabaseTablesClient) listBySchemaHandleResponse(resp *http.Response) (ManagedDatabaseTablesClientListBySchemaResponse, error) {
-	result := ManagedDatabaseTablesClientListBySchemaResponse{RawResponse: resp}
+	result := ManagedDatabaseTablesClientListBySchemaResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseTableListResult); err != nil {
 		return ManagedDatabaseTablesClientListBySchemaResponse{}, err
 	}

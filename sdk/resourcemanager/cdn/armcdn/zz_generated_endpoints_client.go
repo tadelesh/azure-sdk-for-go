@@ -62,9 +62,7 @@ func (client *EndpointsClient) BeginCreate(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return EndpointsClientCreatePollerResponse{}, err
 	}
-	result := EndpointsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := EndpointsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("EndpointsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return EndpointsClientCreatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *EndpointsClient) BeginDelete(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return EndpointsClientDeletePollerResponse{}, err
 	}
-	result := EndpointsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := EndpointsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("EndpointsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return EndpointsClientDeletePollerResponse{}, err
@@ -250,7 +246,7 @@ func (client *EndpointsClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *EndpointsClient) getHandleResponse(resp *http.Response) (EndpointsClientGetResponse, error) {
-	result := EndpointsClientGetResponse{RawResponse: resp}
+	result := EndpointsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Endpoint); err != nil {
 		return EndpointsClientGetResponse{}, err
 	}
@@ -302,7 +298,7 @@ func (client *EndpointsClient) listByProfileCreateRequest(ctx context.Context, r
 
 // listByProfileHandleResponse handles the ListByProfile response.
 func (client *EndpointsClient) listByProfileHandleResponse(resp *http.Response) (EndpointsClientListByProfileResponse, error) {
-	result := EndpointsClientListByProfileResponse{RawResponse: resp}
+	result := EndpointsClientListByProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EndpointListResult); err != nil {
 		return EndpointsClientListByProfileResponse{}, err
 	}
@@ -360,7 +356,7 @@ func (client *EndpointsClient) listResourceUsageCreateRequest(ctx context.Contex
 
 // listResourceUsageHandleResponse handles the ListResourceUsage response.
 func (client *EndpointsClient) listResourceUsageHandleResponse(resp *http.Response) (EndpointsClientListResourceUsageResponse, error) {
-	result := EndpointsClientListResourceUsageResponse{RawResponse: resp}
+	result := EndpointsClientListResourceUsageResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceUsageListResult); err != nil {
 		return EndpointsClientListResourceUsageResponse{}, err
 	}
@@ -381,9 +377,7 @@ func (client *EndpointsClient) BeginLoadContent(ctx context.Context, resourceGro
 	if err != nil {
 		return EndpointsClientLoadContentPollerResponse{}, err
 	}
-	result := EndpointsClientLoadContentPollerResponse{
-		RawResponse: resp,
-	}
+	result := EndpointsClientLoadContentPollerResponse{}
 	pt, err := armruntime.NewPoller("EndpointsClient.LoadContent", "", resp, client.pl)
 	if err != nil {
 		return EndpointsClientLoadContentPollerResponse{}, err
@@ -456,9 +450,7 @@ func (client *EndpointsClient) BeginPurgeContent(ctx context.Context, resourceGr
 	if err != nil {
 		return EndpointsClientPurgeContentPollerResponse{}, err
 	}
-	result := EndpointsClientPurgeContentPollerResponse{
-		RawResponse: resp,
-	}
+	result := EndpointsClientPurgeContentPollerResponse{}
 	pt, err := armruntime.NewPoller("EndpointsClient.PurgeContent", "", resp, client.pl)
 	if err != nil {
 		return EndpointsClientPurgeContentPollerResponse{}, err
@@ -527,9 +519,7 @@ func (client *EndpointsClient) BeginStart(ctx context.Context, resourceGroupName
 	if err != nil {
 		return EndpointsClientStartPollerResponse{}, err
 	}
-	result := EndpointsClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := EndpointsClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("EndpointsClient.Start", "", resp, client.pl)
 	if err != nil {
 		return EndpointsClientStartPollerResponse{}, err
@@ -598,9 +588,7 @@ func (client *EndpointsClient) BeginStop(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return EndpointsClientStopPollerResponse{}, err
 	}
-	result := EndpointsClientStopPollerResponse{
-		RawResponse: resp,
-	}
+	result := EndpointsClientStopPollerResponse{}
 	pt, err := armruntime.NewPoller("EndpointsClient.Stop", "", resp, client.pl)
 	if err != nil {
 		return EndpointsClientStopPollerResponse{}, err
@@ -673,9 +661,7 @@ func (client *EndpointsClient) BeginUpdate(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return EndpointsClientUpdatePollerResponse{}, err
 	}
-	result := EndpointsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := EndpointsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("EndpointsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return EndpointsClientUpdatePollerResponse{}, err
@@ -791,7 +777,7 @@ func (client *EndpointsClient) validateCustomDomainCreateRequest(ctx context.Con
 
 // validateCustomDomainHandleResponse handles the ValidateCustomDomain response.
 func (client *EndpointsClient) validateCustomDomainHandleResponse(resp *http.Response) (EndpointsClientValidateCustomDomainResponse, error) {
-	result := EndpointsClientValidateCustomDomainResponse{RawResponse: resp}
+	result := EndpointsClientValidateCustomDomainResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ValidateCustomDomainOutput); err != nil {
 		return EndpointsClientValidateCustomDomainResponse{}, err
 	}

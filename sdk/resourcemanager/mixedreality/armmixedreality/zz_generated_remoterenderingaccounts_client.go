@@ -34,17 +34,17 @@ type RemoteRenderingAccountsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRemoteRenderingAccountsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RemoteRenderingAccountsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RemoteRenderingAccountsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *RemoteRenderingAccountsClient) createCreateRequest(ctx context.Con
 
 // createHandleResponse handles the Create response.
 func (client *RemoteRenderingAccountsClient) createHandleResponse(resp *http.Response) (RemoteRenderingAccountsClientCreateResponse, error) {
-	result := RemoteRenderingAccountsClientCreateResponse{RawResponse: resp}
+	result := RemoteRenderingAccountsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemoteRenderingAccount); err != nil {
 		return RemoteRenderingAccountsClientCreateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *RemoteRenderingAccountsClient) Delete(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return RemoteRenderingAccountsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return RemoteRenderingAccountsClientDeleteResponse{RawResponse: resp}, nil
+	return RemoteRenderingAccountsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -202,7 +202,7 @@ func (client *RemoteRenderingAccountsClient) getCreateRequest(ctx context.Contex
 
 // getHandleResponse handles the Get response.
 func (client *RemoteRenderingAccountsClient) getHandleResponse(resp *http.Response) (RemoteRenderingAccountsClientGetResponse, error) {
-	result := RemoteRenderingAccountsClientGetResponse{RawResponse: resp}
+	result := RemoteRenderingAccountsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemoteRenderingAccount); err != nil {
 		return RemoteRenderingAccountsClientGetResponse{}, err
 	}
@@ -250,7 +250,7 @@ func (client *RemoteRenderingAccountsClient) listByResourceGroupCreateRequest(ct
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *RemoteRenderingAccountsClient) listByResourceGroupHandleResponse(resp *http.Response) (RemoteRenderingAccountsClientListByResourceGroupResponse, error) {
-	result := RemoteRenderingAccountsClientListByResourceGroupResponse{RawResponse: resp}
+	result := RemoteRenderingAccountsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemoteRenderingAccountPage); err != nil {
 		return RemoteRenderingAccountsClientListByResourceGroupResponse{}, err
 	}
@@ -293,7 +293,7 @@ func (client *RemoteRenderingAccountsClient) listBySubscriptionCreateRequest(ctx
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *RemoteRenderingAccountsClient) listBySubscriptionHandleResponse(resp *http.Response) (RemoteRenderingAccountsClientListBySubscriptionResponse, error) {
-	result := RemoteRenderingAccountsClientListBySubscriptionResponse{RawResponse: resp}
+	result := RemoteRenderingAccountsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemoteRenderingAccountPage); err != nil {
 		return RemoteRenderingAccountsClientListBySubscriptionResponse{}, err
 	}
@@ -349,7 +349,7 @@ func (client *RemoteRenderingAccountsClient) listKeysCreateRequest(ctx context.C
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *RemoteRenderingAccountsClient) listKeysHandleResponse(resp *http.Response) (RemoteRenderingAccountsClientListKeysResponse, error) {
-	result := RemoteRenderingAccountsClientListKeysResponse{RawResponse: resp}
+	result := RemoteRenderingAccountsClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountKeys); err != nil {
 		return RemoteRenderingAccountsClientListKeysResponse{}, err
 	}
@@ -406,7 +406,7 @@ func (client *RemoteRenderingAccountsClient) regenerateKeysCreateRequest(ctx con
 
 // regenerateKeysHandleResponse handles the RegenerateKeys response.
 func (client *RemoteRenderingAccountsClient) regenerateKeysHandleResponse(resp *http.Response) (RemoteRenderingAccountsClientRegenerateKeysResponse, error) {
-	result := RemoteRenderingAccountsClientRegenerateKeysResponse{RawResponse: resp}
+	result := RemoteRenderingAccountsClientRegenerateKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountKeys); err != nil {
 		return RemoteRenderingAccountsClientRegenerateKeysResponse{}, err
 	}
@@ -463,7 +463,7 @@ func (client *RemoteRenderingAccountsClient) updateCreateRequest(ctx context.Con
 
 // updateHandleResponse handles the Update response.
 func (client *RemoteRenderingAccountsClient) updateHandleResponse(resp *http.Response) (RemoteRenderingAccountsClientUpdateResponse, error) {
-	result := RemoteRenderingAccountsClientUpdateResponse{RawResponse: resp}
+	result := RemoteRenderingAccountsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemoteRenderingAccount); err != nil {
 		return RemoteRenderingAccountsClientUpdateResponse{}, err
 	}

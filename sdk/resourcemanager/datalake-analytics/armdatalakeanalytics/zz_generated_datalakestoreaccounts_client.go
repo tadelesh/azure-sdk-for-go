@@ -36,17 +36,17 @@ type DataLakeStoreAccountsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataLakeStoreAccountsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataLakeStoreAccountsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataLakeStoreAccountsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -70,7 +70,7 @@ func (client *DataLakeStoreAccountsClient) Add(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return DataLakeStoreAccountsClientAddResponse{}, runtime.NewResponseError(resp)
 	}
-	return DataLakeStoreAccountsClientAddResponse{RawResponse: resp}, nil
+	return DataLakeStoreAccountsClientAddResponse{}, nil
 }
 
 // addCreateRequest creates the Add request.
@@ -125,7 +125,7 @@ func (client *DataLakeStoreAccountsClient) Delete(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DataLakeStoreAccountsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DataLakeStoreAccountsClientDeleteResponse{RawResponse: resp}, nil
+	return DataLakeStoreAccountsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -212,7 +212,7 @@ func (client *DataLakeStoreAccountsClient) getCreateRequest(ctx context.Context,
 
 // getHandleResponse handles the Get response.
 func (client *DataLakeStoreAccountsClient) getHandleResponse(resp *http.Response) (DataLakeStoreAccountsClientGetResponse, error) {
-	result := DataLakeStoreAccountsClientGetResponse{RawResponse: resp}
+	result := DataLakeStoreAccountsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataLakeStoreAccountInformation); err != nil {
 		return DataLakeStoreAccountsClientGetResponse{}, err
 	}
@@ -284,7 +284,7 @@ func (client *DataLakeStoreAccountsClient) listByAccountCreateRequest(ctx contex
 
 // listByAccountHandleResponse handles the ListByAccount response.
 func (client *DataLakeStoreAccountsClient) listByAccountHandleResponse(resp *http.Response) (DataLakeStoreAccountsClientListByAccountResponse, error) {
-	result := DataLakeStoreAccountsClientListByAccountResponse{RawResponse: resp}
+	result := DataLakeStoreAccountsClientListByAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataLakeStoreAccountInformationListResult); err != nil {
 		return DataLakeStoreAccountsClientListByAccountResponse{}, err
 	}

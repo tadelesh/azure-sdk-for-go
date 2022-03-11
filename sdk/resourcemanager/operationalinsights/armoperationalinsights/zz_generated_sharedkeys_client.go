@@ -34,17 +34,17 @@ type SharedKeysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSharedKeysClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SharedKeysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SharedKeysClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *SharedKeysClient) getSharedKeysCreateRequest(ctx context.Context, 
 
 // getSharedKeysHandleResponse handles the GetSharedKeys response.
 func (client *SharedKeysClient) getSharedKeysHandleResponse(resp *http.Response) (SharedKeysClientGetSharedKeysResponse, error) {
-	result := SharedKeysClientGetSharedKeysResponse{RawResponse: resp}
+	result := SharedKeysClientGetSharedKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedKeys); err != nil {
 		return SharedKeysClientGetSharedKeysResponse{}, err
 	}
@@ -154,7 +154,7 @@ func (client *SharedKeysClient) regenerateCreateRequest(ctx context.Context, res
 
 // regenerateHandleResponse handles the Regenerate response.
 func (client *SharedKeysClient) regenerateHandleResponse(resp *http.Response) (SharedKeysClientRegenerateResponse, error) {
-	result := SharedKeysClientRegenerateResponse{RawResponse: resp}
+	result := SharedKeysClientRegenerateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedKeys); err != nil {
 		return SharedKeysClientRegenerateResponse{}, err
 	}

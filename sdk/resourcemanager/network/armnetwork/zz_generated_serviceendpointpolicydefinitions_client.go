@@ -35,17 +35,17 @@ type ServiceEndpointPolicyDefinitionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServiceEndpointPolicyDefinitionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServiceEndpointPolicyDefinitionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServiceEndpointPolicyDefinitionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ServiceEndpointPolicyDefinitionsClient) BeginCreateOrUpdate(ctx co
 	if err != nil {
 		return ServiceEndpointPolicyDefinitionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ServiceEndpointPolicyDefinitionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServiceEndpointPolicyDefinitionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServiceEndpointPolicyDefinitionsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ServiceEndpointPolicyDefinitionsClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *ServiceEndpointPolicyDefinitionsClient) BeginDelete(ctx context.Co
 	if err != nil {
 		return ServiceEndpointPolicyDefinitionsClientDeletePollerResponse{}, err
 	}
-	result := ServiceEndpointPolicyDefinitionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServiceEndpointPolicyDefinitionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ServiceEndpointPolicyDefinitionsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return ServiceEndpointPolicyDefinitionsClientDeletePollerResponse{}, err
@@ -249,7 +245,7 @@ func (client *ServiceEndpointPolicyDefinitionsClient) getCreateRequest(ctx conte
 
 // getHandleResponse handles the Get response.
 func (client *ServiceEndpointPolicyDefinitionsClient) getHandleResponse(resp *http.Response) (ServiceEndpointPolicyDefinitionsClientGetResponse, error) {
-	result := ServiceEndpointPolicyDefinitionsClientGetResponse{RawResponse: resp}
+	result := ServiceEndpointPolicyDefinitionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceEndpointPolicyDefinition); err != nil {
 		return ServiceEndpointPolicyDefinitionsClientGetResponse{}, err
 	}
@@ -302,7 +298,7 @@ func (client *ServiceEndpointPolicyDefinitionsClient) listByResourceGroupCreateR
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ServiceEndpointPolicyDefinitionsClient) listByResourceGroupHandleResponse(resp *http.Response) (ServiceEndpointPolicyDefinitionsClientListByResourceGroupResponse, error) {
-	result := ServiceEndpointPolicyDefinitionsClientListByResourceGroupResponse{RawResponse: resp}
+	result := ServiceEndpointPolicyDefinitionsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceEndpointPolicyDefinitionListResult); err != nil {
 		return ServiceEndpointPolicyDefinitionsClientListByResourceGroupResponse{}, err
 	}

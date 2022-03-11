@@ -35,17 +35,17 @@ type LocationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLocationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LocationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LocationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -97,7 +97,7 @@ func (client *LocationsClient) checkNameAvailabilityCreateRequest(ctx context.Co
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *LocationsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (LocationsClientCheckNameAvailabilityResponse, error) {
-	result := LocationsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := LocationsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NameAvailability); err != nil {
 		return LocationsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -148,7 +148,7 @@ func (client *LocationsClient) listConsortiumsCreateRequest(ctx context.Context,
 
 // listConsortiumsHandleResponse handles the ListConsortiums response.
 func (client *LocationsClient) listConsortiumsHandleResponse(resp *http.Response) (LocationsClientListConsortiumsResponse, error) {
-	result := LocationsClientListConsortiumsResponse{RawResponse: resp}
+	result := LocationsClientListConsortiumsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConsortiumCollection); err != nil {
 		return LocationsClientListConsortiumsResponse{}, err
 	}

@@ -43,11 +43,10 @@ func (p *CassandraClustersClientCreateUpdatePoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final CassandraClustersClientCreateUpdateResponse will be returned.
 func (p *CassandraClustersClientCreateUpdatePoller) FinalResponse(ctx context.Context) (CassandraClustersClientCreateUpdateResponse, error) {
 	respType := CassandraClustersClientCreateUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ClusterResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.ClusterResource)
 	if err != nil {
 		return CassandraClustersClientCreateUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *CassandraClustersClientDeallocatePoller) Poll(ctx context.Context) (*ht
 // If the final GET succeeded then the final CassandraClustersClientDeallocateResponse will be returned.
 func (p *CassandraClustersClientDeallocatePoller) FinalResponse(ctx context.Context) (CassandraClustersClientDeallocateResponse, error) {
 	respType := CassandraClustersClientDeallocateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CassandraClustersClientDeallocateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *CassandraClustersClientDeletePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final CassandraClustersClientDeleteResponse will be returned.
 func (p *CassandraClustersClientDeletePoller) FinalResponse(ctx context.Context) (CassandraClustersClientDeleteResponse, error) {
 	respType := CassandraClustersClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CassandraClustersClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *CassandraClustersClientInvokeCommandPoller) Poll(ctx context.Context) (
 // If the final GET succeeded then the final CassandraClustersClientInvokeCommandResponse will be returned.
 func (p *CassandraClustersClientInvokeCommandPoller) FinalResponse(ctx context.Context) (CassandraClustersClientInvokeCommandResponse, error) {
 	respType := CassandraClustersClientInvokeCommandResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.CommandOutput)
+	_, err := p.pt.FinalResponse(ctx, &respType.CommandOutput)
 	if err != nil {
 		return CassandraClustersClientInvokeCommandResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *CassandraClustersClientStartPoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final CassandraClustersClientStartResponse will be returned.
 func (p *CassandraClustersClientStartPoller) FinalResponse(ctx context.Context) (CassandraClustersClientStartResponse, error) {
 	respType := CassandraClustersClientStartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CassandraClustersClientStartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *CassandraClustersClientUpdatePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final CassandraClustersClientUpdateResponse will be returned.
 func (p *CassandraClustersClientUpdatePoller) FinalResponse(ctx context.Context) (CassandraClustersClientUpdateResponse, error) {
 	respType := CassandraClustersClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ClusterResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.ClusterResource)
 	if err != nil {
 		return CassandraClustersClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *CassandraDataCentersClientCreateUpdatePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final CassandraDataCentersClientCreateUpdateResponse will be returned.
 func (p *CassandraDataCentersClientCreateUpdatePoller) FinalResponse(ctx context.Context) (CassandraDataCentersClientCreateUpdateResponse, error) {
 	respType := CassandraDataCentersClientCreateUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DataCenterResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.DataCenterResource)
 	if err != nil {
 		return CassandraDataCentersClientCreateUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *CassandraDataCentersClientDeletePoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final CassandraDataCentersClientDeleteResponse will be returned.
 func (p *CassandraDataCentersClientDeletePoller) FinalResponse(ctx context.Context) (CassandraDataCentersClientDeleteResponse, error) {
 	respType := CassandraDataCentersClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CassandraDataCentersClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *CassandraDataCentersClientUpdatePoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final CassandraDataCentersClientUpdateResponse will be returned.
 func (p *CassandraDataCentersClientUpdatePoller) FinalResponse(ctx context.Context) (CassandraDataCentersClientUpdateResponse, error) {
 	respType := CassandraDataCentersClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DataCenterResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.DataCenterResource)
 	if err != nil {
 		return CassandraDataCentersClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -430,11 +421,10 @@ func (p *CassandraResourcesClientCreateUpdateCassandraKeyspacePoller) Poll(ctx c
 // If the final GET succeeded then the final CassandraResourcesClientCreateUpdateCassandraKeyspaceResponse will be returned.
 func (p *CassandraResourcesClientCreateUpdateCassandraKeyspacePoller) FinalResponse(ctx context.Context) (CassandraResourcesClientCreateUpdateCassandraKeyspaceResponse, error) {
 	respType := CassandraResourcesClientCreateUpdateCassandraKeyspaceResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.CassandraKeyspaceGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.CassandraKeyspaceGetResults)
 	if err != nil {
 		return CassandraResourcesClientCreateUpdateCassandraKeyspaceResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -473,11 +463,10 @@ func (p *CassandraResourcesClientCreateUpdateCassandraTablePoller) Poll(ctx cont
 // If the final GET succeeded then the final CassandraResourcesClientCreateUpdateCassandraTableResponse will be returned.
 func (p *CassandraResourcesClientCreateUpdateCassandraTablePoller) FinalResponse(ctx context.Context) (CassandraResourcesClientCreateUpdateCassandraTableResponse, error) {
 	respType := CassandraResourcesClientCreateUpdateCassandraTableResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.CassandraTableGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.CassandraTableGetResults)
 	if err != nil {
 		return CassandraResourcesClientCreateUpdateCassandraTableResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -516,11 +505,10 @@ func (p *CassandraResourcesClientDeleteCassandraKeyspacePoller) Poll(ctx context
 // If the final GET succeeded then the final CassandraResourcesClientDeleteCassandraKeyspaceResponse will be returned.
 func (p *CassandraResourcesClientDeleteCassandraKeyspacePoller) FinalResponse(ctx context.Context) (CassandraResourcesClientDeleteCassandraKeyspaceResponse, error) {
 	respType := CassandraResourcesClientDeleteCassandraKeyspaceResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CassandraResourcesClientDeleteCassandraKeyspaceResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -559,11 +547,10 @@ func (p *CassandraResourcesClientDeleteCassandraTablePoller) Poll(ctx context.Co
 // If the final GET succeeded then the final CassandraResourcesClientDeleteCassandraTableResponse will be returned.
 func (p *CassandraResourcesClientDeleteCassandraTablePoller) FinalResponse(ctx context.Context) (CassandraResourcesClientDeleteCassandraTableResponse, error) {
 	respType := CassandraResourcesClientDeleteCassandraTableResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CassandraResourcesClientDeleteCassandraTableResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -602,11 +589,10 @@ func (p *CassandraResourcesClientMigrateCassandraKeyspaceToAutoscalePoller) Poll
 // If the final GET succeeded then the final CassandraResourcesClientMigrateCassandraKeyspaceToAutoscaleResponse will be returned.
 func (p *CassandraResourcesClientMigrateCassandraKeyspaceToAutoscalePoller) FinalResponse(ctx context.Context) (CassandraResourcesClientMigrateCassandraKeyspaceToAutoscaleResponse, error) {
 	respType := CassandraResourcesClientMigrateCassandraKeyspaceToAutoscaleResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return CassandraResourcesClientMigrateCassandraKeyspaceToAutoscaleResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -645,11 +631,10 @@ func (p *CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputPolle
 // If the final GET succeeded then the final CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputResponse will be returned.
 func (p *CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputPoller) FinalResponse(ctx context.Context) (CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputResponse, error) {
 	respType := CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return CassandraResourcesClientMigrateCassandraKeyspaceToManualThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -688,11 +673,10 @@ func (p *CassandraResourcesClientMigrateCassandraTableToAutoscalePoller) Poll(ct
 // If the final GET succeeded then the final CassandraResourcesClientMigrateCassandraTableToAutoscaleResponse will be returned.
 func (p *CassandraResourcesClientMigrateCassandraTableToAutoscalePoller) FinalResponse(ctx context.Context) (CassandraResourcesClientMigrateCassandraTableToAutoscaleResponse, error) {
 	respType := CassandraResourcesClientMigrateCassandraTableToAutoscaleResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return CassandraResourcesClientMigrateCassandraTableToAutoscaleResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -731,11 +715,10 @@ func (p *CassandraResourcesClientMigrateCassandraTableToManualThroughputPoller) 
 // If the final GET succeeded then the final CassandraResourcesClientMigrateCassandraTableToManualThroughputResponse will be returned.
 func (p *CassandraResourcesClientMigrateCassandraTableToManualThroughputPoller) FinalResponse(ctx context.Context) (CassandraResourcesClientMigrateCassandraTableToManualThroughputResponse, error) {
 	respType := CassandraResourcesClientMigrateCassandraTableToManualThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return CassandraResourcesClientMigrateCassandraTableToManualThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -774,11 +757,10 @@ func (p *CassandraResourcesClientUpdateCassandraKeyspaceThroughputPoller) Poll(c
 // If the final GET succeeded then the final CassandraResourcesClientUpdateCassandraKeyspaceThroughputResponse will be returned.
 func (p *CassandraResourcesClientUpdateCassandraKeyspaceThroughputPoller) FinalResponse(ctx context.Context) (CassandraResourcesClientUpdateCassandraKeyspaceThroughputResponse, error) {
 	respType := CassandraResourcesClientUpdateCassandraKeyspaceThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return CassandraResourcesClientUpdateCassandraKeyspaceThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -817,11 +799,10 @@ func (p *CassandraResourcesClientUpdateCassandraTableThroughputPoller) Poll(ctx 
 // If the final GET succeeded then the final CassandraResourcesClientUpdateCassandraTableThroughputResponse will be returned.
 func (p *CassandraResourcesClientUpdateCassandraTableThroughputPoller) FinalResponse(ctx context.Context) (CassandraResourcesClientUpdateCassandraTableThroughputResponse, error) {
 	respType := CassandraResourcesClientUpdateCassandraTableThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return CassandraResourcesClientUpdateCassandraTableThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -860,11 +841,10 @@ func (p *DatabaseAccountsClientCreateOrUpdatePoller) Poll(ctx context.Context) (
 // If the final GET succeeded then the final DatabaseAccountsClientCreateOrUpdateResponse will be returned.
 func (p *DatabaseAccountsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (DatabaseAccountsClientCreateOrUpdateResponse, error) {
 	respType := DatabaseAccountsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DatabaseAccountGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.DatabaseAccountGetResults)
 	if err != nil {
 		return DatabaseAccountsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -903,11 +883,10 @@ func (p *DatabaseAccountsClientDeletePoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final DatabaseAccountsClientDeleteResponse will be returned.
 func (p *DatabaseAccountsClientDeletePoller) FinalResponse(ctx context.Context) (DatabaseAccountsClientDeleteResponse, error) {
 	respType := DatabaseAccountsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DatabaseAccountsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -946,11 +925,10 @@ func (p *DatabaseAccountsClientFailoverPriorityChangePoller) Poll(ctx context.Co
 // If the final GET succeeded then the final DatabaseAccountsClientFailoverPriorityChangeResponse will be returned.
 func (p *DatabaseAccountsClientFailoverPriorityChangePoller) FinalResponse(ctx context.Context) (DatabaseAccountsClientFailoverPriorityChangeResponse, error) {
 	respType := DatabaseAccountsClientFailoverPriorityChangeResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DatabaseAccountsClientFailoverPriorityChangeResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -989,11 +967,10 @@ func (p *DatabaseAccountsClientOfflineRegionPoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final DatabaseAccountsClientOfflineRegionResponse will be returned.
 func (p *DatabaseAccountsClientOfflineRegionPoller) FinalResponse(ctx context.Context) (DatabaseAccountsClientOfflineRegionResponse, error) {
 	respType := DatabaseAccountsClientOfflineRegionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DatabaseAccountsClientOfflineRegionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1032,11 +1009,10 @@ func (p *DatabaseAccountsClientOnlineRegionPoller) Poll(ctx context.Context) (*h
 // If the final GET succeeded then the final DatabaseAccountsClientOnlineRegionResponse will be returned.
 func (p *DatabaseAccountsClientOnlineRegionPoller) FinalResponse(ctx context.Context) (DatabaseAccountsClientOnlineRegionResponse, error) {
 	respType := DatabaseAccountsClientOnlineRegionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DatabaseAccountsClientOnlineRegionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1075,11 +1051,10 @@ func (p *DatabaseAccountsClientRegenerateKeyPoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final DatabaseAccountsClientRegenerateKeyResponse will be returned.
 func (p *DatabaseAccountsClientRegenerateKeyPoller) FinalResponse(ctx context.Context) (DatabaseAccountsClientRegenerateKeyResponse, error) {
 	respType := DatabaseAccountsClientRegenerateKeyResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DatabaseAccountsClientRegenerateKeyResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1118,11 +1093,10 @@ func (p *DatabaseAccountsClientUpdatePoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final DatabaseAccountsClientUpdateResponse will be returned.
 func (p *DatabaseAccountsClientUpdatePoller) FinalResponse(ctx context.Context) (DatabaseAccountsClientUpdateResponse, error) {
 	respType := DatabaseAccountsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DatabaseAccountGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.DatabaseAccountGetResults)
 	if err != nil {
 		return DatabaseAccountsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1161,11 +1135,10 @@ func (p *GremlinResourcesClientCreateUpdateGremlinDatabasePoller) Poll(ctx conte
 // If the final GET succeeded then the final GremlinResourcesClientCreateUpdateGremlinDatabaseResponse will be returned.
 func (p *GremlinResourcesClientCreateUpdateGremlinDatabasePoller) FinalResponse(ctx context.Context) (GremlinResourcesClientCreateUpdateGremlinDatabaseResponse, error) {
 	respType := GremlinResourcesClientCreateUpdateGremlinDatabaseResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.GremlinDatabaseGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.GremlinDatabaseGetResults)
 	if err != nil {
 		return GremlinResourcesClientCreateUpdateGremlinDatabaseResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1204,11 +1177,10 @@ func (p *GremlinResourcesClientCreateUpdateGremlinGraphPoller) Poll(ctx context.
 // If the final GET succeeded then the final GremlinResourcesClientCreateUpdateGremlinGraphResponse will be returned.
 func (p *GremlinResourcesClientCreateUpdateGremlinGraphPoller) FinalResponse(ctx context.Context) (GremlinResourcesClientCreateUpdateGremlinGraphResponse, error) {
 	respType := GremlinResourcesClientCreateUpdateGremlinGraphResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.GremlinGraphGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.GremlinGraphGetResults)
 	if err != nil {
 		return GremlinResourcesClientCreateUpdateGremlinGraphResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1247,11 +1219,10 @@ func (p *GremlinResourcesClientDeleteGremlinDatabasePoller) Poll(ctx context.Con
 // If the final GET succeeded then the final GremlinResourcesClientDeleteGremlinDatabaseResponse will be returned.
 func (p *GremlinResourcesClientDeleteGremlinDatabasePoller) FinalResponse(ctx context.Context) (GremlinResourcesClientDeleteGremlinDatabaseResponse, error) {
 	respType := GremlinResourcesClientDeleteGremlinDatabaseResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return GremlinResourcesClientDeleteGremlinDatabaseResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1290,11 +1261,10 @@ func (p *GremlinResourcesClientDeleteGremlinGraphPoller) Poll(ctx context.Contex
 // If the final GET succeeded then the final GremlinResourcesClientDeleteGremlinGraphResponse will be returned.
 func (p *GremlinResourcesClientDeleteGremlinGraphPoller) FinalResponse(ctx context.Context) (GremlinResourcesClientDeleteGremlinGraphResponse, error) {
 	respType := GremlinResourcesClientDeleteGremlinGraphResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return GremlinResourcesClientDeleteGremlinGraphResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1333,11 +1303,10 @@ func (p *GremlinResourcesClientMigrateGremlinDatabaseToAutoscalePoller) Poll(ctx
 // If the final GET succeeded then the final GremlinResourcesClientMigrateGremlinDatabaseToAutoscaleResponse will be returned.
 func (p *GremlinResourcesClientMigrateGremlinDatabaseToAutoscalePoller) FinalResponse(ctx context.Context) (GremlinResourcesClientMigrateGremlinDatabaseToAutoscaleResponse, error) {
 	respType := GremlinResourcesClientMigrateGremlinDatabaseToAutoscaleResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return GremlinResourcesClientMigrateGremlinDatabaseToAutoscaleResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1376,11 +1345,10 @@ func (p *GremlinResourcesClientMigrateGremlinDatabaseToManualThroughputPoller) P
 // If the final GET succeeded then the final GremlinResourcesClientMigrateGremlinDatabaseToManualThroughputResponse will be returned.
 func (p *GremlinResourcesClientMigrateGremlinDatabaseToManualThroughputPoller) FinalResponse(ctx context.Context) (GremlinResourcesClientMigrateGremlinDatabaseToManualThroughputResponse, error) {
 	respType := GremlinResourcesClientMigrateGremlinDatabaseToManualThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return GremlinResourcesClientMigrateGremlinDatabaseToManualThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1419,11 +1387,10 @@ func (p *GremlinResourcesClientMigrateGremlinGraphToAutoscalePoller) Poll(ctx co
 // If the final GET succeeded then the final GremlinResourcesClientMigrateGremlinGraphToAutoscaleResponse will be returned.
 func (p *GremlinResourcesClientMigrateGremlinGraphToAutoscalePoller) FinalResponse(ctx context.Context) (GremlinResourcesClientMigrateGremlinGraphToAutoscaleResponse, error) {
 	respType := GremlinResourcesClientMigrateGremlinGraphToAutoscaleResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return GremlinResourcesClientMigrateGremlinGraphToAutoscaleResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1462,11 +1429,10 @@ func (p *GremlinResourcesClientMigrateGremlinGraphToManualThroughputPoller) Poll
 // If the final GET succeeded then the final GremlinResourcesClientMigrateGremlinGraphToManualThroughputResponse will be returned.
 func (p *GremlinResourcesClientMigrateGremlinGraphToManualThroughputPoller) FinalResponse(ctx context.Context) (GremlinResourcesClientMigrateGremlinGraphToManualThroughputResponse, error) {
 	respType := GremlinResourcesClientMigrateGremlinGraphToManualThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return GremlinResourcesClientMigrateGremlinGraphToManualThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1505,11 +1471,10 @@ func (p *GremlinResourcesClientUpdateGremlinDatabaseThroughputPoller) Poll(ctx c
 // If the final GET succeeded then the final GremlinResourcesClientUpdateGremlinDatabaseThroughputResponse will be returned.
 func (p *GremlinResourcesClientUpdateGremlinDatabaseThroughputPoller) FinalResponse(ctx context.Context) (GremlinResourcesClientUpdateGremlinDatabaseThroughputResponse, error) {
 	respType := GremlinResourcesClientUpdateGremlinDatabaseThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return GremlinResourcesClientUpdateGremlinDatabaseThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1548,11 +1513,10 @@ func (p *GremlinResourcesClientUpdateGremlinGraphThroughputPoller) Poll(ctx cont
 // If the final GET succeeded then the final GremlinResourcesClientUpdateGremlinGraphThroughputResponse will be returned.
 func (p *GremlinResourcesClientUpdateGremlinGraphThroughputPoller) FinalResponse(ctx context.Context) (GremlinResourcesClientUpdateGremlinGraphThroughputResponse, error) {
 	respType := GremlinResourcesClientUpdateGremlinGraphThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return GremlinResourcesClientUpdateGremlinGraphThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1591,11 +1555,10 @@ func (p *MongoDBResourcesClientCreateUpdateMongoDBCollectionPoller) Poll(ctx con
 // If the final GET succeeded then the final MongoDBResourcesClientCreateUpdateMongoDBCollectionResponse will be returned.
 func (p *MongoDBResourcesClientCreateUpdateMongoDBCollectionPoller) FinalResponse(ctx context.Context) (MongoDBResourcesClientCreateUpdateMongoDBCollectionResponse, error) {
 	respType := MongoDBResourcesClientCreateUpdateMongoDBCollectionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MongoDBCollectionGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.MongoDBCollectionGetResults)
 	if err != nil {
 		return MongoDBResourcesClientCreateUpdateMongoDBCollectionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1634,11 +1597,10 @@ func (p *MongoDBResourcesClientCreateUpdateMongoDBDatabasePoller) Poll(ctx conte
 // If the final GET succeeded then the final MongoDBResourcesClientCreateUpdateMongoDBDatabaseResponse will be returned.
 func (p *MongoDBResourcesClientCreateUpdateMongoDBDatabasePoller) FinalResponse(ctx context.Context) (MongoDBResourcesClientCreateUpdateMongoDBDatabaseResponse, error) {
 	respType := MongoDBResourcesClientCreateUpdateMongoDBDatabaseResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MongoDBDatabaseGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.MongoDBDatabaseGetResults)
 	if err != nil {
 		return MongoDBResourcesClientCreateUpdateMongoDBDatabaseResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1677,11 +1639,10 @@ func (p *MongoDBResourcesClientDeleteMongoDBCollectionPoller) Poll(ctx context.C
 // If the final GET succeeded then the final MongoDBResourcesClientDeleteMongoDBCollectionResponse will be returned.
 func (p *MongoDBResourcesClientDeleteMongoDBCollectionPoller) FinalResponse(ctx context.Context) (MongoDBResourcesClientDeleteMongoDBCollectionResponse, error) {
 	respType := MongoDBResourcesClientDeleteMongoDBCollectionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return MongoDBResourcesClientDeleteMongoDBCollectionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1720,11 +1681,10 @@ func (p *MongoDBResourcesClientDeleteMongoDBDatabasePoller) Poll(ctx context.Con
 // If the final GET succeeded then the final MongoDBResourcesClientDeleteMongoDBDatabaseResponse will be returned.
 func (p *MongoDBResourcesClientDeleteMongoDBDatabasePoller) FinalResponse(ctx context.Context) (MongoDBResourcesClientDeleteMongoDBDatabaseResponse, error) {
 	respType := MongoDBResourcesClientDeleteMongoDBDatabaseResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return MongoDBResourcesClientDeleteMongoDBDatabaseResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1763,11 +1723,10 @@ func (p *MongoDBResourcesClientMigrateMongoDBCollectionToAutoscalePoller) Poll(c
 // If the final GET succeeded then the final MongoDBResourcesClientMigrateMongoDBCollectionToAutoscaleResponse will be returned.
 func (p *MongoDBResourcesClientMigrateMongoDBCollectionToAutoscalePoller) FinalResponse(ctx context.Context) (MongoDBResourcesClientMigrateMongoDBCollectionToAutoscaleResponse, error) {
 	respType := MongoDBResourcesClientMigrateMongoDBCollectionToAutoscaleResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return MongoDBResourcesClientMigrateMongoDBCollectionToAutoscaleResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1806,11 +1765,10 @@ func (p *MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputPoller)
 // If the final GET succeeded then the final MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputResponse will be returned.
 func (p *MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputPoller) FinalResponse(ctx context.Context) (MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputResponse, error) {
 	respType := MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1849,11 +1807,10 @@ func (p *MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscalePoller) Poll(ctx
 // If the final GET succeeded then the final MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscaleResponse will be returned.
 func (p *MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscalePoller) FinalResponse(ctx context.Context) (MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscaleResponse, error) {
 	respType := MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscaleResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscaleResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1892,11 +1849,10 @@ func (p *MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputPoller) P
 // If the final GET succeeded then the final MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputResponse will be returned.
 func (p *MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputPoller) FinalResponse(ctx context.Context) (MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputResponse, error) {
 	respType := MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1935,11 +1891,10 @@ func (p *MongoDBResourcesClientRetrieveContinuousBackupInformationPoller) Poll(c
 // If the final GET succeeded then the final MongoDBResourcesClientRetrieveContinuousBackupInformationResponse will be returned.
 func (p *MongoDBResourcesClientRetrieveContinuousBackupInformationPoller) FinalResponse(ctx context.Context) (MongoDBResourcesClientRetrieveContinuousBackupInformationResponse, error) {
 	respType := MongoDBResourcesClientRetrieveContinuousBackupInformationResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.BackupInformation)
+	_, err := p.pt.FinalResponse(ctx, &respType.BackupInformation)
 	if err != nil {
 		return MongoDBResourcesClientRetrieveContinuousBackupInformationResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1978,11 +1933,10 @@ func (p *MongoDBResourcesClientUpdateMongoDBCollectionThroughputPoller) Poll(ctx
 // If the final GET succeeded then the final MongoDBResourcesClientUpdateMongoDBCollectionThroughputResponse will be returned.
 func (p *MongoDBResourcesClientUpdateMongoDBCollectionThroughputPoller) FinalResponse(ctx context.Context) (MongoDBResourcesClientUpdateMongoDBCollectionThroughputResponse, error) {
 	respType := MongoDBResourcesClientUpdateMongoDBCollectionThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return MongoDBResourcesClientUpdateMongoDBCollectionThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2021,11 +1975,10 @@ func (p *MongoDBResourcesClientUpdateMongoDBDatabaseThroughputPoller) Poll(ctx c
 // If the final GET succeeded then the final MongoDBResourcesClientUpdateMongoDBDatabaseThroughputResponse will be returned.
 func (p *MongoDBResourcesClientUpdateMongoDBDatabaseThroughputPoller) FinalResponse(ctx context.Context) (MongoDBResourcesClientUpdateMongoDBDatabaseThroughputResponse, error) {
 	respType := MongoDBResourcesClientUpdateMongoDBDatabaseThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return MongoDBResourcesClientUpdateMongoDBDatabaseThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2064,11 +2017,10 @@ func (p *NotebookWorkspacesClientCreateOrUpdatePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final NotebookWorkspacesClientCreateOrUpdateResponse will be returned.
 func (p *NotebookWorkspacesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (NotebookWorkspacesClientCreateOrUpdateResponse, error) {
 	respType := NotebookWorkspacesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.NotebookWorkspace)
+	_, err := p.pt.FinalResponse(ctx, &respType.NotebookWorkspace)
 	if err != nil {
 		return NotebookWorkspacesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2107,11 +2059,10 @@ func (p *NotebookWorkspacesClientDeletePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final NotebookWorkspacesClientDeleteResponse will be returned.
 func (p *NotebookWorkspacesClientDeletePoller) FinalResponse(ctx context.Context) (NotebookWorkspacesClientDeleteResponse, error) {
 	respType := NotebookWorkspacesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return NotebookWorkspacesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2150,11 +2101,10 @@ func (p *NotebookWorkspacesClientRegenerateAuthTokenPoller) Poll(ctx context.Con
 // If the final GET succeeded then the final NotebookWorkspacesClientRegenerateAuthTokenResponse will be returned.
 func (p *NotebookWorkspacesClientRegenerateAuthTokenPoller) FinalResponse(ctx context.Context) (NotebookWorkspacesClientRegenerateAuthTokenResponse, error) {
 	respType := NotebookWorkspacesClientRegenerateAuthTokenResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return NotebookWorkspacesClientRegenerateAuthTokenResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2193,11 +2143,10 @@ func (p *NotebookWorkspacesClientStartPoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final NotebookWorkspacesClientStartResponse will be returned.
 func (p *NotebookWorkspacesClientStartPoller) FinalResponse(ctx context.Context) (NotebookWorkspacesClientStartResponse, error) {
 	respType := NotebookWorkspacesClientStartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return NotebookWorkspacesClientStartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2236,11 +2185,10 @@ func (p *PrivateEndpointConnectionsClientCreateOrUpdatePoller) Poll(ctx context.
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientCreateOrUpdateResponse will be returned.
 func (p *PrivateEndpointConnectionsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientCreateOrUpdateResponse, error) {
 	respType := PrivateEndpointConnectionsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return PrivateEndpointConnectionsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2279,11 +2227,10 @@ func (p *PrivateEndpointConnectionsClientDeletePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionsClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointConnectionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2322,11 +2269,10 @@ func (p *SQLResourcesClientCreateUpdateSQLContainerPoller) Poll(ctx context.Cont
 // If the final GET succeeded then the final SQLResourcesClientCreateUpdateSQLContainerResponse will be returned.
 func (p *SQLResourcesClientCreateUpdateSQLContainerPoller) FinalResponse(ctx context.Context) (SQLResourcesClientCreateUpdateSQLContainerResponse, error) {
 	respType := SQLResourcesClientCreateUpdateSQLContainerResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SQLContainerGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.SQLContainerGetResults)
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLContainerResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2365,11 +2311,10 @@ func (p *SQLResourcesClientCreateUpdateSQLDatabasePoller) Poll(ctx context.Conte
 // If the final GET succeeded then the final SQLResourcesClientCreateUpdateSQLDatabaseResponse will be returned.
 func (p *SQLResourcesClientCreateUpdateSQLDatabasePoller) FinalResponse(ctx context.Context) (SQLResourcesClientCreateUpdateSQLDatabaseResponse, error) {
 	respType := SQLResourcesClientCreateUpdateSQLDatabaseResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SQLDatabaseGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.SQLDatabaseGetResults)
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLDatabaseResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2408,11 +2353,10 @@ func (p *SQLResourcesClientCreateUpdateSQLRoleAssignmentPoller) Poll(ctx context
 // If the final GET succeeded then the final SQLResourcesClientCreateUpdateSQLRoleAssignmentResponse will be returned.
 func (p *SQLResourcesClientCreateUpdateSQLRoleAssignmentPoller) FinalResponse(ctx context.Context) (SQLResourcesClientCreateUpdateSQLRoleAssignmentResponse, error) {
 	respType := SQLResourcesClientCreateUpdateSQLRoleAssignmentResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SQLRoleAssignmentGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.SQLRoleAssignmentGetResults)
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLRoleAssignmentResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2451,11 +2395,10 @@ func (p *SQLResourcesClientCreateUpdateSQLRoleDefinitionPoller) Poll(ctx context
 // If the final GET succeeded then the final SQLResourcesClientCreateUpdateSQLRoleDefinitionResponse will be returned.
 func (p *SQLResourcesClientCreateUpdateSQLRoleDefinitionPoller) FinalResponse(ctx context.Context) (SQLResourcesClientCreateUpdateSQLRoleDefinitionResponse, error) {
 	respType := SQLResourcesClientCreateUpdateSQLRoleDefinitionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SQLRoleDefinitionGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.SQLRoleDefinitionGetResults)
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLRoleDefinitionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2494,11 +2437,10 @@ func (p *SQLResourcesClientCreateUpdateSQLStoredProcedurePoller) Poll(ctx contex
 // If the final GET succeeded then the final SQLResourcesClientCreateUpdateSQLStoredProcedureResponse will be returned.
 func (p *SQLResourcesClientCreateUpdateSQLStoredProcedurePoller) FinalResponse(ctx context.Context) (SQLResourcesClientCreateUpdateSQLStoredProcedureResponse, error) {
 	respType := SQLResourcesClientCreateUpdateSQLStoredProcedureResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SQLStoredProcedureGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.SQLStoredProcedureGetResults)
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLStoredProcedureResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2537,11 +2479,10 @@ func (p *SQLResourcesClientCreateUpdateSQLTriggerPoller) Poll(ctx context.Contex
 // If the final GET succeeded then the final SQLResourcesClientCreateUpdateSQLTriggerResponse will be returned.
 func (p *SQLResourcesClientCreateUpdateSQLTriggerPoller) FinalResponse(ctx context.Context) (SQLResourcesClientCreateUpdateSQLTriggerResponse, error) {
 	respType := SQLResourcesClientCreateUpdateSQLTriggerResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SQLTriggerGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.SQLTriggerGetResults)
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLTriggerResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2580,11 +2521,10 @@ func (p *SQLResourcesClientCreateUpdateSQLUserDefinedFunctionPoller) Poll(ctx co
 // If the final GET succeeded then the final SQLResourcesClientCreateUpdateSQLUserDefinedFunctionResponse will be returned.
 func (p *SQLResourcesClientCreateUpdateSQLUserDefinedFunctionPoller) FinalResponse(ctx context.Context) (SQLResourcesClientCreateUpdateSQLUserDefinedFunctionResponse, error) {
 	respType := SQLResourcesClientCreateUpdateSQLUserDefinedFunctionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SQLUserDefinedFunctionGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.SQLUserDefinedFunctionGetResults)
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLUserDefinedFunctionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2623,11 +2563,10 @@ func (p *SQLResourcesClientDeleteSQLContainerPoller) Poll(ctx context.Context) (
 // If the final GET succeeded then the final SQLResourcesClientDeleteSQLContainerResponse will be returned.
 func (p *SQLResourcesClientDeleteSQLContainerPoller) FinalResponse(ctx context.Context) (SQLResourcesClientDeleteSQLContainerResponse, error) {
 	respType := SQLResourcesClientDeleteSQLContainerResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SQLResourcesClientDeleteSQLContainerResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2666,11 +2605,10 @@ func (p *SQLResourcesClientDeleteSQLDatabasePoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final SQLResourcesClientDeleteSQLDatabaseResponse will be returned.
 func (p *SQLResourcesClientDeleteSQLDatabasePoller) FinalResponse(ctx context.Context) (SQLResourcesClientDeleteSQLDatabaseResponse, error) {
 	respType := SQLResourcesClientDeleteSQLDatabaseResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SQLResourcesClientDeleteSQLDatabaseResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2709,11 +2647,10 @@ func (p *SQLResourcesClientDeleteSQLRoleAssignmentPoller) Poll(ctx context.Conte
 // If the final GET succeeded then the final SQLResourcesClientDeleteSQLRoleAssignmentResponse will be returned.
 func (p *SQLResourcesClientDeleteSQLRoleAssignmentPoller) FinalResponse(ctx context.Context) (SQLResourcesClientDeleteSQLRoleAssignmentResponse, error) {
 	respType := SQLResourcesClientDeleteSQLRoleAssignmentResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SQLResourcesClientDeleteSQLRoleAssignmentResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2752,11 +2689,10 @@ func (p *SQLResourcesClientDeleteSQLRoleDefinitionPoller) Poll(ctx context.Conte
 // If the final GET succeeded then the final SQLResourcesClientDeleteSQLRoleDefinitionResponse will be returned.
 func (p *SQLResourcesClientDeleteSQLRoleDefinitionPoller) FinalResponse(ctx context.Context) (SQLResourcesClientDeleteSQLRoleDefinitionResponse, error) {
 	respType := SQLResourcesClientDeleteSQLRoleDefinitionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SQLResourcesClientDeleteSQLRoleDefinitionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2795,11 +2731,10 @@ func (p *SQLResourcesClientDeleteSQLStoredProcedurePoller) Poll(ctx context.Cont
 // If the final GET succeeded then the final SQLResourcesClientDeleteSQLStoredProcedureResponse will be returned.
 func (p *SQLResourcesClientDeleteSQLStoredProcedurePoller) FinalResponse(ctx context.Context) (SQLResourcesClientDeleteSQLStoredProcedureResponse, error) {
 	respType := SQLResourcesClientDeleteSQLStoredProcedureResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SQLResourcesClientDeleteSQLStoredProcedureResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2838,11 +2773,10 @@ func (p *SQLResourcesClientDeleteSQLTriggerPoller) Poll(ctx context.Context) (*h
 // If the final GET succeeded then the final SQLResourcesClientDeleteSQLTriggerResponse will be returned.
 func (p *SQLResourcesClientDeleteSQLTriggerPoller) FinalResponse(ctx context.Context) (SQLResourcesClientDeleteSQLTriggerResponse, error) {
 	respType := SQLResourcesClientDeleteSQLTriggerResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SQLResourcesClientDeleteSQLTriggerResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2881,11 +2815,10 @@ func (p *SQLResourcesClientDeleteSQLUserDefinedFunctionPoller) Poll(ctx context.
 // If the final GET succeeded then the final SQLResourcesClientDeleteSQLUserDefinedFunctionResponse will be returned.
 func (p *SQLResourcesClientDeleteSQLUserDefinedFunctionPoller) FinalResponse(ctx context.Context) (SQLResourcesClientDeleteSQLUserDefinedFunctionResponse, error) {
 	respType := SQLResourcesClientDeleteSQLUserDefinedFunctionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SQLResourcesClientDeleteSQLUserDefinedFunctionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2924,11 +2857,10 @@ func (p *SQLResourcesClientMigrateSQLContainerToAutoscalePoller) Poll(ctx contex
 // If the final GET succeeded then the final SQLResourcesClientMigrateSQLContainerToAutoscaleResponse will be returned.
 func (p *SQLResourcesClientMigrateSQLContainerToAutoscalePoller) FinalResponse(ctx context.Context) (SQLResourcesClientMigrateSQLContainerToAutoscaleResponse, error) {
 	respType := SQLResourcesClientMigrateSQLContainerToAutoscaleResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return SQLResourcesClientMigrateSQLContainerToAutoscaleResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2967,11 +2899,10 @@ func (p *SQLResourcesClientMigrateSQLContainerToManualThroughputPoller) Poll(ctx
 // If the final GET succeeded then the final SQLResourcesClientMigrateSQLContainerToManualThroughputResponse will be returned.
 func (p *SQLResourcesClientMigrateSQLContainerToManualThroughputPoller) FinalResponse(ctx context.Context) (SQLResourcesClientMigrateSQLContainerToManualThroughputResponse, error) {
 	respType := SQLResourcesClientMigrateSQLContainerToManualThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return SQLResourcesClientMigrateSQLContainerToManualThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -3010,11 +2941,10 @@ func (p *SQLResourcesClientMigrateSQLDatabaseToAutoscalePoller) Poll(ctx context
 // If the final GET succeeded then the final SQLResourcesClientMigrateSQLDatabaseToAutoscaleResponse will be returned.
 func (p *SQLResourcesClientMigrateSQLDatabaseToAutoscalePoller) FinalResponse(ctx context.Context) (SQLResourcesClientMigrateSQLDatabaseToAutoscaleResponse, error) {
 	respType := SQLResourcesClientMigrateSQLDatabaseToAutoscaleResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return SQLResourcesClientMigrateSQLDatabaseToAutoscaleResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -3053,11 +2983,10 @@ func (p *SQLResourcesClientMigrateSQLDatabaseToManualThroughputPoller) Poll(ctx 
 // If the final GET succeeded then the final SQLResourcesClientMigrateSQLDatabaseToManualThroughputResponse will be returned.
 func (p *SQLResourcesClientMigrateSQLDatabaseToManualThroughputPoller) FinalResponse(ctx context.Context) (SQLResourcesClientMigrateSQLDatabaseToManualThroughputResponse, error) {
 	respType := SQLResourcesClientMigrateSQLDatabaseToManualThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return SQLResourcesClientMigrateSQLDatabaseToManualThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -3096,11 +3025,10 @@ func (p *SQLResourcesClientRetrieveContinuousBackupInformationPoller) Poll(ctx c
 // If the final GET succeeded then the final SQLResourcesClientRetrieveContinuousBackupInformationResponse will be returned.
 func (p *SQLResourcesClientRetrieveContinuousBackupInformationPoller) FinalResponse(ctx context.Context) (SQLResourcesClientRetrieveContinuousBackupInformationResponse, error) {
 	respType := SQLResourcesClientRetrieveContinuousBackupInformationResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.BackupInformation)
+	_, err := p.pt.FinalResponse(ctx, &respType.BackupInformation)
 	if err != nil {
 		return SQLResourcesClientRetrieveContinuousBackupInformationResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -3139,11 +3067,10 @@ func (p *SQLResourcesClientUpdateSQLContainerThroughputPoller) Poll(ctx context.
 // If the final GET succeeded then the final SQLResourcesClientUpdateSQLContainerThroughputResponse will be returned.
 func (p *SQLResourcesClientUpdateSQLContainerThroughputPoller) FinalResponse(ctx context.Context) (SQLResourcesClientUpdateSQLContainerThroughputResponse, error) {
 	respType := SQLResourcesClientUpdateSQLContainerThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return SQLResourcesClientUpdateSQLContainerThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -3182,11 +3109,10 @@ func (p *SQLResourcesClientUpdateSQLDatabaseThroughputPoller) Poll(ctx context.C
 // If the final GET succeeded then the final SQLResourcesClientUpdateSQLDatabaseThroughputResponse will be returned.
 func (p *SQLResourcesClientUpdateSQLDatabaseThroughputPoller) FinalResponse(ctx context.Context) (SQLResourcesClientUpdateSQLDatabaseThroughputResponse, error) {
 	respType := SQLResourcesClientUpdateSQLDatabaseThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return SQLResourcesClientUpdateSQLDatabaseThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -3225,11 +3151,10 @@ func (p *TableResourcesClientCreateUpdateTablePoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final TableResourcesClientCreateUpdateTableResponse will be returned.
 func (p *TableResourcesClientCreateUpdateTablePoller) FinalResponse(ctx context.Context) (TableResourcesClientCreateUpdateTableResponse, error) {
 	respType := TableResourcesClientCreateUpdateTableResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.TableGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.TableGetResults)
 	if err != nil {
 		return TableResourcesClientCreateUpdateTableResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -3268,11 +3193,10 @@ func (p *TableResourcesClientDeleteTablePoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final TableResourcesClientDeleteTableResponse will be returned.
 func (p *TableResourcesClientDeleteTablePoller) FinalResponse(ctx context.Context) (TableResourcesClientDeleteTableResponse, error) {
 	respType := TableResourcesClientDeleteTableResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return TableResourcesClientDeleteTableResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -3311,11 +3235,10 @@ func (p *TableResourcesClientMigrateTableToAutoscalePoller) Poll(ctx context.Con
 // If the final GET succeeded then the final TableResourcesClientMigrateTableToAutoscaleResponse will be returned.
 func (p *TableResourcesClientMigrateTableToAutoscalePoller) FinalResponse(ctx context.Context) (TableResourcesClientMigrateTableToAutoscaleResponse, error) {
 	respType := TableResourcesClientMigrateTableToAutoscaleResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return TableResourcesClientMigrateTableToAutoscaleResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -3354,11 +3277,10 @@ func (p *TableResourcesClientMigrateTableToManualThroughputPoller) Poll(ctx cont
 // If the final GET succeeded then the final TableResourcesClientMigrateTableToManualThroughputResponse will be returned.
 func (p *TableResourcesClientMigrateTableToManualThroughputPoller) FinalResponse(ctx context.Context) (TableResourcesClientMigrateTableToManualThroughputResponse, error) {
 	respType := TableResourcesClientMigrateTableToManualThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return TableResourcesClientMigrateTableToManualThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -3397,11 +3319,10 @@ func (p *TableResourcesClientUpdateTableThroughputPoller) Poll(ctx context.Conte
 // If the final GET succeeded then the final TableResourcesClientUpdateTableThroughputResponse will be returned.
 func (p *TableResourcesClientUpdateTableThroughputPoller) FinalResponse(ctx context.Context) (TableResourcesClientUpdateTableThroughputResponse, error) {
 	respType := TableResourcesClientUpdateTableThroughputResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.ThroughputSettingsGetResults)
 	if err != nil {
 		return TableResourcesClientUpdateTableThroughputResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

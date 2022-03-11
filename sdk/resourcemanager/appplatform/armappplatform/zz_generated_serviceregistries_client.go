@@ -35,17 +35,17 @@ type ServiceRegistriesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServiceRegistriesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServiceRegistriesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServiceRegistriesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ServiceRegistriesClient) BeginCreateOrUpdate(ctx context.Context, 
 	if err != nil {
 		return ServiceRegistriesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ServiceRegistriesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServiceRegistriesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServiceRegistriesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ServiceRegistriesClientCreateOrUpdatePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *ServiceRegistriesClient) BeginDelete(ctx context.Context, resource
 	if err != nil {
 		return ServiceRegistriesClientDeletePollerResponse{}, err
 	}
-	result := ServiceRegistriesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServiceRegistriesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ServiceRegistriesClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ServiceRegistriesClientDeletePollerResponse{}, err
@@ -250,7 +246,7 @@ func (client *ServiceRegistriesClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *ServiceRegistriesClient) getHandleResponse(resp *http.Response) (ServiceRegistriesClientGetResponse, error) {
-	result := ServiceRegistriesClientGetResponse{RawResponse: resp}
+	result := ServiceRegistriesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceRegistryResource); err != nil {
 		return ServiceRegistriesClientGetResponse{}, err
 	}
@@ -303,7 +299,7 @@ func (client *ServiceRegistriesClient) listCreateRequest(ctx context.Context, re
 
 // listHandleResponse handles the List response.
 func (client *ServiceRegistriesClient) listHandleResponse(resp *http.Response) (ServiceRegistriesClientListResponse, error) {
-	result := ServiceRegistriesClientListResponse{RawResponse: resp}
+	result := ServiceRegistriesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceRegistryResourceCollection); err != nil {
 		return ServiceRegistriesClientListResponse{}, err
 	}

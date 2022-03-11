@@ -43,11 +43,10 @@ func (p *VaultsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final VaultsClientCreateOrUpdateResponse will be returned.
 func (p *VaultsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (VaultsClientCreateOrUpdateResponse, error) {
 	respType := VaultsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Vault)
+	_, err := p.pt.FinalResponse(ctx, &respType.Vault)
 	if err != nil {
 		return VaultsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *VaultsClientUpdatePoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final VaultsClientUpdateResponse will be returned.
 func (p *VaultsClientUpdatePoller) FinalResponse(ctx context.Context) (VaultsClientUpdateResponse, error) {
 	respType := VaultsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Vault)
+	_, err := p.pt.FinalResponse(ctx, &respType.Vault)
 	if err != nil {
 		return VaultsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

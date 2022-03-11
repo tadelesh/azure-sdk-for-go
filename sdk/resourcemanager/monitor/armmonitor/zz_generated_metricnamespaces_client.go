@@ -30,16 +30,16 @@ type MetricNamespacesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMetricNamespacesClient(credential azcore.TokenCredential, options *arm.ClientOptions) *MetricNamespacesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MetricNamespacesClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -48,19 +48,13 @@ func NewMetricNamespacesClient(credential azcore.TokenCredential, options *arm.C
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceURI - The identifier of the resource.
 // options - MetricNamespacesClientListOptions contains the optional parameters for the MetricNamespacesClient.List method.
-func (client *MetricNamespacesClient) List(ctx context.Context, resourceURI string, options *MetricNamespacesClientListOptions) (MetricNamespacesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceURI, options)
-	if err != nil {
-		return MetricNamespacesClientListResponse{}, err
+func (client *MetricNamespacesClient) List(resourceURI string, options *MetricNamespacesClientListOptions) *MetricNamespacesClientListPager {
+	return &MetricNamespacesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceURI, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return MetricNamespacesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return MetricNamespacesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -83,7 +77,7 @@ func (client *MetricNamespacesClient) listCreateRequest(ctx context.Context, res
 
 // listHandleResponse handles the List response.
 func (client *MetricNamespacesClient) listHandleResponse(resp *http.Response) (MetricNamespacesClientListResponse, error) {
-	result := MetricNamespacesClientListResponse{RawResponse: resp}
+	result := MetricNamespacesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetricNamespaceCollection); err != nil {
 		return MetricNamespacesClientListResponse{}, err
 	}

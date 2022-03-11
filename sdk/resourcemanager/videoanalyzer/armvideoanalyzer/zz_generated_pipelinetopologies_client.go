@@ -108,7 +108,7 @@ func (client *PipelineTopologiesClient) createOrUpdateCreateRequest(ctx context.
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *PipelineTopologiesClient) createOrUpdateHandleResponse(resp *http.Response) (PipelineTopologiesClientCreateOrUpdateResponse, error) {
-	result := PipelineTopologiesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := PipelineTopologiesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PipelineTopology); err != nil {
 		return PipelineTopologiesClientCreateOrUpdateResponse{}, err
 	}
@@ -135,7 +135,7 @@ func (client *PipelineTopologiesClient) Delete(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return PipelineTopologiesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return PipelineTopologiesClientDeleteResponse{RawResponse: resp}, nil
+	return PipelineTopologiesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -222,7 +222,7 @@ func (client *PipelineTopologiesClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *PipelineTopologiesClient) getHandleResponse(resp *http.Response) (PipelineTopologiesClientGetResponse, error) {
-	result := PipelineTopologiesClientGetResponse{RawResponse: resp}
+	result := PipelineTopologiesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PipelineTopology); err != nil {
 		return PipelineTopologiesClientGetResponse{}, err
 	}
@@ -280,7 +280,7 @@ func (client *PipelineTopologiesClient) listCreateRequest(ctx context.Context, r
 
 // listHandleResponse handles the List response.
 func (client *PipelineTopologiesClient) listHandleResponse(resp *http.Response) (PipelineTopologiesClientListResponse, error) {
-	result := PipelineTopologiesClientListResponse{RawResponse: resp}
+	result := PipelineTopologiesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PipelineTopologyCollection); err != nil {
 		return PipelineTopologiesClientListResponse{}, err
 	}
@@ -344,7 +344,7 @@ func (client *PipelineTopologiesClient) updateCreateRequest(ctx context.Context,
 
 // updateHandleResponse handles the Update response.
 func (client *PipelineTopologiesClient) updateHandleResponse(resp *http.Response) (PipelineTopologiesClientUpdateResponse, error) {
-	result := PipelineTopologiesClientUpdateResponse{RawResponse: resp}
+	result := PipelineTopologiesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PipelineTopology); err != nil {
 		return PipelineTopologiesClientUpdateResponse{}, err
 	}

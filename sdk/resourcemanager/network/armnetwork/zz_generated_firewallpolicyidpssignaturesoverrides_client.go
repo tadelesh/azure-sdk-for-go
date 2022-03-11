@@ -35,17 +35,17 @@ type FirewallPolicyIdpsSignaturesOverridesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFirewallPolicyIdpsSignaturesOverridesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FirewallPolicyIdpsSignaturesOverridesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FirewallPolicyIdpsSignaturesOverridesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -96,7 +96,7 @@ func (client *FirewallPolicyIdpsSignaturesOverridesClient) getCreateRequest(ctx 
 
 // getHandleResponse handles the Get response.
 func (client *FirewallPolicyIdpsSignaturesOverridesClient) getHandleResponse(resp *http.Response) (FirewallPolicyIdpsSignaturesOverridesClientGetResponse, error) {
-	result := FirewallPolicyIdpsSignaturesOverridesClientGetResponse{RawResponse: resp}
+	result := FirewallPolicyIdpsSignaturesOverridesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SignaturesOverrides); err != nil {
 		return FirewallPolicyIdpsSignaturesOverridesClientGetResponse{}, err
 	}
@@ -149,7 +149,7 @@ func (client *FirewallPolicyIdpsSignaturesOverridesClient) listCreateRequest(ctx
 
 // listHandleResponse handles the List response.
 func (client *FirewallPolicyIdpsSignaturesOverridesClient) listHandleResponse(resp *http.Response) (FirewallPolicyIdpsSignaturesOverridesClientListResponse, error) {
-	result := FirewallPolicyIdpsSignaturesOverridesClientListResponse{RawResponse: resp}
+	result := FirewallPolicyIdpsSignaturesOverridesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SignaturesOverridesList); err != nil {
 		return FirewallPolicyIdpsSignaturesOverridesClientListResponse{}, err
 	}
@@ -203,7 +203,7 @@ func (client *FirewallPolicyIdpsSignaturesOverridesClient) patchCreateRequest(ct
 
 // patchHandleResponse handles the Patch response.
 func (client *FirewallPolicyIdpsSignaturesOverridesClient) patchHandleResponse(resp *http.Response) (FirewallPolicyIdpsSignaturesOverridesClientPatchResponse, error) {
-	result := FirewallPolicyIdpsSignaturesOverridesClientPatchResponse{RawResponse: resp}
+	result := FirewallPolicyIdpsSignaturesOverridesClientPatchResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SignaturesOverrides); err != nil {
 		return FirewallPolicyIdpsSignaturesOverridesClientPatchResponse{}, err
 	}
@@ -257,7 +257,7 @@ func (client *FirewallPolicyIdpsSignaturesOverridesClient) putCreateRequest(ctx 
 
 // putHandleResponse handles the Put response.
 func (client *FirewallPolicyIdpsSignaturesOverridesClient) putHandleResponse(resp *http.Response) (FirewallPolicyIdpsSignaturesOverridesClientPutResponse, error) {
-	result := FirewallPolicyIdpsSignaturesOverridesClientPutResponse{RawResponse: resp}
+	result := FirewallPolicyIdpsSignaturesOverridesClientPutResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SignaturesOverrides); err != nil {
 		return FirewallPolicyIdpsSignaturesOverridesClientPutResponse{}, err
 	}

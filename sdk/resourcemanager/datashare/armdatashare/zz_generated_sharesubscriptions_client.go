@@ -34,17 +34,17 @@ type ShareSubscriptionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewShareSubscriptionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ShareSubscriptionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ShareSubscriptionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *ShareSubscriptionsClient) BeginCancelSynchronization(ctx context.C
 	if err != nil {
 		return ShareSubscriptionsClientCancelSynchronizationPollerResponse{}, err
 	}
-	result := ShareSubscriptionsClientCancelSynchronizationPollerResponse{
-		RawResponse: resp,
-	}
+	result := ShareSubscriptionsClientCancelSynchronizationPollerResponse{}
 	pt, err := armruntime.NewPoller("ShareSubscriptionsClient.CancelSynchronization", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ShareSubscriptionsClientCancelSynchronizationPollerResponse{}, err
@@ -177,7 +175,7 @@ func (client *ShareSubscriptionsClient) createCreateRequest(ctx context.Context,
 
 // createHandleResponse handles the Create response.
 func (client *ShareSubscriptionsClient) createHandleResponse(resp *http.Response) (ShareSubscriptionsClientCreateResponse, error) {
-	result := ShareSubscriptionsClientCreateResponse{RawResponse: resp}
+	result := ShareSubscriptionsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ShareSubscription); err != nil {
 		return ShareSubscriptionsClientCreateResponse{}, err
 	}
@@ -196,9 +194,7 @@ func (client *ShareSubscriptionsClient) BeginDelete(ctx context.Context, resourc
 	if err != nil {
 		return ShareSubscriptionsClientDeletePollerResponse{}, err
 	}
-	result := ShareSubscriptionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ShareSubscriptionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ShareSubscriptionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ShareSubscriptionsClientDeletePollerResponse{}, err
@@ -309,7 +305,7 @@ func (client *ShareSubscriptionsClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *ShareSubscriptionsClient) getHandleResponse(resp *http.Response) (ShareSubscriptionsClientGetResponse, error) {
-	result := ShareSubscriptionsClientGetResponse{RawResponse: resp}
+	result := ShareSubscriptionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ShareSubscription); err != nil {
 		return ShareSubscriptionsClientGetResponse{}, err
 	}
@@ -371,7 +367,7 @@ func (client *ShareSubscriptionsClient) listByAccountCreateRequest(ctx context.C
 
 // listByAccountHandleResponse handles the ListByAccount response.
 func (client *ShareSubscriptionsClient) listByAccountHandleResponse(resp *http.Response) (ShareSubscriptionsClientListByAccountResponse, error) {
-	result := ShareSubscriptionsClientListByAccountResponse{RawResponse: resp}
+	result := ShareSubscriptionsClientListByAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ShareSubscriptionList); err != nil {
 		return ShareSubscriptionsClientListByAccountResponse{}, err
 	}
@@ -432,7 +428,7 @@ func (client *ShareSubscriptionsClient) listSourceShareSynchronizationSettingsCr
 
 // listSourceShareSynchronizationSettingsHandleResponse handles the ListSourceShareSynchronizationSettings response.
 func (client *ShareSubscriptionsClient) listSourceShareSynchronizationSettingsHandleResponse(resp *http.Response) (ShareSubscriptionsClientListSourceShareSynchronizationSettingsResponse, error) {
-	result := ShareSubscriptionsClientListSourceShareSynchronizationSettingsResponse{RawResponse: resp}
+	result := ShareSubscriptionsClientListSourceShareSynchronizationSettingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceShareSynchronizationSettingList); err != nil {
 		return ShareSubscriptionsClientListSourceShareSynchronizationSettingsResponse{}, err
 	}
@@ -500,7 +496,7 @@ func (client *ShareSubscriptionsClient) listSynchronizationDetailsCreateRequest(
 
 // listSynchronizationDetailsHandleResponse handles the ListSynchronizationDetails response.
 func (client *ShareSubscriptionsClient) listSynchronizationDetailsHandleResponse(resp *http.Response) (ShareSubscriptionsClientListSynchronizationDetailsResponse, error) {
-	result := ShareSubscriptionsClientListSynchronizationDetailsResponse{RawResponse: resp}
+	result := ShareSubscriptionsClientListSynchronizationDetailsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SynchronizationDetailsList); err != nil {
 		return ShareSubscriptionsClientListSynchronizationDetailsResponse{}, err
 	}
@@ -567,7 +563,7 @@ func (client *ShareSubscriptionsClient) listSynchronizationsCreateRequest(ctx co
 
 // listSynchronizationsHandleResponse handles the ListSynchronizations response.
 func (client *ShareSubscriptionsClient) listSynchronizationsHandleResponse(resp *http.Response) (ShareSubscriptionsClientListSynchronizationsResponse, error) {
-	result := ShareSubscriptionsClientListSynchronizationsResponse{RawResponse: resp}
+	result := ShareSubscriptionsClientListSynchronizationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ShareSubscriptionSynchronizationList); err != nil {
 		return ShareSubscriptionsClientListSynchronizationsResponse{}, err
 	}
@@ -587,9 +583,7 @@ func (client *ShareSubscriptionsClient) BeginSynchronize(ctx context.Context, re
 	if err != nil {
 		return ShareSubscriptionsClientSynchronizePollerResponse{}, err
 	}
-	result := ShareSubscriptionsClientSynchronizePollerResponse{
-		RawResponse: resp,
-	}
+	result := ShareSubscriptionsClientSynchronizePollerResponse{}
 	pt, err := armruntime.NewPoller("ShareSubscriptionsClient.Synchronize", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ShareSubscriptionsClientSynchronizePollerResponse{}, err

@@ -34,17 +34,17 @@ type FhirServicesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFhirServicesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FhirServicesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FhirServicesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *FhirServicesClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return FhirServicesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := FhirServicesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := FhirServicesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("FhirServicesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return FhirServicesClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *FhirServicesClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return FhirServicesClientDeletePollerResponse{}, err
 	}
-	result := FhirServicesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := FhirServicesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("FhirServicesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return FhirServicesClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *FhirServicesClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *FhirServicesClient) getHandleResponse(resp *http.Response) (FhirServicesClientGetResponse, error) {
-	result := FhirServicesClientGetResponse{RawResponse: resp}
+	result := FhirServicesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FhirService); err != nil {
 		return FhirServicesClientGetResponse{}, err
 	}
@@ -300,7 +296,7 @@ func (client *FhirServicesClient) listByWorkspaceCreateRequest(ctx context.Conte
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *FhirServicesClient) listByWorkspaceHandleResponse(resp *http.Response) (FhirServicesClientListByWorkspaceResponse, error) {
-	result := FhirServicesClientListByWorkspaceResponse{RawResponse: resp}
+	result := FhirServicesClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FhirServiceCollection); err != nil {
 		return FhirServicesClientListByWorkspaceResponse{}, err
 	}
@@ -320,9 +316,7 @@ func (client *FhirServicesClient) BeginUpdate(ctx context.Context, resourceGroup
 	if err != nil {
 		return FhirServicesClientUpdatePollerResponse{}, err
 	}
-	result := FhirServicesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := FhirServicesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("FhirServicesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return FhirServicesClientUpdatePollerResponse{}, err

@@ -61,9 +61,7 @@ func (client *PoliciesClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return PoliciesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PoliciesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PoliciesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PoliciesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return PoliciesClientCreateOrUpdatePollerResponse{}, err
@@ -134,7 +132,7 @@ func (client *PoliciesClient) Delete(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return PoliciesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return PoliciesClientDeleteResponse{RawResponse: resp}, nil
+	return PoliciesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -211,7 +209,7 @@ func (client *PoliciesClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *PoliciesClient) getHandleResponse(resp *http.Response) (PoliciesClientGetResponse, error) {
-	result := PoliciesClientGetResponse{RawResponse: resp}
+	result := PoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebApplicationFirewallPolicy); err != nil {
 		return PoliciesClientGetResponse{}, err
 	}
@@ -258,7 +256,7 @@ func (client *PoliciesClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *PoliciesClient) listHandleResponse(resp *http.Response) (PoliciesClientListResponse, error) {
-	result := PoliciesClientListResponse{RawResponse: resp}
+	result := PoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebApplicationFirewallPolicyList); err != nil {
 		return PoliciesClientListResponse{}, err
 	}
@@ -277,9 +275,7 @@ func (client *PoliciesClient) BeginUpdate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return PoliciesClientUpdatePollerResponse{}, err
 	}
-	result := PoliciesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PoliciesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PoliciesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return PoliciesClientUpdatePollerResponse{}, err

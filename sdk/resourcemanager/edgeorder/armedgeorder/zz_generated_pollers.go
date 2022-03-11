@@ -43,11 +43,10 @@ func (p *ManagementClientCreateAddressPoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final ManagementClientCreateAddressResponse will be returned.
 func (p *ManagementClientCreateAddressPoller) FinalResponse(ctx context.Context) (ManagementClientCreateAddressResponse, error) {
 	respType := ManagementClientCreateAddressResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.AddressResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.AddressResource)
 	if err != nil {
 		return ManagementClientCreateAddressResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ManagementClientCreateOrderItemPoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final ManagementClientCreateOrderItemResponse will be returned.
 func (p *ManagementClientCreateOrderItemPoller) FinalResponse(ctx context.Context) (ManagementClientCreateOrderItemResponse, error) {
 	respType := ManagementClientCreateOrderItemResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OrderItemResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.OrderItemResource)
 	if err != nil {
 		return ManagementClientCreateOrderItemResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ManagementClientDeleteAddressByNamePoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final ManagementClientDeleteAddressByNameResponse will be returned.
 func (p *ManagementClientDeleteAddressByNamePoller) FinalResponse(ctx context.Context) (ManagementClientDeleteAddressByNameResponse, error) {
 	respType := ManagementClientDeleteAddressByNameResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ManagementClientDeleteAddressByNameResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *ManagementClientDeleteOrderItemByNamePoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final ManagementClientDeleteOrderItemByNameResponse will be returned.
 func (p *ManagementClientDeleteOrderItemByNamePoller) FinalResponse(ctx context.Context) (ManagementClientDeleteOrderItemByNameResponse, error) {
 	respType := ManagementClientDeleteOrderItemByNameResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ManagementClientDeleteOrderItemByNameResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *ManagementClientReturnOrderItemPoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final ManagementClientReturnOrderItemResponse will be returned.
 func (p *ManagementClientReturnOrderItemPoller) FinalResponse(ctx context.Context) (ManagementClientReturnOrderItemResponse, error) {
 	respType := ManagementClientReturnOrderItemResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ManagementClientReturnOrderItemResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *ManagementClientUpdateAddressPoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final ManagementClientUpdateAddressResponse will be returned.
 func (p *ManagementClientUpdateAddressPoller) FinalResponse(ctx context.Context) (ManagementClientUpdateAddressResponse, error) {
 	respType := ManagementClientUpdateAddressResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.AddressResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.AddressResource)
 	if err != nil {
 		return ManagementClientUpdateAddressResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *ManagementClientUpdateOrderItemPoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final ManagementClientUpdateOrderItemResponse will be returned.
 func (p *ManagementClientUpdateOrderItemPoller) FinalResponse(ctx context.Context) (ManagementClientUpdateOrderItemResponse, error) {
 	respType := ManagementClientUpdateOrderItemResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OrderItemResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.OrderItemResource)
 	if err != nil {
 		return ManagementClientUpdateOrderItemResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

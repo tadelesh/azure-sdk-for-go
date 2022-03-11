@@ -104,7 +104,7 @@ func (client *VideosClient) createOrUpdateCreateRequest(ctx context.Context, res
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *VideosClient) createOrUpdateHandleResponse(resp *http.Response) (VideosClientCreateOrUpdateResponse, error) {
-	result := VideosClientCreateOrUpdateResponse{RawResponse: resp}
+	result := VideosClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VideoEntity); err != nil {
 		return VideosClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *VideosClient) Delete(ctx context.Context, resourceGroupName string
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return VideosClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return VideosClientDeleteResponse{RawResponse: resp}, nil
+	return VideosClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *VideosClient) getCreateRequest(ctx context.Context, resourceGroupN
 
 // getHandleResponse handles the Get response.
 func (client *VideosClient) getHandleResponse(resp *http.Response) (VideosClientGetResponse, error) {
-	result := VideosClientGetResponse{RawResponse: resp}
+	result := VideosClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VideoEntity); err != nil {
 		return VideosClientGetResponse{}, err
 	}
@@ -270,7 +270,7 @@ func (client *VideosClient) listCreateRequest(ctx context.Context, resourceGroup
 
 // listHandleResponse handles the List response.
 func (client *VideosClient) listHandleResponse(resp *http.Response) (VideosClientListResponse, error) {
-	result := VideosClientListResponse{RawResponse: resp}
+	result := VideosClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VideoEntityCollection); err != nil {
 		return VideosClientListResponse{}, err
 	}
@@ -331,7 +331,7 @@ func (client *VideosClient) listContentTokenCreateRequest(ctx context.Context, r
 
 // listContentTokenHandleResponse handles the ListContentToken response.
 func (client *VideosClient) listContentTokenHandleResponse(resp *http.Response) (VideosClientListContentTokenResponse, error) {
-	result := VideosClientListContentTokenResponse{RawResponse: resp}
+	result := VideosClientListContentTokenResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VideoContentToken); err != nil {
 		return VideosClientListContentTokenResponse{}, err
 	}
@@ -392,7 +392,7 @@ func (client *VideosClient) updateCreateRequest(ctx context.Context, resourceGro
 
 // updateHandleResponse handles the Update response.
 func (client *VideosClient) updateHandleResponse(resp *http.Response) (VideosClientUpdateResponse, error) {
-	result := VideosClientUpdateResponse{RawResponse: resp}
+	result := VideosClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VideoEntity); err != nil {
 		return VideosClientUpdateResponse{}, err
 	}

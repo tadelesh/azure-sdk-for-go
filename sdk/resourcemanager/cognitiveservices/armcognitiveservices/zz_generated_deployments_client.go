@@ -34,17 +34,17 @@ type DeploymentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDeploymentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DeploymentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DeploymentsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *DeploymentsClient) BeginCreateOrUpdate(ctx context.Context, resour
 	if err != nil {
 		return DeploymentsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DeploymentsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientCreateOrUpdatePollerResponse{}, err
@@ -133,9 +131,7 @@ func (client *DeploymentsClient) BeginDelete(ctx context.Context, resourceGroupN
 	if err != nil {
 		return DeploymentsClientDeletePollerResponse{}, err
 	}
-	result := DeploymentsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientDeletePollerResponse{}, err
@@ -246,7 +242,7 @@ func (client *DeploymentsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *DeploymentsClient) getHandleResponse(resp *http.Response) (DeploymentsClientGetResponse, error) {
-	result := DeploymentsClientGetResponse{RawResponse: resp}
+	result := DeploymentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Deployment); err != nil {
 		return DeploymentsClientGetResponse{}, err
 	}
@@ -298,7 +294,7 @@ func (client *DeploymentsClient) listCreateRequest(ctx context.Context, resource
 
 // listHandleResponse handles the List response.
 func (client *DeploymentsClient) listHandleResponse(resp *http.Response) (DeploymentsClientListResponse, error) {
-	result := DeploymentsClientListResponse{RawResponse: resp}
+	result := DeploymentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentListResult); err != nil {
 		return DeploymentsClientListResponse{}, err
 	}

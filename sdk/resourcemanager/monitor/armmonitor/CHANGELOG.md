@@ -1,5 +1,531 @@
 # Release History
 
+## 0.6.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*AlertRuleIncidentsClient.ListByAlertRule` parameter(s) have been changed from `(context.Context, string, string, *AlertRuleIncidentsClientListByAlertRuleOptions)` to `(string, string, *AlertRuleIncidentsClientListByAlertRuleOptions)`
+- Function `*AlertRuleIncidentsClient.ListByAlertRule` return value(s) have been changed from `(AlertRuleIncidentsClientListByAlertRuleResponse, error)` to `(*AlertRuleIncidentsClientListByAlertRulePager)`
+- Function `*MetricAlertsClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *MetricAlertsClientListByResourceGroupOptions)` to `(string, *MetricAlertsClientListByResourceGroupOptions)`
+- Function `*MetricAlertsClient.ListByResourceGroup` return value(s) have been changed from `(MetricAlertsClientListByResourceGroupResponse, error)` to `(*MetricAlertsClientListByResourceGroupPager)`
+- Function `*EventCategoriesClient.List` parameter(s) have been changed from `(context.Context, *EventCategoriesClientListOptions)` to `(*EventCategoriesClientListOptions)`
+- Function `*EventCategoriesClient.List` return value(s) have been changed from `(EventCategoriesClientListResponse, error)` to `(*EventCategoriesClientListPager)`
+- Function `*DataCollectionEndpointsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(DataCollectionEndpointsClientListBySubscriptionResponse, error)`
+- Function `*ActionGroupsClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *ActionGroupsClientListByResourceGroupOptions)` to `(string, *ActionGroupsClientListByResourceGroupOptions)`
+- Function `*ActionGroupsClient.ListByResourceGroup` return value(s) have been changed from `(ActionGroupsClientListByResourceGroupResponse, error)` to `(*ActionGroupsClientListByResourceGroupPager)`
+- Function `*DataCollectionEndpointsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(DataCollectionEndpointsClientListByResourceGroupResponse, error)`
+- Function `*TenantActivityLogsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(TenantActivityLogsClientListResponse, error)`
+- Function `*MetricDefinitionsClient.List` parameter(s) have been changed from `(context.Context, string, *MetricDefinitionsClientListOptions)` to `(string, *MetricDefinitionsClientListOptions)`
+- Function `*MetricDefinitionsClient.List` return value(s) have been changed from `(MetricDefinitionsClientListResponse, error)` to `(*MetricDefinitionsClientListPager)`
+- Function `*ActivityLogsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ActivityLogsClientListResponse, error)`
+- Function `*PrivateLinkResourcesClientListByPrivateLinkScopePager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateLinkResourcesClientListByPrivateLinkScopeResponse, error)`
+- Function `*PrivateLinkScopedResourcesClientListByPrivateLinkScopePager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateLinkScopedResourcesClientListByPrivateLinkScopeResponse, error)`
+- Function `*AlertRulesClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *AlertRulesClientListByResourceGroupOptions)` to `(string, *AlertRulesClientListByResourceGroupOptions)`
+- Function `*AlertRulesClient.ListByResourceGroup` return value(s) have been changed from `(AlertRulesClientListByResourceGroupResponse, error)` to `(*AlertRulesClientListByResourceGroupPager)`
+- Function `*AlertRulesClient.ListBySubscription` parameter(s) have been changed from `(context.Context, *AlertRulesClientListBySubscriptionOptions)` to `(*AlertRulesClientListBySubscriptionOptions)`
+- Function `*AlertRulesClient.ListBySubscription` return value(s) have been changed from `(AlertRulesClientListBySubscriptionResponse, error)` to `(*AlertRulesClientListBySubscriptionPager)`
+- Function `*PrivateEndpointConnectionsClientListByPrivateLinkScopePager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateEndpointConnectionsClientListByPrivateLinkScopeResponse, error)`
+- Function `*LogProfilesClient.List` parameter(s) have been changed from `(context.Context, *LogProfilesClientListOptions)` to `(*LogProfilesClientListOptions)`
+- Function `*LogProfilesClient.List` return value(s) have been changed from `(LogProfilesClientListResponse, error)` to `(*LogProfilesClientListPager)`
+- Function `*MetricAlertsClient.ListBySubscription` parameter(s) have been changed from `(context.Context, *MetricAlertsClientListBySubscriptionOptions)` to `(*MetricAlertsClientListBySubscriptionOptions)`
+- Function `*MetricAlertsClient.ListBySubscription` return value(s) have been changed from `(MetricAlertsClientListBySubscriptionResponse, error)` to `(*MetricAlertsClientListBySubscriptionPager)`
+- Function `*BaselinesClient.List` parameter(s) have been changed from `(context.Context, string, *BaselinesClientListOptions)` to `(string, *BaselinesClientListOptions)`
+- Function `*BaselinesClient.List` return value(s) have been changed from `(BaselinesClientListResponse, error)` to `(*BaselinesClientListPager)`
+- Function `*PrivateLinkScopesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateLinkScopesClientListByResourceGroupResponse, error)`
+- Function `*ScheduledQueryRulesClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *ScheduledQueryRulesClientListByResourceGroupOptions)` to `(string, *ScheduledQueryRulesClientListByResourceGroupOptions)`
+- Function `*ScheduledQueryRulesClient.ListByResourceGroup` return value(s) have been changed from `(ScheduledQueryRulesClientListByResourceGroupResponse, error)` to `(*ScheduledQueryRulesClientListByResourceGroupPager)`
+- Function `*DataCollectionRulesClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(DataCollectionRulesClientListBySubscriptionResponse, error)`
+- Function `*AutoscaleSettingsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(AutoscaleSettingsClientListByResourceGroupResponse, error)`
+- Function `*ActivityLogAlertsClientListBySubscriptionIDPager.NextPage` return value(s) have been changed from `(bool)` to `(ActivityLogAlertsClientListBySubscriptionIDResponse, error)`
+- Function `*PrivateLinkScopesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateLinkScopesClientListResponse, error)`
+- Function `*DataCollectionRuleAssociationsClientListByRulePager.NextPage` return value(s) have been changed from `(bool)` to `(DataCollectionRuleAssociationsClientListByRuleResponse, error)`
+- Function `*AutoscaleSettingsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(AutoscaleSettingsClientListBySubscriptionResponse, error)`
+- Function `*DataCollectionRulesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(DataCollectionRulesClientListByResourceGroupResponse, error)`
+- Function `*ScheduledQueryRulesClient.ListBySubscription` parameter(s) have been changed from `(context.Context, *ScheduledQueryRulesClientListBySubscriptionOptions)` to `(*ScheduledQueryRulesClientListBySubscriptionOptions)`
+- Function `*ScheduledQueryRulesClient.ListBySubscription` return value(s) have been changed from `(ScheduledQueryRulesClientListBySubscriptionResponse, error)` to `(*ScheduledQueryRulesClientListBySubscriptionPager)`
+- Function `*DataCollectionRuleAssociationsClientListByResourcePager.NextPage` return value(s) have been changed from `(bool)` to `(DataCollectionRuleAssociationsClientListByResourceResponse, error)`
+- Function `*ActionGroupsClient.ListBySubscriptionID` parameter(s) have been changed from `(context.Context, *ActionGroupsClientListBySubscriptionIDOptions)` to `(*ActionGroupsClientListBySubscriptionIDOptions)`
+- Function `*ActionGroupsClient.ListBySubscriptionID` return value(s) have been changed from `(ActionGroupsClientListBySubscriptionIDResponse, error)` to `(*ActionGroupsClientListBySubscriptionIDPager)`
+- Function `*ActivityLogAlertsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ActivityLogAlertsClientListByResourceGroupResponse, error)`
+- Function `*MetricNamespacesClient.List` parameter(s) have been changed from `(context.Context, string, *MetricNamespacesClientListOptions)` to `(string, *MetricNamespacesClientListOptions)`
+- Function `*MetricNamespacesClient.List` return value(s) have been changed from `(MetricNamespacesClientListResponse, error)` to `(*MetricNamespacesClientListPager)`
+- Function `*AutoscaleSettingsClientListBySubscriptionPager.Err` has been removed
+- Function `*DataCollectionRulesClientListBySubscriptionPager.Err` has been removed
+- Function `*PrivateLinkScopedResourcesClientListByPrivateLinkScopePager.Err` has been removed
+- Function `*PrivateLinkScopesClientListPager.PageResponse` has been removed
+- Function `*DataCollectionEndpointsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*PrivateLinkScopesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*DataCollectionRuleAssociationsClientListByResourcePager.PageResponse` has been removed
+- Function `*DataCollectionRuleAssociationsClientListByRulePager.PageResponse` has been removed
+- Function `*AutoscaleSettingsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*DataCollectionRuleAssociationsClientListByResourcePager.Err` has been removed
+- Function `*ActivityLogAlertsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*DataCollectionEndpointsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*DataCollectionRulesClientListByResourceGroupPager.Err` has been removed
+- Function `*DataCollectionEndpointsClientListByResourceGroupPager.Err` has been removed
+- Function `*AutoscaleSettingsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*ActivityLogAlertsClientListBySubscriptionIDPager.Err` has been removed
+- Function `*ActivityLogsClientListPager.PageResponse` has been removed
+- Function `*PrivateLinkScopesClientListPager.Err` has been removed
+- Function `*PrivateEndpointConnectionsClientListByPrivateLinkScopePager.PageResponse` has been removed
+- Function `*DataCollectionEndpointsClientListBySubscriptionPager.Err` has been removed
+- Function `*PrivateLinkScopedResourcesClientListByPrivateLinkScopePager.PageResponse` has been removed
+- Function `*PrivateEndpointConnectionsClientListByPrivateLinkScopePager.Err` has been removed
+- Function `*DataCollectionRulesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*PrivateLinkResourcesClientListByPrivateLinkScopePager.Err` has been removed
+- Function `*AutoscaleSettingsClientListByResourceGroupPager.Err` has been removed
+- Function `*PrivateLinkResourcesClientListByPrivateLinkScopePager.PageResponse` has been removed
+- Function `*DataCollectionRuleAssociationsClientListByRulePager.Err` has been removed
+- Function `*TenantActivityLogsClientListPager.Err` has been removed
+- Function `*DataCollectionRulesClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*ActivityLogsClientListPager.Err` has been removed
+- Function `*PrivateLinkScopesClientListByResourceGroupPager.Err` has been removed
+- Function `*TenantActivityLogsClientListPager.PageResponse` has been removed
+- Function `*ActivityLogAlertsClientListByResourceGroupPager.Err` has been removed
+- Function `*ActivityLogAlertsClientListBySubscriptionIDPager.PageResponse` has been removed
+- Struct `ActionGroupsClientCreateOrUpdateResult` has been removed
+- Struct `ActionGroupsClientGetResult` has been removed
+- Struct `ActionGroupsClientGetTestNotificationsResult` has been removed
+- Struct `ActionGroupsClientListByResourceGroupResult` has been removed
+- Struct `ActionGroupsClientListBySubscriptionIDResult` has been removed
+- Struct `ActionGroupsClientPostTestNotificationsResult` has been removed
+- Struct `ActionGroupsClientUpdateResult` has been removed
+- Struct `ActivityLogAlertsClientCreateOrUpdateResult` has been removed
+- Struct `ActivityLogAlertsClientGetResult` has been removed
+- Struct `ActivityLogAlertsClientListByResourceGroupResult` has been removed
+- Struct `ActivityLogAlertsClientListBySubscriptionIDResult` has been removed
+- Struct `ActivityLogAlertsClientUpdateResult` has been removed
+- Struct `ActivityLogsClientListResult` has been removed
+- Struct `AlertRuleIncidentsClientGetResult` has been removed
+- Struct `AlertRuleIncidentsClientListByAlertRuleResult` has been removed
+- Struct `AlertRulesClientCreateOrUpdateResult` has been removed
+- Struct `AlertRulesClientGetResult` has been removed
+- Struct `AlertRulesClientListByResourceGroupResult` has been removed
+- Struct `AlertRulesClientListBySubscriptionResult` has been removed
+- Struct `AlertRulesClientUpdateResult` has been removed
+- Struct `AutoscaleSettingsClientCreateOrUpdateResult` has been removed
+- Struct `AutoscaleSettingsClientGetResult` has been removed
+- Struct `AutoscaleSettingsClientListByResourceGroupResult` has been removed
+- Struct `AutoscaleSettingsClientListBySubscriptionResult` has been removed
+- Struct `AutoscaleSettingsClientUpdateResult` has been removed
+- Struct `BaselinesClientListResult` has been removed
+- Struct `DataCollectionEndpointsClientCreateResult` has been removed
+- Struct `DataCollectionEndpointsClientGetResult` has been removed
+- Struct `DataCollectionEndpointsClientListByResourceGroupResult` has been removed
+- Struct `DataCollectionEndpointsClientListBySubscriptionResult` has been removed
+- Struct `DataCollectionEndpointsClientUpdateResult` has been removed
+- Struct `DataCollectionRuleAssociationsClientCreateResult` has been removed
+- Struct `DataCollectionRuleAssociationsClientGetResult` has been removed
+- Struct `DataCollectionRuleAssociationsClientListByResourceResult` has been removed
+- Struct `DataCollectionRuleAssociationsClientListByRuleResult` has been removed
+- Struct `DataCollectionRulesClientCreateResult` has been removed
+- Struct `DataCollectionRulesClientGetResult` has been removed
+- Struct `DataCollectionRulesClientListByResourceGroupResult` has been removed
+- Struct `DataCollectionRulesClientListBySubscriptionResult` has been removed
+- Struct `DataCollectionRulesClientUpdateResult` has been removed
+- Struct `DiagnosticSettingsCategoryClientGetResult` has been removed
+- Struct `DiagnosticSettingsCategoryClientListResult` has been removed
+- Struct `DiagnosticSettingsClientCreateOrUpdateResult` has been removed
+- Struct `DiagnosticSettingsClientGetResult` has been removed
+- Struct `DiagnosticSettingsClientListResult` has been removed
+- Struct `EventCategoriesClientListResult` has been removed
+- Struct `LogProfilesClientCreateOrUpdateResult` has been removed
+- Struct `LogProfilesClientGetResult` has been removed
+- Struct `LogProfilesClientListResult` has been removed
+- Struct `LogProfilesClientUpdateResult` has been removed
+- Struct `MetricAlertsClientCreateOrUpdateResult` has been removed
+- Struct `MetricAlertsClientGetResult` has been removed
+- Struct `MetricAlertsClientListByResourceGroupResult` has been removed
+- Struct `MetricAlertsClientListBySubscriptionResult` has been removed
+- Struct `MetricAlertsClientUpdateResult` has been removed
+- Struct `MetricAlertsStatusClientListByNameResult` has been removed
+- Struct `MetricAlertsStatusClientListResult` has been removed
+- Struct `MetricDefinitionsClientListResult` has been removed
+- Struct `MetricNamespacesClientListResult` has been removed
+- Struct `MetricsClientListResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientCreateOrUpdateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListByPrivateLinkScopeResult` has been removed
+- Struct `PrivateLinkResourcesClientGetResult` has been removed
+- Struct `PrivateLinkResourcesClientListByPrivateLinkScopeResult` has been removed
+- Struct `PrivateLinkScopeOperationStatusClientGetResult` has been removed
+- Struct `PrivateLinkScopedResourcesClientCreateOrUpdateResult` has been removed
+- Struct `PrivateLinkScopedResourcesClientGetResult` has been removed
+- Struct `PrivateLinkScopedResourcesClientListByPrivateLinkScopeResult` has been removed
+- Struct `PrivateLinkScopesClientCreateOrUpdateResult` has been removed
+- Struct `PrivateLinkScopesClientGetResult` has been removed
+- Struct `PrivateLinkScopesClientListByResourceGroupResult` has been removed
+- Struct `PrivateLinkScopesClientListResult` has been removed
+- Struct `PrivateLinkScopesClientUpdateTagsResult` has been removed
+- Struct `ScheduledQueryRulesClientCreateOrUpdateResult` has been removed
+- Struct `ScheduledQueryRulesClientGetResult` has been removed
+- Struct `ScheduledQueryRulesClientListByResourceGroupResult` has been removed
+- Struct `ScheduledQueryRulesClientListBySubscriptionResult` has been removed
+- Struct `ScheduledQueryRulesClientUpdateResult` has been removed
+- Struct `TenantActivityLogsClientListResult` has been removed
+- Struct `VMInsightsClientGetOnboardingStatusResult` has been removed
+- Field `PrivateLinkScopedResourcesClientCreateOrUpdateResult` of struct `PrivateLinkScopedResourcesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkScopedResourcesClientCreateOrUpdateResponse` has been removed
+- Field `MetricAlertsClientGetResult` of struct `MetricAlertsClientGetResponse` has been removed
+- Field `RawResponse` of struct `MetricAlertsClientGetResponse` has been removed
+- Field `DiagnosticSettingsCategoryClientGetResult` of struct `DiagnosticSettingsCategoryClientGetResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticSettingsCategoryClientGetResponse` has been removed
+- Field `ActionGroupsClientUpdateResult` of struct `ActionGroupsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ActionGroupsClientUpdateResponse` has been removed
+- Field `EventCategoriesClientListResult` of struct `EventCategoriesClientListResponse` has been removed
+- Field `RawResponse` of struct `EventCategoriesClientListResponse` has been removed
+- Field `ActionGroupsClientListBySubscriptionIDResult` of struct `ActionGroupsClientListBySubscriptionIDResponse` has been removed
+- Field `RawResponse` of struct `ActionGroupsClientListBySubscriptionIDResponse` has been removed
+- Field `ScheduledQueryRulesClientCreateOrUpdateResult` of struct `ScheduledQueryRulesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ScheduledQueryRulesClientCreateOrUpdateResponse` has been removed
+- Field `DataCollectionRulesClientListBySubscriptionResult` of struct `DataCollectionRulesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `DataCollectionRulesClientListBySubscriptionResponse` has been removed
+- Field `DataCollectionRuleAssociationsClientListByResourceResult` of struct `DataCollectionRuleAssociationsClientListByResourceResponse` has been removed
+- Field `RawResponse` of struct `DataCollectionRuleAssociationsClientListByResourceResponse` has been removed
+- Field `RawResponse` of struct `MetricAlertsClientDeleteResponse` has been removed
+- Field `PrivateLinkScopesClientListByResourceGroupResult` of struct `PrivateLinkScopesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkScopesClientListByResourceGroupResponse` has been removed
+- Field `AutoscaleSettingsClientUpdateResult` of struct `AutoscaleSettingsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AutoscaleSettingsClientUpdateResponse` has been removed
+- Field `ActionGroupsClientPostTestNotificationsResult` of struct `ActionGroupsClientPostTestNotificationsResponse` has been removed
+- Field `RawResponse` of struct `ActionGroupsClientPostTestNotificationsResponse` has been removed
+- Field `DataCollectionEndpointsClientListBySubscriptionResult` of struct `DataCollectionEndpointsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `DataCollectionEndpointsClientListBySubscriptionResponse` has been removed
+- Field `PrivateLinkScopesClientCreateOrUpdateResult` of struct `PrivateLinkScopesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkScopesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkScopesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `ActivityLogAlertsClientUpdateResult` of struct `ActivityLogAlertsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ActivityLogAlertsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ActionGroupsClientDeleteResponse` has been removed
+- Field `MetricNamespacesClientListResult` of struct `MetricNamespacesClientListResponse` has been removed
+- Field `RawResponse` of struct `MetricNamespacesClientListResponse` has been removed
+- Field `MetricAlertsClientUpdateResult` of struct `MetricAlertsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `MetricAlertsClientUpdateResponse` has been removed
+- Field `DiagnosticSettingsClientListResult` of struct `DiagnosticSettingsClientListResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticSettingsClientListResponse` has been removed
+- Field `ScheduledQueryRulesClientUpdateResult` of struct `ScheduledQueryRulesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ScheduledQueryRulesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ActionGroupsClientEnableReceiverResponse` has been removed
+- Field `AlertRulesClientGetResult` of struct `AlertRulesClientGetResponse` has been removed
+- Field `RawResponse` of struct `AlertRulesClientGetResponse` has been removed
+- Field `ActionGroupsClientGetResult` of struct `ActionGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ActionGroupsClientGetResponse` has been removed
+- Field `DataCollectionRulesClientGetResult` of struct `DataCollectionRulesClientGetResponse` has been removed
+- Field `RawResponse` of struct `DataCollectionRulesClientGetResponse` has been removed
+- Field `DiagnosticSettingsClientCreateOrUpdateResult` of struct `DiagnosticSettingsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticSettingsClientCreateOrUpdateResponse` has been removed
+- Field `PrivateLinkScopesClientUpdateTagsResult` of struct `PrivateLinkScopesClientUpdateTagsResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkScopesClientUpdateTagsResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkScopesClientDeletePollerResponse` has been removed
+- Field `PrivateLinkScopedResourcesClientGetResult` of struct `PrivateLinkScopedResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkScopedResourcesClientGetResponse` has been removed
+- Field `DataCollectionRuleAssociationsClientListByRuleResult` of struct `DataCollectionRuleAssociationsClientListByRuleResponse` has been removed
+- Field `RawResponse` of struct `DataCollectionRuleAssociationsClientListByRuleResponse` has been removed
+- Field `AutoscaleSettingsClientListByResourceGroupResult` of struct `AutoscaleSettingsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `AutoscaleSettingsClientListByResourceGroupResponse` has been removed
+- Field `DataCollectionRuleAssociationsClientGetResult` of struct `DataCollectionRuleAssociationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DataCollectionRuleAssociationsClientGetResponse` has been removed
+- Field `LogProfilesClientGetResult` of struct `LogProfilesClientGetResponse` has been removed
+- Field `RawResponse` of struct `LogProfilesClientGetResponse` has been removed
+- Field `ActivityLogsClientListResult` of struct `ActivityLogsClientListResponse` has been removed
+- Field `RawResponse` of struct `ActivityLogsClientListResponse` has been removed
+- Field `DataCollectionRulesClientUpdateResult` of struct `DataCollectionRulesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DataCollectionRulesClientUpdateResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `AlertRuleIncidentsClientListByAlertRuleResult` of struct `AlertRuleIncidentsClientListByAlertRuleResponse` has been removed
+- Field `RawResponse` of struct `AlertRuleIncidentsClientListByAlertRuleResponse` has been removed
+- Field `ActionGroupsClientListByResourceGroupResult` of struct `ActionGroupsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ActionGroupsClientListByResourceGroupResponse` has been removed
+- Field `DataCollectionRuleAssociationsClientCreateResult` of struct `DataCollectionRuleAssociationsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `DataCollectionRuleAssociationsClientCreateResponse` has been removed
+- Field `ActivityLogAlertsClientGetResult` of struct `ActivityLogAlertsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ActivityLogAlertsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticSettingsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkScopedResourcesClientDeletePollerResponse` has been removed
+- Field `DataCollectionEndpointsClientUpdateResult` of struct `DataCollectionEndpointsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DataCollectionEndpointsClientUpdateResponse` has been removed
+- Field `AlertRulesClientListBySubscriptionResult` of struct `AlertRulesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `AlertRulesClientListBySubscriptionResponse` has been removed
+- Field `MetricsClientListResult` of struct `MetricsClientListResponse` has been removed
+- Field `RawResponse` of struct `MetricsClientListResponse` has been removed
+- Field `ScheduledQueryRulesClientListBySubscriptionResult` of struct `ScheduledQueryRulesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ScheduledQueryRulesClientListBySubscriptionResponse` has been removed
+- Field `PrivateLinkResourcesClientGetResult` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `AlertRulesClientListByResourceGroupResult` of struct `AlertRulesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `AlertRulesClientListByResourceGroupResponse` has been removed
+- Field `DataCollectionEndpointsClientCreateResult` of struct `DataCollectionEndpointsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `DataCollectionEndpointsClientCreateResponse` has been removed
+- Field `ActivityLogAlertsClientListBySubscriptionIDResult` of struct `ActivityLogAlertsClientListBySubscriptionIDResponse` has been removed
+- Field `RawResponse` of struct `ActivityLogAlertsClientListBySubscriptionIDResponse` has been removed
+- Field `DataCollectionEndpointsClientGetResult` of struct `DataCollectionEndpointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DataCollectionEndpointsClientGetResponse` has been removed
+- Field `AlertRulesClientCreateOrUpdateResult` of struct `AlertRulesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AlertRulesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DataCollectionRuleAssociationsClientDeleteResponse` has been removed
+- Field `LogProfilesClientUpdateResult` of struct `LogProfilesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `LogProfilesClientUpdateResponse` has been removed
+- Field `DataCollectionRulesClientCreateResult` of struct `DataCollectionRulesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `DataCollectionRulesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `AlertRulesClientDeleteResponse` has been removed
+- Field `DiagnosticSettingsCategoryClientListResult` of struct `DiagnosticSettingsCategoryClientListResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticSettingsCategoryClientListResponse` has been removed
+- Field `LogProfilesClientCreateOrUpdateResult` of struct `LogProfilesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `LogProfilesClientCreateOrUpdateResponse` has been removed
+- Field `PrivateLinkResourcesClientListByPrivateLinkScopeResult` of struct `PrivateLinkResourcesClientListByPrivateLinkScopeResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListByPrivateLinkScopeResponse` has been removed
+- Field `AutoscaleSettingsClientGetResult` of struct `AutoscaleSettingsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AutoscaleSettingsClientGetResponse` has been removed
+- Field `AlertRulesClientUpdateResult` of struct `AlertRulesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AlertRulesClientUpdateResponse` has been removed
+- Field `DiagnosticSettingsClientGetResult` of struct `DiagnosticSettingsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticSettingsClientGetResponse` has been removed
+- Field `MetricAlertsClientListBySubscriptionResult` of struct `MetricAlertsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `MetricAlertsClientListBySubscriptionResponse` has been removed
+- Field `BaselinesClientListResult` of struct `BaselinesClientListResponse` has been removed
+- Field `RawResponse` of struct `BaselinesClientListResponse` has been removed
+- Field `MetricDefinitionsClientListResult` of struct `MetricDefinitionsClientListResponse` has been removed
+- Field `RawResponse` of struct `MetricDefinitionsClientListResponse` has been removed
+- Field `PrivateLinkScopedResourcesClientListByPrivateLinkScopeResult` of struct `PrivateLinkScopedResourcesClientListByPrivateLinkScopeResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkScopedResourcesClientListByPrivateLinkScopeResponse` has been removed
+- Field `ActivityLogAlertsClientCreateOrUpdateResult` of struct `ActivityLogAlertsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ActivityLogAlertsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DataCollectionRulesClientDeleteResponse` has been removed
+- Field `MetricAlertsClientListByResourceGroupResult` of struct `MetricAlertsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `MetricAlertsClientListByResourceGroupResponse` has been removed
+- Field `ScheduledQueryRulesClientListByResourceGroupResult` of struct `ScheduledQueryRulesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ScheduledQueryRulesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeletePollerResponse` has been removed
+- Field `MetricAlertsClientCreateOrUpdateResult` of struct `MetricAlertsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `MetricAlertsClientCreateOrUpdateResponse` has been removed
+- Field `AutoscaleSettingsClientListBySubscriptionResult` of struct `AutoscaleSettingsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `AutoscaleSettingsClientListBySubscriptionResponse` has been removed
+- Field `ScheduledQueryRulesClientGetResult` of struct `ScheduledQueryRulesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ScheduledQueryRulesClientGetResponse` has been removed
+- Field `ActionGroupsClientGetTestNotificationsResult` of struct `ActionGroupsClientGetTestNotificationsResponse` has been removed
+- Field `RawResponse` of struct `ActionGroupsClientGetTestNotificationsResponse` has been removed
+- Field `PrivateLinkScopesClientListResult` of struct `PrivateLinkScopesClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkScopesClientListResponse` has been removed
+- Field `RawResponse` of struct `LogProfilesClientDeleteResponse` has been removed
+- Field `PrivateLinkScopeOperationStatusClientGetResult` of struct `PrivateLinkScopeOperationStatusClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkScopeOperationStatusClientGetResponse` has been removed
+- Field `PrivateLinkScopesClientGetResult` of struct `PrivateLinkScopesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkScopesClientGetResponse` has been removed
+- Field `AlertRuleIncidentsClientGetResult` of struct `AlertRuleIncidentsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AlertRuleIncidentsClientGetResponse` has been removed
+- Field `ActivityLogAlertsClientListByResourceGroupResult` of struct `ActivityLogAlertsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ActivityLogAlertsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `AutoscaleSettingsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkScopedResourcesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ActionGroupsClientPostTestNotificationsPollerResponse` has been removed
+- Field `DataCollectionRulesClientListByResourceGroupResult` of struct `DataCollectionRulesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `DataCollectionRulesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ScheduledQueryRulesClientDeleteResponse` has been removed
+- Field `VMInsightsClientGetOnboardingStatusResult` of struct `VMInsightsClientGetOnboardingStatusResponse` has been removed
+- Field `RawResponse` of struct `VMInsightsClientGetOnboardingStatusResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListByPrivateLinkScopeResult` of struct `PrivateEndpointConnectionsClientListByPrivateLinkScopeResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListByPrivateLinkScopeResponse` has been removed
+- Field `AutoscaleSettingsClientCreateOrUpdateResult` of struct `AutoscaleSettingsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AutoscaleSettingsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ActivityLogAlertsClientDeleteResponse` has been removed
+- Field `LogProfilesClientListResult` of struct `LogProfilesClientListResponse` has been removed
+- Field `RawResponse` of struct `LogProfilesClientListResponse` has been removed
+- Field `RawResponse` of struct `DataCollectionEndpointsClientDeleteResponse` has been removed
+- Field `TenantActivityLogsClientListResult` of struct `TenantActivityLogsClientListResponse` has been removed
+- Field `RawResponse` of struct `TenantActivityLogsClientListResponse` has been removed
+- Field `MetricAlertsStatusClientListByNameResult` of struct `MetricAlertsStatusClientListByNameResponse` has been removed
+- Field `RawResponse` of struct `MetricAlertsStatusClientListByNameResponse` has been removed
+- Field `MetricAlertsStatusClientListResult` of struct `MetricAlertsStatusClientListResponse` has been removed
+- Field `RawResponse` of struct `MetricAlertsStatusClientListResponse` has been removed
+- Field `PrivateEndpointConnectionsClientCreateOrUpdateResult` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkScopedResourcesClientCreateOrUpdatePollerResponse` has been removed
+- Field `DataCollectionEndpointsClientListByResourceGroupResult` of struct `DataCollectionEndpointsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `DataCollectionEndpointsClientListByResourceGroupResponse` has been removed
+- Field `ActionGroupsClientCreateOrUpdateResult` of struct `ActionGroupsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ActionGroupsClientCreateOrUpdateResponse` has been removed
+
+### Features Added
+
+- New function `*AlertRulesClientListBySubscriptionPager.NextPage(context.Context) (AlertRulesClientListBySubscriptionResponse, error)`
+- New function `*MetricNamespacesClientListPager.NextPage(context.Context) (MetricNamespacesClientListResponse, error)`
+- New function `*MetricNamespacesClientListPager.More() bool`
+- New function `*PrivateLinkScopedResourcesClientListByPrivateLinkScopePager.More() bool`
+- New function `*TenantActivityLogsClientListPager.More() bool`
+- New function `*PrivateEndpointConnectionsClientListByPrivateLinkScopePager.More() bool`
+- New function `*ScheduledQueryRulesClientListByResourceGroupPager.More() bool`
+- New function `*ActionGroupsClientListByResourceGroupPager.NextPage(context.Context) (ActionGroupsClientListByResourceGroupResponse, error)`
+- New function `*AlertRulesClientListByResourceGroupPager.More() bool`
+- New function `*EventCategoriesClientListPager.NextPage(context.Context) (EventCategoriesClientListResponse, error)`
+- New function `*MetricAlertsClientListBySubscriptionPager.NextPage(context.Context) (MetricAlertsClientListBySubscriptionResponse, error)`
+- New function `*BaselinesClientListPager.NextPage(context.Context) (BaselinesClientListResponse, error)`
+- New function `*DataCollectionRuleAssociationsClientListByResourcePager.More() bool`
+- New function `*AlertRulesClientListByResourceGroupPager.NextPage(context.Context) (AlertRulesClientListByResourceGroupResponse, error)`
+- New function `*ActivityLogAlertsClientListBySubscriptionIDPager.More() bool`
+- New function `*MetricAlertsClientListByResourceGroupPager.More() bool`
+- New function `*EventCategoriesClientListPager.More() bool`
+- New function `*AutoscaleSettingsClientListBySubscriptionPager.More() bool`
+- New function `*LogProfilesClientListPager.NextPage(context.Context) (LogProfilesClientListResponse, error)`
+- New function `*DataCollectionRulesClientListBySubscriptionPager.More() bool`
+- New function `*ScheduledQueryRulesClientListBySubscriptionPager.More() bool`
+- New function `*PrivateLinkResourcesClientListByPrivateLinkScopePager.More() bool`
+- New function `*AutoscaleSettingsClientListByResourceGroupPager.More() bool`
+- New function `*ActivityLogsClientListPager.More() bool`
+- New function `*DataCollectionEndpointsClientListByResourceGroupPager.More() bool`
+- New function `*ScheduledQueryRulesClientListBySubscriptionPager.NextPage(context.Context) (ScheduledQueryRulesClientListBySubscriptionResponse, error)`
+- New function `*DataCollectionRuleAssociationsClientListByRulePager.More() bool`
+- New function `*AlertRulesClientListBySubscriptionPager.More() bool`
+- New function `*DataCollectionEndpointsClientListBySubscriptionPager.More() bool`
+- New function `*PrivateLinkScopesClientListByResourceGroupPager.More() bool`
+- New function `*ActionGroupsClientListBySubscriptionIDPager.More() bool`
+- New function `*MetricDefinitionsClientListPager.More() bool`
+- New function `*AlertRuleIncidentsClientListByAlertRulePager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*LogProfilesClientListPager.More() bool`
+- New function `*ActivityLogAlertsClientListByResourceGroupPager.More() bool`
+- New function `*PrivateLinkScopesClientListPager.More() bool`
+- New function `*DataCollectionRulesClientListByResourceGroupPager.More() bool`
+- New function `*MetricAlertsClientListByResourceGroupPager.NextPage(context.Context) (MetricAlertsClientListByResourceGroupResponse, error)`
+- New function `*MetricDefinitionsClientListPager.NextPage(context.Context) (MetricDefinitionsClientListResponse, error)`
+- New function `*AlertRuleIncidentsClientListByAlertRulePager.NextPage(context.Context) (AlertRuleIncidentsClientListByAlertRuleResponse, error)`
+- New function `*ActionGroupsClientListByResourceGroupPager.More() bool`
+- New function `*ScheduledQueryRulesClientListByResourceGroupPager.NextPage(context.Context) (ScheduledQueryRulesClientListByResourceGroupResponse, error)`
+- New function `*ActionGroupsClientListBySubscriptionIDPager.NextPage(context.Context) (ActionGroupsClientListBySubscriptionIDResponse, error)`
+- New function `*BaselinesClientListPager.More() bool`
+- New function `*MetricAlertsClientListBySubscriptionPager.More() bool`
+- New struct `ActionGroupsClientListByResourceGroupPager`
+- New struct `ActionGroupsClientListBySubscriptionIDPager`
+- New struct `AlertRuleIncidentsClientListByAlertRulePager`
+- New struct `AlertRulesClientListByResourceGroupPager`
+- New struct `AlertRulesClientListBySubscriptionPager`
+- New struct `BaselinesClientListPager`
+- New struct `Error`
+- New struct `ErrorContract`
+- New struct `ErrorDetail`
+- New struct `ErrorResponseAutoGenerated`
+- New struct `ErrorResponseCommonV2`
+- New struct `EventCategoriesClientListPager`
+- New struct `LogProfilesClientListPager`
+- New struct `MetricAlertsClientListByResourceGroupPager`
+- New struct `MetricAlertsClientListBySubscriptionPager`
+- New struct `MetricDefinitionsClientListPager`
+- New struct `MetricNamespacesClientListPager`
+- New struct `ResponseWithError`
+- New struct `ScheduledQueryRulesClientListByResourceGroupPager`
+- New struct `ScheduledQueryRulesClientListBySubscriptionPager`
+- New anonymous field `AlertRuleList` in struct `ActivityLogAlertsClientListByResourceGroupResponse`
+- New anonymous field `ActionGroupList` in struct `ActionGroupsClientListBySubscriptionIDResponse`
+- New anonymous field `MetricDefinitionCollection` in struct `MetricDefinitionsClientListResponse`
+- New anonymous field `LogSearchRuleResource` in struct `ScheduledQueryRulesClientCreateOrUpdateResponse`
+- New anonymous field `DataCollectionEndpointResourceListResult` in struct `DataCollectionEndpointsClientListBySubscriptionResponse`
+- New anonymous field `DiagnosticSettingsResource` in struct `DiagnosticSettingsClientCreateOrUpdateResponse`
+- New anonymous field `ActivityLogAlertResource` in struct `ActivityLogAlertsClientGetResponse`
+- New anonymous field `LogProfileCollection` in struct `LogProfilesClientListResponse`
+- New anonymous field `AzureMonitorPrivateLinkScope` in struct `PrivateLinkScopesClientGetResponse`
+- New anonymous field `DataCollectionRuleResourceListResult` in struct `DataCollectionRulesClientListBySubscriptionResponse`
+- New anonymous field `AutoscaleSettingResourceCollection` in struct `AutoscaleSettingsClientListByResourceGroupResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse`
+- New anonymous field `DataCollectionEndpointResource` in struct `DataCollectionEndpointsClientUpdateResponse`
+- New anonymous field `AzureMonitorPrivateLinkScopeListResult` in struct `PrivateLinkScopesClientListResponse`
+- New anonymous field `MetricBaselinesResponse` in struct `BaselinesClientListResponse`
+- New anonymous field `DiagnosticSettingsResource` in struct `DiagnosticSettingsClientGetResponse`
+- New anonymous field `DataCollectionRuleAssociationProxyOnlyResource` in struct `DataCollectionRuleAssociationsClientGetResponse`
+- New anonymous field `ScopedResourceListResult` in struct `PrivateLinkScopedResourcesClientListByPrivateLinkScopeResponse`
+- New anonymous field `MetricAlertResourceCollection` in struct `MetricAlertsClientListBySubscriptionResponse`
+- New anonymous field `AlertRuleResource` in struct `AlertRulesClientUpdateResponse`
+- New anonymous field `VMInsightsOnboardingStatus` in struct `VMInsightsClientGetOnboardingStatusResponse`
+- New anonymous field `ScopedResource` in struct `PrivateLinkScopedResourcesClientCreateOrUpdateResponse`
+- New anonymous field `AlertRuleList` in struct `ActivityLogAlertsClientListBySubscriptionIDResponse`
+- New anonymous field `DiagnosticSettingsResourceCollection` in struct `DiagnosticSettingsClientListResponse`
+- New anonymous field `DataCollectionRuleResource` in struct `DataCollectionRulesClientUpdateResponse`
+- New anonymous field `DataCollectionRuleResource` in struct `DataCollectionRulesClientCreateResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `TestNotificationResponse` in struct `ActionGroupsClientPostTestNotificationsResponse`
+- New anonymous field `AzureMonitorPrivateLinkScope` in struct `PrivateLinkScopesClientUpdateTagsResponse`
+- New anonymous field `AlertRuleResourceCollection` in struct `AlertRulesClientListBySubscriptionResponse`
+- New anonymous field `OperationStatus` in struct `PrivateLinkScopeOperationStatusClientGetResponse`
+- New anonymous field `AutoscaleSettingResource` in struct `AutoscaleSettingsClientUpdateResponse`
+- New anonymous field `AutoscaleSettingResource` in struct `AutoscaleSettingsClientCreateOrUpdateResponse`
+- New anonymous field `AlertRuleResource` in struct `AlertRulesClientCreateOrUpdateResponse`
+- New anonymous field `LogSearchRuleResourceCollection` in struct `ScheduledQueryRulesClientListByResourceGroupResponse`
+- New anonymous field `PrivateLinkResource` in struct `PrivateLinkResourcesClientGetResponse`
+- New anonymous field `ActivityLogAlertResource` in struct `ActivityLogAlertsClientUpdateResponse`
+- New anonymous field `MetricAlertResource` in struct `MetricAlertsClientGetResponse`
+- New anonymous field `LogSearchRuleResource` in struct `ScheduledQueryRulesClientGetResponse`
+- New anonymous field `MetricAlertStatusCollection` in struct `MetricAlertsStatusClientListByNameResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `PrivateLinkResourcesClientListByPrivateLinkScopeResponse`
+- New anonymous field `LogProfileResource` in struct `LogProfilesClientCreateOrUpdateResponse`
+- New anonymous field `AutoscaleSettingResource` in struct `AutoscaleSettingsClientGetResponse`
+- New anonymous field `AlertRuleResource` in struct `AlertRulesClientGetResponse`
+- New anonymous field `EventDataCollection` in struct `ActivityLogsClientListResponse`
+- New anonymous field `LogProfileResource` in struct `LogProfilesClientUpdateResponse`
+- New anonymous field `TestNotificationDetailsResponse` in struct `ActionGroupsClientGetTestNotificationsResponse`
+- New anonymous field `ActivityLogAlertResource` in struct `ActivityLogAlertsClientCreateOrUpdateResponse`
+- New anonymous field `ActionGroupResource` in struct `ActionGroupsClientGetResponse`
+- New anonymous field `DiagnosticSettingsCategoryResource` in struct `DiagnosticSettingsCategoryClientGetResponse`
+- New anonymous field `EventCategoryCollection` in struct `EventCategoriesClientListResponse`
+- New anonymous field `DiagnosticSettingsCategoryResourceCollection` in struct `DiagnosticSettingsCategoryClientListResponse`
+- New anonymous field `DataCollectionRuleAssociationProxyOnlyResourceListResult` in struct `DataCollectionRuleAssociationsClientListByResourceResponse`
+- New anonymous field `ScopedResource` in struct `PrivateLinkScopedResourcesClientGetResponse`
+- New anonymous field `ActionGroupResource` in struct `ActionGroupsClientUpdateResponse`
+- New anonymous field `EventDataCollection` in struct `TenantActivityLogsClientListResponse`
+- New anonymous field `IncidentListResult` in struct `AlertRuleIncidentsClientListByAlertRuleResponse`
+- New anonymous field `DataCollectionRuleAssociationProxyOnlyResourceListResult` in struct `DataCollectionRuleAssociationsClientListByRuleResponse`
+- New anonymous field `Response` in struct `MetricsClientListResponse`
+- New anonymous field `MetricAlertResource` in struct `MetricAlertsClientCreateOrUpdateResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListByPrivateLinkScopeResponse`
+- New anonymous field `LogSearchRuleResource` in struct `ScheduledQueryRulesClientUpdateResponse`
+- New anonymous field `DataCollectionEndpointResource` in struct `DataCollectionEndpointsClientGetResponse`
+- New anonymous field `ActionGroupList` in struct `ActionGroupsClientListByResourceGroupResponse`
+- New anonymous field `DataCollectionEndpointResourceListResult` in struct `DataCollectionEndpointsClientListByResourceGroupResponse`
+- New anonymous field `MetricAlertResource` in struct `MetricAlertsClientUpdateResponse`
+- New anonymous field `AzureMonitorPrivateLinkScope` in struct `PrivateLinkScopesClientCreateOrUpdateResponse`
+- New anonymous field `DataCollectionRuleResourceListResult` in struct `DataCollectionRulesClientListByResourceGroupResponse`
+- New anonymous field `Incident` in struct `AlertRuleIncidentsClientGetResponse`
+- New anonymous field `DataCollectionEndpointResource` in struct `DataCollectionEndpointsClientCreateResponse`
+- New anonymous field `DataCollectionRuleAssociationProxyOnlyResource` in struct `DataCollectionRuleAssociationsClientCreateResponse`
+- New anonymous field `LogSearchRuleResourceCollection` in struct `ScheduledQueryRulesClientListBySubscriptionResponse`
+- New anonymous field `AlertRuleResourceCollection` in struct `AlertRulesClientListByResourceGroupResponse`
+- New anonymous field `MetricAlertStatusCollection` in struct `MetricAlertsStatusClientListResponse`
+- New anonymous field `AzureMonitorPrivateLinkScopeListResult` in struct `PrivateLinkScopesClientListByResourceGroupResponse`
+- New anonymous field `MetricAlertResourceCollection` in struct `MetricAlertsClientListByResourceGroupResponse`
+- New anonymous field `MetricNamespaceCollection` in struct `MetricNamespacesClientListResponse`
+- New anonymous field `ActionGroupResource` in struct `ActionGroupsClientCreateOrUpdateResponse`
+- New anonymous field `LogProfileResource` in struct `LogProfilesClientGetResponse`
+- New anonymous field `DataCollectionRuleResource` in struct `DataCollectionRulesClientGetResponse`
+- New anonymous field `AutoscaleSettingResourceCollection` in struct `AutoscaleSettingsClientListBySubscriptionResponse`
+
+
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `MetricAlertSingleResourceMultipleMetricCriteria.AdditionalProperties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `MetricAlertCriteria.AdditionalProperties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `MetricAlertMultipleResourceMultipleMetricCriteria.AdditionalProperties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `MetricCriteria.AdditionalProperties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `MultiMetricCriteria.AdditionalProperties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `DynamicMetricCriteria.AdditionalProperties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `WebtestLocationAvailabilityCriteria.AdditionalProperties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `ExtensionDataSource.ExtensionSettings` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `ErrorAdditionalInfo.Info` has been changed from `map[string]interface{}` to `interface{}`
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `Error` has been removed
+- Struct `ErrorContract` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponseAutoGenerated` has been removed
+- Struct `ErrorResponseCommonV2` has been removed
+- Struct `ResponseWithError` has been removed
+
+### Features Added
+
+
+
 ## 0.4.0 (2022-01-13)
 ### Breaking Changes
 

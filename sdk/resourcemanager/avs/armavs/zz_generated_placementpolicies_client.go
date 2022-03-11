@@ -34,17 +34,17 @@ type PlacementPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPlacementPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PlacementPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PlacementPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *PlacementPoliciesClient) BeginCreateOrUpdate(ctx context.Context, 
 	if err != nil {
 		return PlacementPoliciesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PlacementPoliciesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PlacementPoliciesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PlacementPoliciesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return PlacementPoliciesClientCreateOrUpdatePollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *PlacementPoliciesClient) BeginDelete(ctx context.Context, resource
 	if err != nil {
 		return PlacementPoliciesClientDeletePollerResponse{}, err
 	}
-	result := PlacementPoliciesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PlacementPoliciesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PlacementPoliciesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return PlacementPoliciesClientDeletePollerResponse{}, err
@@ -262,7 +258,7 @@ func (client *PlacementPoliciesClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *PlacementPoliciesClient) getHandleResponse(resp *http.Response) (PlacementPoliciesClientGetResponse, error) {
-	result := PlacementPoliciesClientGetResponse{RawResponse: resp}
+	result := PlacementPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PlacementPolicy); err != nil {
 		return PlacementPoliciesClientGetResponse{}, err
 	}
@@ -319,7 +315,7 @@ func (client *PlacementPoliciesClient) listCreateRequest(ctx context.Context, re
 
 // listHandleResponse handles the List response.
 func (client *PlacementPoliciesClient) listHandleResponse(resp *http.Response) (PlacementPoliciesClientListResponse, error) {
-	result := PlacementPoliciesClientListResponse{RawResponse: resp}
+	result := PlacementPoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PlacementPoliciesList); err != nil {
 		return PlacementPoliciesClientListResponse{}, err
 	}
@@ -340,9 +336,7 @@ func (client *PlacementPoliciesClient) BeginUpdate(ctx context.Context, resource
 	if err != nil {
 		return PlacementPoliciesClientUpdatePollerResponse{}, err
 	}
-	result := PlacementPoliciesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PlacementPoliciesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PlacementPoliciesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return PlacementPoliciesClientUpdatePollerResponse{}, err

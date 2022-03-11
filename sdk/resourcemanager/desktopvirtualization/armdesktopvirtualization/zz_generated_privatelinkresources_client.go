@@ -34,17 +34,17 @@ type PrivateLinkResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateLinkResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateLinkResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateLinkResourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *PrivateLinkResourcesClient) listByHostPoolCreateRequest(ctx contex
 
 // listByHostPoolHandleResponse handles the ListByHostPool response.
 func (client *PrivateLinkResourcesClient) listByHostPoolHandleResponse(resp *http.Response) (PrivateLinkResourcesClientListByHostPoolResponse, error) {
-	result := PrivateLinkResourcesClientListByHostPoolResponse{RawResponse: resp}
+	result := PrivateLinkResourcesClientListByHostPoolResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourceListResult); err != nil {
 		return PrivateLinkResourcesClientListByHostPoolResponse{}, err
 	}
@@ -148,7 +148,7 @@ func (client *PrivateLinkResourcesClient) listByWorkspaceCreateRequest(ctx conte
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *PrivateLinkResourcesClient) listByWorkspaceHandleResponse(resp *http.Response) (PrivateLinkResourcesClientListByWorkspaceResponse, error) {
-	result := PrivateLinkResourcesClientListByWorkspaceResponse{RawResponse: resp}
+	result := PrivateLinkResourcesClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourceListResult); err != nil {
 		return PrivateLinkResourcesClientListByWorkspaceResponse{}, err
 	}

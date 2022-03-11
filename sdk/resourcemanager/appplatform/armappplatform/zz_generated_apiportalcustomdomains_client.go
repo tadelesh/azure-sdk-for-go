@@ -35,17 +35,17 @@ type APIPortalCustomDomainsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAPIPortalCustomDomainsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *APIPortalCustomDomainsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &APIPortalCustomDomainsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -65,9 +65,7 @@ func (client *APIPortalCustomDomainsClient) BeginCreateOrUpdate(ctx context.Cont
 	if err != nil {
 		return APIPortalCustomDomainsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := APIPortalCustomDomainsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := APIPortalCustomDomainsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("APIPortalCustomDomainsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return APIPortalCustomDomainsClientCreateOrUpdatePollerResponse{}, err
@@ -143,9 +141,7 @@ func (client *APIPortalCustomDomainsClient) BeginDelete(ctx context.Context, res
 	if err != nil {
 		return APIPortalCustomDomainsClientDeletePollerResponse{}, err
 	}
-	result := APIPortalCustomDomainsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := APIPortalCustomDomainsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("APIPortalCustomDomainsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return APIPortalCustomDomainsClientDeletePollerResponse{}, err
@@ -267,7 +263,7 @@ func (client *APIPortalCustomDomainsClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *APIPortalCustomDomainsClient) getHandleResponse(resp *http.Response) (APIPortalCustomDomainsClientGetResponse, error) {
-	result := APIPortalCustomDomainsClientGetResponse{RawResponse: resp}
+	result := APIPortalCustomDomainsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIPortalCustomDomainResource); err != nil {
 		return APIPortalCustomDomainsClientGetResponse{}, err
 	}
@@ -326,7 +322,7 @@ func (client *APIPortalCustomDomainsClient) listCreateRequest(ctx context.Contex
 
 // listHandleResponse handles the List response.
 func (client *APIPortalCustomDomainsClient) listHandleResponse(resp *http.Response) (APIPortalCustomDomainsClientListResponse, error) {
-	result := APIPortalCustomDomainsClientListResponse{RawResponse: resp}
+	result := APIPortalCustomDomainsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIPortalCustomDomainResourceCollection); err != nil {
 		return APIPortalCustomDomainsClientListResponse{}, err
 	}

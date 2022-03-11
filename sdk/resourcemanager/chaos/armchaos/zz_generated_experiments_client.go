@@ -35,17 +35,17 @@ type ExperimentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewExperimentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ExperimentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ExperimentsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -60,9 +60,7 @@ func (client *ExperimentsClient) BeginCancel(ctx context.Context, resourceGroupN
 	if err != nil {
 		return ExperimentsClientCancelPollerResponse{}, err
 	}
-	result := ExperimentsClientCancelPollerResponse{
-		RawResponse: resp,
-	}
+	result := ExperimentsClientCancelPollerResponse{}
 	pt, err := armruntime.NewPoller("ExperimentsClient.Cancel", "original-uri", resp, client.pl)
 	if err != nil {
 		return ExperimentsClientCancelPollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *ExperimentsClient) BeginCreateOrUpdate(ctx context.Context, resour
 	if err != nil {
 		return ExperimentsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ExperimentsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ExperimentsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ExperimentsClient.CreateOrUpdate", "original-uri", resp, client.pl)
 	if err != nil {
 		return ExperimentsClientCreateOrUpdatePollerResponse{}, err
@@ -201,7 +197,7 @@ func (client *ExperimentsClient) Delete(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ExperimentsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ExperimentsClientDeleteResponse{RawResponse: resp}, nil
+	return ExperimentsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -278,7 +274,7 @@ func (client *ExperimentsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *ExperimentsClient) getHandleResponse(resp *http.Response) (ExperimentsClientGetResponse, error) {
-	result := ExperimentsClientGetResponse{RawResponse: resp}
+	result := ExperimentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Experiment); err != nil {
 		return ExperimentsClientGetResponse{}, err
 	}
@@ -339,7 +335,7 @@ func (client *ExperimentsClient) getExecutionDetailsCreateRequest(ctx context.Co
 
 // getExecutionDetailsHandleResponse handles the GetExecutionDetails response.
 func (client *ExperimentsClient) getExecutionDetailsHandleResponse(resp *http.Response) (ExperimentsClientGetExecutionDetailsResponse, error) {
-	result := ExperimentsClientGetExecutionDetailsResponse{RawResponse: resp}
+	result := ExperimentsClientGetExecutionDetailsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExperimentExecutionDetails); err != nil {
 		return ExperimentsClientGetExecutionDetailsResponse{}, err
 	}
@@ -399,7 +395,7 @@ func (client *ExperimentsClient) getStatusCreateRequest(ctx context.Context, res
 
 // getStatusHandleResponse handles the GetStatus response.
 func (client *ExperimentsClient) getStatusHandleResponse(resp *http.Response) (ExperimentsClientGetStatusResponse, error) {
-	result := ExperimentsClientGetStatusResponse{RawResponse: resp}
+	result := ExperimentsClientGetStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExperimentStatus); err != nil {
 		return ExperimentsClientGetStatusResponse{}, err
 	}
@@ -452,7 +448,7 @@ func (client *ExperimentsClient) listCreateRequest(ctx context.Context, resource
 
 // listHandleResponse handles the List response.
 func (client *ExperimentsClient) listHandleResponse(resp *http.Response) (ExperimentsClientListResponse, error) {
-	result := ExperimentsClientListResponse{RawResponse: resp}
+	result := ExperimentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExperimentListResult); err != nil {
 		return ExperimentsClientListResponse{}, err
 	}
@@ -500,7 +496,7 @@ func (client *ExperimentsClient) listAllCreateRequest(ctx context.Context, optio
 
 // listAllHandleResponse handles the ListAll response.
 func (client *ExperimentsClient) listAllHandleResponse(resp *http.Response) (ExperimentsClientListAllResponse, error) {
-	result := ExperimentsClientListAllResponse{RawResponse: resp}
+	result := ExperimentsClientListAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExperimentListResult); err != nil {
 		return ExperimentsClientListAllResponse{}, err
 	}
@@ -553,7 +549,7 @@ func (client *ExperimentsClient) listAllStatusesCreateRequest(ctx context.Contex
 
 // listAllStatusesHandleResponse handles the ListAllStatuses response.
 func (client *ExperimentsClient) listAllStatusesHandleResponse(resp *http.Response) (ExperimentsClientListAllStatusesResponse, error) {
-	result := ExperimentsClientListAllStatusesResponse{RawResponse: resp}
+	result := ExperimentsClientListAllStatusesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExperimentStatusListResult); err != nil {
 		return ExperimentsClientListAllStatusesResponse{}, err
 	}
@@ -606,7 +602,7 @@ func (client *ExperimentsClient) listExecutionDetailsCreateRequest(ctx context.C
 
 // listExecutionDetailsHandleResponse handles the ListExecutionDetails response.
 func (client *ExperimentsClient) listExecutionDetailsHandleResponse(resp *http.Response) (ExperimentsClientListExecutionDetailsResponse, error) {
-	result := ExperimentsClientListExecutionDetailsResponse{RawResponse: resp}
+	result := ExperimentsClientListExecutionDetailsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExperimentExecutionDetailsListResult); err != nil {
 		return ExperimentsClientListExecutionDetailsResponse{}, err
 	}
@@ -661,7 +657,7 @@ func (client *ExperimentsClient) startCreateRequest(ctx context.Context, resourc
 
 // startHandleResponse handles the Start response.
 func (client *ExperimentsClient) startHandleResponse(resp *http.Response) (ExperimentsClientStartResponse, error) {
-	result := ExperimentsClientStartResponse{RawResponse: resp}
+	result := ExperimentsClientStartResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExperimentStartOperationResult); err != nil {
 		return ExperimentsClientStartResponse{}, err
 	}

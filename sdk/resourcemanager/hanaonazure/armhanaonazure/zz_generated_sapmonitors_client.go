@@ -35,17 +35,17 @@ type SapMonitorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSapMonitorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SapMonitorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SapMonitorsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *SapMonitorsClient) BeginCreate(ctx context.Context, resourceGroupN
 	if err != nil {
 		return SapMonitorsClientCreatePollerResponse{}, err
 	}
-	result := SapMonitorsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SapMonitorsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("SapMonitorsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return SapMonitorsClientCreatePollerResponse{}, err
@@ -127,9 +125,7 @@ func (client *SapMonitorsClient) BeginDelete(ctx context.Context, resourceGroupN
 	if err != nil {
 		return SapMonitorsClientDeletePollerResponse{}, err
 	}
-	result := SapMonitorsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SapMonitorsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SapMonitorsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return SapMonitorsClientDeletePollerResponse{}, err
@@ -231,7 +227,7 @@ func (client *SapMonitorsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *SapMonitorsClient) getHandleResponse(resp *http.Response) (SapMonitorsClientGetResponse, error) {
-	result := SapMonitorsClientGetResponse{RawResponse: resp}
+	result := SapMonitorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SapMonitor); err != nil {
 		return SapMonitorsClientGetResponse{}, err
 	}
@@ -274,7 +270,7 @@ func (client *SapMonitorsClient) listCreateRequest(ctx context.Context, options 
 
 // listHandleResponse handles the List response.
 func (client *SapMonitorsClient) listHandleResponse(resp *http.Response) (SapMonitorsClientListResponse, error) {
-	result := SapMonitorsClientListResponse{RawResponse: resp}
+	result := SapMonitorsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SapMonitorListResult); err != nil {
 		return SapMonitorsClientListResponse{}, err
 	}
@@ -330,7 +326,7 @@ func (client *SapMonitorsClient) updateCreateRequest(ctx context.Context, resour
 
 // updateHandleResponse handles the Update response.
 func (client *SapMonitorsClient) updateHandleResponse(resp *http.Response) (SapMonitorsClientUpdateResponse, error) {
-	result := SapMonitorsClientUpdateResponse{RawResponse: resp}
+	result := SapMonitorsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SapMonitor); err != nil {
 		return SapMonitorsClientUpdateResponse{}, err
 	}

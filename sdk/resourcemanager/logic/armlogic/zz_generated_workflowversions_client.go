@@ -35,17 +35,17 @@ type WorkflowVersionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkflowVersionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkflowVersionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkflowVersionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *WorkflowVersionsClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *WorkflowVersionsClient) getHandleResponse(resp *http.Response) (WorkflowVersionsClientGetResponse, error) {
-	result := WorkflowVersionsClientGetResponse{RawResponse: resp}
+	result := WorkflowVersionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowVersion); err != nil {
 		return WorkflowVersionsClientGetResponse{}, err
 	}
@@ -158,7 +158,7 @@ func (client *WorkflowVersionsClient) listCreateRequest(ctx context.Context, res
 
 // listHandleResponse handles the List response.
 func (client *WorkflowVersionsClient) listHandleResponse(resp *http.Response) (WorkflowVersionsClientListResponse, error) {
-	result := WorkflowVersionsClientListResponse{RawResponse: resp}
+	result := WorkflowVersionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowVersionListResult); err != nil {
 		return WorkflowVersionsClientListResponse{}, err
 	}

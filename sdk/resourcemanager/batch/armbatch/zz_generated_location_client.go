@@ -35,17 +35,17 @@ type LocationClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLocationClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LocationClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LocationClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *LocationClient) checkNameAvailabilityCreateRequest(ctx context.Con
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *LocationClient) checkNameAvailabilityHandleResponse(resp *http.Response) (LocationClientCheckNameAvailabilityResponse, error) {
-	result := LocationClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := LocationClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameAvailabilityResult); err != nil {
 		return LocationClientCheckNameAvailabilityResponse{}, err
 	}
@@ -145,7 +145,7 @@ func (client *LocationClient) getQuotasCreateRequest(ctx context.Context, locati
 
 // getQuotasHandleResponse handles the GetQuotas response.
 func (client *LocationClient) getQuotasHandleResponse(resp *http.Response) (LocationClientGetQuotasResponse, error) {
-	result := LocationClientGetQuotasResponse{RawResponse: resp}
+	result := LocationClientGetQuotasResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LocationQuota); err != nil {
 		return LocationClientGetQuotasResponse{}, err
 	}
@@ -199,7 +199,7 @@ func (client *LocationClient) listSupportedCloudServiceSKUsCreateRequest(ctx con
 
 // listSupportedCloudServiceSKUsHandleResponse handles the ListSupportedCloudServiceSKUs response.
 func (client *LocationClient) listSupportedCloudServiceSKUsHandleResponse(resp *http.Response) (LocationClientListSupportedCloudServiceSKUsResponse, error) {
-	result := LocationClientListSupportedCloudServiceSKUsResponse{RawResponse: resp}
+	result := LocationClientListSupportedCloudServiceSKUsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SupportedSKUsResult); err != nil {
 		return LocationClientListSupportedCloudServiceSKUsResponse{}, err
 	}
@@ -253,7 +253,7 @@ func (client *LocationClient) listSupportedVirtualMachineSKUsCreateRequest(ctx c
 
 // listSupportedVirtualMachineSKUsHandleResponse handles the ListSupportedVirtualMachineSKUs response.
 func (client *LocationClient) listSupportedVirtualMachineSKUsHandleResponse(resp *http.Response) (LocationClientListSupportedVirtualMachineSKUsResponse, error) {
-	result := LocationClientListSupportedVirtualMachineSKUsResponse{RawResponse: resp}
+	result := LocationClientListSupportedVirtualMachineSKUsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SupportedSKUsResult); err != nil {
 		return LocationClientListSupportedVirtualMachineSKUsResponse{}, err
 	}

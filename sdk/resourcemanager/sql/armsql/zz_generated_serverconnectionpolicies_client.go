@@ -34,17 +34,17 @@ type ServerConnectionPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServerConnectionPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServerConnectionPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServerConnectionPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ServerConnectionPoliciesClient) BeginCreateOrUpdate(ctx context.Co
 	if err != nil {
 		return ServerConnectionPoliciesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ServerConnectionPoliciesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerConnectionPoliciesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerConnectionPoliciesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ServerConnectionPoliciesClientCreateOrUpdatePollerResponse{}, err
@@ -178,7 +176,7 @@ func (client *ServerConnectionPoliciesClient) getCreateRequest(ctx context.Conte
 
 // getHandleResponse handles the Get response.
 func (client *ServerConnectionPoliciesClient) getHandleResponse(resp *http.Response) (ServerConnectionPoliciesClientGetResponse, error) {
-	result := ServerConnectionPoliciesClientGetResponse{RawResponse: resp}
+	result := ServerConnectionPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerConnectionPolicy); err != nil {
 		return ServerConnectionPoliciesClientGetResponse{}, err
 	}
@@ -232,7 +230,7 @@ func (client *ServerConnectionPoliciesClient) listByServerCreateRequest(ctx cont
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *ServerConnectionPoliciesClient) listByServerHandleResponse(resp *http.Response) (ServerConnectionPoliciesClientListByServerResponse, error) {
-	result := ServerConnectionPoliciesClientListByServerResponse{RawResponse: resp}
+	result := ServerConnectionPoliciesClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerConnectionPolicyListResult); err != nil {
 		return ServerConnectionPoliciesClientListByServerResponse{}, err
 	}

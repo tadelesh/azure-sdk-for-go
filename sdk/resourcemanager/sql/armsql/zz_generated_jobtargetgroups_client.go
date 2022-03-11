@@ -34,17 +34,17 @@ type JobTargetGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewJobTargetGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *JobTargetGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &JobTargetGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -110,7 +110,7 @@ func (client *JobTargetGroupsClient) createOrUpdateCreateRequest(ctx context.Con
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *JobTargetGroupsClient) createOrUpdateHandleResponse(resp *http.Response) (JobTargetGroupsClientCreateOrUpdateResponse, error) {
-	result := JobTargetGroupsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := JobTargetGroupsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobTargetGroup); err != nil {
 		return JobTargetGroupsClientCreateOrUpdateResponse{}, err
 	}
@@ -137,7 +137,7 @@ func (client *JobTargetGroupsClient) Delete(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return JobTargetGroupsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return JobTargetGroupsClientDeleteResponse{RawResponse: resp}, nil
+	return JobTargetGroupsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -232,7 +232,7 @@ func (client *JobTargetGroupsClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *JobTargetGroupsClient) getHandleResponse(resp *http.Response) (JobTargetGroupsClientGetResponse, error) {
-	result := JobTargetGroupsClientGetResponse{RawResponse: resp}
+	result := JobTargetGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobTargetGroup); err != nil {
 		return JobTargetGroupsClientGetResponse{}, err
 	}
@@ -291,7 +291,7 @@ func (client *JobTargetGroupsClient) listByAgentCreateRequest(ctx context.Contex
 
 // listByAgentHandleResponse handles the ListByAgent response.
 func (client *JobTargetGroupsClient) listByAgentHandleResponse(resp *http.Response) (JobTargetGroupsClientListByAgentResponse, error) {
-	result := JobTargetGroupsClientListByAgentResponse{RawResponse: resp}
+	result := JobTargetGroupsClientListByAgentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobTargetGroupListResult); err != nil {
 		return JobTargetGroupsClientListByAgentResponse{}, err
 	}

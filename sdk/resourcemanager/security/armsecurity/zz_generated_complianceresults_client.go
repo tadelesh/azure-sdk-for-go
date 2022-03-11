@@ -87,7 +87,7 @@ func (client *ComplianceResultsClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *ComplianceResultsClient) getHandleResponse(resp *http.Response) (ComplianceResultsClientGetResponse, error) {
-	result := ComplianceResultsClientGetResponse{RawResponse: resp}
+	result := ComplianceResultsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComplianceResult); err != nil {
 		return ComplianceResultsClientGetResponse{}, err
 	}
@@ -128,7 +128,7 @@ func (client *ComplianceResultsClient) listCreateRequest(ctx context.Context, sc
 
 // listHandleResponse handles the List response.
 func (client *ComplianceResultsClient) listHandleResponse(resp *http.Response) (ComplianceResultsClientListResponse, error) {
-	result := ComplianceResultsClientListResponse{RawResponse: resp}
+	result := ComplianceResultsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComplianceResultList); err != nil {
 		return ComplianceResultsClientListResponse{}, err
 	}

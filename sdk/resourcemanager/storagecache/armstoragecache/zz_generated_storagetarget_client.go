@@ -35,17 +35,17 @@ type StorageTargetClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewStorageTargetClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *StorageTargetClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &StorageTargetClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *StorageTargetClient) BeginFlush(ctx context.Context, resourceGroup
 	if err != nil {
 		return StorageTargetClientFlushPollerResponse{}, err
 	}
-	result := StorageTargetClientFlushPollerResponse{
-		RawResponse: resp,
-	}
+	result := StorageTargetClientFlushPollerResponse{}
 	pt, err := armruntime.NewPoller("StorageTargetClient.Flush", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return StorageTargetClientFlushPollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *StorageTargetClient) BeginResume(ctx context.Context, resourceGrou
 	if err != nil {
 		return StorageTargetClientResumePollerResponse{}, err
 	}
-	result := StorageTargetClientResumePollerResponse{
-		RawResponse: resp,
-	}
+	result := StorageTargetClientResumePollerResponse{}
 	pt, err := armruntime.NewPoller("StorageTargetClient.Resume", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return StorageTargetClientResumePollerResponse{}, err
@@ -208,9 +204,7 @@ func (client *StorageTargetClient) BeginSuspend(ctx context.Context, resourceGro
 	if err != nil {
 		return StorageTargetClientSuspendPollerResponse{}, err
 	}
-	result := StorageTargetClientSuspendPollerResponse{
-		RawResponse: resp,
-	}
+	result := StorageTargetClientSuspendPollerResponse{}
 	pt, err := armruntime.NewPoller("StorageTargetClient.Suspend", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return StorageTargetClientSuspendPollerResponse{}, err

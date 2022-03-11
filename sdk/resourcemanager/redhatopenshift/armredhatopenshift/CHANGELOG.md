@@ -1,5 +1,71 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*OpenShiftClustersClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OpenShiftClustersClientListResponse, error)`
+- Function `*OpenShiftClustersClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(OpenShiftClustersClientListByResourceGroupResponse, error)`
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*OpenShiftClustersClientListPager.Err` has been removed
+- Function `*OpenShiftClustersClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*OpenShiftClustersClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*OpenShiftClustersClientListByResourceGroupPager.Err` has been removed
+- Struct `OpenShiftClustersClientCreateOrUpdateResult` has been removed
+- Struct `OpenShiftClustersClientGetResult` has been removed
+- Struct `OpenShiftClustersClientListByResourceGroupResult` has been removed
+- Struct `OpenShiftClustersClientListCredentialsResult` has been removed
+- Struct `OpenShiftClustersClientListResult` has been removed
+- Struct `OpenShiftClustersClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `OpenShiftClustersClientListCredentialsResult` of struct `OpenShiftClustersClientListCredentialsResponse` has been removed
+- Field `RawResponse` of struct `OpenShiftClustersClientListCredentialsResponse` has been removed
+- Field `OpenShiftClustersClientUpdateResult` of struct `OpenShiftClustersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `OpenShiftClustersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `OpenShiftClustersClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `OpenShiftClustersClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `OpenShiftClustersClientCreateOrUpdatePollerResponse` has been removed
+- Field `OpenShiftClustersClientListResult` of struct `OpenShiftClustersClientListResponse` has been removed
+- Field `RawResponse` of struct `OpenShiftClustersClientListResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `OpenShiftClustersClientListByResourceGroupResult` of struct `OpenShiftClustersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `OpenShiftClustersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `OpenShiftClustersClientDeletePollerResponse` has been removed
+- Field `OpenShiftClustersClientGetResult` of struct `OpenShiftClustersClientGetResponse` has been removed
+- Field `RawResponse` of struct `OpenShiftClustersClientGetResponse` has been removed
+- Field `OpenShiftClustersClientCreateOrUpdateResult` of struct `OpenShiftClustersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `OpenShiftClustersClientCreateOrUpdateResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*OpenShiftClustersClientListByResourceGroupPager.More() bool`
+- New function `*OpenShiftClustersClientListPager.More() bool`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New anonymous field `OpenShiftClusterList` in struct `OpenShiftClustersClientListResponse`
+- New anonymous field `OpenShiftClusterCredentials` in struct `OpenShiftClustersClientListCredentialsResponse`
+- New anonymous field `OperationList` in struct `OperationsClientListResponse`
+- New anonymous field `OpenShiftCluster` in struct `OpenShiftClustersClientGetResponse`
+- New anonymous field `OpenShiftClusterList` in struct `OpenShiftClustersClientListByResourceGroupResponse`
+- New anonymous field `OpenShiftCluster` in struct `OpenShiftClustersClientCreateOrUpdateResponse`
+- New anonymous field `OpenShiftCluster` in struct `OpenShiftClustersClientUpdateResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

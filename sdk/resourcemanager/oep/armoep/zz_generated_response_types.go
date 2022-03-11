@@ -11,7 +11,6 @@ package armoep
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
@@ -19,9 +18,6 @@ import (
 type EnergyServicesClientCreatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *EnergyServicesClientCreatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -29,11 +25,10 @@ type EnergyServicesClientCreatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l EnergyServicesClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (EnergyServicesClientCreateResponse, error) {
 	respType := EnergyServicesClientCreateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.EnergyService)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.EnergyService)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -46,24 +41,16 @@ func (l *EnergyServicesClientCreatePollerResponse) Resume(ctx context.Context, c
 	poller := &EnergyServicesClientCreatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // EnergyServicesClientCreateResponse contains the response from method EnergyServicesClient.Create.
 type EnergyServicesClientCreateResponse struct {
-	EnergyServicesClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// EnergyServicesClientCreateResult contains the result from method EnergyServicesClient.Create.
-type EnergyServicesClientCreateResult struct {
 	EnergyService
 }
 
@@ -71,9 +58,6 @@ type EnergyServicesClientCreateResult struct {
 type EnergyServicesClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *EnergyServicesClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -81,11 +65,10 @@ type EnergyServicesClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l EnergyServicesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (EnergyServicesClientDeleteResponse, error) {
 	respType := EnergyServicesClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -98,89 +81,45 @@ func (l *EnergyServicesClientDeletePollerResponse) Resume(ctx context.Context, c
 	poller := &EnergyServicesClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // EnergyServicesClientDeleteResponse contains the response from method EnergyServicesClient.Delete.
 type EnergyServicesClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // EnergyServicesClientGetResponse contains the response from method EnergyServicesClient.Get.
 type EnergyServicesClientGetResponse struct {
-	EnergyServicesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// EnergyServicesClientGetResult contains the result from method EnergyServicesClient.Get.
-type EnergyServicesClientGetResult struct {
 	EnergyService
 }
 
 // EnergyServicesClientListByResourceGroupResponse contains the response from method EnergyServicesClient.ListByResourceGroup.
 type EnergyServicesClientListByResourceGroupResponse struct {
-	EnergyServicesClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// EnergyServicesClientListByResourceGroupResult contains the result from method EnergyServicesClient.ListByResourceGroup.
-type EnergyServicesClientListByResourceGroupResult struct {
 	EnergyServiceList
 }
 
 // EnergyServicesClientListBySubscriptionResponse contains the response from method EnergyServicesClient.ListBySubscription.
 type EnergyServicesClientListBySubscriptionResponse struct {
-	EnergyServicesClientListBySubscriptionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// EnergyServicesClientListBySubscriptionResult contains the result from method EnergyServicesClient.ListBySubscription.
-type EnergyServicesClientListBySubscriptionResult struct {
 	EnergyServiceList
 }
 
 // EnergyServicesClientUpdateResponse contains the response from method EnergyServicesClient.Update.
 type EnergyServicesClientUpdateResponse struct {
-	EnergyServicesClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// EnergyServicesClientUpdateResult contains the result from method EnergyServicesClient.Update.
-type EnergyServicesClientUpdateResult struct {
 	EnergyService
 }
 
 // LocationsClientCheckNameAvailabilityResponse contains the response from method LocationsClient.CheckNameAvailability.
 type LocationsClientCheckNameAvailabilityResponse struct {
-	LocationsClientCheckNameAvailabilityResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LocationsClientCheckNameAvailabilityResult contains the result from method LocationsClient.CheckNameAvailability.
-type LocationsClientCheckNameAvailabilityResult struct {
 	CheckNameAvailabilityResponse
 }
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	OperationListResult
 }

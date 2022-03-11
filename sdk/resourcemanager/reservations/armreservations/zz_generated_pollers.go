@@ -43,11 +43,10 @@ func (p *CalculateExchangeClientPostPoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final CalculateExchangeClientPostResponse will be returned.
 func (p *CalculateExchangeClientPostPoller) FinalResponse(ctx context.Context) (CalculateExchangeClientPostResponse, error) {
 	respType := CalculateExchangeClientPostResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.CalculateExchangeOperationResultResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.CalculateExchangeOperationResultResponse)
 	if err != nil {
 		return CalculateExchangeClientPostResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ExchangeClientPostPoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final ExchangeClientPostResponse will be returned.
 func (p *ExchangeClientPostPoller) FinalResponse(ctx context.Context) (ExchangeClientPostResponse, error) {
 	respType := ExchangeClientPostResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ExchangeOperationResultResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.ExchangeOperationResultResponse)
 	if err != nil {
 		return ExchangeClientPostResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *QuotaClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Respo
 // If the final GET succeeded then the final QuotaClientCreateOrUpdateResponse will be returned.
 func (p *QuotaClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (QuotaClientCreateOrUpdateResponse, error) {
 	respType := QuotaClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.QuotaRequestOneResourceSubmitResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.QuotaRequestOneResourceSubmitResponse)
 	if err != nil {
 		return QuotaClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *QuotaClientUpdatePoller) Poll(ctx context.Context) (*http.Response, err
 // If the final GET succeeded then the final QuotaClientUpdateResponse will be returned.
 func (p *QuotaClientUpdatePoller) FinalResponse(ctx context.Context) (QuotaClientUpdateResponse, error) {
 	respType := QuotaClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.QuotaRequestOneResourceSubmitResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.QuotaRequestOneResourceSubmitResponse)
 	if err != nil {
 		return QuotaClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *ReservationClientAvailableScopesPoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final ReservationClientAvailableScopesResponse will be returned.
 func (p *ReservationClientAvailableScopesPoller) FinalResponse(ctx context.Context) (ReservationClientAvailableScopesResponse, error) {
 	respType := ReservationClientAvailableScopesResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.AvailableScopeProperties)
+	_, err := p.pt.FinalResponse(ctx, &respType.AvailableScopeProperties)
 	if err != nil {
 		return ReservationClientAvailableScopesResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *ReservationClientMergePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final ReservationClientMergeResponse will be returned.
 func (p *ReservationClientMergePoller) FinalResponse(ctx context.Context) (ReservationClientMergeResponse, error) {
 	respType := ReservationClientMergeResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReservationResponseArray)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReservationResponseArray)
 	if err != nil {
 		return ReservationClientMergeResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *ReservationClientSplitPoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final ReservationClientSplitResponse will be returned.
 func (p *ReservationClientSplitPoller) FinalResponse(ctx context.Context) (ReservationClientSplitResponse, error) {
 	respType := ReservationClientSplitResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReservationResponseArray)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReservationResponseArray)
 	if err != nil {
 		return ReservationClientSplitResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *ReservationClientUpdatePoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final ReservationClientUpdateResponse will be returned.
 func (p *ReservationClientUpdatePoller) FinalResponse(ctx context.Context) (ReservationClientUpdateResponse, error) {
 	respType := ReservationClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReservationResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReservationResponse)
 	if err != nil {
 		return ReservationClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *ReservationOrderClientPurchasePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final ReservationOrderClientPurchaseResponse will be returned.
 func (p *ReservationOrderClientPurchasePoller) FinalResponse(ctx context.Context) (ReservationOrderClientPurchaseResponse, error) {
 	respType := ReservationOrderClientPurchaseResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReservationOrderResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReservationOrderResponse)
 	if err != nil {
 		return ReservationOrderClientPurchaseResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

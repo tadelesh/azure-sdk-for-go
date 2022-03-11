@@ -101,7 +101,7 @@ func (client *TableServicesClient) getServicePropertiesCreateRequest(ctx context
 
 // getServicePropertiesHandleResponse handles the GetServiceProperties response.
 func (client *TableServicesClient) getServicePropertiesHandleResponse(resp *http.Response) (TableServicesClientGetServicePropertiesResponse, error) {
-	result := TableServicesClientGetServicePropertiesResponse{RawResponse: resp}
+	result := TableServicesClientGetServicePropertiesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TableServiceProperties); err != nil {
 		return TableServicesClientGetServicePropertiesResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *TableServicesClient) listCreateRequest(ctx context.Context, resour
 
 // listHandleResponse handles the List response.
 func (client *TableServicesClient) listHandleResponse(resp *http.Response) (TableServicesClientListResponse, error) {
-	result := TableServicesClientListResponse{RawResponse: resp}
+	result := TableServicesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListTableServices); err != nil {
 		return TableServicesClientListResponse{}, err
 	}
@@ -218,7 +218,7 @@ func (client *TableServicesClient) setServicePropertiesCreateRequest(ctx context
 
 // setServicePropertiesHandleResponse handles the SetServiceProperties response.
 func (client *TableServicesClient) setServicePropertiesHandleResponse(resp *http.Response) (TableServicesClientSetServicePropertiesResponse, error) {
-	result := TableServicesClientSetServicePropertiesResponse{RawResponse: resp}
+	result := TableServicesClientSetServicePropertiesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TableServiceProperties); err != nil {
 		return TableServicesClientSetServicePropertiesResponse{}, err
 	}

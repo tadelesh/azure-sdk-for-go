@@ -32,16 +32,16 @@ type InvoiceSectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewInvoiceSectionsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *InvoiceSectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &InvoiceSectionsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -60,9 +60,7 @@ func (client *InvoiceSectionsClient) BeginCreateOrUpdate(ctx context.Context, bi
 	if err != nil {
 		return InvoiceSectionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := InvoiceSectionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := InvoiceSectionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("InvoiceSectionsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return InvoiceSectionsClientCreateOrUpdatePollerResponse{}, err
@@ -167,7 +165,7 @@ func (client *InvoiceSectionsClient) getCreateRequest(ctx context.Context, billi
 
 // getHandleResponse handles the Get response.
 func (client *InvoiceSectionsClient) getHandleResponse(resp *http.Response) (InvoiceSectionsClientGetResponse, error) {
-	result := InvoiceSectionsClientGetResponse{RawResponse: resp}
+	result := InvoiceSectionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InvoiceSection); err != nil {
 		return InvoiceSectionsClientGetResponse{}, err
 	}
@@ -217,7 +215,7 @@ func (client *InvoiceSectionsClient) listByBillingProfileCreateRequest(ctx conte
 
 // listByBillingProfileHandleResponse handles the ListByBillingProfile response.
 func (client *InvoiceSectionsClient) listByBillingProfileHandleResponse(resp *http.Response) (InvoiceSectionsClientListByBillingProfileResponse, error) {
-	result := InvoiceSectionsClientListByBillingProfileResponse{RawResponse: resp}
+	result := InvoiceSectionsClientListByBillingProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InvoiceSectionListResult); err != nil {
 		return InvoiceSectionsClientListByBillingProfileResponse{}, err
 	}

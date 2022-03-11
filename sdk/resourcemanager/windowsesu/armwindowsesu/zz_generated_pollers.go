@@ -43,11 +43,10 @@ func (p *MultipleActivationKeysClientCreatePoller) Poll(ctx context.Context) (*h
 // If the final GET succeeded then the final MultipleActivationKeysClientCreateResponse will be returned.
 func (p *MultipleActivationKeysClientCreatePoller) FinalResponse(ctx context.Context) (MultipleActivationKeysClientCreateResponse, error) {
 	respType := MultipleActivationKeysClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MultipleActivationKey)
+	_, err := p.pt.FinalResponse(ctx, &respType.MultipleActivationKey)
 	if err != nil {
 		return MultipleActivationKeysClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

@@ -34,17 +34,17 @@ type InstanceFailoverGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewInstanceFailoverGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *InstanceFailoverGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &InstanceFailoverGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *InstanceFailoverGroupsClient) BeginCreateOrUpdate(ctx context.Cont
 	if err != nil {
 		return InstanceFailoverGroupsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := InstanceFailoverGroupsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := InstanceFailoverGroupsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("InstanceFailoverGroupsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return InstanceFailoverGroupsClientCreateOrUpdatePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *InstanceFailoverGroupsClient) BeginDelete(ctx context.Context, res
 	if err != nil {
 		return InstanceFailoverGroupsClientDeletePollerResponse{}, err
 	}
-	result := InstanceFailoverGroupsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := InstanceFailoverGroupsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("InstanceFailoverGroupsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return InstanceFailoverGroupsClientDeletePollerResponse{}, err
@@ -208,9 +204,7 @@ func (client *InstanceFailoverGroupsClient) BeginFailover(ctx context.Context, r
 	if err != nil {
 		return InstanceFailoverGroupsClientFailoverPollerResponse{}, err
 	}
-	result := InstanceFailoverGroupsClientFailoverPollerResponse{
-		RawResponse: resp,
-	}
+	result := InstanceFailoverGroupsClientFailoverPollerResponse{}
 	pt, err := armruntime.NewPoller("InstanceFailoverGroupsClient.Failover", "", resp, client.pl)
 	if err != nil {
 		return InstanceFailoverGroupsClientFailoverPollerResponse{}, err
@@ -282,9 +276,7 @@ func (client *InstanceFailoverGroupsClient) BeginForceFailoverAllowDataLoss(ctx 
 	if err != nil {
 		return InstanceFailoverGroupsClientForceFailoverAllowDataLossPollerResponse{}, err
 	}
-	result := InstanceFailoverGroupsClientForceFailoverAllowDataLossPollerResponse{
-		RawResponse: resp,
-	}
+	result := InstanceFailoverGroupsClientForceFailoverAllowDataLossPollerResponse{}
 	pt, err := armruntime.NewPoller("InstanceFailoverGroupsClient.ForceFailoverAllowDataLoss", "", resp, client.pl)
 	if err != nil {
 		return InstanceFailoverGroupsClientForceFailoverAllowDataLossPollerResponse{}, err
@@ -398,7 +390,7 @@ func (client *InstanceFailoverGroupsClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *InstanceFailoverGroupsClient) getHandleResponse(resp *http.Response) (InstanceFailoverGroupsClientGetResponse, error) {
-	result := InstanceFailoverGroupsClientGetResponse{RawResponse: resp}
+	result := InstanceFailoverGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InstanceFailoverGroup); err != nil {
 		return InstanceFailoverGroupsClientGetResponse{}, err
 	}
@@ -452,7 +444,7 @@ func (client *InstanceFailoverGroupsClient) listByLocationCreateRequest(ctx cont
 
 // listByLocationHandleResponse handles the ListByLocation response.
 func (client *InstanceFailoverGroupsClient) listByLocationHandleResponse(resp *http.Response) (InstanceFailoverGroupsClientListByLocationResponse, error) {
-	result := InstanceFailoverGroupsClientListByLocationResponse{RawResponse: resp}
+	result := InstanceFailoverGroupsClientListByLocationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InstanceFailoverGroupListResult); err != nil {
 		return InstanceFailoverGroupsClientListByLocationResponse{}, err
 	}

@@ -78,7 +78,7 @@ func (client *Client) resourcesCreateRequest(ctx context.Context, query QueryReq
 
 // resourcesHandleResponse handles the Resources response.
 func (client *Client) resourcesHandleResponse(resp *http.Response) (ClientResourcesResponse, error) {
-	result := ClientResourcesResponse{RawResponse: resp}
+	result := ClientResourcesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QueryResponse); err != nil {
 		return ClientResourcesResponse{}, err
 	}
@@ -120,7 +120,7 @@ func (client *Client) resourcesHistoryCreateRequest(ctx context.Context, request
 
 // resourcesHistoryHandleResponse handles the ResourcesHistory response.
 func (client *Client) resourcesHistoryHandleResponse(resp *http.Response) (ClientResourcesHistoryResponse, error) {
-	result := ClientResourcesHistoryResponse{RawResponse: resp}
+	result := ClientResourcesHistoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Interface); err != nil {
 		return ClientResourcesHistoryResponse{}, err
 	}

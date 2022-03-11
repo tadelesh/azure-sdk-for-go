@@ -43,11 +43,10 @@ func (p *CustomLocationsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final CustomLocationsClientCreateOrUpdateResponse will be returned.
 func (p *CustomLocationsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (CustomLocationsClientCreateOrUpdateResponse, error) {
 	respType := CustomLocationsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.CustomLocation)
+	_, err := p.pt.FinalResponse(ctx, &respType.CustomLocation)
 	if err != nil {
 		return CustomLocationsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *CustomLocationsClientDeletePoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final CustomLocationsClientDeleteResponse will be returned.
 func (p *CustomLocationsClientDeletePoller) FinalResponse(ctx context.Context) (CustomLocationsClientDeleteResponse, error) {
 	respType := CustomLocationsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CustomLocationsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

@@ -43,11 +43,10 @@ func (p *CapacitiesClientCreatePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final CapacitiesClientCreateResponse will be returned.
 func (p *CapacitiesClientCreatePoller) FinalResponse(ctx context.Context) (CapacitiesClientCreateResponse, error) {
 	respType := CapacitiesClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DedicatedCapacity)
+	_, err := p.pt.FinalResponse(ctx, &respType.DedicatedCapacity)
 	if err != nil {
 		return CapacitiesClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *CapacitiesClientDeletePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final CapacitiesClientDeleteResponse will be returned.
 func (p *CapacitiesClientDeletePoller) FinalResponse(ctx context.Context) (CapacitiesClientDeleteResponse, error) {
 	respType := CapacitiesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CapacitiesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *CapacitiesClientResumePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final CapacitiesClientResumeResponse will be returned.
 func (p *CapacitiesClientResumePoller) FinalResponse(ctx context.Context) (CapacitiesClientResumeResponse, error) {
 	respType := CapacitiesClientResumeResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CapacitiesClientResumeResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *CapacitiesClientSuspendPoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final CapacitiesClientSuspendResponse will be returned.
 func (p *CapacitiesClientSuspendPoller) FinalResponse(ctx context.Context) (CapacitiesClientSuspendResponse, error) {
 	respType := CapacitiesClientSuspendResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return CapacitiesClientSuspendResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *CapacitiesClientUpdatePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final CapacitiesClientUpdateResponse will be returned.
 func (p *CapacitiesClientUpdatePoller) FinalResponse(ctx context.Context) (CapacitiesClientUpdateResponse, error) {
 	respType := CapacitiesClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DedicatedCapacity)
+	_, err := p.pt.FinalResponse(ctx, &respType.DedicatedCapacity)
 	if err != nil {
 		return CapacitiesClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

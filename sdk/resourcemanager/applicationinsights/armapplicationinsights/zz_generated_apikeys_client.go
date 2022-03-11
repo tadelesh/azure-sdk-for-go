@@ -34,17 +34,17 @@ type APIKeysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAPIKeysClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *APIKeysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &APIKeysClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *APIKeysClient) createCreateRequest(ctx context.Context, resourceGr
 
 // createHandleResponse handles the Create response.
 func (client *APIKeysClient) createHandleResponse(resp *http.Response) (APIKeysClientCreateResponse, error) {
-	result := APIKeysClientCreateResponse{RawResponse: resp}
+	result := APIKeysClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentAPIKey); err != nil {
 		return APIKeysClientCreateResponse{}, err
 	}
@@ -158,7 +158,7 @@ func (client *APIKeysClient) deleteCreateRequest(ctx context.Context, resourceGr
 
 // deleteHandleResponse handles the Delete response.
 func (client *APIKeysClient) deleteHandleResponse(resp *http.Response) (APIKeysClientDeleteResponse, error) {
-	result := APIKeysClientDeleteResponse{RawResponse: resp}
+	result := APIKeysClientDeleteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentAPIKey); err != nil {
 		return APIKeysClientDeleteResponse{}, err
 	}
@@ -218,7 +218,7 @@ func (client *APIKeysClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *APIKeysClient) getHandleResponse(resp *http.Response) (APIKeysClientGetResponse, error) {
-	result := APIKeysClientGetResponse{RawResponse: resp}
+	result := APIKeysClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentAPIKey); err != nil {
 		return APIKeysClientGetResponse{}, err
 	}
@@ -230,19 +230,13 @@ func (client *APIKeysClient) getHandleResponse(resp *http.Response) (APIKeysClie
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // resourceName - The name of the Application Insights component resource.
 // options - APIKeysClientListOptions contains the optional parameters for the APIKeysClient.List method.
-func (client *APIKeysClient) List(ctx context.Context, resourceGroupName string, resourceName string, options *APIKeysClientListOptions) (APIKeysClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return APIKeysClientListResponse{}, err
+func (client *APIKeysClient) List(resourceGroupName string, resourceName string, options *APIKeysClientListOptions) *APIKeysClientListPager {
+	return &APIKeysClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return APIKeysClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return APIKeysClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -273,7 +267,7 @@ func (client *APIKeysClient) listCreateRequest(ctx context.Context, resourceGrou
 
 // listHandleResponse handles the List response.
 func (client *APIKeysClient) listHandleResponse(resp *http.Response) (APIKeysClientListResponse, error) {
-	result := APIKeysClientListResponse{RawResponse: resp}
+	result := APIKeysClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentAPIKeyListResult); err != nil {
 		return APIKeysClientListResponse{}, err
 	}

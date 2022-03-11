@@ -35,17 +35,17 @@ type ManagementConfigurationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagementConfigurationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagementConfigurationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagementConfigurationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *ManagementConfigurationsClient) createOrUpdateCreateRequest(ctx co
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ManagementConfigurationsClient) createOrUpdateHandleResponse(resp *http.Response) (ManagementConfigurationsClientCreateOrUpdateResponse, error) {
-	result := ManagementConfigurationsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ManagementConfigurationsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagementConfiguration); err != nil {
 		return ManagementConfigurationsClientCreateOrUpdateResponse{}, err
 	}
@@ -125,7 +125,7 @@ func (client *ManagementConfigurationsClient) Delete(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ManagementConfigurationsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ManagementConfigurationsClientDeleteResponse{RawResponse: resp}, nil
+	return ManagementConfigurationsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -203,7 +203,7 @@ func (client *ManagementConfigurationsClient) getCreateRequest(ctx context.Conte
 
 // getHandleResponse handles the Get response.
 func (client *ManagementConfigurationsClient) getHandleResponse(resp *http.Response) (ManagementConfigurationsClientGetResponse, error) {
-	result := ManagementConfigurationsClientGetResponse{RawResponse: resp}
+	result := ManagementConfigurationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagementConfiguration); err != nil {
 		return ManagementConfigurationsClientGetResponse{}, err
 	}
@@ -249,7 +249,7 @@ func (client *ManagementConfigurationsClient) listBySubscriptionCreateRequest(ct
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *ManagementConfigurationsClient) listBySubscriptionHandleResponse(resp *http.Response) (ManagementConfigurationsClientListBySubscriptionResponse, error) {
-	result := ManagementConfigurationsClientListBySubscriptionResponse{RawResponse: resp}
+	result := ManagementConfigurationsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagementConfigurationPropertiesList); err != nil {
 		return ManagementConfigurationsClientListBySubscriptionResponse{}, err
 	}

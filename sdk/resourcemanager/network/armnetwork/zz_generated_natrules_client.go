@@ -35,17 +35,17 @@ type NatRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewNatRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *NatRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &NatRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *NatRulesClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return NatRulesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := NatRulesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := NatRulesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("NatRulesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return NatRulesClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *NatRulesClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return NatRulesClientDeletePollerResponse{}, err
 	}
-	result := NatRulesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := NatRulesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("NatRulesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return NatRulesClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *NatRulesClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *NatRulesClient) getHandleResponse(resp *http.Response) (NatRulesClientGetResponse, error) {
-	result := NatRulesClientGetResponse{RawResponse: resp}
+	result := NatRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VPNGatewayNatRule); err != nil {
 		return NatRulesClientGetResponse{}, err
 	}
@@ -300,7 +296,7 @@ func (client *NatRulesClient) listByVPNGatewayCreateRequest(ctx context.Context,
 
 // listByVPNGatewayHandleResponse handles the ListByVPNGateway response.
 func (client *NatRulesClient) listByVPNGatewayHandleResponse(resp *http.Response) (NatRulesClientListByVPNGatewayResponse, error) {
-	result := NatRulesClientListByVPNGatewayResponse{RawResponse: resp}
+	result := NatRulesClientListByVPNGatewayResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListVPNGatewayNatRulesResult); err != nil {
 		return NatRulesClientListByVPNGatewayResponse{}, err
 	}

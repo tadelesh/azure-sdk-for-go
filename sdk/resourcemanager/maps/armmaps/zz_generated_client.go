@@ -34,17 +34,17 @@ type Client struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *Client {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &Client{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -80,7 +80,7 @@ func (client *Client) listOperationsCreateRequest(ctx context.Context, options *
 
 // listOperationsHandleResponse handles the ListOperations response.
 func (client *Client) listOperationsHandleResponse(resp *http.Response) (ClientListOperationsResponse, error) {
-	result := ClientListOperationsResponse{RawResponse: resp}
+	result := ClientListOperationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Operations); err != nil {
 		return ClientListOperationsResponse{}, err
 	}
@@ -123,7 +123,7 @@ func (client *Client) listSubscriptionOperationsCreateRequest(ctx context.Contex
 
 // listSubscriptionOperationsHandleResponse handles the ListSubscriptionOperations response.
 func (client *Client) listSubscriptionOperationsHandleResponse(resp *http.Response) (ClientListSubscriptionOperationsResponse, error) {
-	result := ClientListSubscriptionOperationsResponse{RawResponse: resp}
+	result := ClientListSubscriptionOperationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Operations); err != nil {
 		return ClientListSubscriptionOperationsResponse{}, err
 	}

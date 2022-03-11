@@ -35,17 +35,17 @@ type AttestationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAttestationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AttestationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AttestationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *AttestationsClient) BeginCreateOrUpdateAtResource(ctx context.Cont
 	if err != nil {
 		return AttestationsClientCreateOrUpdateAtResourcePollerResponse{}, err
 	}
-	result := AttestationsClientCreateOrUpdateAtResourcePollerResponse{
-		RawResponse: resp,
-	}
+	result := AttestationsClientCreateOrUpdateAtResourcePollerResponse{}
 	pt, err := armruntime.NewPoller("AttestationsClient.CreateOrUpdateAtResource", "", resp, client.pl)
 	if err != nil {
 		return AttestationsClientCreateOrUpdateAtResourcePollerResponse{}, err
@@ -123,9 +121,7 @@ func (client *AttestationsClient) BeginCreateOrUpdateAtResourceGroup(ctx context
 	if err != nil {
 		return AttestationsClientCreateOrUpdateAtResourceGroupPollerResponse{}, err
 	}
-	result := AttestationsClientCreateOrUpdateAtResourceGroupPollerResponse{
-		RawResponse: resp,
-	}
+	result := AttestationsClientCreateOrUpdateAtResourceGroupPollerResponse{}
 	pt, err := armruntime.NewPoller("AttestationsClient.CreateOrUpdateAtResourceGroup", "", resp, client.pl)
 	if err != nil {
 		return AttestationsClientCreateOrUpdateAtResourceGroupPollerResponse{}, err
@@ -190,9 +186,7 @@ func (client *AttestationsClient) BeginCreateOrUpdateAtSubscription(ctx context.
 	if err != nil {
 		return AttestationsClientCreateOrUpdateAtSubscriptionPollerResponse{}, err
 	}
-	result := AttestationsClientCreateOrUpdateAtSubscriptionPollerResponse{
-		RawResponse: resp,
-	}
+	result := AttestationsClientCreateOrUpdateAtSubscriptionPollerResponse{}
 	pt, err := armruntime.NewPoller("AttestationsClient.CreateOrUpdateAtSubscription", "", resp, client.pl)
 	if err != nil {
 		return AttestationsClientCreateOrUpdateAtSubscriptionPollerResponse{}, err
@@ -260,7 +254,7 @@ func (client *AttestationsClient) DeleteAtResource(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return AttestationsClientDeleteAtResourceResponse{}, runtime.NewResponseError(resp)
 	}
-	return AttestationsClientDeleteAtResourceResponse{RawResponse: resp}, nil
+	return AttestationsClientDeleteAtResourceResponse{}, nil
 }
 
 // deleteAtResourceCreateRequest creates the DeleteAtResource request.
@@ -300,7 +294,7 @@ func (client *AttestationsClient) DeleteAtResourceGroup(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return AttestationsClientDeleteAtResourceGroupResponse{}, runtime.NewResponseError(resp)
 	}
-	return AttestationsClientDeleteAtResourceGroupResponse{RawResponse: resp}, nil
+	return AttestationsClientDeleteAtResourceGroupResponse{}, nil
 }
 
 // deleteAtResourceGroupCreateRequest creates the DeleteAtResourceGroup request.
@@ -346,7 +340,7 @@ func (client *AttestationsClient) DeleteAtSubscription(ctx context.Context, atte
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return AttestationsClientDeleteAtSubscriptionResponse{}, runtime.NewResponseError(resp)
 	}
-	return AttestationsClientDeleteAtSubscriptionResponse{RawResponse: resp}, nil
+	return AttestationsClientDeleteAtSubscriptionResponse{}, nil
 }
 
 // deleteAtSubscriptionCreateRequest creates the DeleteAtSubscription request.
@@ -413,7 +407,7 @@ func (client *AttestationsClient) getAtResourceCreateRequest(ctx context.Context
 
 // getAtResourceHandleResponse handles the GetAtResource response.
 func (client *AttestationsClient) getAtResourceHandleResponse(resp *http.Response) (AttestationsClientGetAtResourceResponse, error) {
-	result := AttestationsClientGetAtResourceResponse{RawResponse: resp}
+	result := AttestationsClientGetAtResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Attestation); err != nil {
 		return AttestationsClientGetAtResourceResponse{}, err
 	}
@@ -469,7 +463,7 @@ func (client *AttestationsClient) getAtResourceGroupCreateRequest(ctx context.Co
 
 // getAtResourceGroupHandleResponse handles the GetAtResourceGroup response.
 func (client *AttestationsClient) getAtResourceGroupHandleResponse(resp *http.Response) (AttestationsClientGetAtResourceGroupResponse, error) {
-	result := AttestationsClientGetAtResourceGroupResponse{RawResponse: resp}
+	result := AttestationsClientGetAtResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Attestation); err != nil {
 		return AttestationsClientGetAtResourceGroupResponse{}, err
 	}
@@ -520,7 +514,7 @@ func (client *AttestationsClient) getAtSubscriptionCreateRequest(ctx context.Con
 
 // getAtSubscriptionHandleResponse handles the GetAtSubscription response.
 func (client *AttestationsClient) getAtSubscriptionHandleResponse(resp *http.Response) (AttestationsClientGetAtSubscriptionResponse, error) {
-	result := AttestationsClientGetAtSubscriptionResponse{RawResponse: resp}
+	result := AttestationsClientGetAtSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Attestation); err != nil {
 		return AttestationsClientGetAtSubscriptionResponse{}, err
 	}
@@ -567,7 +561,7 @@ func (client *AttestationsClient) listForResourceCreateRequest(ctx context.Conte
 
 // listForResourceHandleResponse handles the ListForResource response.
 func (client *AttestationsClient) listForResourceHandleResponse(resp *http.Response) (AttestationsClientListForResourceResponse, error) {
-	result := AttestationsClientListForResourceResponse{RawResponse: resp}
+	result := AttestationsClientListForResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AttestationListResult); err != nil {
 		return AttestationsClientListForResourceResponse{}, err
 	}
@@ -621,7 +615,7 @@ func (client *AttestationsClient) listForResourceGroupCreateRequest(ctx context.
 
 // listForResourceGroupHandleResponse handles the ListForResourceGroup response.
 func (client *AttestationsClient) listForResourceGroupHandleResponse(resp *http.Response) (AttestationsClientListForResourceGroupResponse, error) {
-	result := AttestationsClientListForResourceGroupResponse{RawResponse: resp}
+	result := AttestationsClientListForResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AttestationListResult); err != nil {
 		return AttestationsClientListForResourceGroupResponse{}, err
 	}
@@ -670,7 +664,7 @@ func (client *AttestationsClient) listForSubscriptionCreateRequest(ctx context.C
 
 // listForSubscriptionHandleResponse handles the ListForSubscription response.
 func (client *AttestationsClient) listForSubscriptionHandleResponse(resp *http.Response) (AttestationsClientListForSubscriptionResponse, error) {
-	result := AttestationsClientListForSubscriptionResponse{RawResponse: resp}
+	result := AttestationsClientListForSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AttestationListResult); err != nil {
 		return AttestationsClientListForSubscriptionResponse{}, err
 	}

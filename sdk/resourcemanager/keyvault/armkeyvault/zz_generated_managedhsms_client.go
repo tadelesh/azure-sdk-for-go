@@ -36,17 +36,17 @@ type ManagedHsmsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedHsmsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedHsmsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedHsmsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ManagedHsmsClient) BeginCreateOrUpdate(ctx context.Context, resour
 	if err != nil {
 		return ManagedHsmsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ManagedHsmsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedHsmsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedHsmsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ManagedHsmsClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *ManagedHsmsClient) BeginDelete(ctx context.Context, resourceGroupN
 	if err != nil {
 		return ManagedHsmsClientDeletePollerResponse{}, err
 	}
-	result := ManagedHsmsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedHsmsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedHsmsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ManagedHsmsClientDeletePollerResponse{}, err
@@ -233,7 +229,7 @@ func (client *ManagedHsmsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *ManagedHsmsClient) getHandleResponse(resp *http.Response) (ManagedHsmsClientGetResponse, error) {
-	result := ManagedHsmsClientGetResponse{RawResponse: resp}
+	result := ManagedHsmsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedHsm); err != nil {
 		return ManagedHsmsClientGetResponse{}, err
 	}
@@ -288,7 +284,7 @@ func (client *ManagedHsmsClient) getDeletedCreateRequest(ctx context.Context, na
 
 // getDeletedHandleResponse handles the GetDeleted response.
 func (client *ManagedHsmsClient) getDeletedHandleResponse(resp *http.Response) (ManagedHsmsClientGetDeletedResponse, error) {
-	result := ManagedHsmsClientGetDeletedResponse{RawResponse: resp}
+	result := ManagedHsmsClientGetDeletedResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedManagedHsm); err != nil {
 		return ManagedHsmsClientGetDeletedResponse{}, err
 	}
@@ -340,7 +336,7 @@ func (client *ManagedHsmsClient) listByResourceGroupCreateRequest(ctx context.Co
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ManagedHsmsClient) listByResourceGroupHandleResponse(resp *http.Response) (ManagedHsmsClientListByResourceGroupResponse, error) {
-	result := ManagedHsmsClientListByResourceGroupResponse{RawResponse: resp}
+	result := ManagedHsmsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedHsmListResult); err != nil {
 		return ManagedHsmsClientListByResourceGroupResponse{}, err
 	}
@@ -386,7 +382,7 @@ func (client *ManagedHsmsClient) listBySubscriptionCreateRequest(ctx context.Con
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *ManagedHsmsClient) listBySubscriptionHandleResponse(resp *http.Response) (ManagedHsmsClientListBySubscriptionResponse, error) {
-	result := ManagedHsmsClientListBySubscriptionResponse{RawResponse: resp}
+	result := ManagedHsmsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedHsmListResult); err != nil {
 		return ManagedHsmsClientListBySubscriptionResponse{}, err
 	}
@@ -428,7 +424,7 @@ func (client *ManagedHsmsClient) listDeletedCreateRequest(ctx context.Context, o
 
 // listDeletedHandleResponse handles the ListDeleted response.
 func (client *ManagedHsmsClient) listDeletedHandleResponse(resp *http.Response) (ManagedHsmsClientListDeletedResponse, error) {
-	result := ManagedHsmsClientListDeletedResponse{RawResponse: resp}
+	result := ManagedHsmsClientListDeletedResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedManagedHsmListResult); err != nil {
 		return ManagedHsmsClientListDeletedResponse{}, err
 	}
@@ -446,9 +442,7 @@ func (client *ManagedHsmsClient) BeginPurgeDeleted(ctx context.Context, name str
 	if err != nil {
 		return ManagedHsmsClientPurgeDeletedPollerResponse{}, err
 	}
-	result := ManagedHsmsClientPurgeDeletedPollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedHsmsClientPurgeDeletedPollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedHsmsClient.PurgeDeleted", "", resp, client.pl)
 	if err != nil {
 		return ManagedHsmsClientPurgeDeletedPollerResponse{}, err
@@ -513,9 +507,7 @@ func (client *ManagedHsmsClient) BeginUpdate(ctx context.Context, resourceGroupN
 	if err != nil {
 		return ManagedHsmsClientUpdatePollerResponse{}, err
 	}
-	result := ManagedHsmsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedHsmsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedHsmsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ManagedHsmsClientUpdatePollerResponse{}, err

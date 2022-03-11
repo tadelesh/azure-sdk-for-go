@@ -35,17 +35,17 @@ type UserSessionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewUserSessionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *UserSessionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &UserSessionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -69,7 +69,7 @@ func (client *UserSessionsClient) Delete(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return UserSessionsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return UserSessionsClientDeleteResponse{RawResponse: resp}, nil
+	return UserSessionsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -128,7 +128,7 @@ func (client *UserSessionsClient) Disconnect(ctx context.Context, resourceGroupN
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return UserSessionsClientDisconnectResponse{}, runtime.NewResponseError(resp)
 	}
-	return UserSessionsClientDisconnectResponse{RawResponse: resp}, nil
+	return UserSessionsClientDisconnectResponse{}, nil
 }
 
 // disconnectCreateRequest creates the Disconnect request.
@@ -223,7 +223,7 @@ func (client *UserSessionsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *UserSessionsClient) getHandleResponse(resp *http.Response) (UserSessionsClientGetResponse, error) {
-	result := UserSessionsClientGetResponse{RawResponse: resp}
+	result := UserSessionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UserSession); err != nil {
 		return UserSessionsClientGetResponse{}, err
 	}
@@ -280,7 +280,7 @@ func (client *UserSessionsClient) listCreateRequest(ctx context.Context, resourc
 
 // listHandleResponse handles the List response.
 func (client *UserSessionsClient) listHandleResponse(resp *http.Response) (UserSessionsClientListResponse, error) {
-	result := UserSessionsClientListResponse{RawResponse: resp}
+	result := UserSessionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UserSessionList); err != nil {
 		return UserSessionsClientListResponse{}, err
 	}
@@ -336,7 +336,7 @@ func (client *UserSessionsClient) listByHostPoolCreateRequest(ctx context.Contex
 
 // listByHostPoolHandleResponse handles the ListByHostPool response.
 func (client *UserSessionsClient) listByHostPoolHandleResponse(resp *http.Response) (UserSessionsClientListByHostPoolResponse, error) {
-	result := UserSessionsClientListByHostPoolResponse{RawResponse: resp}
+	result := UserSessionsClientListByHostPoolResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UserSessionList); err != nil {
 		return UserSessionsClientListByHostPoolResponse{}, err
 	}
@@ -363,7 +363,7 @@ func (client *UserSessionsClient) SendMessage(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return UserSessionsClientSendMessageResponse{}, runtime.NewResponseError(resp)
 	}
-	return UserSessionsClientSendMessageResponse{RawResponse: resp}, nil
+	return UserSessionsClientSendMessageResponse{}, nil
 }
 
 // sendMessageCreateRequest creates the SendMessage request.

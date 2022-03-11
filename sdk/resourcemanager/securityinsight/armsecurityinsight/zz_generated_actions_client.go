@@ -34,17 +34,17 @@ type ActionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewActionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ActionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ActionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *ActionsClient) createOrUpdateCreateRequest(ctx context.Context, re
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ActionsClient) createOrUpdateHandleResponse(resp *http.Response) (ActionsClientCreateOrUpdateResponse, error) {
-	result := ActionsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ActionsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ActionResponse); err != nil {
 		return ActionsClientCreateOrUpdateResponse{}, err
 	}
@@ -134,7 +134,7 @@ func (client *ActionsClient) Delete(ctx context.Context, resourceGroupName strin
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ActionsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ActionsClientDeleteResponse{RawResponse: resp}, nil
+	return ActionsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -229,7 +229,7 @@ func (client *ActionsClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *ActionsClient) getHandleResponse(resp *http.Response) (ActionsClientGetResponse, error) {
-	result := ActionsClientGetResponse{RawResponse: resp}
+	result := ActionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ActionResponse); err != nil {
 		return ActionsClientGetResponse{}, err
 	}
@@ -286,7 +286,7 @@ func (client *ActionsClient) listByAlertRuleCreateRequest(ctx context.Context, r
 
 // listByAlertRuleHandleResponse handles the ListByAlertRule response.
 func (client *ActionsClient) listByAlertRuleHandleResponse(resp *http.Response) (ActionsClientListByAlertRuleResponse, error) {
-	result := ActionsClientListByAlertRuleResponse{RawResponse: resp}
+	result := ActionsClientListByAlertRuleResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ActionsList); err != nil {
 		return ActionsClientListByAlertRuleResponse{}, err
 	}

@@ -35,17 +35,17 @@ type SerialPortsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSerialPortsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SerialPortsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SerialPortsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -111,7 +111,7 @@ func (client *SerialPortsClient) connectCreateRequest(ctx context.Context, resou
 
 // connectHandleResponse handles the Connect response.
 func (client *SerialPortsClient) connectHandleResponse(resp *http.Response) (SerialPortsClientConnectResponse, error) {
-	result := SerialPortsClientConnectResponse{RawResponse: resp}
+	result := SerialPortsClientConnectResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SerialPortConnectResult); err != nil {
 		return SerialPortsClientConnectResponse{}, err
 	}
@@ -180,7 +180,7 @@ func (client *SerialPortsClient) createCreateRequest(ctx context.Context, resour
 
 // createHandleResponse handles the Create response.
 func (client *SerialPortsClient) createHandleResponse(resp *http.Response) (SerialPortsClientCreateResponse, error) {
-	result := SerialPortsClientCreateResponse{RawResponse: resp}
+	result := SerialPortsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SerialPort); err != nil {
 		return SerialPortsClientCreateResponse{}, err
 	}
@@ -208,7 +208,7 @@ func (client *SerialPortsClient) Delete(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SerialPortsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SerialPortsClientDeleteResponse{RawResponse: resp}, nil
+	return SerialPortsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -307,7 +307,7 @@ func (client *SerialPortsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *SerialPortsClient) getHandleResponse(resp *http.Response) (SerialPortsClientGetResponse, error) {
-	result := SerialPortsClientGetResponse{RawResponse: resp}
+	result := SerialPortsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SerialPort); err != nil {
 		return SerialPortsClientGetResponse{}, err
 	}
@@ -370,7 +370,7 @@ func (client *SerialPortsClient) listCreateRequest(ctx context.Context, resource
 
 // listHandleResponse handles the List response.
 func (client *SerialPortsClient) listHandleResponse(resp *http.Response) (SerialPortsClientListResponse, error) {
-	result := SerialPortsClientListResponse{RawResponse: resp}
+	result := SerialPortsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SerialPortListResult); err != nil {
 		return SerialPortsClientListResponse{}, err
 	}
@@ -413,7 +413,7 @@ func (client *SerialPortsClient) listBySubscriptionsCreateRequest(ctx context.Co
 
 // listBySubscriptionsHandleResponse handles the ListBySubscriptions response.
 func (client *SerialPortsClient) listBySubscriptionsHandleResponse(resp *http.Response) (SerialPortsClientListBySubscriptionsResponse, error) {
-	result := SerialPortsClientListBySubscriptionsResponse{RawResponse: resp}
+	result := SerialPortsClientListBySubscriptionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SerialPortListResult); err != nil {
 		return SerialPortsClientListBySubscriptionsResponse{}, err
 	}

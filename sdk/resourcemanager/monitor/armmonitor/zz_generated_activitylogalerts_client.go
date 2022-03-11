@@ -34,17 +34,17 @@ type ActivityLogAlertsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewActivityLogAlertsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ActivityLogAlertsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ActivityLogAlertsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *ActivityLogAlertsClient) createOrUpdateCreateRequest(ctx context.C
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ActivityLogAlertsClient) createOrUpdateHandleResponse(resp *http.Response) (ActivityLogAlertsClientCreateOrUpdateResponse, error) {
-	result := ActivityLogAlertsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ActivityLogAlertsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ActivityLogAlertResource); err != nil {
 		return ActivityLogAlertsClientCreateOrUpdateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *ActivityLogAlertsClient) Delete(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ActivityLogAlertsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ActivityLogAlertsClientDeleteResponse{RawResponse: resp}, nil
+	return ActivityLogAlertsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -201,7 +201,7 @@ func (client *ActivityLogAlertsClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *ActivityLogAlertsClient) getHandleResponse(resp *http.Response) (ActivityLogAlertsClientGetResponse, error) {
-	result := ActivityLogAlertsClientGetResponse{RawResponse: resp}
+	result := ActivityLogAlertsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ActivityLogAlertResource); err != nil {
 		return ActivityLogAlertsClientGetResponse{}, err
 	}
@@ -249,7 +249,7 @@ func (client *ActivityLogAlertsClient) listByResourceGroupCreateRequest(ctx cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ActivityLogAlertsClient) listByResourceGroupHandleResponse(resp *http.Response) (ActivityLogAlertsClientListByResourceGroupResponse, error) {
-	result := ActivityLogAlertsClientListByResourceGroupResponse{RawResponse: resp}
+	result := ActivityLogAlertsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AlertRuleList); err != nil {
 		return ActivityLogAlertsClientListByResourceGroupResponse{}, err
 	}
@@ -292,7 +292,7 @@ func (client *ActivityLogAlertsClient) listBySubscriptionIDCreateRequest(ctx con
 
 // listBySubscriptionIDHandleResponse handles the ListBySubscriptionID response.
 func (client *ActivityLogAlertsClient) listBySubscriptionIDHandleResponse(resp *http.Response) (ActivityLogAlertsClientListBySubscriptionIDResponse, error) {
-	result := ActivityLogAlertsClientListBySubscriptionIDResponse{RawResponse: resp}
+	result := ActivityLogAlertsClientListBySubscriptionIDResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AlertRuleList); err != nil {
 		return ActivityLogAlertsClientListBySubscriptionIDResponse{}, err
 	}
@@ -351,7 +351,7 @@ func (client *ActivityLogAlertsClient) updateCreateRequest(ctx context.Context, 
 
 // updateHandleResponse handles the Update response.
 func (client *ActivityLogAlertsClient) updateHandleResponse(resp *http.Response) (ActivityLogAlertsClientUpdateResponse, error) {
-	result := ActivityLogAlertsClientUpdateResponse{RawResponse: resp}
+	result := ActivityLogAlertsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ActivityLogAlertResource); err != nil {
 		return ActivityLogAlertsClientUpdateResponse{}, err
 	}

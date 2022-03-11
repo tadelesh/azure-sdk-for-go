@@ -34,17 +34,17 @@ type ManagementClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagementClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagementClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagementClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *ManagementClient) BeginCreateRecommendedActionSession(ctx context.
 	if err != nil {
 		return ManagementClientCreateRecommendedActionSessionPollerResponse{}, err
 	}
-	result := ManagementClientCreateRecommendedActionSessionPollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagementClientCreateRecommendedActionSessionPollerResponse{}
 	pt, err := armruntime.NewPoller("ManagementClient.CreateRecommendedActionSession", "", resp, client.pl)
 	if err != nil {
 		return ManagementClientCreateRecommendedActionSessionPollerResponse{}, err
@@ -171,7 +169,7 @@ func (client *ManagementClient) resetQueryPerformanceInsightDataCreateRequest(ct
 
 // resetQueryPerformanceInsightDataHandleResponse handles the ResetQueryPerformanceInsightData response.
 func (client *ManagementClient) resetQueryPerformanceInsightDataHandleResponse(resp *http.Response) (ManagementClientResetQueryPerformanceInsightDataResponse, error) {
-	result := ManagementClientResetQueryPerformanceInsightDataResponse{RawResponse: resp}
+	result := ManagementClientResetQueryPerformanceInsightDataResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QueryPerformanceInsightResetDataResult); err != nil {
 		return ManagementClientResetQueryPerformanceInsightDataResponse{}, err
 	}

@@ -105,7 +105,7 @@ func (client *EncryptionScopesClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *EncryptionScopesClient) getHandleResponse(resp *http.Response) (EncryptionScopesClientGetResponse, error) {
-	result := EncryptionScopesClientGetResponse{RawResponse: resp}
+	result := EncryptionScopesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EncryptionScope); err != nil {
 		return EncryptionScopesClientGetResponse{}, err
 	}
@@ -158,7 +158,7 @@ func (client *EncryptionScopesClient) listCreateRequest(ctx context.Context, res
 
 // listHandleResponse handles the List response.
 func (client *EncryptionScopesClient) listHandleResponse(resp *http.Response) (EncryptionScopesClientListResponse, error) {
-	result := EncryptionScopesClientListResponse{RawResponse: resp}
+	result := EncryptionScopesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EncryptionScopeListResult); err != nil {
 		return EncryptionScopesClientListResponse{}, err
 	}
@@ -223,7 +223,7 @@ func (client *EncryptionScopesClient) patchCreateRequest(ctx context.Context, re
 
 // patchHandleResponse handles the Patch response.
 func (client *EncryptionScopesClient) patchHandleResponse(resp *http.Response) (EncryptionScopesClientPatchResponse, error) {
-	result := EncryptionScopesClientPatchResponse{RawResponse: resp}
+	result := EncryptionScopesClientPatchResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EncryptionScope); err != nil {
 		return EncryptionScopesClientPatchResponse{}, err
 	}
@@ -289,7 +289,7 @@ func (client *EncryptionScopesClient) putCreateRequest(ctx context.Context, reso
 
 // putHandleResponse handles the Put response.
 func (client *EncryptionScopesClient) putHandleResponse(resp *http.Response) (EncryptionScopesClientPutResponse, error) {
-	result := EncryptionScopesClientPutResponse{RawResponse: resp}
+	result := EncryptionScopesClientPutResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EncryptionScope); err != nil {
 		return EncryptionScopesClientPutResponse{}, err
 	}

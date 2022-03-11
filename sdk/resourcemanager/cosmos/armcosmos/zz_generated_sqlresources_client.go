@@ -34,17 +34,17 @@ type SQLResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLResourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *SQLResourcesClient) BeginCreateUpdateSQLContainer(ctx context.Cont
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLContainerPollerResponse{}, err
 	}
-	result := SQLResourcesClientCreateUpdateSQLContainerPollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientCreateUpdateSQLContainerPollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.CreateUpdateSQLContainer", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLContainerPollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *SQLResourcesClient) BeginCreateUpdateSQLDatabase(ctx context.Conte
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLDatabasePollerResponse{}, err
 	}
-	result := SQLResourcesClientCreateUpdateSQLDatabasePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientCreateUpdateSQLDatabasePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.CreateUpdateSQLDatabase", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLDatabasePollerResponse{}, err
@@ -213,9 +209,7 @@ func (client *SQLResourcesClient) BeginCreateUpdateSQLRoleAssignment(ctx context
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLRoleAssignmentPollerResponse{}, err
 	}
-	result := SQLResourcesClientCreateUpdateSQLRoleAssignmentPollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientCreateUpdateSQLRoleAssignmentPollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.CreateUpdateSQLRoleAssignment", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLRoleAssignmentPollerResponse{}, err
@@ -286,9 +280,7 @@ func (client *SQLResourcesClient) BeginCreateUpdateSQLRoleDefinition(ctx context
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLRoleDefinitionPollerResponse{}, err
 	}
-	result := SQLResourcesClientCreateUpdateSQLRoleDefinitionPollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientCreateUpdateSQLRoleDefinitionPollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.CreateUpdateSQLRoleDefinition", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLRoleDefinitionPollerResponse{}, err
@@ -361,9 +353,7 @@ func (client *SQLResourcesClient) BeginCreateUpdateSQLStoredProcedure(ctx contex
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLStoredProcedurePollerResponse{}, err
 	}
-	result := SQLResourcesClientCreateUpdateSQLStoredProcedurePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientCreateUpdateSQLStoredProcedurePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.CreateUpdateSQLStoredProcedure", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLStoredProcedurePollerResponse{}, err
@@ -444,9 +434,7 @@ func (client *SQLResourcesClient) BeginCreateUpdateSQLTrigger(ctx context.Contex
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLTriggerPollerResponse{}, err
 	}
-	result := SQLResourcesClientCreateUpdateSQLTriggerPollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientCreateUpdateSQLTriggerPollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.CreateUpdateSQLTrigger", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLTriggerPollerResponse{}, err
@@ -527,9 +515,7 @@ func (client *SQLResourcesClient) BeginCreateUpdateSQLUserDefinedFunction(ctx co
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLUserDefinedFunctionPollerResponse{}, err
 	}
-	result := SQLResourcesClientCreateUpdateSQLUserDefinedFunctionPollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientCreateUpdateSQLUserDefinedFunctionPollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.CreateUpdateSQLUserDefinedFunction", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientCreateUpdateSQLUserDefinedFunctionPollerResponse{}, err
@@ -608,9 +594,7 @@ func (client *SQLResourcesClient) BeginDeleteSQLContainer(ctx context.Context, r
 	if err != nil {
 		return SQLResourcesClientDeleteSQLContainerPollerResponse{}, err
 	}
-	result := SQLResourcesClientDeleteSQLContainerPollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientDeleteSQLContainerPollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.DeleteSQLContainer", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientDeleteSQLContainerPollerResponse{}, err
@@ -683,9 +667,7 @@ func (client *SQLResourcesClient) BeginDeleteSQLDatabase(ctx context.Context, re
 	if err != nil {
 		return SQLResourcesClientDeleteSQLDatabasePollerResponse{}, err
 	}
-	result := SQLResourcesClientDeleteSQLDatabasePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientDeleteSQLDatabasePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.DeleteSQLDatabase", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientDeleteSQLDatabasePollerResponse{}, err
@@ -754,9 +736,7 @@ func (client *SQLResourcesClient) BeginDeleteSQLRoleAssignment(ctx context.Conte
 	if err != nil {
 		return SQLResourcesClientDeleteSQLRoleAssignmentPollerResponse{}, err
 	}
-	result := SQLResourcesClientDeleteSQLRoleAssignmentPollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientDeleteSQLRoleAssignmentPollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.DeleteSQLRoleAssignment", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientDeleteSQLRoleAssignmentPollerResponse{}, err
@@ -826,9 +806,7 @@ func (client *SQLResourcesClient) BeginDeleteSQLRoleDefinition(ctx context.Conte
 	if err != nil {
 		return SQLResourcesClientDeleteSQLRoleDefinitionPollerResponse{}, err
 	}
-	result := SQLResourcesClientDeleteSQLRoleDefinitionPollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientDeleteSQLRoleDefinitionPollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.DeleteSQLRoleDefinition", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientDeleteSQLRoleDefinitionPollerResponse{}, err
@@ -900,9 +878,7 @@ func (client *SQLResourcesClient) BeginDeleteSQLStoredProcedure(ctx context.Cont
 	if err != nil {
 		return SQLResourcesClientDeleteSQLStoredProcedurePollerResponse{}, err
 	}
-	result := SQLResourcesClientDeleteSQLStoredProcedurePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientDeleteSQLStoredProcedurePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.DeleteSQLStoredProcedure", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientDeleteSQLStoredProcedurePollerResponse{}, err
@@ -981,9 +957,7 @@ func (client *SQLResourcesClient) BeginDeleteSQLTrigger(ctx context.Context, res
 	if err != nil {
 		return SQLResourcesClientDeleteSQLTriggerPollerResponse{}, err
 	}
-	result := SQLResourcesClientDeleteSQLTriggerPollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientDeleteSQLTriggerPollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.DeleteSQLTrigger", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientDeleteSQLTriggerPollerResponse{}, err
@@ -1062,9 +1036,7 @@ func (client *SQLResourcesClient) BeginDeleteSQLUserDefinedFunction(ctx context.
 	if err != nil {
 		return SQLResourcesClientDeleteSQLUserDefinedFunctionPollerResponse{}, err
 	}
-	result := SQLResourcesClientDeleteSQLUserDefinedFunctionPollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientDeleteSQLUserDefinedFunctionPollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.DeleteSQLUserDefinedFunction", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientDeleteSQLUserDefinedFunctionPollerResponse{}, err
@@ -1188,7 +1160,7 @@ func (client *SQLResourcesClient) getSQLContainerCreateRequest(ctx context.Conte
 
 // getSQLContainerHandleResponse handles the GetSQLContainer response.
 func (client *SQLResourcesClient) getSQLContainerHandleResponse(resp *http.Response) (SQLResourcesClientGetSQLContainerResponse, error) {
-	result := SQLResourcesClientGetSQLContainerResponse{RawResponse: resp}
+	result := SQLResourcesClientGetSQLContainerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLContainerGetResults); err != nil {
 		return SQLResourcesClientGetSQLContainerResponse{}, err
 	}
@@ -1254,7 +1226,7 @@ func (client *SQLResourcesClient) getSQLContainerThroughputCreateRequest(ctx con
 
 // getSQLContainerThroughputHandleResponse handles the GetSQLContainerThroughput response.
 func (client *SQLResourcesClient) getSQLContainerThroughputHandleResponse(resp *http.Response) (SQLResourcesClientGetSQLContainerThroughputResponse, error) {
-	result := SQLResourcesClientGetSQLContainerThroughputResponse{RawResponse: resp}
+	result := SQLResourcesClientGetSQLContainerThroughputResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ThroughputSettingsGetResults); err != nil {
 		return SQLResourcesClientGetSQLContainerThroughputResponse{}, err
 	}
@@ -1315,7 +1287,7 @@ func (client *SQLResourcesClient) getSQLDatabaseCreateRequest(ctx context.Contex
 
 // getSQLDatabaseHandleResponse handles the GetSQLDatabase response.
 func (client *SQLResourcesClient) getSQLDatabaseHandleResponse(resp *http.Response) (SQLResourcesClientGetSQLDatabaseResponse, error) {
-	result := SQLResourcesClientGetSQLDatabaseResponse{RawResponse: resp}
+	result := SQLResourcesClientGetSQLDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLDatabaseGetResults); err != nil {
 		return SQLResourcesClientGetSQLDatabaseResponse{}, err
 	}
@@ -1377,7 +1349,7 @@ func (client *SQLResourcesClient) getSQLDatabaseThroughputCreateRequest(ctx cont
 
 // getSQLDatabaseThroughputHandleResponse handles the GetSQLDatabaseThroughput response.
 func (client *SQLResourcesClient) getSQLDatabaseThroughputHandleResponse(resp *http.Response) (SQLResourcesClientGetSQLDatabaseThroughputResponse, error) {
-	result := SQLResourcesClientGetSQLDatabaseThroughputResponse{RawResponse: resp}
+	result := SQLResourcesClientGetSQLDatabaseThroughputResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ThroughputSettingsGetResults); err != nil {
 		return SQLResourcesClientGetSQLDatabaseThroughputResponse{}, err
 	}
@@ -1438,7 +1410,7 @@ func (client *SQLResourcesClient) getSQLRoleAssignmentCreateRequest(ctx context.
 
 // getSQLRoleAssignmentHandleResponse handles the GetSQLRoleAssignment response.
 func (client *SQLResourcesClient) getSQLRoleAssignmentHandleResponse(resp *http.Response) (SQLResourcesClientGetSQLRoleAssignmentResponse, error) {
-	result := SQLResourcesClientGetSQLRoleAssignmentResponse{RawResponse: resp}
+	result := SQLResourcesClientGetSQLRoleAssignmentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLRoleAssignmentGetResults); err != nil {
 		return SQLResourcesClientGetSQLRoleAssignmentResponse{}, err
 	}
@@ -1499,7 +1471,7 @@ func (client *SQLResourcesClient) getSQLRoleDefinitionCreateRequest(ctx context.
 
 // getSQLRoleDefinitionHandleResponse handles the GetSQLRoleDefinition response.
 func (client *SQLResourcesClient) getSQLRoleDefinitionHandleResponse(resp *http.Response) (SQLResourcesClientGetSQLRoleDefinitionResponse, error) {
-	result := SQLResourcesClientGetSQLRoleDefinitionResponse{RawResponse: resp}
+	result := SQLResourcesClientGetSQLRoleDefinitionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLRoleDefinitionGetResults); err != nil {
 		return SQLResourcesClientGetSQLRoleDefinitionResponse{}, err
 	}
@@ -1570,7 +1542,7 @@ func (client *SQLResourcesClient) getSQLStoredProcedureCreateRequest(ctx context
 
 // getSQLStoredProcedureHandleResponse handles the GetSQLStoredProcedure response.
 func (client *SQLResourcesClient) getSQLStoredProcedureHandleResponse(resp *http.Response) (SQLResourcesClientGetSQLStoredProcedureResponse, error) {
-	result := SQLResourcesClientGetSQLStoredProcedureResponse{RawResponse: resp}
+	result := SQLResourcesClientGetSQLStoredProcedureResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLStoredProcedureGetResults); err != nil {
 		return SQLResourcesClientGetSQLStoredProcedureResponse{}, err
 	}
@@ -1641,7 +1613,7 @@ func (client *SQLResourcesClient) getSQLTriggerCreateRequest(ctx context.Context
 
 // getSQLTriggerHandleResponse handles the GetSQLTrigger response.
 func (client *SQLResourcesClient) getSQLTriggerHandleResponse(resp *http.Response) (SQLResourcesClientGetSQLTriggerResponse, error) {
-	result := SQLResourcesClientGetSQLTriggerResponse{RawResponse: resp}
+	result := SQLResourcesClientGetSQLTriggerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLTriggerGetResults); err != nil {
 		return SQLResourcesClientGetSQLTriggerResponse{}, err
 	}
@@ -1712,7 +1684,7 @@ func (client *SQLResourcesClient) getSQLUserDefinedFunctionCreateRequest(ctx con
 
 // getSQLUserDefinedFunctionHandleResponse handles the GetSQLUserDefinedFunction response.
 func (client *SQLResourcesClient) getSQLUserDefinedFunctionHandleResponse(resp *http.Response) (SQLResourcesClientGetSQLUserDefinedFunctionResponse, error) {
-	result := SQLResourcesClientGetSQLUserDefinedFunctionResponse{RawResponse: resp}
+	result := SQLResourcesClientGetSQLUserDefinedFunctionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLUserDefinedFunctionGetResults); err != nil {
 		return SQLResourcesClientGetSQLUserDefinedFunctionResponse{}, err
 	}
@@ -1726,19 +1698,13 @@ func (client *SQLResourcesClient) getSQLUserDefinedFunctionHandleResponse(resp *
 // databaseName - Cosmos DB database name.
 // options - SQLResourcesClientListSQLContainersOptions contains the optional parameters for the SQLResourcesClient.ListSQLContainers
 // method.
-func (client *SQLResourcesClient) ListSQLContainers(ctx context.Context, resourceGroupName string, accountName string, databaseName string, options *SQLResourcesClientListSQLContainersOptions) (SQLResourcesClientListSQLContainersResponse, error) {
-	req, err := client.listSQLContainersCreateRequest(ctx, resourceGroupName, accountName, databaseName, options)
-	if err != nil {
-		return SQLResourcesClientListSQLContainersResponse{}, err
+func (client *SQLResourcesClient) ListSQLContainers(resourceGroupName string, accountName string, databaseName string, options *SQLResourcesClientListSQLContainersOptions) *SQLResourcesClientListSQLContainersPager {
+	return &SQLResourcesClientListSQLContainersPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listSQLContainersCreateRequest(ctx, resourceGroupName, accountName, databaseName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return SQLResourcesClientListSQLContainersResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return SQLResourcesClientListSQLContainersResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listSQLContainersHandleResponse(resp)
 }
 
 // listSQLContainersCreateRequest creates the ListSQLContainers request.
@@ -1773,7 +1739,7 @@ func (client *SQLResourcesClient) listSQLContainersCreateRequest(ctx context.Con
 
 // listSQLContainersHandleResponse handles the ListSQLContainers response.
 func (client *SQLResourcesClient) listSQLContainersHandleResponse(resp *http.Response) (SQLResourcesClientListSQLContainersResponse, error) {
-	result := SQLResourcesClientListSQLContainersResponse{RawResponse: resp}
+	result := SQLResourcesClientListSQLContainersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLContainerListResult); err != nil {
 		return SQLResourcesClientListSQLContainersResponse{}, err
 	}
@@ -1786,19 +1752,13 @@ func (client *SQLResourcesClient) listSQLContainersHandleResponse(resp *http.Res
 // accountName - Cosmos DB database account name.
 // options - SQLResourcesClientListSQLDatabasesOptions contains the optional parameters for the SQLResourcesClient.ListSQLDatabases
 // method.
-func (client *SQLResourcesClient) ListSQLDatabases(ctx context.Context, resourceGroupName string, accountName string, options *SQLResourcesClientListSQLDatabasesOptions) (SQLResourcesClientListSQLDatabasesResponse, error) {
-	req, err := client.listSQLDatabasesCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return SQLResourcesClientListSQLDatabasesResponse{}, err
+func (client *SQLResourcesClient) ListSQLDatabases(resourceGroupName string, accountName string, options *SQLResourcesClientListSQLDatabasesOptions) *SQLResourcesClientListSQLDatabasesPager {
+	return &SQLResourcesClientListSQLDatabasesPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listSQLDatabasesCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return SQLResourcesClientListSQLDatabasesResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return SQLResourcesClientListSQLDatabasesResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listSQLDatabasesHandleResponse(resp)
 }
 
 // listSQLDatabasesCreateRequest creates the ListSQLDatabases request.
@@ -1829,7 +1789,7 @@ func (client *SQLResourcesClient) listSQLDatabasesCreateRequest(ctx context.Cont
 
 // listSQLDatabasesHandleResponse handles the ListSQLDatabases response.
 func (client *SQLResourcesClient) listSQLDatabasesHandleResponse(resp *http.Response) (SQLResourcesClientListSQLDatabasesResponse, error) {
-	result := SQLResourcesClientListSQLDatabasesResponse{RawResponse: resp}
+	result := SQLResourcesClientListSQLDatabasesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLDatabaseListResult); err != nil {
 		return SQLResourcesClientListSQLDatabasesResponse{}, err
 	}
@@ -1842,19 +1802,13 @@ func (client *SQLResourcesClient) listSQLDatabasesHandleResponse(resp *http.Resp
 // accountName - Cosmos DB database account name.
 // options - SQLResourcesClientListSQLRoleAssignmentsOptions contains the optional parameters for the SQLResourcesClient.ListSQLRoleAssignments
 // method.
-func (client *SQLResourcesClient) ListSQLRoleAssignments(ctx context.Context, resourceGroupName string, accountName string, options *SQLResourcesClientListSQLRoleAssignmentsOptions) (SQLResourcesClientListSQLRoleAssignmentsResponse, error) {
-	req, err := client.listSQLRoleAssignmentsCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return SQLResourcesClientListSQLRoleAssignmentsResponse{}, err
+func (client *SQLResourcesClient) ListSQLRoleAssignments(resourceGroupName string, accountName string, options *SQLResourcesClientListSQLRoleAssignmentsOptions) *SQLResourcesClientListSQLRoleAssignmentsPager {
+	return &SQLResourcesClientListSQLRoleAssignmentsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listSQLRoleAssignmentsCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return SQLResourcesClientListSQLRoleAssignmentsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return SQLResourcesClientListSQLRoleAssignmentsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listSQLRoleAssignmentsHandleResponse(resp)
 }
 
 // listSQLRoleAssignmentsCreateRequest creates the ListSQLRoleAssignments request.
@@ -1885,7 +1839,7 @@ func (client *SQLResourcesClient) listSQLRoleAssignmentsCreateRequest(ctx contex
 
 // listSQLRoleAssignmentsHandleResponse handles the ListSQLRoleAssignments response.
 func (client *SQLResourcesClient) listSQLRoleAssignmentsHandleResponse(resp *http.Response) (SQLResourcesClientListSQLRoleAssignmentsResponse, error) {
-	result := SQLResourcesClientListSQLRoleAssignmentsResponse{RawResponse: resp}
+	result := SQLResourcesClientListSQLRoleAssignmentsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLRoleAssignmentListResult); err != nil {
 		return SQLResourcesClientListSQLRoleAssignmentsResponse{}, err
 	}
@@ -1898,19 +1852,13 @@ func (client *SQLResourcesClient) listSQLRoleAssignmentsHandleResponse(resp *htt
 // accountName - Cosmos DB database account name.
 // options - SQLResourcesClientListSQLRoleDefinitionsOptions contains the optional parameters for the SQLResourcesClient.ListSQLRoleDefinitions
 // method.
-func (client *SQLResourcesClient) ListSQLRoleDefinitions(ctx context.Context, resourceGroupName string, accountName string, options *SQLResourcesClientListSQLRoleDefinitionsOptions) (SQLResourcesClientListSQLRoleDefinitionsResponse, error) {
-	req, err := client.listSQLRoleDefinitionsCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return SQLResourcesClientListSQLRoleDefinitionsResponse{}, err
+func (client *SQLResourcesClient) ListSQLRoleDefinitions(resourceGroupName string, accountName string, options *SQLResourcesClientListSQLRoleDefinitionsOptions) *SQLResourcesClientListSQLRoleDefinitionsPager {
+	return &SQLResourcesClientListSQLRoleDefinitionsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listSQLRoleDefinitionsCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return SQLResourcesClientListSQLRoleDefinitionsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return SQLResourcesClientListSQLRoleDefinitionsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listSQLRoleDefinitionsHandleResponse(resp)
 }
 
 // listSQLRoleDefinitionsCreateRequest creates the ListSQLRoleDefinitions request.
@@ -1941,7 +1889,7 @@ func (client *SQLResourcesClient) listSQLRoleDefinitionsCreateRequest(ctx contex
 
 // listSQLRoleDefinitionsHandleResponse handles the ListSQLRoleDefinitions response.
 func (client *SQLResourcesClient) listSQLRoleDefinitionsHandleResponse(resp *http.Response) (SQLResourcesClientListSQLRoleDefinitionsResponse, error) {
-	result := SQLResourcesClientListSQLRoleDefinitionsResponse{RawResponse: resp}
+	result := SQLResourcesClientListSQLRoleDefinitionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLRoleDefinitionListResult); err != nil {
 		return SQLResourcesClientListSQLRoleDefinitionsResponse{}, err
 	}
@@ -1956,19 +1904,13 @@ func (client *SQLResourcesClient) listSQLRoleDefinitionsHandleResponse(resp *htt
 // containerName - Cosmos DB container name.
 // options - SQLResourcesClientListSQLStoredProceduresOptions contains the optional parameters for the SQLResourcesClient.ListSQLStoredProcedures
 // method.
-func (client *SQLResourcesClient) ListSQLStoredProcedures(ctx context.Context, resourceGroupName string, accountName string, databaseName string, containerName string, options *SQLResourcesClientListSQLStoredProceduresOptions) (SQLResourcesClientListSQLStoredProceduresResponse, error) {
-	req, err := client.listSQLStoredProceduresCreateRequest(ctx, resourceGroupName, accountName, databaseName, containerName, options)
-	if err != nil {
-		return SQLResourcesClientListSQLStoredProceduresResponse{}, err
+func (client *SQLResourcesClient) ListSQLStoredProcedures(resourceGroupName string, accountName string, databaseName string, containerName string, options *SQLResourcesClientListSQLStoredProceduresOptions) *SQLResourcesClientListSQLStoredProceduresPager {
+	return &SQLResourcesClientListSQLStoredProceduresPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listSQLStoredProceduresCreateRequest(ctx, resourceGroupName, accountName, databaseName, containerName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return SQLResourcesClientListSQLStoredProceduresResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return SQLResourcesClientListSQLStoredProceduresResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listSQLStoredProceduresHandleResponse(resp)
 }
 
 // listSQLStoredProceduresCreateRequest creates the ListSQLStoredProcedures request.
@@ -2007,7 +1949,7 @@ func (client *SQLResourcesClient) listSQLStoredProceduresCreateRequest(ctx conte
 
 // listSQLStoredProceduresHandleResponse handles the ListSQLStoredProcedures response.
 func (client *SQLResourcesClient) listSQLStoredProceduresHandleResponse(resp *http.Response) (SQLResourcesClientListSQLStoredProceduresResponse, error) {
-	result := SQLResourcesClientListSQLStoredProceduresResponse{RawResponse: resp}
+	result := SQLResourcesClientListSQLStoredProceduresResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLStoredProcedureListResult); err != nil {
 		return SQLResourcesClientListSQLStoredProceduresResponse{}, err
 	}
@@ -2022,19 +1964,13 @@ func (client *SQLResourcesClient) listSQLStoredProceduresHandleResponse(resp *ht
 // containerName - Cosmos DB container name.
 // options - SQLResourcesClientListSQLTriggersOptions contains the optional parameters for the SQLResourcesClient.ListSQLTriggers
 // method.
-func (client *SQLResourcesClient) ListSQLTriggers(ctx context.Context, resourceGroupName string, accountName string, databaseName string, containerName string, options *SQLResourcesClientListSQLTriggersOptions) (SQLResourcesClientListSQLTriggersResponse, error) {
-	req, err := client.listSQLTriggersCreateRequest(ctx, resourceGroupName, accountName, databaseName, containerName, options)
-	if err != nil {
-		return SQLResourcesClientListSQLTriggersResponse{}, err
+func (client *SQLResourcesClient) ListSQLTriggers(resourceGroupName string, accountName string, databaseName string, containerName string, options *SQLResourcesClientListSQLTriggersOptions) *SQLResourcesClientListSQLTriggersPager {
+	return &SQLResourcesClientListSQLTriggersPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listSQLTriggersCreateRequest(ctx, resourceGroupName, accountName, databaseName, containerName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return SQLResourcesClientListSQLTriggersResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return SQLResourcesClientListSQLTriggersResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listSQLTriggersHandleResponse(resp)
 }
 
 // listSQLTriggersCreateRequest creates the ListSQLTriggers request.
@@ -2073,7 +2009,7 @@ func (client *SQLResourcesClient) listSQLTriggersCreateRequest(ctx context.Conte
 
 // listSQLTriggersHandleResponse handles the ListSQLTriggers response.
 func (client *SQLResourcesClient) listSQLTriggersHandleResponse(resp *http.Response) (SQLResourcesClientListSQLTriggersResponse, error) {
-	result := SQLResourcesClientListSQLTriggersResponse{RawResponse: resp}
+	result := SQLResourcesClientListSQLTriggersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLTriggerListResult); err != nil {
 		return SQLResourcesClientListSQLTriggersResponse{}, err
 	}
@@ -2088,19 +2024,13 @@ func (client *SQLResourcesClient) listSQLTriggersHandleResponse(resp *http.Respo
 // containerName - Cosmos DB container name.
 // options - SQLResourcesClientListSQLUserDefinedFunctionsOptions contains the optional parameters for the SQLResourcesClient.ListSQLUserDefinedFunctions
 // method.
-func (client *SQLResourcesClient) ListSQLUserDefinedFunctions(ctx context.Context, resourceGroupName string, accountName string, databaseName string, containerName string, options *SQLResourcesClientListSQLUserDefinedFunctionsOptions) (SQLResourcesClientListSQLUserDefinedFunctionsResponse, error) {
-	req, err := client.listSQLUserDefinedFunctionsCreateRequest(ctx, resourceGroupName, accountName, databaseName, containerName, options)
-	if err != nil {
-		return SQLResourcesClientListSQLUserDefinedFunctionsResponse{}, err
+func (client *SQLResourcesClient) ListSQLUserDefinedFunctions(resourceGroupName string, accountName string, databaseName string, containerName string, options *SQLResourcesClientListSQLUserDefinedFunctionsOptions) *SQLResourcesClientListSQLUserDefinedFunctionsPager {
+	return &SQLResourcesClientListSQLUserDefinedFunctionsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listSQLUserDefinedFunctionsCreateRequest(ctx, resourceGroupName, accountName, databaseName, containerName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return SQLResourcesClientListSQLUserDefinedFunctionsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return SQLResourcesClientListSQLUserDefinedFunctionsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listSQLUserDefinedFunctionsHandleResponse(resp)
 }
 
 // listSQLUserDefinedFunctionsCreateRequest creates the ListSQLUserDefinedFunctions request.
@@ -2139,7 +2069,7 @@ func (client *SQLResourcesClient) listSQLUserDefinedFunctionsCreateRequest(ctx c
 
 // listSQLUserDefinedFunctionsHandleResponse handles the ListSQLUserDefinedFunctions response.
 func (client *SQLResourcesClient) listSQLUserDefinedFunctionsHandleResponse(resp *http.Response) (SQLResourcesClientListSQLUserDefinedFunctionsResponse, error) {
-	result := SQLResourcesClientListSQLUserDefinedFunctionsResponse{RawResponse: resp}
+	result := SQLResourcesClientListSQLUserDefinedFunctionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SQLUserDefinedFunctionListResult); err != nil {
 		return SQLResourcesClientListSQLUserDefinedFunctionsResponse{}, err
 	}
@@ -2159,9 +2089,7 @@ func (client *SQLResourcesClient) BeginMigrateSQLContainerToAutoscale(ctx contex
 	if err != nil {
 		return SQLResourcesClientMigrateSQLContainerToAutoscalePollerResponse{}, err
 	}
-	result := SQLResourcesClientMigrateSQLContainerToAutoscalePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientMigrateSQLContainerToAutoscalePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.MigrateSQLContainerToAutoscale", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientMigrateSQLContainerToAutoscalePollerResponse{}, err
@@ -2236,9 +2164,7 @@ func (client *SQLResourcesClient) BeginMigrateSQLContainerToManualThroughput(ctx
 	if err != nil {
 		return SQLResourcesClientMigrateSQLContainerToManualThroughputPollerResponse{}, err
 	}
-	result := SQLResourcesClientMigrateSQLContainerToManualThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientMigrateSQLContainerToManualThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.MigrateSQLContainerToManualThroughput", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientMigrateSQLContainerToManualThroughputPollerResponse{}, err
@@ -2312,9 +2238,7 @@ func (client *SQLResourcesClient) BeginMigrateSQLDatabaseToAutoscale(ctx context
 	if err != nil {
 		return SQLResourcesClientMigrateSQLDatabaseToAutoscalePollerResponse{}, err
 	}
-	result := SQLResourcesClientMigrateSQLDatabaseToAutoscalePollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientMigrateSQLDatabaseToAutoscalePollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.MigrateSQLDatabaseToAutoscale", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientMigrateSQLDatabaseToAutoscalePollerResponse{}, err
@@ -2384,9 +2308,7 @@ func (client *SQLResourcesClient) BeginMigrateSQLDatabaseToManualThroughput(ctx 
 	if err != nil {
 		return SQLResourcesClientMigrateSQLDatabaseToManualThroughputPollerResponse{}, err
 	}
-	result := SQLResourcesClientMigrateSQLDatabaseToManualThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientMigrateSQLDatabaseToManualThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.MigrateSQLDatabaseToManualThroughput", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientMigrateSQLDatabaseToManualThroughputPollerResponse{}, err
@@ -2458,9 +2380,7 @@ func (client *SQLResourcesClient) BeginRetrieveContinuousBackupInformation(ctx c
 	if err != nil {
 		return SQLResourcesClientRetrieveContinuousBackupInformationPollerResponse{}, err
 	}
-	result := SQLResourcesClientRetrieveContinuousBackupInformationPollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientRetrieveContinuousBackupInformationPollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.RetrieveContinuousBackupInformation", "location", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientRetrieveContinuousBackupInformationPollerResponse{}, err
@@ -2536,9 +2456,7 @@ func (client *SQLResourcesClient) BeginUpdateSQLContainerThroughput(ctx context.
 	if err != nil {
 		return SQLResourcesClientUpdateSQLContainerThroughputPollerResponse{}, err
 	}
-	result := SQLResourcesClientUpdateSQLContainerThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientUpdateSQLContainerThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.UpdateSQLContainerThroughput", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientUpdateSQLContainerThroughputPollerResponse{}, err
@@ -2613,9 +2531,7 @@ func (client *SQLResourcesClient) BeginUpdateSQLDatabaseThroughput(ctx context.C
 	if err != nil {
 		return SQLResourcesClientUpdateSQLDatabaseThroughputPollerResponse{}, err
 	}
-	result := SQLResourcesClientUpdateSQLDatabaseThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := SQLResourcesClientUpdateSQLDatabaseThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("SQLResourcesClient.UpdateSQLDatabaseThroughput", "", resp, client.pl)
 	if err != nil {
 		return SQLResourcesClientUpdateSQLDatabaseThroughputPollerResponse{}, err

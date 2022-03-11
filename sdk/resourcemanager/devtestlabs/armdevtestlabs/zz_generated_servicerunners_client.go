@@ -34,17 +34,17 @@ type ServiceRunnersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServiceRunnersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServiceRunnersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServiceRunnersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *ServiceRunnersClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ServiceRunnersClient) createOrUpdateHandleResponse(resp *http.Response) (ServiceRunnersClientCreateOrUpdateResponse, error) {
-	result := ServiceRunnersClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ServiceRunnersClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceRunner); err != nil {
 		return ServiceRunnersClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *ServiceRunnersClient) Delete(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ServiceRunnersClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ServiceRunnersClientDeleteResponse{RawResponse: resp}, nil
+	return ServiceRunnersClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *ServiceRunnersClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *ServiceRunnersClient) getHandleResponse(resp *http.Response) (ServiceRunnersClientGetResponse, error) {
-	result := ServiceRunnersClientGetResponse{RawResponse: resp}
+	result := ServiceRunnersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceRunner); err != nil {
 		return ServiceRunnersClientGetResponse{}, err
 	}

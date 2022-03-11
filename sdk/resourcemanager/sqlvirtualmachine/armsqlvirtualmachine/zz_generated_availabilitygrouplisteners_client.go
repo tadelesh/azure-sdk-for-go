@@ -34,17 +34,17 @@ type AvailabilityGroupListenersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAvailabilityGroupListenersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AvailabilityGroupListenersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AvailabilityGroupListenersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *AvailabilityGroupListenersClient) BeginCreateOrUpdate(ctx context.
 	if err != nil {
 		return AvailabilityGroupListenersClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := AvailabilityGroupListenersClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AvailabilityGroupListenersClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AvailabilityGroupListenersClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return AvailabilityGroupListenersClientCreateOrUpdatePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *AvailabilityGroupListenersClient) BeginDelete(ctx context.Context,
 	if err != nil {
 		return AvailabilityGroupListenersClientDeletePollerResponse{}, err
 	}
-	result := AvailabilityGroupListenersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AvailabilityGroupListenersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AvailabilityGroupListenersClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return AvailabilityGroupListenersClientDeletePollerResponse{}, err
@@ -250,7 +246,7 @@ func (client *AvailabilityGroupListenersClient) getCreateRequest(ctx context.Con
 
 // getHandleResponse handles the Get response.
 func (client *AvailabilityGroupListenersClient) getHandleResponse(resp *http.Response) (AvailabilityGroupListenersClientGetResponse, error) {
-	result := AvailabilityGroupListenersClientGetResponse{RawResponse: resp}
+	result := AvailabilityGroupListenersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AvailabilityGroupListener); err != nil {
 		return AvailabilityGroupListenersClientGetResponse{}, err
 	}
@@ -304,7 +300,7 @@ func (client *AvailabilityGroupListenersClient) listByGroupCreateRequest(ctx con
 
 // listByGroupHandleResponse handles the ListByGroup response.
 func (client *AvailabilityGroupListenersClient) listByGroupHandleResponse(resp *http.Response) (AvailabilityGroupListenersClientListByGroupResponse, error) {
-	result := AvailabilityGroupListenersClientListByGroupResponse{RawResponse: resp}
+	result := AvailabilityGroupListenersClientListByGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AvailabilityGroupListenerListResult); err != nil {
 		return AvailabilityGroupListenersClientListByGroupResponse{}, err
 	}

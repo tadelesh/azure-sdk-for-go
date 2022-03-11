@@ -34,17 +34,17 @@ type DatabaseAccountsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDatabaseAccountsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DatabaseAccountsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DatabaseAccountsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,7 +63,7 @@ func (client *DatabaseAccountsClient) CheckNameExists(ctx context.Context, accou
 	if err != nil {
 		return DatabaseAccountsClientCheckNameExistsResponse{}, err
 	}
-	result := DatabaseAccountsClientCheckNameExistsResponse{RawResponse: resp}
+	result := DatabaseAccountsClientCheckNameExistsResponse{}
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		result.Success = true
 	}
@@ -100,9 +100,7 @@ func (client *DatabaseAccountsClient) BeginCreateOrUpdate(ctx context.Context, r
 	if err != nil {
 		return DatabaseAccountsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DatabaseAccountsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabaseAccountsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabaseAccountsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DatabaseAccountsClientCreateOrUpdatePollerResponse{}, err
@@ -168,9 +166,7 @@ func (client *DatabaseAccountsClient) BeginDelete(ctx context.Context, resourceG
 	if err != nil {
 		return DatabaseAccountsClientDeletePollerResponse{}, err
 	}
-	result := DatabaseAccountsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabaseAccountsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabaseAccountsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DatabaseAccountsClientDeletePollerResponse{}, err
@@ -237,9 +233,7 @@ func (client *DatabaseAccountsClient) BeginFailoverPriorityChange(ctx context.Co
 	if err != nil {
 		return DatabaseAccountsClientFailoverPriorityChangePollerResponse{}, err
 	}
-	result := DatabaseAccountsClientFailoverPriorityChangePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabaseAccountsClientFailoverPriorityChangePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabaseAccountsClient.FailoverPriorityChange", "", resp, client.pl)
 	if err != nil {
 		return DatabaseAccountsClientFailoverPriorityChangePollerResponse{}, err
@@ -342,7 +336,7 @@ func (client *DatabaseAccountsClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *DatabaseAccountsClient) getHandleResponse(resp *http.Response) (DatabaseAccountsClientGetResponse, error) {
-	result := DatabaseAccountsClientGetResponse{RawResponse: resp}
+	result := DatabaseAccountsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseAccountGetResults); err != nil {
 		return DatabaseAccountsClientGetResponse{}, err
 	}
@@ -398,7 +392,7 @@ func (client *DatabaseAccountsClient) getReadOnlyKeysCreateRequest(ctx context.C
 
 // getReadOnlyKeysHandleResponse handles the GetReadOnlyKeys response.
 func (client *DatabaseAccountsClient) getReadOnlyKeysHandleResponse(resp *http.Response) (DatabaseAccountsClientGetReadOnlyKeysResponse, error) {
-	result := DatabaseAccountsClientGetReadOnlyKeysResponse{RawResponse: resp}
+	result := DatabaseAccountsClientGetReadOnlyKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseAccountListReadOnlyKeysResult); err != nil {
 		return DatabaseAccountsClientGetReadOnlyKeysResponse{}, err
 	}
@@ -408,19 +402,13 @@ func (client *DatabaseAccountsClient) getReadOnlyKeysHandleResponse(resp *http.R
 // List - Lists all the Azure Cosmos DB database accounts available under the subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - DatabaseAccountsClientListOptions contains the optional parameters for the DatabaseAccountsClient.List method.
-func (client *DatabaseAccountsClient) List(ctx context.Context, options *DatabaseAccountsClientListOptions) (DatabaseAccountsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, options)
-	if err != nil {
-		return DatabaseAccountsClientListResponse{}, err
+func (client *DatabaseAccountsClient) List(options *DatabaseAccountsClientListOptions) *DatabaseAccountsClientListPager {
+	return &DatabaseAccountsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DatabaseAccountsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DatabaseAccountsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -443,7 +431,7 @@ func (client *DatabaseAccountsClient) listCreateRequest(ctx context.Context, opt
 
 // listHandleResponse handles the List response.
 func (client *DatabaseAccountsClient) listHandleResponse(resp *http.Response) (DatabaseAccountsClientListResponse, error) {
-	result := DatabaseAccountsClientListResponse{RawResponse: resp}
+	result := DatabaseAccountsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseAccountsListResult); err != nil {
 		return DatabaseAccountsClientListResponse{}, err
 	}
@@ -455,19 +443,13 @@ func (client *DatabaseAccountsClient) listHandleResponse(resp *http.Response) (D
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - DatabaseAccountsClientListByResourceGroupOptions contains the optional parameters for the DatabaseAccountsClient.ListByResourceGroup
 // method.
-func (client *DatabaseAccountsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, options *DatabaseAccountsClientListByResourceGroupOptions) (DatabaseAccountsClientListByResourceGroupResponse, error) {
-	req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-	if err != nil {
-		return DatabaseAccountsClientListByResourceGroupResponse{}, err
+func (client *DatabaseAccountsClient) ListByResourceGroup(resourceGroupName string, options *DatabaseAccountsClientListByResourceGroupOptions) *DatabaseAccountsClientListByResourceGroupPager {
+	return &DatabaseAccountsClientListByResourceGroupPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DatabaseAccountsClientListByResourceGroupResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DatabaseAccountsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByResourceGroupHandleResponse(resp)
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -494,7 +476,7 @@ func (client *DatabaseAccountsClient) listByResourceGroupCreateRequest(ctx conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *DatabaseAccountsClient) listByResourceGroupHandleResponse(resp *http.Response) (DatabaseAccountsClientListByResourceGroupResponse, error) {
-	result := DatabaseAccountsClientListByResourceGroupResponse{RawResponse: resp}
+	result := DatabaseAccountsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseAccountsListResult); err != nil {
 		return DatabaseAccountsClientListByResourceGroupResponse{}, err
 	}
@@ -550,7 +532,7 @@ func (client *DatabaseAccountsClient) listConnectionStringsCreateRequest(ctx con
 
 // listConnectionStringsHandleResponse handles the ListConnectionStrings response.
 func (client *DatabaseAccountsClient) listConnectionStringsHandleResponse(resp *http.Response) (DatabaseAccountsClientListConnectionStringsResponse, error) {
-	result := DatabaseAccountsClientListConnectionStringsResponse{RawResponse: resp}
+	result := DatabaseAccountsClientListConnectionStringsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseAccountListConnectionStringsResult); err != nil {
 		return DatabaseAccountsClientListConnectionStringsResponse{}, err
 	}
@@ -606,7 +588,7 @@ func (client *DatabaseAccountsClient) listKeysCreateRequest(ctx context.Context,
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *DatabaseAccountsClient) listKeysHandleResponse(resp *http.Response) (DatabaseAccountsClientListKeysResponse, error) {
-	result := DatabaseAccountsClientListKeysResponse{RawResponse: resp}
+	result := DatabaseAccountsClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseAccountListKeysResult); err != nil {
 		return DatabaseAccountsClientListKeysResponse{}, err
 	}
@@ -619,19 +601,13 @@ func (client *DatabaseAccountsClient) listKeysHandleResponse(resp *http.Response
 // accountName - Cosmos DB database account name.
 // options - DatabaseAccountsClientListMetricDefinitionsOptions contains the optional parameters for the DatabaseAccountsClient.ListMetricDefinitions
 // method.
-func (client *DatabaseAccountsClient) ListMetricDefinitions(ctx context.Context, resourceGroupName string, accountName string, options *DatabaseAccountsClientListMetricDefinitionsOptions) (DatabaseAccountsClientListMetricDefinitionsResponse, error) {
-	req, err := client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return DatabaseAccountsClientListMetricDefinitionsResponse{}, err
+func (client *DatabaseAccountsClient) ListMetricDefinitions(resourceGroupName string, accountName string, options *DatabaseAccountsClientListMetricDefinitionsOptions) *DatabaseAccountsClientListMetricDefinitionsPager {
+	return &DatabaseAccountsClientListMetricDefinitionsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listMetricDefinitionsCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DatabaseAccountsClientListMetricDefinitionsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DatabaseAccountsClientListMetricDefinitionsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listMetricDefinitionsHandleResponse(resp)
 }
 
 // listMetricDefinitionsCreateRequest creates the ListMetricDefinitions request.
@@ -662,7 +638,7 @@ func (client *DatabaseAccountsClient) listMetricDefinitionsCreateRequest(ctx con
 
 // listMetricDefinitionsHandleResponse handles the ListMetricDefinitions response.
 func (client *DatabaseAccountsClient) listMetricDefinitionsHandleResponse(resp *http.Response) (DatabaseAccountsClientListMetricDefinitionsResponse, error) {
-	result := DatabaseAccountsClientListMetricDefinitionsResponse{RawResponse: resp}
+	result := DatabaseAccountsClientListMetricDefinitionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetricDefinitionsListResult); err != nil {
 		return DatabaseAccountsClientListMetricDefinitionsResponse{}, err
 	}
@@ -678,19 +654,13 @@ func (client *DatabaseAccountsClient) listMetricDefinitionsHandleResponse(resp *
 // and timeGrain. The supported operator is eq.
 // options - DatabaseAccountsClientListMetricsOptions contains the optional parameters for the DatabaseAccountsClient.ListMetrics
 // method.
-func (client *DatabaseAccountsClient) ListMetrics(ctx context.Context, resourceGroupName string, accountName string, filter string, options *DatabaseAccountsClientListMetricsOptions) (DatabaseAccountsClientListMetricsResponse, error) {
-	req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, filter, options)
-	if err != nil {
-		return DatabaseAccountsClientListMetricsResponse{}, err
+func (client *DatabaseAccountsClient) ListMetrics(resourceGroupName string, accountName string, filter string, options *DatabaseAccountsClientListMetricsOptions) *DatabaseAccountsClientListMetricsPager {
+	return &DatabaseAccountsClientListMetricsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, filter, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DatabaseAccountsClientListMetricsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DatabaseAccountsClientListMetricsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listMetricsHandleResponse(resp)
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.
@@ -722,7 +692,7 @@ func (client *DatabaseAccountsClient) listMetricsCreateRequest(ctx context.Conte
 
 // listMetricsHandleResponse handles the ListMetrics response.
 func (client *DatabaseAccountsClient) listMetricsHandleResponse(resp *http.Response) (DatabaseAccountsClientListMetricsResponse, error) {
-	result := DatabaseAccountsClientListMetricsResponse{RawResponse: resp}
+	result := DatabaseAccountsClientListMetricsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetricListResult); err != nil {
 		return DatabaseAccountsClientListMetricsResponse{}, err
 	}
@@ -778,7 +748,7 @@ func (client *DatabaseAccountsClient) listReadOnlyKeysCreateRequest(ctx context.
 
 // listReadOnlyKeysHandleResponse handles the ListReadOnlyKeys response.
 func (client *DatabaseAccountsClient) listReadOnlyKeysHandleResponse(resp *http.Response) (DatabaseAccountsClientListReadOnlyKeysResponse, error) {
-	result := DatabaseAccountsClientListReadOnlyKeysResponse{RawResponse: resp}
+	result := DatabaseAccountsClientListReadOnlyKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseAccountListReadOnlyKeysResult); err != nil {
 		return DatabaseAccountsClientListReadOnlyKeysResponse{}, err
 	}
@@ -791,19 +761,13 @@ func (client *DatabaseAccountsClient) listReadOnlyKeysHandleResponse(resp *http.
 // accountName - Cosmos DB database account name.
 // options - DatabaseAccountsClientListUsagesOptions contains the optional parameters for the DatabaseAccountsClient.ListUsages
 // method.
-func (client *DatabaseAccountsClient) ListUsages(ctx context.Context, resourceGroupName string, accountName string, options *DatabaseAccountsClientListUsagesOptions) (DatabaseAccountsClientListUsagesResponse, error) {
-	req, err := client.listUsagesCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return DatabaseAccountsClientListUsagesResponse{}, err
+func (client *DatabaseAccountsClient) ListUsages(resourceGroupName string, accountName string, options *DatabaseAccountsClientListUsagesOptions) *DatabaseAccountsClientListUsagesPager {
+	return &DatabaseAccountsClientListUsagesPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listUsagesCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DatabaseAccountsClientListUsagesResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DatabaseAccountsClientListUsagesResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listUsagesHandleResponse(resp)
 }
 
 // listUsagesCreateRequest creates the ListUsages request.
@@ -837,7 +801,7 @@ func (client *DatabaseAccountsClient) listUsagesCreateRequest(ctx context.Contex
 
 // listUsagesHandleResponse handles the ListUsages response.
 func (client *DatabaseAccountsClient) listUsagesHandleResponse(resp *http.Response) (DatabaseAccountsClientListUsagesResponse, error) {
-	result := DatabaseAccountsClientListUsagesResponse{RawResponse: resp}
+	result := DatabaseAccountsClientListUsagesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UsagesResult); err != nil {
 		return DatabaseAccountsClientListUsagesResponse{}, err
 	}
@@ -856,9 +820,7 @@ func (client *DatabaseAccountsClient) BeginOfflineRegion(ctx context.Context, re
 	if err != nil {
 		return DatabaseAccountsClientOfflineRegionPollerResponse{}, err
 	}
-	result := DatabaseAccountsClientOfflineRegionPollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabaseAccountsClientOfflineRegionPollerResponse{}
 	pt, err := armruntime.NewPoller("DatabaseAccountsClient.OfflineRegion", "", resp, client.pl)
 	if err != nil {
 		return DatabaseAccountsClientOfflineRegionPollerResponse{}, err
@@ -924,9 +886,7 @@ func (client *DatabaseAccountsClient) BeginOnlineRegion(ctx context.Context, res
 	if err != nil {
 		return DatabaseAccountsClientOnlineRegionPollerResponse{}, err
 	}
-	result := DatabaseAccountsClientOnlineRegionPollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabaseAccountsClientOnlineRegionPollerResponse{}
 	pt, err := armruntime.NewPoller("DatabaseAccountsClient.OnlineRegion", "", resp, client.pl)
 	if err != nil {
 		return DatabaseAccountsClientOnlineRegionPollerResponse{}, err
@@ -992,9 +952,7 @@ func (client *DatabaseAccountsClient) BeginRegenerateKey(ctx context.Context, re
 	if err != nil {
 		return DatabaseAccountsClientRegenerateKeyPollerResponse{}, err
 	}
-	result := DatabaseAccountsClientRegenerateKeyPollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabaseAccountsClientRegenerateKeyPollerResponse{}
 	pt, err := armruntime.NewPoller("DatabaseAccountsClient.RegenerateKey", "", resp, client.pl)
 	if err != nil {
 		return DatabaseAccountsClientRegenerateKeyPollerResponse{}, err
@@ -1059,9 +1017,7 @@ func (client *DatabaseAccountsClient) BeginUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return DatabaseAccountsClientUpdatePollerResponse{}, err
 	}
-	result := DatabaseAccountsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatabaseAccountsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DatabaseAccountsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return DatabaseAccountsClientUpdatePollerResponse{}, err

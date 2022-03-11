@@ -34,17 +34,17 @@ type DevicesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDevicesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DevicesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DevicesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *DevicesClient) BeginCreateOrUpdate(ctx context.Context, resourceGr
 	if err != nil {
 		return DevicesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DevicesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DevicesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DevicesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DevicesClientCreateOrUpdatePollerResponse{}, err
@@ -127,9 +125,7 @@ func (client *DevicesClient) BeginDelete(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return DevicesClientDeletePollerResponse{}, err
 	}
-	result := DevicesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DevicesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DevicesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return DevicesClientDeletePollerResponse{}, err
@@ -231,7 +227,7 @@ func (client *DevicesClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *DevicesClient) getHandleResponse(resp *http.Response) (DevicesClientGetResponse, error) {
-	result := DevicesClientGetResponse{RawResponse: resp}
+	result := DevicesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Device); err != nil {
 		return DevicesClientGetResponse{}, err
 	}
@@ -279,7 +275,7 @@ func (client *DevicesClient) listByResourceGroupCreateRequest(ctx context.Contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *DevicesClient) listByResourceGroupHandleResponse(resp *http.Response) (DevicesClientListByResourceGroupResponse, error) {
-	result := DevicesClientListByResourceGroupResponse{RawResponse: resp}
+	result := DevicesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceListResult); err != nil {
 		return DevicesClientListByResourceGroupResponse{}, err
 	}
@@ -322,7 +318,7 @@ func (client *DevicesClient) listBySubscriptionCreateRequest(ctx context.Context
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *DevicesClient) listBySubscriptionHandleResponse(resp *http.Response) (DevicesClientListBySubscriptionResponse, error) {
-	result := DevicesClientListBySubscriptionResponse{RawResponse: resp}
+	result := DevicesClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceListResult); err != nil {
 		return DevicesClientListBySubscriptionResponse{}, err
 	}
@@ -378,7 +374,7 @@ func (client *DevicesClient) listRegistrationKeyCreateRequest(ctx context.Contex
 
 // listRegistrationKeyHandleResponse handles the ListRegistrationKey response.
 func (client *DevicesClient) listRegistrationKeyHandleResponse(resp *http.Response) (DevicesClientListRegistrationKeyResponse, error) {
-	result := DevicesClientListRegistrationKeyResponse{RawResponse: resp}
+	result := DevicesClientListRegistrationKeyResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeviceRegistrationKey); err != nil {
 		return DevicesClientListRegistrationKeyResponse{}, err
 	}
@@ -434,7 +430,7 @@ func (client *DevicesClient) updateTagsCreateRequest(ctx context.Context, resour
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *DevicesClient) updateTagsHandleResponse(resp *http.Response) (DevicesClientUpdateTagsResponse, error) {
-	result := DevicesClientUpdateTagsResponse{RawResponse: resp}
+	result := DevicesClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Device); err != nil {
 		return DevicesClientUpdateTagsResponse{}, err
 	}

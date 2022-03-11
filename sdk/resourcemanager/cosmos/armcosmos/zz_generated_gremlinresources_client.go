@@ -34,17 +34,17 @@ type GremlinResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGremlinResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *GremlinResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GremlinResourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *GremlinResourcesClient) BeginCreateUpdateGremlinDatabase(ctx conte
 	if err != nil {
 		return GremlinResourcesClientCreateUpdateGremlinDatabasePollerResponse{}, err
 	}
-	result := GremlinResourcesClientCreateUpdateGremlinDatabasePollerResponse{
-		RawResponse: resp,
-	}
+	result := GremlinResourcesClientCreateUpdateGremlinDatabasePollerResponse{}
 	pt, err := armruntime.NewPoller("GremlinResourcesClient.CreateUpdateGremlinDatabase", "", resp, client.pl)
 	if err != nil {
 		return GremlinResourcesClientCreateUpdateGremlinDatabasePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *GremlinResourcesClient) BeginCreateUpdateGremlinGraph(ctx context.
 	if err != nil {
 		return GremlinResourcesClientCreateUpdateGremlinGraphPollerResponse{}, err
 	}
-	result := GremlinResourcesClientCreateUpdateGremlinGraphPollerResponse{
-		RawResponse: resp,
-	}
+	result := GremlinResourcesClientCreateUpdateGremlinGraphPollerResponse{}
 	pt, err := armruntime.NewPoller("GremlinResourcesClient.CreateUpdateGremlinGraph", "", resp, client.pl)
 	if err != nil {
 		return GremlinResourcesClientCreateUpdateGremlinGraphPollerResponse{}, err
@@ -212,9 +208,7 @@ func (client *GremlinResourcesClient) BeginDeleteGremlinDatabase(ctx context.Con
 	if err != nil {
 		return GremlinResourcesClientDeleteGremlinDatabasePollerResponse{}, err
 	}
-	result := GremlinResourcesClientDeleteGremlinDatabasePollerResponse{
-		RawResponse: resp,
-	}
+	result := GremlinResourcesClientDeleteGremlinDatabasePollerResponse{}
 	pt, err := armruntime.NewPoller("GremlinResourcesClient.DeleteGremlinDatabase", "", resp, client.pl)
 	if err != nil {
 		return GremlinResourcesClientDeleteGremlinDatabasePollerResponse{}, err
@@ -284,9 +278,7 @@ func (client *GremlinResourcesClient) BeginDeleteGremlinGraph(ctx context.Contex
 	if err != nil {
 		return GremlinResourcesClientDeleteGremlinGraphPollerResponse{}, err
 	}
-	result := GremlinResourcesClientDeleteGremlinGraphPollerResponse{
-		RawResponse: resp,
-	}
+	result := GremlinResourcesClientDeleteGremlinGraphPollerResponse{}
 	pt, err := armruntime.NewPoller("GremlinResourcesClient.DeleteGremlinGraph", "", resp, client.pl)
 	if err != nil {
 		return GremlinResourcesClientDeleteGremlinGraphPollerResponse{}, err
@@ -401,7 +393,7 @@ func (client *GremlinResourcesClient) getGremlinDatabaseCreateRequest(ctx contex
 
 // getGremlinDatabaseHandleResponse handles the GetGremlinDatabase response.
 func (client *GremlinResourcesClient) getGremlinDatabaseHandleResponse(resp *http.Response) (GremlinResourcesClientGetGremlinDatabaseResponse, error) {
-	result := GremlinResourcesClientGetGremlinDatabaseResponse{RawResponse: resp}
+	result := GremlinResourcesClientGetGremlinDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GremlinDatabaseGetResults); err != nil {
 		return GremlinResourcesClientGetGremlinDatabaseResponse{}, err
 	}
@@ -463,7 +455,7 @@ func (client *GremlinResourcesClient) getGremlinDatabaseThroughputCreateRequest(
 
 // getGremlinDatabaseThroughputHandleResponse handles the GetGremlinDatabaseThroughput response.
 func (client *GremlinResourcesClient) getGremlinDatabaseThroughputHandleResponse(resp *http.Response) (GremlinResourcesClientGetGremlinDatabaseThroughputResponse, error) {
-	result := GremlinResourcesClientGetGremlinDatabaseThroughputResponse{RawResponse: resp}
+	result := GremlinResourcesClientGetGremlinDatabaseThroughputResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ThroughputSettingsGetResults); err != nil {
 		return GremlinResourcesClientGetGremlinDatabaseThroughputResponse{}, err
 	}
@@ -529,7 +521,7 @@ func (client *GremlinResourcesClient) getGremlinGraphCreateRequest(ctx context.C
 
 // getGremlinGraphHandleResponse handles the GetGremlinGraph response.
 func (client *GremlinResourcesClient) getGremlinGraphHandleResponse(resp *http.Response) (GremlinResourcesClientGetGremlinGraphResponse, error) {
-	result := GremlinResourcesClientGetGremlinGraphResponse{RawResponse: resp}
+	result := GremlinResourcesClientGetGremlinGraphResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GremlinGraphGetResults); err != nil {
 		return GremlinResourcesClientGetGremlinGraphResponse{}, err
 	}
@@ -596,7 +588,7 @@ func (client *GremlinResourcesClient) getGremlinGraphThroughputCreateRequest(ctx
 
 // getGremlinGraphThroughputHandleResponse handles the GetGremlinGraphThroughput response.
 func (client *GremlinResourcesClient) getGremlinGraphThroughputHandleResponse(resp *http.Response) (GremlinResourcesClientGetGremlinGraphThroughputResponse, error) {
-	result := GremlinResourcesClientGetGremlinGraphThroughputResponse{RawResponse: resp}
+	result := GremlinResourcesClientGetGremlinGraphThroughputResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ThroughputSettingsGetResults); err != nil {
 		return GremlinResourcesClientGetGremlinGraphThroughputResponse{}, err
 	}
@@ -609,19 +601,13 @@ func (client *GremlinResourcesClient) getGremlinGraphThroughputHandleResponse(re
 // accountName - Cosmos DB database account name.
 // options - GremlinResourcesClientListGremlinDatabasesOptions contains the optional parameters for the GremlinResourcesClient.ListGremlinDatabases
 // method.
-func (client *GremlinResourcesClient) ListGremlinDatabases(ctx context.Context, resourceGroupName string, accountName string, options *GremlinResourcesClientListGremlinDatabasesOptions) (GremlinResourcesClientListGremlinDatabasesResponse, error) {
-	req, err := client.listGremlinDatabasesCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return GremlinResourcesClientListGremlinDatabasesResponse{}, err
+func (client *GremlinResourcesClient) ListGremlinDatabases(resourceGroupName string, accountName string, options *GremlinResourcesClientListGremlinDatabasesOptions) *GremlinResourcesClientListGremlinDatabasesPager {
+	return &GremlinResourcesClientListGremlinDatabasesPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listGremlinDatabasesCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return GremlinResourcesClientListGremlinDatabasesResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return GremlinResourcesClientListGremlinDatabasesResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listGremlinDatabasesHandleResponse(resp)
 }
 
 // listGremlinDatabasesCreateRequest creates the ListGremlinDatabases request.
@@ -652,7 +638,7 @@ func (client *GremlinResourcesClient) listGremlinDatabasesCreateRequest(ctx cont
 
 // listGremlinDatabasesHandleResponse handles the ListGremlinDatabases response.
 func (client *GremlinResourcesClient) listGremlinDatabasesHandleResponse(resp *http.Response) (GremlinResourcesClientListGremlinDatabasesResponse, error) {
-	result := GremlinResourcesClientListGremlinDatabasesResponse{RawResponse: resp}
+	result := GremlinResourcesClientListGremlinDatabasesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GremlinDatabaseListResult); err != nil {
 		return GremlinResourcesClientListGremlinDatabasesResponse{}, err
 	}
@@ -666,19 +652,13 @@ func (client *GremlinResourcesClient) listGremlinDatabasesHandleResponse(resp *h
 // databaseName - Cosmos DB database name.
 // options - GremlinResourcesClientListGremlinGraphsOptions contains the optional parameters for the GremlinResourcesClient.ListGremlinGraphs
 // method.
-func (client *GremlinResourcesClient) ListGremlinGraphs(ctx context.Context, resourceGroupName string, accountName string, databaseName string, options *GremlinResourcesClientListGremlinGraphsOptions) (GremlinResourcesClientListGremlinGraphsResponse, error) {
-	req, err := client.listGremlinGraphsCreateRequest(ctx, resourceGroupName, accountName, databaseName, options)
-	if err != nil {
-		return GremlinResourcesClientListGremlinGraphsResponse{}, err
+func (client *GremlinResourcesClient) ListGremlinGraphs(resourceGroupName string, accountName string, databaseName string, options *GremlinResourcesClientListGremlinGraphsOptions) *GremlinResourcesClientListGremlinGraphsPager {
+	return &GremlinResourcesClientListGremlinGraphsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listGremlinGraphsCreateRequest(ctx, resourceGroupName, accountName, databaseName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return GremlinResourcesClientListGremlinGraphsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return GremlinResourcesClientListGremlinGraphsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listGremlinGraphsHandleResponse(resp)
 }
 
 // listGremlinGraphsCreateRequest creates the ListGremlinGraphs request.
@@ -713,7 +693,7 @@ func (client *GremlinResourcesClient) listGremlinGraphsCreateRequest(ctx context
 
 // listGremlinGraphsHandleResponse handles the ListGremlinGraphs response.
 func (client *GremlinResourcesClient) listGremlinGraphsHandleResponse(resp *http.Response) (GremlinResourcesClientListGremlinGraphsResponse, error) {
-	result := GremlinResourcesClientListGremlinGraphsResponse{RawResponse: resp}
+	result := GremlinResourcesClientListGremlinGraphsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GremlinGraphListResult); err != nil {
 		return GremlinResourcesClientListGremlinGraphsResponse{}, err
 	}
@@ -732,9 +712,7 @@ func (client *GremlinResourcesClient) BeginMigrateGremlinDatabaseToAutoscale(ctx
 	if err != nil {
 		return GremlinResourcesClientMigrateGremlinDatabaseToAutoscalePollerResponse{}, err
 	}
-	result := GremlinResourcesClientMigrateGremlinDatabaseToAutoscalePollerResponse{
-		RawResponse: resp,
-	}
+	result := GremlinResourcesClientMigrateGremlinDatabaseToAutoscalePollerResponse{}
 	pt, err := armruntime.NewPoller("GremlinResourcesClient.MigrateGremlinDatabaseToAutoscale", "", resp, client.pl)
 	if err != nil {
 		return GremlinResourcesClientMigrateGremlinDatabaseToAutoscalePollerResponse{}, err
@@ -804,9 +782,7 @@ func (client *GremlinResourcesClient) BeginMigrateGremlinDatabaseToManualThrough
 	if err != nil {
 		return GremlinResourcesClientMigrateGremlinDatabaseToManualThroughputPollerResponse{}, err
 	}
-	result := GremlinResourcesClientMigrateGremlinDatabaseToManualThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := GremlinResourcesClientMigrateGremlinDatabaseToManualThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("GremlinResourcesClient.MigrateGremlinDatabaseToManualThroughput", "", resp, client.pl)
 	if err != nil {
 		return GremlinResourcesClientMigrateGremlinDatabaseToManualThroughputPollerResponse{}, err
@@ -877,9 +853,7 @@ func (client *GremlinResourcesClient) BeginMigrateGremlinGraphToAutoscale(ctx co
 	if err != nil {
 		return GremlinResourcesClientMigrateGremlinGraphToAutoscalePollerResponse{}, err
 	}
-	result := GremlinResourcesClientMigrateGremlinGraphToAutoscalePollerResponse{
-		RawResponse: resp,
-	}
+	result := GremlinResourcesClientMigrateGremlinGraphToAutoscalePollerResponse{}
 	pt, err := armruntime.NewPoller("GremlinResourcesClient.MigrateGremlinGraphToAutoscale", "", resp, client.pl)
 	if err != nil {
 		return GremlinResourcesClientMigrateGremlinGraphToAutoscalePollerResponse{}, err
@@ -954,9 +928,7 @@ func (client *GremlinResourcesClient) BeginMigrateGremlinGraphToManualThroughput
 	if err != nil {
 		return GremlinResourcesClientMigrateGremlinGraphToManualThroughputPollerResponse{}, err
 	}
-	result := GremlinResourcesClientMigrateGremlinGraphToManualThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := GremlinResourcesClientMigrateGremlinGraphToManualThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("GremlinResourcesClient.MigrateGremlinGraphToManualThroughput", "", resp, client.pl)
 	if err != nil {
 		return GremlinResourcesClientMigrateGremlinGraphToManualThroughputPollerResponse{}, err
@@ -1031,9 +1003,7 @@ func (client *GremlinResourcesClient) BeginUpdateGremlinDatabaseThroughput(ctx c
 	if err != nil {
 		return GremlinResourcesClientUpdateGremlinDatabaseThroughputPollerResponse{}, err
 	}
-	result := GremlinResourcesClientUpdateGremlinDatabaseThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := GremlinResourcesClientUpdateGremlinDatabaseThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("GremlinResourcesClient.UpdateGremlinDatabaseThroughput", "", resp, client.pl)
 	if err != nil {
 		return GremlinResourcesClientUpdateGremlinDatabaseThroughputPollerResponse{}, err
@@ -1105,9 +1075,7 @@ func (client *GremlinResourcesClient) BeginUpdateGremlinGraphThroughput(ctx cont
 	if err != nil {
 		return GremlinResourcesClientUpdateGremlinGraphThroughputPollerResponse{}, err
 	}
-	result := GremlinResourcesClientUpdateGremlinGraphThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := GremlinResourcesClientUpdateGremlinGraphThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("GremlinResourcesClient.UpdateGremlinGraphThroughput", "", resp, client.pl)
 	if err != nil {
 		return GremlinResourcesClientUpdateGremlinGraphThroughputPollerResponse{}, err

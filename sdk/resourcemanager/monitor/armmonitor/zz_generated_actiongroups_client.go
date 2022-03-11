@@ -34,17 +34,17 @@ type ActionGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewActionGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ActionGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ActionGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *ActionGroupsClient) createOrUpdateCreateRequest(ctx context.Contex
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ActionGroupsClient) createOrUpdateHandleResponse(resp *http.Response) (ActionGroupsClientCreateOrUpdateResponse, error) {
-	result := ActionGroupsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ActionGroupsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ActionGroupResource); err != nil {
 		return ActionGroupsClientCreateOrUpdateResponse{}, err
 	}
@@ -123,7 +123,7 @@ func (client *ActionGroupsClient) Delete(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ActionGroupsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ActionGroupsClientDeleteResponse{RawResponse: resp}, nil
+	return ActionGroupsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -172,7 +172,7 @@ func (client *ActionGroupsClient) EnableReceiver(ctx context.Context, resourceGr
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ActionGroupsClientEnableReceiverResponse{}, runtime.NewResponseError(resp)
 	}
-	return ActionGroupsClientEnableReceiverResponse{RawResponse: resp}, nil
+	return ActionGroupsClientEnableReceiverResponse{}, nil
 }
 
 // enableReceiverCreateRequest creates the EnableReceiver request.
@@ -249,7 +249,7 @@ func (client *ActionGroupsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *ActionGroupsClient) getHandleResponse(resp *http.Response) (ActionGroupsClientGetResponse, error) {
-	result := ActionGroupsClientGetResponse{RawResponse: resp}
+	result := ActionGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ActionGroupResource); err != nil {
 		return ActionGroupsClientGetResponse{}, err
 	}
@@ -300,7 +300,7 @@ func (client *ActionGroupsClient) getTestNotificationsCreateRequest(ctx context.
 
 // getTestNotificationsHandleResponse handles the GetTestNotifications response.
 func (client *ActionGroupsClient) getTestNotificationsHandleResponse(resp *http.Response) (ActionGroupsClientGetTestNotificationsResponse, error) {
-	result := ActionGroupsClientGetTestNotificationsResponse{RawResponse: resp}
+	result := ActionGroupsClientGetTestNotificationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TestNotificationDetailsResponse); err != nil {
 		return ActionGroupsClientGetTestNotificationsResponse{}, err
 	}
@@ -312,19 +312,13 @@ func (client *ActionGroupsClient) getTestNotificationsHandleResponse(resp *http.
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ActionGroupsClientListByResourceGroupOptions contains the optional parameters for the ActionGroupsClient.ListByResourceGroup
 // method.
-func (client *ActionGroupsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, options *ActionGroupsClientListByResourceGroupOptions) (ActionGroupsClientListByResourceGroupResponse, error) {
-	req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-	if err != nil {
-		return ActionGroupsClientListByResourceGroupResponse{}, err
+func (client *ActionGroupsClient) ListByResourceGroup(resourceGroupName string, options *ActionGroupsClientListByResourceGroupOptions) *ActionGroupsClientListByResourceGroupPager {
+	return &ActionGroupsClientListByResourceGroupPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ActionGroupsClientListByResourceGroupResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ActionGroupsClientListByResourceGroupResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByResourceGroupHandleResponse(resp)
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
@@ -351,7 +345,7 @@ func (client *ActionGroupsClient) listByResourceGroupCreateRequest(ctx context.C
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ActionGroupsClient) listByResourceGroupHandleResponse(resp *http.Response) (ActionGroupsClientListByResourceGroupResponse, error) {
-	result := ActionGroupsClientListByResourceGroupResponse{RawResponse: resp}
+	result := ActionGroupsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ActionGroupList); err != nil {
 		return ActionGroupsClientListByResourceGroupResponse{}, err
 	}
@@ -362,19 +356,13 @@ func (client *ActionGroupsClient) listByResourceGroupHandleResponse(resp *http.R
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ActionGroupsClientListBySubscriptionIDOptions contains the optional parameters for the ActionGroupsClient.ListBySubscriptionID
 // method.
-func (client *ActionGroupsClient) ListBySubscriptionID(ctx context.Context, options *ActionGroupsClientListBySubscriptionIDOptions) (ActionGroupsClientListBySubscriptionIDResponse, error) {
-	req, err := client.listBySubscriptionIDCreateRequest(ctx, options)
-	if err != nil {
-		return ActionGroupsClientListBySubscriptionIDResponse{}, err
+func (client *ActionGroupsClient) ListBySubscriptionID(options *ActionGroupsClientListBySubscriptionIDOptions) *ActionGroupsClientListBySubscriptionIDPager {
+	return &ActionGroupsClientListBySubscriptionIDPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listBySubscriptionIDCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ActionGroupsClientListBySubscriptionIDResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ActionGroupsClientListBySubscriptionIDResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listBySubscriptionIDHandleResponse(resp)
 }
 
 // listBySubscriptionIDCreateRequest creates the ListBySubscriptionID request.
@@ -397,7 +385,7 @@ func (client *ActionGroupsClient) listBySubscriptionIDCreateRequest(ctx context.
 
 // listBySubscriptionIDHandleResponse handles the ListBySubscriptionID response.
 func (client *ActionGroupsClient) listBySubscriptionIDHandleResponse(resp *http.Response) (ActionGroupsClientListBySubscriptionIDResponse, error) {
-	result := ActionGroupsClientListBySubscriptionIDResponse{RawResponse: resp}
+	result := ActionGroupsClientListBySubscriptionIDResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ActionGroupList); err != nil {
 		return ActionGroupsClientListBySubscriptionIDResponse{}, err
 	}
@@ -414,9 +402,7 @@ func (client *ActionGroupsClient) BeginPostTestNotifications(ctx context.Context
 	if err != nil {
 		return ActionGroupsClientPostTestNotificationsPollerResponse{}, err
 	}
-	result := ActionGroupsClientPostTestNotificationsPollerResponse{
-		RawResponse: resp,
-	}
+	result := ActionGroupsClientPostTestNotificationsPollerResponse{}
 	pt, err := armruntime.NewPoller("ActionGroupsClient.PostTestNotifications", "location", resp, client.pl)
 	if err != nil {
 		return ActionGroupsClientPostTestNotificationsPollerResponse{}, err
@@ -511,7 +497,7 @@ func (client *ActionGroupsClient) updateCreateRequest(ctx context.Context, resou
 
 // updateHandleResponse handles the Update response.
 func (client *ActionGroupsClient) updateHandleResponse(resp *http.Response) (ActionGroupsClientUpdateResponse, error) {
-	result := ActionGroupsClientUpdateResponse{RawResponse: resp}
+	result := ActionGroupsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ActionGroupResource); err != nil {
 		return ActionGroupsClientUpdateResponse{}, err
 	}

@@ -35,17 +35,17 @@ type HubRouteTablesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewHubRouteTablesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *HubRouteTablesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &HubRouteTablesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *HubRouteTablesClient) BeginCreateOrUpdate(ctx context.Context, res
 	if err != nil {
 		return HubRouteTablesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := HubRouteTablesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := HubRouteTablesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("HubRouteTablesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return HubRouteTablesClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *HubRouteTablesClient) BeginDelete(ctx context.Context, resourceGro
 	if err != nil {
 		return HubRouteTablesClientDeletePollerResponse{}, err
 	}
-	result := HubRouteTablesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := HubRouteTablesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("HubRouteTablesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return HubRouteTablesClientDeletePollerResponse{}, err
@@ -248,7 +244,7 @@ func (client *HubRouteTablesClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *HubRouteTablesClient) getHandleResponse(resp *http.Response) (HubRouteTablesClientGetResponse, error) {
-	result := HubRouteTablesClientGetResponse{RawResponse: resp}
+	result := HubRouteTablesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HubRouteTable); err != nil {
 		return HubRouteTablesClientGetResponse{}, err
 	}
@@ -300,7 +296,7 @@ func (client *HubRouteTablesClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *HubRouteTablesClient) listHandleResponse(resp *http.Response) (HubRouteTablesClientListResponse, error) {
-	result := HubRouteTablesClientListResponse{RawResponse: resp}
+	result := HubRouteTablesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListHubRouteTablesResult); err != nil {
 		return HubRouteTablesClientListResponse{}, err
 	}

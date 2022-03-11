@@ -11,25 +11,16 @@ package armpurview
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // AccountsClientAddRootCollectionAdminResponse contains the response from method AccountsClient.AddRootCollectionAdmin.
 type AccountsClientAddRootCollectionAdminResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // AccountsClientCheckNameAvailabilityResponse contains the response from method AccountsClient.CheckNameAvailability.
 type AccountsClientCheckNameAvailabilityResponse struct {
-	AccountsClientCheckNameAvailabilityResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AccountsClientCheckNameAvailabilityResult contains the result from method AccountsClient.CheckNameAvailability.
-type AccountsClientCheckNameAvailabilityResult struct {
 	CheckNameAvailabilityResult
 }
 
@@ -37,9 +28,6 @@ type AccountsClientCheckNameAvailabilityResult struct {
 type AccountsClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *AccountsClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -47,11 +35,10 @@ type AccountsClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l AccountsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (AccountsClientCreateOrUpdateResponse, error) {
 	respType := AccountsClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Account)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Account)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -64,24 +51,16 @@ func (l *AccountsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context,
 	poller := &AccountsClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // AccountsClientCreateOrUpdateResponse contains the response from method AccountsClient.CreateOrUpdate.
 type AccountsClientCreateOrUpdateResponse struct {
-	AccountsClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AccountsClientCreateOrUpdateResult contains the result from method AccountsClient.CreateOrUpdate.
-type AccountsClientCreateOrUpdateResult struct {
 	Account
 }
 
@@ -89,9 +68,6 @@ type AccountsClientCreateOrUpdateResult struct {
 type AccountsClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *AccountsClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -99,11 +75,10 @@ type AccountsClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l AccountsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (AccountsClientDeleteResponse, error) {
 	respType := AccountsClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -116,66 +91,36 @@ func (l *AccountsClientDeletePollerResponse) Resume(ctx context.Context, client 
 	poller := &AccountsClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // AccountsClientDeleteResponse contains the response from method AccountsClient.Delete.
 type AccountsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // AccountsClientGetResponse contains the response from method AccountsClient.Get.
 type AccountsClientGetResponse struct {
-	AccountsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AccountsClientGetResult contains the result from method AccountsClient.Get.
-type AccountsClientGetResult struct {
 	Account
 }
 
 // AccountsClientListByResourceGroupResponse contains the response from method AccountsClient.ListByResourceGroup.
 type AccountsClientListByResourceGroupResponse struct {
-	AccountsClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AccountsClientListByResourceGroupResult contains the result from method AccountsClient.ListByResourceGroup.
-type AccountsClientListByResourceGroupResult struct {
 	AccountList
 }
 
 // AccountsClientListBySubscriptionResponse contains the response from method AccountsClient.ListBySubscription.
 type AccountsClientListBySubscriptionResponse struct {
-	AccountsClientListBySubscriptionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AccountsClientListBySubscriptionResult contains the result from method AccountsClient.ListBySubscription.
-type AccountsClientListBySubscriptionResult struct {
 	AccountList
 }
 
 // AccountsClientListKeysResponse contains the response from method AccountsClient.ListKeys.
 type AccountsClientListKeysResponse struct {
-	AccountsClientListKeysResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AccountsClientListKeysResult contains the result from method AccountsClient.ListKeys.
-type AccountsClientListKeysResult struct {
 	AccessKeys
 }
 
@@ -183,9 +128,6 @@ type AccountsClientListKeysResult struct {
 type AccountsClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *AccountsClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -193,11 +135,10 @@ type AccountsClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l AccountsClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (AccountsClientUpdateResponse, error) {
 	respType := AccountsClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Account)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.Account)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -210,66 +151,36 @@ func (l *AccountsClientUpdatePollerResponse) Resume(ctx context.Context, client 
 	poller := &AccountsClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // AccountsClientUpdateResponse contains the response from method AccountsClient.Update.
 type AccountsClientUpdateResponse struct {
-	AccountsClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AccountsClientUpdateResult contains the result from method AccountsClient.Update.
-type AccountsClientUpdateResult struct {
 	Account
 }
 
 // DefaultAccountsClientGetResponse contains the response from method DefaultAccountsClient.Get.
 type DefaultAccountsClientGetResponse struct {
-	DefaultAccountsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DefaultAccountsClientGetResult contains the result from method DefaultAccountsClient.Get.
-type DefaultAccountsClientGetResult struct {
 	DefaultAccountPayload
 }
 
 // DefaultAccountsClientRemoveResponse contains the response from method DefaultAccountsClient.Remove.
 type DefaultAccountsClientRemoveResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // DefaultAccountsClientSetResponse contains the response from method DefaultAccountsClient.Set.
 type DefaultAccountsClientSetResponse struct {
-	DefaultAccountsClientSetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DefaultAccountsClientSetResult contains the result from method DefaultAccountsClient.Set.
-type DefaultAccountsClientSetResult struct {
 	DefaultAccountPayload
 }
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	OperationList
 }
 
@@ -277,9 +188,6 @@ type OperationsClientListResult struct {
 type PrivateEndpointConnectionsClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *PrivateEndpointConnectionsClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -287,11 +195,10 @@ type PrivateEndpointConnectionsClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l PrivateEndpointConnectionsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PrivateEndpointConnectionsClientCreateOrUpdateResponse, error) {
 	respType := PrivateEndpointConnectionsClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.PrivateEndpointConnection)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -304,24 +211,16 @@ func (l *PrivateEndpointConnectionsClientCreateOrUpdatePollerResponse) Resume(ct
 	poller := &PrivateEndpointConnectionsClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // PrivateEndpointConnectionsClientCreateOrUpdateResponse contains the response from method PrivateEndpointConnectionsClient.CreateOrUpdate.
 type PrivateEndpointConnectionsClientCreateOrUpdateResponse struct {
-	PrivateEndpointConnectionsClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateEndpointConnectionsClientCreateOrUpdateResult contains the result from method PrivateEndpointConnectionsClient.CreateOrUpdate.
-type PrivateEndpointConnectionsClientCreateOrUpdateResult struct {
 	PrivateEndpointConnection
 }
 
@@ -329,9 +228,6 @@ type PrivateEndpointConnectionsClientCreateOrUpdateResult struct {
 type PrivateEndpointConnectionsClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *PrivateEndpointConnectionsClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -339,11 +235,10 @@ type PrivateEndpointConnectionsClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l PrivateEndpointConnectionsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (PrivateEndpointConnectionsClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -356,65 +251,35 @@ func (l *PrivateEndpointConnectionsClientDeletePollerResponse) Resume(ctx contex
 	poller := &PrivateEndpointConnectionsClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // PrivateEndpointConnectionsClientDeleteResponse contains the response from method PrivateEndpointConnectionsClient.Delete.
 type PrivateEndpointConnectionsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // PrivateEndpointConnectionsClientGetResponse contains the response from method PrivateEndpointConnectionsClient.Get.
 type PrivateEndpointConnectionsClientGetResponse struct {
-	PrivateEndpointConnectionsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateEndpointConnectionsClientGetResult contains the result from method PrivateEndpointConnectionsClient.Get.
-type PrivateEndpointConnectionsClientGetResult struct {
 	PrivateEndpointConnection
 }
 
 // PrivateEndpointConnectionsClientListByAccountResponse contains the response from method PrivateEndpointConnectionsClient.ListByAccount.
 type PrivateEndpointConnectionsClientListByAccountResponse struct {
-	PrivateEndpointConnectionsClientListByAccountResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateEndpointConnectionsClientListByAccountResult contains the result from method PrivateEndpointConnectionsClient.ListByAccount.
-type PrivateEndpointConnectionsClientListByAccountResult struct {
 	PrivateEndpointConnectionList
 }
 
 // PrivateLinkResourcesClientGetByGroupIDResponse contains the response from method PrivateLinkResourcesClient.GetByGroupID.
 type PrivateLinkResourcesClientGetByGroupIDResponse struct {
-	PrivateLinkResourcesClientGetByGroupIDResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateLinkResourcesClientGetByGroupIDResult contains the result from method PrivateLinkResourcesClient.GetByGroupID.
-type PrivateLinkResourcesClientGetByGroupIDResult struct {
 	PrivateLinkResource
 }
 
 // PrivateLinkResourcesClientListByAccountResponse contains the response from method PrivateLinkResourcesClient.ListByAccount.
 type PrivateLinkResourcesClientListByAccountResponse struct {
-	PrivateLinkResourcesClientListByAccountResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateLinkResourcesClientListByAccountResult contains the result from method PrivateLinkResourcesClient.ListByAccount.
-type PrivateLinkResourcesClientListByAccountResult struct {
 	PrivateLinkResourceList
 }

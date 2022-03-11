@@ -43,11 +43,10 @@ func (p *MonitorsClientCreatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final MonitorsClientCreateResponse will be returned.
 func (p *MonitorsClientCreatePoller) FinalResponse(ctx context.Context) (MonitorsClientCreateResponse, error) {
 	respType := MonitorsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MonitorResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.MonitorResource)
 	if err != nil {
 		return MonitorsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *MonitorsClientDeletePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final MonitorsClientDeleteResponse will be returned.
 func (p *MonitorsClientDeletePoller) FinalResponse(ctx context.Context) (MonitorsClientDeleteResponse, error) {
 	respType := MonitorsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return MonitorsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *MonitorsClientUpdatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final MonitorsClientUpdateResponse will be returned.
 func (p *MonitorsClientUpdatePoller) FinalResponse(ctx context.Context) (MonitorsClientUpdateResponse, error) {
 	respType := MonitorsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MonitorResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.MonitorResource)
 	if err != nil {
 		return MonitorsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *SingleSignOnConfigurationsClientCreateOrUpdatePoller) Poll(ctx context.
 // If the final GET succeeded then the final SingleSignOnConfigurationsClientCreateOrUpdateResponse will be returned.
 func (p *SingleSignOnConfigurationsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (SingleSignOnConfigurationsClientCreateOrUpdateResponse, error) {
 	respType := SingleSignOnConfigurationsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SingleSignOnResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.SingleSignOnResource)
 	if err != nil {
 		return SingleSignOnConfigurationsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

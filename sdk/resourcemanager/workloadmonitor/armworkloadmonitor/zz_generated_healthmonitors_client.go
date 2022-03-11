@@ -33,16 +33,16 @@ type HealthMonitorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewHealthMonitorsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *HealthMonitorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &HealthMonitorsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -115,7 +115,7 @@ func (client *HealthMonitorsClient) getCreateRequest(ctx context.Context, subscr
 
 // getHandleResponse handles the Get response.
 func (client *HealthMonitorsClient) getHandleResponse(resp *http.Response) (HealthMonitorsClientGetResponse, error) {
-	result := HealthMonitorsClientGetResponse{RawResponse: resp}
+	result := HealthMonitorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HealthMonitor); err != nil {
 		return HealthMonitorsClientGetResponse{}, err
 	}
@@ -196,7 +196,7 @@ func (client *HealthMonitorsClient) getStateChangeCreateRequest(ctx context.Cont
 
 // getStateChangeHandleResponse handles the GetStateChange response.
 func (client *HealthMonitorsClient) getStateChangeHandleResponse(resp *http.Response) (HealthMonitorsClientGetStateChangeResponse, error) {
-	result := HealthMonitorsClientGetStateChangeResponse{RawResponse: resp}
+	result := HealthMonitorsClientGetStateChangeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HealthMonitorStateChange); err != nil {
 		return HealthMonitorsClientGetStateChangeResponse{}, err
 	}
@@ -266,7 +266,7 @@ func (client *HealthMonitorsClient) listCreateRequest(ctx context.Context, subsc
 
 // listHandleResponse handles the List response.
 func (client *HealthMonitorsClient) listHandleResponse(resp *http.Response) (HealthMonitorsClientListResponse, error) {
-	result := HealthMonitorsClientListResponse{RawResponse: resp}
+	result := HealthMonitorsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HealthMonitorList); err != nil {
 		return HealthMonitorsClientListResponse{}, err
 	}
@@ -349,7 +349,7 @@ func (client *HealthMonitorsClient) listStateChangesCreateRequest(ctx context.Co
 
 // listStateChangesHandleResponse handles the ListStateChanges response.
 func (client *HealthMonitorsClient) listStateChangesHandleResponse(resp *http.Response) (HealthMonitorsClientListStateChangesResponse, error) {
-	result := HealthMonitorsClientListStateChangesResponse{RawResponse: resp}
+	result := HealthMonitorsClientListStateChangesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HealthMonitorStateChangeList); err != nil {
 		return HealthMonitorsClientListStateChangesResponse{}, err
 	}

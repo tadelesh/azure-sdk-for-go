@@ -34,17 +34,17 @@ type SparkConfigurationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSparkConfigurationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SparkConfigurationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SparkConfigurationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *SparkConfigurationsClient) listByWorkspaceCreateRequest(ctx contex
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *SparkConfigurationsClient) listByWorkspaceHandleResponse(resp *http.Response) (SparkConfigurationsClientListByWorkspaceResponse, error) {
-	result := SparkConfigurationsClientListByWorkspaceResponse{RawResponse: resp}
+	result := SparkConfigurationsClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SparkConfigurationListResponse); err != nil {
 		return SparkConfigurationsClientListByWorkspaceResponse{}, err
 	}

@@ -30,16 +30,16 @@ type SystemAssignedIdentitiesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSystemAssignedIdentitiesClient(credential azcore.TokenCredential, options *arm.ClientOptions) *SystemAssignedIdentitiesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SystemAssignedIdentitiesClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -81,7 +81,7 @@ func (client *SystemAssignedIdentitiesClient) getByScopeCreateRequest(ctx contex
 
 // getByScopeHandleResponse handles the GetByScope response.
 func (client *SystemAssignedIdentitiesClient) getByScopeHandleResponse(resp *http.Response) (SystemAssignedIdentitiesClientGetByScopeResponse, error) {
-	result := SystemAssignedIdentitiesClientGetByScopeResponse{RawResponse: resp}
+	result := SystemAssignedIdentitiesClientGetByScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SystemAssignedIdentity); err != nil {
 		return SystemAssignedIdentitiesClientGetByScopeResponse{}, err
 	}

@@ -34,17 +34,17 @@ type ContactsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewContactsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ContactsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ContactsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *ContactsClient) BeginCreate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ContactsClientCreatePollerResponse{}, err
 	}
-	result := ContactsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ContactsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ContactsClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ContactsClientCreatePollerResponse{}, err
@@ -132,9 +130,7 @@ func (client *ContactsClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ContactsClientDeletePollerResponse{}, err
 	}
-	result := ContactsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ContactsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ContactsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return ContactsClientDeletePollerResponse{}, err
@@ -245,7 +241,7 @@ func (client *ContactsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *ContactsClient) getHandleResponse(resp *http.Response) (ContactsClientGetResponse, error) {
-	result := ContactsClientGetResponse{RawResponse: resp}
+	result := ContactsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Contact); err != nil {
 		return ContactsClientGetResponse{}, err
 	}
@@ -257,19 +253,13 @@ func (client *ContactsClient) getHandleResponse(resp *http.Response) (ContactsCl
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // spacecraftName - Spacecraft ID
 // options - ContactsClientListOptions contains the optional parameters for the ContactsClient.List method.
-func (client *ContactsClient) List(ctx context.Context, resourceGroupName string, spacecraftName string, options *ContactsClientListOptions) (ContactsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, spacecraftName, options)
-	if err != nil {
-		return ContactsClientListResponse{}, err
+func (client *ContactsClient) List(resourceGroupName string, spacecraftName string, options *ContactsClientListOptions) *ContactsClientListPager {
+	return &ContactsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, spacecraftName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ContactsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ContactsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -300,7 +290,7 @@ func (client *ContactsClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *ContactsClient) listHandleResponse(resp *http.Response) (ContactsClientListResponse, error) {
-	result := ContactsClientListResponse{RawResponse: resp}
+	result := ContactsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContactListResult); err != nil {
 		return ContactsClientListResponse{}, err
 	}

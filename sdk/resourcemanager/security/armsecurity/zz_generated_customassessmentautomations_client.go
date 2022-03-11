@@ -100,7 +100,7 @@ func (client *CustomAssessmentAutomationsClient) createCreateRequest(ctx context
 
 // createHandleResponse handles the Create response.
 func (client *CustomAssessmentAutomationsClient) createHandleResponse(resp *http.Response) (CustomAssessmentAutomationsClientCreateResponse, error) {
-	result := CustomAssessmentAutomationsClientCreateResponse{RawResponse: resp}
+	result := CustomAssessmentAutomationsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomAssessmentAutomation); err != nil {
 		return CustomAssessmentAutomationsClientCreateResponse{}, err
 	}
@@ -125,7 +125,7 @@ func (client *CustomAssessmentAutomationsClient) Delete(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return CustomAssessmentAutomationsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return CustomAssessmentAutomationsClientDeleteResponse{RawResponse: resp}, nil
+	return CustomAssessmentAutomationsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -203,7 +203,7 @@ func (client *CustomAssessmentAutomationsClient) getCreateRequest(ctx context.Co
 
 // getHandleResponse handles the Get response.
 func (client *CustomAssessmentAutomationsClient) getHandleResponse(resp *http.Response) (CustomAssessmentAutomationsClientGetResponse, error) {
-	result := CustomAssessmentAutomationsClientGetResponse{RawResponse: resp}
+	result := CustomAssessmentAutomationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomAssessmentAutomation); err != nil {
 		return CustomAssessmentAutomationsClientGetResponse{}, err
 	}
@@ -251,7 +251,7 @@ func (client *CustomAssessmentAutomationsClient) listByResourceGroupCreateReques
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *CustomAssessmentAutomationsClient) listByResourceGroupHandleResponse(resp *http.Response) (CustomAssessmentAutomationsClientListByResourceGroupResponse, error) {
-	result := CustomAssessmentAutomationsClientListByResourceGroupResponse{RawResponse: resp}
+	result := CustomAssessmentAutomationsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomAssessmentAutomationsListResult); err != nil {
 		return CustomAssessmentAutomationsClientListByResourceGroupResponse{}, err
 	}
@@ -294,7 +294,7 @@ func (client *CustomAssessmentAutomationsClient) listBySubscriptionCreateRequest
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *CustomAssessmentAutomationsClient) listBySubscriptionHandleResponse(resp *http.Response) (CustomAssessmentAutomationsClientListBySubscriptionResponse, error) {
-	result := CustomAssessmentAutomationsClientListBySubscriptionResponse{RawResponse: resp}
+	result := CustomAssessmentAutomationsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomAssessmentAutomationsListResult); err != nil {
 		return CustomAssessmentAutomationsClientListBySubscriptionResponse{}, err
 	}

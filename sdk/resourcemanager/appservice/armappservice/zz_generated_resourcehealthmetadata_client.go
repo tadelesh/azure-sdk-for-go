@@ -98,7 +98,7 @@ func (client *ResourceHealthMetadataClient) getBySiteCreateRequest(ctx context.C
 
 // getBySiteHandleResponse handles the GetBySite response.
 func (client *ResourceHealthMetadataClient) getBySiteHandleResponse(resp *http.Response) (ResourceHealthMetadataClientGetBySiteResponse, error) {
-	result := ResourceHealthMetadataClientGetBySiteResponse{RawResponse: resp}
+	result := ResourceHealthMetadataClientGetBySiteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceHealthMetadata); err != nil {
 		return ResourceHealthMetadataClientGetBySiteResponse{}, err
 	}
@@ -159,7 +159,7 @@ func (client *ResourceHealthMetadataClient) getBySiteSlotCreateRequest(ctx conte
 
 // getBySiteSlotHandleResponse handles the GetBySiteSlot response.
 func (client *ResourceHealthMetadataClient) getBySiteSlotHandleResponse(resp *http.Response) (ResourceHealthMetadataClientGetBySiteSlotResponse, error) {
-	result := ResourceHealthMetadataClientGetBySiteSlotResponse{RawResponse: resp}
+	result := ResourceHealthMetadataClientGetBySiteSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceHealthMetadata); err != nil {
 		return ResourceHealthMetadataClientGetBySiteSlotResponse{}, err
 	}
@@ -202,7 +202,7 @@ func (client *ResourceHealthMetadataClient) listCreateRequest(ctx context.Contex
 
 // listHandleResponse handles the List response.
 func (client *ResourceHealthMetadataClient) listHandleResponse(resp *http.Response) (ResourceHealthMetadataClientListResponse, error) {
-	result := ResourceHealthMetadataClientListResponse{RawResponse: resp}
+	result := ResourceHealthMetadataClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceHealthMetadataCollection); err != nil {
 		return ResourceHealthMetadataClientListResponse{}, err
 	}
@@ -250,7 +250,7 @@ func (client *ResourceHealthMetadataClient) listByResourceGroupCreateRequest(ctx
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ResourceHealthMetadataClient) listByResourceGroupHandleResponse(resp *http.Response) (ResourceHealthMetadataClientListByResourceGroupResponse, error) {
-	result := ResourceHealthMetadataClientListByResourceGroupResponse{RawResponse: resp}
+	result := ResourceHealthMetadataClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceHealthMetadataCollection); err != nil {
 		return ResourceHealthMetadataClientListByResourceGroupResponse{}, err
 	}
@@ -303,7 +303,7 @@ func (client *ResourceHealthMetadataClient) listBySiteCreateRequest(ctx context.
 
 // listBySiteHandleResponse handles the ListBySite response.
 func (client *ResourceHealthMetadataClient) listBySiteHandleResponse(resp *http.Response) (ResourceHealthMetadataClientListBySiteResponse, error) {
-	result := ResourceHealthMetadataClientListBySiteResponse{RawResponse: resp}
+	result := ResourceHealthMetadataClientListBySiteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceHealthMetadataCollection); err != nil {
 		return ResourceHealthMetadataClientListBySiteResponse{}, err
 	}
@@ -361,7 +361,7 @@ func (client *ResourceHealthMetadataClient) listBySiteSlotCreateRequest(ctx cont
 
 // listBySiteSlotHandleResponse handles the ListBySiteSlot response.
 func (client *ResourceHealthMetadataClient) listBySiteSlotHandleResponse(resp *http.Response) (ResourceHealthMetadataClientListBySiteSlotResponse, error) {
-	result := ResourceHealthMetadataClientListBySiteSlotResponse{RawResponse: resp}
+	result := ResourceHealthMetadataClientListBySiteSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceHealthMetadataCollection); err != nil {
 		return ResourceHealthMetadataClientListBySiteSlotResponse{}, err
 	}

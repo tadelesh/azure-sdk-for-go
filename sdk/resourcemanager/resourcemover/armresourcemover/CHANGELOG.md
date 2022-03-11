@@ -1,5 +1,138 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*UnresolvedDependenciesClientGetPager.NextPage` return value(s) have been changed from `(bool)` to `(UnresolvedDependenciesClientGetResponse, error)`
+- Function `*MoveCollectionsClientListMoveCollectionsBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(MoveCollectionsClientListMoveCollectionsBySubscriptionResponse, error)`
+- Function `*MoveResourcesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(MoveResourcesClientListResponse, error)`
+- Function `*MoveCollectionsClientListMoveCollectionsByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(MoveCollectionsClientListMoveCollectionsByResourceGroupResponse, error)`
+- Function `*MoveCollectionsClientListMoveCollectionsBySubscriptionPager.PageResponse` has been removed
+- Function `*MoveCollectionsClientListMoveCollectionsByResourceGroupPager.Err` has been removed
+- Function `*MoveResourcesClientListPager.PageResponse` has been removed
+- Function `*MoveResourcesClientListPager.Err` has been removed
+- Function `*UnresolvedDependenciesClientGetPager.PageResponse` has been removed
+- Function `*UnresolvedDependenciesClientGetPager.Err` has been removed
+- Function `*MoveCollectionsClientListMoveCollectionsByResourceGroupPager.PageResponse` has been removed
+- Function `*MoveCollectionsClientListMoveCollectionsBySubscriptionPager.Err` has been removed
+- Struct `MoveCollectionsClientBulkRemoveResult` has been removed
+- Struct `MoveCollectionsClientCommitResult` has been removed
+- Struct `MoveCollectionsClientCreateResult` has been removed
+- Struct `MoveCollectionsClientDeleteResult` has been removed
+- Struct `MoveCollectionsClientDiscardResult` has been removed
+- Struct `MoveCollectionsClientGetResult` has been removed
+- Struct `MoveCollectionsClientInitiateMoveResult` has been removed
+- Struct `MoveCollectionsClientListMoveCollectionsByResourceGroupResult` has been removed
+- Struct `MoveCollectionsClientListMoveCollectionsBySubscriptionResult` has been removed
+- Struct `MoveCollectionsClientListRequiredForResult` has been removed
+- Struct `MoveCollectionsClientPrepareResult` has been removed
+- Struct `MoveCollectionsClientResolveDependenciesResult` has been removed
+- Struct `MoveCollectionsClientUpdateResult` has been removed
+- Struct `MoveResourcesClientCreateResult` has been removed
+- Struct `MoveResourcesClientDeleteResult` has been removed
+- Struct `MoveResourcesClientGetResult` has been removed
+- Struct `MoveResourcesClientListResult` has been removed
+- Struct `OperationsDiscoveryClientGetResult` has been removed
+- Struct `UnresolvedDependenciesClientGetResult` has been removed
+- Field `RawResponse` of struct `MoveResourcesClientCreatePollerResponse` has been removed
+- Field `OperationsDiscoveryClientGetResult` of struct `OperationsDiscoveryClientGetResponse` has been removed
+- Field `RawResponse` of struct `OperationsDiscoveryClientGetResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientInitiateMovePollerResponse` has been removed
+- Field `MoveCollectionsClientListMoveCollectionsBySubscriptionResult` of struct `MoveCollectionsClientListMoveCollectionsBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientListMoveCollectionsBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientPreparePollerResponse` has been removed
+- Field `UnresolvedDependenciesClientGetResult` of struct `UnresolvedDependenciesClientGetResponse` has been removed
+- Field `RawResponse` of struct `UnresolvedDependenciesClientGetResponse` has been removed
+- Field `MoveCollectionsClientListMoveCollectionsByResourceGroupResult` of struct `MoveCollectionsClientListMoveCollectionsByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientListMoveCollectionsByResourceGroupResponse` has been removed
+- Field `MoveResourcesClientCreateResult` of struct `MoveResourcesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `MoveResourcesClientCreateResponse` has been removed
+- Field `MoveResourcesClientGetResult` of struct `MoveResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `MoveResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `MoveResourcesClientDeletePollerResponse` has been removed
+- Field `MoveResourcesClientDeleteResult` of struct `MoveResourcesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `MoveResourcesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientBulkRemovePollerResponse` has been removed
+- Field `MoveCollectionsClientCommitResult` of struct `MoveCollectionsClientCommitResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientCommitResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientDiscardPollerResponse` has been removed
+- Field `MoveCollectionsClientResolveDependenciesResult` of struct `MoveCollectionsClientResolveDependenciesResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientResolveDependenciesResponse` has been removed
+- Field `MoveCollectionsClientBulkRemoveResult` of struct `MoveCollectionsClientBulkRemoveResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientBulkRemoveResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientResolveDependenciesPollerResponse` has been removed
+- Field `MoveCollectionsClientListRequiredForResult` of struct `MoveCollectionsClientListRequiredForResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientListRequiredForResponse` has been removed
+- Field `MoveCollectionsClientCreateResult` of struct `MoveCollectionsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientCommitPollerResponse` has been removed
+- Field `MoveResourcesClientListResult` of struct `MoveResourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `MoveResourcesClientListResponse` has been removed
+- Field `MoveCollectionsClientPrepareResult` of struct `MoveCollectionsClientPrepareResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientPrepareResponse` has been removed
+- Field `MoveCollectionsClientUpdateResult` of struct `MoveCollectionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientUpdateResponse` has been removed
+- Field `MoveCollectionsClientInitiateMoveResult` of struct `MoveCollectionsClientInitiateMoveResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientInitiateMoveResponse` has been removed
+- Field `MoveCollectionsClientGetResult` of struct `MoveCollectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientDeletePollerResponse` has been removed
+- Field `MoveCollectionsClientDeleteResult` of struct `MoveCollectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientDeleteResponse` has been removed
+- Field `MoveCollectionsClientDiscardResult` of struct `MoveCollectionsClientDiscardResponse` has been removed
+- Field `RawResponse` of struct `MoveCollectionsClientDiscardResponse` has been removed
+
+### Features Added
+
+- New function `*MoveCollectionsClientListMoveCollectionsByResourceGroupPager.More() bool`
+- New function `*MoveResourcesClientListPager.More() bool`
+- New function `*MoveCollectionsClientListMoveCollectionsBySubscriptionPager.More() bool`
+- New function `*UnresolvedDependenciesClientGetPager.More() bool`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New struct `MoveResourceFilter`
+- New struct `MoveResourceFilterProperties`
+- New struct `UnresolvedDependenciesFilter`
+- New struct `UnresolvedDependenciesFilterProperties`
+- New anonymous field `UnresolvedDependencyCollection` in struct `UnresolvedDependenciesClientGetResponse`
+- New anonymous field `MoveResource` in struct `MoveResourcesClientGetResponse`
+- New anonymous field `MoveResource` in struct `MoveResourcesClientCreateResponse`
+- New anonymous field `OperationStatus` in struct `MoveCollectionsClientPrepareResponse`
+- New anonymous field `RequiredForResourcesCollection` in struct `MoveCollectionsClientListRequiredForResponse`
+- New anonymous field `MoveResourceCollection` in struct `MoveResourcesClientListResponse`
+- New anonymous field `OperationsDiscoveryCollection` in struct `OperationsDiscoveryClientGetResponse`
+- New anonymous field `OperationStatus` in struct `MoveCollectionsClientDiscardResponse`
+- New anonymous field `MoveCollectionResultList` in struct `MoveCollectionsClientListMoveCollectionsByResourceGroupResponse`
+- New anonymous field `MoveCollectionResultList` in struct `MoveCollectionsClientListMoveCollectionsBySubscriptionResponse`
+- New anonymous field `MoveCollection` in struct `MoveCollectionsClientUpdateResponse`
+- New anonymous field `OperationStatus` in struct `MoveCollectionsClientCommitResponse`
+- New anonymous field `OperationStatus` in struct `MoveCollectionsClientDeleteResponse`
+- New anonymous field `MoveCollection` in struct `MoveCollectionsClientCreateResponse`
+- New anonymous field `OperationStatus` in struct `MoveCollectionsClientInitiateMoveResponse`
+- New anonymous field `OperationStatus` in struct `MoveResourcesClientDeleteResponse`
+- New anonymous field `OperationStatus` in struct `MoveCollectionsClientResolveDependenciesResponse`
+- New anonymous field `OperationStatus` in struct `MoveCollectionsClientBulkRemoveResponse`
+- New anonymous field `MoveCollection` in struct `MoveCollectionsClientGetResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `OperationsDiscovery.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `OperationStatus.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+- Struct `MoveResourceFilter` has been removed
+- Struct `MoveResourceFilterProperties` has been removed
+- Struct `UnresolvedDependenciesFilter` has been removed
+- Struct `UnresolvedDependenciesFilterProperties` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-14)
 ### Breaking Changes
 

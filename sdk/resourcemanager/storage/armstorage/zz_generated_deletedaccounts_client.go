@@ -97,7 +97,7 @@ func (client *DeletedAccountsClient) getCreateRequest(ctx context.Context, delet
 
 // getHandleResponse handles the Get response.
 func (client *DeletedAccountsClient) getHandleResponse(resp *http.Response) (DeletedAccountsClientGetResponse, error) {
-	result := DeletedAccountsClientGetResponse{RawResponse: resp}
+	result := DeletedAccountsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedAccount); err != nil {
 		return DeletedAccountsClientGetResponse{}, err
 	}
@@ -139,7 +139,7 @@ func (client *DeletedAccountsClient) listCreateRequest(ctx context.Context, opti
 
 // listHandleResponse handles the List response.
 func (client *DeletedAccountsClient) listHandleResponse(resp *http.Response) (DeletedAccountsClientListResponse, error) {
-	result := DeletedAccountsClientListResponse{RawResponse: resp}
+	result := DeletedAccountsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedAccountListResult); err != nil {
 		return DeletedAccountsClientListResponse{}, err
 	}

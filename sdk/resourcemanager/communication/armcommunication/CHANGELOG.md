@@ -1,5 +1,84 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ServiceClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ServiceClientListBySubscriptionResponse, error)`
+- Function `*ServiceClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ServiceClientListByResourceGroupResponse, error)`
+- Function `*ServiceClientListBySubscriptionPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*ServiceClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ServiceClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*ServiceClientListByResourceGroupPager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `ServiceClientCheckNameAvailabilityResult` has been removed
+- Struct `ServiceClientCreateOrUpdateResult` has been removed
+- Struct `ServiceClientGetResult` has been removed
+- Struct `ServiceClientLinkNotificationHubResult` has been removed
+- Struct `ServiceClientListByResourceGroupResult` has been removed
+- Struct `ServiceClientListBySubscriptionResult` has been removed
+- Struct `ServiceClientListKeysResult` has been removed
+- Struct `ServiceClientRegenerateKeyResult` has been removed
+- Struct `ServiceClientUpdateResult` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `ServiceClientCheckNameAvailabilityResult` of struct `ServiceClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientDeleteResponse` has been removed
+- Field `ServiceClientCreateOrUpdateResult` of struct `ServiceClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientCreateOrUpdatePollerResponse` has been removed
+- Field `ServiceClientLinkNotificationHubResult` of struct `ServiceClientLinkNotificationHubResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientLinkNotificationHubResponse` has been removed
+- Field `ServiceClientListBySubscriptionResult` of struct `ServiceClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientListBySubscriptionResponse` has been removed
+- Field `ServiceClientListByResourceGroupResult` of struct `ServiceClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientListByResourceGroupResponse` has been removed
+- Field `ServiceClientListKeysResult` of struct `ServiceClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientListKeysResponse` has been removed
+- Field `ServiceClientRegenerateKeyResult` of struct `ServiceClientRegenerateKeyResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientRegenerateKeyResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientDeletePollerResponse` has been removed
+- Field `ServiceClientUpdateResult` of struct `ServiceClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientUpdateResponse` has been removed
+- Field `ServiceClientGetResult` of struct `ServiceClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServiceClientGetResponse` has been removed
+
+### Features Added
+
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*ServiceClientListByResourceGroupPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*ServiceClientListBySubscriptionPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `LinkedNotificationHub` in struct `ServiceClientLinkNotificationHubResponse`
+- New anonymous field `ServiceResource` in struct `ServiceClientGetResponse`
+- New anonymous field `ServiceKeys` in struct `ServiceClientListKeysResponse`
+- New anonymous field `ServiceResourceList` in struct `ServiceClientListByResourceGroupResponse`
+- New anonymous field `ServiceResource` in struct `ServiceClientCreateOrUpdateResponse`
+- New anonymous field `ServiceKeys` in struct `ServiceClientRegenerateKeyResponse`
+- New anonymous field `ServiceResource` in struct `ServiceClientUpdateResponse`
+- New anonymous field `NameAvailability` in struct `ServiceClientCheckNameAvailabilityResponse`
+- New anonymous field `ServiceResourceList` in struct `ServiceClientListBySubscriptionResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

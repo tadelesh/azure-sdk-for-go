@@ -34,17 +34,17 @@ type ExportConfigurationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewExportConfigurationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ExportConfigurationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ExportConfigurationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *ExportConfigurationsClient) createCreateRequest(ctx context.Contex
 
 // createHandleResponse handles the Create response.
 func (client *ExportConfigurationsClient) createHandleResponse(resp *http.Response) (ExportConfigurationsClientCreateResponse, error) {
-	result := ExportConfigurationsClientCreateResponse{RawResponse: resp}
+	result := ExportConfigurationsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentExportConfigurationArray); err != nil {
 		return ExportConfigurationsClientCreateResponse{}, err
 	}
@@ -161,7 +161,7 @@ func (client *ExportConfigurationsClient) deleteCreateRequest(ctx context.Contex
 
 // deleteHandleResponse handles the Delete response.
 func (client *ExportConfigurationsClient) deleteHandleResponse(resp *http.Response) (ExportConfigurationsClientDeleteResponse, error) {
-	result := ExportConfigurationsClientDeleteResponse{RawResponse: resp}
+	result := ExportConfigurationsClientDeleteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentExportConfiguration); err != nil {
 		return ExportConfigurationsClientDeleteResponse{}, err
 	}
@@ -222,7 +222,7 @@ func (client *ExportConfigurationsClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *ExportConfigurationsClient) getHandleResponse(resp *http.Response) (ExportConfigurationsClientGetResponse, error) {
-	result := ExportConfigurationsClientGetResponse{RawResponse: resp}
+	result := ExportConfigurationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentExportConfiguration); err != nil {
 		return ExportConfigurationsClientGetResponse{}, err
 	}
@@ -278,7 +278,7 @@ func (client *ExportConfigurationsClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *ExportConfigurationsClient) listHandleResponse(resp *http.Response) (ExportConfigurationsClientListResponse, error) {
-	result := ExportConfigurationsClientListResponse{RawResponse: resp}
+	result := ExportConfigurationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentExportConfigurationArray); err != nil {
 		return ExportConfigurationsClientListResponse{}, err
 	}
@@ -340,7 +340,7 @@ func (client *ExportConfigurationsClient) updateCreateRequest(ctx context.Contex
 
 // updateHandleResponse handles the Update response.
 func (client *ExportConfigurationsClient) updateHandleResponse(resp *http.Response) (ExportConfigurationsClientUpdateResponse, error) {
-	result := ExportConfigurationsClientUpdateResponse{RawResponse: resp}
+	result := ExportConfigurationsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentExportConfiguration); err != nil {
 		return ExportConfigurationsClientUpdateResponse{}, err
 	}

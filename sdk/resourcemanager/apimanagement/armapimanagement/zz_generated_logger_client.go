@@ -36,17 +36,17 @@ type LoggerClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLoggerClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LoggerClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LoggerClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *LoggerClient) createOrUpdateCreateRequest(ctx context.Context, res
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *LoggerClient) createOrUpdateHandleResponse(resp *http.Response) (LoggerClientCreateOrUpdateResponse, error) {
-	result := LoggerClientCreateOrUpdateResponse{RawResponse: resp}
+	result := LoggerClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -138,7 +138,7 @@ func (client *LoggerClient) Delete(ctx context.Context, resourceGroupName string
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return LoggerClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return LoggerClientDeleteResponse{RawResponse: resp}, nil
+	return LoggerClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -225,7 +225,7 @@ func (client *LoggerClient) getCreateRequest(ctx context.Context, resourceGroupN
 
 // getHandleResponse handles the Get response.
 func (client *LoggerClient) getHandleResponse(resp *http.Response) (LoggerClientGetResponse, error) {
-	result := LoggerClientGetResponse{RawResponse: resp}
+	result := LoggerClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -284,7 +284,7 @@ func (client *LoggerClient) getEntityTagCreateRequest(ctx context.Context, resou
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *LoggerClient) getEntityTagHandleResponse(resp *http.Response) (LoggerClientGetEntityTagResponse, error) {
-	result := LoggerClientGetEntityTagResponse{RawResponse: resp}
+	result := LoggerClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -348,7 +348,7 @@ func (client *LoggerClient) listByServiceCreateRequest(ctx context.Context, reso
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *LoggerClient) listByServiceHandleResponse(resp *http.Response) (LoggerClientListByServiceResponse, error) {
-	result := LoggerClientListByServiceResponse{RawResponse: resp}
+	result := LoggerClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LoggerCollection); err != nil {
 		return LoggerClientListByServiceResponse{}, err
 	}
@@ -412,7 +412,7 @@ func (client *LoggerClient) updateCreateRequest(ctx context.Context, resourceGro
 
 // updateHandleResponse handles the Update response.
 func (client *LoggerClient) updateHandleResponse(resp *http.Response) (LoggerClientUpdateResponse, error) {
-	result := LoggerClientUpdateResponse{RawResponse: resp}
+	result := LoggerClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

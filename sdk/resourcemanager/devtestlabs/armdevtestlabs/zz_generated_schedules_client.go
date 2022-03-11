@@ -35,17 +35,17 @@ type SchedulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSchedulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SchedulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SchedulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *SchedulesClient) createOrUpdateCreateRequest(ctx context.Context, 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *SchedulesClient) createOrUpdateHandleResponse(resp *http.Response) (SchedulesClientCreateOrUpdateResponse, error) {
-	result := SchedulesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := SchedulesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Schedule); err != nil {
 		return SchedulesClientCreateOrUpdateResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *SchedulesClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SchedulesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SchedulesClientDeleteResponse{RawResponse: resp}, nil
+	return SchedulesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -174,9 +174,7 @@ func (client *SchedulesClient) BeginExecute(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return SchedulesClientExecutePollerResponse{}, err
 	}
-	result := SchedulesClientExecutePollerResponse{
-		RawResponse: resp,
-	}
+	result := SchedulesClientExecutePollerResponse{}
 	pt, err := armruntime.NewPoller("SchedulesClient.Execute", "", resp, client.pl)
 	if err != nil {
 		return SchedulesClientExecutePollerResponse{}, err
@@ -290,7 +288,7 @@ func (client *SchedulesClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *SchedulesClient) getHandleResponse(resp *http.Response) (SchedulesClientGetResponse, error) {
-	result := SchedulesClientGetResponse{RawResponse: resp}
+	result := SchedulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Schedule); err != nil {
 		return SchedulesClientGetResponse{}, err
 	}
@@ -354,7 +352,7 @@ func (client *SchedulesClient) listCreateRequest(ctx context.Context, resourceGr
 
 // listHandleResponse handles the List response.
 func (client *SchedulesClient) listHandleResponse(resp *http.Response) (SchedulesClientListResponse, error) {
-	result := SchedulesClientListResponse{RawResponse: resp}
+	result := SchedulesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScheduleList); err != nil {
 		return SchedulesClientListResponse{}, err
 	}
@@ -412,7 +410,7 @@ func (client *SchedulesClient) listApplicableCreateRequest(ctx context.Context, 
 
 // listApplicableHandleResponse handles the ListApplicable response.
 func (client *SchedulesClient) listApplicableHandleResponse(resp *http.Response) (SchedulesClientListApplicableResponse, error) {
-	result := SchedulesClientListApplicableResponse{RawResponse: resp}
+	result := SchedulesClientListApplicableResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScheduleList); err != nil {
 		return SchedulesClientListApplicableResponse{}, err
 	}
@@ -473,7 +471,7 @@ func (client *SchedulesClient) updateCreateRequest(ctx context.Context, resource
 
 // updateHandleResponse handles the Update response.
 func (client *SchedulesClient) updateHandleResponse(resp *http.Response) (SchedulesClientUpdateResponse, error) {
-	result := SchedulesClientUpdateResponse{RawResponse: resp}
+	result := SchedulesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Schedule); err != nil {
 		return SchedulesClientUpdateResponse{}, err
 	}

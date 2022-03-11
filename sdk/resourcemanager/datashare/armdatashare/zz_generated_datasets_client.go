@@ -34,17 +34,17 @@ type DataSetsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataSetsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataSetsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataSetsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *DataSetsClient) createCreateRequest(ctx context.Context, resourceG
 
 // createHandleResponse handles the Create response.
 func (client *DataSetsClient) createHandleResponse(resp *http.Response) (DataSetsClientCreateResponse, error) {
-	result := DataSetsClientCreateResponse{RawResponse: resp}
+	result := DataSetsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return DataSetsClientCreateResponse{}, err
 	}
@@ -127,9 +127,7 @@ func (client *DataSetsClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return DataSetsClientDeletePollerResponse{}, err
 	}
-	result := DataSetsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DataSetsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DataSetsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DataSetsClientDeletePollerResponse{}, err
@@ -249,7 +247,7 @@ func (client *DataSetsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *DataSetsClient) getHandleResponse(resp *http.Response) (DataSetsClientGetResponse, error) {
-	result := DataSetsClientGetResponse{RawResponse: resp}
+	result := DataSetsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return DataSetsClientGetResponse{}, err
 	}
@@ -315,7 +313,7 @@ func (client *DataSetsClient) listByShareCreateRequest(ctx context.Context, reso
 
 // listByShareHandleResponse handles the ListByShare response.
 func (client *DataSetsClient) listByShareHandleResponse(resp *http.Response) (DataSetsClientListByShareResponse, error) {
-	result := DataSetsClientListByShareResponse{RawResponse: resp}
+	result := DataSetsClientListByShareResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataSetList); err != nil {
 		return DataSetsClientListByShareResponse{}, err
 	}

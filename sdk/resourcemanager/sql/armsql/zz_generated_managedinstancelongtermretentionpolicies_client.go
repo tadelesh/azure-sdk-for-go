@@ -34,17 +34,17 @@ type ManagedInstanceLongTermRetentionPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedInstanceLongTermRetentionPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedInstanceLongTermRetentionPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedInstanceLongTermRetentionPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *ManagedInstanceLongTermRetentionPoliciesClient) BeginCreateOrUpdat
 	if err != nil {
 		return ManagedInstanceLongTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ManagedInstanceLongTermRetentionPoliciesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedInstanceLongTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedInstanceLongTermRetentionPoliciesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ManagedInstanceLongTermRetentionPoliciesClientCreateOrUpdatePollerResponse{}, err
@@ -188,7 +186,7 @@ func (client *ManagedInstanceLongTermRetentionPoliciesClient) getCreateRequest(c
 
 // getHandleResponse handles the Get response.
 func (client *ManagedInstanceLongTermRetentionPoliciesClient) getHandleResponse(resp *http.Response) (ManagedInstanceLongTermRetentionPoliciesClientGetResponse, error) {
-	result := ManagedInstanceLongTermRetentionPoliciesClientGetResponse{RawResponse: resp}
+	result := ManagedInstanceLongTermRetentionPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceLongTermRetentionPolicy); err != nil {
 		return ManagedInstanceLongTermRetentionPoliciesClientGetResponse{}, err
 	}
@@ -247,7 +245,7 @@ func (client *ManagedInstanceLongTermRetentionPoliciesClient) listByDatabaseCrea
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *ManagedInstanceLongTermRetentionPoliciesClient) listByDatabaseHandleResponse(resp *http.Response) (ManagedInstanceLongTermRetentionPoliciesClientListByDatabaseResponse, error) {
-	result := ManagedInstanceLongTermRetentionPoliciesClientListByDatabaseResponse{RawResponse: resp}
+	result := ManagedInstanceLongTermRetentionPoliciesClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceLongTermRetentionPolicyListResult); err != nil {
 		return ManagedInstanceLongTermRetentionPoliciesClientListByDatabaseResponse{}, err
 	}

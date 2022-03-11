@@ -34,17 +34,17 @@ type StartMenuItemsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewStartMenuItemsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *StartMenuItemsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &StartMenuItemsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -94,7 +94,7 @@ func (client *StartMenuItemsClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *StartMenuItemsClient) listHandleResponse(resp *http.Response) (StartMenuItemsClientListResponse, error) {
-	result := StartMenuItemsClientListResponse{RawResponse: resp}
+	result := StartMenuItemsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StartMenuItemList); err != nil {
 		return StartMenuItemsClientListResponse{}, err
 	}

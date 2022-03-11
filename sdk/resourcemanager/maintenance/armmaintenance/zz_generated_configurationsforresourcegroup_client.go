@@ -35,17 +35,17 @@ type ConfigurationsForResourceGroupClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewConfigurationsForResourceGroupClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ConfigurationsForResourceGroupClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ConfigurationsForResourceGroupClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -55,19 +55,13 @@ func NewConfigurationsForResourceGroupClient(subscriptionID string, credential a
 // resourceGroupName - Resource Group Name
 // options - ConfigurationsForResourceGroupClientListOptions contains the optional parameters for the ConfigurationsForResourceGroupClient.List
 // method.
-func (client *ConfigurationsForResourceGroupClient) List(ctx context.Context, resourceGroupName string, options *ConfigurationsForResourceGroupClientListOptions) (ConfigurationsForResourceGroupClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, options)
-	if err != nil {
-		return ConfigurationsForResourceGroupClientListResponse{}, err
+func (client *ConfigurationsForResourceGroupClient) List(resourceGroupName string, options *ConfigurationsForResourceGroupClientListOptions) *ConfigurationsForResourceGroupClientListPager {
+	return &ConfigurationsForResourceGroupClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ConfigurationsForResourceGroupClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ConfigurationsForResourceGroupClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -94,7 +88,7 @@ func (client *ConfigurationsForResourceGroupClient) listCreateRequest(ctx contex
 
 // listHandleResponse handles the List response.
 func (client *ConfigurationsForResourceGroupClient) listHandleResponse(resp *http.Response) (ConfigurationsForResourceGroupClientListResponse, error) {
-	result := ConfigurationsForResourceGroupClientListResponse{RawResponse: resp}
+	result := ConfigurationsForResourceGroupClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListMaintenanceConfigurationsResult); err != nil {
 		return ConfigurationsForResourceGroupClientListResponse{}, err
 	}

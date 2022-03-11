@@ -34,17 +34,17 @@ type SubAccountClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSubAccountClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SubAccountClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SubAccountClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -60,9 +60,7 @@ func (client *SubAccountClient) BeginCreate(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return SubAccountClientCreatePollerResponse{}, err
 	}
-	result := SubAccountClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SubAccountClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("SubAccountClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return SubAccountClientCreatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *SubAccountClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return SubAccountClientDeletePollerResponse{}, err
 	}
-	result := SubAccountClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SubAccountClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SubAccountClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return SubAccountClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *SubAccountClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *SubAccountClient) getHandleResponse(resp *http.Response) (SubAccountClientGetResponse, error) {
-	result := SubAccountClientGetResponse{RawResponse: resp}
+	result := SubAccountClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MonitorResource); err != nil {
 		return SubAccountClientGetResponse{}, err
 	}
@@ -299,7 +295,7 @@ func (client *SubAccountClient) listCreateRequest(ctx context.Context, resourceG
 
 // listHandleResponse handles the List response.
 func (client *SubAccountClient) listHandleResponse(resp *http.Response) (SubAccountClientListResponse, error) {
-	result := SubAccountClientListResponse{RawResponse: resp}
+	result := SubAccountClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MonitorResourceListResponse); err != nil {
 		return SubAccountClientListResponse{}, err
 	}
@@ -357,7 +353,7 @@ func (client *SubAccountClient) listMonitoredResourcesCreateRequest(ctx context.
 
 // listMonitoredResourcesHandleResponse handles the ListMonitoredResources response.
 func (client *SubAccountClient) listMonitoredResourcesHandleResponse(resp *http.Response) (SubAccountClientListMonitoredResourcesResponse, error) {
-	result := SubAccountClientListMonitoredResourcesResponse{RawResponse: resp}
+	result := SubAccountClientListMonitoredResourcesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MonitoredResourceListResponse); err != nil {
 		return SubAccountClientListMonitoredResourcesResponse{}, err
 	}
@@ -418,7 +414,7 @@ func (client *SubAccountClient) listVMHostUpdateCreateRequest(ctx context.Contex
 
 // listVMHostUpdateHandleResponse handles the ListVMHostUpdate response.
 func (client *SubAccountClient) listVMHostUpdateHandleResponse(resp *http.Response) (SubAccountClientListVMHostUpdateResponse, error) {
-	result := SubAccountClientListVMHostUpdateResponse{RawResponse: resp}
+	result := SubAccountClientListVMHostUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VMResourcesListResponse); err != nil {
 		return SubAccountClientListVMHostUpdateResponse{}, err
 	}
@@ -475,7 +471,7 @@ func (client *SubAccountClient) listVMHostsCreateRequest(ctx context.Context, re
 
 // listVMHostsHandleResponse handles the ListVMHosts response.
 func (client *SubAccountClient) listVMHostsHandleResponse(resp *http.Response) (SubAccountClientListVMHostsResponse, error) {
-	result := SubAccountClientListVMHostsResponse{RawResponse: resp}
+	result := SubAccountClientListVMHostsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VMResourcesListResponse); err != nil {
 		return SubAccountClientListVMHostsResponse{}, err
 	}
@@ -538,7 +534,7 @@ func (client *SubAccountClient) updateCreateRequest(ctx context.Context, resourc
 
 // updateHandleResponse handles the Update response.
 func (client *SubAccountClient) updateHandleResponse(resp *http.Response) (SubAccountClientUpdateResponse, error) {
-	result := SubAccountClientUpdateResponse{RawResponse: resp}
+	result := SubAccountClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MonitorResource); err != nil {
 		return SubAccountClientUpdateResponse{}, err
 	}
@@ -599,7 +595,7 @@ func (client *SubAccountClient) vmHostPayloadCreateRequest(ctx context.Context, 
 
 // vmHostPayloadHandleResponse handles the VMHostPayload response.
 func (client *SubAccountClient) vmHostPayloadHandleResponse(resp *http.Response) (SubAccountClientVMHostPayloadResponse, error) {
-	result := SubAccountClientVMHostPayloadResponse{RawResponse: resp}
+	result := SubAccountClientVMHostPayloadResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VMExtensionPayload); err != nil {
 		return SubAccountClientVMHostPayloadResponse{}, err
 	}

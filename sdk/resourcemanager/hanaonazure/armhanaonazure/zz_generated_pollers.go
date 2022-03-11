@@ -43,11 +43,10 @@ func (p *ProviderInstancesClientCreatePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final ProviderInstancesClientCreateResponse will be returned.
 func (p *ProviderInstancesClientCreatePoller) FinalResponse(ctx context.Context) (ProviderInstancesClientCreateResponse, error) {
 	respType := ProviderInstancesClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ProviderInstance)
+	_, err := p.pt.FinalResponse(ctx, &respType.ProviderInstance)
 	if err != nil {
 		return ProviderInstancesClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ProviderInstancesClientDeletePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final ProviderInstancesClientDeleteResponse will be returned.
 func (p *ProviderInstancesClientDeletePoller) FinalResponse(ctx context.Context) (ProviderInstancesClientDeleteResponse, error) {
 	respType := ProviderInstancesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ProviderInstancesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *SapMonitorsClientCreatePoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final SapMonitorsClientCreateResponse will be returned.
 func (p *SapMonitorsClientCreatePoller) FinalResponse(ctx context.Context) (SapMonitorsClientCreateResponse, error) {
 	respType := SapMonitorsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SapMonitor)
+	_, err := p.pt.FinalResponse(ctx, &respType.SapMonitor)
 	if err != nil {
 		return SapMonitorsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *SapMonitorsClientDeletePoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final SapMonitorsClientDeleteResponse will be returned.
 func (p *SapMonitorsClientDeletePoller) FinalResponse(ctx context.Context) (SapMonitorsClientDeleteResponse, error) {
 	respType := SapMonitorsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return SapMonitorsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

@@ -35,17 +35,17 @@ type StreamingEndpointsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewStreamingEndpointsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *StreamingEndpointsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &StreamingEndpointsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *StreamingEndpointsClient) BeginCreate(ctx context.Context, resourc
 	if err != nil {
 		return StreamingEndpointsClientCreatePollerResponse{}, err
 	}
-	result := StreamingEndpointsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := StreamingEndpointsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("StreamingEndpointsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return StreamingEndpointsClientCreatePollerResponse{}, err
@@ -138,9 +136,7 @@ func (client *StreamingEndpointsClient) BeginDelete(ctx context.Context, resourc
 	if err != nil {
 		return StreamingEndpointsClientDeletePollerResponse{}, err
 	}
-	result := StreamingEndpointsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := StreamingEndpointsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("StreamingEndpointsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return StreamingEndpointsClientDeletePollerResponse{}, err
@@ -251,7 +247,7 @@ func (client *StreamingEndpointsClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *StreamingEndpointsClient) getHandleResponse(resp *http.Response) (StreamingEndpointsClientGetResponse, error) {
-	result := StreamingEndpointsClientGetResponse{RawResponse: resp}
+	result := StreamingEndpointsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StreamingEndpoint); err != nil {
 		return StreamingEndpointsClientGetResponse{}, err
 	}
@@ -303,7 +299,7 @@ func (client *StreamingEndpointsClient) listCreateRequest(ctx context.Context, r
 
 // listHandleResponse handles the List response.
 func (client *StreamingEndpointsClient) listHandleResponse(resp *http.Response) (StreamingEndpointsClientListResponse, error) {
-	result := StreamingEndpointsClientListResponse{RawResponse: resp}
+	result := StreamingEndpointsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StreamingEndpointListResult); err != nil {
 		return StreamingEndpointsClientListResponse{}, err
 	}
@@ -323,9 +319,7 @@ func (client *StreamingEndpointsClient) BeginScale(ctx context.Context, resource
 	if err != nil {
 		return StreamingEndpointsClientScalePollerResponse{}, err
 	}
-	result := StreamingEndpointsClientScalePollerResponse{
-		RawResponse: resp,
-	}
+	result := StreamingEndpointsClientScalePollerResponse{}
 	pt, err := armruntime.NewPoller("StreamingEndpointsClient.Scale", "", resp, client.pl)
 	if err != nil {
 		return StreamingEndpointsClientScalePollerResponse{}, err
@@ -395,9 +389,7 @@ func (client *StreamingEndpointsClient) BeginStart(ctx context.Context, resource
 	if err != nil {
 		return StreamingEndpointsClientStartPollerResponse{}, err
 	}
-	result := StreamingEndpointsClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := StreamingEndpointsClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("StreamingEndpointsClient.Start", "", resp, client.pl)
 	if err != nil {
 		return StreamingEndpointsClientStartPollerResponse{}, err
@@ -467,9 +459,7 @@ func (client *StreamingEndpointsClient) BeginStop(ctx context.Context, resourceG
 	if err != nil {
 		return StreamingEndpointsClientStopPollerResponse{}, err
 	}
-	result := StreamingEndpointsClientStopPollerResponse{
-		RawResponse: resp,
-	}
+	result := StreamingEndpointsClientStopPollerResponse{}
 	pt, err := armruntime.NewPoller("StreamingEndpointsClient.Stop", "", resp, client.pl)
 	if err != nil {
 		return StreamingEndpointsClientStopPollerResponse{}, err
@@ -540,9 +530,7 @@ func (client *StreamingEndpointsClient) BeginUpdate(ctx context.Context, resourc
 	if err != nil {
 		return StreamingEndpointsClientUpdatePollerResponse{}, err
 	}
-	result := StreamingEndpointsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := StreamingEndpointsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("StreamingEndpointsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return StreamingEndpointsClientUpdatePollerResponse{}, err

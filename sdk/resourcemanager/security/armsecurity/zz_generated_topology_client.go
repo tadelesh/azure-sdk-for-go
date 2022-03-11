@@ -104,7 +104,7 @@ func (client *TopologyClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *TopologyClient) getHandleResponse(resp *http.Response) (TopologyClientGetResponse, error) {
-	result := TopologyClientGetResponse{RawResponse: resp}
+	result := TopologyClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TopologyResource); err != nil {
 		return TopologyClientGetResponse{}, err
 	}
@@ -146,7 +146,7 @@ func (client *TopologyClient) listCreateRequest(ctx context.Context, options *To
 
 // listHandleResponse handles the List response.
 func (client *TopologyClient) listHandleResponse(resp *http.Response) (TopologyClientListResponse, error) {
-	result := TopologyClientListResponse{RawResponse: resp}
+	result := TopologyClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TopologyList); err != nil {
 		return TopologyClientListResponse{}, err
 	}
@@ -193,7 +193,7 @@ func (client *TopologyClient) listByHomeRegionCreateRequest(ctx context.Context,
 
 // listByHomeRegionHandleResponse handles the ListByHomeRegion response.
 func (client *TopologyClient) listByHomeRegionHandleResponse(resp *http.Response) (TopologyClientListByHomeRegionResponse, error) {
-	result := TopologyClientListByHomeRegionResponse{RawResponse: resp}
+	result := TopologyClientListByHomeRegionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TopologyList); err != nil {
 		return TopologyClientListByHomeRegionResponse{}, err
 	}

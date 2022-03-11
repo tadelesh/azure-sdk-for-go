@@ -32,16 +32,16 @@ type AssignmentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAssignmentsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *AssignmentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AssignmentsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -90,7 +90,7 @@ func (client *AssignmentsClient) createOrUpdateCreateRequest(ctx context.Context
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *AssignmentsClient) createOrUpdateHandleResponse(resp *http.Response) (AssignmentsClientCreateOrUpdateResponse, error) {
-	result := AssignmentsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := AssignmentsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Assignment); err != nil {
 		return AssignmentsClientCreateOrUpdateResponse{}, err
 	}
@@ -142,7 +142,7 @@ func (client *AssignmentsClient) deleteCreateRequest(ctx context.Context, resour
 
 // deleteHandleResponse handles the Delete response.
 func (client *AssignmentsClient) deleteHandleResponse(resp *http.Response) (AssignmentsClientDeleteResponse, error) {
-	result := AssignmentsClientDeleteResponse{RawResponse: resp}
+	result := AssignmentsClientDeleteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Assignment); err != nil {
 		return AssignmentsClientDeleteResponse{}, err
 	}
@@ -191,7 +191,7 @@ func (client *AssignmentsClient) getCreateRequest(ctx context.Context, resourceS
 
 // getHandleResponse handles the Get response.
 func (client *AssignmentsClient) getHandleResponse(resp *http.Response) (AssignmentsClientGetResponse, error) {
-	result := AssignmentsClientGetResponse{RawResponse: resp}
+	result := AssignmentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Assignment); err != nil {
 		return AssignmentsClientGetResponse{}, err
 	}
@@ -232,7 +232,7 @@ func (client *AssignmentsClient) listCreateRequest(ctx context.Context, resource
 
 // listHandleResponse handles the List response.
 func (client *AssignmentsClient) listHandleResponse(resp *http.Response) (AssignmentsClientListResponse, error) {
-	result := AssignmentsClientListResponse{RawResponse: resp}
+	result := AssignmentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssignmentList); err != nil {
 		return AssignmentsClientListResponse{}, err
 	}
@@ -282,7 +282,7 @@ func (client *AssignmentsClient) whoIsBlueprintCreateRequest(ctx context.Context
 
 // whoIsBlueprintHandleResponse handles the WhoIsBlueprint response.
 func (client *AssignmentsClient) whoIsBlueprintHandleResponse(resp *http.Response) (AssignmentsClientWhoIsBlueprintResponse, error) {
-	result := AssignmentsClientWhoIsBlueprintResponse{RawResponse: resp}
+	result := AssignmentsClientWhoIsBlueprintResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WhoIsBlueprintContract); err != nil {
 		return AssignmentsClientWhoIsBlueprintResponse{}, err
 	}

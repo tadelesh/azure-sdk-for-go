@@ -34,17 +34,17 @@ type ManagedDatabasesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedDatabasesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedDatabasesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedDatabasesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ManagedDatabasesClient) BeginCompleteRestore(ctx context.Context, 
 	if err != nil {
 		return ManagedDatabasesClientCompleteRestorePollerResponse{}, err
 	}
-	result := ManagedDatabasesClientCompleteRestorePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedDatabasesClientCompleteRestorePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedDatabasesClient.CompleteRestore", "", resp, client.pl)
 	if err != nil {
 		return ManagedDatabasesClientCompleteRestorePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *ManagedDatabasesClient) BeginCreateOrUpdate(ctx context.Context, r
 	if err != nil {
 		return ManagedDatabasesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ManagedDatabasesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedDatabasesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedDatabasesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ManagedDatabasesClientCreateOrUpdatePollerResponse{}, err
@@ -209,9 +205,7 @@ func (client *ManagedDatabasesClient) BeginDelete(ctx context.Context, resourceG
 	if err != nil {
 		return ManagedDatabasesClientDeletePollerResponse{}, err
 	}
-	result := ManagedDatabasesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedDatabasesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedDatabasesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ManagedDatabasesClientDeletePollerResponse{}, err
@@ -322,7 +316,7 @@ func (client *ManagedDatabasesClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *ManagedDatabasesClient) getHandleResponse(resp *http.Response) (ManagedDatabasesClientGetResponse, error) {
-	result := ManagedDatabasesClientGetResponse{RawResponse: resp}
+	result := ManagedDatabasesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedDatabase); err != nil {
 		return ManagedDatabasesClientGetResponse{}, err
 	}
@@ -376,7 +370,7 @@ func (client *ManagedDatabasesClient) listByInstanceCreateRequest(ctx context.Co
 
 // listByInstanceHandleResponse handles the ListByInstance response.
 func (client *ManagedDatabasesClient) listByInstanceHandleResponse(resp *http.Response) (ManagedDatabasesClientListByInstanceResponse, error) {
-	result := ManagedDatabasesClientListByInstanceResponse{RawResponse: resp}
+	result := ManagedDatabasesClientListByInstanceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedDatabaseListResult); err != nil {
 		return ManagedDatabasesClientListByInstanceResponse{}, err
 	}
@@ -430,7 +424,7 @@ func (client *ManagedDatabasesClient) listInaccessibleByInstanceCreateRequest(ct
 
 // listInaccessibleByInstanceHandleResponse handles the ListInaccessibleByInstance response.
 func (client *ManagedDatabasesClient) listInaccessibleByInstanceHandleResponse(resp *http.Response) (ManagedDatabasesClientListInaccessibleByInstanceResponse, error) {
-	result := ManagedDatabasesClientListInaccessibleByInstanceResponse{RawResponse: resp}
+	result := ManagedDatabasesClientListInaccessibleByInstanceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedDatabaseListResult); err != nil {
 		return ManagedDatabasesClientListInaccessibleByInstanceResponse{}, err
 	}
@@ -451,9 +445,7 @@ func (client *ManagedDatabasesClient) BeginUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return ManagedDatabasesClientUpdatePollerResponse{}, err
 	}
-	result := ManagedDatabasesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedDatabasesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedDatabasesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ManagedDatabasesClientUpdatePollerResponse{}, err

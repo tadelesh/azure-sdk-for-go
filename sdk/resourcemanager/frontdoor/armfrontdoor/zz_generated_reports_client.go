@@ -36,17 +36,17 @@ type ReportsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReportsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReportsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReportsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -113,7 +113,7 @@ func (client *ReportsClient) getLatencyScorecardsCreateRequest(ctx context.Conte
 
 // getLatencyScorecardsHandleResponse handles the GetLatencyScorecards response.
 func (client *ReportsClient) getLatencyScorecardsHandleResponse(resp *http.Response) (ReportsClientGetLatencyScorecardsResponse, error) {
-	result := ReportsClientGetLatencyScorecardsResponse{RawResponse: resp}
+	result := ReportsClientGetLatencyScorecardsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LatencyScorecard); err != nil {
 		return ReportsClientGetLatencyScorecardsResponse{}, err
 	}
@@ -187,7 +187,7 @@ func (client *ReportsClient) getTimeseriesCreateRequest(ctx context.Context, res
 
 // getTimeseriesHandleResponse handles the GetTimeseries response.
 func (client *ReportsClient) getTimeseriesHandleResponse(resp *http.Response) (ReportsClientGetTimeseriesResponse, error) {
-	result := ReportsClientGetTimeseriesResponse{RawResponse: resp}
+	result := ReportsClientGetTimeseriesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Timeseries); err != nil {
 		return ReportsClientGetTimeseriesResponse{}, err
 	}

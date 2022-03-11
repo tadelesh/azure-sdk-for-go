@@ -1,5 +1,509 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*PermissionsClientListByCustomerPager.NextPage` return value(s) have been changed from `(bool)` to `(PermissionsClientListByCustomerResponse, error)`
+- Function `*InvoicesClientListByBillingProfilePager.NextPage` return value(s) have been changed from `(bool)` to `(InvoicesClientListByBillingProfileResponse, error)`
+- Function `*AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionPager.NextPage` return value(s) have been changed from `(bool)` to `(AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse, error)`
+- Function `*InvoicesClientListByBillingAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(InvoicesClientListByBillingAccountResponse, error)`
+- Function `*PeriodsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PeriodsClientListResponse, error)`
+- Function `*RoleDefinitionsClientListByInvoiceSectionPager.NextPage` return value(s) have been changed from `(bool)` to `(RoleDefinitionsClientListByInvoiceSectionResponse, error)`
+- Function `*CustomersClientListByBillingProfilePager.NextPage` return value(s) have been changed from `(bool)` to `(CustomersClientListByBillingProfileResponse, error)`
+- Function `*RoleAssignmentsClientListByInvoiceSectionPager.NextPage` return value(s) have been changed from `(bool)` to `(RoleAssignmentsClientListByInvoiceSectionResponse, error)`
+- Function `*InstructionsClientListByBillingProfilePager.NextPage` return value(s) have been changed from `(bool)` to `(InstructionsClientListByBillingProfileResponse, error)`
+- Function `*PermissionsClientListByInvoiceSectionsPager.NextPage` return value(s) have been changed from `(bool)` to `(PermissionsClientListByInvoiceSectionsResponse, error)`
+- Function `*EnrollmentAccountsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(EnrollmentAccountsClientListResponse, error)`
+- Function `*RoleDefinitionsClientListByBillingAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(RoleDefinitionsClientListByBillingAccountResponse, error)`
+- Function `*AccountsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(AccountsClientListResponse, error)`
+- Function `*PermissionsClientListByBillingAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(PermissionsClientListByBillingAccountResponse, error)`
+- Function `*RoleAssignmentsClientListByBillingAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(RoleAssignmentsClientListByBillingAccountResponse, error)`
+- Function `*SubscriptionsClientListByBillingProfilePager.NextPage` return value(s) have been changed from `(bool)` to `(SubscriptionsClientListByBillingProfileResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*TransactionsClientListByInvoicePager.NextPage` return value(s) have been changed from `(bool)` to `(TransactionsClientListByInvoiceResponse, error)`
+- Function `*SubscriptionsClientListByCustomerPager.NextPage` return value(s) have been changed from `(bool)` to `(SubscriptionsClientListByCustomerResponse, error)`
+- Function `*ReservationsClientListByBillingProfilePager.NextPage` return value(s) have been changed from `(bool)` to `(ReservationsClientListByBillingProfileResponse, error)`
+- Function `*SubscriptionsClientListByInvoiceSectionPager.NextPage` return value(s) have been changed from `(bool)` to `(SubscriptionsClientListByInvoiceSectionResponse, error)`
+- Function `*SubscriptionsClientListByBillingAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(SubscriptionsClientListByBillingAccountResponse, error)`
+- Function `*ProfilesClientListByBillingAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(ProfilesClientListByBillingAccountResponse, error)`
+- Function `*ProductsClientListByCustomerPager.NextPage` return value(s) have been changed from `(bool)` to `(ProductsClientListByCustomerResponse, error)`
+- Function `*ProductsClientListByBillingProfilePager.NextPage` return value(s) have been changed from `(bool)` to `(ProductsClientListByBillingProfileResponse, error)`
+- Function `*ProductsClientListByBillingAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(ProductsClientListByBillingAccountResponse, error)`
+- Function `*RoleDefinitionsClientListByBillingProfilePager.NextPage` return value(s) have been changed from `(bool)` to `(RoleDefinitionsClientListByBillingProfileResponse, error)`
+- Function `*RoleAssignmentsClientListByBillingProfilePager.NextPage` return value(s) have been changed from `(bool)` to `(RoleAssignmentsClientListByBillingProfileResponse, error)`
+- Function `*PermissionsClientListByBillingProfilePager.NextPage` return value(s) have been changed from `(bool)` to `(PermissionsClientListByBillingProfileResponse, error)`
+- Function `*AgreementsClientListByBillingAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(AgreementsClientListByBillingAccountResponse, error)`
+- Function `*InvoicesClientListByBillingSubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(InvoicesClientListByBillingSubscriptionResponse, error)`
+- Function `*CustomersClientListByBillingAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(CustomersClientListByBillingAccountResponse, error)`
+- Function `*ReservationsClientListByBillingAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(ReservationsClientListByBillingAccountResponse, error)`
+- Function `*ProductsClientListByInvoiceSectionPager.NextPage` return value(s) have been changed from `(bool)` to `(ProductsClientListByInvoiceSectionResponse, error)`
+- Function `*InvoiceSectionsClientListByBillingProfilePager.NextPage` return value(s) have been changed from `(bool)` to `(InvoiceSectionsClientListByBillingProfileResponse, error)`
+- Function `*CustomersClientListByBillingAccountPager.Err` has been removed
+- Function `*SubscriptionsClientListByCustomerPager.PageResponse` has been removed
+- Function `*EnrollmentAccountsClientListPager.Err` has been removed
+- Function `*RoleAssignmentsClientListByBillingAccountPager.Err` has been removed
+- Function `*ProfilesClientListByBillingAccountPager.Err` has been removed
+- Function `*PermissionsClientListByInvoiceSectionsPager.Err` has been removed
+- Function `*InvoiceSectionsClientListByBillingProfilePager.Err` has been removed
+- Function `*RoleDefinitionsClientListByInvoiceSectionPager.Err` has been removed
+- Function `*SubscriptionsClientListByBillingAccountPager.PageResponse` has been removed
+- Function `*InvoicesClientListByBillingAccountPager.Err` has been removed
+- Function `*ReservationsClientListByBillingAccountPager.PageResponse` has been removed
+- Function `*InvoicesClientListByBillingProfilePager.PageResponse` has been removed
+- Function `*InvoicesClientListByBillingProfilePager.Err` has been removed
+- Function `*PermissionsClientListByCustomerPager.Err` has been removed
+- Function `*SubscriptionsClientListByCustomerPager.Err` has been removed
+- Function `*ProfilesClientListByBillingAccountPager.PageResponse` has been removed
+- Function `*PermissionsClientListByBillingProfilePager.PageResponse` has been removed
+- Function `*EnrollmentAccountsClientListPager.PageResponse` has been removed
+- Function `*ReservationsClientListByBillingAccountPager.Err` has been removed
+- Function `*RoleAssignmentsClientListByBillingProfilePager.Err` has been removed
+- Function `*AgreementsClientListByBillingAccountPager.PageResponse` has been removed
+- Function `*SubscriptionsClientListByBillingProfilePager.PageResponse` has been removed
+- Function `*AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionPager.Err` has been removed
+- Function `*RoleAssignmentsClientListByBillingProfilePager.PageResponse` has been removed
+- Function `*ProductsClientListByBillingProfilePager.Err` has been removed
+- Function `*SubscriptionsClientListByBillingProfilePager.Err` has been removed
+- Function `*RoleDefinitionsClientListByBillingProfilePager.Err` has been removed
+- Function `*RoleDefinitionsClientListByInvoiceSectionPager.PageResponse` has been removed
+- Function `*CustomersClientListByBillingProfilePager.PageResponse` has been removed
+- Function `*PeriodsClientListPager.Err` has been removed
+- Function `*ProductsClientListByBillingAccountPager.Err` has been removed
+- Function `*SubscriptionsClientListByInvoiceSectionPager.PageResponse` has been removed
+- Function `*PermissionsClientListByBillingProfilePager.Err` has been removed
+- Function `*TransactionsClientListByInvoicePager.Err` has been removed
+- Function `*InvoiceSectionsClientListByBillingProfilePager.PageResponse` has been removed
+- Function `*RoleDefinitionsClientListByBillingAccountPager.PageResponse` has been removed
+- Function `*CustomersClientListByBillingAccountPager.PageResponse` has been removed
+- Function `*AgreementsClientListByBillingAccountPager.Err` has been removed
+- Function `*ProductsClientListByCustomerPager.PageResponse` has been removed
+- Function `*InvoicesClientListByBillingAccountPager.PageResponse` has been removed
+- Function `*PermissionsClientListByInvoiceSectionsPager.PageResponse` has been removed
+- Function `*ProductsClientListByInvoiceSectionPager.Err` has been removed
+- Function `*PermissionsClientListByBillingAccountPager.PageResponse` has been removed
+- Function `*TransactionsClientListByInvoicePager.PageResponse` has been removed
+- Function `*RoleAssignmentsClientListByBillingAccountPager.PageResponse` has been removed
+- Function `*RoleDefinitionsClientListByBillingAccountPager.Err` has been removed
+- Function `*ReservationsClientListByBillingProfilePager.Err` has been removed
+- Function `*AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionPager.PageResponse` has been removed
+- Function `*PeriodsClientListPager.PageResponse` has been removed
+- Function `*ProductsClientListByInvoiceSectionPager.PageResponse` has been removed
+- Function `*RoleAssignmentsClientListByInvoiceSectionPager.Err` has been removed
+- Function `*RoleDefinitionsClientListByBillingProfilePager.PageResponse` has been removed
+- Function `*PermissionsClientListByBillingAccountPager.Err` has been removed
+- Function `*ProductsClientListByBillingAccountPager.PageResponse` has been removed
+- Function `*RoleAssignmentsClientListByInvoiceSectionPager.PageResponse` has been removed
+- Function `*ReservationsClientListByBillingProfilePager.PageResponse` has been removed
+- Function `*InvoicesClientListByBillingSubscriptionPager.PageResponse` has been removed
+- Function `*InstructionsClientListByBillingProfilePager.Err` has been removed
+- Function `*InvoicesClientListByBillingSubscriptionPager.Err` has been removed
+- Function `*SubscriptionsClientListByBillingAccountPager.Err` has been removed
+- Function `*ProductsClientListByCustomerPager.Err` has been removed
+- Function `*InstructionsClientListByBillingProfilePager.PageResponse` has been removed
+- Function `*AccountsClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*AccountsClientListPager.PageResponse` has been removed
+- Function `*CustomersClientListByBillingProfilePager.Err` has been removed
+- Function `*PermissionsClientListByCustomerPager.PageResponse` has been removed
+- Function `*ProductsClientListByBillingProfilePager.PageResponse` has been removed
+- Function `*SubscriptionsClientListByInvoiceSectionPager.Err` has been removed
+- Struct `AccountsClientGetResult` has been removed
+- Struct `AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResult` has been removed
+- Struct `AccountsClientListResult` has been removed
+- Struct `AccountsClientUpdateResult` has been removed
+- Struct `AddressClientValidateResult` has been removed
+- Struct `AgreementsClientGetResult` has been removed
+- Struct `AgreementsClientListByBillingAccountResult` has been removed
+- Struct `AvailableBalancesClientGetResult` has been removed
+- Struct `CustomersClientGetResult` has been removed
+- Struct `CustomersClientListByBillingAccountResult` has been removed
+- Struct `CustomersClientListByBillingProfileResult` has been removed
+- Struct `EnrollmentAccountsClientGetResult` has been removed
+- Struct `EnrollmentAccountsClientListResult` has been removed
+- Struct `InstructionsClientGetResult` has been removed
+- Struct `InstructionsClientListByBillingProfileResult` has been removed
+- Struct `InstructionsClientPutResult` has been removed
+- Struct `InvoiceSectionsClientCreateOrUpdateResult` has been removed
+- Struct `InvoiceSectionsClientGetResult` has been removed
+- Struct `InvoiceSectionsClientListByBillingProfileResult` has been removed
+- Struct `InvoicesClientDownloadBillingSubscriptionInvoiceResult` has been removed
+- Struct `InvoicesClientDownloadInvoiceResult` has been removed
+- Struct `InvoicesClientDownloadMultipleBillingProfileInvoicesResult` has been removed
+- Struct `InvoicesClientDownloadMultipleBillingSubscriptionInvoicesResult` has been removed
+- Struct `InvoicesClientGetByIDResult` has been removed
+- Struct `InvoicesClientGetBySubscriptionAndInvoiceIDResult` has been removed
+- Struct `InvoicesClientGetResult` has been removed
+- Struct `InvoicesClientListByBillingAccountResult` has been removed
+- Struct `InvoicesClientListByBillingProfileResult` has been removed
+- Struct `InvoicesClientListByBillingSubscriptionResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PeriodsClientGetResult` has been removed
+- Struct `PeriodsClientListResult` has been removed
+- Struct `PermissionsClientListByBillingAccountResult` has been removed
+- Struct `PermissionsClientListByBillingProfileResult` has been removed
+- Struct `PermissionsClientListByCustomerResult` has been removed
+- Struct `PermissionsClientListByInvoiceSectionsResult` has been removed
+- Struct `PoliciesClientGetByBillingProfileResult` has been removed
+- Struct `PoliciesClientGetByCustomerResult` has been removed
+- Struct `PoliciesClientUpdateCustomerResult` has been removed
+- Struct `PoliciesClientUpdateResult` has been removed
+- Struct `ProductsClientGetResult` has been removed
+- Struct `ProductsClientListByBillingAccountResult` has been removed
+- Struct `ProductsClientListByBillingProfileResult` has been removed
+- Struct `ProductsClientListByCustomerResult` has been removed
+- Struct `ProductsClientListByInvoiceSectionResult` has been removed
+- Struct `ProductsClientMoveResult` has been removed
+- Struct `ProductsClientUpdateResult` has been removed
+- Struct `ProductsClientValidateMoveResult` has been removed
+- Struct `ProfilesClientCreateOrUpdateResult` has been removed
+- Struct `ProfilesClientGetResult` has been removed
+- Struct `ProfilesClientListByBillingAccountResult` has been removed
+- Struct `PropertyClientGetResult` has been removed
+- Struct `PropertyClientUpdateResult` has been removed
+- Struct `ReservationsClientListByBillingAccountResult` has been removed
+- Struct `ReservationsClientListByBillingProfileResult` has been removed
+- Struct `RoleAssignmentsClientDeleteByBillingAccountResult` has been removed
+- Struct `RoleAssignmentsClientDeleteByBillingProfileResult` has been removed
+- Struct `RoleAssignmentsClientDeleteByInvoiceSectionResult` has been removed
+- Struct `RoleAssignmentsClientGetByBillingAccountResult` has been removed
+- Struct `RoleAssignmentsClientGetByBillingProfileResult` has been removed
+- Struct `RoleAssignmentsClientGetByInvoiceSectionResult` has been removed
+- Struct `RoleAssignmentsClientListByBillingAccountResult` has been removed
+- Struct `RoleAssignmentsClientListByBillingProfileResult` has been removed
+- Struct `RoleAssignmentsClientListByInvoiceSectionResult` has been removed
+- Struct `RoleDefinitionsClientGetByBillingAccountResult` has been removed
+- Struct `RoleDefinitionsClientGetByBillingProfileResult` has been removed
+- Struct `RoleDefinitionsClientGetByInvoiceSectionResult` has been removed
+- Struct `RoleDefinitionsClientListByBillingAccountResult` has been removed
+- Struct `RoleDefinitionsClientListByBillingProfileResult` has been removed
+- Struct `RoleDefinitionsClientListByInvoiceSectionResult` has been removed
+- Struct `SubscriptionsClientGetResult` has been removed
+- Struct `SubscriptionsClientListByBillingAccountResult` has been removed
+- Struct `SubscriptionsClientListByBillingProfileResult` has been removed
+- Struct `SubscriptionsClientListByCustomerResult` has been removed
+- Struct `SubscriptionsClientListByInvoiceSectionResult` has been removed
+- Struct `SubscriptionsClientMoveResult` has been removed
+- Struct `SubscriptionsClientUpdateResult` has been removed
+- Struct `SubscriptionsClientValidateMoveResult` has been removed
+- Struct `TransactionsClientListByInvoiceResult` has been removed
+- Field `PermissionsClientListByBillingAccountResult` of struct `PermissionsClientListByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `PermissionsClientListByBillingAccountResponse` has been removed
+- Field `ProductsClientValidateMoveResult` of struct `ProductsClientValidateMoveResponse` has been removed
+- Field `RawResponse` of struct `ProductsClientValidateMoveResponse` has been removed
+- Field `AddressClientValidateResult` of struct `AddressClientValidateResponse` has been removed
+- Field `RawResponse` of struct `AddressClientValidateResponse` has been removed
+- Field `SubscriptionsClientUpdateResult` of struct `SubscriptionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionsClientUpdateResponse` has been removed
+- Field `CustomersClientListByBillingProfileResult` of struct `CustomersClientListByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `CustomersClientListByBillingProfileResponse` has been removed
+- Field `InvoicesClientDownloadInvoiceResult` of struct `InvoicesClientDownloadInvoiceResponse` has been removed
+- Field `RawResponse` of struct `InvoicesClientDownloadInvoiceResponse` has been removed
+- Field `InstructionsClientListByBillingProfileResult` of struct `InstructionsClientListByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `InstructionsClientListByBillingProfileResponse` has been removed
+- Field `RoleDefinitionsClientGetByInvoiceSectionResult` of struct `RoleDefinitionsClientGetByInvoiceSectionResponse` has been removed
+- Field `RawResponse` of struct `RoleDefinitionsClientGetByInvoiceSectionResponse` has been removed
+- Field `RoleDefinitionsClientGetByBillingProfileResult` of struct `RoleDefinitionsClientGetByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `RoleDefinitionsClientGetByBillingProfileResponse` has been removed
+- Field `RoleAssignmentsClientListByInvoiceSectionResult` of struct `RoleAssignmentsClientListByInvoiceSectionResponse` has been removed
+- Field `RawResponse` of struct `RoleAssignmentsClientListByInvoiceSectionResponse` has been removed
+- Field `PermissionsClientListByCustomerResult` of struct `PermissionsClientListByCustomerResponse` has been removed
+- Field `RawResponse` of struct `PermissionsClientListByCustomerResponse` has been removed
+- Field `ProductsClientListByCustomerResult` of struct `ProductsClientListByCustomerResponse` has been removed
+- Field `RawResponse` of struct `ProductsClientListByCustomerResponse` has been removed
+- Field `ReservationsClientListByBillingProfileResult` of struct `ReservationsClientListByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `ReservationsClientListByBillingProfileResponse` has been removed
+- Field `TransactionsClientListByInvoiceResult` of struct `TransactionsClientListByInvoiceResponse` has been removed
+- Field `RawResponse` of struct `TransactionsClientListByInvoiceResponse` has been removed
+- Field `PoliciesClientGetByCustomerResult` of struct `PoliciesClientGetByCustomerResponse` has been removed
+- Field `RawResponse` of struct `PoliciesClientGetByCustomerResponse` has been removed
+- Field `InstructionsClientPutResult` of struct `InstructionsClientPutResponse` has been removed
+- Field `RawResponse` of struct `InstructionsClientPutResponse` has been removed
+- Field `ProductsClientMoveResult` of struct `ProductsClientMoveResponse` has been removed
+- Field `RawResponse` of struct `ProductsClientMoveResponse` has been removed
+- Field `CustomersClientGetResult` of struct `CustomersClientGetResponse` has been removed
+- Field `RawResponse` of struct `CustomersClientGetResponse` has been removed
+- Field `SubscriptionsClientListByBillingProfileResult` of struct `SubscriptionsClientListByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionsClientListByBillingProfileResponse` has been removed
+- Field `AgreementsClientListByBillingAccountResult` of struct `AgreementsClientListByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `AgreementsClientListByBillingAccountResponse` has been removed
+- Field `RoleDefinitionsClientListByBillingAccountResult` of struct `RoleDefinitionsClientListByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `RoleDefinitionsClientListByBillingAccountResponse` has been removed
+- Field `PeriodsClientListResult` of struct `PeriodsClientListResponse` has been removed
+- Field `RawResponse` of struct `PeriodsClientListResponse` has been removed
+- Field `RoleAssignmentsClientDeleteByBillingProfileResult` of struct `RoleAssignmentsClientDeleteByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `RoleAssignmentsClientDeleteByBillingProfileResponse` has been removed
+- Field `SubscriptionsClientMoveResult` of struct `SubscriptionsClientMoveResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionsClientMoveResponse` has been removed
+- Field `PoliciesClientUpdateCustomerResult` of struct `PoliciesClientUpdateCustomerResponse` has been removed
+- Field `RawResponse` of struct `PoliciesClientUpdateCustomerResponse` has been removed
+- Field `SubscriptionsClientListByInvoiceSectionResult` of struct `SubscriptionsClientListByInvoiceSectionResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionsClientListByInvoiceSectionResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionsClientMovePollerResponse` has been removed
+- Field `InvoicesClientListByBillingAccountResult` of struct `InvoicesClientListByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `InvoicesClientListByBillingAccountResponse` has been removed
+- Field `InvoicesClientDownloadMultipleBillingProfileInvoicesResult` of struct `InvoicesClientDownloadMultipleBillingProfileInvoicesResponse` has been removed
+- Field `RawResponse` of struct `InvoicesClientDownloadMultipleBillingProfileInvoicesResponse` has been removed
+- Field `RoleAssignmentsClientDeleteByInvoiceSectionResult` of struct `RoleAssignmentsClientDeleteByInvoiceSectionResponse` has been removed
+- Field `RawResponse` of struct `RoleAssignmentsClientDeleteByInvoiceSectionResponse` has been removed
+- Field `InvoicesClientGetByIDResult` of struct `InvoicesClientGetByIDResponse` has been removed
+- Field `RawResponse` of struct `InvoicesClientGetByIDResponse` has been removed
+- Field `InstructionsClientGetResult` of struct `InstructionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `InstructionsClientGetResponse` has been removed
+- Field `PropertyClientUpdateResult` of struct `PropertyClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PropertyClientUpdateResponse` has been removed
+- Field `SubscriptionsClientGetResult` of struct `SubscriptionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionsClientGetResponse` has been removed
+- Field `RoleAssignmentsClientListByBillingProfileResult` of struct `RoleAssignmentsClientListByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `RoleAssignmentsClientListByBillingProfileResponse` has been removed
+- Field `PermissionsClientListByInvoiceSectionsResult` of struct `PermissionsClientListByInvoiceSectionsResponse` has been removed
+- Field `RawResponse` of struct `PermissionsClientListByInvoiceSectionsResponse` has been removed
+- Field `ProfilesClientCreateOrUpdateResult` of struct `ProfilesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProfilesClientCreateOrUpdateResponse` has been removed
+- Field `ProductsClientListByInvoiceSectionResult` of struct `ProductsClientListByInvoiceSectionResponse` has been removed
+- Field `RawResponse` of struct `ProductsClientListByInvoiceSectionResponse` has been removed
+- Field `InvoicesClientDownloadBillingSubscriptionInvoiceResult` of struct `InvoicesClientDownloadBillingSubscriptionInvoiceResponse` has been removed
+- Field `RawResponse` of struct `InvoicesClientDownloadBillingSubscriptionInvoiceResponse` has been removed
+- Field `InvoicesClientGetResult` of struct `InvoicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `InvoicesClientGetResponse` has been removed
+- Field `ProductsClientListByBillingAccountResult` of struct `ProductsClientListByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `ProductsClientListByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientUpdatePollerResponse` has been removed
+- Field `SubscriptionsClientListByCustomerResult` of struct `SubscriptionsClientListByCustomerResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionsClientListByCustomerResponse` has been removed
+- Field `CustomersClientListByBillingAccountResult` of struct `CustomersClientListByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `CustomersClientListByBillingAccountResponse` has been removed
+- Field `RoleAssignmentsClientGetByInvoiceSectionResult` of struct `RoleAssignmentsClientGetByInvoiceSectionResponse` has been removed
+- Field `RawResponse` of struct `RoleAssignmentsClientGetByInvoiceSectionResponse` has been removed
+- Field `RawResponse` of struct `InvoicesClientDownloadBillingSubscriptionInvoicePollerResponse` has been removed
+- Field `AgreementsClientGetResult` of struct `AgreementsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AgreementsClientGetResponse` has been removed
+- Field `RoleAssignmentsClientGetByBillingProfileResult` of struct `RoleAssignmentsClientGetByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `RoleAssignmentsClientGetByBillingProfileResponse` has been removed
+- Field `SubscriptionsClientListByBillingAccountResult` of struct `SubscriptionsClientListByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionsClientListByBillingAccountResponse` has been removed
+- Field `ProductsClientListByBillingProfileResult` of struct `ProductsClientListByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `ProductsClientListByBillingProfileResponse` has been removed
+- Field `InvoiceSectionsClientListByBillingProfileResult` of struct `InvoiceSectionsClientListByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `InvoiceSectionsClientListByBillingProfileResponse` has been removed
+- Field `AvailableBalancesClientGetResult` of struct `AvailableBalancesClientGetResponse` has been removed
+- Field `RawResponse` of struct `AvailableBalancesClientGetResponse` has been removed
+- Field `RoleDefinitionsClientListByBillingProfileResult` of struct `RoleDefinitionsClientListByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `RoleDefinitionsClientListByBillingProfileResponse` has been removed
+- Field `PoliciesClientUpdateResult` of struct `PoliciesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PoliciesClientUpdateResponse` has been removed
+- Field `AccountsClientGetResult` of struct `AccountsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientGetResponse` has been removed
+- Field `PermissionsClientListByBillingProfileResult` of struct `PermissionsClientListByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `PermissionsClientListByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `InvoicesClientDownloadInvoicePollerResponse` has been removed
+- Field `RoleDefinitionsClientGetByBillingAccountResult` of struct `RoleDefinitionsClientGetByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `RoleDefinitionsClientGetByBillingAccountResponse` has been removed
+- Field `InvoicesClientListByBillingProfileResult` of struct `InvoicesClientListByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `InvoicesClientListByBillingProfileResponse` has been removed
+- Field `EnrollmentAccountsClientGetResult` of struct `EnrollmentAccountsClientGetResponse` has been removed
+- Field `RawResponse` of struct `EnrollmentAccountsClientGetResponse` has been removed
+- Field `ReservationsClientListByBillingAccountResult` of struct `ReservationsClientListByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `ReservationsClientListByBillingAccountResponse` has been removed
+- Field `InvoicesClientListByBillingSubscriptionResult` of struct `InvoicesClientListByBillingSubscriptionResponse` has been removed
+- Field `RawResponse` of struct `InvoicesClientListByBillingSubscriptionResponse` has been removed
+- Field `PoliciesClientGetByBillingProfileResult` of struct `PoliciesClientGetByBillingProfileResponse` has been removed
+- Field `RawResponse` of struct `PoliciesClientGetByBillingProfileResponse` has been removed
+- Field `RoleAssignmentsClientListByBillingAccountResult` of struct `RoleAssignmentsClientListByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `RoleAssignmentsClientListByBillingAccountResponse` has been removed
+- Field `ProfilesClientListByBillingAccountResult` of struct `ProfilesClientListByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `ProfilesClientListByBillingAccountResponse` has been removed
+- Field `AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResult` of struct `AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse` has been removed
+- Field `ProductsClientGetResult` of struct `ProductsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProductsClientGetResponse` has been removed
+- Field `InvoiceSectionsClientCreateOrUpdateResult` of struct `InvoiceSectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `InvoiceSectionsClientCreateOrUpdateResponse` has been removed
+- Field `AccountsClientListResult` of struct `AccountsClientListResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientListResponse` has been removed
+- Field `RoleDefinitionsClientListByInvoiceSectionResult` of struct `RoleDefinitionsClientListByInvoiceSectionResponse` has been removed
+- Field `RawResponse` of struct `RoleDefinitionsClientListByInvoiceSectionResponse` has been removed
+- Field `RawResponse` of struct `ProfilesClientCreateOrUpdatePollerResponse` has been removed
+- Field `PropertyClientGetResult` of struct `PropertyClientGetResponse` has been removed
+- Field `RawResponse` of struct `PropertyClientGetResponse` has been removed
+- Field `InvoiceSectionsClientGetResult` of struct `InvoiceSectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `InvoiceSectionsClientGetResponse` has been removed
+- Field `PeriodsClientGetResult` of struct `PeriodsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PeriodsClientGetResponse` has been removed
+- Field `AccountsClientUpdateResult` of struct `AccountsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientUpdateResponse` has been removed
+- Field `InvoicesClientGetBySubscriptionAndInvoiceIDResult` of struct `InvoicesClientGetBySubscriptionAndInvoiceIDResponse` has been removed
+- Field `RawResponse` of struct `InvoicesClientGetBySubscriptionAndInvoiceIDResponse` has been removed
+- Field `RawResponse` of struct `InvoicesClientDownloadMultipleBillingProfileInvoicesPollerResponse` has been removed
+- Field `RawResponse` of struct `InvoiceSectionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `SubscriptionsClientValidateMoveResult` of struct `SubscriptionsClientValidateMoveResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionsClientValidateMoveResponse` has been removed
+- Field `RawResponse` of struct `InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPollerResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `InvoicesClientDownloadMultipleBillingSubscriptionInvoicesResult` of struct `InvoicesClientDownloadMultipleBillingSubscriptionInvoicesResponse` has been removed
+- Field `RawResponse` of struct `InvoicesClientDownloadMultipleBillingSubscriptionInvoicesResponse` has been removed
+- Field `RoleAssignmentsClientDeleteByBillingAccountResult` of struct `RoleAssignmentsClientDeleteByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `RoleAssignmentsClientDeleteByBillingAccountResponse` has been removed
+- Field `EnrollmentAccountsClientListResult` of struct `EnrollmentAccountsClientListResponse` has been removed
+- Field `RawResponse` of struct `EnrollmentAccountsClientListResponse` has been removed
+- Field `ProfilesClientGetResult` of struct `ProfilesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProfilesClientGetResponse` has been removed
+- Field `RoleAssignmentsClientGetByBillingAccountResult` of struct `RoleAssignmentsClientGetByBillingAccountResponse` has been removed
+- Field `RawResponse` of struct `RoleAssignmentsClientGetByBillingAccountResponse` has been removed
+- Field `ProductsClientUpdateResult` of struct `ProductsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProductsClientUpdateResponse` has been removed
+
+### Features Added
+
+- New function `*InstructionsClientListByBillingProfilePager.More() bool`
+- New function `*PermissionsClientListByBillingAccountPager.More() bool`
+- New function `*ProductsClientListByBillingAccountPager.More() bool`
+- New function `*EnrollmentAccountContext.UnmarshalJSON([]byte) error`
+- New function `*ReservationsClientListByBillingProfilePager.More() bool`
+- New function `ErrorDetails.MarshalJSON() ([]byte, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `EnrollmentAccountContext.MarshalJSON() ([]byte, error)`
+- New function `*ProfilesClientListByBillingAccountPager.More() bool`
+- New function `*PeriodsClientListPager.More() bool`
+- New function `*CustomersClientListByBillingAccountPager.More() bool`
+- New function `*RoleAssignmentsClientListByInvoiceSectionPager.More() bool`
+- New function `*InvoicesClientListByBillingProfilePager.More() bool`
+- New function `*SubscriptionsClientListByBillingAccountPager.More() bool`
+- New function `*RoleDefinitionsClientListByBillingProfilePager.More() bool`
+- New function `*SubscriptionsClientListByBillingProfilePager.More() bool`
+- New function `*InvoicesClientListByBillingSubscriptionPager.More() bool`
+- New function `*EnrollmentAccountsClientListPager.More() bool`
+- New function `ProfileCreationRequest.MarshalJSON() ([]byte, error)`
+- New function `*AgreementsClientListByBillingAccountPager.More() bool`
+- New function `*RoleDefinitionsClientListByBillingAccountPager.More() bool`
+- New function `*PermissionsClientListByBillingProfilePager.More() bool`
+- New function `*InvoiceSectionsClientListByBillingProfilePager.More() bool`
+- New function `*ProductsClientListByInvoiceSectionPager.More() bool`
+- New function `*ProductsClientListByBillingProfilePager.More() bool`
+- New function `*SubscriptionsClientListByInvoiceSectionPager.More() bool`
+- New function `*ReservationsClientListByBillingAccountPager.More() bool`
+- New function `*AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionPager.More() bool`
+- New function `*PermissionsClientListByInvoiceSectionsPager.More() bool`
+- New function `*RoleAssignmentsClientListByBillingAccountPager.More() bool`
+- New function `*PermissionsClientListByCustomerPager.More() bool`
+- New function `*AccountsClientListPager.More() bool`
+- New function `*ProductsClientListByCustomerPager.More() bool`
+- New function `*InvoicesClientListByBillingAccountPager.More() bool`
+- New function `*RoleAssignmentsClientListByBillingProfilePager.More() bool`
+- New function `*RoleDefinitionsClientListByInvoiceSectionPager.More() bool`
+- New function `*SubscriptionsClientListByCustomerPager.More() bool`
+- New function `*TransactionsClientListByInvoicePager.More() bool`
+- New function `*CustomersClientListByBillingProfilePager.More() bool`
+- New struct `EnrollmentAccountContext`
+- New struct `ErrorDetails`
+- New struct `ErrorResponse`
+- New struct `ErrorSubDetailsItem`
+- New struct `InvoiceSectionCreationRequest`
+- New struct `ProfileCreationRequest`
+- New anonymous field `AvailableBalance` in struct `AvailableBalancesClientGetResponse`
+- New anonymous field `CustomerListResult` in struct `CustomersClientListByBillingAccountResponse`
+- New anonymous field `RoleDefinitionListResult` in struct `RoleDefinitionsClientListByInvoiceSectionResponse`
+- New anonymous field `DownloadURL` in struct `InvoicesClientDownloadMultipleBillingSubscriptionInvoicesResponse`
+- New anonymous field `RoleAssignment` in struct `RoleAssignmentsClientGetByBillingProfileResponse`
+- New anonymous field `ValidateProductTransferEligibilityResult` in struct `ProductsClientValidateMoveResponse`
+- New anonymous field `Instruction` in struct `InstructionsClientPutResponse`
+- New anonymous field `CustomerListResult` in struct `CustomersClientListByBillingProfileResponse`
+- New anonymous field `CustomerPolicy` in struct `PoliciesClientUpdateCustomerResponse`
+- New anonymous field `Period` in struct `PeriodsClientGetResponse`
+- New anonymous field `DownloadURL` in struct `InvoicesClientDownloadInvoiceResponse`
+- New anonymous field `AgreementListResult` in struct `AgreementsClientListByBillingAccountResponse`
+- New anonymous field `RoleDefinitionListResult` in struct `RoleDefinitionsClientListByBillingAccountResponse`
+- New anonymous field `ProfileListResult` in struct `ProfilesClientListByBillingAccountResponse`
+- New anonymous field `ReservationsListResult` in struct `ReservationsClientListByBillingProfileResponse`
+- New anonymous field `Property` in struct `PropertyClientGetResponse`
+- New anonymous field `ProductsListResult` in struct `ProductsClientListByBillingAccountResponse`
+- New anonymous field `RoleAssignment` in struct `RoleAssignmentsClientGetByInvoiceSectionResponse`
+- New anonymous field `Customer` in struct `CustomersClientGetResponse`
+- New anonymous field `PermissionsListResult` in struct `PermissionsClientListByBillingProfileResponse`
+- New anonymous field `PermissionsListResult` in struct `PermissionsClientListByBillingAccountResponse`
+- New anonymous field `RoleDefinition` in struct `RoleDefinitionsClientGetByBillingAccountResponse`
+- New anonymous field `Subscription` in struct `SubscriptionsClientUpdateResponse`
+- New anonymous field `InvoiceListResult` in struct `InvoicesClientListByBillingAccountResponse`
+- New anonymous field `Instruction` in struct `InstructionsClientGetResponse`
+- New anonymous field `TransactionListResult` in struct `TransactionsClientListByInvoiceResponse`
+- New anonymous field `Profile` in struct `ProfilesClientCreateOrUpdateResponse`
+- New anonymous field `InvoiceSection` in struct `InvoiceSectionsClientCreateOrUpdateResponse`
+- New anonymous field `Account` in struct `AccountsClientUpdateResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `RoleAssignmentListResult` in struct `RoleAssignmentsClientListByBillingProfileResponse`
+- New anonymous field `CustomerPolicy` in struct `PoliciesClientGetByCustomerResponse`
+- New anonymous field `Agreement` in struct `AgreementsClientGetResponse`
+- New anonymous field `RoleAssignmentListResult` in struct `RoleAssignmentsClientListByInvoiceSectionResponse`
+- New anonymous field `DownloadURL` in struct `InvoicesClientDownloadMultipleBillingProfileInvoicesResponse`
+- New anonymous field `SubscriptionsListResult` in struct `SubscriptionsClientListByCustomerResponse`
+- New anonymous field `SubscriptionsListResult` in struct `SubscriptionsClientListByInvoiceSectionResponse`
+- New anonymous field `ProductsListResult` in struct `ProductsClientListByInvoiceSectionResponse`
+- New anonymous field `EnrollmentAccountSummary` in struct `EnrollmentAccountsClientGetResponse`
+- New anonymous field `ProductsListResult` in struct `ProductsClientListByBillingProfileResponse`
+- New anonymous field `Product` in struct `ProductsClientUpdateResponse`
+- New anonymous field `RoleAssignmentListResult` in struct `RoleAssignmentsClientListByBillingAccountResponse`
+- New anonymous field `ReservationsListResult` in struct `ReservationsClientListByBillingAccountResponse`
+- New anonymous field `EnrollmentAccountListResult` in struct `EnrollmentAccountsClientListResponse`
+- New anonymous field `Invoice` in struct `InvoicesClientGetBySubscriptionAndInvoiceIDResponse`
+- New anonymous field `InvoiceListResult` in struct `InvoicesClientListByBillingProfileResponse`
+- New anonymous field `Product` in struct `ProductsClientMoveResponse`
+- New field `Location` in struct `ProductsClientMoveResponse`
+- New field `RetryAfter` in struct `ProductsClientMoveResponse`
+- New anonymous field `RoleDefinition` in struct `RoleDefinitionsClientGetByBillingProfileResponse`
+- New anonymous field `RoleDefinition` in struct `RoleDefinitionsClientGetByInvoiceSectionResponse`
+- New anonymous field `Account` in struct `AccountsClientGetResponse`
+- New anonymous field `InstructionListResult` in struct `InstructionsClientListByBillingProfileResponse`
+- New anonymous field `Profile` in struct `ProfilesClientGetResponse`
+- New anonymous field `Invoice` in struct `InvoicesClientGetResponse`
+- New anonymous field `Invoice` in struct `InvoicesClientGetByIDResponse`
+- New anonymous field `Policy` in struct `PoliciesClientGetByBillingProfileResponse`
+- New anonymous field `RoleAssignment` in struct `RoleAssignmentsClientDeleteByBillingProfileResponse`
+- New anonymous field `InvoiceListResult` in struct `InvoicesClientListByBillingSubscriptionResponse`
+- New anonymous field `AccountListResult` in struct `AccountsClientListResponse`
+- New anonymous field `PeriodsListResult` in struct `PeriodsClientListResponse`
+- New anonymous field `RoleAssignment` in struct `RoleAssignmentsClientDeleteByBillingAccountResponse`
+- New anonymous field `DownloadURL` in struct `InvoicesClientDownloadBillingSubscriptionInvoiceResponse`
+- New anonymous field `PermissionsListResult` in struct `PermissionsClientListByInvoiceSectionsResponse`
+- New anonymous field `Property` in struct `PropertyClientUpdateResponse`
+- New anonymous field `InvoiceSectionListResult` in struct `InvoiceSectionsClientListByBillingProfileResponse`
+- New anonymous field `Subscription` in struct `SubscriptionsClientGetResponse`
+- New anonymous field `RoleDefinitionListResult` in struct `RoleDefinitionsClientListByBillingProfileResponse`
+- New anonymous field `SubscriptionsListResult` in struct `SubscriptionsClientListByBillingProfileResponse`
+- New anonymous field `RoleAssignment` in struct `RoleAssignmentsClientGetByBillingAccountResponse`
+- New anonymous field `Policy` in struct `PoliciesClientUpdateResponse`
+- New anonymous field `RoleAssignment` in struct `RoleAssignmentsClientDeleteByInvoiceSectionResponse`
+- New anonymous field `PermissionsListResult` in struct `PermissionsClientListByCustomerResponse`
+- New anonymous field `ProductsListResult` in struct `ProductsClientListByCustomerResponse`
+- New anonymous field `InvoiceSection` in struct `InvoiceSectionsClientGetResponse`
+- New anonymous field `InvoiceSectionListWithCreateSubPermissionResult` in struct `AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse`
+- New anonymous field `Subscription` in struct `SubscriptionsClientMoveResponse`
+- New anonymous field `Product` in struct `ProductsClientGetResponse`
+- New anonymous field `ValidateAddressResponse` in struct `AddressClientValidateResponse`
+- New anonymous field `SubscriptionsListResult` in struct `SubscriptionsClientListByBillingAccountResponse`
+- New anonymous field `ValidateSubscriptionTransferEligibilityResult` in struct `SubscriptionsClientValidateMoveResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*EnrollmentAccountContext.UnmarshalJSON` has been removed
+- Function `ProfileCreationRequest.MarshalJSON` has been removed
+- Function `ErrorDetails.MarshalJSON` has been removed
+- Function `EnrollmentAccountContext.MarshalJSON` has been removed
+- Struct `EnrollmentAccountContext` has been removed
+- Struct `ErrorDetails` has been removed
+- Struct `ErrorResponse` has been removed
+- Struct `ErrorSubDetailsItem` has been removed
+- Struct `InvoiceSectionCreationRequest` has been removed
+- Struct `ProfileCreationRequest` has been removed
+
+### Features Added
+
+- New struct `ProfileInfo`
+- New field `BillingProfilesInfo` in struct `AgreementProperties`
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

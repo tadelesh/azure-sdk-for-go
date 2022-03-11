@@ -35,17 +35,17 @@ type ApplyUpdatesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewApplyUpdatesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ApplyUpdatesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ApplyUpdatesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *ApplyUpdatesClient) createOrUpdateCreateRequest(ctx context.Contex
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ApplyUpdatesClient) createOrUpdateHandleResponse(resp *http.Response) (ApplyUpdatesClientCreateOrUpdateResponse, error) {
-	result := ApplyUpdatesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ApplyUpdatesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplyUpdate); err != nil {
 		return ApplyUpdatesClientCreateOrUpdateResponse{}, err
 	}
@@ -185,7 +185,7 @@ func (client *ApplyUpdatesClient) createOrUpdateParentCreateRequest(ctx context.
 
 // createOrUpdateParentHandleResponse handles the CreateOrUpdateParent response.
 func (client *ApplyUpdatesClient) createOrUpdateParentHandleResponse(resp *http.Response) (ApplyUpdatesClientCreateOrUpdateParentResponse, error) {
-	result := ApplyUpdatesClientCreateOrUpdateParentResponse{RawResponse: resp}
+	result := ApplyUpdatesClientCreateOrUpdateParentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplyUpdate); err != nil {
 		return ApplyUpdatesClientCreateOrUpdateParentResponse{}, err
 	}
@@ -255,7 +255,7 @@ func (client *ApplyUpdatesClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *ApplyUpdatesClient) getHandleResponse(resp *http.Response) (ApplyUpdatesClientGetResponse, error) {
-	result := ApplyUpdatesClientGetResponse{RawResponse: resp}
+	result := ApplyUpdatesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplyUpdate); err != nil {
 		return ApplyUpdatesClientGetResponse{}, err
 	}
@@ -335,7 +335,7 @@ func (client *ApplyUpdatesClient) getParentCreateRequest(ctx context.Context, re
 
 // getParentHandleResponse handles the GetParent response.
 func (client *ApplyUpdatesClient) getParentHandleResponse(resp *http.Response) (ApplyUpdatesClientGetParentResponse, error) {
-	result := ApplyUpdatesClientGetParentResponse{RawResponse: resp}
+	result := ApplyUpdatesClientGetParentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplyUpdate); err != nil {
 		return ApplyUpdatesClientGetParentResponse{}, err
 	}
@@ -345,19 +345,13 @@ func (client *ApplyUpdatesClient) getParentHandleResponse(resp *http.Response) (
 // List - Get Configuration records within a subscription
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ApplyUpdatesClientListOptions contains the optional parameters for the ApplyUpdatesClient.List method.
-func (client *ApplyUpdatesClient) List(ctx context.Context, options *ApplyUpdatesClientListOptions) (ApplyUpdatesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, options)
-	if err != nil {
-		return ApplyUpdatesClientListResponse{}, err
+func (client *ApplyUpdatesClient) List(options *ApplyUpdatesClientListOptions) *ApplyUpdatesClientListPager {
+	return &ApplyUpdatesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ApplyUpdatesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ApplyUpdatesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -380,7 +374,7 @@ func (client *ApplyUpdatesClient) listCreateRequest(ctx context.Context, options
 
 // listHandleResponse handles the List response.
 func (client *ApplyUpdatesClient) listHandleResponse(resp *http.Response) (ApplyUpdatesClientListResponse, error) {
-	result := ApplyUpdatesClientListResponse{RawResponse: resp}
+	result := ApplyUpdatesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListApplyUpdate); err != nil {
 		return ApplyUpdatesClientListResponse{}, err
 	}

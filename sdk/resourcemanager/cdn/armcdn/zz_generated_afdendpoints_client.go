@@ -64,9 +64,7 @@ func (client *AFDEndpointsClient) BeginCreate(ctx context.Context, resourceGroup
 	if err != nil {
 		return AFDEndpointsClientCreatePollerResponse{}, err
 	}
-	result := AFDEndpointsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AFDEndpointsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("AFDEndpointsClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AFDEndpointsClientCreatePollerResponse{}, err
@@ -139,9 +137,7 @@ func (client *AFDEndpointsClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return AFDEndpointsClientDeletePollerResponse{}, err
 	}
-	result := AFDEndpointsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AFDEndpointsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AFDEndpointsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AFDEndpointsClientDeletePollerResponse{}, err
@@ -255,7 +251,7 @@ func (client *AFDEndpointsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *AFDEndpointsClient) getHandleResponse(resp *http.Response) (AFDEndpointsClientGetResponse, error) {
-	result := AFDEndpointsClientGetResponse{RawResponse: resp}
+	result := AFDEndpointsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AFDEndpoint); err != nil {
 		return AFDEndpointsClientGetResponse{}, err
 	}
@@ -309,7 +305,7 @@ func (client *AFDEndpointsClient) listByProfileCreateRequest(ctx context.Context
 
 // listByProfileHandleResponse handles the ListByProfile response.
 func (client *AFDEndpointsClient) listByProfileHandleResponse(resp *http.Response) (AFDEndpointsClientListByProfileResponse, error) {
-	result := AFDEndpointsClientListByProfileResponse{RawResponse: resp}
+	result := AFDEndpointsClientListByProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AFDEndpointListResult); err != nil {
 		return AFDEndpointsClientListByProfileResponse{}, err
 	}
@@ -368,7 +364,7 @@ func (client *AFDEndpointsClient) listResourceUsageCreateRequest(ctx context.Con
 
 // listResourceUsageHandleResponse handles the ListResourceUsage response.
 func (client *AFDEndpointsClient) listResourceUsageHandleResponse(resp *http.Response) (AFDEndpointsClientListResourceUsageResponse, error) {
-	result := AFDEndpointsClientListResourceUsageResponse{RawResponse: resp}
+	result := AFDEndpointsClientListResourceUsageResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UsagesListResult); err != nil {
 		return AFDEndpointsClientListResourceUsageResponse{}, err
 	}
@@ -391,9 +387,7 @@ func (client *AFDEndpointsClient) BeginPurgeContent(ctx context.Context, resourc
 	if err != nil {
 		return AFDEndpointsClientPurgeContentPollerResponse{}, err
 	}
-	result := AFDEndpointsClientPurgeContentPollerResponse{
-		RawResponse: resp,
-	}
+	result := AFDEndpointsClientPurgeContentPollerResponse{}
 	pt, err := armruntime.NewPoller("AFDEndpointsClient.PurgeContent", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AFDEndpointsClientPurgeContentPollerResponse{}, err
@@ -468,9 +462,7 @@ func (client *AFDEndpointsClient) BeginUpdate(ctx context.Context, resourceGroup
 	if err != nil {
 		return AFDEndpointsClientUpdatePollerResponse{}, err
 	}
-	result := AFDEndpointsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AFDEndpointsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AFDEndpointsClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AFDEndpointsClientUpdatePollerResponse{}, err
@@ -587,7 +579,7 @@ func (client *AFDEndpointsClient) validateCustomDomainCreateRequest(ctx context.
 
 // validateCustomDomainHandleResponse handles the ValidateCustomDomain response.
 func (client *AFDEndpointsClient) validateCustomDomainHandleResponse(resp *http.Response) (AFDEndpointsClientValidateCustomDomainResponse, error) {
-	result := AFDEndpointsClientValidateCustomDomainResponse{RawResponse: resp}
+	result := AFDEndpointsClientValidateCustomDomainResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ValidateCustomDomainOutput); err != nil {
 		return AFDEndpointsClientValidateCustomDomainResponse{}, err
 	}

@@ -35,17 +35,17 @@ type GatewayRouteConfigsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGatewayRouteConfigsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *GatewayRouteConfigsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GatewayRouteConfigsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -66,9 +66,7 @@ func (client *GatewayRouteConfigsClient) BeginCreateOrUpdate(ctx context.Context
 	if err != nil {
 		return GatewayRouteConfigsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := GatewayRouteConfigsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := GatewayRouteConfigsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("GatewayRouteConfigsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return GatewayRouteConfigsClientCreateOrUpdatePollerResponse{}, err
@@ -145,9 +143,7 @@ func (client *GatewayRouteConfigsClient) BeginDelete(ctx context.Context, resour
 	if err != nil {
 		return GatewayRouteConfigsClientDeletePollerResponse{}, err
 	}
-	result := GatewayRouteConfigsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := GatewayRouteConfigsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("GatewayRouteConfigsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return GatewayRouteConfigsClientDeletePollerResponse{}, err
@@ -268,7 +264,7 @@ func (client *GatewayRouteConfigsClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *GatewayRouteConfigsClient) getHandleResponse(resp *http.Response) (GatewayRouteConfigsClientGetResponse, error) {
-	result := GatewayRouteConfigsClientGetResponse{RawResponse: resp}
+	result := GatewayRouteConfigsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GatewayRouteConfigResource); err != nil {
 		return GatewayRouteConfigsClientGetResponse{}, err
 	}
@@ -327,7 +323,7 @@ func (client *GatewayRouteConfigsClient) listCreateRequest(ctx context.Context, 
 
 // listHandleResponse handles the List response.
 func (client *GatewayRouteConfigsClient) listHandleResponse(resp *http.Response) (GatewayRouteConfigsClientListResponse, error) {
-	result := GatewayRouteConfigsClientListResponse{RawResponse: resp}
+	result := GatewayRouteConfigsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GatewayRouteConfigResourceCollection); err != nil {
 		return GatewayRouteConfigsClientListResponse{}, err
 	}

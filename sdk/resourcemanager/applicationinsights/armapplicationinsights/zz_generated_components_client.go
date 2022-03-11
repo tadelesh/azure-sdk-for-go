@@ -34,17 +34,17 @@ type ComponentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewComponentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ComponentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ComponentsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -66,7 +66,7 @@ func (client *ComponentsClient) CreateOrUpdate(ctx context.Context, resourceGrou
 	if err != nil {
 		return ComponentsClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated) {
+	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ComponentsClientCreateOrUpdateResponse{}, runtime.NewResponseError(resp)
 	}
 	return client.createOrUpdateHandleResponse(resp)
@@ -92,7 +92,7 @@ func (client *ComponentsClient) createOrUpdateCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-05-01-preview")
+	reqQP.Set("api-version", "2020-02-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, insightProperties)
@@ -100,7 +100,7 @@ func (client *ComponentsClient) createOrUpdateCreateRequest(ctx context.Context,
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ComponentsClient) createOrUpdateHandleResponse(resp *http.Response) (ComponentsClientCreateOrUpdateResponse, error) {
-	result := ComponentsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ComponentsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Component); err != nil {
 		return ComponentsClientCreateOrUpdateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *ComponentsClient) Delete(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ComponentsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ComponentsClientDeleteResponse{RawResponse: resp}, nil
+	return ComponentsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -147,8 +147,9 @@ func (client *ComponentsClient) deleteCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-05-01-preview")
+	reqQP.Set("api-version", "2020-02-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
 }
 
@@ -192,7 +193,7 @@ func (client *ComponentsClient) getCreateRequest(ctx context.Context, resourceGr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-05-01-preview")
+	reqQP.Set("api-version", "2020-02-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -200,7 +201,7 @@ func (client *ComponentsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *ComponentsClient) getHandleResponse(resp *http.Response) (ComponentsClientGetResponse, error) {
-	result := ComponentsClientGetResponse{RawResponse: resp}
+	result := ComponentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Component); err != nil {
 		return ComponentsClientGetResponse{}, err
 	}
@@ -253,7 +254,7 @@ func (client *ComponentsClient) getPurgeStatusCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-05-01-preview")
+	reqQP.Set("api-version", "2020-02-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -261,7 +262,7 @@ func (client *ComponentsClient) getPurgeStatusCreateRequest(ctx context.Context,
 
 // getPurgeStatusHandleResponse handles the GetPurgeStatus response.
 func (client *ComponentsClient) getPurgeStatusHandleResponse(resp *http.Response) (ComponentsClientGetPurgeStatusResponse, error) {
-	result := ComponentsClientGetPurgeStatusResponse{RawResponse: resp}
+	result := ComponentsClientGetPurgeStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentPurgeStatusResponse); err != nil {
 		return ComponentsClientGetPurgeStatusResponse{}, err
 	}
@@ -295,7 +296,7 @@ func (client *ComponentsClient) listCreateRequest(ctx context.Context, options *
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-05-01-preview")
+	reqQP.Set("api-version", "2020-02-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -303,7 +304,7 @@ func (client *ComponentsClient) listCreateRequest(ctx context.Context, options *
 
 // listHandleResponse handles the List response.
 func (client *ComponentsClient) listHandleResponse(resp *http.Response) (ComponentsClientListResponse, error) {
-	result := ComponentsClientListResponse{RawResponse: resp}
+	result := ComponentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentListResult); err != nil {
 		return ComponentsClientListResponse{}, err
 	}
@@ -343,7 +344,7 @@ func (client *ComponentsClient) listByResourceGroupCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-05-01-preview")
+	reqQP.Set("api-version", "2020-02-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -351,7 +352,7 @@ func (client *ComponentsClient) listByResourceGroupCreateRequest(ctx context.Con
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ComponentsClient) listByResourceGroupHandleResponse(resp *http.Response) (ComponentsClientListByResourceGroupResponse, error) {
-	result := ComponentsClientListByResourceGroupResponse{RawResponse: resp}
+	result := ComponentsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentListResult); err != nil {
 		return ComponentsClientListByResourceGroupResponse{}, err
 	}
@@ -403,7 +404,7 @@ func (client *ComponentsClient) purgeCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-05-01-preview")
+	reqQP.Set("api-version", "2020-02-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, body)
@@ -411,7 +412,7 @@ func (client *ComponentsClient) purgeCreateRequest(ctx context.Context, resource
 
 // purgeHandleResponse handles the Purge response.
 func (client *ComponentsClient) purgeHandleResponse(resp *http.Response) (ComponentsClientPurgeResponse, error) {
-	result := ComponentsClientPurgeResponse{RawResponse: resp}
+	result := ComponentsClientPurgeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentPurgeResponse); err != nil {
 		return ComponentsClientPurgeResponse{}, err
 	}
@@ -433,7 +434,7 @@ func (client *ComponentsClient) UpdateTags(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return ComponentsClientUpdateTagsResponse{}, err
 	}
-	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated) {
+	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ComponentsClientUpdateTagsResponse{}, runtime.NewResponseError(resp)
 	}
 	return client.updateTagsHandleResponse(resp)
@@ -459,7 +460,7 @@ func (client *ComponentsClient) updateTagsCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-05-01-preview")
+	reqQP.Set("api-version", "2020-02-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, componentTags)
@@ -467,7 +468,7 @@ func (client *ComponentsClient) updateTagsCreateRequest(ctx context.Context, res
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *ComponentsClient) updateTagsHandleResponse(resp *http.Response) (ComponentsClientUpdateTagsResponse, error) {
-	result := ComponentsClientUpdateTagsResponse{RawResponse: resp}
+	result := ComponentsClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Component); err != nil {
 		return ComponentsClientUpdateTagsResponse{}, err
 	}

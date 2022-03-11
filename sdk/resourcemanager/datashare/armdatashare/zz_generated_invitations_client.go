@@ -34,17 +34,17 @@ type InvitationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewInvitationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *InvitationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &InvitationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *InvitationsClient) createCreateRequest(ctx context.Context, resour
 
 // createHandleResponse handles the Create response.
 func (client *InvitationsClient) createHandleResponse(resp *http.Response) (InvitationsClientCreateResponse, error) {
-	result := InvitationsClientCreateResponse{RawResponse: resp}
+	result := InvitationsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Invitation); err != nil {
 		return InvitationsClientCreateResponse{}, err
 	}
@@ -134,7 +134,7 @@ func (client *InvitationsClient) Delete(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return InvitationsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return InvitationsClientDeleteResponse{RawResponse: resp}, nil
+	return InvitationsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -229,7 +229,7 @@ func (client *InvitationsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *InvitationsClient) getHandleResponse(resp *http.Response) (InvitationsClientGetResponse, error) {
-	result := InvitationsClientGetResponse{RawResponse: resp}
+	result := InvitationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Invitation); err != nil {
 		return InvitationsClientGetResponse{}, err
 	}
@@ -295,7 +295,7 @@ func (client *InvitationsClient) listByShareCreateRequest(ctx context.Context, r
 
 // listByShareHandleResponse handles the ListByShare response.
 func (client *InvitationsClient) listByShareHandleResponse(resp *http.Response) (InvitationsClientListByShareResponse, error) {
-	result := InvitationsClientListByShareResponse{RawResponse: resp}
+	result := InvitationsClientListByShareResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InvitationList); err != nil {
 		return InvitationsClientListByShareResponse{}, err
 	}

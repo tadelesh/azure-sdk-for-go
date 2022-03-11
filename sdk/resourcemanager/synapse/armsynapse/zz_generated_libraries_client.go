@@ -34,17 +34,17 @@ type LibrariesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLibrariesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LibrariesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LibrariesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *LibrariesClient) listByWorkspaceCreateRequest(ctx context.Context,
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *LibrariesClient) listByWorkspaceHandleResponse(resp *http.Response) (LibrariesClientListByWorkspaceResponse, error) {
-	result := LibrariesClientListByWorkspaceResponse{RawResponse: resp}
+	result := LibrariesClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LibraryListResponse); err != nil {
 		return LibrariesClientListByWorkspaceResponse{}, err
 	}

@@ -34,17 +34,17 @@ type PrivateCloudsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateCloudsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateCloudsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateCloudsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *PrivateCloudsClient) BeginCreateOrUpdate(ctx context.Context, reso
 	if err != nil {
 		return PrivateCloudsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PrivateCloudsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateCloudsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateCloudsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return PrivateCloudsClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *PrivateCloudsClient) BeginDelete(ctx context.Context, resourceGrou
 	if err != nil {
 		return PrivateCloudsClientDeletePollerResponse{}, err
 	}
-	result := PrivateCloudsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateCloudsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateCloudsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return PrivateCloudsClientDeletePollerResponse{}, err
@@ -232,7 +228,7 @@ func (client *PrivateCloudsClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *PrivateCloudsClient) getHandleResponse(resp *http.Response) (PrivateCloudsClientGetResponse, error) {
-	result := PrivateCloudsClientGetResponse{RawResponse: resp}
+	result := PrivateCloudsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateCloud); err != nil {
 		return PrivateCloudsClientGetResponse{}, err
 	}
@@ -279,7 +275,7 @@ func (client *PrivateCloudsClient) listCreateRequest(ctx context.Context, resour
 
 // listHandleResponse handles the List response.
 func (client *PrivateCloudsClient) listHandleResponse(resp *http.Response) (PrivateCloudsClientListResponse, error) {
-	result := PrivateCloudsClientListResponse{RawResponse: resp}
+	result := PrivateCloudsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateCloudList); err != nil {
 		return PrivateCloudsClientListResponse{}, err
 	}
@@ -335,7 +331,7 @@ func (client *PrivateCloudsClient) listAdminCredentialsCreateRequest(ctx context
 
 // listAdminCredentialsHandleResponse handles the ListAdminCredentials response.
 func (client *PrivateCloudsClient) listAdminCredentialsHandleResponse(resp *http.Response) (PrivateCloudsClientListAdminCredentialsResponse, error) {
-	result := PrivateCloudsClientListAdminCredentialsResponse{RawResponse: resp}
+	result := PrivateCloudsClientListAdminCredentialsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdminCredentials); err != nil {
 		return PrivateCloudsClientListAdminCredentialsResponse{}, err
 	}
@@ -378,7 +374,7 @@ func (client *PrivateCloudsClient) listInSubscriptionCreateRequest(ctx context.C
 
 // listInSubscriptionHandleResponse handles the ListInSubscription response.
 func (client *PrivateCloudsClient) listInSubscriptionHandleResponse(resp *http.Response) (PrivateCloudsClientListInSubscriptionResponse, error) {
-	result := PrivateCloudsClientListInSubscriptionResponse{RawResponse: resp}
+	result := PrivateCloudsClientListInSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateCloudList); err != nil {
 		return PrivateCloudsClientListInSubscriptionResponse{}, err
 	}
@@ -396,9 +392,7 @@ func (client *PrivateCloudsClient) BeginRotateNsxtPassword(ctx context.Context, 
 	if err != nil {
 		return PrivateCloudsClientRotateNsxtPasswordPollerResponse{}, err
 	}
-	result := PrivateCloudsClientRotateNsxtPasswordPollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateCloudsClientRotateNsxtPasswordPollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateCloudsClient.RotateNsxtPassword", "", resp, client.pl)
 	if err != nil {
 		return PrivateCloudsClientRotateNsxtPasswordPollerResponse{}, err
@@ -463,9 +457,7 @@ func (client *PrivateCloudsClient) BeginRotateVcenterPassword(ctx context.Contex
 	if err != nil {
 		return PrivateCloudsClientRotateVcenterPasswordPollerResponse{}, err
 	}
-	result := PrivateCloudsClientRotateVcenterPasswordPollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateCloudsClientRotateVcenterPasswordPollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateCloudsClient.RotateVcenterPassword", "", resp, client.pl)
 	if err != nil {
 		return PrivateCloudsClientRotateVcenterPasswordPollerResponse{}, err
@@ -531,9 +523,7 @@ func (client *PrivateCloudsClient) BeginUpdate(ctx context.Context, resourceGrou
 	if err != nil {
 		return PrivateCloudsClientUpdatePollerResponse{}, err
 	}
-	result := PrivateCloudsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateCloudsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateCloudsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return PrivateCloudsClientUpdatePollerResponse{}, err

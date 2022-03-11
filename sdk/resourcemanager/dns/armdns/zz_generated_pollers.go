@@ -43,11 +43,10 @@ func (p *ZonesClientDeletePoller) Poll(ctx context.Context) (*http.Response, err
 // If the final GET succeeded then the final ZonesClientDeleteResponse will be returned.
 func (p *ZonesClientDeletePoller) FinalResponse(ctx context.Context) (ZonesClientDeleteResponse, error) {
 	respType := ZonesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ZonesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

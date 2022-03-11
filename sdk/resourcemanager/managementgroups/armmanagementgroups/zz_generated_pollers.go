@@ -43,11 +43,10 @@ func (p *ClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ClientCreateOrUpdateResponse will be returned.
 func (p *ClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ClientCreateOrUpdateResponse, error) {
 	respType := ClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ManagementGroup)
+	_, err := p.pt.FinalResponse(ctx, &respType.ManagementGroup)
 	if err != nil {
 		return ClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ClientDeletePoller) Poll(ctx context.Context) (*http.Response, error) {
 // If the final GET succeeded then the final ClientDeleteResponse will be returned.
 func (p *ClientDeletePoller) FinalResponse(ctx context.Context) (ClientDeleteResponse, error) {
 	respType := ClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.AzureAsyncOperationResults)
+	_, err := p.pt.FinalResponse(ctx, &respType.AzureAsyncOperationResults)
 	if err != nil {
 		return ClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

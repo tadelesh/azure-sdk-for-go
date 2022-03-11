@@ -29,16 +29,16 @@ type ExchangeClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewExchangeClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ExchangeClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ExchangeClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -52,9 +52,7 @@ func (client *ExchangeClient) BeginPost(ctx context.Context, body ExchangeReques
 	if err != nil {
 		return ExchangeClientPostPollerResponse{}, err
 	}
-	result := ExchangeClientPostPollerResponse{
-		RawResponse: resp,
-	}
+	result := ExchangeClientPostPollerResponse{}
 	pt, err := armruntime.NewPoller("ExchangeClient.Post", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ExchangeClientPostPollerResponse{}, err

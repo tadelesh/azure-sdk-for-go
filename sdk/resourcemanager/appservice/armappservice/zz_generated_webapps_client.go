@@ -104,7 +104,7 @@ func (client *WebAppsClient) addPremierAddOnCreateRequest(ctx context.Context, r
 
 // addPremierAddOnHandleResponse handles the AddPremierAddOn response.
 func (client *WebAppsClient) addPremierAddOnHandleResponse(resp *http.Response) (WebAppsClientAddPremierAddOnResponse, error) {
-	result := WebAppsClientAddPremierAddOnResponse{RawResponse: resp}
+	result := WebAppsClientAddPremierAddOnResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PremierAddOn); err != nil {
 		return WebAppsClientAddPremierAddOnResponse{}, err
 	}
@@ -172,7 +172,7 @@ func (client *WebAppsClient) addPremierAddOnSlotCreateRequest(ctx context.Contex
 
 // addPremierAddOnSlotHandleResponse handles the AddPremierAddOnSlot response.
 func (client *WebAppsClient) addPremierAddOnSlotHandleResponse(resp *http.Response) (WebAppsClientAddPremierAddOnSlotResponse, error) {
-	result := WebAppsClientAddPremierAddOnSlotResponse{RawResponse: resp}
+	result := WebAppsClientAddPremierAddOnSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PremierAddOn); err != nil {
 		return WebAppsClientAddPremierAddOnSlotResponse{}, err
 	}
@@ -231,7 +231,7 @@ func (client *WebAppsClient) analyzeCustomHostnameCreateRequest(ctx context.Cont
 
 // analyzeCustomHostnameHandleResponse handles the AnalyzeCustomHostname response.
 func (client *WebAppsClient) analyzeCustomHostnameHandleResponse(resp *http.Response) (WebAppsClientAnalyzeCustomHostnameResponse, error) {
-	result := WebAppsClientAnalyzeCustomHostnameResponse{RawResponse: resp}
+	result := WebAppsClientAnalyzeCustomHostnameResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomHostnameAnalysisResult); err != nil {
 		return WebAppsClientAnalyzeCustomHostnameResponse{}, err
 	}
@@ -295,7 +295,7 @@ func (client *WebAppsClient) analyzeCustomHostnameSlotCreateRequest(ctx context.
 
 // analyzeCustomHostnameSlotHandleResponse handles the AnalyzeCustomHostnameSlot response.
 func (client *WebAppsClient) analyzeCustomHostnameSlotHandleResponse(resp *http.Response) (WebAppsClientAnalyzeCustomHostnameSlotResponse, error) {
-	result := WebAppsClientAnalyzeCustomHostnameSlotResponse{RawResponse: resp}
+	result := WebAppsClientAnalyzeCustomHostnameSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomHostnameAnalysisResult); err != nil {
 		return WebAppsClientAnalyzeCustomHostnameSlotResponse{}, err
 	}
@@ -322,7 +322,7 @@ func (client *WebAppsClient) ApplySlotConfigToProduction(ctx context.Context, re
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientApplySlotConfigToProductionResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientApplySlotConfigToProductionResponse{RawResponse: resp}, nil
+	return WebAppsClientApplySlotConfigToProductionResponse{}, nil
 }
 
 // applySlotConfigToProductionCreateRequest creates the ApplySlotConfigToProduction request.
@@ -371,7 +371,7 @@ func (client *WebAppsClient) ApplySlotConfigurationSlot(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientApplySlotConfigurationSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientApplySlotConfigurationSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientApplySlotConfigurationSlotResponse{}, nil
 }
 
 // applySlotConfigurationSlotCreateRequest creates the ApplySlotConfigurationSlot request.
@@ -415,9 +415,7 @@ func (client *WebAppsClient) BeginApproveOrRejectPrivateEndpointConnection(ctx c
 	if err != nil {
 		return WebAppsClientApproveOrRejectPrivateEndpointConnectionPollerResponse{}, err
 	}
-	result := WebAppsClientApproveOrRejectPrivateEndpointConnectionPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientApproveOrRejectPrivateEndpointConnectionPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.ApproveOrRejectPrivateEndpointConnection", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientApproveOrRejectPrivateEndpointConnectionPollerResponse{}, err
@@ -486,9 +484,7 @@ func (client *WebAppsClient) BeginApproveOrRejectPrivateEndpointConnectionSlot(c
 	if err != nil {
 		return WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotPollerResponse{}, err
 	}
-	result := WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.ApproveOrRejectPrivateEndpointConnectionSlot", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientApproveOrRejectPrivateEndpointConnectionSlotPollerResponse{}, err
@@ -599,7 +595,7 @@ func (client *WebAppsClient) backupCreateRequest(ctx context.Context, resourceGr
 
 // backupHandleResponse handles the Backup response.
 func (client *WebAppsClient) backupHandleResponse(resp *http.Response) (WebAppsClientBackupResponse, error) {
-	result := WebAppsClientBackupResponse{RawResponse: resp}
+	result := WebAppsClientBackupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupItem); err != nil {
 		return WebAppsClientBackupResponse{}, err
 	}
@@ -660,7 +656,7 @@ func (client *WebAppsClient) backupSlotCreateRequest(ctx context.Context, resour
 
 // backupSlotHandleResponse handles the BackupSlot response.
 func (client *WebAppsClient) backupSlotHandleResponse(resp *http.Response) (WebAppsClientBackupSlotResponse, error) {
-	result := WebAppsClientBackupSlotResponse{RawResponse: resp}
+	result := WebAppsClientBackupSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupItem); err != nil {
 		return WebAppsClientBackupSlotResponse{}, err
 	}
@@ -722,7 +718,7 @@ func (client *WebAppsClient) createDeploymentCreateRequest(ctx context.Context, 
 
 // createDeploymentHandleResponse handles the CreateDeployment response.
 func (client *WebAppsClient) createDeploymentHandleResponse(resp *http.Response) (WebAppsClientCreateDeploymentResponse, error) {
-	result := WebAppsClientCreateDeploymentResponse{RawResponse: resp}
+	result := WebAppsClientCreateDeploymentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Deployment); err != nil {
 		return WebAppsClientCreateDeploymentResponse{}, err
 	}
@@ -789,7 +785,7 @@ func (client *WebAppsClient) createDeploymentSlotCreateRequest(ctx context.Conte
 
 // createDeploymentSlotHandleResponse handles the CreateDeploymentSlot response.
 func (client *WebAppsClient) createDeploymentSlotHandleResponse(resp *http.Response) (WebAppsClientCreateDeploymentSlotResponse, error) {
-	result := WebAppsClientCreateDeploymentSlotResponse{RawResponse: resp}
+	result := WebAppsClientCreateDeploymentSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Deployment); err != nil {
 		return WebAppsClientCreateDeploymentSlotResponse{}, err
 	}
@@ -809,9 +805,7 @@ func (client *WebAppsClient) BeginCreateFunction(ctx context.Context, resourceGr
 	if err != nil {
 		return WebAppsClientCreateFunctionPollerResponse{}, err
 	}
-	result := WebAppsClientCreateFunctionPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientCreateFunctionPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.CreateFunction", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientCreateFunctionPollerResponse{}, err
@@ -883,9 +877,7 @@ func (client *WebAppsClient) BeginCreateInstanceFunctionSlot(ctx context.Context
 	if err != nil {
 		return WebAppsClientCreateInstanceFunctionSlotPollerResponse{}, err
 	}
-	result := WebAppsClientCreateInstanceFunctionSlotPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientCreateInstanceFunctionSlotPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.CreateInstanceFunctionSlot", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientCreateInstanceFunctionSlotPollerResponse{}, err
@@ -960,9 +952,7 @@ func (client *WebAppsClient) BeginCreateInstanceMSDeployOperation(ctx context.Co
 	if err != nil {
 		return WebAppsClientCreateInstanceMSDeployOperationPollerResponse{}, err
 	}
-	result := WebAppsClientCreateInstanceMSDeployOperationPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientCreateInstanceMSDeployOperationPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.CreateInstanceMSDeployOperation", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientCreateInstanceMSDeployOperationPollerResponse{}, err
@@ -1034,9 +1024,7 @@ func (client *WebAppsClient) BeginCreateInstanceMSDeployOperationSlot(ctx contex
 	if err != nil {
 		return WebAppsClientCreateInstanceMSDeployOperationSlotPollerResponse{}, err
 	}
-	result := WebAppsClientCreateInstanceMSDeployOperationSlotPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientCreateInstanceMSDeployOperationSlotPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.CreateInstanceMSDeployOperationSlot", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientCreateInstanceMSDeployOperationSlotPollerResponse{}, err
@@ -1110,9 +1098,7 @@ func (client *WebAppsClient) BeginCreateMSDeployOperation(ctx context.Context, r
 	if err != nil {
 		return WebAppsClientCreateMSDeployOperationPollerResponse{}, err
 	}
-	result := WebAppsClientCreateMSDeployOperationPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientCreateMSDeployOperationPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.CreateMSDeployOperation", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientCreateMSDeployOperationPollerResponse{}, err
@@ -1179,9 +1165,7 @@ func (client *WebAppsClient) BeginCreateMSDeployOperationSlot(ctx context.Contex
 	if err != nil {
 		return WebAppsClientCreateMSDeployOperationSlotPollerResponse{}, err
 	}
-	result := WebAppsClientCreateMSDeployOperationSlotPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientCreateMSDeployOperationSlotPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.CreateMSDeployOperationSlot", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientCreateMSDeployOperationSlotPollerResponse{}, err
@@ -1288,7 +1272,7 @@ func (client *WebAppsClient) createOneDeployOperationCreateRequest(ctx context.C
 
 // createOneDeployOperationHandleResponse handles the CreateOneDeployOperation response.
 func (client *WebAppsClient) createOneDeployOperationHandleResponse(resp *http.Response) (WebAppsClientCreateOneDeployOperationResponse, error) {
-	result := WebAppsClientCreateOneDeployOperationResponse{RawResponse: resp}
+	result := WebAppsClientCreateOneDeployOperationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Interface); err != nil {
 		return WebAppsClientCreateOneDeployOperationResponse{}, err
 	}
@@ -1308,9 +1292,7 @@ func (client *WebAppsClient) BeginCreateOrUpdate(ctx context.Context, resourceGr
 	if err != nil {
 		return WebAppsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := WebAppsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientCreateOrUpdatePollerResponse{}, err
@@ -1415,7 +1397,7 @@ func (client *WebAppsClient) createOrUpdateConfigurationCreateRequest(ctx contex
 
 // createOrUpdateConfigurationHandleResponse handles the CreateOrUpdateConfiguration response.
 func (client *WebAppsClient) createOrUpdateConfigurationHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateConfigurationResponse, error) {
-	result := WebAppsClientCreateOrUpdateConfigurationResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateConfigurationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteConfigResource); err != nil {
 		return WebAppsClientCreateOrUpdateConfigurationResponse{}, err
 	}
@@ -1477,7 +1459,7 @@ func (client *WebAppsClient) createOrUpdateConfigurationSlotCreateRequest(ctx co
 
 // createOrUpdateConfigurationSlotHandleResponse handles the CreateOrUpdateConfigurationSlot response.
 func (client *WebAppsClient) createOrUpdateConfigurationSlotHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateConfigurationSlotResponse, error) {
-	result := WebAppsClientCreateOrUpdateConfigurationSlotResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateConfigurationSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteConfigResource); err != nil {
 		return WebAppsClientCreateOrUpdateConfigurationSlotResponse{}, err
 	}
@@ -1540,7 +1522,7 @@ func (client *WebAppsClient) createOrUpdateDomainOwnershipIdentifierCreateReques
 
 // createOrUpdateDomainOwnershipIdentifierHandleResponse handles the CreateOrUpdateDomainOwnershipIdentifier response.
 func (client *WebAppsClient) createOrUpdateDomainOwnershipIdentifierHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateDomainOwnershipIdentifierResponse, error) {
-	result := WebAppsClientCreateOrUpdateDomainOwnershipIdentifierResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateDomainOwnershipIdentifierResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Identifier); err != nil {
 		return WebAppsClientCreateOrUpdateDomainOwnershipIdentifierResponse{}, err
 	}
@@ -1608,7 +1590,7 @@ func (client *WebAppsClient) createOrUpdateDomainOwnershipIdentifierSlotCreateRe
 
 // createOrUpdateDomainOwnershipIdentifierSlotHandleResponse handles the CreateOrUpdateDomainOwnershipIdentifierSlot response.
 func (client *WebAppsClient) createOrUpdateDomainOwnershipIdentifierSlotHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateDomainOwnershipIdentifierSlotResponse, error) {
-	result := WebAppsClientCreateOrUpdateDomainOwnershipIdentifierSlotResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateDomainOwnershipIdentifierSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Identifier); err != nil {
 		return WebAppsClientCreateOrUpdateDomainOwnershipIdentifierSlotResponse{}, err
 	}
@@ -1675,7 +1657,7 @@ func (client *WebAppsClient) createOrUpdateFunctionSecretCreateRequest(ctx conte
 
 // createOrUpdateFunctionSecretHandleResponse handles the CreateOrUpdateFunctionSecret response.
 func (client *WebAppsClient) createOrUpdateFunctionSecretHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateFunctionSecretResponse, error) {
-	result := WebAppsClientCreateOrUpdateFunctionSecretResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateFunctionSecretResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KeyInfo); err != nil {
 		return WebAppsClientCreateOrUpdateFunctionSecretResponse{}, err
 	}
@@ -1747,7 +1729,7 @@ func (client *WebAppsClient) createOrUpdateFunctionSecretSlotCreateRequest(ctx c
 
 // createOrUpdateFunctionSecretSlotHandleResponse handles the CreateOrUpdateFunctionSecretSlot response.
 func (client *WebAppsClient) createOrUpdateFunctionSecretSlotHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateFunctionSecretSlotResponse, error) {
-	result := WebAppsClientCreateOrUpdateFunctionSecretSlotResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateFunctionSecretSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KeyInfo); err != nil {
 		return WebAppsClientCreateOrUpdateFunctionSecretSlotResponse{}, err
 	}
@@ -1809,7 +1791,7 @@ func (client *WebAppsClient) createOrUpdateHostNameBindingCreateRequest(ctx cont
 
 // createOrUpdateHostNameBindingHandleResponse handles the CreateOrUpdateHostNameBinding response.
 func (client *WebAppsClient) createOrUpdateHostNameBindingHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateHostNameBindingResponse, error) {
-	result := WebAppsClientCreateOrUpdateHostNameBindingResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateHostNameBindingResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostNameBinding); err != nil {
 		return WebAppsClientCreateOrUpdateHostNameBindingResponse{}, err
 	}
@@ -1876,7 +1858,7 @@ func (client *WebAppsClient) createOrUpdateHostNameBindingSlotCreateRequest(ctx 
 
 // createOrUpdateHostNameBindingSlotHandleResponse handles the CreateOrUpdateHostNameBindingSlot response.
 func (client *WebAppsClient) createOrUpdateHostNameBindingSlotHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateHostNameBindingSlotResponse, error) {
-	result := WebAppsClientCreateOrUpdateHostNameBindingSlotResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateHostNameBindingSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostNameBinding); err != nil {
 		return WebAppsClientCreateOrUpdateHostNameBindingSlotResponse{}, err
 	}
@@ -1943,7 +1925,7 @@ func (client *WebAppsClient) createOrUpdateHostSecretCreateRequest(ctx context.C
 
 // createOrUpdateHostSecretHandleResponse handles the CreateOrUpdateHostSecret response.
 func (client *WebAppsClient) createOrUpdateHostSecretHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateHostSecretResponse, error) {
-	result := WebAppsClientCreateOrUpdateHostSecretResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateHostSecretResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KeyInfo); err != nil {
 		return WebAppsClientCreateOrUpdateHostSecretResponse{}, err
 	}
@@ -2015,7 +1997,7 @@ func (client *WebAppsClient) createOrUpdateHostSecretSlotCreateRequest(ctx conte
 
 // createOrUpdateHostSecretSlotHandleResponse handles the CreateOrUpdateHostSecretSlot response.
 func (client *WebAppsClient) createOrUpdateHostSecretSlotHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateHostSecretSlotResponse, error) {
-	result := WebAppsClientCreateOrUpdateHostSecretSlotResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateHostSecretSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KeyInfo); err != nil {
 		return WebAppsClientCreateOrUpdateHostSecretSlotResponse{}, err
 	}
@@ -2082,7 +2064,7 @@ func (client *WebAppsClient) createOrUpdateHybridConnectionCreateRequest(ctx con
 
 // createOrUpdateHybridConnectionHandleResponse handles the CreateOrUpdateHybridConnection response.
 func (client *WebAppsClient) createOrUpdateHybridConnectionHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateHybridConnectionResponse, error) {
-	result := WebAppsClientCreateOrUpdateHybridConnectionResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateHybridConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridConnection); err != nil {
 		return WebAppsClientCreateOrUpdateHybridConnectionResponse{}, err
 	}
@@ -2154,7 +2136,7 @@ func (client *WebAppsClient) createOrUpdateHybridConnectionSlotCreateRequest(ctx
 
 // createOrUpdateHybridConnectionSlotHandleResponse handles the CreateOrUpdateHybridConnectionSlot response.
 func (client *WebAppsClient) createOrUpdateHybridConnectionSlotHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateHybridConnectionSlotResponse, error) {
-	result := WebAppsClientCreateOrUpdateHybridConnectionSlotResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateHybridConnectionSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridConnection); err != nil {
 		return WebAppsClientCreateOrUpdateHybridConnectionSlotResponse{}, err
 	}
@@ -2216,7 +2198,7 @@ func (client *WebAppsClient) createOrUpdatePublicCertificateCreateRequest(ctx co
 
 // createOrUpdatePublicCertificateHandleResponse handles the CreateOrUpdatePublicCertificate response.
 func (client *WebAppsClient) createOrUpdatePublicCertificateHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdatePublicCertificateResponse, error) {
-	result := WebAppsClientCreateOrUpdatePublicCertificateResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdatePublicCertificateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicCertificate); err != nil {
 		return WebAppsClientCreateOrUpdatePublicCertificateResponse{}, err
 	}
@@ -2283,7 +2265,7 @@ func (client *WebAppsClient) createOrUpdatePublicCertificateSlotCreateRequest(ct
 
 // createOrUpdatePublicCertificateSlotHandleResponse handles the CreateOrUpdatePublicCertificateSlot response.
 func (client *WebAppsClient) createOrUpdatePublicCertificateSlotHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdatePublicCertificateSlotResponse, error) {
-	result := WebAppsClientCreateOrUpdatePublicCertificateSlotResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdatePublicCertificateSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicCertificate); err != nil {
 		return WebAppsClientCreateOrUpdatePublicCertificateSlotResponse{}, err
 	}
@@ -2346,7 +2328,7 @@ func (client *WebAppsClient) createOrUpdateRelayServiceConnectionCreateRequest(c
 
 // createOrUpdateRelayServiceConnectionHandleResponse handles the CreateOrUpdateRelayServiceConnection response.
 func (client *WebAppsClient) createOrUpdateRelayServiceConnectionHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateRelayServiceConnectionResponse, error) {
-	result := WebAppsClientCreateOrUpdateRelayServiceConnectionResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateRelayServiceConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RelayServiceConnectionEntity); err != nil {
 		return WebAppsClientCreateOrUpdateRelayServiceConnectionResponse{}, err
 	}
@@ -2415,7 +2397,7 @@ func (client *WebAppsClient) createOrUpdateRelayServiceConnectionSlotCreateReque
 
 // createOrUpdateRelayServiceConnectionSlotHandleResponse handles the CreateOrUpdateRelayServiceConnectionSlot response.
 func (client *WebAppsClient) createOrUpdateRelayServiceConnectionSlotHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateRelayServiceConnectionSlotResponse, error) {
-	result := WebAppsClientCreateOrUpdateRelayServiceConnectionSlotResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateRelayServiceConnectionSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RelayServiceConnectionEntity); err != nil {
 		return WebAppsClientCreateOrUpdateRelayServiceConnectionSlotResponse{}, err
 	}
@@ -2437,9 +2419,7 @@ func (client *WebAppsClient) BeginCreateOrUpdateSlot(ctx context.Context, resour
 	if err != nil {
 		return WebAppsClientCreateOrUpdateSlotPollerResponse{}, err
 	}
-	result := WebAppsClientCreateOrUpdateSlotPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientCreateOrUpdateSlotPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.CreateOrUpdateSlot", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientCreateOrUpdateSlotPollerResponse{}, err
@@ -2510,9 +2490,7 @@ func (client *WebAppsClient) BeginCreateOrUpdateSourceControl(ctx context.Contex
 	if err != nil {
 		return WebAppsClientCreateOrUpdateSourceControlPollerResponse{}, err
 	}
-	result := WebAppsClientCreateOrUpdateSourceControlPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientCreateOrUpdateSourceControlPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.CreateOrUpdateSourceControl", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientCreateOrUpdateSourceControlPollerResponse{}, err
@@ -2580,9 +2558,7 @@ func (client *WebAppsClient) BeginCreateOrUpdateSourceControlSlot(ctx context.Co
 	if err != nil {
 		return WebAppsClientCreateOrUpdateSourceControlSlotPollerResponse{}, err
 	}
-	result := WebAppsClientCreateOrUpdateSourceControlSlotPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientCreateOrUpdateSourceControlSlotPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.CreateOrUpdateSourceControlSlot", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientCreateOrUpdateSourceControlSlotPollerResponse{}, err
@@ -2693,7 +2669,7 @@ func (client *WebAppsClient) createOrUpdateSwiftVirtualNetworkConnectionWithChec
 
 // createOrUpdateSwiftVirtualNetworkConnectionWithCheckHandleResponse handles the CreateOrUpdateSwiftVirtualNetworkConnectionWithCheck response.
 func (client *WebAppsClient) createOrUpdateSwiftVirtualNetworkConnectionWithCheckHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateSwiftVirtualNetworkConnectionWithCheckResponse, error) {
-	result := WebAppsClientCreateOrUpdateSwiftVirtualNetworkConnectionWithCheckResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateSwiftVirtualNetworkConnectionWithCheckResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SwiftVirtualNetwork); err != nil {
 		return WebAppsClientCreateOrUpdateSwiftVirtualNetworkConnectionWithCheckResponse{}, err
 	}
@@ -2759,7 +2735,7 @@ func (client *WebAppsClient) createOrUpdateSwiftVirtualNetworkConnectionWithChec
 
 // createOrUpdateSwiftVirtualNetworkConnectionWithCheckSlotHandleResponse handles the CreateOrUpdateSwiftVirtualNetworkConnectionWithCheckSlot response.
 func (client *WebAppsClient) createOrUpdateSwiftVirtualNetworkConnectionWithCheckSlotHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateSwiftVirtualNetworkConnectionWithCheckSlotResponse, error) {
-	result := WebAppsClientCreateOrUpdateSwiftVirtualNetworkConnectionWithCheckSlotResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateSwiftVirtualNetworkConnectionWithCheckSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SwiftVirtualNetwork); err != nil {
 		return WebAppsClientCreateOrUpdateSwiftVirtualNetworkConnectionWithCheckSlotResponse{}, err
 	}
@@ -2822,7 +2798,7 @@ func (client *WebAppsClient) createOrUpdateVnetConnectionCreateRequest(ctx conte
 
 // createOrUpdateVnetConnectionHandleResponse handles the CreateOrUpdateVnetConnection response.
 func (client *WebAppsClient) createOrUpdateVnetConnectionHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateVnetConnectionResponse, error) {
-	result := WebAppsClientCreateOrUpdateVnetConnectionResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateVnetConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetInfoResource); err != nil {
 		return WebAppsClientCreateOrUpdateVnetConnectionResponse{}, err
 	}
@@ -2890,7 +2866,7 @@ func (client *WebAppsClient) createOrUpdateVnetConnectionGatewayCreateRequest(ct
 
 // createOrUpdateVnetConnectionGatewayHandleResponse handles the CreateOrUpdateVnetConnectionGateway response.
 func (client *WebAppsClient) createOrUpdateVnetConnectionGatewayHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateVnetConnectionGatewayResponse, error) {
-	result := WebAppsClientCreateOrUpdateVnetConnectionGatewayResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateVnetConnectionGatewayResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetGateway); err != nil {
 		return WebAppsClientCreateOrUpdateVnetConnectionGatewayResponse{}, err
 	}
@@ -2964,7 +2940,7 @@ func (client *WebAppsClient) createOrUpdateVnetConnectionGatewaySlotCreateReques
 
 // createOrUpdateVnetConnectionGatewaySlotHandleResponse handles the CreateOrUpdateVnetConnectionGatewaySlot response.
 func (client *WebAppsClient) createOrUpdateVnetConnectionGatewaySlotHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateVnetConnectionGatewaySlotResponse, error) {
-	result := WebAppsClientCreateOrUpdateVnetConnectionGatewaySlotResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateVnetConnectionGatewaySlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetGateway); err != nil {
 		return WebAppsClientCreateOrUpdateVnetConnectionGatewaySlotResponse{}, err
 	}
@@ -3033,7 +3009,7 @@ func (client *WebAppsClient) createOrUpdateVnetConnectionSlotCreateRequest(ctx c
 
 // createOrUpdateVnetConnectionSlotHandleResponse handles the CreateOrUpdateVnetConnectionSlot response.
 func (client *WebAppsClient) createOrUpdateVnetConnectionSlotHandleResponse(resp *http.Response) (WebAppsClientCreateOrUpdateVnetConnectionSlotResponse, error) {
-	result := WebAppsClientCreateOrUpdateVnetConnectionSlotResponse{RawResponse: resp}
+	result := WebAppsClientCreateOrUpdateVnetConnectionSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetInfoResource); err != nil {
 		return WebAppsClientCreateOrUpdateVnetConnectionSlotResponse{}, err
 	}
@@ -3057,7 +3033,7 @@ func (client *WebAppsClient) Delete(ctx context.Context, resourceGroupName strin
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -3110,7 +3086,7 @@ func (client *WebAppsClient) DeleteBackup(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientDeleteBackupResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteBackupResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteBackupResponse{}, nil
 }
 
 // deleteBackupCreateRequest creates the DeleteBackup request.
@@ -3161,7 +3137,7 @@ func (client *WebAppsClient) DeleteBackupConfiguration(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientDeleteBackupConfigurationResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteBackupConfigurationResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteBackupConfigurationResponse{}, nil
 }
 
 // deleteBackupConfigurationCreateRequest creates the DeleteBackupConfiguration request.
@@ -3210,7 +3186,7 @@ func (client *WebAppsClient) DeleteBackupConfigurationSlot(ctx context.Context, 
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientDeleteBackupConfigurationSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteBackupConfigurationSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteBackupConfigurationSlotResponse{}, nil
 }
 
 // deleteBackupConfigurationSlotCreateRequest creates the DeleteBackupConfigurationSlot request.
@@ -3263,7 +3239,7 @@ func (client *WebAppsClient) DeleteBackupSlot(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientDeleteBackupSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteBackupSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteBackupSlotResponse{}, nil
 }
 
 // deleteBackupSlotCreateRequest creates the DeleteBackupSlot request.
@@ -3319,7 +3295,7 @@ func (client *WebAppsClient) DeleteContinuousWebJob(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientDeleteContinuousWebJobResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteContinuousWebJobResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteContinuousWebJobResponse{}, nil
 }
 
 // deleteContinuousWebJobCreateRequest creates the DeleteContinuousWebJob request.
@@ -3372,7 +3348,7 @@ func (client *WebAppsClient) DeleteContinuousWebJobSlot(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientDeleteContinuousWebJobSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteContinuousWebJobSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteContinuousWebJobSlotResponse{}, nil
 }
 
 // deleteContinuousWebJobSlotCreateRequest creates the DeleteContinuousWebJobSlot request.
@@ -3428,7 +3404,7 @@ func (client *WebAppsClient) DeleteDeployment(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientDeleteDeploymentResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteDeploymentResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteDeploymentResponse{}, nil
 }
 
 // deleteDeploymentCreateRequest creates the DeleteDeployment request.
@@ -3481,7 +3457,7 @@ func (client *WebAppsClient) DeleteDeploymentSlot(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientDeleteDeploymentSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteDeploymentSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteDeploymentSlotResponse{}, nil
 }
 
 // deleteDeploymentSlotCreateRequest creates the DeleteDeploymentSlot request.
@@ -3537,7 +3513,7 @@ func (client *WebAppsClient) DeleteDomainOwnershipIdentifier(ctx context.Context
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientDeleteDomainOwnershipIdentifierResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteDomainOwnershipIdentifierResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteDomainOwnershipIdentifierResponse{}, nil
 }
 
 // deleteDomainOwnershipIdentifierCreateRequest creates the DeleteDomainOwnershipIdentifier request.
@@ -3590,7 +3566,7 @@ func (client *WebAppsClient) DeleteDomainOwnershipIdentifierSlot(ctx context.Con
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientDeleteDomainOwnershipIdentifierSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteDomainOwnershipIdentifierSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteDomainOwnershipIdentifierSlotResponse{}, nil
 }
 
 // deleteDomainOwnershipIdentifierSlotCreateRequest creates the DeleteDomainOwnershipIdentifierSlot request.
@@ -3645,7 +3621,7 @@ func (client *WebAppsClient) DeleteFunction(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientDeleteFunctionResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteFunctionResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteFunctionResponse{}, nil
 }
 
 // deleteFunctionCreateRequest creates the DeleteFunction request.
@@ -3698,7 +3674,7 @@ func (client *WebAppsClient) DeleteFunctionSecret(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientDeleteFunctionSecretResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteFunctionSecretResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteFunctionSecretResponse{}, nil
 }
 
 // deleteFunctionSecretCreateRequest creates the DeleteFunctionSecret request.
@@ -3756,7 +3732,7 @@ func (client *WebAppsClient) DeleteFunctionSecretSlot(ctx context.Context, resou
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientDeleteFunctionSecretSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteFunctionSecretSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteFunctionSecretSlotResponse{}, nil
 }
 
 // deleteFunctionSecretSlotCreateRequest creates the DeleteFunctionSecretSlot request.
@@ -3816,7 +3792,7 @@ func (client *WebAppsClient) DeleteHostNameBinding(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientDeleteHostNameBindingResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteHostNameBindingResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteHostNameBindingResponse{}, nil
 }
 
 // deleteHostNameBindingCreateRequest creates the DeleteHostNameBinding request.
@@ -3869,7 +3845,7 @@ func (client *WebAppsClient) DeleteHostNameBindingSlot(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientDeleteHostNameBindingSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteHostNameBindingSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteHostNameBindingSlotResponse{}, nil
 }
 
 // deleteHostNameBindingSlotCreateRequest creates the DeleteHostNameBindingSlot request.
@@ -3926,7 +3902,7 @@ func (client *WebAppsClient) DeleteHostSecret(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientDeleteHostSecretResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteHostSecretResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteHostSecretResponse{}, nil
 }
 
 // deleteHostSecretCreateRequest creates the DeleteHostSecret request.
@@ -3984,7 +3960,7 @@ func (client *WebAppsClient) DeleteHostSecretSlot(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientDeleteHostSecretSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteHostSecretSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteHostSecretSlotResponse{}, nil
 }
 
 // deleteHostSecretSlotCreateRequest creates the DeleteHostSecretSlot request.
@@ -4045,7 +4021,7 @@ func (client *WebAppsClient) DeleteHybridConnection(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientDeleteHybridConnectionResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteHybridConnectionResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteHybridConnectionResponse{}, nil
 }
 
 // deleteHybridConnectionCreateRequest creates the DeleteHybridConnection request.
@@ -4103,7 +4079,7 @@ func (client *WebAppsClient) DeleteHybridConnectionSlot(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientDeleteHybridConnectionSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteHybridConnectionSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteHybridConnectionSlotResponse{}, nil
 }
 
 // deleteHybridConnectionSlotCreateRequest creates the DeleteHybridConnectionSlot request.
@@ -4164,7 +4140,7 @@ func (client *WebAppsClient) DeleteInstanceFunctionSlot(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientDeleteInstanceFunctionSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteInstanceFunctionSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteInstanceFunctionSlotResponse{}, nil
 }
 
 // deleteInstanceFunctionSlotCreateRequest creates the DeleteInstanceFunctionSlot request.
@@ -4223,7 +4199,7 @@ func (client *WebAppsClient) DeleteInstanceProcess(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientDeleteInstanceProcessResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteInstanceProcessResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteInstanceProcessResponse{}, nil
 }
 
 // deleteInstanceProcessCreateRequest creates the DeleteInstanceProcess request.
@@ -4283,7 +4259,7 @@ func (client *WebAppsClient) DeleteInstanceProcessSlot(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientDeleteInstanceProcessSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteInstanceProcessSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteInstanceProcessSlotResponse{}, nil
 }
 
 // deleteInstanceProcessSlotCreateRequest creates the DeleteInstanceProcessSlot request.
@@ -4343,7 +4319,7 @@ func (client *WebAppsClient) DeletePremierAddOn(ctx context.Context, resourceGro
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientDeletePremierAddOnResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeletePremierAddOnResponse{RawResponse: resp}, nil
+	return WebAppsClientDeletePremierAddOnResponse{}, nil
 }
 
 // deletePremierAddOnCreateRequest creates the DeletePremierAddOn request.
@@ -4397,7 +4373,7 @@ func (client *WebAppsClient) DeletePremierAddOnSlot(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientDeletePremierAddOnSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeletePremierAddOnSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeletePremierAddOnSlotResponse{}, nil
 }
 
 // deletePremierAddOnSlotCreateRequest creates the DeletePremierAddOnSlot request.
@@ -4445,9 +4421,7 @@ func (client *WebAppsClient) BeginDeletePrivateEndpointConnection(ctx context.Co
 	if err != nil {
 		return WebAppsClientDeletePrivateEndpointConnectionPollerResponse{}, err
 	}
-	result := WebAppsClientDeletePrivateEndpointConnectionPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientDeletePrivateEndpointConnectionPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.DeletePrivateEndpointConnection", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientDeletePrivateEndpointConnectionPollerResponse{}, err
@@ -4516,9 +4490,7 @@ func (client *WebAppsClient) BeginDeletePrivateEndpointConnectionSlot(ctx contex
 	if err != nil {
 		return WebAppsClientDeletePrivateEndpointConnectionSlotPollerResponse{}, err
 	}
-	result := WebAppsClientDeletePrivateEndpointConnectionSlotPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientDeletePrivateEndpointConnectionSlotPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.DeletePrivateEndpointConnectionSlot", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientDeletePrivateEndpointConnectionSlotPollerResponse{}, err
@@ -4599,7 +4571,7 @@ func (client *WebAppsClient) DeleteProcess(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientDeleteProcessResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteProcessResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteProcessResponse{}, nil
 }
 
 // deleteProcessCreateRequest creates the DeleteProcess request.
@@ -4653,7 +4625,7 @@ func (client *WebAppsClient) DeleteProcessSlot(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientDeleteProcessSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteProcessSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteProcessSlotResponse{}, nil
 }
 
 // deleteProcessSlotCreateRequest creates the DeleteProcessSlot request.
@@ -4709,7 +4681,7 @@ func (client *WebAppsClient) DeletePublicCertificate(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientDeletePublicCertificateResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeletePublicCertificateResponse{RawResponse: resp}, nil
+	return WebAppsClientDeletePublicCertificateResponse{}, nil
 }
 
 // deletePublicCertificateCreateRequest creates the DeletePublicCertificate request.
@@ -4762,7 +4734,7 @@ func (client *WebAppsClient) DeletePublicCertificateSlot(ctx context.Context, re
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientDeletePublicCertificateSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeletePublicCertificateSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeletePublicCertificateSlotResponse{}, nil
 }
 
 // deletePublicCertificateSlotCreateRequest creates the DeletePublicCertificateSlot request.
@@ -4818,7 +4790,7 @@ func (client *WebAppsClient) DeleteRelayServiceConnection(ctx context.Context, r
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientDeleteRelayServiceConnectionResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteRelayServiceConnectionResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteRelayServiceConnectionResponse{}, nil
 }
 
 // deleteRelayServiceConnectionCreateRequest creates the DeleteRelayServiceConnection request.
@@ -4872,7 +4844,7 @@ func (client *WebAppsClient) DeleteRelayServiceConnectionSlot(ctx context.Contex
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientDeleteRelayServiceConnectionSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteRelayServiceConnectionSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteRelayServiceConnectionSlotResponse{}, nil
 }
 
 // deleteRelayServiceConnectionSlotCreateRequest creates the DeleteRelayServiceConnectionSlot request.
@@ -4928,7 +4900,7 @@ func (client *WebAppsClient) DeleteSiteExtension(ctx context.Context, resourceGr
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientDeleteSiteExtensionResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteSiteExtensionResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteSiteExtensionResponse{}, nil
 }
 
 // deleteSiteExtensionCreateRequest creates the DeleteSiteExtension request.
@@ -4981,7 +4953,7 @@ func (client *WebAppsClient) DeleteSiteExtensionSlot(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientDeleteSiteExtensionSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteSiteExtensionSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteSiteExtensionSlotResponse{}, nil
 }
 
 // deleteSiteExtensionSlotCreateRequest creates the DeleteSiteExtensionSlot request.
@@ -5036,7 +5008,7 @@ func (client *WebAppsClient) DeleteSlot(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientDeleteSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteSlotResponse{}, nil
 }
 
 // deleteSlotCreateRequest creates the DeleteSlot request.
@@ -5093,7 +5065,7 @@ func (client *WebAppsClient) DeleteSourceControl(ctx context.Context, resourceGr
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return WebAppsClientDeleteSourceControlResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteSourceControlResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteSourceControlResponse{}, nil
 }
 
 // deleteSourceControlCreateRequest creates the DeleteSourceControl request.
@@ -5145,7 +5117,7 @@ func (client *WebAppsClient) DeleteSourceControlSlot(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return WebAppsClientDeleteSourceControlSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteSourceControlSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteSourceControlSlotResponse{}, nil
 }
 
 // deleteSourceControlSlotCreateRequest creates the DeleteSourceControlSlot request.
@@ -5199,7 +5171,7 @@ func (client *WebAppsClient) DeleteSwiftVirtualNetwork(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientDeleteSwiftVirtualNetworkResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteSwiftVirtualNetworkResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteSwiftVirtualNetworkResponse{}, nil
 }
 
 // deleteSwiftVirtualNetworkCreateRequest creates the DeleteSwiftVirtualNetwork request.
@@ -5247,7 +5219,7 @@ func (client *WebAppsClient) DeleteSwiftVirtualNetworkSlot(ctx context.Context, 
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientDeleteSwiftVirtualNetworkSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteSwiftVirtualNetworkSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteSwiftVirtualNetworkSlotResponse{}, nil
 }
 
 // deleteSwiftVirtualNetworkSlotCreateRequest creates the DeleteSwiftVirtualNetworkSlot request.
@@ -5299,7 +5271,7 @@ func (client *WebAppsClient) DeleteTriggeredWebJob(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientDeleteTriggeredWebJobResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteTriggeredWebJobResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteTriggeredWebJobResponse{}, nil
 }
 
 // deleteTriggeredWebJobCreateRequest creates the DeleteTriggeredWebJob request.
@@ -5352,7 +5324,7 @@ func (client *WebAppsClient) DeleteTriggeredWebJobSlot(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientDeleteTriggeredWebJobSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteTriggeredWebJobSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteTriggeredWebJobSlotResponse{}, nil
 }
 
 // deleteTriggeredWebJobSlotCreateRequest creates the DeleteTriggeredWebJobSlot request.
@@ -5408,7 +5380,7 @@ func (client *WebAppsClient) DeleteVnetConnection(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientDeleteVnetConnectionResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteVnetConnectionResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteVnetConnectionResponse{}, nil
 }
 
 // deleteVnetConnectionCreateRequest creates the DeleteVnetConnection request.
@@ -5461,7 +5433,7 @@ func (client *WebAppsClient) DeleteVnetConnectionSlot(ctx context.Context, resou
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientDeleteVnetConnectionSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientDeleteVnetConnectionSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientDeleteVnetConnectionSlotResponse{}, nil
 }
 
 // deleteVnetConnectionSlotCreateRequest creates the DeleteVnetConnectionSlot request.
@@ -5548,7 +5520,7 @@ func (client *WebAppsClient) discoverBackupCreateRequest(ctx context.Context, re
 
 // discoverBackupHandleResponse handles the DiscoverBackup response.
 func (client *WebAppsClient) discoverBackupHandleResponse(resp *http.Response) (WebAppsClientDiscoverBackupResponse, error) {
-	result := WebAppsClientDiscoverBackupResponse{RawResponse: resp}
+	result := WebAppsClientDiscoverBackupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestoreRequest); err != nil {
 		return WebAppsClientDiscoverBackupResponse{}, err
 	}
@@ -5611,7 +5583,7 @@ func (client *WebAppsClient) discoverBackupSlotCreateRequest(ctx context.Context
 
 // discoverBackupSlotHandleResponse handles the DiscoverBackupSlot response.
 func (client *WebAppsClient) discoverBackupSlotHandleResponse(resp *http.Response) (WebAppsClientDiscoverBackupSlotResponse, error) {
-	result := WebAppsClientDiscoverBackupSlotResponse{RawResponse: resp}
+	result := WebAppsClientDiscoverBackupSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestoreRequest); err != nil {
 		return WebAppsClientDiscoverBackupSlotResponse{}, err
 	}
@@ -5637,7 +5609,7 @@ func (client *WebAppsClient) GenerateNewSitePublishingPassword(ctx context.Conte
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientGenerateNewSitePublishingPasswordResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientGenerateNewSitePublishingPasswordResponse{RawResponse: resp}, nil
+	return WebAppsClientGenerateNewSitePublishingPasswordResponse{}, nil
 }
 
 // generateNewSitePublishingPasswordCreateRequest creates the GenerateNewSitePublishingPassword request.
@@ -5687,7 +5659,7 @@ func (client *WebAppsClient) GenerateNewSitePublishingPasswordSlot(ctx context.C
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientGenerateNewSitePublishingPasswordSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientGenerateNewSitePublishingPasswordSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientGenerateNewSitePublishingPasswordSlotResponse{}, nil
 }
 
 // generateNewSitePublishingPasswordSlotCreateRequest creates the GenerateNewSitePublishingPasswordSlot request.
@@ -5768,7 +5740,7 @@ func (client *WebAppsClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *WebAppsClient) getHandleResponse(resp *http.Response) (WebAppsClientGetResponse, error) {
-	result := WebAppsClientGetResponse{RawResponse: resp}
+	result := WebAppsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Site); err != nil {
 		return WebAppsClientGetResponse{}, err
 	}
@@ -5829,7 +5801,7 @@ func (client *WebAppsClient) getAppSettingKeyVaultReferenceCreateRequest(ctx con
 
 // getAppSettingKeyVaultReferenceHandleResponse handles the GetAppSettingKeyVaultReference response.
 func (client *WebAppsClient) getAppSettingKeyVaultReferenceHandleResponse(resp *http.Response) (WebAppsClientGetAppSettingKeyVaultReferenceResponse, error) {
-	result := WebAppsClientGetAppSettingKeyVaultReferenceResponse{RawResponse: resp}
+	result := WebAppsClientGetAppSettingKeyVaultReferenceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIKVReference); err != nil {
 		return WebAppsClientGetAppSettingKeyVaultReferenceResponse{}, err
 	}
@@ -5894,7 +5866,7 @@ func (client *WebAppsClient) getAppSettingKeyVaultReferenceSlotCreateRequest(ctx
 
 // getAppSettingKeyVaultReferenceSlotHandleResponse handles the GetAppSettingKeyVaultReferenceSlot response.
 func (client *WebAppsClient) getAppSettingKeyVaultReferenceSlotHandleResponse(resp *http.Response) (WebAppsClientGetAppSettingKeyVaultReferenceSlotResponse, error) {
-	result := WebAppsClientGetAppSettingKeyVaultReferenceSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetAppSettingKeyVaultReferenceSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIKVReference); err != nil {
 		return WebAppsClientGetAppSettingKeyVaultReferenceSlotResponse{}, err
 	}
@@ -5947,7 +5919,7 @@ func (client *WebAppsClient) getAppSettingsKeyVaultReferencesCreateRequest(ctx c
 
 // getAppSettingsKeyVaultReferencesHandleResponse handles the GetAppSettingsKeyVaultReferences response.
 func (client *WebAppsClient) getAppSettingsKeyVaultReferencesHandleResponse(resp *http.Response) (WebAppsClientGetAppSettingsKeyVaultReferencesResponse, error) {
-	result := WebAppsClientGetAppSettingsKeyVaultReferencesResponse{RawResponse: resp}
+	result := WebAppsClientGetAppSettingsKeyVaultReferencesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIKVReferenceCollection); err != nil {
 		return WebAppsClientGetAppSettingsKeyVaultReferencesResponse{}, err
 	}
@@ -6004,7 +5976,7 @@ func (client *WebAppsClient) getAppSettingsKeyVaultReferencesSlotCreateRequest(c
 
 // getAppSettingsKeyVaultReferencesSlotHandleResponse handles the GetAppSettingsKeyVaultReferencesSlot response.
 func (client *WebAppsClient) getAppSettingsKeyVaultReferencesSlotHandleResponse(resp *http.Response) (WebAppsClientGetAppSettingsKeyVaultReferencesSlotResponse, error) {
-	result := WebAppsClientGetAppSettingsKeyVaultReferencesSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetAppSettingsKeyVaultReferencesSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIKVReferenceCollection); err != nil {
 		return WebAppsClientGetAppSettingsKeyVaultReferencesSlotResponse{}, err
 	}
@@ -6059,7 +6031,7 @@ func (client *WebAppsClient) getAuthSettingsCreateRequest(ctx context.Context, r
 
 // getAuthSettingsHandleResponse handles the GetAuthSettings response.
 func (client *WebAppsClient) getAuthSettingsHandleResponse(resp *http.Response) (WebAppsClientGetAuthSettingsResponse, error) {
-	result := WebAppsClientGetAuthSettingsResponse{RawResponse: resp}
+	result := WebAppsClientGetAuthSettingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteAuthSettings); err != nil {
 		return WebAppsClientGetAuthSettingsResponse{}, err
 	}
@@ -6120,7 +6092,7 @@ func (client *WebAppsClient) getAuthSettingsSlotCreateRequest(ctx context.Contex
 
 // getAuthSettingsSlotHandleResponse handles the GetAuthSettingsSlot response.
 func (client *WebAppsClient) getAuthSettingsSlotHandleResponse(resp *http.Response) (WebAppsClientGetAuthSettingsSlotResponse, error) {
-	result := WebAppsClientGetAuthSettingsSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetAuthSettingsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteAuthSettings); err != nil {
 		return WebAppsClientGetAuthSettingsSlotResponse{}, err
 	}
@@ -6176,7 +6148,7 @@ func (client *WebAppsClient) getAuthSettingsV2CreateRequest(ctx context.Context,
 
 // getAuthSettingsV2HandleResponse handles the GetAuthSettingsV2 response.
 func (client *WebAppsClient) getAuthSettingsV2HandleResponse(resp *http.Response) (WebAppsClientGetAuthSettingsV2Response, error) {
-	result := WebAppsClientGetAuthSettingsV2Response{RawResponse: resp}
+	result := WebAppsClientGetAuthSettingsV2Response{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteAuthSettingsV2); err != nil {
 		return WebAppsClientGetAuthSettingsV2Response{}, err
 	}
@@ -6237,7 +6209,7 @@ func (client *WebAppsClient) getAuthSettingsV2SlotCreateRequest(ctx context.Cont
 
 // getAuthSettingsV2SlotHandleResponse handles the GetAuthSettingsV2Slot response.
 func (client *WebAppsClient) getAuthSettingsV2SlotHandleResponse(resp *http.Response) (WebAppsClientGetAuthSettingsV2SlotResponse, error) {
-	result := WebAppsClientGetAuthSettingsV2SlotResponse{RawResponse: resp}
+	result := WebAppsClientGetAuthSettingsV2SlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteAuthSettingsV2); err != nil {
 		return WebAppsClientGetAuthSettingsV2SlotResponse{}, err
 	}
@@ -6294,7 +6266,7 @@ func (client *WebAppsClient) getAuthSettingsV2WithoutSecretsCreateRequest(ctx co
 
 // getAuthSettingsV2WithoutSecretsHandleResponse handles the GetAuthSettingsV2WithoutSecrets response.
 func (client *WebAppsClient) getAuthSettingsV2WithoutSecretsHandleResponse(resp *http.Response) (WebAppsClientGetAuthSettingsV2WithoutSecretsResponse, error) {
-	result := WebAppsClientGetAuthSettingsV2WithoutSecretsResponse{RawResponse: resp}
+	result := WebAppsClientGetAuthSettingsV2WithoutSecretsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteAuthSettingsV2); err != nil {
 		return WebAppsClientGetAuthSettingsV2WithoutSecretsResponse{}, err
 	}
@@ -6350,7 +6322,7 @@ func (client *WebAppsClient) getBackupConfigurationCreateRequest(ctx context.Con
 
 // getBackupConfigurationHandleResponse handles the GetBackupConfiguration response.
 func (client *WebAppsClient) getBackupConfigurationHandleResponse(resp *http.Response) (WebAppsClientGetBackupConfigurationResponse, error) {
-	result := WebAppsClientGetBackupConfigurationResponse{RawResponse: resp}
+	result := WebAppsClientGetBackupConfigurationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupRequest); err != nil {
 		return WebAppsClientGetBackupConfigurationResponse{}, err
 	}
@@ -6412,7 +6384,7 @@ func (client *WebAppsClient) getBackupConfigurationSlotCreateRequest(ctx context
 
 // getBackupConfigurationSlotHandleResponse handles the GetBackupConfigurationSlot response.
 func (client *WebAppsClient) getBackupConfigurationSlotHandleResponse(resp *http.Response) (WebAppsClientGetBackupConfigurationSlotResponse, error) {
-	result := WebAppsClientGetBackupConfigurationSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetBackupConfigurationSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupRequest); err != nil {
 		return WebAppsClientGetBackupConfigurationSlotResponse{}, err
 	}
@@ -6472,7 +6444,7 @@ func (client *WebAppsClient) getBackupStatusCreateRequest(ctx context.Context, r
 
 // getBackupStatusHandleResponse handles the GetBackupStatus response.
 func (client *WebAppsClient) getBackupStatusHandleResponse(resp *http.Response) (WebAppsClientGetBackupStatusResponse, error) {
-	result := WebAppsClientGetBackupStatusResponse{RawResponse: resp}
+	result := WebAppsClientGetBackupStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupItem); err != nil {
 		return WebAppsClientGetBackupStatusResponse{}, err
 	}
@@ -6538,7 +6510,7 @@ func (client *WebAppsClient) getBackupStatusSlotCreateRequest(ctx context.Contex
 
 // getBackupStatusSlotHandleResponse handles the GetBackupStatusSlot response.
 func (client *WebAppsClient) getBackupStatusSlotHandleResponse(resp *http.Response) (WebAppsClientGetBackupStatusSlotResponse, error) {
-	result := WebAppsClientGetBackupStatusSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetBackupStatusSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupItem); err != nil {
 		return WebAppsClientGetBackupStatusSlotResponse{}, err
 	}
@@ -6595,7 +6567,7 @@ func (client *WebAppsClient) getConfigurationCreateRequest(ctx context.Context, 
 
 // getConfigurationHandleResponse handles the GetConfiguration response.
 func (client *WebAppsClient) getConfigurationHandleResponse(resp *http.Response) (WebAppsClientGetConfigurationResponse, error) {
-	result := WebAppsClientGetConfigurationResponse{RawResponse: resp}
+	result := WebAppsClientGetConfigurationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteConfigResource); err != nil {
 		return WebAppsClientGetConfigurationResponse{}, err
 	}
@@ -6657,7 +6629,7 @@ func (client *WebAppsClient) getConfigurationSlotCreateRequest(ctx context.Conte
 
 // getConfigurationSlotHandleResponse handles the GetConfigurationSlot response.
 func (client *WebAppsClient) getConfigurationSlotHandleResponse(resp *http.Response) (WebAppsClientGetConfigurationSlotResponse, error) {
-	result := WebAppsClientGetConfigurationSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetConfigurationSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteConfigResource); err != nil {
 		return WebAppsClientGetConfigurationSlotResponse{}, err
 	}
@@ -6718,7 +6690,7 @@ func (client *WebAppsClient) getConfigurationSnapshotCreateRequest(ctx context.C
 
 // getConfigurationSnapshotHandleResponse handles the GetConfigurationSnapshot response.
 func (client *WebAppsClient) getConfigurationSnapshotHandleResponse(resp *http.Response) (WebAppsClientGetConfigurationSnapshotResponse, error) {
-	result := WebAppsClientGetConfigurationSnapshotResponse{RawResponse: resp}
+	result := WebAppsClientGetConfigurationSnapshotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteConfigResource); err != nil {
 		return WebAppsClientGetConfigurationSnapshotResponse{}, err
 	}
@@ -6784,7 +6756,7 @@ func (client *WebAppsClient) getConfigurationSnapshotSlotCreateRequest(ctx conte
 
 // getConfigurationSnapshotSlotHandleResponse handles the GetConfigurationSnapshotSlot response.
 func (client *WebAppsClient) getConfigurationSnapshotSlotHandleResponse(resp *http.Response) (WebAppsClientGetConfigurationSnapshotSlotResponse, error) {
-	result := WebAppsClientGetConfigurationSnapshotSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetConfigurationSnapshotSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteConfigResource); err != nil {
 		return WebAppsClientGetConfigurationSnapshotSlotResponse{}, err
 	}
@@ -6809,7 +6781,7 @@ func (client *WebAppsClient) GetContainerLogsZip(ctx context.Context, resourceGr
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientGetContainerLogsZipResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientGetContainerLogsZipResponse{RawResponse: resp}, nil
+	return WebAppsClientGetContainerLogsZipResponse{Body: resp.Body}, nil
 }
 
 // getContainerLogsZipCreateRequest creates the GetContainerLogsZip request.
@@ -6858,7 +6830,7 @@ func (client *WebAppsClient) GetContainerLogsZipSlot(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientGetContainerLogsZipSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientGetContainerLogsZipSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientGetContainerLogsZipSlotResponse{Body: resp.Body}, nil
 }
 
 // getContainerLogsZipSlotCreateRequest creates the GetContainerLogsZipSlot request.
@@ -6946,7 +6918,7 @@ func (client *WebAppsClient) getContinuousWebJobCreateRequest(ctx context.Contex
 
 // getContinuousWebJobHandleResponse handles the GetContinuousWebJob response.
 func (client *WebAppsClient) getContinuousWebJobHandleResponse(resp *http.Response) (WebAppsClientGetContinuousWebJobResponse, error) {
-	result := WebAppsClientGetContinuousWebJobResponse{RawResponse: resp}
+	result := WebAppsClientGetContinuousWebJobResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContinuousWebJob); err != nil {
 		return WebAppsClientGetContinuousWebJobResponse{}, err
 	}
@@ -7012,7 +6984,7 @@ func (client *WebAppsClient) getContinuousWebJobSlotCreateRequest(ctx context.Co
 
 // getContinuousWebJobSlotHandleResponse handles the GetContinuousWebJobSlot response.
 func (client *WebAppsClient) getContinuousWebJobSlotHandleResponse(resp *http.Response) (WebAppsClientGetContinuousWebJobSlotResponse, error) {
-	result := WebAppsClientGetContinuousWebJobSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetContinuousWebJobSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContinuousWebJob); err != nil {
 		return WebAppsClientGetContinuousWebJobSlotResponse{}, err
 	}
@@ -7072,7 +7044,7 @@ func (client *WebAppsClient) getDeploymentCreateRequest(ctx context.Context, res
 
 // getDeploymentHandleResponse handles the GetDeployment response.
 func (client *WebAppsClient) getDeploymentHandleResponse(resp *http.Response) (WebAppsClientGetDeploymentResponse, error) {
-	result := WebAppsClientGetDeploymentResponse{RawResponse: resp}
+	result := WebAppsClientGetDeploymentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Deployment); err != nil {
 		return WebAppsClientGetDeploymentResponse{}, err
 	}
@@ -7138,7 +7110,7 @@ func (client *WebAppsClient) getDeploymentSlotCreateRequest(ctx context.Context,
 
 // getDeploymentSlotHandleResponse handles the GetDeploymentSlot response.
 func (client *WebAppsClient) getDeploymentSlotHandleResponse(resp *http.Response) (WebAppsClientGetDeploymentSlotResponse, error) {
-	result := WebAppsClientGetDeploymentSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetDeploymentSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Deployment); err != nil {
 		return WebAppsClientGetDeploymentSlotResponse{}, err
 	}
@@ -7194,7 +7166,7 @@ func (client *WebAppsClient) getDiagnosticLogsConfigurationCreateRequest(ctx con
 
 // getDiagnosticLogsConfigurationHandleResponse handles the GetDiagnosticLogsConfiguration response.
 func (client *WebAppsClient) getDiagnosticLogsConfigurationHandleResponse(resp *http.Response) (WebAppsClientGetDiagnosticLogsConfigurationResponse, error) {
-	result := WebAppsClientGetDiagnosticLogsConfigurationResponse{RawResponse: resp}
+	result := WebAppsClientGetDiagnosticLogsConfigurationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteLogsConfig); err != nil {
 		return WebAppsClientGetDiagnosticLogsConfigurationResponse{}, err
 	}
@@ -7256,7 +7228,7 @@ func (client *WebAppsClient) getDiagnosticLogsConfigurationSlotCreateRequest(ctx
 
 // getDiagnosticLogsConfigurationSlotHandleResponse handles the GetDiagnosticLogsConfigurationSlot response.
 func (client *WebAppsClient) getDiagnosticLogsConfigurationSlotHandleResponse(resp *http.Response) (WebAppsClientGetDiagnosticLogsConfigurationSlotResponse, error) {
-	result := WebAppsClientGetDiagnosticLogsConfigurationSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetDiagnosticLogsConfigurationSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteLogsConfig); err != nil {
 		return WebAppsClientGetDiagnosticLogsConfigurationSlotResponse{}, err
 	}
@@ -7317,7 +7289,7 @@ func (client *WebAppsClient) getDomainOwnershipIdentifierCreateRequest(ctx conte
 
 // getDomainOwnershipIdentifierHandleResponse handles the GetDomainOwnershipIdentifier response.
 func (client *WebAppsClient) getDomainOwnershipIdentifierHandleResponse(resp *http.Response) (WebAppsClientGetDomainOwnershipIdentifierResponse, error) {
-	result := WebAppsClientGetDomainOwnershipIdentifierResponse{RawResponse: resp}
+	result := WebAppsClientGetDomainOwnershipIdentifierResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Identifier); err != nil {
 		return WebAppsClientGetDomainOwnershipIdentifierResponse{}, err
 	}
@@ -7383,7 +7355,7 @@ func (client *WebAppsClient) getDomainOwnershipIdentifierSlotCreateRequest(ctx c
 
 // getDomainOwnershipIdentifierSlotHandleResponse handles the GetDomainOwnershipIdentifierSlot response.
 func (client *WebAppsClient) getDomainOwnershipIdentifierSlotHandleResponse(resp *http.Response) (WebAppsClientGetDomainOwnershipIdentifierSlotResponse, error) {
-	result := WebAppsClientGetDomainOwnershipIdentifierSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetDomainOwnershipIdentifierSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Identifier); err != nil {
 		return WebAppsClientGetDomainOwnershipIdentifierSlotResponse{}, err
 	}
@@ -7438,7 +7410,7 @@ func (client *WebAppsClient) getFtpAllowedCreateRequest(ctx context.Context, res
 
 // getFtpAllowedHandleResponse handles the GetFtpAllowed response.
 func (client *WebAppsClient) getFtpAllowedHandleResponse(resp *http.Response) (WebAppsClientGetFtpAllowedResponse, error) {
-	result := WebAppsClientGetFtpAllowedResponse{RawResponse: resp}
+	result := WebAppsClientGetFtpAllowedResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CsmPublishingCredentialsPoliciesEntity); err != nil {
 		return WebAppsClientGetFtpAllowedResponse{}, err
 	}
@@ -7498,7 +7470,7 @@ func (client *WebAppsClient) getFtpAllowedSlotCreateRequest(ctx context.Context,
 
 // getFtpAllowedSlotHandleResponse handles the GetFtpAllowedSlot response.
 func (client *WebAppsClient) getFtpAllowedSlotHandleResponse(resp *http.Response) (WebAppsClientGetFtpAllowedSlotResponse, error) {
-	result := WebAppsClientGetFtpAllowedSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetFtpAllowedSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CsmPublishingCredentialsPoliciesEntity); err != nil {
 		return WebAppsClientGetFtpAllowedSlotResponse{}, err
 	}
@@ -7558,7 +7530,7 @@ func (client *WebAppsClient) getFunctionCreateRequest(ctx context.Context, resou
 
 // getFunctionHandleResponse handles the GetFunction response.
 func (client *WebAppsClient) getFunctionHandleResponse(resp *http.Response) (WebAppsClientGetFunctionResponse, error) {
-	result := WebAppsClientGetFunctionResponse{RawResponse: resp}
+	result := WebAppsClientGetFunctionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FunctionEnvelope); err != nil {
 		return WebAppsClientGetFunctionResponse{}, err
 	}
@@ -7614,7 +7586,7 @@ func (client *WebAppsClient) getFunctionsAdminTokenCreateRequest(ctx context.Con
 
 // getFunctionsAdminTokenHandleResponse handles the GetFunctionsAdminToken response.
 func (client *WebAppsClient) getFunctionsAdminTokenHandleResponse(resp *http.Response) (WebAppsClientGetFunctionsAdminTokenResponse, error) {
-	result := WebAppsClientGetFunctionsAdminTokenResponse{RawResponse: resp}
+	result := WebAppsClientGetFunctionsAdminTokenResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Value); err != nil {
 		return WebAppsClientGetFunctionsAdminTokenResponse{}, err
 	}
@@ -7675,7 +7647,7 @@ func (client *WebAppsClient) getFunctionsAdminTokenSlotCreateRequest(ctx context
 
 // getFunctionsAdminTokenSlotHandleResponse handles the GetFunctionsAdminTokenSlot response.
 func (client *WebAppsClient) getFunctionsAdminTokenSlotHandleResponse(resp *http.Response) (WebAppsClientGetFunctionsAdminTokenSlotResponse, error) {
-	result := WebAppsClientGetFunctionsAdminTokenSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetFunctionsAdminTokenSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Value); err != nil {
 		return WebAppsClientGetFunctionsAdminTokenSlotResponse{}, err
 	}
@@ -7736,7 +7708,7 @@ func (client *WebAppsClient) getHostNameBindingCreateRequest(ctx context.Context
 
 // getHostNameBindingHandleResponse handles the GetHostNameBinding response.
 func (client *WebAppsClient) getHostNameBindingHandleResponse(resp *http.Response) (WebAppsClientGetHostNameBindingResponse, error) {
-	result := WebAppsClientGetHostNameBindingResponse{RawResponse: resp}
+	result := WebAppsClientGetHostNameBindingResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostNameBinding); err != nil {
 		return WebAppsClientGetHostNameBindingResponse{}, err
 	}
@@ -7802,7 +7774,7 @@ func (client *WebAppsClient) getHostNameBindingSlotCreateRequest(ctx context.Con
 
 // getHostNameBindingSlotHandleResponse handles the GetHostNameBindingSlot response.
 func (client *WebAppsClient) getHostNameBindingSlotHandleResponse(resp *http.Response) (WebAppsClientGetHostNameBindingSlotResponse, error) {
-	result := WebAppsClientGetHostNameBindingSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetHostNameBindingSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostNameBinding); err != nil {
 		return WebAppsClientGetHostNameBindingSlotResponse{}, err
 	}
@@ -7868,7 +7840,7 @@ func (client *WebAppsClient) getHybridConnectionCreateRequest(ctx context.Contex
 
 // getHybridConnectionHandleResponse handles the GetHybridConnection response.
 func (client *WebAppsClient) getHybridConnectionHandleResponse(resp *http.Response) (WebAppsClientGetHybridConnectionResponse, error) {
-	result := WebAppsClientGetHybridConnectionResponse{RawResponse: resp}
+	result := WebAppsClientGetHybridConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridConnection); err != nil {
 		return WebAppsClientGetHybridConnectionResponse{}, err
 	}
@@ -7939,7 +7911,7 @@ func (client *WebAppsClient) getHybridConnectionSlotCreateRequest(ctx context.Co
 
 // getHybridConnectionSlotHandleResponse handles the GetHybridConnectionSlot response.
 func (client *WebAppsClient) getHybridConnectionSlotHandleResponse(resp *http.Response) (WebAppsClientGetHybridConnectionSlotResponse, error) {
-	result := WebAppsClientGetHybridConnectionSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetHybridConnectionSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridConnection); err != nil {
 		return WebAppsClientGetHybridConnectionSlotResponse{}, err
 	}
@@ -8005,7 +7977,7 @@ func (client *WebAppsClient) getInstanceFunctionSlotCreateRequest(ctx context.Co
 
 // getInstanceFunctionSlotHandleResponse handles the GetInstanceFunctionSlot response.
 func (client *WebAppsClient) getInstanceFunctionSlotHandleResponse(resp *http.Response) (WebAppsClientGetInstanceFunctionSlotResponse, error) {
-	result := WebAppsClientGetInstanceFunctionSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetInstanceFunctionSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FunctionEnvelope); err != nil {
 		return WebAppsClientGetInstanceFunctionSlotResponse{}, err
 	}
@@ -8064,7 +8036,7 @@ func (client *WebAppsClient) getInstanceInfoCreateRequest(ctx context.Context, r
 
 // getInstanceInfoHandleResponse handles the GetInstanceInfo response.
 func (client *WebAppsClient) getInstanceInfoHandleResponse(resp *http.Response) (WebAppsClientGetInstanceInfoResponse, error) {
-	result := WebAppsClientGetInstanceInfoResponse{RawResponse: resp}
+	result := WebAppsClientGetInstanceInfoResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebSiteInstanceStatus); err != nil {
 		return WebAppsClientGetInstanceInfoResponse{}, err
 	}
@@ -8129,7 +8101,7 @@ func (client *WebAppsClient) getInstanceInfoSlotCreateRequest(ctx context.Contex
 
 // getInstanceInfoSlotHandleResponse handles the GetInstanceInfoSlot response.
 func (client *WebAppsClient) getInstanceInfoSlotHandleResponse(resp *http.Response) (WebAppsClientGetInstanceInfoSlotResponse, error) {
-	result := WebAppsClientGetInstanceInfoSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetInstanceInfoSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebSiteInstanceStatus); err != nil {
 		return WebAppsClientGetInstanceInfoSlotResponse{}, err
 	}
@@ -8190,7 +8162,7 @@ func (client *WebAppsClient) getInstanceMSDeployLogCreateRequest(ctx context.Con
 
 // getInstanceMSDeployLogHandleResponse handles the GetInstanceMSDeployLog response.
 func (client *WebAppsClient) getInstanceMSDeployLogHandleResponse(resp *http.Response) (WebAppsClientGetInstanceMSDeployLogResponse, error) {
-	result := WebAppsClientGetInstanceMSDeployLogResponse{RawResponse: resp}
+	result := WebAppsClientGetInstanceMSDeployLogResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MSDeployLog); err != nil {
 		return WebAppsClientGetInstanceMSDeployLogResponse{}, err
 	}
@@ -8256,7 +8228,7 @@ func (client *WebAppsClient) getInstanceMSDeployLogSlotCreateRequest(ctx context
 
 // getInstanceMSDeployLogSlotHandleResponse handles the GetInstanceMSDeployLogSlot response.
 func (client *WebAppsClient) getInstanceMSDeployLogSlotHandleResponse(resp *http.Response) (WebAppsClientGetInstanceMSDeployLogSlotResponse, error) {
-	result := WebAppsClientGetInstanceMSDeployLogSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetInstanceMSDeployLogSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MSDeployLog); err != nil {
 		return WebAppsClientGetInstanceMSDeployLogSlotResponse{}, err
 	}
@@ -8317,7 +8289,7 @@ func (client *WebAppsClient) getInstanceMsDeployStatusCreateRequest(ctx context.
 
 // getInstanceMsDeployStatusHandleResponse handles the GetInstanceMsDeployStatus response.
 func (client *WebAppsClient) getInstanceMsDeployStatusHandleResponse(resp *http.Response) (WebAppsClientGetInstanceMsDeployStatusResponse, error) {
-	result := WebAppsClientGetInstanceMsDeployStatusResponse{RawResponse: resp}
+	result := WebAppsClientGetInstanceMsDeployStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MSDeployStatus); err != nil {
 		return WebAppsClientGetInstanceMsDeployStatusResponse{}, err
 	}
@@ -8383,7 +8355,7 @@ func (client *WebAppsClient) getInstanceMsDeployStatusSlotCreateRequest(ctx cont
 
 // getInstanceMsDeployStatusSlotHandleResponse handles the GetInstanceMsDeployStatusSlot response.
 func (client *WebAppsClient) getInstanceMsDeployStatusSlotHandleResponse(resp *http.Response) (WebAppsClientGetInstanceMsDeployStatusSlotResponse, error) {
-	result := WebAppsClientGetInstanceMsDeployStatusSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetInstanceMsDeployStatusSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MSDeployStatus); err != nil {
 		return WebAppsClientGetInstanceMsDeployStatusSlotResponse{}, err
 	}
@@ -8450,7 +8422,7 @@ func (client *WebAppsClient) getInstanceProcessCreateRequest(ctx context.Context
 
 // getInstanceProcessHandleResponse handles the GetInstanceProcess response.
 func (client *WebAppsClient) getInstanceProcessHandleResponse(resp *http.Response) (WebAppsClientGetInstanceProcessResponse, error) {
-	result := WebAppsClientGetInstanceProcessResponse{RawResponse: resp}
+	result := WebAppsClientGetInstanceProcessResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessInfo); err != nil {
 		return WebAppsClientGetInstanceProcessResponse{}, err
 	}
@@ -8479,7 +8451,7 @@ func (client *WebAppsClient) GetInstanceProcessDump(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientGetInstanceProcessDumpResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientGetInstanceProcessDumpResponse{RawResponse: resp}, nil
+	return WebAppsClientGetInstanceProcessDumpResponse{Body: resp.Body}, nil
 }
 
 // getInstanceProcessDumpCreateRequest creates the GetInstanceProcessDump request.
@@ -8540,7 +8512,7 @@ func (client *WebAppsClient) GetInstanceProcessDumpSlot(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientGetInstanceProcessDumpSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientGetInstanceProcessDumpSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientGetInstanceProcessDumpSlotResponse{Body: resp.Body}, nil
 }
 
 // getInstanceProcessDumpSlotCreateRequest creates the GetInstanceProcessDumpSlot request.
@@ -8648,7 +8620,7 @@ func (client *WebAppsClient) getInstanceProcessModuleCreateRequest(ctx context.C
 
 // getInstanceProcessModuleHandleResponse handles the GetInstanceProcessModule response.
 func (client *WebAppsClient) getInstanceProcessModuleHandleResponse(resp *http.Response) (WebAppsClientGetInstanceProcessModuleResponse, error) {
-	result := WebAppsClientGetInstanceProcessModuleResponse{RawResponse: resp}
+	result := WebAppsClientGetInstanceProcessModuleResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessModuleInfo); err != nil {
 		return WebAppsClientGetInstanceProcessModuleResponse{}, err
 	}
@@ -8726,7 +8698,7 @@ func (client *WebAppsClient) getInstanceProcessModuleSlotCreateRequest(ctx conte
 
 // getInstanceProcessModuleSlotHandleResponse handles the GetInstanceProcessModuleSlot response.
 func (client *WebAppsClient) getInstanceProcessModuleSlotHandleResponse(resp *http.Response) (WebAppsClientGetInstanceProcessModuleSlotResponse, error) {
-	result := WebAppsClientGetInstanceProcessModuleSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetInstanceProcessModuleSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessModuleInfo); err != nil {
 		return WebAppsClientGetInstanceProcessModuleSlotResponse{}, err
 	}
@@ -8799,7 +8771,7 @@ func (client *WebAppsClient) getInstanceProcessSlotCreateRequest(ctx context.Con
 
 // getInstanceProcessSlotHandleResponse handles the GetInstanceProcessSlot response.
 func (client *WebAppsClient) getInstanceProcessSlotHandleResponse(resp *http.Response) (WebAppsClientGetInstanceProcessSlotResponse, error) {
-	result := WebAppsClientGetInstanceProcessSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetInstanceProcessSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessInfo); err != nil {
 		return WebAppsClientGetInstanceProcessSlotResponse{}, err
 	}
@@ -8854,7 +8826,7 @@ func (client *WebAppsClient) getMSDeployLogCreateRequest(ctx context.Context, re
 
 // getMSDeployLogHandleResponse handles the GetMSDeployLog response.
 func (client *WebAppsClient) getMSDeployLogHandleResponse(resp *http.Response) (WebAppsClientGetMSDeployLogResponse, error) {
-	result := WebAppsClientGetMSDeployLogResponse{RawResponse: resp}
+	result := WebAppsClientGetMSDeployLogResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MSDeployLog); err != nil {
 		return WebAppsClientGetMSDeployLogResponse{}, err
 	}
@@ -8915,7 +8887,7 @@ func (client *WebAppsClient) getMSDeployLogSlotCreateRequest(ctx context.Context
 
 // getMSDeployLogSlotHandleResponse handles the GetMSDeployLogSlot response.
 func (client *WebAppsClient) getMSDeployLogSlotHandleResponse(resp *http.Response) (WebAppsClientGetMSDeployLogSlotResponse, error) {
-	result := WebAppsClientGetMSDeployLogSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetMSDeployLogSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MSDeployLog); err != nil {
 		return WebAppsClientGetMSDeployLogSlotResponse{}, err
 	}
@@ -8971,7 +8943,7 @@ func (client *WebAppsClient) getMSDeployStatusCreateRequest(ctx context.Context,
 
 // getMSDeployStatusHandleResponse handles the GetMSDeployStatus response.
 func (client *WebAppsClient) getMSDeployStatusHandleResponse(resp *http.Response) (WebAppsClientGetMSDeployStatusResponse, error) {
-	result := WebAppsClientGetMSDeployStatusResponse{RawResponse: resp}
+	result := WebAppsClientGetMSDeployStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MSDeployStatus); err != nil {
 		return WebAppsClientGetMSDeployStatusResponse{}, err
 	}
@@ -9032,7 +9004,7 @@ func (client *WebAppsClient) getMSDeployStatusSlotCreateRequest(ctx context.Cont
 
 // getMSDeployStatusSlotHandleResponse handles the GetMSDeployStatusSlot response.
 func (client *WebAppsClient) getMSDeployStatusSlotHandleResponse(resp *http.Response) (WebAppsClientGetMSDeployStatusSlotResponse, error) {
-	result := WebAppsClientGetMSDeployStatusSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetMSDeployStatusSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MSDeployStatus); err != nil {
 		return WebAppsClientGetMSDeployStatusSlotResponse{}, err
 	}
@@ -9089,7 +9061,7 @@ func (client *WebAppsClient) getMigrateMySQLStatusCreateRequest(ctx context.Cont
 
 // getMigrateMySQLStatusHandleResponse handles the GetMigrateMySQLStatus response.
 func (client *WebAppsClient) getMigrateMySQLStatusHandleResponse(resp *http.Response) (WebAppsClientGetMigrateMySQLStatusResponse, error) {
-	result := WebAppsClientGetMigrateMySQLStatusResponse{RawResponse: resp}
+	result := WebAppsClientGetMigrateMySQLStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MigrateMySQLStatus); err != nil {
 		return WebAppsClientGetMigrateMySQLStatusResponse{}, err
 	}
@@ -9151,7 +9123,7 @@ func (client *WebAppsClient) getMigrateMySQLStatusSlotCreateRequest(ctx context.
 
 // getMigrateMySQLStatusSlotHandleResponse handles the GetMigrateMySQLStatusSlot response.
 func (client *WebAppsClient) getMigrateMySQLStatusSlotHandleResponse(resp *http.Response) (WebAppsClientGetMigrateMySQLStatusSlotResponse, error) {
-	result := WebAppsClientGetMigrateMySQLStatusSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetMigrateMySQLStatusSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MigrateMySQLStatus); err != nil {
 		return WebAppsClientGetMigrateMySQLStatusSlotResponse{}, err
 	}
@@ -9213,7 +9185,7 @@ func (client *WebAppsClient) getNetworkTraceOperationCreateRequest(ctx context.C
 
 // getNetworkTraceOperationHandleResponse handles the GetNetworkTraceOperation response.
 func (client *WebAppsClient) getNetworkTraceOperationHandleResponse(resp *http.Response) (WebAppsClientGetNetworkTraceOperationResponse, error) {
-	result := WebAppsClientGetNetworkTraceOperationResponse{RawResponse: resp}
+	result := WebAppsClientGetNetworkTraceOperationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkTraceArray); err != nil {
 		return WebAppsClientGetNetworkTraceOperationResponse{}, err
 	}
@@ -9280,7 +9252,7 @@ func (client *WebAppsClient) getNetworkTraceOperationSlotCreateRequest(ctx conte
 
 // getNetworkTraceOperationSlotHandleResponse handles the GetNetworkTraceOperationSlot response.
 func (client *WebAppsClient) getNetworkTraceOperationSlotHandleResponse(resp *http.Response) (WebAppsClientGetNetworkTraceOperationSlotResponse, error) {
-	result := WebAppsClientGetNetworkTraceOperationSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetNetworkTraceOperationSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkTraceArray); err != nil {
 		return WebAppsClientGetNetworkTraceOperationSlotResponse{}, err
 	}
@@ -9347,7 +9319,7 @@ func (client *WebAppsClient) getNetworkTraceOperationSlotV2CreateRequest(ctx con
 
 // getNetworkTraceOperationSlotV2HandleResponse handles the GetNetworkTraceOperationSlotV2 response.
 func (client *WebAppsClient) getNetworkTraceOperationSlotV2HandleResponse(resp *http.Response) (WebAppsClientGetNetworkTraceOperationSlotV2Response, error) {
-	result := WebAppsClientGetNetworkTraceOperationSlotV2Response{RawResponse: resp}
+	result := WebAppsClientGetNetworkTraceOperationSlotV2Response{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkTraceArray); err != nil {
 		return WebAppsClientGetNetworkTraceOperationSlotV2Response{}, err
 	}
@@ -9409,7 +9381,7 @@ func (client *WebAppsClient) getNetworkTraceOperationV2CreateRequest(ctx context
 
 // getNetworkTraceOperationV2HandleResponse handles the GetNetworkTraceOperationV2 response.
 func (client *WebAppsClient) getNetworkTraceOperationV2HandleResponse(resp *http.Response) (WebAppsClientGetNetworkTraceOperationV2Response, error) {
-	result := WebAppsClientGetNetworkTraceOperationV2Response{RawResponse: resp}
+	result := WebAppsClientGetNetworkTraceOperationV2Response{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkTraceArray); err != nil {
 		return WebAppsClientGetNetworkTraceOperationV2Response{}, err
 	}
@@ -9470,7 +9442,7 @@ func (client *WebAppsClient) getNetworkTracesCreateRequest(ctx context.Context, 
 
 // getNetworkTracesHandleResponse handles the GetNetworkTraces response.
 func (client *WebAppsClient) getNetworkTracesHandleResponse(resp *http.Response) (WebAppsClientGetNetworkTracesResponse, error) {
-	result := WebAppsClientGetNetworkTracesResponse{RawResponse: resp}
+	result := WebAppsClientGetNetworkTracesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkTraceArray); err != nil {
 		return WebAppsClientGetNetworkTracesResponse{}, err
 	}
@@ -9536,7 +9508,7 @@ func (client *WebAppsClient) getNetworkTracesSlotCreateRequest(ctx context.Conte
 
 // getNetworkTracesSlotHandleResponse handles the GetNetworkTracesSlot response.
 func (client *WebAppsClient) getNetworkTracesSlotHandleResponse(resp *http.Response) (WebAppsClientGetNetworkTracesSlotResponse, error) {
-	result := WebAppsClientGetNetworkTracesSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetNetworkTracesSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkTraceArray); err != nil {
 		return WebAppsClientGetNetworkTracesSlotResponse{}, err
 	}
@@ -9602,7 +9574,7 @@ func (client *WebAppsClient) getNetworkTracesSlotV2CreateRequest(ctx context.Con
 
 // getNetworkTracesSlotV2HandleResponse handles the GetNetworkTracesSlotV2 response.
 func (client *WebAppsClient) getNetworkTracesSlotV2HandleResponse(resp *http.Response) (WebAppsClientGetNetworkTracesSlotV2Response, error) {
-	result := WebAppsClientGetNetworkTracesSlotV2Response{RawResponse: resp}
+	result := WebAppsClientGetNetworkTracesSlotV2Response{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkTraceArray); err != nil {
 		return WebAppsClientGetNetworkTracesSlotV2Response{}, err
 	}
@@ -9663,7 +9635,7 @@ func (client *WebAppsClient) getNetworkTracesV2CreateRequest(ctx context.Context
 
 // getNetworkTracesV2HandleResponse handles the GetNetworkTracesV2 response.
 func (client *WebAppsClient) getNetworkTracesV2HandleResponse(resp *http.Response) (WebAppsClientGetNetworkTracesV2Response, error) {
-	result := WebAppsClientGetNetworkTracesV2Response{RawResponse: resp}
+	result := WebAppsClientGetNetworkTracesV2Response{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkTraceArray); err != nil {
 		return WebAppsClientGetNetworkTracesV2Response{}, err
 	}
@@ -9720,7 +9692,7 @@ func (client *WebAppsClient) getOneDeployStatusCreateRequest(ctx context.Context
 
 // getOneDeployStatusHandleResponse handles the GetOneDeployStatus response.
 func (client *WebAppsClient) getOneDeployStatusHandleResponse(resp *http.Response) (WebAppsClientGetOneDeployStatusResponse, error) {
-	result := WebAppsClientGetOneDeployStatusResponse{RawResponse: resp}
+	result := WebAppsClientGetOneDeployStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Interface); err != nil {
 		return WebAppsClientGetOneDeployStatusResponse{}, err
 	}
@@ -9780,7 +9752,7 @@ func (client *WebAppsClient) getPremierAddOnCreateRequest(ctx context.Context, r
 
 // getPremierAddOnHandleResponse handles the GetPremierAddOn response.
 func (client *WebAppsClient) getPremierAddOnHandleResponse(resp *http.Response) (WebAppsClientGetPremierAddOnResponse, error) {
-	result := WebAppsClientGetPremierAddOnResponse{RawResponse: resp}
+	result := WebAppsClientGetPremierAddOnResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PremierAddOn); err != nil {
 		return WebAppsClientGetPremierAddOnResponse{}, err
 	}
@@ -9846,7 +9818,7 @@ func (client *WebAppsClient) getPremierAddOnSlotCreateRequest(ctx context.Contex
 
 // getPremierAddOnSlotHandleResponse handles the GetPremierAddOnSlot response.
 func (client *WebAppsClient) getPremierAddOnSlotHandleResponse(resp *http.Response) (WebAppsClientGetPremierAddOnSlotResponse, error) {
-	result := WebAppsClientGetPremierAddOnSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetPremierAddOnSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PremierAddOn); err != nil {
 		return WebAppsClientGetPremierAddOnSlotResponse{}, err
 	}
@@ -9903,7 +9875,7 @@ func (client *WebAppsClient) getPrivateAccessCreateRequest(ctx context.Context, 
 
 // getPrivateAccessHandleResponse handles the GetPrivateAccess response.
 func (client *WebAppsClient) getPrivateAccessHandleResponse(resp *http.Response) (WebAppsClientGetPrivateAccessResponse, error) {
-	result := WebAppsClientGetPrivateAccessResponse{RawResponse: resp}
+	result := WebAppsClientGetPrivateAccessResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateAccess); err != nil {
 		return WebAppsClientGetPrivateAccessResponse{}, err
 	}
@@ -9965,7 +9937,7 @@ func (client *WebAppsClient) getPrivateAccessSlotCreateRequest(ctx context.Conte
 
 // getPrivateAccessSlotHandleResponse handles the GetPrivateAccessSlot response.
 func (client *WebAppsClient) getPrivateAccessSlotHandleResponse(resp *http.Response) (WebAppsClientGetPrivateAccessSlotResponse, error) {
-	result := WebAppsClientGetPrivateAccessSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetPrivateAccessSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateAccess); err != nil {
 		return WebAppsClientGetPrivateAccessSlotResponse{}, err
 	}
@@ -10026,7 +9998,7 @@ func (client *WebAppsClient) getPrivateEndpointConnectionCreateRequest(ctx conte
 
 // getPrivateEndpointConnectionHandleResponse handles the GetPrivateEndpointConnection response.
 func (client *WebAppsClient) getPrivateEndpointConnectionHandleResponse(resp *http.Response) (WebAppsClientGetPrivateEndpointConnectionResponse, error) {
-	result := WebAppsClientGetPrivateEndpointConnectionResponse{RawResponse: resp}
+	result := WebAppsClientGetPrivateEndpointConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemotePrivateEndpointConnectionARMResource); err != nil {
 		return WebAppsClientGetPrivateEndpointConnectionResponse{}, err
 	}
@@ -10079,7 +10051,7 @@ func (client *WebAppsClient) getPrivateEndpointConnectionListCreateRequest(ctx c
 
 // getPrivateEndpointConnectionListHandleResponse handles the GetPrivateEndpointConnectionList response.
 func (client *WebAppsClient) getPrivateEndpointConnectionListHandleResponse(resp *http.Response) (WebAppsClientGetPrivateEndpointConnectionListResponse, error) {
-	result := WebAppsClientGetPrivateEndpointConnectionListResponse{RawResponse: resp}
+	result := WebAppsClientGetPrivateEndpointConnectionListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionCollection); err != nil {
 		return WebAppsClientGetPrivateEndpointConnectionListResponse{}, err
 	}
@@ -10138,7 +10110,7 @@ func (client *WebAppsClient) getPrivateEndpointConnectionListSlotCreateRequest(c
 
 // getPrivateEndpointConnectionListSlotHandleResponse handles the GetPrivateEndpointConnectionListSlot response.
 func (client *WebAppsClient) getPrivateEndpointConnectionListSlotHandleResponse(resp *http.Response) (WebAppsClientGetPrivateEndpointConnectionListSlotResponse, error) {
-	result := WebAppsClientGetPrivateEndpointConnectionListSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetPrivateEndpointConnectionListSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionCollection); err != nil {
 		return WebAppsClientGetPrivateEndpointConnectionListSlotResponse{}, err
 	}
@@ -10204,7 +10176,7 @@ func (client *WebAppsClient) getPrivateEndpointConnectionSlotCreateRequest(ctx c
 
 // getPrivateEndpointConnectionSlotHandleResponse handles the GetPrivateEndpointConnectionSlot response.
 func (client *WebAppsClient) getPrivateEndpointConnectionSlotHandleResponse(resp *http.Response) (WebAppsClientGetPrivateEndpointConnectionSlotResponse, error) {
-	result := WebAppsClientGetPrivateEndpointConnectionSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetPrivateEndpointConnectionSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemotePrivateEndpointConnectionARMResource); err != nil {
 		return WebAppsClientGetPrivateEndpointConnectionSlotResponse{}, err
 	}
@@ -10260,7 +10232,7 @@ func (client *WebAppsClient) getPrivateLinkResourcesCreateRequest(ctx context.Co
 
 // getPrivateLinkResourcesHandleResponse handles the GetPrivateLinkResources response.
 func (client *WebAppsClient) getPrivateLinkResourcesHandleResponse(resp *http.Response) (WebAppsClientGetPrivateLinkResourcesResponse, error) {
-	result := WebAppsClientGetPrivateLinkResourcesResponse{RawResponse: resp}
+	result := WebAppsClientGetPrivateLinkResourcesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourcesWrapper); err != nil {
 		return WebAppsClientGetPrivateLinkResourcesResponse{}, err
 	}
@@ -10320,7 +10292,7 @@ func (client *WebAppsClient) getPrivateLinkResourcesSlotCreateRequest(ctx contex
 
 // getPrivateLinkResourcesSlotHandleResponse handles the GetPrivateLinkResourcesSlot response.
 func (client *WebAppsClient) getPrivateLinkResourcesSlotHandleResponse(resp *http.Response) (WebAppsClientGetPrivateLinkResourcesSlotResponse, error) {
-	result := WebAppsClientGetPrivateLinkResourcesSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetPrivateLinkResourcesSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourcesWrapper); err != nil {
 		return WebAppsClientGetPrivateLinkResourcesSlotResponse{}, err
 	}
@@ -10380,7 +10352,7 @@ func (client *WebAppsClient) getProcessCreateRequest(ctx context.Context, resour
 
 // getProcessHandleResponse handles the GetProcess response.
 func (client *WebAppsClient) getProcessHandleResponse(resp *http.Response) (WebAppsClientGetProcessResponse, error) {
-	result := WebAppsClientGetProcessResponse{RawResponse: resp}
+	result := WebAppsClientGetProcessResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessInfo); err != nil {
 		return WebAppsClientGetProcessResponse{}, err
 	}
@@ -10405,7 +10377,7 @@ func (client *WebAppsClient) GetProcessDump(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientGetProcessDumpResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientGetProcessDumpResponse{RawResponse: resp}, nil
+	return WebAppsClientGetProcessDumpResponse{Body: resp.Body}, nil
 }
 
 // getProcessDumpCreateRequest creates the GetProcessDump request.
@@ -10460,7 +10432,7 @@ func (client *WebAppsClient) GetProcessDumpSlot(ctx context.Context, resourceGro
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientGetProcessDumpSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientGetProcessDumpSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientGetProcessDumpSlotResponse{Body: resp.Body}, nil
 }
 
 // getProcessDumpSlotCreateRequest creates the GetProcessDumpSlot request.
@@ -10557,7 +10529,7 @@ func (client *WebAppsClient) getProcessModuleCreateRequest(ctx context.Context, 
 
 // getProcessModuleHandleResponse handles the GetProcessModule response.
 func (client *WebAppsClient) getProcessModuleHandleResponse(resp *http.Response) (WebAppsClientGetProcessModuleResponse, error) {
-	result := WebAppsClientGetProcessModuleResponse{RawResponse: resp}
+	result := WebAppsClientGetProcessModuleResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessModuleInfo); err != nil {
 		return WebAppsClientGetProcessModuleResponse{}, err
 	}
@@ -10628,7 +10600,7 @@ func (client *WebAppsClient) getProcessModuleSlotCreateRequest(ctx context.Conte
 
 // getProcessModuleSlotHandleResponse handles the GetProcessModuleSlot response.
 func (client *WebAppsClient) getProcessModuleSlotHandleResponse(resp *http.Response) (WebAppsClientGetProcessModuleSlotResponse, error) {
-	result := WebAppsClientGetProcessModuleSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetProcessModuleSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessModuleInfo); err != nil {
 		return WebAppsClientGetProcessModuleSlotResponse{}, err
 	}
@@ -10693,7 +10665,7 @@ func (client *WebAppsClient) getProcessSlotCreateRequest(ctx context.Context, re
 
 // getProcessSlotHandleResponse handles the GetProcessSlot response.
 func (client *WebAppsClient) getProcessSlotHandleResponse(resp *http.Response) (WebAppsClientGetProcessSlotResponse, error) {
-	result := WebAppsClientGetProcessSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetProcessSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessInfo); err != nil {
 		return WebAppsClientGetProcessSlotResponse{}, err
 	}
@@ -10754,7 +10726,7 @@ func (client *WebAppsClient) getPublicCertificateCreateRequest(ctx context.Conte
 
 // getPublicCertificateHandleResponse handles the GetPublicCertificate response.
 func (client *WebAppsClient) getPublicCertificateHandleResponse(resp *http.Response) (WebAppsClientGetPublicCertificateResponse, error) {
-	result := WebAppsClientGetPublicCertificateResponse{RawResponse: resp}
+	result := WebAppsClientGetPublicCertificateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicCertificate); err != nil {
 		return WebAppsClientGetPublicCertificateResponse{}, err
 	}
@@ -10820,7 +10792,7 @@ func (client *WebAppsClient) getPublicCertificateSlotCreateRequest(ctx context.C
 
 // getPublicCertificateSlotHandleResponse handles the GetPublicCertificateSlot response.
 func (client *WebAppsClient) getPublicCertificateSlotHandleResponse(resp *http.Response) (WebAppsClientGetPublicCertificateSlotResponse, error) {
-	result := WebAppsClientGetPublicCertificateSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetPublicCertificateSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicCertificate); err != nil {
 		return WebAppsClientGetPublicCertificateSlotResponse{}, err
 	}
@@ -10881,7 +10853,7 @@ func (client *WebAppsClient) getRelayServiceConnectionCreateRequest(ctx context.
 
 // getRelayServiceConnectionHandleResponse handles the GetRelayServiceConnection response.
 func (client *WebAppsClient) getRelayServiceConnectionHandleResponse(resp *http.Response) (WebAppsClientGetRelayServiceConnectionResponse, error) {
-	result := WebAppsClientGetRelayServiceConnectionResponse{RawResponse: resp}
+	result := WebAppsClientGetRelayServiceConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RelayServiceConnectionEntity); err != nil {
 		return WebAppsClientGetRelayServiceConnectionResponse{}, err
 	}
@@ -10948,7 +10920,7 @@ func (client *WebAppsClient) getRelayServiceConnectionSlotCreateRequest(ctx cont
 
 // getRelayServiceConnectionSlotHandleResponse handles the GetRelayServiceConnectionSlot response.
 func (client *WebAppsClient) getRelayServiceConnectionSlotHandleResponse(resp *http.Response) (WebAppsClientGetRelayServiceConnectionSlotResponse, error) {
-	result := WebAppsClientGetRelayServiceConnectionSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetRelayServiceConnectionSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RelayServiceConnectionEntity); err != nil {
 		return WebAppsClientGetRelayServiceConnectionSlotResponse{}, err
 	}
@@ -11003,7 +10975,7 @@ func (client *WebAppsClient) getScmAllowedCreateRequest(ctx context.Context, res
 
 // getScmAllowedHandleResponse handles the GetScmAllowed response.
 func (client *WebAppsClient) getScmAllowedHandleResponse(resp *http.Response) (WebAppsClientGetScmAllowedResponse, error) {
-	result := WebAppsClientGetScmAllowedResponse{RawResponse: resp}
+	result := WebAppsClientGetScmAllowedResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CsmPublishingCredentialsPoliciesEntity); err != nil {
 		return WebAppsClientGetScmAllowedResponse{}, err
 	}
@@ -11063,7 +11035,7 @@ func (client *WebAppsClient) getScmAllowedSlotCreateRequest(ctx context.Context,
 
 // getScmAllowedSlotHandleResponse handles the GetScmAllowedSlot response.
 func (client *WebAppsClient) getScmAllowedSlotHandleResponse(resp *http.Response) (WebAppsClientGetScmAllowedSlotResponse, error) {
-	result := WebAppsClientGetScmAllowedSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetScmAllowedSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CsmPublishingCredentialsPoliciesEntity); err != nil {
 		return WebAppsClientGetScmAllowedSlotResponse{}, err
 	}
@@ -11123,7 +11095,7 @@ func (client *WebAppsClient) getSiteConnectionStringKeyVaultReferenceCreateReque
 
 // getSiteConnectionStringKeyVaultReferenceHandleResponse handles the GetSiteConnectionStringKeyVaultReference response.
 func (client *WebAppsClient) getSiteConnectionStringKeyVaultReferenceHandleResponse(resp *http.Response) (WebAppsClientGetSiteConnectionStringKeyVaultReferenceResponse, error) {
-	result := WebAppsClientGetSiteConnectionStringKeyVaultReferenceResponse{RawResponse: resp}
+	result := WebAppsClientGetSiteConnectionStringKeyVaultReferenceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIKVReference); err != nil {
 		return WebAppsClientGetSiteConnectionStringKeyVaultReferenceResponse{}, err
 	}
@@ -11187,7 +11159,7 @@ func (client *WebAppsClient) getSiteConnectionStringKeyVaultReferenceSlotCreateR
 
 // getSiteConnectionStringKeyVaultReferenceSlotHandleResponse handles the GetSiteConnectionStringKeyVaultReferenceSlot response.
 func (client *WebAppsClient) getSiteConnectionStringKeyVaultReferenceSlotHandleResponse(resp *http.Response) (WebAppsClientGetSiteConnectionStringKeyVaultReferenceSlotResponse, error) {
-	result := WebAppsClientGetSiteConnectionStringKeyVaultReferenceSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetSiteConnectionStringKeyVaultReferenceSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIKVReference); err != nil {
 		return WebAppsClientGetSiteConnectionStringKeyVaultReferenceSlotResponse{}, err
 	}
@@ -11240,7 +11212,7 @@ func (client *WebAppsClient) getSiteConnectionStringKeyVaultReferencesCreateRequ
 
 // getSiteConnectionStringKeyVaultReferencesHandleResponse handles the GetSiteConnectionStringKeyVaultReferences response.
 func (client *WebAppsClient) getSiteConnectionStringKeyVaultReferencesHandleResponse(resp *http.Response) (WebAppsClientGetSiteConnectionStringKeyVaultReferencesResponse, error) {
-	result := WebAppsClientGetSiteConnectionStringKeyVaultReferencesResponse{RawResponse: resp}
+	result := WebAppsClientGetSiteConnectionStringKeyVaultReferencesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIKVReferenceCollection); err != nil {
 		return WebAppsClientGetSiteConnectionStringKeyVaultReferencesResponse{}, err
 	}
@@ -11298,7 +11270,7 @@ func (client *WebAppsClient) getSiteConnectionStringKeyVaultReferencesSlotCreate
 
 // getSiteConnectionStringKeyVaultReferencesSlotHandleResponse handles the GetSiteConnectionStringKeyVaultReferencesSlot response.
 func (client *WebAppsClient) getSiteConnectionStringKeyVaultReferencesSlotHandleResponse(resp *http.Response) (WebAppsClientGetSiteConnectionStringKeyVaultReferencesSlotResponse, error) {
-	result := WebAppsClientGetSiteConnectionStringKeyVaultReferencesSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetSiteConnectionStringKeyVaultReferencesSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIKVReferenceCollection); err != nil {
 		return WebAppsClientGetSiteConnectionStringKeyVaultReferencesSlotResponse{}, err
 	}
@@ -11359,7 +11331,7 @@ func (client *WebAppsClient) getSiteExtensionCreateRequest(ctx context.Context, 
 
 // getSiteExtensionHandleResponse handles the GetSiteExtension response.
 func (client *WebAppsClient) getSiteExtensionHandleResponse(resp *http.Response) (WebAppsClientGetSiteExtensionResponse, error) {
-	result := WebAppsClientGetSiteExtensionResponse{RawResponse: resp}
+	result := WebAppsClientGetSiteExtensionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteExtensionInfo); err != nil {
 		return WebAppsClientGetSiteExtensionResponse{}, err
 	}
@@ -11425,7 +11397,7 @@ func (client *WebAppsClient) getSiteExtensionSlotCreateRequest(ctx context.Conte
 
 // getSiteExtensionSlotHandleResponse handles the GetSiteExtensionSlot response.
 func (client *WebAppsClient) getSiteExtensionSlotHandleResponse(resp *http.Response) (WebAppsClientGetSiteExtensionSlotResponse, error) {
-	result := WebAppsClientGetSiteExtensionSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetSiteExtensionSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteExtensionInfo); err != nil {
 		return WebAppsClientGetSiteExtensionSlotResponse{}, err
 	}
@@ -11481,7 +11453,7 @@ func (client *WebAppsClient) getSitePhpErrorLogFlagCreateRequest(ctx context.Con
 
 // getSitePhpErrorLogFlagHandleResponse handles the GetSitePhpErrorLogFlag response.
 func (client *WebAppsClient) getSitePhpErrorLogFlagHandleResponse(resp *http.Response) (WebAppsClientGetSitePhpErrorLogFlagResponse, error) {
-	result := WebAppsClientGetSitePhpErrorLogFlagResponse{RawResponse: resp}
+	result := WebAppsClientGetSitePhpErrorLogFlagResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SitePhpErrorLogFlag); err != nil {
 		return WebAppsClientGetSitePhpErrorLogFlagResponse{}, err
 	}
@@ -11542,7 +11514,7 @@ func (client *WebAppsClient) getSitePhpErrorLogFlagSlotCreateRequest(ctx context
 
 // getSitePhpErrorLogFlagSlotHandleResponse handles the GetSitePhpErrorLogFlagSlot response.
 func (client *WebAppsClient) getSitePhpErrorLogFlagSlotHandleResponse(resp *http.Response) (WebAppsClientGetSitePhpErrorLogFlagSlotResponse, error) {
-	result := WebAppsClientGetSitePhpErrorLogFlagSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetSitePhpErrorLogFlagSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SitePhpErrorLogFlag); err != nil {
 		return WebAppsClientGetSitePhpErrorLogFlagSlotResponse{}, err
 	}
@@ -11602,7 +11574,7 @@ func (client *WebAppsClient) getSlotCreateRequest(ctx context.Context, resourceG
 
 // getSlotHandleResponse handles the GetSlot response.
 func (client *WebAppsClient) getSlotHandleResponse(resp *http.Response) (WebAppsClientGetSlotResponse, error) {
-	result := WebAppsClientGetSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Site); err != nil {
 		return WebAppsClientGetSlotResponse{}, err
 	}
@@ -11658,7 +11630,7 @@ func (client *WebAppsClient) getSourceControlCreateRequest(ctx context.Context, 
 
 // getSourceControlHandleResponse handles the GetSourceControl response.
 func (client *WebAppsClient) getSourceControlHandleResponse(resp *http.Response) (WebAppsClientGetSourceControlResponse, error) {
-	result := WebAppsClientGetSourceControlResponse{RawResponse: resp}
+	result := WebAppsClientGetSourceControlResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteSourceControl); err != nil {
 		return WebAppsClientGetSourceControlResponse{}, err
 	}
@@ -11720,7 +11692,7 @@ func (client *WebAppsClient) getSourceControlSlotCreateRequest(ctx context.Conte
 
 // getSourceControlSlotHandleResponse handles the GetSourceControlSlot response.
 func (client *WebAppsClient) getSourceControlSlotHandleResponse(resp *http.Response) (WebAppsClientGetSourceControlSlotResponse, error) {
-	result := WebAppsClientGetSourceControlSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetSourceControlSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteSourceControl); err != nil {
 		return WebAppsClientGetSourceControlSlotResponse{}, err
 	}
@@ -11776,7 +11748,7 @@ func (client *WebAppsClient) getSwiftVirtualNetworkConnectionCreateRequest(ctx c
 
 // getSwiftVirtualNetworkConnectionHandleResponse handles the GetSwiftVirtualNetworkConnection response.
 func (client *WebAppsClient) getSwiftVirtualNetworkConnectionHandleResponse(resp *http.Response) (WebAppsClientGetSwiftVirtualNetworkConnectionResponse, error) {
-	result := WebAppsClientGetSwiftVirtualNetworkConnectionResponse{RawResponse: resp}
+	result := WebAppsClientGetSwiftVirtualNetworkConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SwiftVirtualNetwork); err != nil {
 		return WebAppsClientGetSwiftVirtualNetworkConnectionResponse{}, err
 	}
@@ -11838,7 +11810,7 @@ func (client *WebAppsClient) getSwiftVirtualNetworkConnectionSlotCreateRequest(c
 
 // getSwiftVirtualNetworkConnectionSlotHandleResponse handles the GetSwiftVirtualNetworkConnectionSlot response.
 func (client *WebAppsClient) getSwiftVirtualNetworkConnectionSlotHandleResponse(resp *http.Response) (WebAppsClientGetSwiftVirtualNetworkConnectionSlotResponse, error) {
-	result := WebAppsClientGetSwiftVirtualNetworkConnectionSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetSwiftVirtualNetworkConnectionSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SwiftVirtualNetwork); err != nil {
 		return WebAppsClientGetSwiftVirtualNetworkConnectionSlotResponse{}, err
 	}
@@ -11899,7 +11871,7 @@ func (client *WebAppsClient) getTriggeredWebJobCreateRequest(ctx context.Context
 
 // getTriggeredWebJobHandleResponse handles the GetTriggeredWebJob response.
 func (client *WebAppsClient) getTriggeredWebJobHandleResponse(resp *http.Response) (WebAppsClientGetTriggeredWebJobResponse, error) {
-	result := WebAppsClientGetTriggeredWebJobResponse{RawResponse: resp}
+	result := WebAppsClientGetTriggeredWebJobResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggeredWebJob); err != nil {
 		return WebAppsClientGetTriggeredWebJobResponse{}, err
 	}
@@ -11966,7 +11938,7 @@ func (client *WebAppsClient) getTriggeredWebJobHistoryCreateRequest(ctx context.
 
 // getTriggeredWebJobHistoryHandleResponse handles the GetTriggeredWebJobHistory response.
 func (client *WebAppsClient) getTriggeredWebJobHistoryHandleResponse(resp *http.Response) (WebAppsClientGetTriggeredWebJobHistoryResponse, error) {
-	result := WebAppsClientGetTriggeredWebJobHistoryResponse{RawResponse: resp}
+	result := WebAppsClientGetTriggeredWebJobHistoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggeredJobHistory); err != nil {
 		return WebAppsClientGetTriggeredWebJobHistoryResponse{}, err
 	}
@@ -12038,7 +12010,7 @@ func (client *WebAppsClient) getTriggeredWebJobHistorySlotCreateRequest(ctx cont
 
 // getTriggeredWebJobHistorySlotHandleResponse handles the GetTriggeredWebJobHistorySlot response.
 func (client *WebAppsClient) getTriggeredWebJobHistorySlotHandleResponse(resp *http.Response) (WebAppsClientGetTriggeredWebJobHistorySlotResponse, error) {
-	result := WebAppsClientGetTriggeredWebJobHistorySlotResponse{RawResponse: resp}
+	result := WebAppsClientGetTriggeredWebJobHistorySlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggeredJobHistory); err != nil {
 		return WebAppsClientGetTriggeredWebJobHistorySlotResponse{}, err
 	}
@@ -12104,7 +12076,7 @@ func (client *WebAppsClient) getTriggeredWebJobSlotCreateRequest(ctx context.Con
 
 // getTriggeredWebJobSlotHandleResponse handles the GetTriggeredWebJobSlot response.
 func (client *WebAppsClient) getTriggeredWebJobSlotHandleResponse(resp *http.Response) (WebAppsClientGetTriggeredWebJobSlotResponse, error) {
-	result := WebAppsClientGetTriggeredWebJobSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetTriggeredWebJobSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggeredWebJob); err != nil {
 		return WebAppsClientGetTriggeredWebJobSlotResponse{}, err
 	}
@@ -12165,7 +12137,7 @@ func (client *WebAppsClient) getVnetConnectionCreateRequest(ctx context.Context,
 
 // getVnetConnectionHandleResponse handles the GetVnetConnection response.
 func (client *WebAppsClient) getVnetConnectionHandleResponse(resp *http.Response) (WebAppsClientGetVnetConnectionResponse, error) {
-	result := WebAppsClientGetVnetConnectionResponse{RawResponse: resp}
+	result := WebAppsClientGetVnetConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetInfoResource); err != nil {
 		return WebAppsClientGetVnetConnectionResponse{}, err
 	}
@@ -12231,7 +12203,7 @@ func (client *WebAppsClient) getVnetConnectionGatewayCreateRequest(ctx context.C
 
 // getVnetConnectionGatewayHandleResponse handles the GetVnetConnectionGateway response.
 func (client *WebAppsClient) getVnetConnectionGatewayHandleResponse(resp *http.Response) (WebAppsClientGetVnetConnectionGatewayResponse, error) {
-	result := WebAppsClientGetVnetConnectionGatewayResponse{RawResponse: resp}
+	result := WebAppsClientGetVnetConnectionGatewayResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetGateway); err != nil {
 		return WebAppsClientGetVnetConnectionGatewayResponse{}, err
 	}
@@ -12303,7 +12275,7 @@ func (client *WebAppsClient) getVnetConnectionGatewaySlotCreateRequest(ctx conte
 
 // getVnetConnectionGatewaySlotHandleResponse handles the GetVnetConnectionGatewaySlot response.
 func (client *WebAppsClient) getVnetConnectionGatewaySlotHandleResponse(resp *http.Response) (WebAppsClientGetVnetConnectionGatewaySlotResponse, error) {
-	result := WebAppsClientGetVnetConnectionGatewaySlotResponse{RawResponse: resp}
+	result := WebAppsClientGetVnetConnectionGatewaySlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetGateway); err != nil {
 		return WebAppsClientGetVnetConnectionGatewaySlotResponse{}, err
 	}
@@ -12370,7 +12342,7 @@ func (client *WebAppsClient) getVnetConnectionSlotCreateRequest(ctx context.Cont
 
 // getVnetConnectionSlotHandleResponse handles the GetVnetConnectionSlot response.
 func (client *WebAppsClient) getVnetConnectionSlotHandleResponse(resp *http.Response) (WebAppsClientGetVnetConnectionSlotResponse, error) {
-	result := WebAppsClientGetVnetConnectionSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetVnetConnectionSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetInfoResource); err != nil {
 		return WebAppsClientGetVnetConnectionSlotResponse{}, err
 	}
@@ -12430,7 +12402,7 @@ func (client *WebAppsClient) getWebJobCreateRequest(ctx context.Context, resourc
 
 // getWebJobHandleResponse handles the GetWebJob response.
 func (client *WebAppsClient) getWebJobHandleResponse(resp *http.Response) (WebAppsClientGetWebJobResponse, error) {
-	result := WebAppsClientGetWebJobResponse{RawResponse: resp}
+	result := WebAppsClientGetWebJobResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebJob); err != nil {
 		return WebAppsClientGetWebJobResponse{}, err
 	}
@@ -12495,7 +12467,7 @@ func (client *WebAppsClient) getWebJobSlotCreateRequest(ctx context.Context, res
 
 // getWebJobSlotHandleResponse handles the GetWebJobSlot response.
 func (client *WebAppsClient) getWebJobSlotHandleResponse(resp *http.Response) (WebAppsClientGetWebJobSlotResponse, error) {
-	result := WebAppsClientGetWebJobSlotResponse{RawResponse: resp}
+	result := WebAppsClientGetWebJobSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebJob); err != nil {
 		return WebAppsClientGetWebJobSlotResponse{}, err
 	}
@@ -12520,7 +12492,7 @@ func (client *WebAppsClient) GetWebSiteContainerLogs(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientGetWebSiteContainerLogsResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientGetWebSiteContainerLogsResponse{RawResponse: resp}, nil
+	return WebAppsClientGetWebSiteContainerLogsResponse{Body: resp.Body}, nil
 }
 
 // getWebSiteContainerLogsCreateRequest creates the GetWebSiteContainerLogs request.
@@ -12569,7 +12541,7 @@ func (client *WebAppsClient) GetWebSiteContainerLogsSlot(ctx context.Context, re
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientGetWebSiteContainerLogsSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientGetWebSiteContainerLogsSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientGetWebSiteContainerLogsSlotResponse{Body: resp.Body}, nil
 }
 
 // getWebSiteContainerLogsSlotCreateRequest creates the GetWebSiteContainerLogsSlot request.
@@ -12615,9 +12587,7 @@ func (client *WebAppsClient) BeginInstallSiteExtension(ctx context.Context, reso
 	if err != nil {
 		return WebAppsClientInstallSiteExtensionPollerResponse{}, err
 	}
-	result := WebAppsClientInstallSiteExtensionPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientInstallSiteExtensionPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.InstallSiteExtension", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientInstallSiteExtensionPollerResponse{}, err
@@ -12688,9 +12658,7 @@ func (client *WebAppsClient) BeginInstallSiteExtensionSlot(ctx context.Context, 
 	if err != nil {
 		return WebAppsClientInstallSiteExtensionSlotPollerResponse{}, err
 	}
-	result := WebAppsClientInstallSiteExtensionSlotPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientInstallSiteExtensionSlotPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.InstallSiteExtensionSlot", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientInstallSiteExtensionSlotPollerResponse{}, err
@@ -12800,7 +12768,7 @@ func (client *WebAppsClient) isCloneableCreateRequest(ctx context.Context, resou
 
 // isCloneableHandleResponse handles the IsCloneable response.
 func (client *WebAppsClient) isCloneableHandleResponse(resp *http.Response) (WebAppsClientIsCloneableResponse, error) {
-	result := WebAppsClientIsCloneableResponse{RawResponse: resp}
+	result := WebAppsClientIsCloneableResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteCloneability); err != nil {
 		return WebAppsClientIsCloneableResponse{}, err
 	}
@@ -12860,7 +12828,7 @@ func (client *WebAppsClient) isCloneableSlotCreateRequest(ctx context.Context, r
 
 // isCloneableSlotHandleResponse handles the IsCloneableSlot response.
 func (client *WebAppsClient) isCloneableSlotHandleResponse(resp *http.Response) (WebAppsClientIsCloneableSlotResponse, error) {
-	result := WebAppsClientIsCloneableSlotResponse{RawResponse: resp}
+	result := WebAppsClientIsCloneableSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteCloneability); err != nil {
 		return WebAppsClientIsCloneableSlotResponse{}, err
 	}
@@ -12902,7 +12870,7 @@ func (client *WebAppsClient) listCreateRequest(ctx context.Context, options *Web
 
 // listHandleResponse handles the List response.
 func (client *WebAppsClient) listHandleResponse(resp *http.Response) (WebAppsClientListResponse, error) {
-	result := WebAppsClientListResponse{RawResponse: resp}
+	result := WebAppsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebAppCollection); err != nil {
 		return WebAppsClientListResponse{}, err
 	}
@@ -12958,7 +12926,7 @@ func (client *WebAppsClient) listApplicationSettingsCreateRequest(ctx context.Co
 
 // listApplicationSettingsHandleResponse handles the ListApplicationSettings response.
 func (client *WebAppsClient) listApplicationSettingsHandleResponse(resp *http.Response) (WebAppsClientListApplicationSettingsResponse, error) {
-	result := WebAppsClientListApplicationSettingsResponse{RawResponse: resp}
+	result := WebAppsClientListApplicationSettingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return WebAppsClientListApplicationSettingsResponse{}, err
 	}
@@ -13020,7 +12988,7 @@ func (client *WebAppsClient) listApplicationSettingsSlotCreateRequest(ctx contex
 
 // listApplicationSettingsSlotHandleResponse handles the ListApplicationSettingsSlot response.
 func (client *WebAppsClient) listApplicationSettingsSlotHandleResponse(resp *http.Response) (WebAppsClientListApplicationSettingsSlotResponse, error) {
-	result := WebAppsClientListApplicationSettingsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListApplicationSettingsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return WebAppsClientListApplicationSettingsSlotResponse{}, err
 	}
@@ -13076,7 +13044,7 @@ func (client *WebAppsClient) listAzureStorageAccountsCreateRequest(ctx context.C
 
 // listAzureStorageAccountsHandleResponse handles the ListAzureStorageAccounts response.
 func (client *WebAppsClient) listAzureStorageAccountsHandleResponse(resp *http.Response) (WebAppsClientListAzureStorageAccountsResponse, error) {
-	result := WebAppsClientListAzureStorageAccountsResponse{RawResponse: resp}
+	result := WebAppsClientListAzureStorageAccountsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureStoragePropertyDictionaryResource); err != nil {
 		return WebAppsClientListAzureStorageAccountsResponse{}, err
 	}
@@ -13138,7 +13106,7 @@ func (client *WebAppsClient) listAzureStorageAccountsSlotCreateRequest(ctx conte
 
 // listAzureStorageAccountsSlotHandleResponse handles the ListAzureStorageAccountsSlot response.
 func (client *WebAppsClient) listAzureStorageAccountsSlotHandleResponse(resp *http.Response) (WebAppsClientListAzureStorageAccountsSlotResponse, error) {
-	result := WebAppsClientListAzureStorageAccountsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListAzureStorageAccountsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureStoragePropertyDictionaryResource); err != nil {
 		return WebAppsClientListAzureStorageAccountsSlotResponse{}, err
 	}
@@ -13202,7 +13170,7 @@ func (client *WebAppsClient) listBackupStatusSecretsCreateRequest(ctx context.Co
 
 // listBackupStatusSecretsHandleResponse handles the ListBackupStatusSecrets response.
 func (client *WebAppsClient) listBackupStatusSecretsHandleResponse(resp *http.Response) (WebAppsClientListBackupStatusSecretsResponse, error) {
-	result := WebAppsClientListBackupStatusSecretsResponse{RawResponse: resp}
+	result := WebAppsClientListBackupStatusSecretsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupItem); err != nil {
 		return WebAppsClientListBackupStatusSecretsResponse{}, err
 	}
@@ -13271,7 +13239,7 @@ func (client *WebAppsClient) listBackupStatusSecretsSlotCreateRequest(ctx contex
 
 // listBackupStatusSecretsSlotHandleResponse handles the ListBackupStatusSecretsSlot response.
 func (client *WebAppsClient) listBackupStatusSecretsSlotHandleResponse(resp *http.Response) (WebAppsClientListBackupStatusSecretsSlotResponse, error) {
-	result := WebAppsClientListBackupStatusSecretsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListBackupStatusSecretsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupItem); err != nil {
 		return WebAppsClientListBackupStatusSecretsSlotResponse{}, err
 	}
@@ -13323,7 +13291,7 @@ func (client *WebAppsClient) listBackupsCreateRequest(ctx context.Context, resou
 
 // listBackupsHandleResponse handles the ListBackups response.
 func (client *WebAppsClient) listBackupsHandleResponse(resp *http.Response) (WebAppsClientListBackupsResponse, error) {
-	result := WebAppsClientListBackupsResponse{RawResponse: resp}
+	result := WebAppsClientListBackupsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupItemCollection); err != nil {
 		return WebAppsClientListBackupsResponse{}, err
 	}
@@ -13380,7 +13348,7 @@ func (client *WebAppsClient) listBackupsSlotCreateRequest(ctx context.Context, r
 
 // listBackupsSlotHandleResponse handles the ListBackupsSlot response.
 func (client *WebAppsClient) listBackupsSlotHandleResponse(resp *http.Response) (WebAppsClientListBackupsSlotResponse, error) {
-	result := WebAppsClientListBackupsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListBackupsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupItemCollection); err != nil {
 		return WebAppsClientListBackupsSlotResponse{}, err
 	}
@@ -13434,7 +13402,7 @@ func (client *WebAppsClient) listBasicPublishingCredentialsPoliciesCreateRequest
 
 // listBasicPublishingCredentialsPoliciesHandleResponse handles the ListBasicPublishingCredentialsPolicies response.
 func (client *WebAppsClient) listBasicPublishingCredentialsPoliciesHandleResponse(resp *http.Response) (WebAppsClientListBasicPublishingCredentialsPoliciesResponse, error) {
-	result := WebAppsClientListBasicPublishingCredentialsPoliciesResponse{RawResponse: resp}
+	result := WebAppsClientListBasicPublishingCredentialsPoliciesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublishingCredentialsPoliciesCollection); err != nil {
 		return WebAppsClientListBasicPublishingCredentialsPoliciesResponse{}, err
 	}
@@ -13492,7 +13460,7 @@ func (client *WebAppsClient) listBasicPublishingCredentialsPoliciesSlotCreateReq
 
 // listBasicPublishingCredentialsPoliciesSlotHandleResponse handles the ListBasicPublishingCredentialsPoliciesSlot response.
 func (client *WebAppsClient) listBasicPublishingCredentialsPoliciesSlotHandleResponse(resp *http.Response) (WebAppsClientListBasicPublishingCredentialsPoliciesSlotResponse, error) {
-	result := WebAppsClientListBasicPublishingCredentialsPoliciesSlotResponse{RawResponse: resp}
+	result := WebAppsClientListBasicPublishingCredentialsPoliciesSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublishingCredentialsPoliciesCollection); err != nil {
 		return WebAppsClientListBasicPublishingCredentialsPoliciesSlotResponse{}, err
 	}
@@ -13543,7 +13511,7 @@ func (client *WebAppsClient) listByResourceGroupCreateRequest(ctx context.Contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *WebAppsClient) listByResourceGroupHandleResponse(resp *http.Response) (WebAppsClientListByResourceGroupResponse, error) {
-	result := WebAppsClientListByResourceGroupResponse{RawResponse: resp}
+	result := WebAppsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebAppCollection); err != nil {
 		return WebAppsClientListByResourceGroupResponse{}, err
 	}
@@ -13597,7 +13565,7 @@ func (client *WebAppsClient) listConfigurationSnapshotInfoCreateRequest(ctx cont
 
 // listConfigurationSnapshotInfoHandleResponse handles the ListConfigurationSnapshotInfo response.
 func (client *WebAppsClient) listConfigurationSnapshotInfoHandleResponse(resp *http.Response) (WebAppsClientListConfigurationSnapshotInfoResponse, error) {
-	result := WebAppsClientListConfigurationSnapshotInfoResponse{RawResponse: resp}
+	result := WebAppsClientListConfigurationSnapshotInfoResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteConfigurationSnapshotInfoCollection); err != nil {
 		return WebAppsClientListConfigurationSnapshotInfoResponse{}, err
 	}
@@ -13656,7 +13624,7 @@ func (client *WebAppsClient) listConfigurationSnapshotInfoSlotCreateRequest(ctx 
 
 // listConfigurationSnapshotInfoSlotHandleResponse handles the ListConfigurationSnapshotInfoSlot response.
 func (client *WebAppsClient) listConfigurationSnapshotInfoSlotHandleResponse(resp *http.Response) (WebAppsClientListConfigurationSnapshotInfoSlotResponse, error) {
-	result := WebAppsClientListConfigurationSnapshotInfoSlotResponse{RawResponse: resp}
+	result := WebAppsClientListConfigurationSnapshotInfoSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteConfigurationSnapshotInfoCollection); err != nil {
 		return WebAppsClientListConfigurationSnapshotInfoSlotResponse{}, err
 	}
@@ -13709,7 +13677,7 @@ func (client *WebAppsClient) listConfigurationsCreateRequest(ctx context.Context
 
 // listConfigurationsHandleResponse handles the ListConfigurations response.
 func (client *WebAppsClient) listConfigurationsHandleResponse(resp *http.Response) (WebAppsClientListConfigurationsResponse, error) {
-	result := WebAppsClientListConfigurationsResponse{RawResponse: resp}
+	result := WebAppsClientListConfigurationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteConfigResourceCollection); err != nil {
 		return WebAppsClientListConfigurationsResponse{}, err
 	}
@@ -13767,7 +13735,7 @@ func (client *WebAppsClient) listConfigurationsSlotCreateRequest(ctx context.Con
 
 // listConfigurationsSlotHandleResponse handles the ListConfigurationsSlot response.
 func (client *WebAppsClient) listConfigurationsSlotHandleResponse(resp *http.Response) (WebAppsClientListConfigurationsSlotResponse, error) {
-	result := WebAppsClientListConfigurationsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListConfigurationsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteConfigResourceCollection); err != nil {
 		return WebAppsClientListConfigurationsSlotResponse{}, err
 	}
@@ -13823,7 +13791,7 @@ func (client *WebAppsClient) listConnectionStringsCreateRequest(ctx context.Cont
 
 // listConnectionStringsHandleResponse handles the ListConnectionStrings response.
 func (client *WebAppsClient) listConnectionStringsHandleResponse(resp *http.Response) (WebAppsClientListConnectionStringsResponse, error) {
-	result := WebAppsClientListConnectionStringsResponse{RawResponse: resp}
+	result := WebAppsClientListConnectionStringsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConnectionStringDictionary); err != nil {
 		return WebAppsClientListConnectionStringsResponse{}, err
 	}
@@ -13885,7 +13853,7 @@ func (client *WebAppsClient) listConnectionStringsSlotCreateRequest(ctx context.
 
 // listConnectionStringsSlotHandleResponse handles the ListConnectionStringsSlot response.
 func (client *WebAppsClient) listConnectionStringsSlotHandleResponse(resp *http.Response) (WebAppsClientListConnectionStringsSlotResponse, error) {
-	result := WebAppsClientListConnectionStringsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListConnectionStringsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConnectionStringDictionary); err != nil {
 		return WebAppsClientListConnectionStringsSlotResponse{}, err
 	}
@@ -13938,7 +13906,7 @@ func (client *WebAppsClient) listContinuousWebJobsCreateRequest(ctx context.Cont
 
 // listContinuousWebJobsHandleResponse handles the ListContinuousWebJobs response.
 func (client *WebAppsClient) listContinuousWebJobsHandleResponse(resp *http.Response) (WebAppsClientListContinuousWebJobsResponse, error) {
-	result := WebAppsClientListContinuousWebJobsResponse{RawResponse: resp}
+	result := WebAppsClientListContinuousWebJobsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContinuousWebJobCollection); err != nil {
 		return WebAppsClientListContinuousWebJobsResponse{}, err
 	}
@@ -13996,7 +13964,7 @@ func (client *WebAppsClient) listContinuousWebJobsSlotCreateRequest(ctx context.
 
 // listContinuousWebJobsSlotHandleResponse handles the ListContinuousWebJobsSlot response.
 func (client *WebAppsClient) listContinuousWebJobsSlotHandleResponse(resp *http.Response) (WebAppsClientListContinuousWebJobsSlotResponse, error) {
-	result := WebAppsClientListContinuousWebJobsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListContinuousWebJobsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContinuousWebJobCollection); err != nil {
 		return WebAppsClientListContinuousWebJobsSlotResponse{}, err
 	}
@@ -14057,7 +14025,7 @@ func (client *WebAppsClient) listDeploymentLogCreateRequest(ctx context.Context,
 
 // listDeploymentLogHandleResponse handles the ListDeploymentLog response.
 func (client *WebAppsClient) listDeploymentLogHandleResponse(resp *http.Response) (WebAppsClientListDeploymentLogResponse, error) {
-	result := WebAppsClientListDeploymentLogResponse{RawResponse: resp}
+	result := WebAppsClientListDeploymentLogResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Deployment); err != nil {
 		return WebAppsClientListDeploymentLogResponse{}, err
 	}
@@ -14123,7 +14091,7 @@ func (client *WebAppsClient) listDeploymentLogSlotCreateRequest(ctx context.Cont
 
 // listDeploymentLogSlotHandleResponse handles the ListDeploymentLogSlot response.
 func (client *WebAppsClient) listDeploymentLogSlotHandleResponse(resp *http.Response) (WebAppsClientListDeploymentLogSlotResponse, error) {
-	result := WebAppsClientListDeploymentLogSlotResponse{RawResponse: resp}
+	result := WebAppsClientListDeploymentLogSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Deployment); err != nil {
 		return WebAppsClientListDeploymentLogSlotResponse{}, err
 	}
@@ -14175,7 +14143,7 @@ func (client *WebAppsClient) listDeploymentsCreateRequest(ctx context.Context, r
 
 // listDeploymentsHandleResponse handles the ListDeployments response.
 func (client *WebAppsClient) listDeploymentsHandleResponse(resp *http.Response) (WebAppsClientListDeploymentsResponse, error) {
-	result := WebAppsClientListDeploymentsResponse{RawResponse: resp}
+	result := WebAppsClientListDeploymentsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentCollection); err != nil {
 		return WebAppsClientListDeploymentsResponse{}, err
 	}
@@ -14233,7 +14201,7 @@ func (client *WebAppsClient) listDeploymentsSlotCreateRequest(ctx context.Contex
 
 // listDeploymentsSlotHandleResponse handles the ListDeploymentsSlot response.
 func (client *WebAppsClient) listDeploymentsSlotHandleResponse(resp *http.Response) (WebAppsClientListDeploymentsSlotResponse, error) {
-	result := WebAppsClientListDeploymentsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListDeploymentsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentCollection); err != nil {
 		return WebAppsClientListDeploymentsSlotResponse{}, err
 	}
@@ -14286,7 +14254,7 @@ func (client *WebAppsClient) listDomainOwnershipIdentifiersCreateRequest(ctx con
 
 // listDomainOwnershipIdentifiersHandleResponse handles the ListDomainOwnershipIdentifiers response.
 func (client *WebAppsClient) listDomainOwnershipIdentifiersHandleResponse(resp *http.Response) (WebAppsClientListDomainOwnershipIdentifiersResponse, error) {
-	result := WebAppsClientListDomainOwnershipIdentifiersResponse{RawResponse: resp}
+	result := WebAppsClientListDomainOwnershipIdentifiersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IdentifierCollection); err != nil {
 		return WebAppsClientListDomainOwnershipIdentifiersResponse{}, err
 	}
@@ -14344,7 +14312,7 @@ func (client *WebAppsClient) listDomainOwnershipIdentifiersSlotCreateRequest(ctx
 
 // listDomainOwnershipIdentifiersSlotHandleResponse handles the ListDomainOwnershipIdentifiersSlot response.
 func (client *WebAppsClient) listDomainOwnershipIdentifiersSlotHandleResponse(resp *http.Response) (WebAppsClientListDomainOwnershipIdentifiersSlotResponse, error) {
-	result := WebAppsClientListDomainOwnershipIdentifiersSlotResponse{RawResponse: resp}
+	result := WebAppsClientListDomainOwnershipIdentifiersSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IdentifierCollection); err != nil {
 		return WebAppsClientListDomainOwnershipIdentifiersSlotResponse{}, err
 	}
@@ -14405,7 +14373,7 @@ func (client *WebAppsClient) listFunctionKeysCreateRequest(ctx context.Context, 
 
 // listFunctionKeysHandleResponse handles the ListFunctionKeys response.
 func (client *WebAppsClient) listFunctionKeysHandleResponse(resp *http.Response) (WebAppsClientListFunctionKeysResponse, error) {
-	result := WebAppsClientListFunctionKeysResponse{RawResponse: resp}
+	result := WebAppsClientListFunctionKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return WebAppsClientListFunctionKeysResponse{}, err
 	}
@@ -14471,7 +14439,7 @@ func (client *WebAppsClient) listFunctionKeysSlotCreateRequest(ctx context.Conte
 
 // listFunctionKeysSlotHandleResponse handles the ListFunctionKeysSlot response.
 func (client *WebAppsClient) listFunctionKeysSlotHandleResponse(resp *http.Response) (WebAppsClientListFunctionKeysSlotResponse, error) {
-	result := WebAppsClientListFunctionKeysSlotResponse{RawResponse: resp}
+	result := WebAppsClientListFunctionKeysSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return WebAppsClientListFunctionKeysSlotResponse{}, err
 	}
@@ -14532,7 +14500,7 @@ func (client *WebAppsClient) listFunctionSecretsCreateRequest(ctx context.Contex
 
 // listFunctionSecretsHandleResponse handles the ListFunctionSecrets response.
 func (client *WebAppsClient) listFunctionSecretsHandleResponse(resp *http.Response) (WebAppsClientListFunctionSecretsResponse, error) {
-	result := WebAppsClientListFunctionSecretsResponse{RawResponse: resp}
+	result := WebAppsClientListFunctionSecretsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FunctionSecrets); err != nil {
 		return WebAppsClientListFunctionSecretsResponse{}, err
 	}
@@ -14598,7 +14566,7 @@ func (client *WebAppsClient) listFunctionSecretsSlotCreateRequest(ctx context.Co
 
 // listFunctionSecretsSlotHandleResponse handles the ListFunctionSecretsSlot response.
 func (client *WebAppsClient) listFunctionSecretsSlotHandleResponse(resp *http.Response) (WebAppsClientListFunctionSecretsSlotResponse, error) {
-	result := WebAppsClientListFunctionSecretsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListFunctionSecretsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FunctionSecrets); err != nil {
 		return WebAppsClientListFunctionSecretsSlotResponse{}, err
 	}
@@ -14650,7 +14618,7 @@ func (client *WebAppsClient) listFunctionsCreateRequest(ctx context.Context, res
 
 // listFunctionsHandleResponse handles the ListFunctions response.
 func (client *WebAppsClient) listFunctionsHandleResponse(resp *http.Response) (WebAppsClientListFunctionsResponse, error) {
-	result := WebAppsClientListFunctionsResponse{RawResponse: resp}
+	result := WebAppsClientListFunctionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FunctionEnvelopeCollection); err != nil {
 		return WebAppsClientListFunctionsResponse{}, err
 	}
@@ -14705,7 +14673,7 @@ func (client *WebAppsClient) listHostKeysCreateRequest(ctx context.Context, reso
 
 // listHostKeysHandleResponse handles the ListHostKeys response.
 func (client *WebAppsClient) listHostKeysHandleResponse(resp *http.Response) (WebAppsClientListHostKeysResponse, error) {
-	result := WebAppsClientListHostKeysResponse{RawResponse: resp}
+	result := WebAppsClientListHostKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostKeys); err != nil {
 		return WebAppsClientListHostKeysResponse{}, err
 	}
@@ -14766,7 +14734,7 @@ func (client *WebAppsClient) listHostKeysSlotCreateRequest(ctx context.Context, 
 
 // listHostKeysSlotHandleResponse handles the ListHostKeysSlot response.
 func (client *WebAppsClient) listHostKeysSlotHandleResponse(resp *http.Response) (WebAppsClientListHostKeysSlotResponse, error) {
-	result := WebAppsClientListHostKeysSlotResponse{RawResponse: resp}
+	result := WebAppsClientListHostKeysSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostKeys); err != nil {
 		return WebAppsClientListHostKeysSlotResponse{}, err
 	}
@@ -14819,7 +14787,7 @@ func (client *WebAppsClient) listHostNameBindingsCreateRequest(ctx context.Conte
 
 // listHostNameBindingsHandleResponse handles the ListHostNameBindings response.
 func (client *WebAppsClient) listHostNameBindingsHandleResponse(resp *http.Response) (WebAppsClientListHostNameBindingsResponse, error) {
-	result := WebAppsClientListHostNameBindingsResponse{RawResponse: resp}
+	result := WebAppsClientListHostNameBindingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostNameBindingCollection); err != nil {
 		return WebAppsClientListHostNameBindingsResponse{}, err
 	}
@@ -14877,7 +14845,7 @@ func (client *WebAppsClient) listHostNameBindingsSlotCreateRequest(ctx context.C
 
 // listHostNameBindingsSlotHandleResponse handles the ListHostNameBindingsSlot response.
 func (client *WebAppsClient) listHostNameBindingsSlotHandleResponse(resp *http.Response) (WebAppsClientListHostNameBindingsSlotResponse, error) {
-	result := WebAppsClientListHostNameBindingsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListHostNameBindingsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostNameBindingCollection); err != nil {
 		return WebAppsClientListHostNameBindingsSlotResponse{}, err
 	}
@@ -14933,7 +14901,7 @@ func (client *WebAppsClient) listHybridConnectionsCreateRequest(ctx context.Cont
 
 // listHybridConnectionsHandleResponse handles the ListHybridConnections response.
 func (client *WebAppsClient) listHybridConnectionsHandleResponse(resp *http.Response) (WebAppsClientListHybridConnectionsResponse, error) {
-	result := WebAppsClientListHybridConnectionsResponse{RawResponse: resp}
+	result := WebAppsClientListHybridConnectionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridConnection); err != nil {
 		return WebAppsClientListHybridConnectionsResponse{}, err
 	}
@@ -14994,7 +14962,7 @@ func (client *WebAppsClient) listHybridConnectionsSlotCreateRequest(ctx context.
 
 // listHybridConnectionsSlotHandleResponse handles the ListHybridConnectionsSlot response.
 func (client *WebAppsClient) listHybridConnectionsSlotHandleResponse(resp *http.Response) (WebAppsClientListHybridConnectionsSlotResponse, error) {
-	result := WebAppsClientListHybridConnectionsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListHybridConnectionsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridConnection); err != nil {
 		return WebAppsClientListHybridConnectionsSlotResponse{}, err
 	}
@@ -15052,7 +15020,7 @@ func (client *WebAppsClient) listInstanceFunctionsSlotCreateRequest(ctx context.
 
 // listInstanceFunctionsSlotHandleResponse handles the ListInstanceFunctionsSlot response.
 func (client *WebAppsClient) listInstanceFunctionsSlotHandleResponse(resp *http.Response) (WebAppsClientListInstanceFunctionsSlotResponse, error) {
-	result := WebAppsClientListInstanceFunctionsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListInstanceFunctionsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FunctionEnvelopeCollection); err != nil {
 		return WebAppsClientListInstanceFunctionsSlotResponse{}, err
 	}
@@ -15105,7 +15073,7 @@ func (client *WebAppsClient) listInstanceIdentifiersCreateRequest(ctx context.Co
 
 // listInstanceIdentifiersHandleResponse handles the ListInstanceIdentifiers response.
 func (client *WebAppsClient) listInstanceIdentifiersHandleResponse(resp *http.Response) (WebAppsClientListInstanceIdentifiersResponse, error) {
-	result := WebAppsClientListInstanceIdentifiersResponse{RawResponse: resp}
+	result := WebAppsClientListInstanceIdentifiersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebAppInstanceStatusCollection); err != nil {
 		return WebAppsClientListInstanceIdentifiersResponse{}, err
 	}
@@ -15163,7 +15131,7 @@ func (client *WebAppsClient) listInstanceIdentifiersSlotCreateRequest(ctx contex
 
 // listInstanceIdentifiersSlotHandleResponse handles the ListInstanceIdentifiersSlot response.
 func (client *WebAppsClient) listInstanceIdentifiersSlotHandleResponse(resp *http.Response) (WebAppsClientListInstanceIdentifiersSlotResponse, error) {
-	result := WebAppsClientListInstanceIdentifiersSlotResponse{RawResponse: resp}
+	result := WebAppsClientListInstanceIdentifiersSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebAppInstanceStatusCollection); err != nil {
 		return WebAppsClientListInstanceIdentifiersSlotResponse{}, err
 	}
@@ -15228,7 +15196,7 @@ func (client *WebAppsClient) listInstanceProcessModulesCreateRequest(ctx context
 
 // listInstanceProcessModulesHandleResponse handles the ListInstanceProcessModules response.
 func (client *WebAppsClient) listInstanceProcessModulesHandleResponse(resp *http.Response) (WebAppsClientListInstanceProcessModulesResponse, error) {
-	result := WebAppsClientListInstanceProcessModulesResponse{RawResponse: resp}
+	result := WebAppsClientListInstanceProcessModulesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessModuleInfoCollection); err != nil {
 		return WebAppsClientListInstanceProcessModulesResponse{}, err
 	}
@@ -15298,7 +15266,7 @@ func (client *WebAppsClient) listInstanceProcessModulesSlotCreateRequest(ctx con
 
 // listInstanceProcessModulesSlotHandleResponse handles the ListInstanceProcessModulesSlot response.
 func (client *WebAppsClient) listInstanceProcessModulesSlotHandleResponse(resp *http.Response) (WebAppsClientListInstanceProcessModulesSlotResponse, error) {
-	result := WebAppsClientListInstanceProcessModulesSlotResponse{RawResponse: resp}
+	result := WebAppsClientListInstanceProcessModulesSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessModuleInfoCollection); err != nil {
 		return WebAppsClientListInstanceProcessModulesSlotResponse{}, err
 	}
@@ -15363,7 +15331,7 @@ func (client *WebAppsClient) listInstanceProcessThreadsCreateRequest(ctx context
 
 // listInstanceProcessThreadsHandleResponse handles the ListInstanceProcessThreads response.
 func (client *WebAppsClient) listInstanceProcessThreadsHandleResponse(resp *http.Response) (WebAppsClientListInstanceProcessThreadsResponse, error) {
-	result := WebAppsClientListInstanceProcessThreadsResponse{RawResponse: resp}
+	result := WebAppsClientListInstanceProcessThreadsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessThreadInfoCollection); err != nil {
 		return WebAppsClientListInstanceProcessThreadsResponse{}, err
 	}
@@ -15433,7 +15401,7 @@ func (client *WebAppsClient) listInstanceProcessThreadsSlotCreateRequest(ctx con
 
 // listInstanceProcessThreadsSlotHandleResponse handles the ListInstanceProcessThreadsSlot response.
 func (client *WebAppsClient) listInstanceProcessThreadsSlotHandleResponse(resp *http.Response) (WebAppsClientListInstanceProcessThreadsSlotResponse, error) {
-	result := WebAppsClientListInstanceProcessThreadsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListInstanceProcessThreadsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessThreadInfoCollection); err != nil {
 		return WebAppsClientListInstanceProcessThreadsSlotResponse{}, err
 	}
@@ -15493,7 +15461,7 @@ func (client *WebAppsClient) listInstanceProcessesCreateRequest(ctx context.Cont
 
 // listInstanceProcessesHandleResponse handles the ListInstanceProcesses response.
 func (client *WebAppsClient) listInstanceProcessesHandleResponse(resp *http.Response) (WebAppsClientListInstanceProcessesResponse, error) {
-	result := WebAppsClientListInstanceProcessesResponse{RawResponse: resp}
+	result := WebAppsClientListInstanceProcessesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessInfoCollection); err != nil {
 		return WebAppsClientListInstanceProcessesResponse{}, err
 	}
@@ -15558,7 +15526,7 @@ func (client *WebAppsClient) listInstanceProcessesSlotCreateRequest(ctx context.
 
 // listInstanceProcessesSlotHandleResponse handles the ListInstanceProcessesSlot response.
 func (client *WebAppsClient) listInstanceProcessesSlotHandleResponse(resp *http.Response) (WebAppsClientListInstanceProcessesSlotResponse, error) {
-	result := WebAppsClientListInstanceProcessesSlotResponse{RawResponse: resp}
+	result := WebAppsClientListInstanceProcessesSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessInfoCollection); err != nil {
 		return WebAppsClientListInstanceProcessesSlotResponse{}, err
 	}
@@ -15613,7 +15581,7 @@ func (client *WebAppsClient) listMetadataCreateRequest(ctx context.Context, reso
 
 // listMetadataHandleResponse handles the ListMetadata response.
 func (client *WebAppsClient) listMetadataHandleResponse(resp *http.Response) (WebAppsClientListMetadataResponse, error) {
-	result := WebAppsClientListMetadataResponse{RawResponse: resp}
+	result := WebAppsClientListMetadataResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return WebAppsClientListMetadataResponse{}, err
 	}
@@ -15674,7 +15642,7 @@ func (client *WebAppsClient) listMetadataSlotCreateRequest(ctx context.Context, 
 
 // listMetadataSlotHandleResponse handles the ListMetadataSlot response.
 func (client *WebAppsClient) listMetadataSlotHandleResponse(resp *http.Response) (WebAppsClientListMetadataSlotResponse, error) {
-	result := WebAppsClientListMetadataSlotResponse{RawResponse: resp}
+	result := WebAppsClientListMetadataSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return WebAppsClientListMetadataSlotResponse{}, err
 	}
@@ -15735,7 +15703,7 @@ func (client *WebAppsClient) listNetworkFeaturesCreateRequest(ctx context.Contex
 
 // listNetworkFeaturesHandleResponse handles the ListNetworkFeatures response.
 func (client *WebAppsClient) listNetworkFeaturesHandleResponse(resp *http.Response) (WebAppsClientListNetworkFeaturesResponse, error) {
-	result := WebAppsClientListNetworkFeaturesResponse{RawResponse: resp}
+	result := WebAppsClientListNetworkFeaturesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkFeatures); err != nil {
 		return WebAppsClientListNetworkFeaturesResponse{}, err
 	}
@@ -15801,7 +15769,7 @@ func (client *WebAppsClient) listNetworkFeaturesSlotCreateRequest(ctx context.Co
 
 // listNetworkFeaturesSlotHandleResponse handles the ListNetworkFeaturesSlot response.
 func (client *WebAppsClient) listNetworkFeaturesSlotHandleResponse(resp *http.Response) (WebAppsClientListNetworkFeaturesSlotResponse, error) {
-	result := WebAppsClientListNetworkFeaturesSlotResponse{RawResponse: resp}
+	result := WebAppsClientListNetworkFeaturesSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkFeatures); err != nil {
 		return WebAppsClientListNetworkFeaturesSlotResponse{}, err
 	}
@@ -15859,7 +15827,7 @@ func (client *WebAppsClient) listPerfMonCountersCreateRequest(ctx context.Contex
 
 // listPerfMonCountersHandleResponse handles the ListPerfMonCounters response.
 func (client *WebAppsClient) listPerfMonCountersHandleResponse(resp *http.Response) (WebAppsClientListPerfMonCountersResponse, error) {
-	result := WebAppsClientListPerfMonCountersResponse{RawResponse: resp}
+	result := WebAppsClientListPerfMonCountersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PerfMonCounterCollection); err != nil {
 		return WebAppsClientListPerfMonCountersResponse{}, err
 	}
@@ -15922,7 +15890,7 @@ func (client *WebAppsClient) listPerfMonCountersSlotCreateRequest(ctx context.Co
 
 // listPerfMonCountersSlotHandleResponse handles the ListPerfMonCountersSlot response.
 func (client *WebAppsClient) listPerfMonCountersSlotHandleResponse(resp *http.Response) (WebAppsClientListPerfMonCountersSlotResponse, error) {
-	result := WebAppsClientListPerfMonCountersSlotResponse{RawResponse: resp}
+	result := WebAppsClientListPerfMonCountersSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PerfMonCounterCollection); err != nil {
 		return WebAppsClientListPerfMonCountersSlotResponse{}, err
 	}
@@ -15978,7 +15946,7 @@ func (client *WebAppsClient) listPremierAddOnsCreateRequest(ctx context.Context,
 
 // listPremierAddOnsHandleResponse handles the ListPremierAddOns response.
 func (client *WebAppsClient) listPremierAddOnsHandleResponse(resp *http.Response) (WebAppsClientListPremierAddOnsResponse, error) {
-	result := WebAppsClientListPremierAddOnsResponse{RawResponse: resp}
+	result := WebAppsClientListPremierAddOnsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PremierAddOn); err != nil {
 		return WebAppsClientListPremierAddOnsResponse{}, err
 	}
@@ -16040,7 +16008,7 @@ func (client *WebAppsClient) listPremierAddOnsSlotCreateRequest(ctx context.Cont
 
 // listPremierAddOnsSlotHandleResponse handles the ListPremierAddOnsSlot response.
 func (client *WebAppsClient) listPremierAddOnsSlotHandleResponse(resp *http.Response) (WebAppsClientListPremierAddOnsSlotResponse, error) {
-	result := WebAppsClientListPremierAddOnsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListPremierAddOnsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PremierAddOn); err != nil {
 		return WebAppsClientListPremierAddOnsSlotResponse{}, err
 	}
@@ -16099,7 +16067,7 @@ func (client *WebAppsClient) listProcessModulesCreateRequest(ctx context.Context
 
 // listProcessModulesHandleResponse handles the ListProcessModules response.
 func (client *WebAppsClient) listProcessModulesHandleResponse(resp *http.Response) (WebAppsClientListProcessModulesResponse, error) {
-	result := WebAppsClientListProcessModulesResponse{RawResponse: resp}
+	result := WebAppsClientListProcessModulesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessModuleInfoCollection); err != nil {
 		return WebAppsClientListProcessModulesResponse{}, err
 	}
@@ -16163,7 +16131,7 @@ func (client *WebAppsClient) listProcessModulesSlotCreateRequest(ctx context.Con
 
 // listProcessModulesSlotHandleResponse handles the ListProcessModulesSlot response.
 func (client *WebAppsClient) listProcessModulesSlotHandleResponse(resp *http.Response) (WebAppsClientListProcessModulesSlotResponse, error) {
-	result := WebAppsClientListProcessModulesSlotResponse{RawResponse: resp}
+	result := WebAppsClientListProcessModulesSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessModuleInfoCollection); err != nil {
 		return WebAppsClientListProcessModulesSlotResponse{}, err
 	}
@@ -16222,7 +16190,7 @@ func (client *WebAppsClient) listProcessThreadsCreateRequest(ctx context.Context
 
 // listProcessThreadsHandleResponse handles the ListProcessThreads response.
 func (client *WebAppsClient) listProcessThreadsHandleResponse(resp *http.Response) (WebAppsClientListProcessThreadsResponse, error) {
-	result := WebAppsClientListProcessThreadsResponse{RawResponse: resp}
+	result := WebAppsClientListProcessThreadsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessThreadInfoCollection); err != nil {
 		return WebAppsClientListProcessThreadsResponse{}, err
 	}
@@ -16286,7 +16254,7 @@ func (client *WebAppsClient) listProcessThreadsSlotCreateRequest(ctx context.Con
 
 // listProcessThreadsSlotHandleResponse handles the ListProcessThreadsSlot response.
 func (client *WebAppsClient) listProcessThreadsSlotHandleResponse(resp *http.Response) (WebAppsClientListProcessThreadsSlotResponse, error) {
-	result := WebAppsClientListProcessThreadsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListProcessThreadsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessThreadInfoCollection); err != nil {
 		return WebAppsClientListProcessThreadsSlotResponse{}, err
 	}
@@ -16339,7 +16307,7 @@ func (client *WebAppsClient) listProcessesCreateRequest(ctx context.Context, res
 
 // listProcessesHandleResponse handles the ListProcesses response.
 func (client *WebAppsClient) listProcessesHandleResponse(resp *http.Response) (WebAppsClientListProcessesResponse, error) {
-	result := WebAppsClientListProcessesResponse{RawResponse: resp}
+	result := WebAppsClientListProcessesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessInfoCollection); err != nil {
 		return WebAppsClientListProcessesResponse{}, err
 	}
@@ -16398,7 +16366,7 @@ func (client *WebAppsClient) listProcessesSlotCreateRequest(ctx context.Context,
 
 // listProcessesSlotHandleResponse handles the ListProcessesSlot response.
 func (client *WebAppsClient) listProcessesSlotHandleResponse(resp *http.Response) (WebAppsClientListProcessesSlotResponse, error) {
-	result := WebAppsClientListProcessesSlotResponse{RawResponse: resp}
+	result := WebAppsClientListProcessesSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProcessInfoCollection); err != nil {
 		return WebAppsClientListProcessesSlotResponse{}, err
 	}
@@ -16451,7 +16419,7 @@ func (client *WebAppsClient) listPublicCertificatesCreateRequest(ctx context.Con
 
 // listPublicCertificatesHandleResponse handles the ListPublicCertificates response.
 func (client *WebAppsClient) listPublicCertificatesHandleResponse(resp *http.Response) (WebAppsClientListPublicCertificatesResponse, error) {
-	result := WebAppsClientListPublicCertificatesResponse{RawResponse: resp}
+	result := WebAppsClientListPublicCertificatesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicCertificateCollection); err != nil {
 		return WebAppsClientListPublicCertificatesResponse{}, err
 	}
@@ -16509,7 +16477,7 @@ func (client *WebAppsClient) listPublicCertificatesSlotCreateRequest(ctx context
 
 // listPublicCertificatesSlotHandleResponse handles the ListPublicCertificatesSlot response.
 func (client *WebAppsClient) listPublicCertificatesSlotHandleResponse(resp *http.Response) (WebAppsClientListPublicCertificatesSlotResponse, error) {
-	result := WebAppsClientListPublicCertificatesSlotResponse{RawResponse: resp}
+	result := WebAppsClientListPublicCertificatesSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicCertificateCollection); err != nil {
 		return WebAppsClientListPublicCertificatesSlotResponse{}, err
 	}
@@ -16527,9 +16495,7 @@ func (client *WebAppsClient) BeginListPublishingCredentials(ctx context.Context,
 	if err != nil {
 		return WebAppsClientListPublishingCredentialsPollerResponse{}, err
 	}
-	result := WebAppsClientListPublishingCredentialsPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientListPublishingCredentialsPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.ListPublishingCredentials", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientListPublishingCredentialsPollerResponse{}, err
@@ -16596,9 +16562,7 @@ func (client *WebAppsClient) BeginListPublishingCredentialsSlot(ctx context.Cont
 	if err != nil {
 		return WebAppsClientListPublishingCredentialsSlotPollerResponse{}, err
 	}
-	result := WebAppsClientListPublishingCredentialsSlotPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientListPublishingCredentialsSlotPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.ListPublishingCredentialsSlot", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientListPublishingCredentialsSlotPollerResponse{}, err
@@ -16676,7 +16640,7 @@ func (client *WebAppsClient) ListPublishingProfileXMLWithSecrets(ctx context.Con
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientListPublishingProfileXMLWithSecretsResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientListPublishingProfileXMLWithSecretsResponse{RawResponse: resp}, nil
+	return WebAppsClientListPublishingProfileXMLWithSecretsResponse{Body: resp.Body}, nil
 }
 
 // listPublishingProfileXMLWithSecretsCreateRequest creates the ListPublishingProfileXMLWithSecrets request.
@@ -16729,7 +16693,7 @@ func (client *WebAppsClient) ListPublishingProfileXMLWithSecretsSlot(ctx context
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientListPublishingProfileXMLWithSecretsSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientListPublishingProfileXMLWithSecretsSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientListPublishingProfileXMLWithSecretsSlotResponse{Body: resp.Body}, nil
 }
 
 // listPublishingProfileXMLWithSecretsSlotCreateRequest creates the ListPublishingProfileXMLWithSecretsSlot request.
@@ -16812,7 +16776,7 @@ func (client *WebAppsClient) listRelayServiceConnectionsCreateRequest(ctx contex
 
 // listRelayServiceConnectionsHandleResponse handles the ListRelayServiceConnections response.
 func (client *WebAppsClient) listRelayServiceConnectionsHandleResponse(resp *http.Response) (WebAppsClientListRelayServiceConnectionsResponse, error) {
-	result := WebAppsClientListRelayServiceConnectionsResponse{RawResponse: resp}
+	result := WebAppsClientListRelayServiceConnectionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RelayServiceConnectionEntity); err != nil {
 		return WebAppsClientListRelayServiceConnectionsResponse{}, err
 	}
@@ -16875,7 +16839,7 @@ func (client *WebAppsClient) listRelayServiceConnectionsSlotCreateRequest(ctx co
 
 // listRelayServiceConnectionsSlotHandleResponse handles the ListRelayServiceConnectionsSlot response.
 func (client *WebAppsClient) listRelayServiceConnectionsSlotHandleResponse(resp *http.Response) (WebAppsClientListRelayServiceConnectionsSlotResponse, error) {
-	result := WebAppsClientListRelayServiceConnectionsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListRelayServiceConnectionsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RelayServiceConnectionEntity); err != nil {
 		return WebAppsClientListRelayServiceConnectionsSlotResponse{}, err
 	}
@@ -16927,7 +16891,7 @@ func (client *WebAppsClient) listSiteBackupsCreateRequest(ctx context.Context, r
 
 // listSiteBackupsHandleResponse handles the ListSiteBackups response.
 func (client *WebAppsClient) listSiteBackupsHandleResponse(resp *http.Response) (WebAppsClientListSiteBackupsResponse, error) {
-	result := WebAppsClientListSiteBackupsResponse{RawResponse: resp}
+	result := WebAppsClientListSiteBackupsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupItemCollection); err != nil {
 		return WebAppsClientListSiteBackupsResponse{}, err
 	}
@@ -16985,7 +16949,7 @@ func (client *WebAppsClient) listSiteBackupsSlotCreateRequest(ctx context.Contex
 
 // listSiteBackupsSlotHandleResponse handles the ListSiteBackupsSlot response.
 func (client *WebAppsClient) listSiteBackupsSlotHandleResponse(resp *http.Response) (WebAppsClientListSiteBackupsSlotResponse, error) {
-	result := WebAppsClientListSiteBackupsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListSiteBackupsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupItemCollection); err != nil {
 		return WebAppsClientListSiteBackupsSlotResponse{}, err
 	}
@@ -17038,7 +17002,7 @@ func (client *WebAppsClient) listSiteExtensionsCreateRequest(ctx context.Context
 
 // listSiteExtensionsHandleResponse handles the ListSiteExtensions response.
 func (client *WebAppsClient) listSiteExtensionsHandleResponse(resp *http.Response) (WebAppsClientListSiteExtensionsResponse, error) {
-	result := WebAppsClientListSiteExtensionsResponse{RawResponse: resp}
+	result := WebAppsClientListSiteExtensionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteExtensionInfoCollection); err != nil {
 		return WebAppsClientListSiteExtensionsResponse{}, err
 	}
@@ -17096,7 +17060,7 @@ func (client *WebAppsClient) listSiteExtensionsSlotCreateRequest(ctx context.Con
 
 // listSiteExtensionsSlotHandleResponse handles the ListSiteExtensionsSlot response.
 func (client *WebAppsClient) listSiteExtensionsSlotHandleResponse(resp *http.Response) (WebAppsClientListSiteExtensionsSlotResponse, error) {
-	result := WebAppsClientListSiteExtensionsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListSiteExtensionsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteExtensionInfoCollection); err != nil {
 		return WebAppsClientListSiteExtensionsSlotResponse{}, err
 	}
@@ -17152,7 +17116,7 @@ func (client *WebAppsClient) listSitePushSettingsCreateRequest(ctx context.Conte
 
 // listSitePushSettingsHandleResponse handles the ListSitePushSettings response.
 func (client *WebAppsClient) listSitePushSettingsHandleResponse(resp *http.Response) (WebAppsClientListSitePushSettingsResponse, error) {
-	result := WebAppsClientListSitePushSettingsResponse{RawResponse: resp}
+	result := WebAppsClientListSitePushSettingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PushSettings); err != nil {
 		return WebAppsClientListSitePushSettingsResponse{}, err
 	}
@@ -17213,7 +17177,7 @@ func (client *WebAppsClient) listSitePushSettingsSlotCreateRequest(ctx context.C
 
 // listSitePushSettingsSlotHandleResponse handles the ListSitePushSettingsSlot response.
 func (client *WebAppsClient) listSitePushSettingsSlotHandleResponse(resp *http.Response) (WebAppsClientListSitePushSettingsSlotResponse, error) {
-	result := WebAppsClientListSitePushSettingsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListSitePushSettingsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PushSettings); err != nil {
 		return WebAppsClientListSitePushSettingsSlotResponse{}, err
 	}
@@ -17270,7 +17234,7 @@ func (client *WebAppsClient) listSlotConfigurationNamesCreateRequest(ctx context
 
 // listSlotConfigurationNamesHandleResponse handles the ListSlotConfigurationNames response.
 func (client *WebAppsClient) listSlotConfigurationNamesHandleResponse(resp *http.Response) (WebAppsClientListSlotConfigurationNamesResponse, error) {
-	result := WebAppsClientListSlotConfigurationNamesResponse{RawResponse: resp}
+	result := WebAppsClientListSlotConfigurationNamesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SlotConfigNamesResource); err != nil {
 		return WebAppsClientListSlotConfigurationNamesResponse{}, err
 	}
@@ -17324,7 +17288,7 @@ func (client *WebAppsClient) listSlotDifferencesFromProductionCreateRequest(ctx 
 
 // listSlotDifferencesFromProductionHandleResponse handles the ListSlotDifferencesFromProduction response.
 func (client *WebAppsClient) listSlotDifferencesFromProductionHandleResponse(resp *http.Response) (WebAppsClientListSlotDifferencesFromProductionResponse, error) {
-	result := WebAppsClientListSlotDifferencesFromProductionResponse{RawResponse: resp}
+	result := WebAppsClientListSlotDifferencesFromProductionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SlotDifferenceCollection); err != nil {
 		return WebAppsClientListSlotDifferencesFromProductionResponse{}, err
 	}
@@ -17383,7 +17347,7 @@ func (client *WebAppsClient) listSlotDifferencesSlotCreateRequest(ctx context.Co
 
 // listSlotDifferencesSlotHandleResponse handles the ListSlotDifferencesSlot response.
 func (client *WebAppsClient) listSlotDifferencesSlotHandleResponse(resp *http.Response) (WebAppsClientListSlotDifferencesSlotResponse, error) {
-	result := WebAppsClientListSlotDifferencesSlotResponse{RawResponse: resp}
+	result := WebAppsClientListSlotDifferencesSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SlotDifferenceCollection); err != nil {
 		return WebAppsClientListSlotDifferencesSlotResponse{}, err
 	}
@@ -17435,7 +17399,7 @@ func (client *WebAppsClient) listSlotsCreateRequest(ctx context.Context, resourc
 
 // listSlotsHandleResponse handles the ListSlots response.
 func (client *WebAppsClient) listSlotsHandleResponse(resp *http.Response) (WebAppsClientListSlotsResponse, error) {
-	result := WebAppsClientListSlotsResponse{RawResponse: resp}
+	result := WebAppsClientListSlotsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebAppCollection); err != nil {
 		return WebAppsClientListSlotsResponse{}, err
 	}
@@ -17487,7 +17451,7 @@ func (client *WebAppsClient) listSnapshotsCreateRequest(ctx context.Context, res
 
 // listSnapshotsHandleResponse handles the ListSnapshots response.
 func (client *WebAppsClient) listSnapshotsHandleResponse(resp *http.Response) (WebAppsClientListSnapshotsResponse, error) {
-	result := WebAppsClientListSnapshotsResponse{RawResponse: resp}
+	result := WebAppsClientListSnapshotsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SnapshotCollection); err != nil {
 		return WebAppsClientListSnapshotsResponse{}, err
 	}
@@ -17540,7 +17504,7 @@ func (client *WebAppsClient) listSnapshotsFromDRSecondaryCreateRequest(ctx conte
 
 // listSnapshotsFromDRSecondaryHandleResponse handles the ListSnapshotsFromDRSecondary response.
 func (client *WebAppsClient) listSnapshotsFromDRSecondaryHandleResponse(resp *http.Response) (WebAppsClientListSnapshotsFromDRSecondaryResponse, error) {
-	result := WebAppsClientListSnapshotsFromDRSecondaryResponse{RawResponse: resp}
+	result := WebAppsClientListSnapshotsFromDRSecondaryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SnapshotCollection); err != nil {
 		return WebAppsClientListSnapshotsFromDRSecondaryResponse{}, err
 	}
@@ -17598,7 +17562,7 @@ func (client *WebAppsClient) listSnapshotsFromDRSecondarySlotCreateRequest(ctx c
 
 // listSnapshotsFromDRSecondarySlotHandleResponse handles the ListSnapshotsFromDRSecondarySlot response.
 func (client *WebAppsClient) listSnapshotsFromDRSecondarySlotHandleResponse(resp *http.Response) (WebAppsClientListSnapshotsFromDRSecondarySlotResponse, error) {
-	result := WebAppsClientListSnapshotsFromDRSecondarySlotResponse{RawResponse: resp}
+	result := WebAppsClientListSnapshotsFromDRSecondarySlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SnapshotCollection); err != nil {
 		return WebAppsClientListSnapshotsFromDRSecondarySlotResponse{}, err
 	}
@@ -17656,7 +17620,7 @@ func (client *WebAppsClient) listSnapshotsSlotCreateRequest(ctx context.Context,
 
 // listSnapshotsSlotHandleResponse handles the ListSnapshotsSlot response.
 func (client *WebAppsClient) listSnapshotsSlotHandleResponse(resp *http.Response) (WebAppsClientListSnapshotsSlotResponse, error) {
-	result := WebAppsClientListSnapshotsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListSnapshotsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SnapshotCollection); err != nil {
 		return WebAppsClientListSnapshotsSlotResponse{}, err
 	}
@@ -17712,7 +17676,7 @@ func (client *WebAppsClient) listSyncFunctionTriggersCreateRequest(ctx context.C
 
 // listSyncFunctionTriggersHandleResponse handles the ListSyncFunctionTriggers response.
 func (client *WebAppsClient) listSyncFunctionTriggersHandleResponse(resp *http.Response) (WebAppsClientListSyncFunctionTriggersResponse, error) {
-	result := WebAppsClientListSyncFunctionTriggersResponse{RawResponse: resp}
+	result := WebAppsClientListSyncFunctionTriggersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FunctionSecrets); err != nil {
 		return WebAppsClientListSyncFunctionTriggersResponse{}, err
 	}
@@ -17773,7 +17737,7 @@ func (client *WebAppsClient) listSyncFunctionTriggersSlotCreateRequest(ctx conte
 
 // listSyncFunctionTriggersSlotHandleResponse handles the ListSyncFunctionTriggersSlot response.
 func (client *WebAppsClient) listSyncFunctionTriggersSlotHandleResponse(resp *http.Response) (WebAppsClientListSyncFunctionTriggersSlotResponse, error) {
-	result := WebAppsClientListSyncFunctionTriggersSlotResponse{RawResponse: resp}
+	result := WebAppsClientListSyncFunctionTriggersSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FunctionSecrets); err != nil {
 		return WebAppsClientListSyncFunctionTriggersSlotResponse{}, err
 	}
@@ -17797,7 +17761,7 @@ func (client *WebAppsClient) ListSyncStatus(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientListSyncStatusResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientListSyncStatusResponse{RawResponse: resp}, nil
+	return WebAppsClientListSyncStatusResponse{}, nil
 }
 
 // listSyncStatusCreateRequest creates the ListSyncStatus request.
@@ -17845,7 +17809,7 @@ func (client *WebAppsClient) ListSyncStatusSlot(ctx context.Context, resourceGro
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientListSyncStatusSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientListSyncStatusSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientListSyncStatusSlotResponse{}, nil
 }
 
 // listSyncStatusSlotCreateRequest creates the ListSyncStatusSlot request.
@@ -17929,7 +17893,7 @@ func (client *WebAppsClient) listTriggeredWebJobHistoryCreateRequest(ctx context
 
 // listTriggeredWebJobHistoryHandleResponse handles the ListTriggeredWebJobHistory response.
 func (client *WebAppsClient) listTriggeredWebJobHistoryHandleResponse(resp *http.Response) (WebAppsClientListTriggeredWebJobHistoryResponse, error) {
-	result := WebAppsClientListTriggeredWebJobHistoryResponse{RawResponse: resp}
+	result := WebAppsClientListTriggeredWebJobHistoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggeredJobHistoryCollection); err != nil {
 		return WebAppsClientListTriggeredWebJobHistoryResponse{}, err
 	}
@@ -17992,7 +17956,7 @@ func (client *WebAppsClient) listTriggeredWebJobHistorySlotCreateRequest(ctx con
 
 // listTriggeredWebJobHistorySlotHandleResponse handles the ListTriggeredWebJobHistorySlot response.
 func (client *WebAppsClient) listTriggeredWebJobHistorySlotHandleResponse(resp *http.Response) (WebAppsClientListTriggeredWebJobHistorySlotResponse, error) {
-	result := WebAppsClientListTriggeredWebJobHistorySlotResponse{RawResponse: resp}
+	result := WebAppsClientListTriggeredWebJobHistorySlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggeredJobHistoryCollection); err != nil {
 		return WebAppsClientListTriggeredWebJobHistorySlotResponse{}, err
 	}
@@ -18045,7 +18009,7 @@ func (client *WebAppsClient) listTriggeredWebJobsCreateRequest(ctx context.Conte
 
 // listTriggeredWebJobsHandleResponse handles the ListTriggeredWebJobs response.
 func (client *WebAppsClient) listTriggeredWebJobsHandleResponse(resp *http.Response) (WebAppsClientListTriggeredWebJobsResponse, error) {
-	result := WebAppsClientListTriggeredWebJobsResponse{RawResponse: resp}
+	result := WebAppsClientListTriggeredWebJobsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggeredWebJobCollection); err != nil {
 		return WebAppsClientListTriggeredWebJobsResponse{}, err
 	}
@@ -18103,7 +18067,7 @@ func (client *WebAppsClient) listTriggeredWebJobsSlotCreateRequest(ctx context.C
 
 // listTriggeredWebJobsSlotHandleResponse handles the ListTriggeredWebJobsSlot response.
 func (client *WebAppsClient) listTriggeredWebJobsSlotHandleResponse(resp *http.Response) (WebAppsClientListTriggeredWebJobsSlotResponse, error) {
-	result := WebAppsClientListTriggeredWebJobsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListTriggeredWebJobsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggeredWebJobCollection); err != nil {
 		return WebAppsClientListTriggeredWebJobsSlotResponse{}, err
 	}
@@ -18160,7 +18124,7 @@ func (client *WebAppsClient) listUsagesCreateRequest(ctx context.Context, resour
 
 // listUsagesHandleResponse handles the ListUsages response.
 func (client *WebAppsClient) listUsagesHandleResponse(resp *http.Response) (WebAppsClientListUsagesResponse, error) {
-	result := WebAppsClientListUsagesResponse{RawResponse: resp}
+	result := WebAppsClientListUsagesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CsmUsageQuotaCollection); err != nil {
 		return WebAppsClientListUsagesResponse{}, err
 	}
@@ -18222,7 +18186,7 @@ func (client *WebAppsClient) listUsagesSlotCreateRequest(ctx context.Context, re
 
 // listUsagesSlotHandleResponse handles the ListUsagesSlot response.
 func (client *WebAppsClient) listUsagesSlotHandleResponse(resp *http.Response) (WebAppsClientListUsagesSlotResponse, error) {
-	result := WebAppsClientListUsagesSlotResponse{RawResponse: resp}
+	result := WebAppsClientListUsagesSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CsmUsageQuotaCollection); err != nil {
 		return WebAppsClientListUsagesSlotResponse{}, err
 	}
@@ -18278,7 +18242,7 @@ func (client *WebAppsClient) listVnetConnectionsCreateRequest(ctx context.Contex
 
 // listVnetConnectionsHandleResponse handles the ListVnetConnections response.
 func (client *WebAppsClient) listVnetConnectionsHandleResponse(resp *http.Response) (WebAppsClientListVnetConnectionsResponse, error) {
-	result := WebAppsClientListVnetConnectionsResponse{RawResponse: resp}
+	result := WebAppsClientListVnetConnectionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetInfoResourceArray); err != nil {
 		return WebAppsClientListVnetConnectionsResponse{}, err
 	}
@@ -18340,7 +18304,7 @@ func (client *WebAppsClient) listVnetConnectionsSlotCreateRequest(ctx context.Co
 
 // listVnetConnectionsSlotHandleResponse handles the ListVnetConnectionsSlot response.
 func (client *WebAppsClient) listVnetConnectionsSlotHandleResponse(resp *http.Response) (WebAppsClientListVnetConnectionsSlotResponse, error) {
-	result := WebAppsClientListVnetConnectionsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListVnetConnectionsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetInfoResourceArray); err != nil {
 		return WebAppsClientListVnetConnectionsSlotResponse{}, err
 	}
@@ -18392,7 +18356,7 @@ func (client *WebAppsClient) listWebJobsCreateRequest(ctx context.Context, resou
 
 // listWebJobsHandleResponse handles the ListWebJobs response.
 func (client *WebAppsClient) listWebJobsHandleResponse(resp *http.Response) (WebAppsClientListWebJobsResponse, error) {
-	result := WebAppsClientListWebJobsResponse{RawResponse: resp}
+	result := WebAppsClientListWebJobsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebJobCollection); err != nil {
 		return WebAppsClientListWebJobsResponse{}, err
 	}
@@ -18449,7 +18413,7 @@ func (client *WebAppsClient) listWebJobsSlotCreateRequest(ctx context.Context, r
 
 // listWebJobsSlotHandleResponse handles the ListWebJobsSlot response.
 func (client *WebAppsClient) listWebJobsSlotHandleResponse(resp *http.Response) (WebAppsClientListWebJobsSlotResponse, error) {
-	result := WebAppsClientListWebJobsSlotResponse{RawResponse: resp}
+	result := WebAppsClientListWebJobsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebJobCollection); err != nil {
 		return WebAppsClientListWebJobsSlotResponse{}, err
 	}
@@ -18468,9 +18432,7 @@ func (client *WebAppsClient) BeginMigrateMySQL(ctx context.Context, resourceGrou
 	if err != nil {
 		return WebAppsClientMigrateMySQLPollerResponse{}, err
 	}
-	result := WebAppsClientMigrateMySQLPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientMigrateMySQLPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.MigrateMySQL", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientMigrateMySQLPollerResponse{}, err
@@ -18537,9 +18499,7 @@ func (client *WebAppsClient) BeginMigrateStorage(ctx context.Context, subscripti
 	if err != nil {
 		return WebAppsClientMigrateStoragePollerResponse{}, err
 	}
-	result := WebAppsClientMigrateStoragePollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientMigrateStoragePollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.MigrateStorage", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientMigrateStoragePollerResponse{}, err
@@ -18645,7 +18605,7 @@ func (client *WebAppsClient) putPrivateAccessVnetCreateRequest(ctx context.Conte
 
 // putPrivateAccessVnetHandleResponse handles the PutPrivateAccessVnet response.
 func (client *WebAppsClient) putPrivateAccessVnetHandleResponse(resp *http.Response) (WebAppsClientPutPrivateAccessVnetResponse, error) {
-	result := WebAppsClientPutPrivateAccessVnetResponse{RawResponse: resp}
+	result := WebAppsClientPutPrivateAccessVnetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateAccess); err != nil {
 		return WebAppsClientPutPrivateAccessVnetResponse{}, err
 	}
@@ -18708,7 +18668,7 @@ func (client *WebAppsClient) putPrivateAccessVnetSlotCreateRequest(ctx context.C
 
 // putPrivateAccessVnetSlotHandleResponse handles the PutPrivateAccessVnetSlot response.
 func (client *WebAppsClient) putPrivateAccessVnetSlotHandleResponse(resp *http.Response) (WebAppsClientPutPrivateAccessVnetSlotResponse, error) {
-	result := WebAppsClientPutPrivateAccessVnetSlotResponse{RawResponse: resp}
+	result := WebAppsClientPutPrivateAccessVnetSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateAccess); err != nil {
 		return WebAppsClientPutPrivateAccessVnetSlotResponse{}, err
 	}
@@ -18734,7 +18694,7 @@ func (client *WebAppsClient) RecoverSiteConfigurationSnapshot(ctx context.Contex
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientRecoverSiteConfigurationSnapshotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientRecoverSiteConfigurationSnapshotResponse{RawResponse: resp}, nil
+	return WebAppsClientRecoverSiteConfigurationSnapshotResponse{}, nil
 }
 
 // recoverSiteConfigurationSnapshotCreateRequest creates the RecoverSiteConfigurationSnapshot request.
@@ -18787,7 +18747,7 @@ func (client *WebAppsClient) RecoverSiteConfigurationSnapshotSlot(ctx context.Co
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientRecoverSiteConfigurationSnapshotSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientRecoverSiteConfigurationSnapshotSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientRecoverSiteConfigurationSnapshotSlotResponse{}, nil
 }
 
 // recoverSiteConfigurationSnapshotSlotCreateRequest creates the RecoverSiteConfigurationSnapshotSlot request.
@@ -18843,7 +18803,7 @@ func (client *WebAppsClient) ResetProductionSlotConfig(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientResetProductionSlotConfigResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientResetProductionSlotConfigResponse{RawResponse: resp}, nil
+	return WebAppsClientResetProductionSlotConfigResponse{}, nil
 }
 
 // resetProductionSlotConfigCreateRequest creates the ResetProductionSlotConfig request.
@@ -18893,7 +18853,7 @@ func (client *WebAppsClient) ResetSlotConfigurationSlot(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientResetSlotConfigurationSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientResetSlotConfigurationSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientResetSlotConfigurationSlotResponse{}, nil
 }
 
 // resetSlotConfigurationSlotCreateRequest creates the ResetSlotConfigurationSlot request.
@@ -18943,7 +18903,7 @@ func (client *WebAppsClient) Restart(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientRestartResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientRestartResponse{RawResponse: resp}, nil
+	return WebAppsClientRestartResponse{}, nil
 }
 
 // restartCreateRequest creates the Restart request.
@@ -18996,7 +18956,7 @@ func (client *WebAppsClient) RestartSlot(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientRestartSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientRestartSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientRestartSlotResponse{}, nil
 }
 
 // restartSlotCreateRequest creates the RestartSlot request.
@@ -19047,9 +19007,7 @@ func (client *WebAppsClient) BeginRestore(ctx context.Context, resourceGroupName
 	if err != nil {
 		return WebAppsClientRestorePollerResponse{}, err
 	}
-	result := WebAppsClientRestorePollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientRestorePollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.Restore", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientRestorePollerResponse{}, err
@@ -19119,9 +19077,7 @@ func (client *WebAppsClient) BeginRestoreFromBackupBlob(ctx context.Context, res
 	if err != nil {
 		return WebAppsClientRestoreFromBackupBlobPollerResponse{}, err
 	}
-	result := WebAppsClientRestoreFromBackupBlobPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientRestoreFromBackupBlobPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.RestoreFromBackupBlob", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientRestoreFromBackupBlobPollerResponse{}, err
@@ -19188,9 +19144,7 @@ func (client *WebAppsClient) BeginRestoreFromBackupBlobSlot(ctx context.Context,
 	if err != nil {
 		return WebAppsClientRestoreFromBackupBlobSlotPollerResponse{}, err
 	}
-	result := WebAppsClientRestoreFromBackupBlobSlotPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientRestoreFromBackupBlobSlotPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.RestoreFromBackupBlobSlot", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientRestoreFromBackupBlobSlotPollerResponse{}, err
@@ -19260,9 +19214,7 @@ func (client *WebAppsClient) BeginRestoreFromDeletedApp(ctx context.Context, res
 	if err != nil {
 		return WebAppsClientRestoreFromDeletedAppPollerResponse{}, err
 	}
-	result := WebAppsClientRestoreFromDeletedAppPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientRestoreFromDeletedAppPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.RestoreFromDeletedApp", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientRestoreFromDeletedAppPollerResponse{}, err
@@ -19329,9 +19281,7 @@ func (client *WebAppsClient) BeginRestoreFromDeletedAppSlot(ctx context.Context,
 	if err != nil {
 		return WebAppsClientRestoreFromDeletedAppSlotPollerResponse{}, err
 	}
-	result := WebAppsClientRestoreFromDeletedAppSlotPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientRestoreFromDeletedAppSlotPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.RestoreFromDeletedAppSlot", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientRestoreFromDeletedAppSlotPollerResponse{}, err
@@ -19403,9 +19353,7 @@ func (client *WebAppsClient) BeginRestoreSlot(ctx context.Context, resourceGroup
 	if err != nil {
 		return WebAppsClientRestoreSlotPollerResponse{}, err
 	}
-	result := WebAppsClientRestoreSlotPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientRestoreSlotPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.RestoreSlot", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientRestoreSlotPollerResponse{}, err
@@ -19480,9 +19428,7 @@ func (client *WebAppsClient) BeginRestoreSnapshot(ctx context.Context, resourceG
 	if err != nil {
 		return WebAppsClientRestoreSnapshotPollerResponse{}, err
 	}
-	result := WebAppsClientRestoreSnapshotPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientRestoreSnapshotPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.RestoreSnapshot", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientRestoreSnapshotPollerResponse{}, err
@@ -19550,9 +19496,7 @@ func (client *WebAppsClient) BeginRestoreSnapshotSlot(ctx context.Context, resou
 	if err != nil {
 		return WebAppsClientRestoreSnapshotSlotPollerResponse{}, err
 	}
-	result := WebAppsClientRestoreSnapshotSlotPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientRestoreSnapshotSlotPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.RestoreSnapshotSlot", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientRestoreSnapshotSlotPollerResponse{}, err
@@ -19629,7 +19573,7 @@ func (client *WebAppsClient) RunTriggeredWebJob(ctx context.Context, resourceGro
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientRunTriggeredWebJobResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientRunTriggeredWebJobResponse{RawResponse: resp}, nil
+	return WebAppsClientRunTriggeredWebJobResponse{}, nil
 }
 
 // runTriggeredWebJobCreateRequest creates the RunTriggeredWebJob request.
@@ -19682,7 +19626,7 @@ func (client *WebAppsClient) RunTriggeredWebJobSlot(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientRunTriggeredWebJobSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientRunTriggeredWebJobSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientRunTriggeredWebJobSlotResponse{}, nil
 }
 
 // runTriggeredWebJobSlotCreateRequest creates the RunTriggeredWebJobSlot request.
@@ -19736,7 +19680,7 @@ func (client *WebAppsClient) Start(ctx context.Context, resourceGroupName string
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientStartResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientStartResponse{RawResponse: resp}, nil
+	return WebAppsClientStartResponse{}, nil
 }
 
 // startCreateRequest creates the Start request.
@@ -19784,7 +19728,7 @@ func (client *WebAppsClient) StartContinuousWebJob(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientStartContinuousWebJobResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientStartContinuousWebJobResponse{RawResponse: resp}, nil
+	return WebAppsClientStartContinuousWebJobResponse{}, nil
 }
 
 // startContinuousWebJobCreateRequest creates the StartContinuousWebJob request.
@@ -19837,7 +19781,7 @@ func (client *WebAppsClient) StartContinuousWebJobSlot(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientStartContinuousWebJobSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientStartContinuousWebJobSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientStartContinuousWebJobSlotResponse{}, nil
 }
 
 // startContinuousWebJobSlotCreateRequest creates the StartContinuousWebJobSlot request.
@@ -19885,9 +19829,7 @@ func (client *WebAppsClient) BeginStartNetworkTrace(ctx context.Context, resourc
 	if err != nil {
 		return WebAppsClientStartNetworkTracePollerResponse{}, err
 	}
-	result := WebAppsClientStartNetworkTracePollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientStartNetworkTracePollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.StartNetworkTrace", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientStartNetworkTracePollerResponse{}, err
@@ -19962,9 +19904,7 @@ func (client *WebAppsClient) BeginStartNetworkTraceSlot(ctx context.Context, res
 	if err != nil {
 		return WebAppsClientStartNetworkTraceSlotPollerResponse{}, err
 	}
-	result := WebAppsClientStartNetworkTraceSlotPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientStartNetworkTraceSlotPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.StartNetworkTraceSlot", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientStartNetworkTraceSlotPollerResponse{}, err
@@ -20049,7 +19989,7 @@ func (client *WebAppsClient) StartSlot(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientStartSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientStartSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientStartSlotResponse{}, nil
 }
 
 // startSlotCreateRequest creates the StartSlot request.
@@ -20140,7 +20080,7 @@ func (client *WebAppsClient) startWebSiteNetworkTraceCreateRequest(ctx context.C
 
 // startWebSiteNetworkTraceHandleResponse handles the StartWebSiteNetworkTrace response.
 func (client *WebAppsClient) startWebSiteNetworkTraceHandleResponse(resp *http.Response) (WebAppsClientStartWebSiteNetworkTraceResponse, error) {
-	result := WebAppsClientStartWebSiteNetworkTraceResponse{RawResponse: resp}
+	result := WebAppsClientStartWebSiteNetworkTraceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Value); err != nil {
 		return WebAppsClientStartWebSiteNetworkTraceResponse{}, err
 	}
@@ -20158,9 +20098,7 @@ func (client *WebAppsClient) BeginStartWebSiteNetworkTraceOperation(ctx context.
 	if err != nil {
 		return WebAppsClientStartWebSiteNetworkTraceOperationPollerResponse{}, err
 	}
-	result := WebAppsClientStartWebSiteNetworkTraceOperationPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientStartWebSiteNetworkTraceOperationPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.StartWebSiteNetworkTraceOperation", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientStartWebSiteNetworkTraceOperationPollerResponse{}, err
@@ -20235,9 +20173,7 @@ func (client *WebAppsClient) BeginStartWebSiteNetworkTraceOperationSlot(ctx cont
 	if err != nil {
 		return WebAppsClientStartWebSiteNetworkTraceOperationSlotPollerResponse{}, err
 	}
-	result := WebAppsClientStartWebSiteNetworkTraceOperationSlotPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientStartWebSiteNetworkTraceOperationSlotPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.StartWebSiteNetworkTraceOperationSlot", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientStartWebSiteNetworkTraceOperationSlotPollerResponse{}, err
@@ -20367,7 +20303,7 @@ func (client *WebAppsClient) startWebSiteNetworkTraceSlotCreateRequest(ctx conte
 
 // startWebSiteNetworkTraceSlotHandleResponse handles the StartWebSiteNetworkTraceSlot response.
 func (client *WebAppsClient) startWebSiteNetworkTraceSlotHandleResponse(resp *http.Response) (WebAppsClientStartWebSiteNetworkTraceSlotResponse, error) {
-	result := WebAppsClientStartWebSiteNetworkTraceSlotResponse{RawResponse: resp}
+	result := WebAppsClientStartWebSiteNetworkTraceSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Value); err != nil {
 		return WebAppsClientStartWebSiteNetworkTraceSlotResponse{}, err
 	}
@@ -20391,7 +20327,7 @@ func (client *WebAppsClient) Stop(ctx context.Context, resourceGroupName string,
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientStopResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientStopResponse{RawResponse: resp}, nil
+	return WebAppsClientStopResponse{}, nil
 }
 
 // stopCreateRequest creates the Stop request.
@@ -20439,7 +20375,7 @@ func (client *WebAppsClient) StopContinuousWebJob(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientStopContinuousWebJobResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientStopContinuousWebJobResponse{RawResponse: resp}, nil
+	return WebAppsClientStopContinuousWebJobResponse{}, nil
 }
 
 // stopContinuousWebJobCreateRequest creates the StopContinuousWebJob request.
@@ -20492,7 +20428,7 @@ func (client *WebAppsClient) StopContinuousWebJobSlot(ctx context.Context, resou
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientStopContinuousWebJobSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientStopContinuousWebJobSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientStopContinuousWebJobSlotResponse{}, nil
 }
 
 // stopContinuousWebJobSlotCreateRequest creates the StopContinuousWebJobSlot request.
@@ -20547,7 +20483,7 @@ func (client *WebAppsClient) StopNetworkTrace(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientStopNetworkTraceResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientStopNetworkTraceResponse{RawResponse: resp}, nil
+	return WebAppsClientStopNetworkTraceResponse{}, nil
 }
 
 // stopNetworkTraceCreateRequest creates the StopNetworkTrace request.
@@ -20595,7 +20531,7 @@ func (client *WebAppsClient) StopNetworkTraceSlot(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientStopNetworkTraceSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientStopNetworkTraceSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientStopNetworkTraceSlotResponse{}, nil
 }
 
 // stopNetworkTraceSlotCreateRequest creates the StopNetworkTraceSlot request.
@@ -20646,7 +20582,7 @@ func (client *WebAppsClient) StopSlot(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientStopSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientStopSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientStopSlotResponse{}, nil
 }
 
 // stopSlotCreateRequest creates the StopSlot request.
@@ -20697,7 +20633,7 @@ func (client *WebAppsClient) StopWebSiteNetworkTrace(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientStopWebSiteNetworkTraceResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientStopWebSiteNetworkTraceResponse{RawResponse: resp}, nil
+	return WebAppsClientStopWebSiteNetworkTraceResponse{}, nil
 }
 
 // stopWebSiteNetworkTraceCreateRequest creates the StopWebSiteNetworkTrace request.
@@ -20745,7 +20681,7 @@ func (client *WebAppsClient) StopWebSiteNetworkTraceSlot(ctx context.Context, re
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WebAppsClientStopWebSiteNetworkTraceSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientStopWebSiteNetworkTraceSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientStopWebSiteNetworkTraceSlotResponse{}, nil
 }
 
 // stopWebSiteNetworkTraceSlotCreateRequest creates the StopWebSiteNetworkTraceSlot request.
@@ -20790,9 +20726,7 @@ func (client *WebAppsClient) BeginSwapSlot(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return WebAppsClientSwapSlotPollerResponse{}, err
 	}
-	result := WebAppsClientSwapSlotPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientSwapSlotPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.SwapSlot", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientSwapSlotPollerResponse{}, err
@@ -20862,9 +20796,7 @@ func (client *WebAppsClient) BeginSwapSlotWithProduction(ctx context.Context, re
 	if err != nil {
 		return WebAppsClientSwapSlotWithProductionPollerResponse{}, err
 	}
-	result := WebAppsClientSwapSlotWithProductionPollerResponse{
-		RawResponse: resp,
-	}
+	result := WebAppsClientSwapSlotWithProductionPollerResponse{}
 	pt, err := armruntime.NewPoller("WebAppsClient.SwapSlotWithProduction", "", resp, client.pl)
 	if err != nil {
 		return WebAppsClientSwapSlotWithProductionPollerResponse{}, err
@@ -20936,7 +20868,7 @@ func (client *WebAppsClient) SyncFunctionTriggers(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientSyncFunctionTriggersResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientSyncFunctionTriggersResponse{RawResponse: resp}, nil
+	return WebAppsClientSyncFunctionTriggersResponse{}, nil
 }
 
 // syncFunctionTriggersCreateRequest creates the SyncFunctionTriggers request.
@@ -20984,7 +20916,7 @@ func (client *WebAppsClient) SyncFunctionTriggersSlot(ctx context.Context, resou
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientSyncFunctionTriggersSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientSyncFunctionTriggersSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientSyncFunctionTriggersSlotResponse{}, nil
 }
 
 // syncFunctionTriggersSlotCreateRequest creates the SyncFunctionTriggersSlot request.
@@ -21034,7 +20966,7 @@ func (client *WebAppsClient) SyncFunctions(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientSyncFunctionsResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientSyncFunctionsResponse{RawResponse: resp}, nil
+	return WebAppsClientSyncFunctionsResponse{}, nil
 }
 
 // syncFunctionsCreateRequest creates the SyncFunctions request.
@@ -21082,7 +21014,7 @@ func (client *WebAppsClient) SyncFunctionsSlot(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebAppsClientSyncFunctionsSlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientSyncFunctionsSlotResponse{RawResponse: resp}, nil
+	return WebAppsClientSyncFunctionsSlotResponse{}, nil
 }
 
 // syncFunctionsSlotCreateRequest creates the SyncFunctionsSlot request.
@@ -21132,7 +21064,7 @@ func (client *WebAppsClient) SyncRepository(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientSyncRepositoryResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientSyncRepositoryResponse{RawResponse: resp}, nil
+	return WebAppsClientSyncRepositoryResponse{}, nil
 }
 
 // syncRepositoryCreateRequest creates the SyncRepository request.
@@ -21180,7 +21112,7 @@ func (client *WebAppsClient) SyncRepositorySlot(ctx context.Context, resourceGro
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return WebAppsClientSyncRepositorySlotResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebAppsClientSyncRepositorySlotResponse{RawResponse: resp}, nil
+	return WebAppsClientSyncRepositorySlotResponse{}, nil
 }
 
 // syncRepositorySlotCreateRequest creates the SyncRepositorySlot request.
@@ -21262,7 +21194,7 @@ func (client *WebAppsClient) updateCreateRequest(ctx context.Context, resourceGr
 
 // updateHandleResponse handles the Update response.
 func (client *WebAppsClient) updateHandleResponse(resp *http.Response) (WebAppsClientUpdateResponse, error) {
-	result := WebAppsClientUpdateResponse{RawResponse: resp}
+	result := WebAppsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Site); err != nil {
 		return WebAppsClientUpdateResponse{}, err
 	}
@@ -21319,7 +21251,7 @@ func (client *WebAppsClient) updateApplicationSettingsCreateRequest(ctx context.
 
 // updateApplicationSettingsHandleResponse handles the UpdateApplicationSettings response.
 func (client *WebAppsClient) updateApplicationSettingsHandleResponse(resp *http.Response) (WebAppsClientUpdateApplicationSettingsResponse, error) {
-	result := WebAppsClientUpdateApplicationSettingsResponse{RawResponse: resp}
+	result := WebAppsClientUpdateApplicationSettingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return WebAppsClientUpdateApplicationSettingsResponse{}, err
 	}
@@ -21382,7 +21314,7 @@ func (client *WebAppsClient) updateApplicationSettingsSlotCreateRequest(ctx cont
 
 // updateApplicationSettingsSlotHandleResponse handles the UpdateApplicationSettingsSlot response.
 func (client *WebAppsClient) updateApplicationSettingsSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateApplicationSettingsSlotResponse, error) {
-	result := WebAppsClientUpdateApplicationSettingsSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateApplicationSettingsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return WebAppsClientUpdateApplicationSettingsSlotResponse{}, err
 	}
@@ -21439,7 +21371,7 @@ func (client *WebAppsClient) updateAuthSettingsCreateRequest(ctx context.Context
 
 // updateAuthSettingsHandleResponse handles the UpdateAuthSettings response.
 func (client *WebAppsClient) updateAuthSettingsHandleResponse(resp *http.Response) (WebAppsClientUpdateAuthSettingsResponse, error) {
-	result := WebAppsClientUpdateAuthSettingsResponse{RawResponse: resp}
+	result := WebAppsClientUpdateAuthSettingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteAuthSettings); err != nil {
 		return WebAppsClientUpdateAuthSettingsResponse{}, err
 	}
@@ -21501,7 +21433,7 @@ func (client *WebAppsClient) updateAuthSettingsSlotCreateRequest(ctx context.Con
 
 // updateAuthSettingsSlotHandleResponse handles the UpdateAuthSettingsSlot response.
 func (client *WebAppsClient) updateAuthSettingsSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateAuthSettingsSlotResponse, error) {
-	result := WebAppsClientUpdateAuthSettingsSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateAuthSettingsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteAuthSettings); err != nil {
 		return WebAppsClientUpdateAuthSettingsSlotResponse{}, err
 	}
@@ -21558,7 +21490,7 @@ func (client *WebAppsClient) updateAuthSettingsV2CreateRequest(ctx context.Conte
 
 // updateAuthSettingsV2HandleResponse handles the UpdateAuthSettingsV2 response.
 func (client *WebAppsClient) updateAuthSettingsV2HandleResponse(resp *http.Response) (WebAppsClientUpdateAuthSettingsV2Response, error) {
-	result := WebAppsClientUpdateAuthSettingsV2Response{RawResponse: resp}
+	result := WebAppsClientUpdateAuthSettingsV2Response{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteAuthSettingsV2); err != nil {
 		return WebAppsClientUpdateAuthSettingsV2Response{}, err
 	}
@@ -21620,7 +21552,7 @@ func (client *WebAppsClient) updateAuthSettingsV2SlotCreateRequest(ctx context.C
 
 // updateAuthSettingsV2SlotHandleResponse handles the UpdateAuthSettingsV2Slot response.
 func (client *WebAppsClient) updateAuthSettingsV2SlotHandleResponse(resp *http.Response) (WebAppsClientUpdateAuthSettingsV2SlotResponse, error) {
-	result := WebAppsClientUpdateAuthSettingsV2SlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateAuthSettingsV2SlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteAuthSettingsV2); err != nil {
 		return WebAppsClientUpdateAuthSettingsV2SlotResponse{}, err
 	}
@@ -21677,7 +21609,7 @@ func (client *WebAppsClient) updateAzureStorageAccountsCreateRequest(ctx context
 
 // updateAzureStorageAccountsHandleResponse handles the UpdateAzureStorageAccounts response.
 func (client *WebAppsClient) updateAzureStorageAccountsHandleResponse(resp *http.Response) (WebAppsClientUpdateAzureStorageAccountsResponse, error) {
-	result := WebAppsClientUpdateAzureStorageAccountsResponse{RawResponse: resp}
+	result := WebAppsClientUpdateAzureStorageAccountsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureStoragePropertyDictionaryResource); err != nil {
 		return WebAppsClientUpdateAzureStorageAccountsResponse{}, err
 	}
@@ -21740,7 +21672,7 @@ func (client *WebAppsClient) updateAzureStorageAccountsSlotCreateRequest(ctx con
 
 // updateAzureStorageAccountsSlotHandleResponse handles the UpdateAzureStorageAccountsSlot response.
 func (client *WebAppsClient) updateAzureStorageAccountsSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateAzureStorageAccountsSlotResponse, error) {
-	result := WebAppsClientUpdateAzureStorageAccountsSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateAzureStorageAccountsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureStoragePropertyDictionaryResource); err != nil {
 		return WebAppsClientUpdateAzureStorageAccountsSlotResponse{}, err
 	}
@@ -21797,7 +21729,7 @@ func (client *WebAppsClient) updateBackupConfigurationCreateRequest(ctx context.
 
 // updateBackupConfigurationHandleResponse handles the UpdateBackupConfiguration response.
 func (client *WebAppsClient) updateBackupConfigurationHandleResponse(resp *http.Response) (WebAppsClientUpdateBackupConfigurationResponse, error) {
-	result := WebAppsClientUpdateBackupConfigurationResponse{RawResponse: resp}
+	result := WebAppsClientUpdateBackupConfigurationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupRequest); err != nil {
 		return WebAppsClientUpdateBackupConfigurationResponse{}, err
 	}
@@ -21860,7 +21792,7 @@ func (client *WebAppsClient) updateBackupConfigurationSlotCreateRequest(ctx cont
 
 // updateBackupConfigurationSlotHandleResponse handles the UpdateBackupConfigurationSlot response.
 func (client *WebAppsClient) updateBackupConfigurationSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateBackupConfigurationSlotResponse, error) {
-	result := WebAppsClientUpdateBackupConfigurationSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateBackupConfigurationSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupRequest); err != nil {
 		return WebAppsClientUpdateBackupConfigurationSlotResponse{}, err
 	}
@@ -21917,7 +21849,7 @@ func (client *WebAppsClient) updateConfigurationCreateRequest(ctx context.Contex
 
 // updateConfigurationHandleResponse handles the UpdateConfiguration response.
 func (client *WebAppsClient) updateConfigurationHandleResponse(resp *http.Response) (WebAppsClientUpdateConfigurationResponse, error) {
-	result := WebAppsClientUpdateConfigurationResponse{RawResponse: resp}
+	result := WebAppsClientUpdateConfigurationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteConfigResource); err != nil {
 		return WebAppsClientUpdateConfigurationResponse{}, err
 	}
@@ -21979,7 +21911,7 @@ func (client *WebAppsClient) updateConfigurationSlotCreateRequest(ctx context.Co
 
 // updateConfigurationSlotHandleResponse handles the UpdateConfigurationSlot response.
 func (client *WebAppsClient) updateConfigurationSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateConfigurationSlotResponse, error) {
-	result := WebAppsClientUpdateConfigurationSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateConfigurationSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteConfigResource); err != nil {
 		return WebAppsClientUpdateConfigurationSlotResponse{}, err
 	}
@@ -22036,7 +21968,7 @@ func (client *WebAppsClient) updateConnectionStringsCreateRequest(ctx context.Co
 
 // updateConnectionStringsHandleResponse handles the UpdateConnectionStrings response.
 func (client *WebAppsClient) updateConnectionStringsHandleResponse(resp *http.Response) (WebAppsClientUpdateConnectionStringsResponse, error) {
-	result := WebAppsClientUpdateConnectionStringsResponse{RawResponse: resp}
+	result := WebAppsClientUpdateConnectionStringsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConnectionStringDictionary); err != nil {
 		return WebAppsClientUpdateConnectionStringsResponse{}, err
 	}
@@ -22099,7 +22031,7 @@ func (client *WebAppsClient) updateConnectionStringsSlotCreateRequest(ctx contex
 
 // updateConnectionStringsSlotHandleResponse handles the UpdateConnectionStringsSlot response.
 func (client *WebAppsClient) updateConnectionStringsSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateConnectionStringsSlotResponse, error) {
-	result := WebAppsClientUpdateConnectionStringsSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateConnectionStringsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConnectionStringDictionary); err != nil {
 		return WebAppsClientUpdateConnectionStringsSlotResponse{}, err
 	}
@@ -22156,7 +22088,7 @@ func (client *WebAppsClient) updateDiagnosticLogsConfigCreateRequest(ctx context
 
 // updateDiagnosticLogsConfigHandleResponse handles the UpdateDiagnosticLogsConfig response.
 func (client *WebAppsClient) updateDiagnosticLogsConfigHandleResponse(resp *http.Response) (WebAppsClientUpdateDiagnosticLogsConfigResponse, error) {
-	result := WebAppsClientUpdateDiagnosticLogsConfigResponse{RawResponse: resp}
+	result := WebAppsClientUpdateDiagnosticLogsConfigResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteLogsConfig); err != nil {
 		return WebAppsClientUpdateDiagnosticLogsConfigResponse{}, err
 	}
@@ -22219,7 +22151,7 @@ func (client *WebAppsClient) updateDiagnosticLogsConfigSlotCreateRequest(ctx con
 
 // updateDiagnosticLogsConfigSlotHandleResponse handles the UpdateDiagnosticLogsConfigSlot response.
 func (client *WebAppsClient) updateDiagnosticLogsConfigSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateDiagnosticLogsConfigSlotResponse, error) {
-	result := WebAppsClientUpdateDiagnosticLogsConfigSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateDiagnosticLogsConfigSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteLogsConfig); err != nil {
 		return WebAppsClientUpdateDiagnosticLogsConfigSlotResponse{}, err
 	}
@@ -22282,7 +22214,7 @@ func (client *WebAppsClient) updateDomainOwnershipIdentifierCreateRequest(ctx co
 
 // updateDomainOwnershipIdentifierHandleResponse handles the UpdateDomainOwnershipIdentifier response.
 func (client *WebAppsClient) updateDomainOwnershipIdentifierHandleResponse(resp *http.Response) (WebAppsClientUpdateDomainOwnershipIdentifierResponse, error) {
-	result := WebAppsClientUpdateDomainOwnershipIdentifierResponse{RawResponse: resp}
+	result := WebAppsClientUpdateDomainOwnershipIdentifierResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Identifier); err != nil {
 		return WebAppsClientUpdateDomainOwnershipIdentifierResponse{}, err
 	}
@@ -22350,7 +22282,7 @@ func (client *WebAppsClient) updateDomainOwnershipIdentifierSlotCreateRequest(ct
 
 // updateDomainOwnershipIdentifierSlotHandleResponse handles the UpdateDomainOwnershipIdentifierSlot response.
 func (client *WebAppsClient) updateDomainOwnershipIdentifierSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateDomainOwnershipIdentifierSlotResponse, error) {
-	result := WebAppsClientUpdateDomainOwnershipIdentifierSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateDomainOwnershipIdentifierSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Identifier); err != nil {
 		return WebAppsClientUpdateDomainOwnershipIdentifierSlotResponse{}, err
 	}
@@ -22406,7 +22338,7 @@ func (client *WebAppsClient) updateFtpAllowedCreateRequest(ctx context.Context, 
 
 // updateFtpAllowedHandleResponse handles the UpdateFtpAllowed response.
 func (client *WebAppsClient) updateFtpAllowedHandleResponse(resp *http.Response) (WebAppsClientUpdateFtpAllowedResponse, error) {
-	result := WebAppsClientUpdateFtpAllowedResponse{RawResponse: resp}
+	result := WebAppsClientUpdateFtpAllowedResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CsmPublishingCredentialsPoliciesEntity); err != nil {
 		return WebAppsClientUpdateFtpAllowedResponse{}, err
 	}
@@ -22466,7 +22398,7 @@ func (client *WebAppsClient) updateFtpAllowedSlotCreateRequest(ctx context.Conte
 
 // updateFtpAllowedSlotHandleResponse handles the UpdateFtpAllowedSlot response.
 func (client *WebAppsClient) updateFtpAllowedSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateFtpAllowedSlotResponse, error) {
-	result := WebAppsClientUpdateFtpAllowedSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateFtpAllowedSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CsmPublishingCredentialsPoliciesEntity); err != nil {
 		return WebAppsClientUpdateFtpAllowedSlotResponse{}, err
 	}
@@ -22533,7 +22465,7 @@ func (client *WebAppsClient) updateHybridConnectionCreateRequest(ctx context.Con
 
 // updateHybridConnectionHandleResponse handles the UpdateHybridConnection response.
 func (client *WebAppsClient) updateHybridConnectionHandleResponse(resp *http.Response) (WebAppsClientUpdateHybridConnectionResponse, error) {
-	result := WebAppsClientUpdateHybridConnectionResponse{RawResponse: resp}
+	result := WebAppsClientUpdateHybridConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridConnection); err != nil {
 		return WebAppsClientUpdateHybridConnectionResponse{}, err
 	}
@@ -22605,7 +22537,7 @@ func (client *WebAppsClient) updateHybridConnectionSlotCreateRequest(ctx context
 
 // updateHybridConnectionSlotHandleResponse handles the UpdateHybridConnectionSlot response.
 func (client *WebAppsClient) updateHybridConnectionSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateHybridConnectionSlotResponse, error) {
-	result := WebAppsClientUpdateHybridConnectionSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateHybridConnectionSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HybridConnection); err != nil {
 		return WebAppsClientUpdateHybridConnectionSlotResponse{}, err
 	}
@@ -22661,7 +22593,7 @@ func (client *WebAppsClient) updateMetadataCreateRequest(ctx context.Context, re
 
 // updateMetadataHandleResponse handles the UpdateMetadata response.
 func (client *WebAppsClient) updateMetadataHandleResponse(resp *http.Response) (WebAppsClientUpdateMetadataResponse, error) {
-	result := WebAppsClientUpdateMetadataResponse{RawResponse: resp}
+	result := WebAppsClientUpdateMetadataResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return WebAppsClientUpdateMetadataResponse{}, err
 	}
@@ -22723,7 +22655,7 @@ func (client *WebAppsClient) updateMetadataSlotCreateRequest(ctx context.Context
 
 // updateMetadataSlotHandleResponse handles the UpdateMetadataSlot response.
 func (client *WebAppsClient) updateMetadataSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateMetadataSlotResponse, error) {
-	result := WebAppsClientUpdateMetadataSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateMetadataSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return WebAppsClientUpdateMetadataSlotResponse{}, err
 	}
@@ -22785,7 +22717,7 @@ func (client *WebAppsClient) updatePremierAddOnCreateRequest(ctx context.Context
 
 // updatePremierAddOnHandleResponse handles the UpdatePremierAddOn response.
 func (client *WebAppsClient) updatePremierAddOnHandleResponse(resp *http.Response) (WebAppsClientUpdatePremierAddOnResponse, error) {
-	result := WebAppsClientUpdatePremierAddOnResponse{RawResponse: resp}
+	result := WebAppsClientUpdatePremierAddOnResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PremierAddOn); err != nil {
 		return WebAppsClientUpdatePremierAddOnResponse{}, err
 	}
@@ -22853,7 +22785,7 @@ func (client *WebAppsClient) updatePremierAddOnSlotCreateRequest(ctx context.Con
 
 // updatePremierAddOnSlotHandleResponse handles the UpdatePremierAddOnSlot response.
 func (client *WebAppsClient) updatePremierAddOnSlotHandleResponse(resp *http.Response) (WebAppsClientUpdatePremierAddOnSlotResponse, error) {
-	result := WebAppsClientUpdatePremierAddOnSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdatePremierAddOnSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PremierAddOn); err != nil {
 		return WebAppsClientUpdatePremierAddOnSlotResponse{}, err
 	}
@@ -22916,7 +22848,7 @@ func (client *WebAppsClient) updateRelayServiceConnectionCreateRequest(ctx conte
 
 // updateRelayServiceConnectionHandleResponse handles the UpdateRelayServiceConnection response.
 func (client *WebAppsClient) updateRelayServiceConnectionHandleResponse(resp *http.Response) (WebAppsClientUpdateRelayServiceConnectionResponse, error) {
-	result := WebAppsClientUpdateRelayServiceConnectionResponse{RawResponse: resp}
+	result := WebAppsClientUpdateRelayServiceConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RelayServiceConnectionEntity); err != nil {
 		return WebAppsClientUpdateRelayServiceConnectionResponse{}, err
 	}
@@ -22985,7 +22917,7 @@ func (client *WebAppsClient) updateRelayServiceConnectionSlotCreateRequest(ctx c
 
 // updateRelayServiceConnectionSlotHandleResponse handles the UpdateRelayServiceConnectionSlot response.
 func (client *WebAppsClient) updateRelayServiceConnectionSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateRelayServiceConnectionSlotResponse, error) {
-	result := WebAppsClientUpdateRelayServiceConnectionSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateRelayServiceConnectionSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RelayServiceConnectionEntity); err != nil {
 		return WebAppsClientUpdateRelayServiceConnectionSlotResponse{}, err
 	}
@@ -23041,7 +22973,7 @@ func (client *WebAppsClient) updateScmAllowedCreateRequest(ctx context.Context, 
 
 // updateScmAllowedHandleResponse handles the UpdateScmAllowed response.
 func (client *WebAppsClient) updateScmAllowedHandleResponse(resp *http.Response) (WebAppsClientUpdateScmAllowedResponse, error) {
-	result := WebAppsClientUpdateScmAllowedResponse{RawResponse: resp}
+	result := WebAppsClientUpdateScmAllowedResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CsmPublishingCredentialsPoliciesEntity); err != nil {
 		return WebAppsClientUpdateScmAllowedResponse{}, err
 	}
@@ -23101,7 +23033,7 @@ func (client *WebAppsClient) updateScmAllowedSlotCreateRequest(ctx context.Conte
 
 // updateScmAllowedSlotHandleResponse handles the UpdateScmAllowedSlot response.
 func (client *WebAppsClient) updateScmAllowedSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateScmAllowedSlotResponse, error) {
-	result := WebAppsClientUpdateScmAllowedSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateScmAllowedSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CsmPublishingCredentialsPoliciesEntity); err != nil {
 		return WebAppsClientUpdateScmAllowedSlotResponse{}, err
 	}
@@ -23158,7 +23090,7 @@ func (client *WebAppsClient) updateSitePushSettingsCreateRequest(ctx context.Con
 
 // updateSitePushSettingsHandleResponse handles the UpdateSitePushSettings response.
 func (client *WebAppsClient) updateSitePushSettingsHandleResponse(resp *http.Response) (WebAppsClientUpdateSitePushSettingsResponse, error) {
-	result := WebAppsClientUpdateSitePushSettingsResponse{RawResponse: resp}
+	result := WebAppsClientUpdateSitePushSettingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PushSettings); err != nil {
 		return WebAppsClientUpdateSitePushSettingsResponse{}, err
 	}
@@ -23220,7 +23152,7 @@ func (client *WebAppsClient) updateSitePushSettingsSlotCreateRequest(ctx context
 
 // updateSitePushSettingsSlotHandleResponse handles the UpdateSitePushSettingsSlot response.
 func (client *WebAppsClient) updateSitePushSettingsSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateSitePushSettingsSlotResponse, error) {
-	result := WebAppsClientUpdateSitePushSettingsSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateSitePushSettingsSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PushSettings); err != nil {
 		return WebAppsClientUpdateSitePushSettingsSlotResponse{}, err
 	}
@@ -23283,7 +23215,7 @@ func (client *WebAppsClient) updateSlotCreateRequest(ctx context.Context, resour
 
 // updateSlotHandleResponse handles the UpdateSlot response.
 func (client *WebAppsClient) updateSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateSlotResponse, error) {
-	result := WebAppsClientUpdateSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Site); err != nil {
 		return WebAppsClientUpdateSlotResponse{}, err
 	}
@@ -23341,7 +23273,7 @@ func (client *WebAppsClient) updateSlotConfigurationNamesCreateRequest(ctx conte
 
 // updateSlotConfigurationNamesHandleResponse handles the UpdateSlotConfigurationNames response.
 func (client *WebAppsClient) updateSlotConfigurationNamesHandleResponse(resp *http.Response) (WebAppsClientUpdateSlotConfigurationNamesResponse, error) {
-	result := WebAppsClientUpdateSlotConfigurationNamesResponse{RawResponse: resp}
+	result := WebAppsClientUpdateSlotConfigurationNamesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SlotConfigNamesResource); err != nil {
 		return WebAppsClientUpdateSlotConfigurationNamesResponse{}, err
 	}
@@ -23398,7 +23330,7 @@ func (client *WebAppsClient) updateSourceControlCreateRequest(ctx context.Contex
 
 // updateSourceControlHandleResponse handles the UpdateSourceControl response.
 func (client *WebAppsClient) updateSourceControlHandleResponse(resp *http.Response) (WebAppsClientUpdateSourceControlResponse, error) {
-	result := WebAppsClientUpdateSourceControlResponse{RawResponse: resp}
+	result := WebAppsClientUpdateSourceControlResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteSourceControl); err != nil {
 		return WebAppsClientUpdateSourceControlResponse{}, err
 	}
@@ -23461,7 +23393,7 @@ func (client *WebAppsClient) updateSourceControlSlotCreateRequest(ctx context.Co
 
 // updateSourceControlSlotHandleResponse handles the UpdateSourceControlSlot response.
 func (client *WebAppsClient) updateSourceControlSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateSourceControlSlotResponse, error) {
-	result := WebAppsClientUpdateSourceControlSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateSourceControlSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteSourceControl); err != nil {
 		return WebAppsClientUpdateSourceControlSlotResponse{}, err
 	}
@@ -23520,7 +23452,7 @@ func (client *WebAppsClient) updateSwiftVirtualNetworkConnectionWithCheckCreateR
 
 // updateSwiftVirtualNetworkConnectionWithCheckHandleResponse handles the UpdateSwiftVirtualNetworkConnectionWithCheck response.
 func (client *WebAppsClient) updateSwiftVirtualNetworkConnectionWithCheckHandleResponse(resp *http.Response) (WebAppsClientUpdateSwiftVirtualNetworkConnectionWithCheckResponse, error) {
-	result := WebAppsClientUpdateSwiftVirtualNetworkConnectionWithCheckResponse{RawResponse: resp}
+	result := WebAppsClientUpdateSwiftVirtualNetworkConnectionWithCheckResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SwiftVirtualNetwork); err != nil {
 		return WebAppsClientUpdateSwiftVirtualNetworkConnectionWithCheckResponse{}, err
 	}
@@ -23586,7 +23518,7 @@ func (client *WebAppsClient) updateSwiftVirtualNetworkConnectionWithCheckSlotCre
 
 // updateSwiftVirtualNetworkConnectionWithCheckSlotHandleResponse handles the UpdateSwiftVirtualNetworkConnectionWithCheckSlot response.
 func (client *WebAppsClient) updateSwiftVirtualNetworkConnectionWithCheckSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateSwiftVirtualNetworkConnectionWithCheckSlotResponse, error) {
-	result := WebAppsClientUpdateSwiftVirtualNetworkConnectionWithCheckSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateSwiftVirtualNetworkConnectionWithCheckSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SwiftVirtualNetwork); err != nil {
 		return WebAppsClientUpdateSwiftVirtualNetworkConnectionWithCheckSlotResponse{}, err
 	}
@@ -23649,7 +23581,7 @@ func (client *WebAppsClient) updateVnetConnectionCreateRequest(ctx context.Conte
 
 // updateVnetConnectionHandleResponse handles the UpdateVnetConnection response.
 func (client *WebAppsClient) updateVnetConnectionHandleResponse(resp *http.Response) (WebAppsClientUpdateVnetConnectionResponse, error) {
-	result := WebAppsClientUpdateVnetConnectionResponse{RawResponse: resp}
+	result := WebAppsClientUpdateVnetConnectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetInfoResource); err != nil {
 		return WebAppsClientUpdateVnetConnectionResponse{}, err
 	}
@@ -23716,7 +23648,7 @@ func (client *WebAppsClient) updateVnetConnectionGatewayCreateRequest(ctx contex
 
 // updateVnetConnectionGatewayHandleResponse handles the UpdateVnetConnectionGateway response.
 func (client *WebAppsClient) updateVnetConnectionGatewayHandleResponse(resp *http.Response) (WebAppsClientUpdateVnetConnectionGatewayResponse, error) {
-	result := WebAppsClientUpdateVnetConnectionGatewayResponse{RawResponse: resp}
+	result := WebAppsClientUpdateVnetConnectionGatewayResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetGateway); err != nil {
 		return WebAppsClientUpdateVnetConnectionGatewayResponse{}, err
 	}
@@ -23789,7 +23721,7 @@ func (client *WebAppsClient) updateVnetConnectionGatewaySlotCreateRequest(ctx co
 
 // updateVnetConnectionGatewaySlotHandleResponse handles the UpdateVnetConnectionGatewaySlot response.
 func (client *WebAppsClient) updateVnetConnectionGatewaySlotHandleResponse(resp *http.Response) (WebAppsClientUpdateVnetConnectionGatewaySlotResponse, error) {
-	result := WebAppsClientUpdateVnetConnectionGatewaySlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateVnetConnectionGatewaySlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetGateway); err != nil {
 		return WebAppsClientUpdateVnetConnectionGatewaySlotResponse{}, err
 	}
@@ -23858,7 +23790,7 @@ func (client *WebAppsClient) updateVnetConnectionSlotCreateRequest(ctx context.C
 
 // updateVnetConnectionSlotHandleResponse handles the UpdateVnetConnectionSlot response.
 func (client *WebAppsClient) updateVnetConnectionSlotHandleResponse(resp *http.Response) (WebAppsClientUpdateVnetConnectionSlotResponse, error) {
-	result := WebAppsClientUpdateVnetConnectionSlotResponse{RawResponse: resp}
+	result := WebAppsClientUpdateVnetConnectionSlotResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetInfoResource); err != nil {
 		return WebAppsClientUpdateVnetConnectionSlotResponse{}, err
 	}

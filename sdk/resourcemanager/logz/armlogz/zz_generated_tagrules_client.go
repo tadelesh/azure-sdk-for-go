@@ -34,17 +34,17 @@ type TagRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTagRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TagRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TagRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *TagRulesClient) createOrUpdateCreateRequest(ctx context.Context, r
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *TagRulesClient) createOrUpdateHandleResponse(resp *http.Response) (TagRulesClientCreateOrUpdateResponse, error) {
-	result := TagRulesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := TagRulesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MonitoringTagRules); err != nil {
 		return TagRulesClientCreateOrUpdateResponse{}, err
 	}
@@ -163,7 +163,7 @@ func (client *TagRulesClient) deleteCreateRequest(ctx context.Context, resourceG
 
 // deleteHandleResponse handles the Delete response.
 func (client *TagRulesClient) deleteHandleResponse(resp *http.Response) (TagRulesClientDeleteResponse, error) {
-	result := TagRulesClientDeleteResponse{RawResponse: resp}
+	result := TagRulesClientDeleteResponse{}
 	if val := resp.Header.Get("location"); val != "" {
 		result.Location = &val
 	}
@@ -222,7 +222,7 @@ func (client *TagRulesClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *TagRulesClient) getHandleResponse(resp *http.Response) (TagRulesClientGetResponse, error) {
-	result := TagRulesClientGetResponse{RawResponse: resp}
+	result := TagRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MonitoringTagRules); err != nil {
 		return TagRulesClientGetResponse{}, err
 	}
@@ -274,7 +274,7 @@ func (client *TagRulesClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *TagRulesClient) listHandleResponse(resp *http.Response) (TagRulesClientListResponse, error) {
-	result := TagRulesClientListResponse{RawResponse: resp}
+	result := TagRulesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MonitoringTagRulesListResponse); err != nil {
 		return TagRulesClientListResponse{}, err
 	}

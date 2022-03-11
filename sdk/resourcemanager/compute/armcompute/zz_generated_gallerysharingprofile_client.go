@@ -35,17 +35,17 @@ type GallerySharingProfileClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGallerySharingProfileClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *GallerySharingProfileClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GallerySharingProfileClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *GallerySharingProfileClient) BeginUpdate(ctx context.Context, reso
 	if err != nil {
 		return GallerySharingProfileClientUpdatePollerResponse{}, err
 	}
-	result := GallerySharingProfileClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := GallerySharingProfileClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("GallerySharingProfileClient.Update", "", resp, client.pl)
 	if err != nil {
 		return GallerySharingProfileClientUpdatePollerResponse{}, err

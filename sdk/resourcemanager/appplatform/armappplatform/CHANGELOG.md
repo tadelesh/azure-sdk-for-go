@@ -1,5 +1,576 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ServicesClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ServicesClientListBySubscriptionResponse, error)`
+- Function `*StoragesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(StoragesClientListResponse, error)`
+- Function `*APIPortalsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(APIPortalsClientListResponse, error)`
+- Function `*ServicesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ServicesClientListResponse, error)`
+- Function `*BuildServiceClientListBuildsPager.NextPage` return value(s) have been changed from `(bool)` to `(BuildServiceClientListBuildsResponse, error)`
+- Function `*BuildServiceClientListBuildResultsPager.NextPage` return value(s) have been changed from `(bool)` to `(BuildServiceClientListBuildResultsResponse, error)`
+- Function `*BuildServiceClientListBuildServicesPager.NextPage` return value(s) have been changed from `(bool)` to `(BuildServiceClientListBuildServicesResponse, error)`
+- Function `*GatewayRouteConfigsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(GatewayRouteConfigsClientListResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*GatewayCustomDomainsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(GatewayCustomDomainsClientListResponse, error)`
+- Function `*ServiceRegistriesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ServiceRegistriesClientListResponse, error)`
+- Function `*GatewaysClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(GatewaysClientListResponse, error)`
+- Function `*CustomDomainsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(CustomDomainsClientListResponse, error)`
+- Function `*DeploymentsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(DeploymentsClientListResponse, error)`
+- Function `*BuildServiceAgentPoolClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(BuildServiceAgentPoolClientListResponse, error)`
+- Function `*AppsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(AppsClientListResponse, error)`
+- Function `*APIPortalCustomDomainsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(APIPortalCustomDomainsClientListResponse, error)`
+- Function `*BuildServiceBuilderClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(BuildServiceBuilderClientListResponse, error)`
+- Function `*CertificatesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(CertificatesClientListResponse, error)`
+- Function `*BindingsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(BindingsClientListResponse, error)`
+- Function `*SKUsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SKUsClientListResponse, error)`
+- Function `*DeploymentsClientListForClusterPager.NextPage` return value(s) have been changed from `(bool)` to `(DeploymentsClientListForClusterResponse, error)`
+- Function `*ConfigurationServicesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ConfigurationServicesClientListResponse, error)`
+- Function `*BuildpackBindingClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(BuildpackBindingClientListResponse, error)`
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*BuildServiceAgentPoolClientListPager.Err` has been removed
+- Function `*CustomDomainsClientListPager.Err` has been removed
+- Function `*BuildServiceClientListBuildServicesPager.PageResponse` has been removed
+- Function `*GatewaysClientListPager.PageResponse` has been removed
+- Function `*CustomDomainsClientListPager.PageResponse` has been removed
+- Function `*SKUsClientListPager.PageResponse` has been removed
+- Function `*DeploymentsClientListForClusterPager.PageResponse` has been removed
+- Function `*DeploymentsClientListPager.Err` has been removed
+- Function `*GatewayCustomDomainsClientListPager.Err` has been removed
+- Function `*ServicesClientListPager.PageResponse` has been removed
+- Function `*BuildServiceBuilderClientListPager.PageResponse` has been removed
+- Function `*SKUsClientListPager.Err` has been removed
+- Function `*StoragesClientListPager.Err` has been removed
+- Function `*ConfigurationServicesClientListPager.Err` has been removed
+- Function `*ServicesClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*BuildpackBindingClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*AppsClientListPager.Err` has been removed
+- Function `*ServiceRegistriesClientListPager.PageResponse` has been removed
+- Function `*BuildServiceClientListBuildResultsPager.Err` has been removed
+- Function `*DeploymentsClientListForClusterPager.Err` has been removed
+- Function `*AppsClientListPager.PageResponse` has been removed
+- Function `*DeploymentsClientListPager.PageResponse` has been removed
+- Function `*ServicesClientListPager.Err` has been removed
+- Function `*BuildServiceClientListBuildsPager.PageResponse` has been removed
+- Function `*ServiceRegistriesClientListPager.Err` has been removed
+- Function `*BuildServiceClientListBuildsPager.Err` has been removed
+- Function `*APIPortalCustomDomainsClientListPager.Err` has been removed
+- Function `*BuildServiceAgentPoolClientListPager.PageResponse` has been removed
+- Function `*APIPortalsClientListPager.Err` has been removed
+- Function `*BuildServiceClientListBuildServicesPager.Err` has been removed
+- Function `*GatewaysClientListPager.Err` has been removed
+- Function `*APIPortalsClientListPager.PageResponse` has been removed
+- Function `*StoragesClientListPager.PageResponse` has been removed
+- Function `*GatewayRouteConfigsClientListPager.PageResponse` has been removed
+- Function `*BuildServiceClientListBuildResultsPager.PageResponse` has been removed
+- Function `*GatewayRouteConfigsClientListPager.Err` has been removed
+- Function `*CertificatesClientListPager.Err` has been removed
+- Function `*BindingsClientListPager.PageResponse` has been removed
+- Function `*GatewayCustomDomainsClientListPager.PageResponse` has been removed
+- Function `*BuildServiceBuilderClientListPager.Err` has been removed
+- Function `*APIPortalCustomDomainsClientListPager.PageResponse` has been removed
+- Function `*ConfigurationServicesClientListPager.PageResponse` has been removed
+- Function `*ServicesClientListBySubscriptionPager.Err` has been removed
+- Function `*BuildpackBindingClientListPager.PageResponse` has been removed
+- Function `*BindingsClientListPager.Err` has been removed
+- Function `*CertificatesClientListPager.PageResponse` has been removed
+- Struct `APIPortalCustomDomainsClientCreateOrUpdateResult` has been removed
+- Struct `APIPortalCustomDomainsClientGetResult` has been removed
+- Struct `APIPortalCustomDomainsClientListResult` has been removed
+- Struct `APIPortalsClientCreateOrUpdateResult` has been removed
+- Struct `APIPortalsClientGetResult` has been removed
+- Struct `APIPortalsClientListResult` has been removed
+- Struct `APIPortalsClientValidateDomainResult` has been removed
+- Struct `AppsClientCreateOrUpdateResult` has been removed
+- Struct `AppsClientGetResourceUploadURLResult` has been removed
+- Struct `AppsClientGetResult` has been removed
+- Struct `AppsClientListResult` has been removed
+- Struct `AppsClientSetActiveDeploymentsResult` has been removed
+- Struct `AppsClientUpdateResult` has been removed
+- Struct `AppsClientValidateDomainResult` has been removed
+- Struct `BindingsClientCreateOrUpdateResult` has been removed
+- Struct `BindingsClientGetResult` has been removed
+- Struct `BindingsClientListResult` has been removed
+- Struct `BindingsClientUpdateResult` has been removed
+- Struct `BuildServiceAgentPoolClientGetResult` has been removed
+- Struct `BuildServiceAgentPoolClientListResult` has been removed
+- Struct `BuildServiceAgentPoolClientUpdatePutResult` has been removed
+- Struct `BuildServiceBuilderClientCreateOrUpdateResult` has been removed
+- Struct `BuildServiceBuilderClientGetResult` has been removed
+- Struct `BuildServiceBuilderClientListResult` has been removed
+- Struct `BuildServiceClientCreateOrUpdateBuildResult` has been removed
+- Struct `BuildServiceClientGetBuildResult` has been removed
+- Struct `BuildServiceClientGetBuildResultLogResult` has been removed
+- Struct `BuildServiceClientGetBuildResultResult` has been removed
+- Struct `BuildServiceClientGetBuildServiceResult` has been removed
+- Struct `BuildServiceClientGetResourceUploadURLResult` has been removed
+- Struct `BuildServiceClientGetSupportedBuildpackResult` has been removed
+- Struct `BuildServiceClientGetSupportedStackResult` has been removed
+- Struct `BuildServiceClientListBuildResultsResult` has been removed
+- Struct `BuildServiceClientListBuildServicesResult` has been removed
+- Struct `BuildServiceClientListBuildsResult` has been removed
+- Struct `BuildServiceClientListSupportedBuildpacksResult` has been removed
+- Struct `BuildServiceClientListSupportedStacksResult` has been removed
+- Struct `BuildpackBindingClientCreateOrUpdateResult` has been removed
+- Struct `BuildpackBindingClientGetResult` has been removed
+- Struct `BuildpackBindingClientListResult` has been removed
+- Struct `CertificatesClientCreateOrUpdateResult` has been removed
+- Struct `CertificatesClientGetResult` has been removed
+- Struct `CertificatesClientListResult` has been removed
+- Struct `ConfigServersClientGetResult` has been removed
+- Struct `ConfigServersClientUpdatePatchResult` has been removed
+- Struct `ConfigServersClientUpdatePutResult` has been removed
+- Struct `ConfigServersClientValidateResult` has been removed
+- Struct `ConfigurationServicesClientCreateOrUpdateResult` has been removed
+- Struct `ConfigurationServicesClientGetResult` has been removed
+- Struct `ConfigurationServicesClientListResult` has been removed
+- Struct `ConfigurationServicesClientValidateResult` has been removed
+- Struct `CustomDomainsClientCreateOrUpdateResult` has been removed
+- Struct `CustomDomainsClientGetResult` has been removed
+- Struct `CustomDomainsClientListResult` has been removed
+- Struct `CustomDomainsClientUpdateResult` has been removed
+- Struct `DeploymentsClientCreateOrUpdateResult` has been removed
+- Struct `DeploymentsClientGetLogFileURLResult` has been removed
+- Struct `DeploymentsClientGetResult` has been removed
+- Struct `DeploymentsClientListForClusterResult` has been removed
+- Struct `DeploymentsClientListResult` has been removed
+- Struct `DeploymentsClientUpdateResult` has been removed
+- Struct `GatewayCustomDomainsClientCreateOrUpdateResult` has been removed
+- Struct `GatewayCustomDomainsClientGetResult` has been removed
+- Struct `GatewayCustomDomainsClientListResult` has been removed
+- Struct `GatewayRouteConfigsClientCreateOrUpdateResult` has been removed
+- Struct `GatewayRouteConfigsClientGetResult` has been removed
+- Struct `GatewayRouteConfigsClientListResult` has been removed
+- Struct `GatewaysClientCreateOrUpdateResult` has been removed
+- Struct `GatewaysClientGetResult` has been removed
+- Struct `GatewaysClientListResult` has been removed
+- Struct `GatewaysClientValidateDomainResult` has been removed
+- Struct `MonitoringSettingsClientGetResult` has been removed
+- Struct `MonitoringSettingsClientUpdatePatchResult` has been removed
+- Struct `MonitoringSettingsClientUpdatePutResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `RuntimeVersionsClientListRuntimeVersionsResult` has been removed
+- Struct `SKUsClientListResult` has been removed
+- Struct `ServiceRegistriesClientCreateOrUpdateResult` has been removed
+- Struct `ServiceRegistriesClientGetResult` has been removed
+- Struct `ServiceRegistriesClientListResult` has been removed
+- Struct `ServicesClientCheckNameAvailabilityResult` has been removed
+- Struct `ServicesClientCreateOrUpdateResult` has been removed
+- Struct `ServicesClientEnableTestEndpointResult` has been removed
+- Struct `ServicesClientGetResult` has been removed
+- Struct `ServicesClientListBySubscriptionResult` has been removed
+- Struct `ServicesClientListResult` has been removed
+- Struct `ServicesClientListTestKeysResult` has been removed
+- Struct `ServicesClientRegenerateTestKeyResult` has been removed
+- Struct `ServicesClientUpdateResult` has been removed
+- Struct `StoragesClientCreateOrUpdateResult` has been removed
+- Struct `StoragesClientGetResult` has been removed
+- Struct `StoragesClientListResult` has been removed
+- Field `RawResponse` of struct `CertificatesClientDeletePollerResponse` has been removed
+- Field `APIPortalCustomDomainsClientGetResult` of struct `APIPortalCustomDomainsClientGetResponse` has been removed
+- Field `RawResponse` of struct `APIPortalCustomDomainsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationServicesClientValidatePollerResponse` has been removed
+- Field `RawResponse` of struct `GatewayRouteConfigsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ConfigServersClientUpdatePutPollerResponse` has been removed
+- Field `CustomDomainsClientCreateOrUpdateResult` of struct `CustomDomainsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `CustomDomainsClientCreateOrUpdateResponse` has been removed
+- Field `BuildpackBindingClientCreateOrUpdateResult` of struct `BuildpackBindingClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `BuildpackBindingClientCreateOrUpdateResponse` has been removed
+- Field `BuildServiceClientGetResourceUploadURLResult` of struct `BuildServiceClientGetResourceUploadURLResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceClientGetResourceUploadURLResponse` has been removed
+- Field `RawResponse` of struct `GatewayCustomDomainsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `CertificatesClientDeleteResponse` has been removed
+- Field `ServiceRegistriesClientCreateOrUpdateResult` of struct `ServiceRegistriesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServiceRegistriesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientStopPollerResponse` has been removed
+- Field `AppsClientUpdateResult` of struct `AppsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AppsClientUpdateResponse` has been removed
+- Field `ServicesClientListTestKeysResult` of struct `ServicesClientListTestKeysResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientListTestKeysResponse` has been removed
+- Field `RawResponse` of struct `AppsClientDeleteResponse` has been removed
+- Field `BindingsClientListResult` of struct `BindingsClientListResponse` has been removed
+- Field `RawResponse` of struct `BindingsClientListResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientStopResponse` has been removed
+- Field `APIPortalsClientValidateDomainResult` of struct `APIPortalsClientValidateDomainResponse` has been removed
+- Field `RawResponse` of struct `APIPortalsClientValidateDomainResponse` has been removed
+- Field `RawResponse` of struct `StoragesClientDeletePollerResponse` has been removed
+- Field `ServicesClientCheckNameAvailabilityResult` of struct `ServicesClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientGenerateThreadDumpResponse` has been removed
+- Field `CustomDomainsClientUpdateResult` of struct `CustomDomainsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `CustomDomainsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `CustomDomainsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientStartJFRResponse` has been removed
+- Field `RawResponse` of struct `GatewaysClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientStartJFRPollerResponse` has been removed
+- Field `RawResponse` of struct `AppsClientCreateOrUpdatePollerResponse` has been removed
+- Field `APIPortalsClientListResult` of struct `APIPortalsClientListResponse` has been removed
+- Field `RawResponse` of struct `APIPortalsClientListResponse` has been removed
+- Field `GatewaysClientCreateOrUpdateResult` of struct `GatewaysClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `GatewaysClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AppsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientGenerateHeapDumpResponse` has been removed
+- Field `GatewayRouteConfigsClientGetResult` of struct `GatewayRouteConfigsClientGetResponse` has been removed
+- Field `RawResponse` of struct `GatewayRouteConfigsClientGetResponse` has been removed
+- Field `BuildpackBindingClientListResult` of struct `BuildpackBindingClientListResponse` has been removed
+- Field `RawResponse` of struct `BuildpackBindingClientListResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationServicesClientDeletePollerResponse` has been removed
+- Field `ConfigurationServicesClientCreateOrUpdateResult` of struct `ConfigurationServicesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationServicesClientCreateOrUpdateResponse` has been removed
+- Field `AppsClientSetActiveDeploymentsResult` of struct `AppsClientSetActiveDeploymentsResponse` has been removed
+- Field `RawResponse` of struct `AppsClientSetActiveDeploymentsResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientStopPollerResponse` has been removed
+- Field `GatewayRouteConfigsClientCreateOrUpdateResult` of struct `GatewayRouteConfigsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `GatewayRouteConfigsClientCreateOrUpdateResponse` has been removed
+- Field `AppsClientGetResourceUploadURLResult` of struct `AppsClientGetResourceUploadURLResponse` has been removed
+- Field `RawResponse` of struct `AppsClientGetResourceUploadURLResponse` has been removed
+- Field `RawResponse` of struct `APIPortalCustomDomainsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `GatewaysClientDeletePollerResponse` has been removed
+- Field `ConfigurationServicesClientGetResult` of struct `ConfigurationServicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationServicesClientGetResponse` has been removed
+- Field `CustomDomainsClientGetResult` of struct `CustomDomainsClientGetResponse` has been removed
+- Field `RawResponse` of struct `CustomDomainsClientGetResponse` has been removed
+- Field `GatewayCustomDomainsClientListResult` of struct `GatewayCustomDomainsClientListResponse` has been removed
+- Field `RawResponse` of struct `GatewayCustomDomainsClientListResponse` has been removed
+- Field `BindingsClientCreateOrUpdateResult` of struct `BindingsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `BindingsClientCreateOrUpdateResponse` has been removed
+- Field `BuildServiceClientGetBuildResult` of struct `BuildServiceClientGetBuildResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceClientGetBuildResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientDisableTestEndpointResponse` has been removed
+- Field `AppsClientValidateDomainResult` of struct `AppsClientValidateDomainResponse` has been removed
+- Field `RawResponse` of struct `AppsClientValidateDomainResponse` has been removed
+- Field `APIPortalCustomDomainsClientCreateOrUpdateResult` of struct `APIPortalCustomDomainsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIPortalCustomDomainsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `BindingsClientDeleteResponse` has been removed
+- Field `GatewayRouteConfigsClientListResult` of struct `GatewayRouteConfigsClientListResponse` has been removed
+- Field `RawResponse` of struct `GatewayRouteConfigsClientListResponse` has been removed
+- Field `RawResponse` of struct `ServiceRegistriesClientDeletePollerResponse` has been removed
+- Field `AppsClientListResult` of struct `AppsClientListResponse` has been removed
+- Field `RawResponse` of struct `AppsClientListResponse` has been removed
+- Field `APIPortalsClientGetResult` of struct `APIPortalsClientGetResponse` has been removed
+- Field `RawResponse` of struct `APIPortalsClientGetResponse` has been removed
+- Field `CertificatesClientCreateOrUpdateResult` of struct `CertificatesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `CertificatesClientCreateOrUpdateResponse` has been removed
+- Field `BuildServiceClientGetSupportedBuildpackResult` of struct `BuildServiceClientGetSupportedBuildpackResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceClientGetSupportedBuildpackResponse` has been removed
+- Field `ServicesClientListResult` of struct `ServicesClientListResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientListResponse` has been removed
+- Field `BuildServiceClientListBuildServicesResult` of struct `BuildServiceClientListBuildServicesResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceClientListBuildServicesResponse` has been removed
+- Field `DeploymentsClientGetResult` of struct `DeploymentsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConfigServersClientValidatePollerResponse` has been removed
+- Field `BuildServiceClientCreateOrUpdateBuildResult` of struct `BuildServiceClientCreateOrUpdateBuildResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceClientCreateOrUpdateBuildResponse` has been removed
+- Field `RawResponse` of struct `CustomDomainsClientCreateOrUpdatePollerResponse` has been removed
+- Field `BuildServiceAgentPoolClientListResult` of struct `BuildServiceAgentPoolClientListResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceAgentPoolClientListResponse` has been removed
+- Field `RawResponse` of struct `APIPortalsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `AppsClientUpdatePollerResponse` has been removed
+- Field `SKUsClientListResult` of struct `SKUsClientListResponse` has been removed
+- Field `RawResponse` of struct `SKUsClientListResponse` has been removed
+- Field `CertificatesClientListResult` of struct `CertificatesClientListResponse` has been removed
+- Field `RawResponse` of struct `CertificatesClientListResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientCreateOrUpdatePollerResponse` has been removed
+- Field `DeploymentsClientUpdateResult` of struct `DeploymentsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientStopResponse` has been removed
+- Field `RawResponse` of struct `BindingsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `BuildpackBindingClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `CustomDomainsClientDeleteResponse` has been removed
+- Field `BindingsClientUpdateResult` of struct `BindingsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `BindingsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `BuildpackBindingClientDeleteResponse` has been removed
+- Field `AppsClientCreateOrUpdateResult` of struct `AppsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AppsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientStartResponse` has been removed
+- Field `GatewayCustomDomainsClientCreateOrUpdateResult` of struct `GatewayCustomDomainsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `GatewayCustomDomainsClientCreateOrUpdateResponse` has been removed
+- Field `DeploymentsClientListForClusterResult` of struct `DeploymentsClientListForClusterResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientListForClusterResponse` has been removed
+- Field `ServicesClientListBySubscriptionResult` of struct `ServicesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientListBySubscriptionResponse` has been removed
+- Field `ConfigurationServicesClientValidateResult` of struct `ConfigurationServicesClientValidateResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationServicesClientValidateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientStartPollerResponse` has been removed
+- Field `GatewayCustomDomainsClientGetResult` of struct `GatewayCustomDomainsClientGetResponse` has been removed
+- Field `RawResponse` of struct `GatewayCustomDomainsClientGetResponse` has been removed
+- Field `BuildServiceBuilderClientCreateOrUpdateResult` of struct `BuildServiceBuilderClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceBuilderClientCreateOrUpdateResponse` has been removed
+- Field `ServicesClientUpdateResult` of struct `ServicesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientUpdateResponse` has been removed
+- Field `BindingsClientGetResult` of struct `BindingsClientGetResponse` has been removed
+- Field `RawResponse` of struct `BindingsClientGetResponse` has been removed
+- Field `RuntimeVersionsClientListRuntimeVersionsResult` of struct `RuntimeVersionsClientListRuntimeVersionsResponse` has been removed
+- Field `RawResponse` of struct `RuntimeVersionsClientListRuntimeVersionsResponse` has been removed
+- Field `ServicesClientGetResult` of struct `ServicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientGenerateThreadDumpPollerResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceBuilderClientCreateOrUpdatePollerResponse` has been removed
+- Field `DeploymentsClientListResult` of struct `DeploymentsClientListResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientListResponse` has been removed
+- Field `ConfigServersClientUpdatePatchResult` of struct `ConfigServersClientUpdatePatchResponse` has been removed
+- Field `RawResponse` of struct `ConfigServersClientUpdatePatchResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationServicesClientCreateOrUpdatePollerResponse` has been removed
+- Field `ConfigurationServicesClientListResult` of struct `ConfigurationServicesClientListResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationServicesClientListResponse` has been removed
+- Field `BuildServiceClientGetBuildResultLogResult` of struct `BuildServiceClientGetBuildResultLogResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceClientGetBuildResultLogResponse` has been removed
+- Field `RawResponse` of struct `GatewaysClientCreateOrUpdatePollerResponse` has been removed
+- Field `BuildServiceClientGetSupportedStackResult` of struct `BuildServiceClientGetSupportedStackResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceClientGetSupportedStackResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `APIPortalsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `MonitoringSettingsClientUpdatePatchPollerResponse` has been removed
+- Field `BuildServiceAgentPoolClientGetResult` of struct `BuildServiceAgentPoolClientGetResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceAgentPoolClientGetResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientRestartPollerResponse` has been removed
+- Field `RawResponse` of struct `GatewayRouteConfigsClientDeletePollerResponse` has been removed
+- Field `MonitoringSettingsClientUpdatePutResult` of struct `MonitoringSettingsClientUpdatePutResponse` has been removed
+- Field `RawResponse` of struct `MonitoringSettingsClientUpdatePutResponse` has been removed
+- Field `RawResponse` of struct `APIPortalCustomDomainsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ConfigServersClientUpdatePatchPollerResponse` has been removed
+- Field `RawResponse` of struct `StoragesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `BindingsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `CertificatesClientCreateOrUpdatePollerResponse` has been removed
+- Field `ServicesClientRegenerateTestKeyResult` of struct `ServicesClientRegenerateTestKeyResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientRegenerateTestKeyResponse` has been removed
+- Field `RawResponse` of struct `GatewayCustomDomainsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientGenerateHeapDumpPollerResponse` has been removed
+- Field `RawResponse` of struct `ServiceRegistriesClientCreateOrUpdatePollerResponse` has been removed
+- Field `BuildServiceClientGetBuildResultResult` of struct `BuildServiceClientGetBuildResultResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceClientGetBuildResultResponse` has been removed
+- Field `DeploymentsClientCreateOrUpdateResult` of struct `DeploymentsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServiceRegistriesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `AppsClientSetActiveDeploymentsPollerResponse` has been removed
+- Field `BuildServiceBuilderClientGetResult` of struct `BuildServiceBuilderClientGetResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceBuilderClientGetResponse` has been removed
+- Field `RawResponse` of struct `GatewayCustomDomainsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `StoragesClientCreateOrUpdatePollerResponse` has been removed
+- Field `GatewaysClientListResult` of struct `GatewaysClientListResponse` has been removed
+- Field `RawResponse` of struct `GatewaysClientListResponse` has been removed
+- Field `StoragesClientCreateOrUpdateResult` of struct `StoragesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `StoragesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `BindingsClientUpdatePollerResponse` has been removed
+- Field `BuildServiceClientListSupportedBuildpacksResult` of struct `BuildServiceClientListSupportedBuildpacksResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceClientListSupportedBuildpacksResponse` has been removed
+- Field `GatewaysClientValidateDomainResult` of struct `GatewaysClientValidateDomainResponse` has been removed
+- Field `RawResponse` of struct `GatewaysClientValidateDomainResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientStartResponse` has been removed
+- Field `ConfigServersClientValidateResult` of struct `ConfigServersClientValidateResponse` has been removed
+- Field `RawResponse` of struct `ConfigServersClientValidateResponse` has been removed
+- Field `ServicesClientCreateOrUpdateResult` of struct `ServicesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCreateOrUpdateResponse` has been removed
+- Field `ServicesClientEnableTestEndpointResult` of struct `ServicesClientEnableTestEndpointResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientEnableTestEndpointResponse` has been removed
+- Field `BuildServiceClientGetBuildServiceResult` of struct `BuildServiceClientGetBuildServiceResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceClientGetBuildServiceResponse` has been removed
+- Field `ServiceRegistriesClientGetResult` of struct `ServiceRegistriesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServiceRegistriesClientGetResponse` has been removed
+- Field `RawResponse` of struct `BuildpackBindingClientDeletePollerResponse` has been removed
+- Field `APIPortalsClientCreateOrUpdateResult` of struct `APIPortalsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `APIPortalsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `GatewayRouteConfigsClientDeleteResponse` has been removed
+- Field `MonitoringSettingsClientUpdatePatchResult` of struct `MonitoringSettingsClientUpdatePatchResponse` has been removed
+- Field `RawResponse` of struct `MonitoringSettingsClientUpdatePatchResponse` has been removed
+- Field `MonitoringSettingsClientGetResult` of struct `MonitoringSettingsClientGetResponse` has been removed
+- Field `RawResponse` of struct `MonitoringSettingsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientUpdatePollerResponse` has been removed
+- Field `ServiceRegistriesClientListResult` of struct `ServiceRegistriesClientListResponse` has been removed
+- Field `RawResponse` of struct `ServiceRegistriesClientListResponse` has been removed
+- Field `StoragesClientListResult` of struct `StoragesClientListResponse` has been removed
+- Field `RawResponse` of struct `StoragesClientListResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceAgentPoolClientUpdatePutPollerResponse` has been removed
+- Field `BuildServiceClientListSupportedStacksResult` of struct `BuildServiceClientListSupportedStacksResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceClientListSupportedStacksResponse` has been removed
+- Field `BuildServiceClientListBuildsResult` of struct `BuildServiceClientListBuildsResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceClientListBuildsResponse` has been removed
+- Field `RawResponse` of struct `APIPortalsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceBuilderClientDeleteResponse` has been removed
+- Field `BuildServiceAgentPoolClientUpdatePutResult` of struct `BuildServiceAgentPoolClientUpdatePutResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceAgentPoolClientUpdatePutResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientDeletePollerResponse` has been removed
+- Field `CustomDomainsClientListResult` of struct `CustomDomainsClientListResponse` has been removed
+- Field `RawResponse` of struct `CustomDomainsClientListResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientRestartResponse` has been removed
+- Field `BuildServiceBuilderClientListResult` of struct `BuildServiceBuilderClientListResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceBuilderClientListResponse` has been removed
+- Field `RawResponse` of struct `ServicesClientCreateOrUpdatePollerResponse` has been removed
+- Field `DeploymentsClientGetLogFileURLResult` of struct `DeploymentsClientGetLogFileURLResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientGetLogFileURLResponse` has been removed
+- Field `ConfigServersClientUpdatePutResult` of struct `ConfigServersClientUpdatePutResponse` has been removed
+- Field `RawResponse` of struct `ConfigServersClientUpdatePutResponse` has been removed
+- Field `StoragesClientGetResult` of struct `StoragesClientGetResponse` has been removed
+- Field `RawResponse` of struct `StoragesClientGetResponse` has been removed
+- Field `RawResponse` of struct `APIPortalCustomDomainsClientDeletePollerResponse` has been removed
+- Field `BuildpackBindingClientGetResult` of struct `BuildpackBindingClientGetResponse` has been removed
+- Field `RawResponse` of struct `BuildpackBindingClientGetResponse` has been removed
+- Field `ConfigServersClientGetResult` of struct `ConfigServersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConfigServersClientGetResponse` has been removed
+- Field `APIPortalCustomDomainsClientListResult` of struct `APIPortalCustomDomainsClientListResponse` has been removed
+- Field `RawResponse` of struct `APIPortalCustomDomainsClientListResponse` has been removed
+- Field `CertificatesClientGetResult` of struct `CertificatesClientGetResponse` has been removed
+- Field `RawResponse` of struct `CertificatesClientGetResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientStartPollerResponse` has been removed
+- Field `GatewaysClientGetResult` of struct `GatewaysClientGetResponse` has been removed
+- Field `RawResponse` of struct `GatewaysClientGetResponse` has been removed
+- Field `AppsClientGetResult` of struct `AppsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AppsClientGetResponse` has been removed
+- Field `BuildServiceClientListBuildResultsResult` of struct `BuildServiceClientListBuildResultsResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceClientListBuildResultsResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationServicesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `CustomDomainsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `BuildServiceBuilderClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `DeploymentsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `MonitoringSettingsClientUpdatePutPollerResponse` has been removed
+
+### Features Added
+
+- New function `*ServiceRegistriesClientListPager.More() bool`
+- New function `*CertificatesClientListPager.More() bool`
+- New function `*ServicesClientListBySubscriptionPager.More() bool`
+- New function `*BuildServiceAgentPoolClientListPager.More() bool`
+- New function `*BuildpackBindingClientListPager.More() bool`
+- New function `*APIPortalsClientListPager.More() bool`
+- New function `*BuildServiceClientListBuildServicesPager.More() bool`
+- New function `*StoragesClientListPager.More() bool`
+- New function `*APIPortalCustomDomainsClientListPager.More() bool`
+- New function `*GatewayCustomDomainsClientListPager.More() bool`
+- New function `*GatewayRouteConfigsClientListPager.More() bool`
+- New function `*BuildServiceClientListBuildsPager.More() bool`
+- New function `*BindingsClientListPager.More() bool`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*DeploymentsClientListForClusterPager.More() bool`
+- New function `*BuildServiceClientListBuildResultsPager.More() bool`
+- New function `*ConfigurationServicesClientListPager.More() bool`
+- New function `*AppsClientListPager.More() bool`
+- New function `*ServicesClientListPager.More() bool`
+- New function `*BuildServiceBuilderClientListPager.More() bool`
+- New function `*GatewaysClientListPager.More() bool`
+- New function `*CustomDomainsClientListPager.More() bool`
+- New function `*DeploymentsClientListPager.More() bool`
+- New function `*SKUsClientListPager.More() bool`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New anonymous field `ConfigurationServiceSettingsValidateResult` in struct `ConfigurationServicesClientValidateResponse`
+- New anonymous field `GatewayCustomDomainResource` in struct `GatewayCustomDomainsClientGetResponse`
+- New anonymous field `GatewayResourceCollection` in struct `GatewaysClientListResponse`
+- New anonymous field `Build` in struct `BuildServiceClientCreateOrUpdateBuildResponse`
+- New anonymous field `DeploymentResourceCollection` in struct `DeploymentsClientListForClusterResponse`
+- New anonymous field `ResourceSKUCollection` in struct `SKUsClientListResponse`
+- New anonymous field `ServiceRegistryResource` in struct `ServiceRegistriesClientCreateOrUpdateResponse`
+- New anonymous field `GatewayRouteConfigResourceCollection` in struct `GatewayRouteConfigsClientListResponse`
+- New anonymous field `AppResourceCollection` in struct `AppsClientListResponse`
+- New anonymous field `GatewayCustomDomainResourceCollection` in struct `GatewayCustomDomainsClientListResponse`
+- New anonymous field `SupportedBuildpackResource` in struct `BuildServiceClientGetSupportedBuildpackResponse`
+- New anonymous field `BindingResource` in struct `BindingsClientGetResponse`
+- New anonymous field `MonitoringSettingResource` in struct `MonitoringSettingsClientGetResponse`
+- New anonymous field `BuildpackBindingResource` in struct `BuildpackBindingClientCreateOrUpdateResponse`
+- New anonymous field `ServiceResource` in struct `ServicesClientGetResponse`
+- New anonymous field `ServiceResourceList` in struct `ServicesClientListBySubscriptionResponse`
+- New anonymous field `SupportedBuildpacksCollection` in struct `BuildServiceClientListSupportedBuildpacksResponse`
+- New anonymous field `BuildResult` in struct `BuildServiceClientGetBuildResultResponse`
+- New anonymous field `GatewayResource` in struct `GatewaysClientCreateOrUpdateResponse`
+- New anonymous field `BuildServiceAgentPoolResource` in struct `BuildServiceAgentPoolClientUpdatePutResponse`
+- New anonymous field `BindingResource` in struct `BindingsClientCreateOrUpdateResponse`
+- New anonymous field `ServiceResourceList` in struct `ServicesClientListResponse`
+- New anonymous field `AppResource` in struct `AppsClientUpdateResponse`
+- New anonymous field `APIPortalCustomDomainResourceCollection` in struct `APIPortalCustomDomainsClientListResponse`
+- New anonymous field `AppResource` in struct `AppsClientGetResponse`
+- New anonymous field `StorageResource` in struct `StoragesClientCreateOrUpdateResponse`
+- New anonymous field `TestKeys` in struct `ServicesClientEnableTestEndpointResponse`
+- New anonymous field `AvailableRuntimeVersions` in struct `RuntimeVersionsClientListRuntimeVersionsResponse`
+- New anonymous field `StorageResource` in struct `StoragesClientGetResponse`
+- New anonymous field `DeploymentResource` in struct `DeploymentsClientGetResponse`
+- New anonymous field `BuildResultLog` in struct `BuildServiceClientGetBuildResultLogResponse`
+- New anonymous field `ServiceRegistryResourceCollection` in struct `ServiceRegistriesClientListResponse`
+- New anonymous field `Build` in struct `BuildServiceClientGetBuildResponse`
+- New anonymous field `NameAvailability` in struct `ServicesClientCheckNameAvailabilityResponse`
+- New anonymous field `LogFileURLResponse` in struct `DeploymentsClientGetLogFileURLResponse`
+- New anonymous field `ConfigurationServiceResource` in struct `ConfigurationServicesClientCreateOrUpdateResponse`
+- New anonymous field `MonitoringSettingResource` in struct `MonitoringSettingsClientUpdatePatchResponse`
+- New anonymous field `CustomDomainValidateResult` in struct `AppsClientValidateDomainResponse`
+- New anonymous field `ConfigServerResource` in struct `ConfigServersClientUpdatePutResponse`
+- New anonymous field `ServiceResource` in struct `ServicesClientUpdateResponse`
+- New anonymous field `AppResource` in struct `AppsClientCreateOrUpdateResponse`
+- New anonymous field `ResourceUploadDefinition` in struct `BuildServiceClientGetResourceUploadURLResponse`
+- New anonymous field `GatewayResource` in struct `GatewaysClientGetResponse`
+- New anonymous field `TestKeys` in struct `ServicesClientRegenerateTestKeyResponse`
+- New anonymous field `BuildServiceAgentPoolResourceCollection` in struct `BuildServiceAgentPoolClientListResponse`
+- New anonymous field `CustomDomainValidateResult` in struct `GatewaysClientValidateDomainResponse`
+- New anonymous field `BindingResource` in struct `BindingsClientUpdateResponse`
+- New anonymous field `CustomDomainValidateResult` in struct `APIPortalsClientValidateDomainResponse`
+- New anonymous field `CustomDomainResource` in struct `CustomDomainsClientUpdateResponse`
+- New anonymous field `ConfigServerResource` in struct `ConfigServersClientUpdatePatchResponse`
+- New anonymous field `BindingResourceCollection` in struct `BindingsClientListResponse`
+- New anonymous field `GatewayCustomDomainResource` in struct `GatewayCustomDomainsClientCreateOrUpdateResponse`
+- New anonymous field `DeploymentResource` in struct `DeploymentsClientUpdateResponse`
+- New anonymous field `StorageResourceCollection` in struct `StoragesClientListResponse`
+- New anonymous field `BuildResultCollection` in struct `BuildServiceClientListBuildResultsResponse`
+- New anonymous field `ConfigServerSettingsValidateResult` in struct `ConfigServersClientValidateResponse`
+- New anonymous field `ConfigServerResource` in struct `ConfigServersClientGetResponse`
+- New anonymous field `BuildCollection` in struct `BuildServiceClientListBuildsResponse`
+- New anonymous field `CustomDomainResource` in struct `CustomDomainsClientCreateOrUpdateResponse`
+- New anonymous field `DeploymentResourceCollection` in struct `DeploymentsClientListResponse`
+- New anonymous field `AvailableOperations` in struct `OperationsClientListResponse`
+- New anonymous field `ConfigurationServiceResourceCollection` in struct `ConfigurationServicesClientListResponse`
+- New anonymous field `SupportedStackResource` in struct `BuildServiceClientGetSupportedStackResponse`
+- New anonymous field `TestKeys` in struct `ServicesClientListTestKeysResponse`
+- New anonymous field `ResourceUploadDefinition` in struct `AppsClientGetResourceUploadURLResponse`
+- New anonymous field `CertificateResource` in struct `CertificatesClientGetResponse`
+- New anonymous field `SupportedStacksCollection` in struct `BuildServiceClientListSupportedStacksResponse`
+- New anonymous field `BuildpackBindingResourceCollection` in struct `BuildpackBindingClientListResponse`
+- New anonymous field `BuildpackBindingResource` in struct `BuildpackBindingClientGetResponse`
+- New anonymous field `ConfigurationServiceResource` in struct `ConfigurationServicesClientGetResponse`
+- New anonymous field `BuildService` in struct `BuildServiceClientGetBuildServiceResponse`
+- New anonymous field `BuilderResource` in struct `BuildServiceBuilderClientGetResponse`
+- New anonymous field `ServiceResource` in struct `ServicesClientCreateOrUpdateResponse`
+- New anonymous field `CustomDomainResourceCollection` in struct `CustomDomainsClientListResponse`
+- New anonymous field `GatewayRouteConfigResource` in struct `GatewayRouteConfigsClientCreateOrUpdateResponse`
+- New anonymous field `MonitoringSettingResource` in struct `MonitoringSettingsClientUpdatePutResponse`
+- New anonymous field `BuilderResourceCollection` in struct `BuildServiceBuilderClientListResponse`
+- New anonymous field `APIPortalResource` in struct `APIPortalsClientCreateOrUpdateResponse`
+- New anonymous field `APIPortalResource` in struct `APIPortalsClientGetResponse`
+- New anonymous field `APIPortalResourceCollection` in struct `APIPortalsClientListResponse`
+- New anonymous field `GatewayRouteConfigResource` in struct `GatewayRouteConfigsClientGetResponse`
+- New anonymous field `DeploymentResource` in struct `DeploymentsClientCreateOrUpdateResponse`
+- New anonymous field `CertificateResourceCollection` in struct `CertificatesClientListResponse`
+- New anonymous field `APIPortalCustomDomainResource` in struct `APIPortalCustomDomainsClientGetResponse`
+- New anonymous field `BuildServiceCollection` in struct `BuildServiceClientListBuildServicesResponse`
+- New anonymous field `APIPortalCustomDomainResource` in struct `APIPortalCustomDomainsClientCreateOrUpdateResponse`
+- New anonymous field `ServiceRegistryResource` in struct `ServiceRegistriesClientGetResponse`
+- New anonymous field `CertificateResource` in struct `CertificatesClientCreateOrUpdateResponse`
+- New anonymous field `CustomDomainResource` in struct `CustomDomainsClientGetResponse`
+- New anonymous field `BuilderResource` in struct `BuildServiceBuilderClientCreateOrUpdateResponse`
+- New anonymous field `BuildServiceAgentPoolResource` in struct `BuildServiceAgentPoolClientGetResponse`
+- New anonymous field `AppResource` in struct `AppsClientSetActiveDeploymentsResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `DeploymentSettings.AddonConfigs` has been changed from `map[string]map[string]map[string]interface{}` to `map[string]map[string]interface{}`
+- Type of `AppResourceProperties.AddonConfigs` has been changed from `map[string]map[string]map[string]interface{}` to `map[string]map[string]interface{}`
+- Type of `BindingResourceProperties.BindingParameters` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+
+### Features Added
+
+- New const `ActionTypeInternal`
+- New function `ActionType.ToPtr() *ActionType`
+- New function `PossibleActionTypeValues() []ActionType`
+- New field `ActionType` in struct `OperationDetail`
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

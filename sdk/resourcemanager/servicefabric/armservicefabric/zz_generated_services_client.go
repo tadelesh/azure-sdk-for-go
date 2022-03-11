@@ -34,17 +34,17 @@ type ServicesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServicesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServicesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServicesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ServicesClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return ServicesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ServicesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServicesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServicesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ServicesClientCreateOrUpdatePollerResponse{}, err
@@ -139,9 +137,7 @@ func (client *ServicesClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ServicesClientDeletePollerResponse{}, err
 	}
-	result := ServicesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServicesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ServicesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ServicesClientDeletePollerResponse{}, err
@@ -262,7 +258,7 @@ func (client *ServicesClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *ServicesClient) getHandleResponse(resp *http.Response) (ServicesClientGetResponse, error) {
-	result := ServicesClientGetResponse{RawResponse: resp}
+	result := ServicesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceResource); err != nil {
 		return ServicesClientGetResponse{}, err
 	}
@@ -322,7 +318,7 @@ func (client *ServicesClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *ServicesClient) listHandleResponse(resp *http.Response) (ServicesClientListResponse, error) {
-	result := ServicesClientListResponse{RawResponse: resp}
+	result := ServicesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceResourceList); err != nil {
 		return ServicesClientListResponse{}, err
 	}
@@ -342,9 +338,7 @@ func (client *ServicesClient) BeginUpdate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ServicesClientUpdatePollerResponse{}, err
 	}
-	result := ServicesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServicesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServicesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ServicesClientUpdatePollerResponse{}, err

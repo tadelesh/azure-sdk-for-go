@@ -90,7 +90,7 @@ func (client *WebSiteManagementClient) checkNameAvailabilityCreateRequest(ctx co
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *WebSiteManagementClient) checkNameAvailabilityHandleResponse(resp *http.Response) (WebSiteManagementClientCheckNameAvailabilityResponse, error) {
-	result := WebSiteManagementClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := WebSiteManagementClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceNameAvailability); err != nil {
 		return WebSiteManagementClientCheckNameAvailabilityResponse{}, err
 	}
@@ -132,7 +132,7 @@ func (client *WebSiteManagementClient) getPublishingUserCreateRequest(ctx contex
 
 // getPublishingUserHandleResponse handles the GetPublishingUser response.
 func (client *WebSiteManagementClient) getPublishingUserHandleResponse(resp *http.Response) (WebSiteManagementClientGetPublishingUserResponse, error) {
-	result := WebSiteManagementClientGetPublishingUserResponse{RawResponse: resp}
+	result := WebSiteManagementClientGetPublishingUserResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.User); err != nil {
 		return WebSiteManagementClientGetPublishingUserResponse{}, err
 	}
@@ -179,7 +179,7 @@ func (client *WebSiteManagementClient) getSourceControlCreateRequest(ctx context
 
 // getSourceControlHandleResponse handles the GetSourceControl response.
 func (client *WebSiteManagementClient) getSourceControlHandleResponse(resp *http.Response) (WebSiteManagementClientGetSourceControlResponse, error) {
-	result := WebSiteManagementClientGetSourceControlResponse{RawResponse: resp}
+	result := WebSiteManagementClientGetSourceControlResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceControl); err != nil {
 		return WebSiteManagementClientGetSourceControlResponse{}, err
 	}
@@ -225,7 +225,7 @@ func (client *WebSiteManagementClient) getSubscriptionDeploymentLocationsCreateR
 
 // getSubscriptionDeploymentLocationsHandleResponse handles the GetSubscriptionDeploymentLocations response.
 func (client *WebSiteManagementClient) getSubscriptionDeploymentLocationsHandleResponse(resp *http.Response) (WebSiteManagementClientGetSubscriptionDeploymentLocationsResponse, error) {
-	result := WebSiteManagementClientGetSubscriptionDeploymentLocationsResponse{RawResponse: resp}
+	result := WebSiteManagementClientGetSubscriptionDeploymentLocationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentLocations); err != nil {
 		return WebSiteManagementClientGetSubscriptionDeploymentLocationsResponse{}, err
 	}
@@ -274,7 +274,7 @@ func (client *WebSiteManagementClient) listBillingMetersCreateRequest(ctx contex
 
 // listBillingMetersHandleResponse handles the ListBillingMeters response.
 func (client *WebSiteManagementClient) listBillingMetersHandleResponse(resp *http.Response) (WebSiteManagementClientListBillingMetersResponse, error) {
-	result := WebSiteManagementClientListBillingMetersResponse{RawResponse: resp}
+	result := WebSiteManagementClientListBillingMetersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BillingMeterCollection); err != nil {
 		return WebSiteManagementClientListBillingMetersResponse{}, err
 	}
@@ -317,7 +317,7 @@ func (client *WebSiteManagementClient) listCustomHostNameSitesCreateRequest(ctx 
 
 // listCustomHostNameSitesHandleResponse handles the ListCustomHostNameSites response.
 func (client *WebSiteManagementClient) listCustomHostNameSitesHandleResponse(resp *http.Response) (WebSiteManagementClientListCustomHostNameSitesResponse, error) {
-	result := WebSiteManagementClientListCustomHostNameSitesResponse{RawResponse: resp}
+	result := WebSiteManagementClientListCustomHostNameSitesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomHostnameSitesCollection); err != nil {
 		return WebSiteManagementClientListCustomHostNameSitesResponse{}, err
 	}
@@ -372,7 +372,7 @@ func (client *WebSiteManagementClient) listGeoRegionsCreateRequest(ctx context.C
 
 // listGeoRegionsHandleResponse handles the ListGeoRegions response.
 func (client *WebSiteManagementClient) listGeoRegionsHandleResponse(resp *http.Response) (WebSiteManagementClientListGeoRegionsResponse, error) {
-	result := WebSiteManagementClientListGeoRegionsResponse{RawResponse: resp}
+	result := WebSiteManagementClientListGeoRegionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GeoRegionCollection); err != nil {
 		return WebSiteManagementClientListGeoRegionsResponse{}, err
 	}
@@ -415,7 +415,7 @@ func (client *WebSiteManagementClient) listPremierAddOnOffersCreateRequest(ctx c
 
 // listPremierAddOnOffersHandleResponse handles the ListPremierAddOnOffers response.
 func (client *WebSiteManagementClient) listPremierAddOnOffersHandleResponse(resp *http.Response) (WebSiteManagementClientListPremierAddOnOffersResponse, error) {
-	result := WebSiteManagementClientListPremierAddOnOffersResponse{RawResponse: resp}
+	result := WebSiteManagementClientListPremierAddOnOffersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PremierAddOnOfferCollection); err != nil {
 		return WebSiteManagementClientListPremierAddOnOffersResponse{}, err
 	}
@@ -461,7 +461,7 @@ func (client *WebSiteManagementClient) listSKUsCreateRequest(ctx context.Context
 
 // listSKUsHandleResponse handles the ListSKUs response.
 func (client *WebSiteManagementClient) listSKUsHandleResponse(resp *http.Response) (WebSiteManagementClientListSKUsResponse, error) {
-	result := WebSiteManagementClientListSKUsResponse{RawResponse: resp}
+	result := WebSiteManagementClientListSKUsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUInfos); err != nil {
 		return WebSiteManagementClientListSKUsResponse{}, err
 	}
@@ -505,7 +505,7 @@ func (client *WebSiteManagementClient) listSiteIdentifiersAssignedToHostNameCrea
 
 // listSiteIdentifiersAssignedToHostNameHandleResponse handles the ListSiteIdentifiersAssignedToHostName response.
 func (client *WebSiteManagementClient) listSiteIdentifiersAssignedToHostNameHandleResponse(resp *http.Response) (WebSiteManagementClientListSiteIdentifiersAssignedToHostNameResponse, error) {
-	result := WebSiteManagementClientListSiteIdentifiersAssignedToHostNameResponse{RawResponse: resp}
+	result := WebSiteManagementClientListSiteIdentifiersAssignedToHostNameResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IdentifierCollection); err != nil {
 		return WebSiteManagementClientListSiteIdentifiersAssignedToHostNameResponse{}, err
 	}
@@ -544,7 +544,7 @@ func (client *WebSiteManagementClient) listSourceControlsCreateRequest(ctx conte
 
 // listSourceControlsHandleResponse handles the ListSourceControls response.
 func (client *WebSiteManagementClient) listSourceControlsHandleResponse(resp *http.Response) (WebSiteManagementClientListSourceControlsResponse, error) {
-	result := WebSiteManagementClientListSourceControlsResponse{RawResponse: resp}
+	result := WebSiteManagementClientListSourceControlsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceControlCollection); err != nil {
 		return WebSiteManagementClientListSourceControlsResponse{}, err
 	}
@@ -568,7 +568,7 @@ func (client *WebSiteManagementClient) Move(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebSiteManagementClientMoveResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebSiteManagementClientMoveResponse{RawResponse: resp}, nil
+	return WebSiteManagementClientMoveResponse{}, nil
 }
 
 // moveCreateRequest creates the Move request.
@@ -629,7 +629,7 @@ func (client *WebSiteManagementClient) updatePublishingUserCreateRequest(ctx con
 
 // updatePublishingUserHandleResponse handles the UpdatePublishingUser response.
 func (client *WebSiteManagementClient) updatePublishingUserHandleResponse(resp *http.Response) (WebSiteManagementClientUpdatePublishingUserResponse, error) {
-	result := WebSiteManagementClientUpdatePublishingUserResponse{RawResponse: resp}
+	result := WebSiteManagementClientUpdatePublishingUserResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.User); err != nil {
 		return WebSiteManagementClientUpdatePublishingUserResponse{}, err
 	}
@@ -677,7 +677,7 @@ func (client *WebSiteManagementClient) updateSourceControlCreateRequest(ctx cont
 
 // updateSourceControlHandleResponse handles the UpdateSourceControl response.
 func (client *WebSiteManagementClient) updateSourceControlHandleResponse(resp *http.Response) (WebSiteManagementClientUpdateSourceControlResponse, error) {
-	result := WebSiteManagementClientUpdateSourceControlResponse{RawResponse: resp}
+	result := WebSiteManagementClientUpdateSourceControlResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceControl); err != nil {
 		return WebSiteManagementClientUpdateSourceControlResponse{}, err
 	}
@@ -729,7 +729,7 @@ func (client *WebSiteManagementClient) validateCreateRequest(ctx context.Context
 
 // validateHandleResponse handles the Validate response.
 func (client *WebSiteManagementClient) validateHandleResponse(resp *http.Response) (WebSiteManagementClientValidateResponse, error) {
-	result := WebSiteManagementClientValidateResponse{RawResponse: resp}
+	result := WebSiteManagementClientValidateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ValidateResponse); err != nil {
 		return WebSiteManagementClientValidateResponse{}, err
 	}
@@ -754,7 +754,7 @@ func (client *WebSiteManagementClient) ValidateMove(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return WebSiteManagementClientValidateMoveResponse{}, runtime.NewResponseError(resp)
 	}
-	return WebSiteManagementClientValidateMoveResponse{RawResponse: resp}, nil
+	return WebSiteManagementClientValidateMoveResponse{}, nil
 }
 
 // validateMoveCreateRequest creates the ValidateMove request.
@@ -820,7 +820,7 @@ func (client *WebSiteManagementClient) verifyHostingEnvironmentVnetCreateRequest
 
 // verifyHostingEnvironmentVnetHandleResponse handles the VerifyHostingEnvironmentVnet response.
 func (client *WebSiteManagementClient) verifyHostingEnvironmentVnetHandleResponse(resp *http.Response) (WebSiteManagementClientVerifyHostingEnvironmentVnetResponse, error) {
-	result := WebSiteManagementClientVerifyHostingEnvironmentVnetResponse{RawResponse: resp}
+	result := WebSiteManagementClientVerifyHostingEnvironmentVnetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VnetValidationFailureDetails); err != nil {
 		return WebSiteManagementClientVerifyHostingEnvironmentVnetResponse{}, err
 	}

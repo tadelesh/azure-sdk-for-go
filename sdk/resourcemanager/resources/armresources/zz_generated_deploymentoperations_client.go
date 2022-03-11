@@ -35,17 +35,17 @@ type DeploymentOperationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDeploymentOperationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DeploymentOperationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DeploymentOperationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *DeploymentOperationsClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *DeploymentOperationsClient) getHandleResponse(resp *http.Response) (DeploymentOperationsClientGetResponse, error) {
-	result := DeploymentOperationsClientGetResponse{RawResponse: resp}
+	result := DeploymentOperationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentOperation); err != nil {
 		return DeploymentOperationsClientGetResponse{}, err
 	}
@@ -161,7 +161,7 @@ func (client *DeploymentOperationsClient) getAtManagementGroupScopeCreateRequest
 
 // getAtManagementGroupScopeHandleResponse handles the GetAtManagementGroupScope response.
 func (client *DeploymentOperationsClient) getAtManagementGroupScopeHandleResponse(resp *http.Response) (DeploymentOperationsClientGetAtManagementGroupScopeResponse, error) {
-	result := DeploymentOperationsClientGetAtManagementGroupScopeResponse{RawResponse: resp}
+	result := DeploymentOperationsClientGetAtManagementGroupScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentOperation); err != nil {
 		return DeploymentOperationsClientGetAtManagementGroupScopeResponse{}, err
 	}
@@ -215,7 +215,7 @@ func (client *DeploymentOperationsClient) getAtScopeCreateRequest(ctx context.Co
 
 // getAtScopeHandleResponse handles the GetAtScope response.
 func (client *DeploymentOperationsClient) getAtScopeHandleResponse(resp *http.Response) (DeploymentOperationsClientGetAtScopeResponse, error) {
-	result := DeploymentOperationsClientGetAtScopeResponse{RawResponse: resp}
+	result := DeploymentOperationsClientGetAtScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentOperation); err != nil {
 		return DeploymentOperationsClientGetAtScopeResponse{}, err
 	}
@@ -271,7 +271,7 @@ func (client *DeploymentOperationsClient) getAtSubscriptionScopeCreateRequest(ct
 
 // getAtSubscriptionScopeHandleResponse handles the GetAtSubscriptionScope response.
 func (client *DeploymentOperationsClient) getAtSubscriptionScopeHandleResponse(resp *http.Response) (DeploymentOperationsClientGetAtSubscriptionScopeResponse, error) {
-	result := DeploymentOperationsClientGetAtSubscriptionScopeResponse{RawResponse: resp}
+	result := DeploymentOperationsClientGetAtSubscriptionScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentOperation); err != nil {
 		return DeploymentOperationsClientGetAtSubscriptionScopeResponse{}, err
 	}
@@ -323,7 +323,7 @@ func (client *DeploymentOperationsClient) getAtTenantScopeCreateRequest(ctx cont
 
 // getAtTenantScopeHandleResponse handles the GetAtTenantScope response.
 func (client *DeploymentOperationsClient) getAtTenantScopeHandleResponse(resp *http.Response) (DeploymentOperationsClientGetAtTenantScopeResponse, error) {
-	result := DeploymentOperationsClientGetAtTenantScopeResponse{RawResponse: resp}
+	result := DeploymentOperationsClientGetAtTenantScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentOperation); err != nil {
 		return DeploymentOperationsClientGetAtTenantScopeResponse{}, err
 	}
@@ -379,7 +379,7 @@ func (client *DeploymentOperationsClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *DeploymentOperationsClient) listHandleResponse(resp *http.Response) (DeploymentOperationsClientListResponse, error) {
-	result := DeploymentOperationsClientListResponse{RawResponse: resp}
+	result := DeploymentOperationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentOperationsListResult); err != nil {
 		return DeploymentOperationsClientListResponse{}, err
 	}
@@ -431,7 +431,7 @@ func (client *DeploymentOperationsClient) listAtManagementGroupScopeCreateReques
 
 // listAtManagementGroupScopeHandleResponse handles the ListAtManagementGroupScope response.
 func (client *DeploymentOperationsClient) listAtManagementGroupScopeHandleResponse(resp *http.Response) (DeploymentOperationsClientListAtManagementGroupScopeResponse, error) {
-	result := DeploymentOperationsClientListAtManagementGroupScopeResponse{RawResponse: resp}
+	result := DeploymentOperationsClientListAtManagementGroupScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentOperationsListResult); err != nil {
 		return DeploymentOperationsClientListAtManagementGroupScopeResponse{}, err
 	}
@@ -480,7 +480,7 @@ func (client *DeploymentOperationsClient) listAtScopeCreateRequest(ctx context.C
 
 // listAtScopeHandleResponse handles the ListAtScope response.
 func (client *DeploymentOperationsClient) listAtScopeHandleResponse(resp *http.Response) (DeploymentOperationsClientListAtScopeResponse, error) {
-	result := DeploymentOperationsClientListAtScopeResponse{RawResponse: resp}
+	result := DeploymentOperationsClientListAtScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentOperationsListResult); err != nil {
 		return DeploymentOperationsClientListAtScopeResponse{}, err
 	}
@@ -531,7 +531,7 @@ func (client *DeploymentOperationsClient) listAtSubscriptionScopeCreateRequest(c
 
 // listAtSubscriptionScopeHandleResponse handles the ListAtSubscriptionScope response.
 func (client *DeploymentOperationsClient) listAtSubscriptionScopeHandleResponse(resp *http.Response) (DeploymentOperationsClientListAtSubscriptionScopeResponse, error) {
-	result := DeploymentOperationsClientListAtSubscriptionScopeResponse{RawResponse: resp}
+	result := DeploymentOperationsClientListAtSubscriptionScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentOperationsListResult); err != nil {
 		return DeploymentOperationsClientListAtSubscriptionScopeResponse{}, err
 	}
@@ -578,7 +578,7 @@ func (client *DeploymentOperationsClient) listAtTenantScopeCreateRequest(ctx con
 
 // listAtTenantScopeHandleResponse handles the ListAtTenantScope response.
 func (client *DeploymentOperationsClient) listAtTenantScopeHandleResponse(resp *http.Response) (DeploymentOperationsClientListAtTenantScopeResponse, error) {
-	result := DeploymentOperationsClientListAtTenantScopeResponse{RawResponse: resp}
+	result := DeploymentOperationsClientListAtTenantScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentOperationsListResult); err != nil {
 		return DeploymentOperationsClientListAtTenantScopeResponse{}, err
 	}

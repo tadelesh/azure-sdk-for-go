@@ -32,16 +32,16 @@ type HierarchySettingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewHierarchySettingsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *HierarchySettingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &HierarchySettingsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -87,7 +87,7 @@ func (client *HierarchySettingsClient) createOrUpdateCreateRequest(ctx context.C
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *HierarchySettingsClient) createOrUpdateHandleResponse(resp *http.Response) (HierarchySettingsClientCreateOrUpdateResponse, error) {
-	result := HierarchySettingsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := HierarchySettingsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HierarchySettings); err != nil {
 		return HierarchySettingsClientCreateOrUpdateResponse{}, err
 	}
@@ -111,7 +111,7 @@ func (client *HierarchySettingsClient) Delete(ctx context.Context, groupID strin
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return HierarchySettingsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return HierarchySettingsClientDeleteResponse{RawResponse: resp}, nil
+	return HierarchySettingsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -172,7 +172,7 @@ func (client *HierarchySettingsClient) getCreateRequest(ctx context.Context, gro
 
 // getHandleResponse handles the Get response.
 func (client *HierarchySettingsClient) getHandleResponse(resp *http.Response) (HierarchySettingsClientGetResponse, error) {
-	result := HierarchySettingsClientGetResponse{RawResponse: resp}
+	result := HierarchySettingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HierarchySettings); err != nil {
 		return HierarchySettingsClientGetResponse{}, err
 	}
@@ -219,7 +219,7 @@ func (client *HierarchySettingsClient) listCreateRequest(ctx context.Context, gr
 
 // listHandleResponse handles the List response.
 func (client *HierarchySettingsClient) listHandleResponse(resp *http.Response) (HierarchySettingsClientListResponse, error) {
-	result := HierarchySettingsClientListResponse{RawResponse: resp}
+	result := HierarchySettingsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HierarchySettingsList); err != nil {
 		return HierarchySettingsClientListResponse{}, err
 	}
@@ -267,7 +267,7 @@ func (client *HierarchySettingsClient) updateCreateRequest(ctx context.Context, 
 
 // updateHandleResponse handles the Update response.
 func (client *HierarchySettingsClient) updateHandleResponse(resp *http.Response) (HierarchySettingsClientUpdateResponse, error) {
-	result := HierarchySettingsClientUpdateResponse{RawResponse: resp}
+	result := HierarchySettingsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HierarchySettings); err != nil {
 		return HierarchySettingsClientUpdateResponse{}, err
 	}

@@ -35,17 +35,17 @@ type ScriptActionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewScriptActionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ScriptActionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ScriptActionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -68,7 +68,7 @@ func (client *ScriptActionsClient) Delete(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ScriptActionsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ScriptActionsClientDeleteResponse{RawResponse: resp}, nil
+	return ScriptActionsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -155,7 +155,7 @@ func (client *ScriptActionsClient) getExecutionAsyncOperationStatusCreateRequest
 
 // getExecutionAsyncOperationStatusHandleResponse handles the GetExecutionAsyncOperationStatus response.
 func (client *ScriptActionsClient) getExecutionAsyncOperationStatusHandleResponse(resp *http.Response) (ScriptActionsClientGetExecutionAsyncOperationStatusResponse, error) {
-	result := ScriptActionsClientGetExecutionAsyncOperationStatusResponse{RawResponse: resp}
+	result := ScriptActionsClientGetExecutionAsyncOperationStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AsyncOperationResult); err != nil {
 		return ScriptActionsClientGetExecutionAsyncOperationStatusResponse{}, err
 	}
@@ -216,7 +216,7 @@ func (client *ScriptActionsClient) getExecutionDetailCreateRequest(ctx context.C
 
 // getExecutionDetailHandleResponse handles the GetExecutionDetail response.
 func (client *ScriptActionsClient) getExecutionDetailHandleResponse(resp *http.Response) (ScriptActionsClientGetExecutionDetailResponse, error) {
-	result := ScriptActionsClientGetExecutionDetailResponse{RawResponse: resp}
+	result := ScriptActionsClientGetExecutionDetailResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RuntimeScriptActionDetail); err != nil {
 		return ScriptActionsClientGetExecutionDetailResponse{}, err
 	}
@@ -269,7 +269,7 @@ func (client *ScriptActionsClient) listByClusterCreateRequest(ctx context.Contex
 
 // listByClusterHandleResponse handles the ListByCluster response.
 func (client *ScriptActionsClient) listByClusterHandleResponse(resp *http.Response) (ScriptActionsClientListByClusterResponse, error) {
-	result := ScriptActionsClientListByClusterResponse{RawResponse: resp}
+	result := ScriptActionsClientListByClusterResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScriptActionsList); err != nil {
 		return ScriptActionsClientListByClusterResponse{}, err
 	}

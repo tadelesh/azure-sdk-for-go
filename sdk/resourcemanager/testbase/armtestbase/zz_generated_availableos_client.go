@@ -34,17 +34,17 @@ type AvailableOSClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAvailableOSClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AvailableOSClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AvailableOSClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *AvailableOSClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *AvailableOSClient) getHandleResponse(resp *http.Response) (AvailableOSClientGetResponse, error) {
-	result := AvailableOSClientGetResponse{RawResponse: resp}
+	result := AvailableOSClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AvailableOSResource); err != nil {
 		return AvailableOSClientGetResponse{}, err
 	}
@@ -156,7 +156,7 @@ func (client *AvailableOSClient) listCreateRequest(ctx context.Context, resource
 
 // listHandleResponse handles the List response.
 func (client *AvailableOSClient) listHandleResponse(resp *http.Response) (AvailableOSClientListResponse, error) {
-	result := AvailableOSClientListResponse{RawResponse: resp}
+	result := AvailableOSClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AvailableOSListResult); err != nil {
 		return AvailableOSClientListResponse{}, err
 	}

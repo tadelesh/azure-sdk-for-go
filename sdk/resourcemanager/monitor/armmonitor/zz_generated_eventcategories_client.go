@@ -29,16 +29,16 @@ type EventCategoriesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewEventCategoriesClient(credential azcore.TokenCredential, options *arm.ClientOptions) *EventCategoriesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &EventCategoriesClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -47,19 +47,13 @@ func NewEventCategoriesClient(credential azcore.TokenCredential, options *arm.Cl
 // following: Administrative, Security, ServiceHealth, Alert, Recommendation, Policy.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - EventCategoriesClientListOptions contains the optional parameters for the EventCategoriesClient.List method.
-func (client *EventCategoriesClient) List(ctx context.Context, options *EventCategoriesClientListOptions) (EventCategoriesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, options)
-	if err != nil {
-		return EventCategoriesClientListResponse{}, err
+func (client *EventCategoriesClient) List(options *EventCategoriesClientListOptions) *EventCategoriesClientListPager {
+	return &EventCategoriesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return EventCategoriesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return EventCategoriesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -78,7 +72,7 @@ func (client *EventCategoriesClient) listCreateRequest(ctx context.Context, opti
 
 // listHandleResponse handles the List response.
 func (client *EventCategoriesClient) listHandleResponse(resp *http.Response) (EventCategoriesClientListResponse, error) {
-	result := EventCategoriesClientListResponse{RawResponse: resp}
+	result := EventCategoriesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventCategoryCollection); err != nil {
 		return EventCategoriesClientListResponse{}, err
 	}

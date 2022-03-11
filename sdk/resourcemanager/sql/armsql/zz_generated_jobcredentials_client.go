@@ -34,17 +34,17 @@ type JobCredentialsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewJobCredentialsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *JobCredentialsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &JobCredentialsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -110,7 +110,7 @@ func (client *JobCredentialsClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *JobCredentialsClient) createOrUpdateHandleResponse(resp *http.Response) (JobCredentialsClientCreateOrUpdateResponse, error) {
-	result := JobCredentialsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := JobCredentialsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobCredential); err != nil {
 		return JobCredentialsClientCreateOrUpdateResponse{}, err
 	}
@@ -137,7 +137,7 @@ func (client *JobCredentialsClient) Delete(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return JobCredentialsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return JobCredentialsClientDeleteResponse{RawResponse: resp}, nil
+	return JobCredentialsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -232,7 +232,7 @@ func (client *JobCredentialsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *JobCredentialsClient) getHandleResponse(resp *http.Response) (JobCredentialsClientGetResponse, error) {
-	result := JobCredentialsClientGetResponse{RawResponse: resp}
+	result := JobCredentialsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobCredential); err != nil {
 		return JobCredentialsClientGetResponse{}, err
 	}
@@ -291,7 +291,7 @@ func (client *JobCredentialsClient) listByAgentCreateRequest(ctx context.Context
 
 // listByAgentHandleResponse handles the ListByAgent response.
 func (client *JobCredentialsClient) listByAgentHandleResponse(resp *http.Response) (JobCredentialsClientListByAgentResponse, error) {
-	result := JobCredentialsClientListByAgentResponse{RawResponse: resp}
+	result := JobCredentialsClientListByAgentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobCredentialListResult); err != nil {
 		return JobCredentialsClientListByAgentResponse{}, err
 	}

@@ -32,16 +32,16 @@ type BlueprintsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBlueprintsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *BlueprintsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BlueprintsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -90,7 +90,7 @@ func (client *BlueprintsClient) createOrUpdateCreateRequest(ctx context.Context,
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *BlueprintsClient) createOrUpdateHandleResponse(resp *http.Response) (BlueprintsClientCreateOrUpdateResponse, error) {
-	result := BlueprintsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := BlueprintsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Blueprint); err != nil {
 		return BlueprintsClientCreateOrUpdateResponse{}, err
 	}
@@ -139,7 +139,7 @@ func (client *BlueprintsClient) deleteCreateRequest(ctx context.Context, resourc
 
 // deleteHandleResponse handles the Delete response.
 func (client *BlueprintsClient) deleteHandleResponse(resp *http.Response) (BlueprintsClientDeleteResponse, error) {
-	result := BlueprintsClientDeleteResponse{RawResponse: resp}
+	result := BlueprintsClientDeleteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Blueprint); err != nil {
 		return BlueprintsClientDeleteResponse{}, err
 	}
@@ -188,7 +188,7 @@ func (client *BlueprintsClient) getCreateRequest(ctx context.Context, resourceSc
 
 // getHandleResponse handles the Get response.
 func (client *BlueprintsClient) getHandleResponse(resp *http.Response) (BlueprintsClientGetResponse, error) {
-	result := BlueprintsClientGetResponse{RawResponse: resp}
+	result := BlueprintsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Blueprint); err != nil {
 		return BlueprintsClientGetResponse{}, err
 	}
@@ -229,7 +229,7 @@ func (client *BlueprintsClient) listCreateRequest(ctx context.Context, resourceS
 
 // listHandleResponse handles the List response.
 func (client *BlueprintsClient) listHandleResponse(resp *http.Response) (BlueprintsClientListResponse, error) {
-	result := BlueprintsClientListResponse{RawResponse: resp}
+	result := BlueprintsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.List); err != nil {
 		return BlueprintsClientListResponse{}, err
 	}

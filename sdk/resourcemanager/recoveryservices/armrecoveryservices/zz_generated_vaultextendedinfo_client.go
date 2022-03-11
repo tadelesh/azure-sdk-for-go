@@ -34,17 +34,17 @@ type VaultExtendedInfoClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVaultExtendedInfoClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VaultExtendedInfoClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VaultExtendedInfoClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *VaultExtendedInfoClient) createOrUpdateCreateRequest(ctx context.C
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *VaultExtendedInfoClient) createOrUpdateHandleResponse(resp *http.Response) (VaultExtendedInfoClientCreateOrUpdateResponse, error) {
-	result := VaultExtendedInfoClientCreateOrUpdateResponse{RawResponse: resp}
+	result := VaultExtendedInfoClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VaultExtendedInfoResource); err != nil {
 		return VaultExtendedInfoClientCreateOrUpdateResponse{}, err
 	}
@@ -154,7 +154,7 @@ func (client *VaultExtendedInfoClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *VaultExtendedInfoClient) getHandleResponse(resp *http.Response) (VaultExtendedInfoClientGetResponse, error) {
-	result := VaultExtendedInfoClientGetResponse{RawResponse: resp}
+	result := VaultExtendedInfoClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VaultExtendedInfoResource); err != nil {
 		return VaultExtendedInfoClientGetResponse{}, err
 	}
@@ -211,7 +211,7 @@ func (client *VaultExtendedInfoClient) updateCreateRequest(ctx context.Context, 
 
 // updateHandleResponse handles the Update response.
 func (client *VaultExtendedInfoClient) updateHandleResponse(resp *http.Response) (VaultExtendedInfoClientUpdateResponse, error) {
-	result := VaultExtendedInfoClientUpdateResponse{RawResponse: resp}
+	result := VaultExtendedInfoClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VaultExtendedInfoResource); err != nil {
 		return VaultExtendedInfoClientUpdateResponse{}, err
 	}

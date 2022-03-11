@@ -34,17 +34,17 @@ type DatabaseAdvisorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDatabaseAdvisorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DatabaseAdvisorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DatabaseAdvisorsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *DatabaseAdvisorsClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *DatabaseAdvisorsClient) getHandleResponse(resp *http.Response) (DatabaseAdvisorsClientGetResponse, error) {
-	result := DatabaseAdvisorsClientGetResponse{RawResponse: resp}
+	result := DatabaseAdvisorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Advisor); err != nil {
 		return DatabaseAdvisorsClientGetResponse{}, err
 	}
@@ -173,7 +173,7 @@ func (client *DatabaseAdvisorsClient) listByDatabaseCreateRequest(ctx context.Co
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *DatabaseAdvisorsClient) listByDatabaseHandleResponse(resp *http.Response) (DatabaseAdvisorsClientListByDatabaseResponse, error) {
-	result := DatabaseAdvisorsClientListByDatabaseResponse{RawResponse: resp}
+	result := DatabaseAdvisorsClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdvisorArray); err != nil {
 		return DatabaseAdvisorsClientListByDatabaseResponse{}, err
 	}
@@ -240,7 +240,7 @@ func (client *DatabaseAdvisorsClient) updateCreateRequest(ctx context.Context, r
 
 // updateHandleResponse handles the Update response.
 func (client *DatabaseAdvisorsClient) updateHandleResponse(resp *http.Response) (DatabaseAdvisorsClientUpdateResponse, error) {
-	result := DatabaseAdvisorsClientUpdateResponse{RawResponse: resp}
+	result := DatabaseAdvisorsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Advisor); err != nil {
 		return DatabaseAdvisorsClientUpdateResponse{}, err
 	}

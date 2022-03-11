@@ -34,17 +34,17 @@ type WorkloadGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkloadGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkloadGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkloadGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *WorkloadGroupsClient) BeginCreateOrUpdate(ctx context.Context, res
 	if err != nil {
 		return WorkloadGroupsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := WorkloadGroupsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadGroupsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadGroupsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return WorkloadGroupsClientCreateOrUpdatePollerResponse{}, err
@@ -142,9 +140,7 @@ func (client *WorkloadGroupsClient) BeginDelete(ctx context.Context, resourceGro
 	if err != nil {
 		return WorkloadGroupsClientDeletePollerResponse{}, err
 	}
-	result := WorkloadGroupsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadGroupsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadGroupsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return WorkloadGroupsClientDeletePollerResponse{}, err
@@ -264,7 +260,7 @@ func (client *WorkloadGroupsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *WorkloadGroupsClient) getHandleResponse(resp *http.Response) (WorkloadGroupsClientGetResponse, error) {
-	result := WorkloadGroupsClientGetResponse{RawResponse: resp}
+	result := WorkloadGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadGroup); err != nil {
 		return WorkloadGroupsClientGetResponse{}, err
 	}
@@ -323,7 +319,7 @@ func (client *WorkloadGroupsClient) listByDatabaseCreateRequest(ctx context.Cont
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *WorkloadGroupsClient) listByDatabaseHandleResponse(resp *http.Response) (WorkloadGroupsClientListByDatabaseResponse, error) {
-	result := WorkloadGroupsClientListByDatabaseResponse{RawResponse: resp}
+	result := WorkloadGroupsClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadGroupListResult); err != nil {
 		return WorkloadGroupsClientListByDatabaseResponse{}, err
 	}

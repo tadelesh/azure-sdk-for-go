@@ -1,5 +1,109 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*MonitorsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(MonitorsClientListByResourceGroupResponse, error)`
+- Function `*TagRulesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(TagRulesClientListResponse, error)`
+- Function `*MonitorsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(MonitorsClientListResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*VMHostClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(VMHostClientListResponse, error)`
+- Function `*MonitoredResourcesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(MonitoredResourcesClientListResponse, error)`
+- Function `*MonitorsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*TagRulesClientListPager.Err` has been removed
+- Function `*MonitoredResourcesClientListPager.Err` has been removed
+- Function `*MonitoredResourcesClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*MonitorsClientListPager.PageResponse` has been removed
+- Function `*TagRulesClientListPager.PageResponse` has been removed
+- Function `*MonitorsClientListPager.Err` has been removed
+- Function `*MonitorsClientListByResourceGroupPager.Err` has been removed
+- Function `*VMHostClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*VMHostClientListPager.PageResponse` has been removed
+- Struct `DeploymentInfoClientListResult` has been removed
+- Struct `MonitoredResourcesClientListResult` has been removed
+- Struct `MonitorsClientCreateResult` has been removed
+- Struct `MonitorsClientGetResult` has been removed
+- Struct `MonitorsClientListByResourceGroupResult` has been removed
+- Struct `MonitorsClientListResult` has been removed
+- Struct `MonitorsClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `TagRulesClientCreateOrUpdateResult` has been removed
+- Struct `TagRulesClientGetResult` has been removed
+- Struct `TagRulesClientListResult` has been removed
+- Struct `VMHostClientListResult` has been removed
+- Struct `VMIngestionClientDetailsResult` has been removed
+- Field `RawResponse` of struct `VMCollectionClientUpdateResponse` has been removed
+- Field `MonitorsClientUpdateResult` of struct `MonitorsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientUpdateResponse` has been removed
+- Field `TagRulesClientGetResult` of struct `TagRulesClientGetResponse` has been removed
+- Field `RawResponse` of struct `TagRulesClientGetResponse` has been removed
+- Field `MonitorsClientGetResult` of struct `MonitorsClientGetResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientGetResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `TagRulesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `TagRulesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientDeleteResponse` has been removed
+- Field `TagRulesClientListResult` of struct `TagRulesClientListResponse` has been removed
+- Field `RawResponse` of struct `TagRulesClientListResponse` has been removed
+- Field `VMHostClientListResult` of struct `VMHostClientListResponse` has been removed
+- Field `RawResponse` of struct `VMHostClientListResponse` has been removed
+- Field `VMIngestionClientDetailsResult` of struct `VMIngestionClientDetailsResponse` has been removed
+- Field `RawResponse` of struct `VMIngestionClientDetailsResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientCreatePollerResponse` has been removed
+- Field `MonitorsClientListByResourceGroupResult` of struct `MonitorsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientListByResourceGroupResponse` has been removed
+- Field `DeploymentInfoClientListResult` of struct `DeploymentInfoClientListResponse` has been removed
+- Field `RawResponse` of struct `DeploymentInfoClientListResponse` has been removed
+- Field `MonitoredResourcesClientListResult` of struct `MonitoredResourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `MonitoredResourcesClientListResponse` has been removed
+- Field `TagRulesClientCreateOrUpdateResult` of struct `TagRulesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `TagRulesClientCreateOrUpdateResponse` has been removed
+- Field `MonitorsClientListResult` of struct `MonitorsClientListResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientListResponse` has been removed
+- Field `MonitorsClientCreateResult` of struct `MonitorsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `MonitorsClientCreateResponse` has been removed
+
+### Features Added
+
+- New function `*VMHostClientListPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*MonitorsClientListByResourceGroupPager.More() bool`
+- New function `*MonitoredResourcesClientListPager.More() bool`
+- New function `*TagRulesClientListPager.More() bool`
+- New function `ErrorResponseBody.MarshalJSON() ([]byte, error)`
+- New function `*MonitorsClientListPager.More() bool`
+- New struct `ErrorResponseBody`
+- New struct `ResourceProviderDefaultErrorResponse`
+- New anonymous field `DeploymentInfoResponse` in struct `DeploymentInfoClientListResponse`
+- New anonymous field `MonitoringTagRulesListResponse` in struct `TagRulesClientListResponse`
+- New anonymous field `MonitoredResourceListResponse` in struct `MonitoredResourcesClientListResponse`
+- New anonymous field `VMHostListResponse` in struct `VMHostClientListResponse`
+- New anonymous field `MonitoringTagRules` in struct `TagRulesClientCreateOrUpdateResponse`
+- New anonymous field `MonitorResource` in struct `MonitorsClientUpdateResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `MonitoringTagRules` in struct `TagRulesClientGetResponse`
+- New anonymous field `VMIngestionDetailsResponse` in struct `VMIngestionClientDetailsResponse`
+- New anonymous field `MonitorResourceListResponse` in struct `MonitorsClientListResponse`
+- New anonymous field `MonitorResource` in struct `MonitorsClientCreateResponse`
+- New anonymous field `MonitorResource` in struct `MonitorsClientGetResponse`
+- New anonymous field `MonitorResourceListResponse` in struct `MonitorsClientListByResourceGroupResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorResponseBody.MarshalJSON` has been removed
+- Struct `ErrorResponseBody` has been removed
+- Struct `ResourceProviderDefaultErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-14)
 ### Breaking Changes
 

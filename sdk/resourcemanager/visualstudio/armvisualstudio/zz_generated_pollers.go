@@ -43,11 +43,10 @@ func (p *ProjectsClientCreatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ProjectsClientCreateResponse will be returned.
 func (p *ProjectsClientCreatePoller) FinalResponse(ctx context.Context) (ProjectsClientCreateResponse, error) {
 	respType := ProjectsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ProjectResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.ProjectResource)
 	if err != nil {
 		return ProjectsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

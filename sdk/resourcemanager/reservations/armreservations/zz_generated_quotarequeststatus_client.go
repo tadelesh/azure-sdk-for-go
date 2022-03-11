@@ -33,16 +33,16 @@ type QuotaRequestStatusClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewQuotaRequestStatusClient(credential azcore.TokenCredential, options *arm.ClientOptions) *QuotaRequestStatusClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &QuotaRequestStatusClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *QuotaRequestStatusClient) getCreateRequest(ctx context.Context, su
 
 // getHandleResponse handles the Get response.
 func (client *QuotaRequestStatusClient) getHandleResponse(resp *http.Response) (QuotaRequestStatusClientGetResponse, error) {
-	result := QuotaRequestStatusClientGetResponse{RawResponse: resp}
+	result := QuotaRequestStatusClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QuotaRequestDetails); err != nil {
 		return QuotaRequestStatusClientGetResponse{}, err
 	}
@@ -166,7 +166,7 @@ func (client *QuotaRequestStatusClient) listCreateRequest(ctx context.Context, s
 
 // listHandleResponse handles the List response.
 func (client *QuotaRequestStatusClient) listHandleResponse(resp *http.Response) (QuotaRequestStatusClientListResponse, error) {
-	result := QuotaRequestStatusClientListResponse{RawResponse: resp}
+	result := QuotaRequestStatusClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QuotaRequestDetailsList); err != nil {
 		return QuotaRequestStatusClientListResponse{}, err
 	}

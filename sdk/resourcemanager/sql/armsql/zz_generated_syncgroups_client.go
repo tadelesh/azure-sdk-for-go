@@ -34,17 +34,17 @@ type SyncGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSyncGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SyncGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SyncGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -69,7 +69,7 @@ func (client *SyncGroupsClient) CancelSync(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return SyncGroupsClientCancelSyncResponse{}, runtime.NewResponseError(resp)
 	}
-	return SyncGroupsClientCancelSyncResponse{RawResponse: resp}, nil
+	return SyncGroupsClientCancelSyncResponse{}, nil
 }
 
 // cancelSyncCreateRequest creates the CancelSync request.
@@ -120,9 +120,7 @@ func (client *SyncGroupsClient) BeginCreateOrUpdate(ctx context.Context, resourc
 	if err != nil {
 		return SyncGroupsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := SyncGroupsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SyncGroupsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SyncGroupsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return SyncGroupsClientCreateOrUpdatePollerResponse{}, err
@@ -197,9 +195,7 @@ func (client *SyncGroupsClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return SyncGroupsClientDeletePollerResponse{}, err
 	}
-	result := SyncGroupsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SyncGroupsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SyncGroupsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return SyncGroupsClientDeletePollerResponse{}, err
@@ -319,7 +315,7 @@ func (client *SyncGroupsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *SyncGroupsClient) getHandleResponse(resp *http.Response) (SyncGroupsClientGetResponse, error) {
-	result := SyncGroupsClientGetResponse{RawResponse: resp}
+	result := SyncGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SyncGroup); err != nil {
 		return SyncGroupsClientGetResponse{}, err
 	}
@@ -378,7 +374,7 @@ func (client *SyncGroupsClient) listByDatabaseCreateRequest(ctx context.Context,
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *SyncGroupsClient) listByDatabaseHandleResponse(resp *http.Response) (SyncGroupsClientListByDatabaseResponse, error) {
-	result := SyncGroupsClientListByDatabaseResponse{RawResponse: resp}
+	result := SyncGroupsClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SyncGroupListResult); err != nil {
 		return SyncGroupsClientListByDatabaseResponse{}, err
 	}
@@ -442,7 +438,7 @@ func (client *SyncGroupsClient) listHubSchemasCreateRequest(ctx context.Context,
 
 // listHubSchemasHandleResponse handles the ListHubSchemas response.
 func (client *SyncGroupsClient) listHubSchemasHandleResponse(resp *http.Response) (SyncGroupsClientListHubSchemasResponse, error) {
-	result := SyncGroupsClientListHubSchemasResponse{RawResponse: resp}
+	result := SyncGroupsClientListHubSchemasResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SyncFullSchemaPropertiesListResult); err != nil {
 		return SyncGroupsClientListHubSchemasResponse{}, err
 	}
@@ -514,7 +510,7 @@ func (client *SyncGroupsClient) listLogsCreateRequest(ctx context.Context, resou
 
 // listLogsHandleResponse handles the ListLogs response.
 func (client *SyncGroupsClient) listLogsHandleResponse(resp *http.Response) (SyncGroupsClientListLogsResponse, error) {
-	result := SyncGroupsClientListLogsResponse{RawResponse: resp}
+	result := SyncGroupsClientListLogsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SyncGroupLogListResult); err != nil {
 		return SyncGroupsClientListLogsResponse{}, err
 	}
@@ -562,7 +558,7 @@ func (client *SyncGroupsClient) listSyncDatabaseIDsCreateRequest(ctx context.Con
 
 // listSyncDatabaseIDsHandleResponse handles the ListSyncDatabaseIDs response.
 func (client *SyncGroupsClient) listSyncDatabaseIDsHandleResponse(resp *http.Response) (SyncGroupsClientListSyncDatabaseIDsResponse, error) {
-	result := SyncGroupsClientListSyncDatabaseIDsResponse{RawResponse: resp}
+	result := SyncGroupsClientListSyncDatabaseIDsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SyncDatabaseIDListResult); err != nil {
 		return SyncGroupsClientListSyncDatabaseIDsResponse{}, err
 	}
@@ -583,9 +579,7 @@ func (client *SyncGroupsClient) BeginRefreshHubSchema(ctx context.Context, resou
 	if err != nil {
 		return SyncGroupsClientRefreshHubSchemaPollerResponse{}, err
 	}
-	result := SyncGroupsClientRefreshHubSchemaPollerResponse{
-		RawResponse: resp,
-	}
+	result := SyncGroupsClientRefreshHubSchemaPollerResponse{}
 	pt, err := armruntime.NewPoller("SyncGroupsClient.RefreshHubSchema", "", resp, client.pl)
 	if err != nil {
 		return SyncGroupsClientRefreshHubSchemaPollerResponse{}, err
@@ -666,7 +660,7 @@ func (client *SyncGroupsClient) TriggerSync(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return SyncGroupsClientTriggerSyncResponse{}, runtime.NewResponseError(resp)
 	}
-	return SyncGroupsClientTriggerSyncResponse{RawResponse: resp}, nil
+	return SyncGroupsClientTriggerSyncResponse{}, nil
 }
 
 // triggerSyncCreateRequest creates the TriggerSync request.
@@ -716,9 +710,7 @@ func (client *SyncGroupsClient) BeginUpdate(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return SyncGroupsClientUpdatePollerResponse{}, err
 	}
-	result := SyncGroupsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SyncGroupsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SyncGroupsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return SyncGroupsClientUpdatePollerResponse{}, err

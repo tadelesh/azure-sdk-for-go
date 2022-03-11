@@ -36,17 +36,17 @@ type EmailTemplateClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewEmailTemplateClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *EmailTemplateClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &EmailTemplateClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *EmailTemplateClient) createOrUpdateCreateRequest(ctx context.Conte
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *EmailTemplateClient) createOrUpdateHandleResponse(resp *http.Response) (EmailTemplateClientCreateOrUpdateResponse, error) {
-	result := EmailTemplateClientCreateOrUpdateResponse{RawResponse: resp}
+	result := EmailTemplateClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EmailTemplateContract); err != nil {
 		return EmailTemplateClientCreateOrUpdateResponse{}, err
 	}
@@ -136,7 +136,7 @@ func (client *EmailTemplateClient) Delete(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return EmailTemplateClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return EmailTemplateClientDeleteResponse{RawResponse: resp}, nil
+	return EmailTemplateClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -223,7 +223,7 @@ func (client *EmailTemplateClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *EmailTemplateClient) getHandleResponse(resp *http.Response) (EmailTemplateClientGetResponse, error) {
-	result := EmailTemplateClientGetResponse{RawResponse: resp}
+	result := EmailTemplateClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -283,7 +283,7 @@ func (client *EmailTemplateClient) getEntityTagCreateRequest(ctx context.Context
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *EmailTemplateClient) getEntityTagHandleResponse(resp *http.Response) (EmailTemplateClientGetEntityTagResponse, error) {
-	result := EmailTemplateClientGetEntityTagResponse{RawResponse: resp}
+	result := EmailTemplateClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -348,7 +348,7 @@ func (client *EmailTemplateClient) listByServiceCreateRequest(ctx context.Contex
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *EmailTemplateClient) listByServiceHandleResponse(resp *http.Response) (EmailTemplateClientListByServiceResponse, error) {
-	result := EmailTemplateClientListByServiceResponse{RawResponse: resp}
+	result := EmailTemplateClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EmailTemplateCollection); err != nil {
 		return EmailTemplateClientListByServiceResponse{}, err
 	}
@@ -412,7 +412,7 @@ func (client *EmailTemplateClient) updateCreateRequest(ctx context.Context, reso
 
 // updateHandleResponse handles the Update response.
 func (client *EmailTemplateClient) updateHandleResponse(resp *http.Response) (EmailTemplateClientUpdateResponse, error) {
-	result := EmailTemplateClientUpdateResponse{RawResponse: resp}
+	result := EmailTemplateClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

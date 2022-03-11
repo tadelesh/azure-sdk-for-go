@@ -34,17 +34,17 @@ type AlertRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAlertRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AlertRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AlertRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *AlertRulesClient) createOrUpdateCreateRequest(ctx context.Context,
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *AlertRulesClient) createOrUpdateHandleResponse(resp *http.Response) (AlertRulesClientCreateOrUpdateResponse, error) {
-	result := AlertRulesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := AlertRulesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return AlertRulesClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *AlertRulesClient) Delete(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return AlertRulesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AlertRulesClientDeleteResponse{RawResponse: resp}, nil
+	return AlertRulesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *AlertRulesClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *AlertRulesClient) getHandleResponse(resp *http.Response) (AlertRulesClientGetResponse, error) {
-	result := AlertRulesClientGetResponse{RawResponse: resp}
+	result := AlertRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return AlertRulesClientGetResponse{}, err
 	}
@@ -267,7 +267,7 @@ func (client *AlertRulesClient) listCreateRequest(ctx context.Context, resourceG
 
 // listHandleResponse handles the List response.
 func (client *AlertRulesClient) listHandleResponse(resp *http.Response) (AlertRulesClientListResponse, error) {
-	result := AlertRulesClientListResponse{RawResponse: resp}
+	result := AlertRulesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AlertRulesList); err != nil {
 		return AlertRulesClientListResponse{}, err
 	}

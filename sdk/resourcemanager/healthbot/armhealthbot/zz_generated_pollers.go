@@ -43,11 +43,10 @@ func (p *BotsClientCreatePoller) Poll(ctx context.Context) (*http.Response, erro
 // If the final GET succeeded then the final BotsClientCreateResponse will be returned.
 func (p *BotsClientCreatePoller) FinalResponse(ctx context.Context) (BotsClientCreateResponse, error) {
 	respType := BotsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.HealthBot)
+	_, err := p.pt.FinalResponse(ctx, &respType.HealthBot)
 	if err != nil {
 		return BotsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *BotsClientDeletePoller) Poll(ctx context.Context) (*http.Response, erro
 // If the final GET succeeded then the final BotsClientDeleteResponse will be returned.
 func (p *BotsClientDeletePoller) FinalResponse(ctx context.Context) (BotsClientDeleteResponse, error) {
 	respType := BotsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return BotsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

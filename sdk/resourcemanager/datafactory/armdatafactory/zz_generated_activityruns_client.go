@@ -34,17 +34,17 @@ type ActivityRunsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewActivityRunsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ActivityRunsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ActivityRunsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *ActivityRunsClient) queryByPipelineRunCreateRequest(ctx context.Co
 
 // queryByPipelineRunHandleResponse handles the QueryByPipelineRun response.
 func (client *ActivityRunsClient) queryByPipelineRunHandleResponse(resp *http.Response) (ActivityRunsClientQueryByPipelineRunResponse, error) {
-	result := ActivityRunsClientQueryByPipelineRunResponse{RawResponse: resp}
+	result := ActivityRunsClientQueryByPipelineRunResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ActivityRunsQueryResponse); err != nil {
 		return ActivityRunsClientQueryByPipelineRunResponse{}, err
 	}

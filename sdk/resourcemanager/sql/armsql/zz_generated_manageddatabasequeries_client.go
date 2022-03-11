@@ -34,17 +34,17 @@ type ManagedDatabaseQueriesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedDatabaseQueriesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedDatabaseQueriesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedDatabaseQueriesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *ManagedDatabaseQueriesClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *ManagedDatabaseQueriesClient) getHandleResponse(resp *http.Response) (ManagedDatabaseQueriesClientGetResponse, error) {
-	result := ManagedDatabaseQueriesClientGetResponse{RawResponse: resp}
+	result := ManagedDatabaseQueriesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceQuery); err != nil {
 		return ManagedDatabaseQueriesClientGetResponse{}, err
 	}
@@ -180,7 +180,7 @@ func (client *ManagedDatabaseQueriesClient) listByQueryCreateRequest(ctx context
 
 // listByQueryHandleResponse handles the ListByQuery response.
 func (client *ManagedDatabaseQueriesClient) listByQueryHandleResponse(resp *http.Response) (ManagedDatabaseQueriesClientListByQueryResponse, error) {
-	result := ManagedDatabaseQueriesClientListByQueryResponse{RawResponse: resp}
+	result := ManagedDatabaseQueriesClientListByQueryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceQueryStatistics); err != nil {
 		return ManagedDatabaseQueriesClientListByQueryResponse{}, err
 	}

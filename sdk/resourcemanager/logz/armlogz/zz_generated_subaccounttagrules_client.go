@@ -34,17 +34,17 @@ type SubAccountTagRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSubAccountTagRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SubAccountTagRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SubAccountTagRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -110,7 +110,7 @@ func (client *SubAccountTagRulesClient) createOrUpdateCreateRequest(ctx context.
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *SubAccountTagRulesClient) createOrUpdateHandleResponse(resp *http.Response) (SubAccountTagRulesClientCreateOrUpdateResponse, error) {
-	result := SubAccountTagRulesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := SubAccountTagRulesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MonitoringTagRules); err != nil {
 		return SubAccountTagRulesClientCreateOrUpdateResponse{}, err
 	}
@@ -175,7 +175,7 @@ func (client *SubAccountTagRulesClient) deleteCreateRequest(ctx context.Context,
 
 // deleteHandleResponse handles the Delete response.
 func (client *SubAccountTagRulesClient) deleteHandleResponse(resp *http.Response) (SubAccountTagRulesClientDeleteResponse, error) {
-	result := SubAccountTagRulesClientDeleteResponse{RawResponse: resp}
+	result := SubAccountTagRulesClientDeleteResponse{}
 	if val := resp.Header.Get("location"); val != "" {
 		result.Location = &val
 	}
@@ -239,7 +239,7 @@ func (client *SubAccountTagRulesClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *SubAccountTagRulesClient) getHandleResponse(resp *http.Response) (SubAccountTagRulesClientGetResponse, error) {
-	result := SubAccountTagRulesClientGetResponse{RawResponse: resp}
+	result := SubAccountTagRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MonitoringTagRules); err != nil {
 		return SubAccountTagRulesClientGetResponse{}, err
 	}
@@ -296,7 +296,7 @@ func (client *SubAccountTagRulesClient) listCreateRequest(ctx context.Context, r
 
 // listHandleResponse handles the List response.
 func (client *SubAccountTagRulesClient) listHandleResponse(resp *http.Response) (SubAccountTagRulesClientListResponse, error) {
-	result := SubAccountTagRulesClientListResponse{RawResponse: resp}
+	result := SubAccountTagRulesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MonitoringTagRulesListResponse); err != nil {
 		return SubAccountTagRulesClientListResponse{}, err
 	}

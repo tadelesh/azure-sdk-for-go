@@ -35,17 +35,17 @@ type LongTermRetentionBackupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLongTermRetentionBackupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LongTermRetentionBackupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LongTermRetentionBackupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *LongTermRetentionBackupsClient) BeginCopy(ctx context.Context, loc
 	if err != nil {
 		return LongTermRetentionBackupsClientCopyPollerResponse{}, err
 	}
-	result := LongTermRetentionBackupsClientCopyPollerResponse{
-		RawResponse: resp,
-	}
+	result := LongTermRetentionBackupsClientCopyPollerResponse{}
 	pt, err := armruntime.NewPoller("LongTermRetentionBackupsClient.Copy", "", resp, client.pl)
 	if err != nil {
 		return LongTermRetentionBackupsClientCopyPollerResponse{}, err
@@ -144,9 +142,7 @@ func (client *LongTermRetentionBackupsClient) BeginCopyByResourceGroup(ctx conte
 	if err != nil {
 		return LongTermRetentionBackupsClientCopyByResourceGroupPollerResponse{}, err
 	}
-	result := LongTermRetentionBackupsClientCopyByResourceGroupPollerResponse{
-		RawResponse: resp,
-	}
+	result := LongTermRetentionBackupsClientCopyByResourceGroupPollerResponse{}
 	pt, err := armruntime.NewPoller("LongTermRetentionBackupsClient.CopyByResourceGroup", "", resp, client.pl)
 	if err != nil {
 		return LongTermRetentionBackupsClientCopyByResourceGroupPollerResponse{}, err
@@ -225,9 +221,7 @@ func (client *LongTermRetentionBackupsClient) BeginDelete(ctx context.Context, l
 	if err != nil {
 		return LongTermRetentionBackupsClientDeletePollerResponse{}, err
 	}
-	result := LongTermRetentionBackupsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := LongTermRetentionBackupsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("LongTermRetentionBackupsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return LongTermRetentionBackupsClientDeletePollerResponse{}, err
@@ -303,9 +297,7 @@ func (client *LongTermRetentionBackupsClient) BeginDeleteByResourceGroup(ctx con
 	if err != nil {
 		return LongTermRetentionBackupsClientDeleteByResourceGroupPollerResponse{}, err
 	}
-	result := LongTermRetentionBackupsClientDeleteByResourceGroupPollerResponse{
-		RawResponse: resp,
-	}
+	result := LongTermRetentionBackupsClientDeleteByResourceGroupPollerResponse{}
 	pt, err := armruntime.NewPoller("LongTermRetentionBackupsClient.DeleteByResourceGroup", "", resp, client.pl)
 	if err != nil {
 		return LongTermRetentionBackupsClientDeleteByResourceGroupPollerResponse{}, err
@@ -429,7 +421,7 @@ func (client *LongTermRetentionBackupsClient) getCreateRequest(ctx context.Conte
 
 // getHandleResponse handles the Get response.
 func (client *LongTermRetentionBackupsClient) getHandleResponse(resp *http.Response) (LongTermRetentionBackupsClientGetResponse, error) {
-	result := LongTermRetentionBackupsClientGetResponse{RawResponse: resp}
+	result := LongTermRetentionBackupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LongTermRetentionBackup); err != nil {
 		return LongTermRetentionBackupsClientGetResponse{}, err
 	}
@@ -501,7 +493,7 @@ func (client *LongTermRetentionBackupsClient) getByResourceGroupCreateRequest(ct
 
 // getByResourceGroupHandleResponse handles the GetByResourceGroup response.
 func (client *LongTermRetentionBackupsClient) getByResourceGroupHandleResponse(resp *http.Response) (LongTermRetentionBackupsClientGetByResourceGroupResponse, error) {
-	result := LongTermRetentionBackupsClientGetByResourceGroupResponse{RawResponse: resp}
+	result := LongTermRetentionBackupsClientGetByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LongTermRetentionBackup); err != nil {
 		return LongTermRetentionBackupsClientGetByResourceGroupResponse{}, err
 	}
@@ -565,7 +557,7 @@ func (client *LongTermRetentionBackupsClient) listByDatabaseCreateRequest(ctx co
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *LongTermRetentionBackupsClient) listByDatabaseHandleResponse(resp *http.Response) (LongTermRetentionBackupsClientListByDatabaseResponse, error) {
-	result := LongTermRetentionBackupsClientListByDatabaseResponse{RawResponse: resp}
+	result := LongTermRetentionBackupsClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LongTermRetentionBackupListResult); err != nil {
 		return LongTermRetentionBackupsClientListByDatabaseResponse{}, err
 	}
@@ -619,7 +611,7 @@ func (client *LongTermRetentionBackupsClient) listByLocationCreateRequest(ctx co
 
 // listByLocationHandleResponse handles the ListByLocation response.
 func (client *LongTermRetentionBackupsClient) listByLocationHandleResponse(resp *http.Response) (LongTermRetentionBackupsClientListByLocationResponse, error) {
-	result := LongTermRetentionBackupsClientListByLocationResponse{RawResponse: resp}
+	result := LongTermRetentionBackupsClientListByLocationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LongTermRetentionBackupListResult); err != nil {
 		return LongTermRetentionBackupsClientListByLocationResponse{}, err
 	}
@@ -689,7 +681,7 @@ func (client *LongTermRetentionBackupsClient) listByResourceGroupDatabaseCreateR
 
 // listByResourceGroupDatabaseHandleResponse handles the ListByResourceGroupDatabase response.
 func (client *LongTermRetentionBackupsClient) listByResourceGroupDatabaseHandleResponse(resp *http.Response) (LongTermRetentionBackupsClientListByResourceGroupDatabaseResponse, error) {
-	result := LongTermRetentionBackupsClientListByResourceGroupDatabaseResponse{RawResponse: resp}
+	result := LongTermRetentionBackupsClientListByResourceGroupDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LongTermRetentionBackupListResult); err != nil {
 		return LongTermRetentionBackupsClientListByResourceGroupDatabaseResponse{}, err
 	}
@@ -749,7 +741,7 @@ func (client *LongTermRetentionBackupsClient) listByResourceGroupLocationCreateR
 
 // listByResourceGroupLocationHandleResponse handles the ListByResourceGroupLocation response.
 func (client *LongTermRetentionBackupsClient) listByResourceGroupLocationHandleResponse(resp *http.Response) (LongTermRetentionBackupsClientListByResourceGroupLocationResponse, error) {
-	result := LongTermRetentionBackupsClientListByResourceGroupLocationResponse{RawResponse: resp}
+	result := LongTermRetentionBackupsClientListByResourceGroupLocationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LongTermRetentionBackupListResult); err != nil {
 		return LongTermRetentionBackupsClientListByResourceGroupLocationResponse{}, err
 	}
@@ -814,7 +806,7 @@ func (client *LongTermRetentionBackupsClient) listByResourceGroupServerCreateReq
 
 // listByResourceGroupServerHandleResponse handles the ListByResourceGroupServer response.
 func (client *LongTermRetentionBackupsClient) listByResourceGroupServerHandleResponse(resp *http.Response) (LongTermRetentionBackupsClientListByResourceGroupServerResponse, error) {
-	result := LongTermRetentionBackupsClientListByResourceGroupServerResponse{RawResponse: resp}
+	result := LongTermRetentionBackupsClientListByResourceGroupServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LongTermRetentionBackupListResult); err != nil {
 		return LongTermRetentionBackupsClientListByResourceGroupServerResponse{}, err
 	}
@@ -873,7 +865,7 @@ func (client *LongTermRetentionBackupsClient) listByServerCreateRequest(ctx cont
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *LongTermRetentionBackupsClient) listByServerHandleResponse(resp *http.Response) (LongTermRetentionBackupsClientListByServerResponse, error) {
-	result := LongTermRetentionBackupsClientListByServerResponse{RawResponse: resp}
+	result := LongTermRetentionBackupsClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LongTermRetentionBackupListResult); err != nil {
 		return LongTermRetentionBackupsClientListByServerResponse{}, err
 	}
@@ -894,9 +886,7 @@ func (client *LongTermRetentionBackupsClient) BeginUpdate(ctx context.Context, l
 	if err != nil {
 		return LongTermRetentionBackupsClientUpdatePollerResponse{}, err
 	}
-	result := LongTermRetentionBackupsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LongTermRetentionBackupsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("LongTermRetentionBackupsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return LongTermRetentionBackupsClientUpdatePollerResponse{}, err
@@ -974,9 +964,7 @@ func (client *LongTermRetentionBackupsClient) BeginUpdateByResourceGroup(ctx con
 	if err != nil {
 		return LongTermRetentionBackupsClientUpdateByResourceGroupPollerResponse{}, err
 	}
-	result := LongTermRetentionBackupsClientUpdateByResourceGroupPollerResponse{
-		RawResponse: resp,
-	}
+	result := LongTermRetentionBackupsClientUpdateByResourceGroupPollerResponse{}
 	pt, err := armruntime.NewPoller("LongTermRetentionBackupsClient.UpdateByResourceGroup", "", resp, client.pl)
 	if err != nil {
 		return LongTermRetentionBackupsClientUpdateByResourceGroupPollerResponse{}, err

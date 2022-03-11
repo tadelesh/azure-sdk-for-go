@@ -1,5 +1,73 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*LedgerClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(LedgerClientListByResourceGroupResponse, error)`
+- Function `*LedgerClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(LedgerClientListBySubscriptionResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*LedgerClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*LedgerClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*LedgerClientListByResourceGroupPager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*LedgerClientListBySubscriptionPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Struct `ClientCheckNameAvailabilityResult` has been removed
+- Struct `LedgerClientCreateResult` has been removed
+- Struct `LedgerClientGetResult` has been removed
+- Struct `LedgerClientListByResourceGroupResult` has been removed
+- Struct `LedgerClientListBySubscriptionResult` has been removed
+- Struct `LedgerClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `RawResponse` of struct `LedgerClientUpdatePollerResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `LedgerClientUpdateResult` of struct `LedgerClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `LedgerClientUpdateResponse` has been removed
+- Field `ClientCheckNameAvailabilityResult` of struct `ClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `LedgerClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `LedgerClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `LedgerClientCreatePollerResponse` has been removed
+- Field `LedgerClientListBySubscriptionResult` of struct `LedgerClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `LedgerClientListBySubscriptionResponse` has been removed
+- Field `LedgerClientGetResult` of struct `LedgerClientGetResponse` has been removed
+- Field `RawResponse` of struct `LedgerClientGetResponse` has been removed
+- Field `LedgerClientCreateResult` of struct `LedgerClientCreateResponse` has been removed
+- Field `RawResponse` of struct `LedgerClientCreateResponse` has been removed
+- Field `LedgerClientListByResourceGroupResult` of struct `LedgerClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `LedgerClientListByResourceGroupResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New function `*LedgerClientListBySubscriptionPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*LedgerClientListByResourceGroupPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `ConfidentialLedger` in struct `LedgerClientGetResponse`
+- New anonymous field `ConfidentialLedger` in struct `LedgerClientCreateResponse`
+- New anonymous field `ResourceProviderOperationList` in struct `OperationsClientListResponse`
+- New anonymous field `CheckNameAvailabilityResponse` in struct `ClientCheckNameAvailabilityResponse`
+- New anonymous field `List` in struct `LedgerClientListBySubscriptionResponse`
+- New anonymous field `List` in struct `LedgerClientListByResourceGroupResponse`
+- New anonymous field `ConfidentialLedger` in struct `LedgerClientUpdateResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

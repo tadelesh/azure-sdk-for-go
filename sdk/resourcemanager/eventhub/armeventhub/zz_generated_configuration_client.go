@@ -35,17 +35,17 @@ type ConfigurationClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewConfigurationClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ConfigurationClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ConfigurationClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *ConfigurationClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *ConfigurationClient) getHandleResponse(resp *http.Response) (ConfigurationClientGetResponse, error) {
-	result := ConfigurationClientGetResponse{RawResponse: resp}
+	result := ConfigurationClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ClusterQuotaConfigurationProperties); err != nil {
 		return ConfigurationClientGetResponse{}, err
 	}
@@ -156,7 +156,7 @@ func (client *ConfigurationClient) patchCreateRequest(ctx context.Context, resou
 
 // patchHandleResponse handles the Patch response.
 func (client *ConfigurationClient) patchHandleResponse(resp *http.Response) (ConfigurationClientPatchResponse, error) {
-	result := ConfigurationClientPatchResponse{RawResponse: resp}
+	result := ConfigurationClientPatchResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ClusterQuotaConfigurationProperties); err != nil {
 		return ConfigurationClientPatchResponse{}, err
 	}

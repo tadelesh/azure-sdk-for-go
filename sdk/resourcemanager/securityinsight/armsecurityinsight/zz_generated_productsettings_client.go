@@ -34,17 +34,17 @@ type ProductSettingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProductSettingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ProductSettingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProductSettingsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -67,7 +67,7 @@ func (client *ProductSettingsClient) Delete(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ProductSettingsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ProductSettingsClientDeleteResponse{RawResponse: resp}, nil
+	return ProductSettingsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -153,7 +153,7 @@ func (client *ProductSettingsClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *ProductSettingsClient) getHandleResponse(resp *http.Response) (ProductSettingsClientGetResponse, error) {
-	result := ProductSettingsClientGetResponse{RawResponse: resp}
+	result := ProductSettingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return ProductSettingsClientGetResponse{}, err
 	}
@@ -208,7 +208,7 @@ func (client *ProductSettingsClient) listCreateRequest(ctx context.Context, reso
 
 // listHandleResponse handles the List response.
 func (client *ProductSettingsClient) listHandleResponse(resp *http.Response) (ProductSettingsClientListResponse, error) {
-	result := ProductSettingsClientListResponse{RawResponse: resp}
+	result := ProductSettingsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SettingList); err != nil {
 		return ProductSettingsClientListResponse{}, err
 	}
@@ -269,7 +269,7 @@ func (client *ProductSettingsClient) updateCreateRequest(ctx context.Context, re
 
 // updateHandleResponse handles the Update response.
 func (client *ProductSettingsClient) updateHandleResponse(resp *http.Response) (ProductSettingsClientUpdateResponse, error) {
-	result := ProductSettingsClientUpdateResponse{RawResponse: resp}
+	result := ProductSettingsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return ProductSettingsClientUpdateResponse{}, err
 	}

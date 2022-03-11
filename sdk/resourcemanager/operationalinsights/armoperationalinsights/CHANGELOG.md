@@ -1,5 +1,301 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*DataExportsClient.ListByWorkspace` parameter(s) have been changed from `(context.Context, string, string, *DataExportsClientListByWorkspaceOptions)` to `(string, string, *DataExportsClientListByWorkspaceOptions)`
+- Function `*DataExportsClient.ListByWorkspace` return value(s) have been changed from `(DataExportsClientListByWorkspaceResponse, error)` to `(*DataExportsClientListByWorkspacePager)`
+- Function `*LinkedStorageAccountsClient.ListByWorkspace` parameter(s) have been changed from `(context.Context, string, string, *LinkedStorageAccountsClientListByWorkspaceOptions)` to `(string, string, *LinkedStorageAccountsClientListByWorkspaceOptions)`
+- Function `*LinkedStorageAccountsClient.ListByWorkspace` return value(s) have been changed from `(LinkedStorageAccountsClientListByWorkspaceResponse, error)` to `(*LinkedStorageAccountsClientListByWorkspacePager)`
+- Function `*UsagesClient.List` parameter(s) have been changed from `(context.Context, string, string, *UsagesClientListOptions)` to `(string, string, *UsagesClientListOptions)`
+- Function `*UsagesClient.List` return value(s) have been changed from `(UsagesClientListResponse, error)` to `(*UsagesClientListPager)`
+- Function `*WorkspacesClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *WorkspacesClientListByResourceGroupOptions)` to `(string, *WorkspacesClientListByResourceGroupOptions)`
+- Function `*WorkspacesClient.ListByResourceGroup` return value(s) have been changed from `(WorkspacesClientListByResourceGroupResponse, error)` to `(*WorkspacesClientListByResourceGroupPager)`
+- Function `*LinkedServicesClient.ListByWorkspace` parameter(s) have been changed from `(context.Context, string, string, *LinkedServicesClientListByWorkspaceOptions)` to `(string, string, *LinkedServicesClientListByWorkspaceOptions)`
+- Function `*LinkedServicesClient.ListByWorkspace` return value(s) have been changed from `(LinkedServicesClientListByWorkspaceResponse, error)` to `(*LinkedServicesClientListByWorkspacePager)`
+- Function `*DeletedWorkspacesClient.List` parameter(s) have been changed from `(context.Context, *DeletedWorkspacesClientListOptions)` to `(*DeletedWorkspacesClientListOptions)`
+- Function `*DeletedWorkspacesClient.List` return value(s) have been changed from `(DeletedWorkspacesClientListResponse, error)` to `(*DeletedWorkspacesClientListPager)`
+- Function `*DataSourcesClientListByWorkspacePager.NextPage` return value(s) have been changed from `(bool)` to `(DataSourcesClientListByWorkspaceResponse, error)`
+- Function `*WorkspacesClient.List` parameter(s) have been changed from `(context.Context, *WorkspacesClientListOptions)` to `(*WorkspacesClientListOptions)`
+- Function `*WorkspacesClient.List` return value(s) have been changed from `(WorkspacesClientListResponse, error)` to `(*WorkspacesClientListPager)`
+- Function `*ClustersClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ClustersClientListResponse, error)`
+- Function `*DeletedWorkspacesClient.ListByResourceGroup` parameter(s) have been changed from `(context.Context, string, *DeletedWorkspacesClientListByResourceGroupOptions)` to `(string, *DeletedWorkspacesClientListByResourceGroupOptions)`
+- Function `*DeletedWorkspacesClient.ListByResourceGroup` return value(s) have been changed from `(DeletedWorkspacesClientListByResourceGroupResponse, error)` to `(*DeletedWorkspacesClientListByResourceGroupPager)`
+- Function `*StorageInsightConfigsClientListByWorkspacePager.NextPage` return value(s) have been changed from `(bool)` to `(StorageInsightConfigsClientListByWorkspaceResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ClustersClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ClustersClientListByResourceGroupResponse, error)`
+- Function `*ManagementGroupsClient.List` parameter(s) have been changed from `(context.Context, string, string, *ManagementGroupsClientListOptions)` to `(string, string, *ManagementGroupsClientListOptions)`
+- Function `*ManagementGroupsClient.List` return value(s) have been changed from `(ManagementGroupsClientListResponse, error)` to `(*ManagementGroupsClientListPager)`
+- Function `*TablesClient.ListByWorkspace` parameter(s) have been changed from `(context.Context, string, string, *TablesClientListByWorkspaceOptions)` to `(string, string, *TablesClientListByWorkspaceOptions)`
+- Function `*TablesClient.ListByWorkspace` return value(s) have been changed from `(TablesClientListByWorkspaceResponse, error)` to `(*TablesClientListByWorkspacePager)`
+- Function `*StorageInsightConfigsClientListByWorkspacePager.Err` has been removed
+- Function `*ClustersClientListPager.Err` has been removed
+- Function `*ClustersClientListByResourceGroupPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*StorageInsightConfigsClientListByWorkspacePager.PageResponse` has been removed
+- Function `*ClustersClientListPager.PageResponse` has been removed
+- Function `*DataSourcesClientListByWorkspacePager.Err` has been removed
+- Function `*ClustersClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*DataSourcesClientListByWorkspacePager.PageResponse` has been removed
+- Struct `AvailableServiceTiersClientListByWorkspaceResult` has been removed
+- Struct `ClustersClientCreateOrUpdateResult` has been removed
+- Struct `ClustersClientGetResult` has been removed
+- Struct `ClustersClientListByResourceGroupResult` has been removed
+- Struct `ClustersClientListResult` has been removed
+- Struct `ClustersClientUpdateResult` has been removed
+- Struct `DataExportsClientCreateOrUpdateResult` has been removed
+- Struct `DataExportsClientGetResult` has been removed
+- Struct `DataExportsClientListByWorkspaceResult` has been removed
+- Struct `DataSourcesClientCreateOrUpdateResult` has been removed
+- Struct `DataSourcesClientGetResult` has been removed
+- Struct `DataSourcesClientListByWorkspaceResult` has been removed
+- Struct `DeletedWorkspacesClientListByResourceGroupResult` has been removed
+- Struct `DeletedWorkspacesClientListResult` has been removed
+- Struct `IntelligencePacksClientListResult` has been removed
+- Struct `LinkedServicesClientCreateOrUpdateResult` has been removed
+- Struct `LinkedServicesClientDeleteResult` has been removed
+- Struct `LinkedServicesClientGetResult` has been removed
+- Struct `LinkedServicesClientListByWorkspaceResult` has been removed
+- Struct `LinkedStorageAccountsClientCreateOrUpdateResult` has been removed
+- Struct `LinkedStorageAccountsClientGetResult` has been removed
+- Struct `LinkedStorageAccountsClientListByWorkspaceResult` has been removed
+- Struct `ManagementGroupsClientListResult` has been removed
+- Struct `OperationStatusesClientGetResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `SavedSearchesClientCreateOrUpdateResult` has been removed
+- Struct `SavedSearchesClientGetResult` has been removed
+- Struct `SavedSearchesClientListByWorkspaceResult` has been removed
+- Struct `SchemaClientGetResult` has been removed
+- Struct `SharedKeysClientGetSharedKeysResult` has been removed
+- Struct `SharedKeysClientRegenerateResult` has been removed
+- Struct `StorageInsightConfigsClientCreateOrUpdateResult` has been removed
+- Struct `StorageInsightConfigsClientGetResult` has been removed
+- Struct `StorageInsightConfigsClientListByWorkspaceResult` has been removed
+- Struct `TablesClientCreateOrUpdateResult` has been removed
+- Struct `TablesClientGetResult` has been removed
+- Struct `TablesClientListByWorkspaceResult` has been removed
+- Struct `TablesClientUpdateResult` has been removed
+- Struct `UsagesClientListResult` has been removed
+- Struct `WorkspacePurgeClientGetPurgeStatusResult` has been removed
+- Struct `WorkspacePurgeClientPurgeResult` has been removed
+- Struct `WorkspacesClientCreateOrUpdateResult` has been removed
+- Struct `WorkspacesClientGetResult` has been removed
+- Struct `WorkspacesClientListByResourceGroupResult` has been removed
+- Struct `WorkspacesClientListResult` has been removed
+- Struct `WorkspacesClientUpdateResult` has been removed
+- Field `RawResponse` of struct `TablesClientDeleteResponse` has been removed
+- Field `StorageInsightConfigsClientListByWorkspaceResult` of struct `StorageInsightConfigsClientListByWorkspaceResponse` has been removed
+- Field `RawResponse` of struct `StorageInsightConfigsClientListByWorkspaceResponse` has been removed
+- Field `ClustersClientCreateOrUpdateResult` of struct `ClustersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientCreateOrUpdateResponse` has been removed
+- Field `WorkspacePurgeClientPurgeResult` of struct `WorkspacePurgeClientPurgeResponse` has been removed
+- Field `RawResponse` of struct `WorkspacePurgeClientPurgeResponse` has been removed
+- Field `SharedKeysClientGetSharedKeysResult` of struct `SharedKeysClientGetSharedKeysResponse` has been removed
+- Field `RawResponse` of struct `SharedKeysClientGetSharedKeysResponse` has been removed
+- Field `RawResponse` of struct `TablesClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `IntelligencePacksClientEnableResponse` has been removed
+- Field `RawResponse` of struct `IntelligencePacksClientDisableResponse` has been removed
+- Field `ManagementGroupsClientListResult` of struct `ManagementGroupsClientListResponse` has been removed
+- Field `RawResponse` of struct `ManagementGroupsClientListResponse` has been removed
+- Field `StorageInsightConfigsClientCreateOrUpdateResult` of struct `StorageInsightConfigsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `StorageInsightConfigsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientDeletePollerResponse` has been removed
+- Field `OperationStatusesClientGetResult` of struct `OperationStatusesClientGetResponse` has been removed
+- Field `RawResponse` of struct `OperationStatusesClientGetResponse` has been removed
+- Field `ClustersClientGetResult` of struct `ClustersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DataSourcesClientDeleteResponse` has been removed
+- Field `LinkedStorageAccountsClientCreateOrUpdateResult` of struct `LinkedStorageAccountsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `LinkedStorageAccountsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SavedSearchesClientDeleteResponse` has been removed
+- Field `DeletedWorkspacesClientListResult` of struct `DeletedWorkspacesClientListResponse` has been removed
+- Field `RawResponse` of struct `DeletedWorkspacesClientListResponse` has been removed
+- Field `LinkedServicesClientGetResult` of struct `LinkedServicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `LinkedServicesClientGetResponse` has been removed
+- Field `WorkspacesClientCreateOrUpdateResult` of struct `WorkspacesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientCreateOrUpdateResponse` has been removed
+- Field `WorkspacesClientListResult` of struct `WorkspacesClientListResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientListResponse` has been removed
+- Field `WorkspacesClientUpdateResult` of struct `WorkspacesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientUpdateResponse` has been removed
+- Field `WorkspacesClientGetResult` of struct `WorkspacesClientGetResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientGetResponse` has been removed
+- Field `ClustersClientUpdateResult` of struct `ClustersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdateResponse` has been removed
+- Field `DataExportsClientListByWorkspaceResult` of struct `DataExportsClientListByWorkspaceResponse` has been removed
+- Field `RawResponse` of struct `DataExportsClientListByWorkspaceResponse` has been removed
+- Field `RawResponse` of struct `LinkedServicesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `DataExportsClientDeleteResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `ClustersClientListByResourceGroupResult` of struct `ClustersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListByResourceGroupResponse` has been removed
+- Field `SavedSearchesClientListByWorkspaceResult` of struct `SavedSearchesClientListByWorkspaceResponse` has been removed
+- Field `RawResponse` of struct `SavedSearchesClientListByWorkspaceResponse` has been removed
+- Field `LinkedServicesClientDeleteResult` of struct `LinkedServicesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `LinkedServicesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `GatewaysClientDeleteResponse` has been removed
+- Field `TablesClientCreateOrUpdateResult` of struct `TablesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `TablesClientCreateOrUpdateResponse` has been removed
+- Field `DeletedWorkspacesClientListByResourceGroupResult` of struct `DeletedWorkspacesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `DeletedWorkspacesClientListByResourceGroupResponse` has been removed
+- Field `DataSourcesClientGetResult` of struct `DataSourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `DataSourcesClientGetResponse` has been removed
+- Field `LinkedServicesClientCreateOrUpdateResult` of struct `LinkedServicesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `LinkedServicesClientCreateOrUpdateResponse` has been removed
+- Field `IntelligencePacksClientListResult` of struct `IntelligencePacksClientListResponse` has been removed
+- Field `RawResponse` of struct `IntelligencePacksClientListResponse` has been removed
+- Field `ClustersClientListResult` of struct `ClustersClientListResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListResponse` has been removed
+- Field `LinkedStorageAccountsClientGetResult` of struct `LinkedStorageAccountsClientGetResponse` has been removed
+- Field `RawResponse` of struct `LinkedStorageAccountsClientGetResponse` has been removed
+- Field `AvailableServiceTiersClientListByWorkspaceResult` of struct `AvailableServiceTiersClientListByWorkspaceResponse` has been removed
+- Field `RawResponse` of struct `AvailableServiceTiersClientListByWorkspaceResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdatePollerResponse` has been removed
+- Field `WorkspacePurgeClientGetPurgeStatusResult` of struct `WorkspacePurgeClientGetPurgeStatusResponse` has been removed
+- Field `RawResponse` of struct `WorkspacePurgeClientGetPurgeStatusResponse` has been removed
+- Field `RawResponse` of struct `TablesClientDeletePollerResponse` has been removed
+- Field `SavedSearchesClientCreateOrUpdateResult` of struct `SavedSearchesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SavedSearchesClientCreateOrUpdateResponse` has been removed
+- Field `DataExportsClientGetResult` of struct `DataExportsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DataExportsClientGetResponse` has been removed
+- Field `SchemaClientGetResult` of struct `SchemaClientGetResponse` has been removed
+- Field `RawResponse` of struct `SchemaClientGetResponse` has been removed
+- Field `StorageInsightConfigsClientGetResult` of struct `StorageInsightConfigsClientGetResponse` has been removed
+- Field `RawResponse` of struct `StorageInsightConfigsClientGetResponse` has been removed
+- Field `DataExportsClientCreateOrUpdateResult` of struct `DataExportsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DataExportsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `TablesClientCreateOrUpdatePollerResponse` has been removed
+- Field `TablesClientListByWorkspaceResult` of struct `TablesClientListByWorkspaceResponse` has been removed
+- Field `RawResponse` of struct `TablesClientListByWorkspaceResponse` has been removed
+- Field `SavedSearchesClientGetResult` of struct `SavedSearchesClientGetResponse` has been removed
+- Field `RawResponse` of struct `SavedSearchesClientGetResponse` has been removed
+- Field `TablesClientGetResult` of struct `TablesClientGetResponse` has been removed
+- Field `RawResponse` of struct `TablesClientGetResponse` has been removed
+- Field `UsagesClientListResult` of struct `UsagesClientListResponse` has been removed
+- Field `RawResponse` of struct `UsagesClientListResponse` has been removed
+- Field `TablesClientUpdateResult` of struct `TablesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `TablesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `LinkedServicesClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `StorageInsightConfigsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientDeleteResponse` has been removed
+- Field `DataSourcesClientListByWorkspaceResult` of struct `DataSourcesClientListByWorkspaceResponse` has been removed
+- Field `RawResponse` of struct `DataSourcesClientListByWorkspaceResponse` has been removed
+- Field `LinkedStorageAccountsClientListByWorkspaceResult` of struct `LinkedStorageAccountsClientListByWorkspaceResponse` has been removed
+- Field `RawResponse` of struct `LinkedStorageAccountsClientListByWorkspaceResponse` has been removed
+- Field `WorkspacesClientListByResourceGroupResult` of struct `WorkspacesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientListByResourceGroupResponse` has been removed
+- Field `SharedKeysClientRegenerateResult` of struct `SharedKeysClientRegenerateResponse` has been removed
+- Field `RawResponse` of struct `SharedKeysClientRegenerateResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `WorkspacesClientDeletePollerResponse` has been removed
+- Field `DataSourcesClientCreateOrUpdateResult` of struct `DataSourcesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DataSourcesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `LinkedStorageAccountsClientDeleteResponse` has been removed
+- Field `LinkedServicesClientListByWorkspaceResult` of struct `LinkedServicesClientListByWorkspaceResponse` has been removed
+- Field `RawResponse` of struct `LinkedServicesClientListByWorkspaceResponse` has been removed
+
+### Features Added
+
+- New function `*UsagesClientListPager.More() bool`
+- New function `*LinkedStorageAccountsClientListByWorkspacePager.NextPage(context.Context) (LinkedStorageAccountsClientListByWorkspaceResponse, error)`
+- New function `*ManagementGroupsClientListPager.More() bool`
+- New function `*UsagesClientListPager.NextPage(context.Context) (UsagesClientListResponse, error)`
+- New function `*WorkspacesClientListByResourceGroupPager.More() bool`
+- New function `*ClustersClientListByResourceGroupPager.More() bool`
+- New function `*ClustersClientListPager.More() bool`
+- New function `*LinkedServicesClientListByWorkspacePager.More() bool`
+- New function `*DataExportsClientListByWorkspacePager.NextPage(context.Context) (DataExportsClientListByWorkspaceResponse, error)`
+- New function `*StorageInsightConfigsClientListByWorkspacePager.More() bool`
+- New function `*LinkedStorageAccountsClientListByWorkspacePager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*WorkspacesClientListPager.NextPage(context.Context) (WorkspacesClientListResponse, error)`
+- New function `*WorkspacesClientListByResourceGroupPager.NextPage(context.Context) (WorkspacesClientListByResourceGroupResponse, error)`
+- New function `*TablesClientListByWorkspacePager.NextPage(context.Context) (TablesClientListByWorkspaceResponse, error)`
+- New function `*TablesClientListByWorkspacePager.More() bool`
+- New function `*DataExportsClientListByWorkspacePager.More() bool`
+- New function `*DeletedWorkspacesClientListByResourceGroupPager.NextPage(context.Context) (DeletedWorkspacesClientListByResourceGroupResponse, error)`
+- New function `*DeletedWorkspacesClientListPager.NextPage(context.Context) (DeletedWorkspacesClientListResponse, error)`
+- New function `*ManagementGroupsClientListPager.NextPage(context.Context) (ManagementGroupsClientListResponse, error)`
+- New function `*DataSourcesClientListByWorkspacePager.More() bool`
+- New function `*DeletedWorkspacesClientListPager.More() bool`
+- New function `*DeletedWorkspacesClientListByResourceGroupPager.More() bool`
+- New function `*LinkedServicesClientListByWorkspacePager.NextPage(context.Context) (LinkedServicesClientListByWorkspaceResponse, error)`
+- New function `*WorkspacesClientListPager.More() bool`
+- New struct `DataExportsClientListByWorkspacePager`
+- New struct `DataSourceFilter`
+- New struct `DeletedWorkspacesClientListByResourceGroupPager`
+- New struct `DeletedWorkspacesClientListPager`
+- New struct `LinkedServicesClientListByWorkspacePager`
+- New struct `LinkedStorageAccountsClientListByWorkspacePager`
+- New struct `ManagementGroupsClientListPager`
+- New struct `TablesClientListByWorkspacePager`
+- New struct `UsagesClientListPager`
+- New struct `WorkspacesClientListByResourceGroupPager`
+- New struct `WorkspacesClientListPager`
+- New anonymous field `LinkedService` in struct `LinkedServicesClientDeleteResponse`
+- New anonymous field `SavedSearchesListResult` in struct `SavedSearchesClientListByWorkspaceResponse`
+- New anonymous field `LinkedService` in struct `LinkedServicesClientGetResponse`
+- New anonymous field `LinkedStorageAccountsListResult` in struct `LinkedStorageAccountsClientListByWorkspaceResponse`
+- New anonymous field `DataSource` in struct `DataSourcesClientGetResponse`
+- New anonymous field `SearchGetSchemaResponse` in struct `SchemaClientGetResponse`
+- New anonymous field `DataSource` in struct `DataSourcesClientCreateOrUpdateResponse`
+- New anonymous field `WorkspaceListResult` in struct `DeletedWorkspacesClientListByResourceGroupResponse`
+- New anonymous field `Workspace` in struct `WorkspacesClientGetResponse`
+- New anonymous field `LinkedService` in struct `LinkedServicesClientCreateOrUpdateResponse`
+- New anonymous field `Table` in struct `TablesClientUpdateResponse`
+- New anonymous field `Table` in struct `TablesClientGetResponse`
+- New anonymous field `Table` in struct `TablesClientCreateOrUpdateResponse`
+- New field `IntelligencePackArray` in struct `IntelligencePacksClientListResponse`
+- New anonymous field `SavedSearch` in struct `SavedSearchesClientGetResponse`
+- New anonymous field `Cluster` in struct `ClustersClientCreateOrUpdateResponse`
+- New anonymous field `LinkedServiceListResult` in struct `LinkedServicesClientListByWorkspaceResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `WorkspaceListManagementGroupsResult` in struct `ManagementGroupsClientListResponse`
+- New anonymous field `LinkedStorageAccountsResource` in struct `LinkedStorageAccountsClientCreateOrUpdateResponse`
+- New anonymous field `SavedSearch` in struct `SavedSearchesClientCreateOrUpdateResponse`
+- New field `AvailableServiceTierArray` in struct `AvailableServiceTiersClientListByWorkspaceResponse`
+- New anonymous field `DataSourceListResult` in struct `DataSourcesClientListByWorkspaceResponse`
+- New anonymous field `StorageInsightListResult` in struct `StorageInsightConfigsClientListByWorkspaceResponse`
+- New anonymous field `Workspace` in struct `WorkspacesClientUpdateResponse`
+- New anonymous field `DataExportListResult` in struct `DataExportsClientListByWorkspaceResponse`
+- New anonymous field `WorkspaceListResult` in struct `DeletedWorkspacesClientListResponse`
+- New anonymous field `DataExport` in struct `DataExportsClientGetResponse`
+- New anonymous field `TablesListResult` in struct `TablesClientListByWorkspaceResponse`
+- New anonymous field `SharedKeys` in struct `SharedKeysClientGetSharedKeysResponse`
+- New anonymous field `ClusterListResult` in struct `ClustersClientListByResourceGroupResponse`
+- New anonymous field `StorageInsight` in struct `StorageInsightConfigsClientCreateOrUpdateResponse`
+- New anonymous field `Cluster` in struct `ClustersClientUpdateResponse`
+- New anonymous field `WorkspaceListResult` in struct `WorkspacesClientListByResourceGroupResponse`
+- New anonymous field `OperationStatus` in struct `OperationStatusesClientGetResponse`
+- New anonymous field `DataExport` in struct `DataExportsClientCreateOrUpdateResponse`
+- New anonymous field `StorageInsight` in struct `StorageInsightConfigsClientGetResponse`
+- New anonymous field `LinkedStorageAccountsResource` in struct `LinkedStorageAccountsClientGetResponse`
+- New anonymous field `WorkspaceListUsagesResult` in struct `UsagesClientListResponse`
+- New anonymous field `Cluster` in struct `ClustersClientGetResponse`
+- New anonymous field `ClusterListResult` in struct `ClustersClientListResponse`
+- New anonymous field `WorkspaceListResult` in struct `WorkspacesClientListResponse`
+- New anonymous field `WorkspacePurgeStatusResponse` in struct `WorkspacePurgeClientGetPurgeStatusResponse`
+- New anonymous field `SharedKeys` in struct `SharedKeysClientRegenerateResponse`
+- New anonymous field `Workspace` in struct `WorkspacesClientCreateOrUpdateResponse`
+- New anonymous field `WorkspacePurgeResponse` in struct `WorkspacePurgeClientPurgeResponse`
+- New field `XMSStatusLocation` in struct `WorkspacePurgeClientPurgeResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `ErrorAdditionalInfo.Info` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `DataSource.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Struct `DataSourceFilter` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

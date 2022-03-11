@@ -34,17 +34,17 @@ type ServerGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServerGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServerGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServerGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -89,7 +89,7 @@ func (client *ServerGroupsClient) checkNameAvailabilityCreateRequest(ctx context
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *ServerGroupsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (ServerGroupsClientCheckNameAvailabilityResponse, error) {
-	result := ServerGroupsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := ServerGroupsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NameAvailability); err != nil {
 		return ServerGroupsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -108,9 +108,7 @@ func (client *ServerGroupsClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return ServerGroupsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ServerGroupsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerGroupsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerGroupsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ServerGroupsClientCreateOrUpdatePollerResponse{}, err
@@ -175,9 +173,7 @@ func (client *ServerGroupsClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return ServerGroupsClientDeletePollerResponse{}, err
 	}
-	result := ServerGroupsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerGroupsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerGroupsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ServerGroupsClientDeletePollerResponse{}, err
@@ -279,7 +275,7 @@ func (client *ServerGroupsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *ServerGroupsClient) getHandleResponse(resp *http.Response) (ServerGroupsClientGetResponse, error) {
-	result := ServerGroupsClientGetResponse{RawResponse: resp}
+	result := ServerGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerGroup); err != nil {
 		return ServerGroupsClientGetResponse{}, err
 	}
@@ -321,7 +317,7 @@ func (client *ServerGroupsClient) listCreateRequest(ctx context.Context, options
 
 // listHandleResponse handles the List response.
 func (client *ServerGroupsClient) listHandleResponse(resp *http.Response) (ServerGroupsClientListResponse, error) {
-	result := ServerGroupsClientListResponse{RawResponse: resp}
+	result := ServerGroupsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerGroupListResult); err != nil {
 		return ServerGroupsClientListResponse{}, err
 	}
@@ -369,7 +365,7 @@ func (client *ServerGroupsClient) listByResourceGroupCreateRequest(ctx context.C
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ServerGroupsClient) listByResourceGroupHandleResponse(resp *http.Response) (ServerGroupsClientListByResourceGroupResponse, error) {
-	result := ServerGroupsClientListByResourceGroupResponse{RawResponse: resp}
+	result := ServerGroupsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerGroupListResult); err != nil {
 		return ServerGroupsClientListByResourceGroupResponse{}, err
 	}
@@ -387,9 +383,7 @@ func (client *ServerGroupsClient) BeginRestart(ctx context.Context, resourceGrou
 	if err != nil {
 		return ServerGroupsClientRestartPollerResponse{}, err
 	}
-	result := ServerGroupsClientRestartPollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerGroupsClientRestartPollerResponse{}
 	pt, err := armruntime.NewPoller("ServerGroupsClient.Restart", "", resp, client.pl)
 	if err != nil {
 		return ServerGroupsClientRestartPollerResponse{}, err
@@ -453,9 +447,7 @@ func (client *ServerGroupsClient) BeginStart(ctx context.Context, resourceGroupN
 	if err != nil {
 		return ServerGroupsClientStartPollerResponse{}, err
 	}
-	result := ServerGroupsClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerGroupsClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("ServerGroupsClient.Start", "", resp, client.pl)
 	if err != nil {
 		return ServerGroupsClientStartPollerResponse{}, err
@@ -519,9 +511,7 @@ func (client *ServerGroupsClient) BeginStop(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return ServerGroupsClientStopPollerResponse{}, err
 	}
-	result := ServerGroupsClientStopPollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerGroupsClientStopPollerResponse{}
 	pt, err := armruntime.NewPoller("ServerGroupsClient.Stop", "", resp, client.pl)
 	if err != nil {
 		return ServerGroupsClientStopPollerResponse{}, err
@@ -588,9 +578,7 @@ func (client *ServerGroupsClient) BeginUpdate(ctx context.Context, resourceGroup
 	if err != nil {
 		return ServerGroupsClientUpdatePollerResponse{}, err
 	}
-	result := ServerGroupsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerGroupsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerGroupsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ServerGroupsClientUpdatePollerResponse{}, err

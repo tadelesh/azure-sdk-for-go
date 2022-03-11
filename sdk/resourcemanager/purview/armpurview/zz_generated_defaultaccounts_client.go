@@ -29,16 +29,16 @@ type DefaultAccountsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDefaultAccountsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *DefaultAccountsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DefaultAccountsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -84,7 +84,7 @@ func (client *DefaultAccountsClient) getCreateRequest(ctx context.Context, scope
 
 // getHandleResponse handles the Get response.
 func (client *DefaultAccountsClient) getHandleResponse(resp *http.Response) (DefaultAccountsClientGetResponse, error) {
-	result := DefaultAccountsClientGetResponse{RawResponse: resp}
+	result := DefaultAccountsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DefaultAccountPayload); err != nil {
 		return DefaultAccountsClientGetResponse{}, err
 	}
@@ -108,7 +108,7 @@ func (client *DefaultAccountsClient) Remove(ctx context.Context, scopeTenantID s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DefaultAccountsClientRemoveResponse{}, runtime.NewResponseError(resp)
 	}
-	return DefaultAccountsClientRemoveResponse{RawResponse: resp}, nil
+	return DefaultAccountsClientRemoveResponse{}, nil
 }
 
 // removeCreateRequest creates the Remove request.
@@ -165,7 +165,7 @@ func (client *DefaultAccountsClient) setCreateRequest(ctx context.Context, defau
 
 // setHandleResponse handles the Set response.
 func (client *DefaultAccountsClient) setHandleResponse(resp *http.Response) (DefaultAccountsClientSetResponse, error) {
-	result := DefaultAccountsClientSetResponse{RawResponse: resp}
+	result := DefaultAccountsClientSetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DefaultAccountPayload); err != nil {
 		return DefaultAccountsClientSetResponse{}, err
 	}

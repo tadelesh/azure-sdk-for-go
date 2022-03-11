@@ -11,7 +11,6 @@ package armservicelinker
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
@@ -19,9 +18,6 @@ import (
 type LinkerClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *LinkerClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -29,11 +25,10 @@ type LinkerClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l LinkerClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LinkerClientCreateOrUpdateResponse, error) {
 	respType := LinkerClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.LinkerResource)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.LinkerResource)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -46,24 +41,16 @@ func (l *LinkerClientCreateOrUpdatePollerResponse) Resume(ctx context.Context, c
 	poller := &LinkerClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // LinkerClientCreateOrUpdateResponse contains the response from method LinkerClient.CreateOrUpdate.
 type LinkerClientCreateOrUpdateResponse struct {
-	LinkerClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LinkerClientCreateOrUpdateResult contains the result from method LinkerClient.CreateOrUpdate.
-type LinkerClientCreateOrUpdateResult struct {
 	LinkerResource
 }
 
@@ -71,9 +58,6 @@ type LinkerClientCreateOrUpdateResult struct {
 type LinkerClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *LinkerClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -81,11 +65,10 @@ type LinkerClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l LinkerClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LinkerClientDeleteResponse, error) {
 	respType := LinkerClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -98,54 +81,31 @@ func (l *LinkerClientDeletePollerResponse) Resume(ctx context.Context, client *L
 	poller := &LinkerClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // LinkerClientDeleteResponse contains the response from method LinkerClient.Delete.
 type LinkerClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // LinkerClientGetResponse contains the response from method LinkerClient.Get.
 type LinkerClientGetResponse struct {
-	LinkerClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LinkerClientGetResult contains the result from method LinkerClient.Get.
-type LinkerClientGetResult struct {
 	LinkerResource
 }
 
 // LinkerClientListConfigurationsResponse contains the response from method LinkerClient.ListConfigurations.
 type LinkerClientListConfigurationsResponse struct {
-	LinkerClientListConfigurationsResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LinkerClientListConfigurationsResult contains the result from method LinkerClient.ListConfigurations.
-type LinkerClientListConfigurationsResult struct {
 	SourceConfigurationResult
 }
 
 // LinkerClientListResponse contains the response from method LinkerClient.List.
 type LinkerClientListResponse struct {
-	LinkerClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LinkerClientListResult contains the result from method LinkerClient.List.
-type LinkerClientListResult struct {
 	LinkerList
 }
 
@@ -153,9 +113,6 @@ type LinkerClientListResult struct {
 type LinkerClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *LinkerClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -163,11 +120,10 @@ type LinkerClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l LinkerClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LinkerClientUpdateResponse, error) {
 	respType := LinkerClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.LinkerResource)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.LinkerResource)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -180,24 +136,16 @@ func (l *LinkerClientUpdatePollerResponse) Resume(ctx context.Context, client *L
 	poller := &LinkerClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // LinkerClientUpdateResponse contains the response from method LinkerClient.Update.
 type LinkerClientUpdateResponse struct {
-	LinkerClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LinkerClientUpdateResult contains the result from method LinkerClient.Update.
-type LinkerClientUpdateResult struct {
 	LinkerResource
 }
 
@@ -205,9 +153,6 @@ type LinkerClientUpdateResult struct {
 type LinkerClientValidatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *LinkerClientValidatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -215,11 +160,10 @@ type LinkerClientValidatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l LinkerClientValidatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LinkerClientValidateResponse, error) {
 	respType := LinkerClientValidateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ValidateResult)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ValidateResult)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -232,35 +176,20 @@ func (l *LinkerClientValidatePollerResponse) Resume(ctx context.Context, client 
 	poller := &LinkerClientValidatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // LinkerClientValidateResponse contains the response from method LinkerClient.Validate.
 type LinkerClientValidateResponse struct {
-	LinkerClientValidateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LinkerClientValidateResult contains the result from method LinkerClient.Validate.
-type LinkerClientValidateResult struct {
 	ValidateResult
 }
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	OperationListResult
 }

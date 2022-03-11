@@ -35,17 +35,17 @@ type GalleriesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGalleriesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *GalleriesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GalleriesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *GalleriesClient) BeginCreateOrUpdate(ctx context.Context, resource
 	if err != nil {
 		return GalleriesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := GalleriesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := GalleriesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("GalleriesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return GalleriesClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *GalleriesClient) BeginDelete(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return GalleriesClientDeletePollerResponse{}, err
 	}
-	result := GalleriesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := GalleriesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("GalleriesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return GalleriesClientDeletePollerResponse{}, err
@@ -236,7 +232,7 @@ func (client *GalleriesClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *GalleriesClient) getHandleResponse(resp *http.Response) (GalleriesClientGetResponse, error) {
-	result := GalleriesClientGetResponse{RawResponse: resp}
+	result := GalleriesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Gallery); err != nil {
 		return GalleriesClientGetResponse{}, err
 	}
@@ -278,7 +274,7 @@ func (client *GalleriesClient) listCreateRequest(ctx context.Context, options *G
 
 // listHandleResponse handles the List response.
 func (client *GalleriesClient) listHandleResponse(resp *http.Response) (GalleriesClientListResponse, error) {
-	result := GalleriesClientListResponse{RawResponse: resp}
+	result := GalleriesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GalleryList); err != nil {
 		return GalleriesClientListResponse{}, err
 	}
@@ -326,7 +322,7 @@ func (client *GalleriesClient) listByResourceGroupCreateRequest(ctx context.Cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *GalleriesClient) listByResourceGroupHandleResponse(resp *http.Response) (GalleriesClientListByResourceGroupResponse, error) {
-	result := GalleriesClientListByResourceGroupResponse{RawResponse: resp}
+	result := GalleriesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GalleryList); err != nil {
 		return GalleriesClientListByResourceGroupResponse{}, err
 	}
@@ -345,9 +341,7 @@ func (client *GalleriesClient) BeginUpdate(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return GalleriesClientUpdatePollerResponse{}, err
 	}
-	result := GalleriesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := GalleriesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("GalleriesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return GalleriesClientUpdatePollerResponse{}, err

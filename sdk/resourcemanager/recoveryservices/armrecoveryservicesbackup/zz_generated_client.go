@@ -34,17 +34,17 @@ type Client struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *Client {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &Client{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *Client) BeginBMSPrepareDataMove(ctx context.Context, vaultName str
 	if err != nil {
 		return ClientBMSPrepareDataMovePollerResponse{}, err
 	}
-	result := ClientBMSPrepareDataMovePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientBMSPrepareDataMovePollerResponse{}
 	pt, err := armruntime.NewPoller("Client.BMSPrepareDataMove", "", resp, client.pl)
 	if err != nil {
 		return ClientBMSPrepareDataMovePollerResponse{}, err
@@ -111,7 +109,7 @@ func (client *Client) bmsPrepareDataMoveCreateRequest(ctx context.Context, vault
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-10-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -129,9 +127,7 @@ func (client *Client) BeginBMSTriggerDataMove(ctx context.Context, vaultName str
 	if err != nil {
 		return ClientBMSTriggerDataMovePollerResponse{}, err
 	}
-	result := ClientBMSTriggerDataMovePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientBMSTriggerDataMovePollerResponse{}
 	pt, err := armruntime.NewPoller("Client.BMSTriggerDataMove", "", resp, client.pl)
 	if err != nil {
 		return ClientBMSTriggerDataMovePollerResponse{}, err
@@ -179,7 +175,7 @@ func (client *Client) bmsTriggerDataMoveCreateRequest(ctx context.Context, vault
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-10-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -229,7 +225,7 @@ func (client *Client) getOperationStatusCreateRequest(ctx context.Context, vault
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-10-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -237,7 +233,7 @@ func (client *Client) getOperationStatusCreateRequest(ctx context.Context, vault
 
 // getOperationStatusHandleResponse handles the GetOperationStatus response.
 func (client *Client) getOperationStatusHandleResponse(resp *http.Response) (ClientGetOperationStatusResponse, error) {
-	result := ClientGetOperationStatusResponse{RawResponse: resp}
+	result := ClientGetOperationStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OperationStatus); err != nil {
 		return ClientGetOperationStatusResponse{}, err
 	}
@@ -255,9 +251,7 @@ func (client *Client) BeginMoveRecoveryPoint(ctx context.Context, vaultName stri
 	if err != nil {
 		return ClientMoveRecoveryPointPollerResponse{}, err
 	}
-	result := ClientMoveRecoveryPointPollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientMoveRecoveryPointPollerResponse{}
 	pt, err := armruntime.NewPoller("Client.MoveRecoveryPoint", "", resp, client.pl)
 	if err != nil {
 		return ClientMoveRecoveryPointPollerResponse{}, err
@@ -321,7 +315,7 @@ func (client *Client) moveRecoveryPointCreateRequest(ctx context.Context, vaultN
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-10-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)

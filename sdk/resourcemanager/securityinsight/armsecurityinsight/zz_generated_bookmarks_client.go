@@ -34,17 +34,17 @@ type BookmarksClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBookmarksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BookmarksClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BookmarksClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *BookmarksClient) createOrUpdateCreateRequest(ctx context.Context, 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *BookmarksClient) createOrUpdateHandleResponse(resp *http.Response) (BookmarksClientCreateOrUpdateResponse, error) {
-	result := BookmarksClientCreateOrUpdateResponse{RawResponse: resp}
+	result := BookmarksClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Bookmark); err != nil {
 		return BookmarksClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *BookmarksClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return BookmarksClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return BookmarksClientDeleteResponse{RawResponse: resp}, nil
+	return BookmarksClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *BookmarksClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *BookmarksClient) getHandleResponse(resp *http.Response) (BookmarksClientGetResponse, error) {
-	result := BookmarksClientGetResponse{RawResponse: resp}
+	result := BookmarksClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Bookmark); err != nil {
 		return BookmarksClientGetResponse{}, err
 	}
@@ -267,7 +267,7 @@ func (client *BookmarksClient) listCreateRequest(ctx context.Context, resourceGr
 
 // listHandleResponse handles the List response.
 func (client *BookmarksClient) listHandleResponse(resp *http.Response) (BookmarksClientListResponse, error) {
-	result := BookmarksClientListResponse{RawResponse: resp}
+	result := BookmarksClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BookmarkList); err != nil {
 		return BookmarksClientListResponse{}, err
 	}

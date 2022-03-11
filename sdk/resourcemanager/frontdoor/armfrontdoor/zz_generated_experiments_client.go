@@ -35,17 +35,17 @@ type ExperimentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewExperimentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ExperimentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ExperimentsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ExperimentsClient) BeginCreateOrUpdate(ctx context.Context, resour
 	if err != nil {
 		return ExperimentsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ExperimentsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ExperimentsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ExperimentsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ExperimentsClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *ExperimentsClient) BeginDelete(ctx context.Context, resourceGroupN
 	if err != nil {
 		return ExperimentsClientDeletePollerResponse{}, err
 	}
-	result := ExperimentsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ExperimentsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ExperimentsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ExperimentsClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *ExperimentsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *ExperimentsClient) getHandleResponse(resp *http.Response) (ExperimentsClientGetResponse, error) {
-	result := ExperimentsClientGetResponse{RawResponse: resp}
+	result := ExperimentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Experiment); err != nil {
 		return ExperimentsClientGetResponse{}, err
 	}
@@ -300,7 +296,7 @@ func (client *ExperimentsClient) listByProfileCreateRequest(ctx context.Context,
 
 // listByProfileHandleResponse handles the ListByProfile response.
 func (client *ExperimentsClient) listByProfileHandleResponse(resp *http.Response) (ExperimentsClientListByProfileResponse, error) {
-	result := ExperimentsClientListByProfileResponse{RawResponse: resp}
+	result := ExperimentsClientListByProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExperimentList); err != nil {
 		return ExperimentsClientListByProfileResponse{}, err
 	}
@@ -319,9 +315,7 @@ func (client *ExperimentsClient) BeginUpdate(ctx context.Context, resourceGroupN
 	if err != nil {
 		return ExperimentsClientUpdatePollerResponse{}, err
 	}
-	result := ExperimentsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ExperimentsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ExperimentsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ExperimentsClientUpdatePollerResponse{}, err

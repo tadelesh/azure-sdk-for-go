@@ -1,5 +1,392 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*BackupWorkloadItemsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(BackupWorkloadItemsClientListResponse, error)`
+- Function `*RecoveryPointsRecommendedForMoveClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(RecoveryPointsRecommendedForMoveClientListResponse, error)`
+- Function `*BackupJobsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(BackupJobsClientListResponse, error)`
+- Function `*BackupProtectedItemsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(BackupProtectedItemsClientListResponse, error)`
+- Function `*ResourceGuardProxiesClientGetPager.NextPage` return value(s) have been changed from `(bool)` to `(ResourceGuardProxiesClientGetResponse, error)`
+- Function `*BackupProtectableItemsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(BackupProtectableItemsClientListResponse, error)`
+- Function `*BackupProtectionContainersClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(BackupProtectionContainersClientListResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*BackupPoliciesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(BackupPoliciesClientListResponse, error)`
+- Function `*ProtectableContainersClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ProtectableContainersClientListResponse, error)`
+- Function `*BackupProtectionIntentClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(BackupProtectionIntentClientListResponse, error)`
+- Function `*BackupEnginesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(BackupEnginesClientListResponse, error)`
+- Function `*BackupUsageSummariesClient.List` parameter(s) have been changed from `(context.Context, string, string, *BackupUsageSummariesClientListOptions)` to `(string, string, *BackupUsageSummariesClientListOptions)`
+- Function `*BackupUsageSummariesClient.List` return value(s) have been changed from `(BackupUsageSummariesClientListResponse, error)` to `(*BackupUsageSummariesClientListPager)`
+- Function `*RecoveryPointsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(RecoveryPointsClientListResponse, error)`
+- Function `*RecoveryPointsRecommendedForMoveClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*BMSPrepareDataMoveOperationResultClientGetResult.UnmarshalJSON` has been removed
+- Function `*BackupProtectedItemsClientListPager.PageResponse` has been removed
+- Function `*RecoveryPointsClientListPager.PageResponse` has been removed
+- Function `*BackupWorkloadItemsClientListPager.PageResponse` has been removed
+- Function `*ProtectableContainersClientListPager.PageResponse` has been removed
+- Function `*BackupProtectionContainersClientListPager.Err` has been removed
+- Function `*BackupProtectableItemsClientListPager.PageResponse` has been removed
+- Function `*BackupProtectionIntentClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*BackupJobsClientListPager.PageResponse` has been removed
+- Function `*ResourceGuardProxiesClientGetPager.PageResponse` has been removed
+- Function `*BackupProtectionContainersClientListPager.PageResponse` has been removed
+- Function `*BackupEnginesClientListPager.Err` has been removed
+- Function `*BackupProtectableItemsClientListPager.Err` has been removed
+- Function `*BackupPoliciesClientListPager.Err` has been removed
+- Function `*BackupJobsClientListPager.Err` has been removed
+- Function `*BackupProtectedItemsClientListPager.Err` has been removed
+- Function `*BackupWorkloadItemsClientListPager.Err` has been removed
+- Function `*ResourceGuardProxiesClientGetPager.Err` has been removed
+- Function `*RecoveryPointsClientListPager.Err` has been removed
+- Function `*BackupPoliciesClientListPager.PageResponse` has been removed
+- Function `*RecoveryPointsRecommendedForMoveClientListPager.PageResponse` has been removed
+- Function `*BackupEnginesClientListPager.PageResponse` has been removed
+- Function `*ProtectableContainersClientListPager.Err` has been removed
+- Function `*BackupProtectionIntentClientListPager.Err` has been removed
+- Struct `BMSPrepareDataMoveOperationResultClientGetResult` has been removed
+- Struct `BackupEnginesClientGetResult` has been removed
+- Struct `BackupEnginesClientListResult` has been removed
+- Struct `BackupJobsClientListResult` has been removed
+- Struct `BackupOperationStatusesClientGetResult` has been removed
+- Struct `BackupPoliciesClientListResult` has been removed
+- Struct `BackupProtectableItemsClientListResult` has been removed
+- Struct `BackupProtectedItemsClientListResult` has been removed
+- Struct `BackupProtectionContainersClientListResult` has been removed
+- Struct `BackupProtectionIntentClientListResult` has been removed
+- Struct `BackupResourceEncryptionConfigsClientGetResult` has been removed
+- Struct `BackupResourceStorageConfigsNonCRRClientGetResult` has been removed
+- Struct `BackupResourceStorageConfigsNonCRRClientUpdateResult` has been removed
+- Struct `BackupResourceVaultConfigsClientGetResult` has been removed
+- Struct `BackupResourceVaultConfigsClientPutResult` has been removed
+- Struct `BackupResourceVaultConfigsClientUpdateResult` has been removed
+- Struct `BackupStatusClientGetResult` has been removed
+- Struct `BackupUsageSummariesClientListResult` has been removed
+- Struct `BackupWorkloadItemsClientListResult` has been removed
+- Struct `ClientGetOperationStatusResult` has been removed
+- Struct `ExportJobsOperationResultsClientGetResult` has been removed
+- Struct `FeatureSupportClientValidateResult` has been removed
+- Struct `JobDetailsClientGetResult` has been removed
+- Struct `OperationClientValidateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointClientGetOperationStatusResult` has been removed
+- Struct `PrivateEndpointConnectionClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionClientPutResult` has been removed
+- Struct `ProtectableContainersClientListResult` has been removed
+- Struct `ProtectedItemOperationResultsClientGetResult` has been removed
+- Struct `ProtectedItemOperationStatusesClientGetResult` has been removed
+- Struct `ProtectedItemsClientCreateOrUpdateResult` has been removed
+- Struct `ProtectedItemsClientGetResult` has been removed
+- Struct `ProtectionContainerOperationResultsClientGetResult` has been removed
+- Struct `ProtectionContainersClientGetResult` has been removed
+- Struct `ProtectionContainersClientRegisterResult` has been removed
+- Struct `ProtectionIntentClientCreateOrUpdateResult` has been removed
+- Struct `ProtectionIntentClientGetResult` has been removed
+- Struct `ProtectionIntentClientValidateResult` has been removed
+- Struct `ProtectionPoliciesClientCreateOrUpdateResult` has been removed
+- Struct `ProtectionPoliciesClientGetResult` has been removed
+- Struct `ProtectionPolicyOperationResultsClientGetResult` has been removed
+- Struct `ProtectionPolicyOperationStatusesClientGetResult` has been removed
+- Struct `RecoveryPointsClientGetResult` has been removed
+- Struct `RecoveryPointsClientListResult` has been removed
+- Struct `RecoveryPointsRecommendedForMoveClientListResult` has been removed
+- Struct `ResourceGuardProxiesClientGetResult` has been removed
+- Struct `ResourceGuardProxyClientGetResult` has been removed
+- Struct `ResourceGuardProxyClientPutResult` has been removed
+- Struct `ResourceGuardProxyClientUnlockDeleteResult` has been removed
+- Struct `SecurityPINsClientGetResult` has been removed
+- Struct `ValidateOperationResultsClientGetResult` has been removed
+- Struct `ValidateOperationStatusesClientGetResult` has been removed
+- Field `ClientGetOperationStatusResult` of struct `ClientGetOperationStatusResponse` has been removed
+- Field `RawResponse` of struct `ClientGetOperationStatusResponse` has been removed
+- Field `ProtectionPoliciesClientGetResult` of struct `ProtectionPoliciesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProtectionPoliciesClientGetResponse` has been removed
+- Field `RawResponse` of struct `JobOperationResultsClientGetResponse` has been removed
+- Field `PrivateEndpointClientGetOperationStatusResult` of struct `PrivateEndpointClientGetOperationStatusResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointClientGetOperationStatusResponse` has been removed
+- Field `RawResponse` of struct `ProtectionPoliciesClientDeletePollerResponse` has been removed
+- Field `PrivateEndpointConnectionClientPutResult` of struct `PrivateEndpointConnectionClientPutResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientPutResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `ProtectionContainersClientGetResult` of struct `ProtectionContainersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProtectionContainersClientGetResponse` has been removed
+- Field `ValidateOperationResultsClientGetResult` of struct `ValidateOperationResultsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ValidateOperationResultsClientGetResponse` has been removed
+- Field `BackupResourceStorageConfigsNonCRRClientUpdateResult` of struct `BackupResourceStorageConfigsNonCRRClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `BackupResourceStorageConfigsNonCRRClientUpdateResponse` has been removed
+- Field `RecoveryPointsClientGetResult` of struct `RecoveryPointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `RecoveryPointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProtectionContainerRefreshOperationResultsClientGetResponse` has been removed
+- Field `BackupProtectableItemsClientListResult` of struct `BackupProtectableItemsClientListResponse` has been removed
+- Field `RawResponse` of struct `BackupProtectableItemsClientListResponse` has been removed
+- Field `ProtectableContainersClientListResult` of struct `ProtectableContainersClientListResponse` has been removed
+- Field `RawResponse` of struct `ProtectableContainersClientListResponse` has been removed
+- Field `RawResponse` of struct `ItemLevelRecoveryConnectionsClientProvisionResponse` has been removed
+- Field `RawResponse` of struct `ValidateOperationClientTriggerResponse` has been removed
+- Field `RawResponse` of struct `ClientBMSTriggerDataMoveResponse` has been removed
+- Field `BackupProtectedItemsClientListResult` of struct `BackupProtectedItemsClientListResponse` has been removed
+- Field `RawResponse` of struct `BackupProtectedItemsClientListResponse` has been removed
+- Field `BackupStatusClientGetResult` of struct `BackupStatusClientGetResponse` has been removed
+- Field `RawResponse` of struct `BackupStatusClientGetResponse` has been removed
+- Field `BackupWorkloadItemsClientListResult` of struct `BackupWorkloadItemsClientListResponse` has been removed
+- Field `RawResponse` of struct `BackupWorkloadItemsClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientPutPollerResponse` has been removed
+- Field `BackupPoliciesClientListResult` of struct `BackupPoliciesClientListResponse` has been removed
+- Field `RawResponse` of struct `BackupPoliciesClientListResponse` has been removed
+- Field `ResourceGuardProxyClientUnlockDeleteResult` of struct `ResourceGuardProxyClientUnlockDeleteResponse` has been removed
+- Field `RawResponse` of struct `ResourceGuardProxyClientUnlockDeleteResponse` has been removed
+- Field `RawResponse` of struct `ProtectionIntentClientDeleteResponse` has been removed
+- Field `ProtectionContainerOperationResultsClientGetResult` of struct `ProtectionContainerOperationResultsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProtectionContainerOperationResultsClientGetResponse` has been removed
+- Field `ValidateOperationStatusesClientGetResult` of struct `ValidateOperationStatusesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ValidateOperationStatusesClientGetResponse` has been removed
+- Field `BackupEnginesClientListResult` of struct `BackupEnginesClientListResponse` has been removed
+- Field `RawResponse` of struct `BackupEnginesClientListResponse` has been removed
+- Field `RawResponse` of struct `JobCancellationsClientTriggerResponse` has been removed
+- Field `ProtectionPolicyOperationStatusesClientGetResult` of struct `ProtectionPolicyOperationStatusesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProtectionPolicyOperationStatusesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ValidateOperationClientTriggerPollerResponse` has been removed
+- Field `RawResponse` of struct `ClientBMSTriggerDataMovePollerResponse` has been removed
+- Field `RawResponse` of struct `ClientMoveRecoveryPointResponse` has been removed
+- Field `BMSPrepareDataMoveOperationResultClientGetResult` of struct `BMSPrepareDataMoveOperationResultClientGetResponse` has been removed
+- Field `RawResponse` of struct `BMSPrepareDataMoveOperationResultClientGetResponse` has been removed
+- Field `BackupResourceVaultConfigsClientGetResult` of struct `BackupResourceVaultConfigsClientGetResponse` has been removed
+- Field `RawResponse` of struct `BackupResourceVaultConfigsClientGetResponse` has been removed
+- Field `ProtectionPolicyOperationResultsClientGetResult` of struct `ProtectionPolicyOperationResultsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProtectionPolicyOperationResultsClientGetResponse` has been removed
+- Field `RecoveryPointsClientListResult` of struct `RecoveryPointsClientListResponse` has been removed
+- Field `RawResponse` of struct `RecoveryPointsClientListResponse` has been removed
+- Field `RawResponse` of struct `ResourceGuardProxyClientDeleteResponse` has been removed
+- Field `BackupEnginesClientGetResult` of struct `BackupEnginesClientGetResponse` has been removed
+- Field `RawResponse` of struct `BackupEnginesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClientMoveRecoveryPointPollerResponse` has been removed
+- Field `RawResponse` of struct `BackupResourceStorageConfigsNonCRRClientPatchResponse` has been removed
+- Field `RawResponse` of struct `RestoresClientTriggerPollerResponse` has been removed
+- Field `BackupResourceVaultConfigsClientPutResult` of struct `BackupResourceVaultConfigsClientPutResponse` has been removed
+- Field `RawResponse` of struct `BackupResourceVaultConfigsClientPutResponse` has been removed
+- Field `JobDetailsClientGetResult` of struct `JobDetailsClientGetResponse` has been removed
+- Field `RawResponse` of struct `JobDetailsClientGetResponse` has been removed
+- Field `ResourceGuardProxiesClientGetResult` of struct `ResourceGuardProxiesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ResourceGuardProxiesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProtectionPoliciesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientDeleteResponse` has been removed
+- Field `SecurityPINsClientGetResult` of struct `SecurityPINsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SecurityPINsClientGetResponse` has been removed
+- Field `BackupResourceVaultConfigsClientUpdateResult` of struct `BackupResourceVaultConfigsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `BackupResourceVaultConfigsClientUpdateResponse` has been removed
+- Field `ProtectedItemsClientCreateOrUpdateResult` of struct `ProtectedItemsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProtectedItemsClientCreateOrUpdateResponse` has been removed
+- Field `ProtectionContainersClientRegisterResult` of struct `ProtectionContainersClientRegisterResponse` has been removed
+- Field `RawResponse` of struct `ProtectionContainersClientRegisterResponse` has been removed
+- Field `ExportJobsOperationResultsClientGetResult` of struct `ExportJobsOperationResultsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ExportJobsOperationResultsClientGetResponse` has been removed
+- Field `BackupProtectionContainersClientListResult` of struct `BackupProtectionContainersClientListResponse` has been removed
+- Field `RawResponse` of struct `BackupProtectionContainersClientListResponse` has been removed
+- Field `ProtectedItemOperationStatusesClientGetResult` of struct `ProtectedItemOperationStatusesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProtectedItemOperationStatusesClientGetResponse` has been removed
+- Field `ProtectedItemOperationResultsClientGetResult` of struct `ProtectedItemOperationResultsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProtectedItemOperationResultsClientGetResponse` has been removed
+- Field `ProtectionIntentClientValidateResult` of struct `ProtectionIntentClientValidateResponse` has been removed
+- Field `RawResponse` of struct `ProtectionIntentClientValidateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientDeletePollerResponse` has been removed
+- Field `FeatureSupportClientValidateResult` of struct `FeatureSupportClientValidateResponse` has been removed
+- Field `RawResponse` of struct `FeatureSupportClientValidateResponse` has been removed
+- Field `ResourceGuardProxyClientPutResult` of struct `ResourceGuardProxyClientPutResponse` has been removed
+- Field `RawResponse` of struct `ResourceGuardProxyClientPutResponse` has been removed
+- Field `ProtectedItemsClientGetResult` of struct `ProtectedItemsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProtectedItemsClientGetResponse` has been removed
+- Field `RecoveryPointsRecommendedForMoveClientListResult` of struct `RecoveryPointsRecommendedForMoveClientListResponse` has been removed
+- Field `RawResponse` of struct `RecoveryPointsRecommendedForMoveClientListResponse` has been removed
+- Field `ResourceGuardProxyClientGetResult` of struct `ResourceGuardProxyClientGetResponse` has been removed
+- Field `RawResponse` of struct `ResourceGuardProxyClientGetResponse` has been removed
+- Field `RawResponse` of struct `RestoresClientTriggerResponse` has been removed
+- Field `BackupJobsClientListResult` of struct `BackupJobsClientListResponse` has been removed
+- Field `RawResponse` of struct `BackupJobsClientListResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientTriggerResponse` has been removed
+- Field `BackupOperationStatusesClientGetResult` of struct `BackupOperationStatusesClientGetResponse` has been removed
+- Field `RawResponse` of struct `BackupOperationStatusesClientGetResponse` has been removed
+- Field `OperationClientValidateResult` of struct `OperationClientValidateResponse` has been removed
+- Field `RawResponse` of struct `OperationClientValidateResponse` has been removed
+- Field `RawResponse` of struct `ProtectionContainersClientRefreshResponse` has been removed
+- Field `ProtectionPoliciesClientCreateOrUpdateResult` of struct `ProtectionPoliciesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProtectionPoliciesClientCreateOrUpdateResponse` has been removed
+- Field `ProtectionIntentClientCreateOrUpdateResult` of struct `ProtectionIntentClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProtectionIntentClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProtectionContainersClientUnregisterResponse` has been removed
+- Field `BackupResourceStorageConfigsNonCRRClientGetResult` of struct `BackupResourceStorageConfigsNonCRRClientGetResponse` has been removed
+- Field `RawResponse` of struct `BackupResourceStorageConfigsNonCRRClientGetResponse` has been removed
+- Field `RawResponse` of struct `BackupOperationResultsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClientBMSPrepareDataMovePollerResponse` has been removed
+- Field `BackupUsageSummariesClientListResult` of struct `BackupUsageSummariesClientListResponse` has been removed
+- Field `RawResponse` of struct `BackupUsageSummariesClientListResponse` has been removed
+- Field `BackupProtectionIntentClientListResult` of struct `BackupProtectionIntentClientListResponse` has been removed
+- Field `RawResponse` of struct `BackupProtectionIntentClientListResponse` has been removed
+- Field `RawResponse` of struct `ProtectedItemsClientDeleteResponse` has been removed
+- Field `PrivateEndpointConnectionClientGetResult` of struct `PrivateEndpointConnectionClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionClientGetResponse` has been removed
+- Field `BackupResourceEncryptionConfigsClientGetResult` of struct `BackupResourceEncryptionConfigsClientGetResponse` has been removed
+- Field `RawResponse` of struct `BackupResourceEncryptionConfigsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ItemLevelRecoveryConnectionsClientRevokeResponse` has been removed
+- Field `ProtectionIntentClientGetResult` of struct `ProtectionIntentClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProtectionIntentClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProtectionContainersClientInquireResponse` has been removed
+- Field `RawResponse` of struct `JobsClientExportResponse` has been removed
+- Field `RawResponse` of struct `BackupResourceEncryptionConfigsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientBMSPrepareDataMoveResponse` has been removed
+
+### Features Added
+
+- New function `*BackupProtectedItemsClientListPager.More() bool`
+- New function `NewErrorResponseError.MarshalJSON() ([]byte, error)`
+- New function `*JobQueryObject.UnmarshalJSON([]byte) error`
+- New function `*BackupJobsClientListPager.More() bool`
+- New function `*RecoveryPointsClientListPager.More() bool`
+- New function `*BackupWorkloadItemsClientListPager.More() bool`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*BackupProtectionContainersClientListPager.More() bool`
+- New function `*BMSPrepareDataMoveOperationResultClientGetResponse.UnmarshalJSON([]byte) error`
+- New function `*BackupProtectableItemsClientListPager.More() bool`
+- New function `*BackupUsageSummariesClientListPager.NextPage(context.Context) (BackupUsageSummariesClientListResponse, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `JobQueryObject.MarshalJSON() ([]byte, error)`
+- New function `*BackupUsageSummariesClientListPager.More() bool`
+- New function `*BackupEnginesClientListPager.More() bool`
+- New function `*BackupPoliciesClientListPager.More() bool`
+- New function `*ProtectableContainersClientListPager.More() bool`
+- New function `BMSRPQueryObject.MarshalJSON() ([]byte, error)`
+- New function `*RecoveryPointsRecommendedForMoveClientListPager.More() bool`
+- New function `*BackupProtectionIntentClientListPager.More() bool`
+- New function `*ResourceGuardProxiesClientGetPager.More() bool`
+- New function `*BMSRPQueryObject.UnmarshalJSON([]byte) error`
+- New struct `BMSBackupEngineQueryObject`
+- New struct `BMSBackupEnginesQueryObject`
+- New struct `BMSBackupSummariesQueryObject`
+- New struct `BMSContainerQueryObject`
+- New struct `BMSContainersInquiryQueryObject`
+- New struct `BMSPOQueryObject`
+- New struct `BMSRPQueryObject`
+- New struct `BMSRefreshContainersQueryObject`
+- New struct `BMSWorkloadItemQueryObject`
+- New struct `BackupUsageSummariesClientListPager`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New struct `ErrorAdditionalInfo`
+- New struct `GetProtectedItemQueryObject`
+- New struct `JobQueryObject`
+- New struct `NewErrorResponse`
+- New struct `NewErrorResponseError`
+- New struct `ProtectedItemQueryObject`
+- New struct `ProtectionIntentQueryObject`
+- New struct `ProtectionPolicyQueryObject`
+- New anonymous field `BackupResourceVaultConfigResource` in struct `BackupResourceVaultConfigsClientUpdateResponse`
+- New anonymous field `ProtectableContainerResourceList` in struct `ProtectableContainersClientListResponse`
+- New anonymous field `ResourceGuardProxyBaseResourceList` in struct `ResourceGuardProxiesClientGetResponse`
+- New anonymous field `VaultStorageConfigOperationResultResponseClassification` in struct `BMSPrepareDataMoveOperationResultClientGetResponse`
+- New anonymous field `OperationStatus` in struct `ValidateOperationStatusesClientGetResponse`
+- New anonymous field `BackupEngineBaseResource` in struct `BackupEnginesClientGetResponse`
+- New anonymous field `ProtectionPolicyResource` in struct `ProtectionPoliciesClientGetResponse`
+- New anonymous field `ValidateOperationsResponse` in struct `ValidateOperationResultsClientGetResponse`
+- New anonymous field `JobResourceList` in struct `BackupJobsClientListResponse`
+- New anonymous field `ProtectedItemResource` in struct `ProtectedItemsClientGetResponse`
+- New anonymous field `BackupManagementUsageList` in struct `BackupUsageSummariesClientListResponse`
+- New anonymous field `OperationStatus` in struct `ProtectedItemOperationStatusesClientGetResponse`
+- New anonymous field `ProtectionIntentResourceList` in struct `BackupProtectionIntentClientListResponse`
+- New anonymous field `RecoveryPointResourceList` in struct `RecoveryPointsRecommendedForMoveClientListResponse`
+- New anonymous field `TokenInformation` in struct `SecurityPINsClientGetResponse`
+- New anonymous field `BackupResourceConfigResource` in struct `BackupResourceStorageConfigsNonCRRClientUpdateResponse`
+- New anonymous field `ProtectionContainerResource` in struct `ProtectionContainersClientRegisterResponse`
+- New anonymous field `OperationStatus` in struct `PrivateEndpointClientGetOperationStatusResponse`
+- New anonymous field `UnlockDeleteResponse` in struct `ResourceGuardProxyClientUnlockDeleteResponse`
+- New anonymous field `ProtectionContainerResource` in struct `ProtectionContainersClientGetResponse`
+- New anonymous field `OperationResultInfoBaseResource` in struct `ExportJobsOperationResultsClientGetResponse`
+- New anonymous field `ResourceGuardProxyBaseResource` in struct `ResourceGuardProxyClientPutResponse`
+- New anonymous field `AzureVMResourceFeatureSupportResponse` in struct `FeatureSupportClientValidateResponse`
+- New anonymous field `OperationStatus` in struct `BackupOperationStatusesClientGetResponse`
+- New anonymous field `RecoveryPointResourceList` in struct `RecoveryPointsClientListResponse`
+- New anonymous field `ProtectedItemResource` in struct `ProtectedItemOperationResultsClientGetResponse`
+- New anonymous field `ProtectionPolicyResource` in struct `ProtectionPoliciesClientCreateOrUpdateResponse`
+- New anonymous field `OperationStatus` in struct `ClientGetOperationStatusResponse`
+- New anonymous field `BackupResourceVaultConfigResource` in struct `BackupResourceVaultConfigsClientGetResponse`
+- New anonymous field `ProtectionContainerResource` in struct `ProtectionContainerOperationResultsClientGetResponse`
+- New anonymous field `ProtectedItemResourceList` in struct `BackupProtectedItemsClientListResponse`
+- New anonymous field `ValidateOperationsResponse` in struct `OperationClientValidateResponse`
+- New anonymous field `BackupResourceConfigResource` in struct `BackupResourceStorageConfigsNonCRRClientGetResponse`
+- New anonymous field `JobResource` in struct `JobDetailsClientGetResponse`
+- New anonymous field `BackupResourceEncryptionConfigExtendedResource` in struct `BackupResourceEncryptionConfigsClientGetResponse`
+- New anonymous field `WorkloadProtectableItemResourceList` in struct `BackupProtectableItemsClientListResponse`
+- New anonymous field `BackupEngineBaseResourceList` in struct `BackupEnginesClientListResponse`
+- New anonymous field `PrivateEndpointConnectionResource` in struct `PrivateEndpointConnectionClientPutResponse`
+- New anonymous field `ProtectionContainerResourceList` in struct `BackupProtectionContainersClientListResponse`
+- New anonymous field `ProtectedItemResource` in struct `ProtectedItemsClientCreateOrUpdateResponse`
+- New anonymous field `BackupResourceVaultConfigResource` in struct `BackupResourceVaultConfigsClientPutResponse`
+- New anonymous field `RecoveryPointResource` in struct `RecoveryPointsClientGetResponse`
+- New anonymous field `PreValidateEnableBackupResponse` in struct `ProtectionIntentClientValidateResponse`
+- New anonymous field `ClientDiscoveryResponse` in struct `OperationsClientListResponse`
+- New anonymous field `ProtectionPolicyResourceList` in struct `BackupPoliciesClientListResponse`
+- New anonymous field `OperationStatus` in struct `ProtectionPolicyOperationStatusesClientGetResponse`
+- New anonymous field `WorkloadItemResourceList` in struct `BackupWorkloadItemsClientListResponse`
+- New anonymous field `ProtectionIntentResource` in struct `ProtectionIntentClientCreateOrUpdateResponse`
+- New anonymous field `PrivateEndpointConnectionResource` in struct `PrivateEndpointConnectionClientGetResponse`
+- New anonymous field `ProtectionIntentResource` in struct `ProtectionIntentClientGetResponse`
+- New anonymous field `ProtectionPolicyResource` in struct `ProtectionPolicyOperationResultsClientGetResponse`
+- New anonymous field `ResourceGuardProxyBaseResource` in struct `ResourceGuardProxyClientGetResponse`
+- New anonymous field `BackupStatusResponse` in struct `BackupStatusClientGetResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*BMSRPQueryObject.UnmarshalJSON` has been removed
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Function `NewErrorResponseError.MarshalJSON` has been removed
+- Function `*JobQueryObject.UnmarshalJSON` has been removed
+- Function `JobQueryObject.MarshalJSON` has been removed
+- Function `BMSRPQueryObject.MarshalJSON` has been removed
+- Struct `BMSBackupEngineQueryObject` has been removed
+- Struct `BMSBackupEnginesQueryObject` has been removed
+- Struct `BMSBackupSummariesQueryObject` has been removed
+- Struct `BMSContainerQueryObject` has been removed
+- Struct `BMSContainersInquiryQueryObject` has been removed
+- Struct `BMSPOQueryObject` has been removed
+- Struct `BMSRPQueryObject` has been removed
+- Struct `BMSRefreshContainersQueryObject` has been removed
+- Struct `BMSWorkloadItemQueryObject` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `GetProtectedItemQueryObject` has been removed
+- Struct `JobQueryObject` has been removed
+- Struct `NewErrorResponse` has been removed
+- Struct `NewErrorResponseError` has been removed
+- Struct `ProtectedItemQueryObject` has been removed
+- Struct `ProtectionIntentQueryObject` has been removed
+- Struct `ProtectionPolicyQueryObject` has been removed
+
+### Features Added
+
+- New const `ContainerTypeMicrosoftClassicComputeVirtualMachines`
+- New const `ProtectionIntentItemTypeAzureWorkloadSQLAutoProtectionIntent`
+- New const `ContainerTypeAzureWorkloadContainer`
+- New const `IAASVMPolicyTypeV2`
+- New const `ProtectionIntentItemTypeAzureWorkloadAutoProtectionIntent`
+- New const `ContainerTypeMicrosoftComputeVirtualMachines`
+- New const `IAASVMPolicyTypeInvalid`
+- New const `IAASVMPolicyTypeV1`
+- New function `PossibleIAASVMPolicyTypeValues() []IAASVMPolicyType`
+- New function `WeeklySchedule.MarshalJSON() ([]byte, error)`
+- New function `SimpleSchedulePolicyV2.MarshalJSON() ([]byte, error)`
+- New function `*SimpleSchedulePolicyV2.UnmarshalJSON([]byte) error`
+- New function `IAASVMPolicyType.ToPtr() *IAASVMPolicyType`
+- New function `DailySchedule.MarshalJSON() ([]byte, error)`
+- New function `*SimpleSchedulePolicyV2.GetSchedulePolicy() *SchedulePolicy`
+- New struct `DailySchedule`
+- New struct `SimpleSchedulePolicyV2`
+- New struct `WeeklySchedule`
+- New field `PolicyType` in struct `AzureIaaSVMProtectionPolicy`
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

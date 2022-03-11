@@ -34,17 +34,17 @@ type ScriptExecutionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewScriptExecutionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ScriptExecutionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ScriptExecutionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *ScriptExecutionsClient) BeginCreateOrUpdate(ctx context.Context, r
 	if err != nil {
 		return ScriptExecutionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ScriptExecutionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ScriptExecutionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ScriptExecutionsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ScriptExecutionsClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *ScriptExecutionsClient) BeginDelete(ctx context.Context, resourceG
 	if err != nil {
 		return ScriptExecutionsClientDeletePollerResponse{}, err
 	}
-	result := ScriptExecutionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ScriptExecutionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ScriptExecutionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ScriptExecutionsClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *ScriptExecutionsClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *ScriptExecutionsClient) getHandleResponse(resp *http.Response) (ScriptExecutionsClientGetResponse, error) {
-	result := ScriptExecutionsClientGetResponse{RawResponse: resp}
+	result := ScriptExecutionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScriptExecution); err != nil {
 		return ScriptExecutionsClientGetResponse{}, err
 	}
@@ -311,7 +307,7 @@ func (client *ScriptExecutionsClient) getExecutionLogsCreateRequest(ctx context.
 
 // getExecutionLogsHandleResponse handles the GetExecutionLogs response.
 func (client *ScriptExecutionsClient) getExecutionLogsHandleResponse(resp *http.Response) (ScriptExecutionsClientGetExecutionLogsResponse, error) {
-	result := ScriptExecutionsClientGetExecutionLogsResponse{RawResponse: resp}
+	result := ScriptExecutionsClientGetExecutionLogsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScriptExecution); err != nil {
 		return ScriptExecutionsClientGetExecutionLogsResponse{}, err
 	}
@@ -363,7 +359,7 @@ func (client *ScriptExecutionsClient) listCreateRequest(ctx context.Context, res
 
 // listHandleResponse handles the List response.
 func (client *ScriptExecutionsClient) listHandleResponse(resp *http.Response) (ScriptExecutionsClientListResponse, error) {
-	result := ScriptExecutionsClientListResponse{RawResponse: resp}
+	result := ScriptExecutionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScriptExecutionsList); err != nil {
 		return ScriptExecutionsClientListResponse{}, err
 	}

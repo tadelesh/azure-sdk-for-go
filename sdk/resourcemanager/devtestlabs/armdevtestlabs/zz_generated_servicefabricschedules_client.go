@@ -35,17 +35,17 @@ type ServiceFabricSchedulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServiceFabricSchedulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServiceFabricSchedulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServiceFabricSchedulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -115,7 +115,7 @@ func (client *ServiceFabricSchedulesClient) createOrUpdateCreateRequest(ctx cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ServiceFabricSchedulesClient) createOrUpdateHandleResponse(resp *http.Response) (ServiceFabricSchedulesClientCreateOrUpdateResponse, error) {
-	result := ServiceFabricSchedulesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ServiceFabricSchedulesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Schedule); err != nil {
 		return ServiceFabricSchedulesClientCreateOrUpdateResponse{}, err
 	}
@@ -143,7 +143,7 @@ func (client *ServiceFabricSchedulesClient) Delete(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ServiceFabricSchedulesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ServiceFabricSchedulesClientDeleteResponse{RawResponse: resp}, nil
+	return ServiceFabricSchedulesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -198,9 +198,7 @@ func (client *ServiceFabricSchedulesClient) BeginExecute(ctx context.Context, re
 	if err != nil {
 		return ServiceFabricSchedulesClientExecutePollerResponse{}, err
 	}
-	result := ServiceFabricSchedulesClientExecutePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServiceFabricSchedulesClientExecutePollerResponse{}
 	pt, err := armruntime.NewPoller("ServiceFabricSchedulesClient.Execute", "", resp, client.pl)
 	if err != nil {
 		return ServiceFabricSchedulesClientExecutePollerResponse{}, err
@@ -333,7 +331,7 @@ func (client *ServiceFabricSchedulesClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *ServiceFabricSchedulesClient) getHandleResponse(resp *http.Response) (ServiceFabricSchedulesClientGetResponse, error) {
-	result := ServiceFabricSchedulesClientGetResponse{RawResponse: resp}
+	result := ServiceFabricSchedulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Schedule); err != nil {
 		return ServiceFabricSchedulesClientGetResponse{}, err
 	}
@@ -408,7 +406,7 @@ func (client *ServiceFabricSchedulesClient) listCreateRequest(ctx context.Contex
 
 // listHandleResponse handles the List response.
 func (client *ServiceFabricSchedulesClient) listHandleResponse(resp *http.Response) (ServiceFabricSchedulesClientListResponse, error) {
-	result := ServiceFabricSchedulesClientListResponse{RawResponse: resp}
+	result := ServiceFabricSchedulesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScheduleList); err != nil {
 		return ServiceFabricSchedulesClientListResponse{}, err
 	}
@@ -480,7 +478,7 @@ func (client *ServiceFabricSchedulesClient) updateCreateRequest(ctx context.Cont
 
 // updateHandleResponse handles the Update response.
 func (client *ServiceFabricSchedulesClient) updateHandleResponse(resp *http.Response) (ServiceFabricSchedulesClientUpdateResponse, error) {
-	result := ServiceFabricSchedulesClientUpdateResponse{RawResponse: resp}
+	result := ServiceFabricSchedulesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Schedule); err != nil {
 		return ServiceFabricSchedulesClientUpdateResponse{}, err
 	}

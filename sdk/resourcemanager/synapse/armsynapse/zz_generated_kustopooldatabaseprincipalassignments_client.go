@@ -34,17 +34,17 @@ type KustoPoolDatabasePrincipalAssignmentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewKustoPoolDatabasePrincipalAssignmentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *KustoPoolDatabasePrincipalAssignmentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &KustoPoolDatabasePrincipalAssignmentsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *KustoPoolDatabasePrincipalAssignmentsClient) checkNameAvailability
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *KustoPoolDatabasePrincipalAssignmentsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (KustoPoolDatabasePrincipalAssignmentsClientCheckNameAvailabilityResponse, error) {
-	result := KustoPoolDatabasePrincipalAssignmentsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := KustoPoolDatabasePrincipalAssignmentsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameResult); err != nil {
 		return KustoPoolDatabasePrincipalAssignmentsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -131,9 +131,7 @@ func (client *KustoPoolDatabasePrincipalAssignmentsClient) BeginCreateOrUpdate(c
 	if err != nil {
 		return KustoPoolDatabasePrincipalAssignmentsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := KustoPoolDatabasePrincipalAssignmentsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := KustoPoolDatabasePrincipalAssignmentsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("KustoPoolDatabasePrincipalAssignmentsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return KustoPoolDatabasePrincipalAssignmentsClientCreateOrUpdatePollerResponse{}, err
@@ -213,9 +211,7 @@ func (client *KustoPoolDatabasePrincipalAssignmentsClient) BeginDelete(ctx conte
 	if err != nil {
 		return KustoPoolDatabasePrincipalAssignmentsClientDeletePollerResponse{}, err
 	}
-	result := KustoPoolDatabasePrincipalAssignmentsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := KustoPoolDatabasePrincipalAssignmentsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("KustoPoolDatabasePrincipalAssignmentsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return KustoPoolDatabasePrincipalAssignmentsClientDeletePollerResponse{}, err
@@ -345,7 +341,7 @@ func (client *KustoPoolDatabasePrincipalAssignmentsClient) getCreateRequest(ctx 
 
 // getHandleResponse handles the Get response.
 func (client *KustoPoolDatabasePrincipalAssignmentsClient) getHandleResponse(resp *http.Response) (KustoPoolDatabasePrincipalAssignmentsClientGetResponse, error) {
-	result := KustoPoolDatabasePrincipalAssignmentsClientGetResponse{RawResponse: resp}
+	result := KustoPoolDatabasePrincipalAssignmentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabasePrincipalAssignment); err != nil {
 		return KustoPoolDatabasePrincipalAssignmentsClientGetResponse{}, err
 	}
@@ -360,19 +356,13 @@ func (client *KustoPoolDatabasePrincipalAssignmentsClient) getHandleResponse(res
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - KustoPoolDatabasePrincipalAssignmentsClientListOptions contains the optional parameters for the KustoPoolDatabasePrincipalAssignmentsClient.List
 // method.
-func (client *KustoPoolDatabasePrincipalAssignmentsClient) List(ctx context.Context, workspaceName string, kustoPoolName string, databaseName string, resourceGroupName string, options *KustoPoolDatabasePrincipalAssignmentsClientListOptions) (KustoPoolDatabasePrincipalAssignmentsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, workspaceName, kustoPoolName, databaseName, resourceGroupName, options)
-	if err != nil {
-		return KustoPoolDatabasePrincipalAssignmentsClientListResponse{}, err
+func (client *KustoPoolDatabasePrincipalAssignmentsClient) List(workspaceName string, kustoPoolName string, databaseName string, resourceGroupName string, options *KustoPoolDatabasePrincipalAssignmentsClientListOptions) *KustoPoolDatabasePrincipalAssignmentsClientListPager {
+	return &KustoPoolDatabasePrincipalAssignmentsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, workspaceName, kustoPoolName, databaseName, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return KustoPoolDatabasePrincipalAssignmentsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return KustoPoolDatabasePrincipalAssignmentsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -411,7 +401,7 @@ func (client *KustoPoolDatabasePrincipalAssignmentsClient) listCreateRequest(ctx
 
 // listHandleResponse handles the List response.
 func (client *KustoPoolDatabasePrincipalAssignmentsClient) listHandleResponse(resp *http.Response) (KustoPoolDatabasePrincipalAssignmentsClientListResponse, error) {
-	result := KustoPoolDatabasePrincipalAssignmentsClientListResponse{RawResponse: resp}
+	result := KustoPoolDatabasePrincipalAssignmentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabasePrincipalAssignmentListResult); err != nil {
 		return KustoPoolDatabasePrincipalAssignmentsClientListResponse{}, err
 	}

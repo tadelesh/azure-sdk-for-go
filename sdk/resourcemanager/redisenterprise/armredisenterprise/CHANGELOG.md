@@ -1,5 +1,157 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ClientListResponse, error)`
+- Function `*PrivateEndpointConnectionsClient.List` parameter(s) have been changed from `(context.Context, string, string, *PrivateEndpointConnectionsClientListOptions)` to `(string, string, *PrivateEndpointConnectionsClientListOptions)`
+- Function `*PrivateEndpointConnectionsClient.List` return value(s) have been changed from `(PrivateEndpointConnectionsClientListResponse, error)` to `(*PrivateEndpointConnectionsClientListPager)`
+- Function `*PrivateLinkResourcesClient.ListByCluster` parameter(s) have been changed from `(context.Context, string, string, *PrivateLinkResourcesClientListByClusterOptions)` to `(string, string, *PrivateLinkResourcesClientListByClusterOptions)`
+- Function `*PrivateLinkResourcesClient.ListByCluster` return value(s) have been changed from `(PrivateLinkResourcesClientListByClusterResponse, error)` to `(*PrivateLinkResourcesClientListByClusterPager)`
+- Function `*ClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ClientListByResourceGroupResponse, error)`
+- Function `*DatabasesClientListByClusterPager.NextPage` return value(s) have been changed from `(bool)` to `(DatabasesClientListByClusterResponse, error)`
+- Function `*DatabasesClientListByClusterPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*DatabasesClientListByClusterPager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*ClientListPager.Err` has been removed
+- Function `*ClientListPager.PageResponse` has been removed
+- Function `*ClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ClientListByResourceGroupPager.Err` has been removed
+- Struct `ClientCreateResult` has been removed
+- Struct `ClientGetResult` has been removed
+- Struct `ClientListByResourceGroupResult` has been removed
+- Struct `ClientListResult` has been removed
+- Struct `ClientUpdateResult` has been removed
+- Struct `DatabasesClientCreateResult` has been removed
+- Struct `DatabasesClientGetResult` has been removed
+- Struct `DatabasesClientListByClusterResult` has been removed
+- Struct `DatabasesClientListKeysResult` has been removed
+- Struct `DatabasesClientRegenerateKeyResult` has been removed
+- Struct `DatabasesClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `OperationsStatusClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientPutResult` has been removed
+- Struct `PrivateLinkResourcesClientListByClusterResult` has been removed
+- Field `DatabasesClientListByClusterResult` of struct `DatabasesClientListByClusterResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientListByClusterResponse` has been removed
+- Field `RawResponse` of struct `ClientDeletePollerResponse` has been removed
+- Field `DatabasesClientRegenerateKeyResult` of struct `DatabasesClientRegenerateKeyResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientRegenerateKeyResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientImportPollerResponse` has been removed
+- Field `PrivateEndpointConnectionsClientPutResult` of struct `PrivateEndpointConnectionsClientPutResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientPutResponse` has been removed
+- Field `ClientGetResult` of struct `ClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClientGetResponse` has been removed
+- Field `ClientUpdateResult` of struct `ClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientUpdateResponse` has been removed
+- Field `OperationsStatusClientGetResult` of struct `OperationsStatusClientGetResponse` has been removed
+- Field `RawResponse` of struct `OperationsStatusClientGetResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientForceUnlinkPollerResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientExportResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientRegenerateKeyPollerResponse` has been removed
+- Field `DatabasesClientCreateResult` of struct `DatabasesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientDeletePollerResponse` has been removed
+- Field `PrivateLinkResourcesClientListByClusterResult` of struct `PrivateLinkResourcesClientListByClusterResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListByClusterResponse` has been removed
+- Field `ClientListByResourceGroupResult` of struct `ClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ClientListByResourceGroupResponse` has been removed
+- Field `DatabasesClientListKeysResult` of struct `DatabasesClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `ClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ClientCreatePollerResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClientUpdatePollerResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListResult` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `ClientCreateResult` of struct `ClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ClientCreateResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientForceUnlinkResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientExportPollerResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientCreatePollerResponse` has been removed
+- Field `DatabasesClientUpdateResult` of struct `DatabasesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientUpdateResponse` has been removed
+- Field `DatabasesClientGetResult` of struct `DatabasesClientGetResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientPutPollerResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `ClientListResult` of struct `ClientListResponse` has been removed
+- Field `RawResponse` of struct `ClientListResponse` has been removed
+- Field `RawResponse` of struct `DatabasesClientImportResponse` has been removed
+
+### Features Added
+
+- New function `*PrivateEndpointConnectionsClientListPager.More() bool`
+- New function `*DatabasesClientListByClusterPager.More() bool`
+- New function `*PrivateLinkResourcesClientListByClusterPager.NextPage(context.Context) (PrivateLinkResourcesClientListByClusterResponse, error)`
+- New function `*PrivateLinkResourcesClientListByClusterPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*ClientListByResourceGroupPager.More() bool`
+- New function `*PrivateEndpointConnectionsClientListPager.NextPage(context.Context) (PrivateEndpointConnectionsClientListResponse, error)`
+- New function `*ClientListPager.More() bool`
+- New struct `PrivateEndpointConnectionsClientListPager`
+- New struct `PrivateLinkResourcesClientListByClusterPager`
+- New anonymous field `ClusterList` in struct `ClientListByResourceGroupResponse`
+- New anonymous field `Cluster` in struct `ClientGetResponse`
+- New anonymous field `ClusterList` in struct `ClientListResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientPutResponse`
+- New anonymous field `Cluster` in struct `ClientCreateResponse`
+- New anonymous field `Cluster` in struct `ClientUpdateResponse`
+- New anonymous field `DatabaseList` in struct `DatabasesClientListByClusterResponse`
+- New anonymous field `Database` in struct `DatabasesClientUpdateResponse`
+- New anonymous field `AccessKeys` in struct `DatabasesClientListKeysResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `OperationStatus` in struct `OperationsStatusClientGetResponse`
+- New anonymous field `Database` in struct `DatabasesClientCreateResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `PrivateLinkResourcesClientListByClusterResponse`
+- New anonymous field `Database` in struct `DatabasesClientGetResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `AccessKeys` in struct `DatabasesClientRegenerateKeyResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `ErrorAdditionalInfo.Info` has been changed from `map[string]interface{}` to `interface{}`
+
+### Features Added
+
+- New const `LinkStateUnlinkFailed`
+- New const `LinkStateLinkFailed`
+- New const `LinkStateLinking`
+- New const `LinkStateUnlinking`
+- New const `LinkStateLinked`
+- New function `ForceUnlinkParameters.MarshalJSON() ([]byte, error)`
+- New function `DatabasePropertiesGeoReplication.MarshalJSON() ([]byte, error)`
+- New function `LinkState.ToPtr() *LinkState`
+- New function `*DatabasesClientForceUnlinkPoller.Poll(context.Context) (*http.Response, error)`
+- New function `PossibleLinkStateValues() []LinkState`
+- New function `*DatabasesClientForceUnlinkPoller.FinalResponse(context.Context) (DatabasesClientForceUnlinkResponse, error)`
+- New function `*DatabasesClientForceUnlinkPoller.Done() bool`
+- New function `*DatabasesClientForceUnlinkPoller.ResumeToken() (string, error)`
+- New function `*DatabasesClientForceUnlinkPollerResponse.Resume(context.Context, *DatabasesClient, string) error`
+- New function `*DatabasesClient.BeginForceUnlink(context.Context, string, string, string, ForceUnlinkParameters, *DatabasesClientBeginForceUnlinkOptions) (DatabasesClientForceUnlinkPollerResponse, error)`
+- New function `DatabasesClientForceUnlinkPollerResponse.PollUntilDone(context.Context, time.Duration) (DatabasesClientForceUnlinkResponse, error)`
+- New struct `DatabasePropertiesGeoReplication`
+- New struct `DatabasesClientBeginForceUnlinkOptions`
+- New struct `DatabasesClientForceUnlinkPoller`
+- New struct `DatabasesClientForceUnlinkPollerResponse`
+- New struct `DatabasesClientForceUnlinkResponse`
+- New struct `ForceUnlinkParameters`
+- New struct `LinkedDatabase`
+- New field `GeoReplication` in struct `DatabaseProperties`
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

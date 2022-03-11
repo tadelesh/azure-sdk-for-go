@@ -35,17 +35,17 @@ type TicketsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTicketsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TicketsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TicketsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -91,7 +91,7 @@ func (client *TicketsClient) checkNameAvailabilityCreateRequest(ctx context.Cont
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *TicketsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (TicketsClientCheckNameAvailabilityResponse, error) {
-	result := TicketsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := TicketsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameAvailabilityOutput); err != nil {
 		return TicketsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -125,9 +125,7 @@ func (client *TicketsClient) BeginCreate(ctx context.Context, supportTicketName 
 	if err != nil {
 		return TicketsClientCreatePollerResponse{}, err
 	}
-	result := TicketsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := TicketsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("TicketsClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return TicketsClientCreatePollerResponse{}, err
@@ -239,7 +237,7 @@ func (client *TicketsClient) getCreateRequest(ctx context.Context, supportTicket
 
 // getHandleResponse handles the Get response.
 func (client *TicketsClient) getHandleResponse(resp *http.Response) (TicketsClientGetResponse, error) {
-	result := TicketsClientGetResponse{RawResponse: resp}
+	result := TicketsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TicketDetails); err != nil {
 		return TicketsClientGetResponse{}, err
 	}
@@ -291,7 +289,7 @@ func (client *TicketsClient) listCreateRequest(ctx context.Context, options *Tic
 
 // listHandleResponse handles the List response.
 func (client *TicketsClient) listHandleResponse(resp *http.Response) (TicketsClientListResponse, error) {
-	result := TicketsClientListResponse{RawResponse: resp}
+	result := TicketsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TicketsListResult); err != nil {
 		return TicketsClientListResponse{}, err
 	}
@@ -347,7 +345,7 @@ func (client *TicketsClient) updateCreateRequest(ctx context.Context, supportTic
 
 // updateHandleResponse handles the Update response.
 func (client *TicketsClient) updateHandleResponse(resp *http.Response) (TicketsClientUpdateResponse, error) {
-	result := TicketsClientUpdateResponse{RawResponse: resp}
+	result := TicketsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TicketDetails); err != nil {
 		return TicketsClientUpdateResponse{}, err
 	}

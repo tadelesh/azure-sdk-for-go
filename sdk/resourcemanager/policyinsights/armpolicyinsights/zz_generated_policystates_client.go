@@ -34,16 +34,16 @@ type PolicyStatesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPolicyStatesClient(credential azcore.TokenCredential, options *arm.ClientOptions) *PolicyStatesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PolicyStatesClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -120,7 +120,7 @@ func (client *PolicyStatesClient) listQueryResultsForManagementGroupCreateReques
 
 // listQueryResultsForManagementGroupHandleResponse handles the ListQueryResultsForManagementGroup response.
 func (client *PolicyStatesClient) listQueryResultsForManagementGroupHandleResponse(resp *http.Response) (PolicyStatesClientListQueryResultsForManagementGroupResponse, error) {
-	result := PolicyStatesClientListQueryResultsForManagementGroupResponse{RawResponse: resp}
+	result := PolicyStatesClientListQueryResultsForManagementGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyStatesQueryResults); err != nil {
 		return PolicyStatesClientListQueryResultsForManagementGroupResponse{}, err
 	}
@@ -205,7 +205,7 @@ func (client *PolicyStatesClient) listQueryResultsForPolicyDefinitionCreateReque
 
 // listQueryResultsForPolicyDefinitionHandleResponse handles the ListQueryResultsForPolicyDefinition response.
 func (client *PolicyStatesClient) listQueryResultsForPolicyDefinitionHandleResponse(resp *http.Response) (PolicyStatesClientListQueryResultsForPolicyDefinitionResponse, error) {
-	result := PolicyStatesClientListQueryResultsForPolicyDefinitionResponse{RawResponse: resp}
+	result := PolicyStatesClientListQueryResultsForPolicyDefinitionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyStatesQueryResults); err != nil {
 		return PolicyStatesClientListQueryResultsForPolicyDefinitionResponse{}, err
 	}
@@ -290,7 +290,7 @@ func (client *PolicyStatesClient) listQueryResultsForPolicySetDefinitionCreateRe
 
 // listQueryResultsForPolicySetDefinitionHandleResponse handles the ListQueryResultsForPolicySetDefinition response.
 func (client *PolicyStatesClient) listQueryResultsForPolicySetDefinitionHandleResponse(resp *http.Response) (PolicyStatesClientListQueryResultsForPolicySetDefinitionResponse, error) {
-	result := PolicyStatesClientListQueryResultsForPolicySetDefinitionResponse{RawResponse: resp}
+	result := PolicyStatesClientListQueryResultsForPolicySetDefinitionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyStatesQueryResults); err != nil {
 		return PolicyStatesClientListQueryResultsForPolicySetDefinitionResponse{}, err
 	}
@@ -364,7 +364,7 @@ func (client *PolicyStatesClient) listQueryResultsForResourceCreateRequest(ctx c
 
 // listQueryResultsForResourceHandleResponse handles the ListQueryResultsForResource response.
 func (client *PolicyStatesClient) listQueryResultsForResourceHandleResponse(resp *http.Response) (PolicyStatesClientListQueryResultsForResourceResponse, error) {
-	result := PolicyStatesClientListQueryResultsForResourceResponse{RawResponse: resp}
+	result := PolicyStatesClientListQueryResultsForResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyStatesQueryResults); err != nil {
 		return PolicyStatesClientListQueryResultsForResourceResponse{}, err
 	}
@@ -443,7 +443,7 @@ func (client *PolicyStatesClient) listQueryResultsForResourceGroupCreateRequest(
 
 // listQueryResultsForResourceGroupHandleResponse handles the ListQueryResultsForResourceGroup response.
 func (client *PolicyStatesClient) listQueryResultsForResourceGroupHandleResponse(resp *http.Response) (PolicyStatesClientListQueryResultsForResourceGroupResponse, error) {
-	result := PolicyStatesClientListQueryResultsForResourceGroupResponse{RawResponse: resp}
+	result := PolicyStatesClientListQueryResultsForResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyStatesQueryResults); err != nil {
 		return PolicyStatesClientListQueryResultsForResourceGroupResponse{}, err
 	}
@@ -533,7 +533,7 @@ func (client *PolicyStatesClient) listQueryResultsForResourceGroupLevelPolicyAss
 
 // listQueryResultsForResourceGroupLevelPolicyAssignmentHandleResponse handles the ListQueryResultsForResourceGroupLevelPolicyAssignment response.
 func (client *PolicyStatesClient) listQueryResultsForResourceGroupLevelPolicyAssignmentHandleResponse(resp *http.Response) (PolicyStatesClientListQueryResultsForResourceGroupLevelPolicyAssignmentResponse, error) {
-	result := PolicyStatesClientListQueryResultsForResourceGroupLevelPolicyAssignmentResponse{RawResponse: resp}
+	result := PolicyStatesClientListQueryResultsForResourceGroupLevelPolicyAssignmentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyStatesQueryResults); err != nil {
 		return PolicyStatesClientListQueryResultsForResourceGroupLevelPolicyAssignmentResponse{}, err
 	}
@@ -607,7 +607,7 @@ func (client *PolicyStatesClient) listQueryResultsForSubscriptionCreateRequest(c
 
 // listQueryResultsForSubscriptionHandleResponse handles the ListQueryResultsForSubscription response.
 func (client *PolicyStatesClient) listQueryResultsForSubscriptionHandleResponse(resp *http.Response) (PolicyStatesClientListQueryResultsForSubscriptionResponse, error) {
-	result := PolicyStatesClientListQueryResultsForSubscriptionResponse{RawResponse: resp}
+	result := PolicyStatesClientListQueryResultsForSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyStatesQueryResults); err != nil {
 		return PolicyStatesClientListQueryResultsForSubscriptionResponse{}, err
 	}
@@ -692,7 +692,7 @@ func (client *PolicyStatesClient) listQueryResultsForSubscriptionLevelPolicyAssi
 
 // listQueryResultsForSubscriptionLevelPolicyAssignmentHandleResponse handles the ListQueryResultsForSubscriptionLevelPolicyAssignment response.
 func (client *PolicyStatesClient) listQueryResultsForSubscriptionLevelPolicyAssignmentHandleResponse(resp *http.Response) (PolicyStatesClientListQueryResultsForSubscriptionLevelPolicyAssignmentResponse, error) {
-	result := PolicyStatesClientListQueryResultsForSubscriptionLevelPolicyAssignmentResponse{RawResponse: resp}
+	result := PolicyStatesClientListQueryResultsForSubscriptionLevelPolicyAssignmentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyStatesQueryResults); err != nil {
 		return PolicyStatesClientListQueryResultsForSubscriptionLevelPolicyAssignmentResponse{}, err
 	}
@@ -762,7 +762,7 @@ func (client *PolicyStatesClient) summarizeForManagementGroupCreateRequest(ctx c
 
 // summarizeForManagementGroupHandleResponse handles the SummarizeForManagementGroup response.
 func (client *PolicyStatesClient) summarizeForManagementGroupHandleResponse(resp *http.Response) (PolicyStatesClientSummarizeForManagementGroupResponse, error) {
-	result := PolicyStatesClientSummarizeForManagementGroupResponse{RawResponse: resp}
+	result := PolicyStatesClientSummarizeForManagementGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SummarizeResults); err != nil {
 		return PolicyStatesClientSummarizeForManagementGroupResponse{}, err
 	}
@@ -838,7 +838,7 @@ func (client *PolicyStatesClient) summarizeForPolicyDefinitionCreateRequest(ctx 
 
 // summarizeForPolicyDefinitionHandleResponse handles the SummarizeForPolicyDefinition response.
 func (client *PolicyStatesClient) summarizeForPolicyDefinitionHandleResponse(resp *http.Response) (PolicyStatesClientSummarizeForPolicyDefinitionResponse, error) {
-	result := PolicyStatesClientSummarizeForPolicyDefinitionResponse{RawResponse: resp}
+	result := PolicyStatesClientSummarizeForPolicyDefinitionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SummarizeResults); err != nil {
 		return PolicyStatesClientSummarizeForPolicyDefinitionResponse{}, err
 	}
@@ -914,7 +914,7 @@ func (client *PolicyStatesClient) summarizeForPolicySetDefinitionCreateRequest(c
 
 // summarizeForPolicySetDefinitionHandleResponse handles the SummarizeForPolicySetDefinition response.
 func (client *PolicyStatesClient) summarizeForPolicySetDefinitionHandleResponse(resp *http.Response) (PolicyStatesClientSummarizeForPolicySetDefinitionResponse, error) {
-	result := PolicyStatesClientSummarizeForPolicySetDefinitionResponse{RawResponse: resp}
+	result := PolicyStatesClientSummarizeForPolicySetDefinitionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SummarizeResults); err != nil {
 		return PolicyStatesClientSummarizeForPolicySetDefinitionResponse{}, err
 	}
@@ -976,7 +976,7 @@ func (client *PolicyStatesClient) summarizeForResourceCreateRequest(ctx context.
 
 // summarizeForResourceHandleResponse handles the SummarizeForResource response.
 func (client *PolicyStatesClient) summarizeForResourceHandleResponse(resp *http.Response) (PolicyStatesClientSummarizeForResourceResponse, error) {
-	result := PolicyStatesClientSummarizeForResourceResponse{RawResponse: resp}
+	result := PolicyStatesClientSummarizeForResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SummarizeResults); err != nil {
 		return PolicyStatesClientSummarizeForResourceResponse{}, err
 	}
@@ -1046,7 +1046,7 @@ func (client *PolicyStatesClient) summarizeForResourceGroupCreateRequest(ctx con
 
 // summarizeForResourceGroupHandleResponse handles the SummarizeForResourceGroup response.
 func (client *PolicyStatesClient) summarizeForResourceGroupHandleResponse(resp *http.Response) (PolicyStatesClientSummarizeForResourceGroupResponse, error) {
-	result := PolicyStatesClientSummarizeForResourceGroupResponse{RawResponse: resp}
+	result := PolicyStatesClientSummarizeForResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SummarizeResults); err != nil {
 		return PolicyStatesClientSummarizeForResourceGroupResponse{}, err
 	}
@@ -1127,7 +1127,7 @@ func (client *PolicyStatesClient) summarizeForResourceGroupLevelPolicyAssignment
 
 // summarizeForResourceGroupLevelPolicyAssignmentHandleResponse handles the SummarizeForResourceGroupLevelPolicyAssignment response.
 func (client *PolicyStatesClient) summarizeForResourceGroupLevelPolicyAssignmentHandleResponse(resp *http.Response) (PolicyStatesClientSummarizeForResourceGroupLevelPolicyAssignmentResponse, error) {
-	result := PolicyStatesClientSummarizeForResourceGroupLevelPolicyAssignmentResponse{RawResponse: resp}
+	result := PolicyStatesClientSummarizeForResourceGroupLevelPolicyAssignmentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SummarizeResults); err != nil {
 		return PolicyStatesClientSummarizeForResourceGroupLevelPolicyAssignmentResponse{}, err
 	}
@@ -1192,7 +1192,7 @@ func (client *PolicyStatesClient) summarizeForSubscriptionCreateRequest(ctx cont
 
 // summarizeForSubscriptionHandleResponse handles the SummarizeForSubscription response.
 func (client *PolicyStatesClient) summarizeForSubscriptionHandleResponse(resp *http.Response) (PolicyStatesClientSummarizeForSubscriptionResponse, error) {
-	result := PolicyStatesClientSummarizeForSubscriptionResponse{RawResponse: resp}
+	result := PolicyStatesClientSummarizeForSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SummarizeResults); err != nil {
 		return PolicyStatesClientSummarizeForSubscriptionResponse{}, err
 	}
@@ -1268,7 +1268,7 @@ func (client *PolicyStatesClient) summarizeForSubscriptionLevelPolicyAssignmentC
 
 // summarizeForSubscriptionLevelPolicyAssignmentHandleResponse handles the SummarizeForSubscriptionLevelPolicyAssignment response.
 func (client *PolicyStatesClient) summarizeForSubscriptionLevelPolicyAssignmentHandleResponse(resp *http.Response) (PolicyStatesClientSummarizeForSubscriptionLevelPolicyAssignmentResponse, error) {
-	result := PolicyStatesClientSummarizeForSubscriptionLevelPolicyAssignmentResponse{RawResponse: resp}
+	result := PolicyStatesClientSummarizeForSubscriptionLevelPolicyAssignmentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SummarizeResults); err != nil {
 		return PolicyStatesClientSummarizeForSubscriptionLevelPolicyAssignmentResponse{}, err
 	}
@@ -1286,9 +1286,7 @@ func (client *PolicyStatesClient) BeginTriggerResourceGroupEvaluation(ctx contex
 	if err != nil {
 		return PolicyStatesClientTriggerResourceGroupEvaluationPollerResponse{}, err
 	}
-	result := PolicyStatesClientTriggerResourceGroupEvaluationPollerResponse{
-		RawResponse: resp,
-	}
+	result := PolicyStatesClientTriggerResourceGroupEvaluationPollerResponse{}
 	pt, err := armruntime.NewPoller("PolicyStatesClient.TriggerResourceGroupEvaluation", "location", resp, client.pl)
 	if err != nil {
 		return PolicyStatesClientTriggerResourceGroupEvaluationPollerResponse{}, err
@@ -1348,9 +1346,7 @@ func (client *PolicyStatesClient) BeginTriggerSubscriptionEvaluation(ctx context
 	if err != nil {
 		return PolicyStatesClientTriggerSubscriptionEvaluationPollerResponse{}, err
 	}
-	result := PolicyStatesClientTriggerSubscriptionEvaluationPollerResponse{
-		RawResponse: resp,
-	}
+	result := PolicyStatesClientTriggerSubscriptionEvaluationPollerResponse{}
 	pt, err := armruntime.NewPoller("PolicyStatesClient.TriggerSubscriptionEvaluation", "location", resp, client.pl)
 	if err != nil {
 		return PolicyStatesClientTriggerSubscriptionEvaluationPollerResponse{}, err

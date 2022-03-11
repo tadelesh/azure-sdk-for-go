@@ -35,17 +35,17 @@ type BuildServiceAgentPoolClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBuildServiceAgentPoolClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BuildServiceAgentPoolClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BuildServiceAgentPoolClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -110,7 +110,7 @@ func (client *BuildServiceAgentPoolClient) getCreateRequest(ctx context.Context,
 
 // getHandleResponse handles the Get response.
 func (client *BuildServiceAgentPoolClient) getHandleResponse(resp *http.Response) (BuildServiceAgentPoolClientGetResponse, error) {
-	result := BuildServiceAgentPoolClientGetResponse{RawResponse: resp}
+	result := BuildServiceAgentPoolClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BuildServiceAgentPoolResource); err != nil {
 		return BuildServiceAgentPoolClientGetResponse{}, err
 	}
@@ -169,7 +169,7 @@ func (client *BuildServiceAgentPoolClient) listCreateRequest(ctx context.Context
 
 // listHandleResponse handles the List response.
 func (client *BuildServiceAgentPoolClient) listHandleResponse(resp *http.Response) (BuildServiceAgentPoolClientListResponse, error) {
-	result := BuildServiceAgentPoolClientListResponse{RawResponse: resp}
+	result := BuildServiceAgentPoolClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BuildServiceAgentPoolResourceCollection); err != nil {
 		return BuildServiceAgentPoolClientListResponse{}, err
 	}
@@ -191,9 +191,7 @@ func (client *BuildServiceAgentPoolClient) BeginUpdatePut(ctx context.Context, r
 	if err != nil {
 		return BuildServiceAgentPoolClientUpdatePutPollerResponse{}, err
 	}
-	result := BuildServiceAgentPoolClientUpdatePutPollerResponse{
-		RawResponse: resp,
-	}
+	result := BuildServiceAgentPoolClientUpdatePutPollerResponse{}
 	pt, err := armruntime.NewPoller("BuildServiceAgentPoolClient.UpdatePut", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return BuildServiceAgentPoolClientUpdatePutPollerResponse{}, err

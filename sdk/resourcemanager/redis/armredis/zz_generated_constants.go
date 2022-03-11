@@ -10,7 +10,7 @@ package armredis
 
 const (
 	moduleName    = "armredis"
-	moduleVersion = "v0.3.0"
+	moduleVersion = "v0.4.0"
 )
 
 // DayOfWeek - Day of the week when a cache can be patched.

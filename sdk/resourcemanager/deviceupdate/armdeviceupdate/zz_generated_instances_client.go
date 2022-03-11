@@ -34,17 +34,17 @@ type InstancesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewInstancesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *InstancesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &InstancesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *InstancesClient) BeginCreate(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return InstancesClientCreatePollerResponse{}, err
 	}
-	result := InstancesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := InstancesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("InstancesClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return InstancesClientCreatePollerResponse{}, err
@@ -132,9 +130,7 @@ func (client *InstancesClient) BeginDelete(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return InstancesClientDeletePollerResponse{}, err
 	}
-	result := InstancesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := InstancesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("InstancesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return InstancesClientDeletePollerResponse{}, err
@@ -245,7 +241,7 @@ func (client *InstancesClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *InstancesClient) getHandleResponse(resp *http.Response) (InstancesClientGetResponse, error) {
-	result := InstancesClientGetResponse{RawResponse: resp}
+	result := InstancesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Instance); err != nil {
 		return InstancesClientGetResponse{}, err
 	}
@@ -266,7 +262,7 @@ func (client *InstancesClient) Head(ctx context.Context, resourceGroupName strin
 	if err != nil {
 		return InstancesClientHeadResponse{}, err
 	}
-	result := InstancesClientHeadResponse{RawResponse: resp}
+	result := InstancesClientHeadResponse{}
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		result.Success = true
 	}
@@ -348,7 +344,7 @@ func (client *InstancesClient) listByAccountCreateRequest(ctx context.Context, r
 
 // listByAccountHandleResponse handles the ListByAccount response.
 func (client *InstancesClient) listByAccountHandleResponse(resp *http.Response) (InstancesClientListByAccountResponse, error) {
-	result := InstancesClientListByAccountResponse{RawResponse: resp}
+	result := InstancesClientListByAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InstanceList); err != nil {
 		return InstancesClientListByAccountResponse{}, err
 	}
@@ -409,7 +405,7 @@ func (client *InstancesClient) updateCreateRequest(ctx context.Context, resource
 
 // updateHandleResponse handles the Update response.
 func (client *InstancesClient) updateHandleResponse(resp *http.Response) (InstancesClientUpdateResponse, error) {
-	result := InstancesClientUpdateResponse{RawResponse: resp}
+	result := InstancesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Instance); err != nil {
 		return InstancesClientUpdateResponse{}, err
 	}

@@ -34,17 +34,17 @@ type SpatialAnchorsAccountsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSpatialAnchorsAccountsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SpatialAnchorsAccountsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SpatialAnchorsAccountsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *SpatialAnchorsAccountsClient) createCreateRequest(ctx context.Cont
 
 // createHandleResponse handles the Create response.
 func (client *SpatialAnchorsAccountsClient) createHandleResponse(resp *http.Response) (SpatialAnchorsAccountsClientCreateResponse, error) {
-	result := SpatialAnchorsAccountsClientCreateResponse{RawResponse: resp}
+	result := SpatialAnchorsAccountsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SpatialAnchorsAccount); err != nil {
 		return SpatialAnchorsAccountsClientCreateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *SpatialAnchorsAccountsClient) Delete(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SpatialAnchorsAccountsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SpatialAnchorsAccountsClientDeleteResponse{RawResponse: resp}, nil
+	return SpatialAnchorsAccountsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -202,7 +202,7 @@ func (client *SpatialAnchorsAccountsClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *SpatialAnchorsAccountsClient) getHandleResponse(resp *http.Response) (SpatialAnchorsAccountsClientGetResponse, error) {
-	result := SpatialAnchorsAccountsClientGetResponse{RawResponse: resp}
+	result := SpatialAnchorsAccountsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SpatialAnchorsAccount); err != nil {
 		return SpatialAnchorsAccountsClientGetResponse{}, err
 	}
@@ -250,7 +250,7 @@ func (client *SpatialAnchorsAccountsClient) listByResourceGroupCreateRequest(ctx
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *SpatialAnchorsAccountsClient) listByResourceGroupHandleResponse(resp *http.Response) (SpatialAnchorsAccountsClientListByResourceGroupResponse, error) {
-	result := SpatialAnchorsAccountsClientListByResourceGroupResponse{RawResponse: resp}
+	result := SpatialAnchorsAccountsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SpatialAnchorsAccountPage); err != nil {
 		return SpatialAnchorsAccountsClientListByResourceGroupResponse{}, err
 	}
@@ -293,7 +293,7 @@ func (client *SpatialAnchorsAccountsClient) listBySubscriptionCreateRequest(ctx 
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *SpatialAnchorsAccountsClient) listBySubscriptionHandleResponse(resp *http.Response) (SpatialAnchorsAccountsClientListBySubscriptionResponse, error) {
-	result := SpatialAnchorsAccountsClientListBySubscriptionResponse{RawResponse: resp}
+	result := SpatialAnchorsAccountsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SpatialAnchorsAccountPage); err != nil {
 		return SpatialAnchorsAccountsClientListBySubscriptionResponse{}, err
 	}
@@ -349,7 +349,7 @@ func (client *SpatialAnchorsAccountsClient) listKeysCreateRequest(ctx context.Co
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *SpatialAnchorsAccountsClient) listKeysHandleResponse(resp *http.Response) (SpatialAnchorsAccountsClientListKeysResponse, error) {
-	result := SpatialAnchorsAccountsClientListKeysResponse{RawResponse: resp}
+	result := SpatialAnchorsAccountsClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountKeys); err != nil {
 		return SpatialAnchorsAccountsClientListKeysResponse{}, err
 	}
@@ -406,7 +406,7 @@ func (client *SpatialAnchorsAccountsClient) regenerateKeysCreateRequest(ctx cont
 
 // regenerateKeysHandleResponse handles the RegenerateKeys response.
 func (client *SpatialAnchorsAccountsClient) regenerateKeysHandleResponse(resp *http.Response) (SpatialAnchorsAccountsClientRegenerateKeysResponse, error) {
-	result := SpatialAnchorsAccountsClientRegenerateKeysResponse{RawResponse: resp}
+	result := SpatialAnchorsAccountsClientRegenerateKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountKeys); err != nil {
 		return SpatialAnchorsAccountsClientRegenerateKeysResponse{}, err
 	}
@@ -463,7 +463,7 @@ func (client *SpatialAnchorsAccountsClient) updateCreateRequest(ctx context.Cont
 
 // updateHandleResponse handles the Update response.
 func (client *SpatialAnchorsAccountsClient) updateHandleResponse(resp *http.Response) (SpatialAnchorsAccountsClientUpdateResponse, error) {
-	result := SpatialAnchorsAccountsClientUpdateResponse{RawResponse: resp}
+	result := SpatialAnchorsAccountsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SpatialAnchorsAccount); err != nil {
 		return SpatialAnchorsAccountsClientUpdateResponse{}, err
 	}

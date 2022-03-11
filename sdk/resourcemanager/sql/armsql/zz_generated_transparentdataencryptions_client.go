@@ -34,17 +34,17 @@ type TransparentDataEncryptionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTransparentDataEncryptionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TransparentDataEncryptionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TransparentDataEncryptionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -110,7 +110,7 @@ func (client *TransparentDataEncryptionsClient) createOrUpdateCreateRequest(ctx 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *TransparentDataEncryptionsClient) createOrUpdateHandleResponse(resp *http.Response) (TransparentDataEncryptionsClientCreateOrUpdateResponse, error) {
-	result := TransparentDataEncryptionsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := TransparentDataEncryptionsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LogicalDatabaseTransparentDataEncryption); err != nil {
 		return TransparentDataEncryptionsClientCreateOrUpdateResponse{}, err
 	}
@@ -177,7 +177,7 @@ func (client *TransparentDataEncryptionsClient) getCreateRequest(ctx context.Con
 
 // getHandleResponse handles the Get response.
 func (client *TransparentDataEncryptionsClient) getHandleResponse(resp *http.Response) (TransparentDataEncryptionsClientGetResponse, error) {
-	result := TransparentDataEncryptionsClientGetResponse{RawResponse: resp}
+	result := TransparentDataEncryptionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LogicalDatabaseTransparentDataEncryption); err != nil {
 		return TransparentDataEncryptionsClientGetResponse{}, err
 	}
@@ -236,7 +236,7 @@ func (client *TransparentDataEncryptionsClient) listByDatabaseCreateRequest(ctx 
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *TransparentDataEncryptionsClient) listByDatabaseHandleResponse(resp *http.Response) (TransparentDataEncryptionsClientListByDatabaseResponse, error) {
-	result := TransparentDataEncryptionsClientListByDatabaseResponse{RawResponse: resp}
+	result := TransparentDataEncryptionsClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LogicalDatabaseTransparentDataEncryptionListResult); err != nil {
 		return TransparentDataEncryptionsClientListByDatabaseResponse{}, err
 	}

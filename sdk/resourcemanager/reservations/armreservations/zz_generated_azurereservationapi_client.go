@@ -32,16 +32,16 @@ type AzureReservationAPIClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAzureReservationAPIClient(credential azcore.TokenCredential, options *arm.ClientOptions) *AzureReservationAPIClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AzureReservationAPIClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -87,7 +87,7 @@ func (client *AzureReservationAPIClient) getAppliedReservationListCreateRequest(
 
 // getAppliedReservationListHandleResponse handles the GetAppliedReservationList response.
 func (client *AzureReservationAPIClient) getAppliedReservationListHandleResponse(resp *http.Response) (AzureReservationAPIClientGetAppliedReservationListResponse, error) {
-	result := AzureReservationAPIClientGetAppliedReservationListResponse{RawResponse: resp}
+	result := AzureReservationAPIClientGetAppliedReservationListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AppliedReservations); err != nil {
 		return AzureReservationAPIClientGetAppliedReservationListResponse{}, err
 	}
@@ -140,7 +140,7 @@ func (client *AzureReservationAPIClient) getCatalogCreateRequest(ctx context.Con
 
 // getCatalogHandleResponse handles the GetCatalog response.
 func (client *AzureReservationAPIClient) getCatalogHandleResponse(resp *http.Response) (AzureReservationAPIClientGetCatalogResponse, error) {
-	result := AzureReservationAPIClientGetCatalogResponse{RawResponse: resp}
+	result := AzureReservationAPIClientGetCatalogResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CatalogArray); err != nil {
 		return AzureReservationAPIClientGetCatalogResponse{}, err
 	}

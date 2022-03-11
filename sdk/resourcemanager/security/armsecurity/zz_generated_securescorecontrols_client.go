@@ -88,7 +88,7 @@ func (client *SecureScoreControlsClient) listCreateRequest(ctx context.Context, 
 
 // listHandleResponse handles the List response.
 func (client *SecureScoreControlsClient) listHandleResponse(resp *http.Response) (SecureScoreControlsClientListResponse, error) {
-	result := SecureScoreControlsClientListResponse{RawResponse: resp}
+	result := SecureScoreControlsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecureScoreControlList); err != nil {
 		return SecureScoreControlsClientListResponse{}, err
 	}
@@ -139,7 +139,7 @@ func (client *SecureScoreControlsClient) listBySecureScoreCreateRequest(ctx cont
 
 // listBySecureScoreHandleResponse handles the ListBySecureScore response.
 func (client *SecureScoreControlsClient) listBySecureScoreHandleResponse(resp *http.Response) (SecureScoreControlsClientListBySecureScoreResponse, error) {
-	result := SecureScoreControlsClientListBySecureScoreResponse{RawResponse: resp}
+	result := SecureScoreControlsClientListBySecureScoreResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecureScoreControlList); err != nil {
 		return SecureScoreControlsClientListBySecureScoreResponse{}, err
 	}

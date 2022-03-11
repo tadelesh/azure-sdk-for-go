@@ -52,19 +52,13 @@ func NewSKUsClient(subscriptionID string, credential azcore.TokenCredential, opt
 // List - Lists the available SKUs supported by Microsoft.Storage for given subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SKUsClientListOptions contains the optional parameters for the SKUsClient.List method.
-func (client *SKUsClient) List(ctx context.Context, options *SKUsClientListOptions) (SKUsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, options)
-	if err != nil {
-		return SKUsClientListResponse{}, err
+func (client *SKUsClient) List(options *SKUsClientListOptions) *SKUsClientListPager {
+	return &SKUsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return SKUsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return SKUsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -87,7 +81,7 @@ func (client *SKUsClient) listCreateRequest(ctx context.Context, options *SKUsCl
 
 // listHandleResponse handles the List response.
 func (client *SKUsClient) listHandleResponse(resp *http.Response) (SKUsClientListResponse, error) {
-	result := SKUsClientListResponse{RawResponse: resp}
+	result := SKUsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUListResult); err != nil {
 		return SKUsClientListResponse{}, err
 	}

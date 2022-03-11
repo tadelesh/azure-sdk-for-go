@@ -29,16 +29,16 @@ type AddressClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAddressClient(credential azcore.TokenCredential, options *arm.ClientOptions) *AddressClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AddressClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -77,7 +77,7 @@ func (client *AddressClient) validateCreateRequest(ctx context.Context, address 
 
 // validateHandleResponse handles the Validate response.
 func (client *AddressClient) validateHandleResponse(resp *http.Response) (AddressClientValidateResponse, error) {
-	result := AddressClientValidateResponse{RawResponse: resp}
+	result := AddressClientValidateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ValidateAddressResponse); err != nil {
 		return AddressClientValidateResponse{}, err
 	}

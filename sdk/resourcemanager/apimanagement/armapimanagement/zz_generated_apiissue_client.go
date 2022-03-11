@@ -36,17 +36,17 @@ type APIIssueClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAPIIssueClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *APIIssueClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &APIIssueClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -113,7 +113,7 @@ func (client *APIIssueClient) createOrUpdateCreateRequest(ctx context.Context, r
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *APIIssueClient) createOrUpdateHandleResponse(resp *http.Response) (APIIssueClientCreateOrUpdateResponse, error) {
-	result := APIIssueClientCreateOrUpdateResponse{RawResponse: resp}
+	result := APIIssueClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -144,7 +144,7 @@ func (client *APIIssueClient) Delete(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return APIIssueClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return APIIssueClientDeleteResponse{RawResponse: resp}, nil
+	return APIIssueClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -243,7 +243,7 @@ func (client *APIIssueClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *APIIssueClient) getHandleResponse(resp *http.Response) (APIIssueClientGetResponse, error) {
-	result := APIIssueClientGetResponse{RawResponse: resp}
+	result := APIIssueClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -307,7 +307,7 @@ func (client *APIIssueClient) getEntityTagCreateRequest(ctx context.Context, res
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *APIIssueClient) getEntityTagHandleResponse(resp *http.Response) (APIIssueClientGetEntityTagResponse, error) {
-	result := APIIssueClientGetEntityTagResponse{RawResponse: resp}
+	result := APIIssueClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -379,7 +379,7 @@ func (client *APIIssueClient) listByServiceCreateRequest(ctx context.Context, re
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *APIIssueClient) listByServiceHandleResponse(resp *http.Response) (APIIssueClientListByServiceResponse, error) {
-	result := APIIssueClientListByServiceResponse{RawResponse: resp}
+	result := APIIssueClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IssueCollection); err != nil {
 		return APIIssueClientListByServiceResponse{}, err
 	}
@@ -448,7 +448,7 @@ func (client *APIIssueClient) updateCreateRequest(ctx context.Context, resourceG
 
 // updateHandleResponse handles the Update response.
 func (client *APIIssueClient) updateHandleResponse(resp *http.Response) (APIIssueClientUpdateResponse, error) {
-	result := APIIssueClientUpdateResponse{RawResponse: resp}
+	result := APIIssueClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

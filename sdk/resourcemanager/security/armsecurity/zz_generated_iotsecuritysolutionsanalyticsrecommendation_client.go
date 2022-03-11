@@ -105,7 +105,7 @@ func (client *IotSecuritySolutionsAnalyticsRecommendationClient) getCreateReques
 
 // getHandleResponse handles the Get response.
 func (client *IotSecuritySolutionsAnalyticsRecommendationClient) getHandleResponse(resp *http.Response) (IotSecuritySolutionsAnalyticsRecommendationClientGetResponse, error) {
-	result := IotSecuritySolutionsAnalyticsRecommendationClientGetResponse{RawResponse: resp}
+	result := IotSecuritySolutionsAnalyticsRecommendationClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IoTSecurityAggregatedRecommendation); err != nil {
 		return IotSecuritySolutionsAnalyticsRecommendationClientGetResponse{}, err
 	}
@@ -161,7 +161,7 @@ func (client *IotSecuritySolutionsAnalyticsRecommendationClient) listCreateReque
 
 // listHandleResponse handles the List response.
 func (client *IotSecuritySolutionsAnalyticsRecommendationClient) listHandleResponse(resp *http.Response) (IotSecuritySolutionsAnalyticsRecommendationClientListResponse, error) {
-	result := IotSecuritySolutionsAnalyticsRecommendationClientListResponse{RawResponse: resp}
+	result := IotSecuritySolutionsAnalyticsRecommendationClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IoTSecurityAggregatedRecommendationList); err != nil {
 		return IotSecuritySolutionsAnalyticsRecommendationClientListResponse{}, err
 	}

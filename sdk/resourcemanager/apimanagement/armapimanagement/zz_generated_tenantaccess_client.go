@@ -35,17 +35,17 @@ type TenantAccessClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTenantAccessClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TenantAccessClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TenantAccessClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -107,7 +107,7 @@ func (client *TenantAccessClient) createCreateRequest(ctx context.Context, resou
 
 // createHandleResponse handles the Create response.
 func (client *TenantAccessClient) createHandleResponse(resp *http.Response) (TenantAccessClientCreateResponse, error) {
-	result := TenantAccessClientCreateResponse{RawResponse: resp}
+	result := TenantAccessClientCreateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -170,7 +170,7 @@ func (client *TenantAccessClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *TenantAccessClient) getHandleResponse(resp *http.Response) (TenantAccessClientGetResponse, error) {
-	result := TenantAccessClientGetResponse{RawResponse: resp}
+	result := TenantAccessClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -230,7 +230,7 @@ func (client *TenantAccessClient) getEntityTagCreateRequest(ctx context.Context,
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *TenantAccessClient) getEntityTagHandleResponse(resp *http.Response) (TenantAccessClientGetEntityTagResponse, error) {
-	result := TenantAccessClientGetEntityTagResponse{RawResponse: resp}
+	result := TenantAccessClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -289,7 +289,7 @@ func (client *TenantAccessClient) listByServiceCreateRequest(ctx context.Context
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *TenantAccessClient) listByServiceHandleResponse(resp *http.Response) (TenantAccessClientListByServiceResponse, error) {
-	result := TenantAccessClientListByServiceResponse{RawResponse: resp}
+	result := TenantAccessClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessInformationCollection); err != nil {
 		return TenantAccessClientListByServiceResponse{}, err
 	}
@@ -350,7 +350,7 @@ func (client *TenantAccessClient) listSecretsCreateRequest(ctx context.Context, 
 
 // listSecretsHandleResponse handles the ListSecrets response.
 func (client *TenantAccessClient) listSecretsHandleResponse(resp *http.Response) (TenantAccessClientListSecretsResponse, error) {
-	result := TenantAccessClientListSecretsResponse{RawResponse: resp}
+	result := TenantAccessClientListSecretsResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -379,7 +379,7 @@ func (client *TenantAccessClient) RegeneratePrimaryKey(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return TenantAccessClientRegeneratePrimaryKeyResponse{}, runtime.NewResponseError(resp)
 	}
-	return TenantAccessClientRegeneratePrimaryKeyResponse{RawResponse: resp}, nil
+	return TenantAccessClientRegeneratePrimaryKeyResponse{}, nil
 }
 
 // regeneratePrimaryKeyCreateRequest creates the RegeneratePrimaryKey request.
@@ -431,7 +431,7 @@ func (client *TenantAccessClient) RegenerateSecondaryKey(ctx context.Context, re
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return TenantAccessClientRegenerateSecondaryKeyResponse{}, runtime.NewResponseError(resp)
 	}
-	return TenantAccessClientRegenerateSecondaryKeyResponse{RawResponse: resp}, nil
+	return TenantAccessClientRegenerateSecondaryKeyResponse{}, nil
 }
 
 // regenerateSecondaryKeyCreateRequest creates the RegenerateSecondaryKey request.
@@ -521,7 +521,7 @@ func (client *TenantAccessClient) updateCreateRequest(ctx context.Context, resou
 
 // updateHandleResponse handles the Update response.
 func (client *TenantAccessClient) updateHandleResponse(resp *http.Response) (TenantAccessClientUpdateResponse, error) {
-	result := TenantAccessClientUpdateResponse{RawResponse: resp}
+	result := TenantAccessClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

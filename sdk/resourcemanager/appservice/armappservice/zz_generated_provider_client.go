@@ -84,7 +84,7 @@ func (client *ProviderClient) getAvailableStacksCreateRequest(ctx context.Contex
 
 // getAvailableStacksHandleResponse handles the GetAvailableStacks response.
 func (client *ProviderClient) getAvailableStacksHandleResponse(resp *http.Response) (ProviderClientGetAvailableStacksResponse, error) {
-	result := ProviderClientGetAvailableStacksResponse{RawResponse: resp}
+	result := ProviderClientGetAvailableStacksResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationStackCollection); err != nil {
 		return ProviderClientGetAvailableStacksResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *ProviderClient) getAvailableStacksOnPremCreateRequest(ctx context.
 
 // getAvailableStacksOnPremHandleResponse handles the GetAvailableStacksOnPrem response.
 func (client *ProviderClient) getAvailableStacksOnPremHandleResponse(resp *http.Response) (ProviderClientGetAvailableStacksOnPremResponse, error) {
-	result := ProviderClientGetAvailableStacksOnPremResponse{RawResponse: resp}
+	result := ProviderClientGetAvailableStacksOnPremResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationStackCollection); err != nil {
 		return ProviderClientGetAvailableStacksOnPremResponse{}, err
 	}
@@ -172,7 +172,7 @@ func (client *ProviderClient) getFunctionAppStacksCreateRequest(ctx context.Cont
 
 // getFunctionAppStacksHandleResponse handles the GetFunctionAppStacks response.
 func (client *ProviderClient) getFunctionAppStacksHandleResponse(resp *http.Response) (ProviderClientGetFunctionAppStacksResponse, error) {
-	result := ProviderClientGetFunctionAppStacksResponse{RawResponse: resp}
+	result := ProviderClientGetFunctionAppStacksResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FunctionAppStackCollection); err != nil {
 		return ProviderClientGetFunctionAppStacksResponse{}, err
 	}
@@ -219,7 +219,7 @@ func (client *ProviderClient) getFunctionAppStacksForLocationCreateRequest(ctx c
 
 // getFunctionAppStacksForLocationHandleResponse handles the GetFunctionAppStacksForLocation response.
 func (client *ProviderClient) getFunctionAppStacksForLocationHandleResponse(resp *http.Response) (ProviderClientGetFunctionAppStacksForLocationResponse, error) {
-	result := ProviderClientGetFunctionAppStacksForLocationResponse{RawResponse: resp}
+	result := ProviderClientGetFunctionAppStacksForLocationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FunctionAppStackCollection); err != nil {
 		return ProviderClientGetFunctionAppStacksForLocationResponse{}, err
 	}
@@ -261,7 +261,7 @@ func (client *ProviderClient) getWebAppStacksCreateRequest(ctx context.Context, 
 
 // getWebAppStacksHandleResponse handles the GetWebAppStacks response.
 func (client *ProviderClient) getWebAppStacksHandleResponse(resp *http.Response) (ProviderClientGetWebAppStacksResponse, error) {
-	result := ProviderClientGetWebAppStacksResponse{RawResponse: resp}
+	result := ProviderClientGetWebAppStacksResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebAppStackCollection); err != nil {
 		return ProviderClientGetWebAppStacksResponse{}, err
 	}
@@ -308,7 +308,7 @@ func (client *ProviderClient) getWebAppStacksForLocationCreateRequest(ctx contex
 
 // getWebAppStacksForLocationHandleResponse handles the GetWebAppStacksForLocation response.
 func (client *ProviderClient) getWebAppStacksForLocationHandleResponse(resp *http.Response) (ProviderClientGetWebAppStacksForLocationResponse, error) {
-	result := ProviderClientGetWebAppStacksForLocationResponse{RawResponse: resp}
+	result := ProviderClientGetWebAppStacksForLocationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebAppStackCollection); err != nil {
 		return ProviderClientGetWebAppStacksForLocationResponse{}, err
 	}
@@ -347,7 +347,7 @@ func (client *ProviderClient) listOperationsCreateRequest(ctx context.Context, o
 
 // listOperationsHandleResponse handles the ListOperations response.
 func (client *ProviderClient) listOperationsHandleResponse(resp *http.Response) (ProviderClientListOperationsResponse, error) {
-	result := ProviderClientListOperationsResponse{RawResponse: resp}
+	result := ProviderClientListOperationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CsmOperationCollection); err != nil {
 		return ProviderClientListOperationsResponse{}, err
 	}

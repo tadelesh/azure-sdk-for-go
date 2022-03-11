@@ -34,17 +34,17 @@ type HcxEnterpriseSitesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewHcxEnterpriseSitesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *HcxEnterpriseSitesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &HcxEnterpriseSitesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *HcxEnterpriseSitesClient) createOrUpdateCreateRequest(ctx context.
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *HcxEnterpriseSitesClient) createOrUpdateHandleResponse(resp *http.Response) (HcxEnterpriseSitesClientCreateOrUpdateResponse, error) {
-	result := HcxEnterpriseSitesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := HcxEnterpriseSitesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HcxEnterpriseSite); err != nil {
 		return HcxEnterpriseSitesClientCreateOrUpdateResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *HcxEnterpriseSitesClient) Delete(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return HcxEnterpriseSitesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return HcxEnterpriseSitesClientDeleteResponse{RawResponse: resp}, nil
+	return HcxEnterpriseSitesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -216,7 +216,7 @@ func (client *HcxEnterpriseSitesClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *HcxEnterpriseSitesClient) getHandleResponse(resp *http.Response) (HcxEnterpriseSitesClientGetResponse, error) {
-	result := HcxEnterpriseSitesClientGetResponse{RawResponse: resp}
+	result := HcxEnterpriseSitesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HcxEnterpriseSite); err != nil {
 		return HcxEnterpriseSitesClientGetResponse{}, err
 	}
@@ -268,7 +268,7 @@ func (client *HcxEnterpriseSitesClient) listCreateRequest(ctx context.Context, r
 
 // listHandleResponse handles the List response.
 func (client *HcxEnterpriseSitesClient) listHandleResponse(resp *http.Response) (HcxEnterpriseSitesClientListResponse, error) {
-	result := HcxEnterpriseSitesClientListResponse{RawResponse: resp}
+	result := HcxEnterpriseSitesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HcxEnterpriseSiteList); err != nil {
 		return HcxEnterpriseSitesClientListResponse{}, err
 	}

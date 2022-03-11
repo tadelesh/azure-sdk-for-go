@@ -35,17 +35,17 @@ type ConnectionClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewConnectionClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ConnectionClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ConnectionClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *ConnectionClient) createOrUpdateCreateRequest(ctx context.Context,
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ConnectionClient) createOrUpdateHandleResponse(resp *http.Response) (ConnectionClientCreateOrUpdateResponse, error) {
-	result := ConnectionClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ConnectionClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Connection); err != nil {
 		return ConnectionClientCreateOrUpdateResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *ConnectionClient) Delete(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ConnectionClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ConnectionClientDeleteResponse{RawResponse: resp}, nil
+	return ConnectionClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -216,7 +216,7 @@ func (client *ConnectionClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *ConnectionClient) getHandleResponse(resp *http.Response) (ConnectionClientGetResponse, error) {
-	result := ConnectionClientGetResponse{RawResponse: resp}
+	result := ConnectionClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Connection); err != nil {
 		return ConnectionClientGetResponse{}, err
 	}
@@ -269,7 +269,7 @@ func (client *ConnectionClient) listByAutomationAccountCreateRequest(ctx context
 
 // listByAutomationAccountHandleResponse handles the ListByAutomationAccount response.
 func (client *ConnectionClient) listByAutomationAccountHandleResponse(resp *http.Response) (ConnectionClientListByAutomationAccountResponse, error) {
-	result := ConnectionClientListByAutomationAccountResponse{RawResponse: resp}
+	result := ConnectionClientListByAutomationAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConnectionListResult); err != nil {
 		return ConnectionClientListByAutomationAccountResponse{}, err
 	}
@@ -330,7 +330,7 @@ func (client *ConnectionClient) updateCreateRequest(ctx context.Context, resourc
 
 // updateHandleResponse handles the Update response.
 func (client *ConnectionClient) updateHandleResponse(resp *http.Response) (ConnectionClientUpdateResponse, error) {
-	result := ConnectionClientUpdateResponse{RawResponse: resp}
+	result := ConnectionClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Connection); err != nil {
 		return ConnectionClientUpdateResponse{}, err
 	}

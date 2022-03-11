@@ -35,17 +35,17 @@ type ResourceGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewResourceGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ResourceGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ResourceGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,7 +63,7 @@ func (client *ResourceGroupsClient) CheckExistence(ctx context.Context, resource
 	if err != nil {
 		return ResourceGroupsClientCheckExistenceResponse{}, err
 	}
-	result := ResourceGroupsClientCheckExistenceResponse{RawResponse: resp}
+	result := ResourceGroupsClientCheckExistenceResponse{}
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		result.Success = true
 	}
@@ -138,7 +138,7 @@ func (client *ResourceGroupsClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ResourceGroupsClient) createOrUpdateHandleResponse(resp *http.Response) (ResourceGroupsClientCreateOrUpdateResponse, error) {
-	result := ResourceGroupsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ResourceGroupsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceGroup); err != nil {
 		return ResourceGroupsClientCreateOrUpdateResponse{}, err
 	}
@@ -156,9 +156,7 @@ func (client *ResourceGroupsClient) BeginDelete(ctx context.Context, resourceGro
 	if err != nil {
 		return ResourceGroupsClientDeletePollerResponse{}, err
 	}
-	result := ResourceGroupsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ResourceGroupsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ResourceGroupsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ResourceGroupsClientDeletePollerResponse{}, err
@@ -223,9 +221,7 @@ func (client *ResourceGroupsClient) BeginExportTemplate(ctx context.Context, res
 	if err != nil {
 		return ResourceGroupsClientExportTemplatePollerResponse{}, err
 	}
-	result := ResourceGroupsClientExportTemplatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ResourceGroupsClientExportTemplatePollerResponse{}
 	pt, err := armruntime.NewPoller("ResourceGroupsClient.ExportTemplate", "location", resp, client.pl)
 	if err != nil {
 		return ResourceGroupsClientExportTemplatePollerResponse{}, err
@@ -318,7 +314,7 @@ func (client *ResourceGroupsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *ResourceGroupsClient) getHandleResponse(resp *http.Response) (ResourceGroupsClientGetResponse, error) {
-	result := ResourceGroupsClientGetResponse{RawResponse: resp}
+	result := ResourceGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceGroup); err != nil {
 		return ResourceGroupsClientGetResponse{}, err
 	}
@@ -366,7 +362,7 @@ func (client *ResourceGroupsClient) listCreateRequest(ctx context.Context, optio
 
 // listHandleResponse handles the List response.
 func (client *ResourceGroupsClient) listHandleResponse(resp *http.Response) (ResourceGroupsClientListResponse, error) {
-	result := ResourceGroupsClientListResponse{RawResponse: resp}
+	result := ResourceGroupsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceGroupListResult); err != nil {
 		return ResourceGroupsClientListResponse{}, err
 	}
@@ -419,7 +415,7 @@ func (client *ResourceGroupsClient) updateCreateRequest(ctx context.Context, res
 
 // updateHandleResponse handles the Update response.
 func (client *ResourceGroupsClient) updateHandleResponse(resp *http.Response) (ResourceGroupsClientUpdateResponse, error) {
-	result := ResourceGroupsClientUpdateResponse{RawResponse: resp}
+	result := ResourceGroupsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceGroup); err != nil {
 		return ResourceGroupsClientUpdateResponse{}, err
 	}

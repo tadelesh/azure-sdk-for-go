@@ -35,17 +35,17 @@ type WorkflowTriggerHistoriesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkflowTriggerHistoriesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkflowTriggerHistoriesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkflowTriggerHistoriesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *WorkflowTriggerHistoriesClient) getCreateRequest(ctx context.Conte
 
 // getHandleResponse handles the Get response.
 func (client *WorkflowTriggerHistoriesClient) getHandleResponse(resp *http.Response) (WorkflowTriggerHistoriesClientGetResponse, error) {
-	result := WorkflowTriggerHistoriesClientGetResponse{RawResponse: resp}
+	result := WorkflowTriggerHistoriesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowTriggerHistory); err != nil {
 		return WorkflowTriggerHistoriesClientGetResponse{}, err
 	}
@@ -173,7 +173,7 @@ func (client *WorkflowTriggerHistoriesClient) listCreateRequest(ctx context.Cont
 
 // listHandleResponse handles the List response.
 func (client *WorkflowTriggerHistoriesClient) listHandleResponse(resp *http.Response) (WorkflowTriggerHistoriesClientListResponse, error) {
-	result := WorkflowTriggerHistoriesClientListResponse{RawResponse: resp}
+	result := WorkflowTriggerHistoriesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowTriggerHistoryListResult); err != nil {
 		return WorkflowTriggerHistoriesClientListResponse{}, err
 	}
@@ -200,7 +200,7 @@ func (client *WorkflowTriggerHistoriesClient) Resubmit(ctx context.Context, reso
 	if !runtime.HasStatusCode(resp, http.StatusAccepted) {
 		return WorkflowTriggerHistoriesClientResubmitResponse{}, runtime.NewResponseError(resp)
 	}
-	return WorkflowTriggerHistoriesClientResubmitResponse{RawResponse: resp}, nil
+	return WorkflowTriggerHistoriesClientResubmitResponse{}, nil
 }
 
 // resubmitCreateRequest creates the Resubmit request.

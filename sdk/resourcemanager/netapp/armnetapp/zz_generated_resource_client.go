@@ -35,17 +35,17 @@ type ResourceClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewResourceClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ResourceClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ResourceClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *ResourceClient) checkFilePathAvailabilityCreateRequest(ctx context
 
 // checkFilePathAvailabilityHandleResponse handles the CheckFilePathAvailability response.
 func (client *ResourceClient) checkFilePathAvailabilityHandleResponse(resp *http.Response) (ResourceClientCheckFilePathAvailabilityResponse, error) {
-	result := ResourceClientCheckFilePathAvailabilityResponse{RawResponse: resp}
+	result := ResourceClientCheckFilePathAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckAvailabilityResponse); err != nil {
 		return ResourceClientCheckFilePathAvailabilityResponse{}, err
 	}
@@ -147,7 +147,7 @@ func (client *ResourceClient) checkNameAvailabilityCreateRequest(ctx context.Con
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *ResourceClient) checkNameAvailabilityHandleResponse(resp *http.Response) (ResourceClientCheckNameAvailabilityResponse, error) {
-	result := ResourceClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := ResourceClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckAvailabilityResponse); err != nil {
 		return ResourceClientCheckNameAvailabilityResponse{}, err
 	}
@@ -199,7 +199,7 @@ func (client *ResourceClient) checkQuotaAvailabilityCreateRequest(ctx context.Co
 
 // checkQuotaAvailabilityHandleResponse handles the CheckQuotaAvailability response.
 func (client *ResourceClient) checkQuotaAvailabilityHandleResponse(resp *http.Response) (ResourceClientCheckQuotaAvailabilityResponse, error) {
-	result := ResourceClientCheckQuotaAvailabilityResponse{RawResponse: resp}
+	result := ResourceClientCheckQuotaAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckAvailabilityResponse); err != nil {
 		return ResourceClientCheckQuotaAvailabilityResponse{}, err
 	}

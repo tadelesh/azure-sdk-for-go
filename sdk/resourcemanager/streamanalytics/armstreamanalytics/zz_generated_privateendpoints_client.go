@@ -34,17 +34,17 @@ type PrivateEndpointsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateEndpointsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateEndpointsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateEndpointsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -111,7 +111,7 @@ func (client *PrivateEndpointsClient) createOrUpdateCreateRequest(ctx context.Co
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *PrivateEndpointsClient) createOrUpdateHandleResponse(resp *http.Response) (PrivateEndpointsClientCreateOrUpdateResponse, error) {
-	result := PrivateEndpointsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := PrivateEndpointsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpoint); err != nil {
 		return PrivateEndpointsClientCreateOrUpdateResponse{}, err
 	}
@@ -130,9 +130,7 @@ func (client *PrivateEndpointsClient) BeginDelete(ctx context.Context, resourceG
 	if err != nil {
 		return PrivateEndpointsClientDeletePollerResponse{}, err
 	}
-	result := PrivateEndpointsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateEndpointsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateEndpointsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return PrivateEndpointsClientDeletePollerResponse{}, err
@@ -243,7 +241,7 @@ func (client *PrivateEndpointsClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *PrivateEndpointsClient) getHandleResponse(resp *http.Response) (PrivateEndpointsClientGetResponse, error) {
-	result := PrivateEndpointsClientGetResponse{RawResponse: resp}
+	result := PrivateEndpointsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpoint); err != nil {
 		return PrivateEndpointsClientGetResponse{}, err
 	}
@@ -296,7 +294,7 @@ func (client *PrivateEndpointsClient) listByClusterCreateRequest(ctx context.Con
 
 // listByClusterHandleResponse handles the ListByCluster response.
 func (client *PrivateEndpointsClient) listByClusterHandleResponse(resp *http.Response) (PrivateEndpointsClientListByClusterResponse, error) {
-	result := PrivateEndpointsClientListByClusterResponse{RawResponse: resp}
+	result := PrivateEndpointsClientListByClusterResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointListResult); err != nil {
 		return PrivateEndpointsClientListByClusterResponse{}, err
 	}

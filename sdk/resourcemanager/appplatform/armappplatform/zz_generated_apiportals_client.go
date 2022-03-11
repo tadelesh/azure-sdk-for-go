@@ -35,17 +35,17 @@ type APIPortalsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAPIPortalsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *APIPortalsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &APIPortalsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *APIPortalsClient) BeginCreateOrUpdate(ctx context.Context, resourc
 	if err != nil {
 		return APIPortalsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := APIPortalsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := APIPortalsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("APIPortalsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return APIPortalsClientCreateOrUpdatePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *APIPortalsClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return APIPortalsClientDeletePollerResponse{}, err
 	}
-	result := APIPortalsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := APIPortalsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("APIPortalsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return APIPortalsClientDeletePollerResponse{}, err
@@ -250,7 +246,7 @@ func (client *APIPortalsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *APIPortalsClient) getHandleResponse(resp *http.Response) (APIPortalsClientGetResponse, error) {
-	result := APIPortalsClientGetResponse{RawResponse: resp}
+	result := APIPortalsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIPortalResource); err != nil {
 		return APIPortalsClientGetResponse{}, err
 	}
@@ -303,7 +299,7 @@ func (client *APIPortalsClient) listCreateRequest(ctx context.Context, resourceG
 
 // listHandleResponse handles the List response.
 func (client *APIPortalsClient) listHandleResponse(resp *http.Response) (APIPortalsClientListResponse, error) {
-	result := APIPortalsClientListResponse{RawResponse: resp}
+	result := APIPortalsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.APIPortalResourceCollection); err != nil {
 		return APIPortalsClientListResponse{}, err
 	}
@@ -366,7 +362,7 @@ func (client *APIPortalsClient) validateDomainCreateRequest(ctx context.Context,
 
 // validateDomainHandleResponse handles the ValidateDomain response.
 func (client *APIPortalsClient) validateDomainHandleResponse(resp *http.Response) (APIPortalsClientValidateDomainResponse, error) {
-	result := APIPortalsClientValidateDomainResponse{RawResponse: resp}
+	result := APIPortalsClientValidateDomainResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CustomDomainValidateResult); err != nil {
 		return APIPortalsClientValidateDomainResponse{}, err
 	}

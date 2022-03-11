@@ -35,17 +35,17 @@ type ExtensionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewExtensionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ExtensionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ExtensionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *ExtensionsClient) BeginCreate(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return ExtensionsClientCreatePollerResponse{}, err
 	}
-	result := ExtensionsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ExtensionsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ExtensionsClient.Create", "location", resp, client.pl)
 	if err != nil {
 		return ExtensionsClientCreatePollerResponse{}, err
@@ -133,9 +131,7 @@ func (client *ExtensionsClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return ExtensionsClientDeletePollerResponse{}, err
 	}
-	result := ExtensionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ExtensionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ExtensionsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return ExtensionsClientDeletePollerResponse{}, err
@@ -204,9 +200,7 @@ func (client *ExtensionsClient) BeginDisableAzureMonitor(ctx context.Context, re
 	if err != nil {
 		return ExtensionsClientDisableAzureMonitorPollerResponse{}, err
 	}
-	result := ExtensionsClientDisableAzureMonitorPollerResponse{
-		RawResponse: resp,
-	}
+	result := ExtensionsClientDisableAzureMonitorPollerResponse{}
 	pt, err := armruntime.NewPoller("ExtensionsClient.DisableAzureMonitor", "location", resp, client.pl)
 	if err != nil {
 		return ExtensionsClientDisableAzureMonitorPollerResponse{}, err
@@ -271,9 +265,7 @@ func (client *ExtensionsClient) BeginDisableMonitoring(ctx context.Context, reso
 	if err != nil {
 		return ExtensionsClientDisableMonitoringPollerResponse{}, err
 	}
-	result := ExtensionsClientDisableMonitoringPollerResponse{
-		RawResponse: resp,
-	}
+	result := ExtensionsClientDisableMonitoringPollerResponse{}
 	pt, err := armruntime.NewPoller("ExtensionsClient.DisableMonitoring", "location", resp, client.pl)
 	if err != nil {
 		return ExtensionsClientDisableMonitoringPollerResponse{}, err
@@ -339,9 +331,7 @@ func (client *ExtensionsClient) BeginEnableAzureMonitor(ctx context.Context, res
 	if err != nil {
 		return ExtensionsClientEnableAzureMonitorPollerResponse{}, err
 	}
-	result := ExtensionsClientEnableAzureMonitorPollerResponse{
-		RawResponse: resp,
-	}
+	result := ExtensionsClientEnableAzureMonitorPollerResponse{}
 	pt, err := armruntime.NewPoller("ExtensionsClient.EnableAzureMonitor", "location", resp, client.pl)
 	if err != nil {
 		return ExtensionsClientEnableAzureMonitorPollerResponse{}, err
@@ -407,9 +397,7 @@ func (client *ExtensionsClient) BeginEnableMonitoring(ctx context.Context, resou
 	if err != nil {
 		return ExtensionsClientEnableMonitoringPollerResponse{}, err
 	}
-	result := ExtensionsClientEnableMonitoringPollerResponse{
-		RawResponse: resp,
-	}
+	result := ExtensionsClientEnableMonitoringPollerResponse{}
 	pt, err := armruntime.NewPoller("ExtensionsClient.EnableMonitoring", "location", resp, client.pl)
 	if err != nil {
 		return ExtensionsClientEnableMonitoringPollerResponse{}, err
@@ -516,7 +504,7 @@ func (client *ExtensionsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *ExtensionsClient) getHandleResponse(resp *http.Response) (ExtensionsClientGetResponse, error) {
-	result := ExtensionsClientGetResponse{RawResponse: resp}
+	result := ExtensionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ClusterMonitoringResponse); err != nil {
 		return ExtensionsClientGetResponse{}, err
 	}
@@ -582,7 +570,7 @@ func (client *ExtensionsClient) getAzureAsyncOperationStatusCreateRequest(ctx co
 
 // getAzureAsyncOperationStatusHandleResponse handles the GetAzureAsyncOperationStatus response.
 func (client *ExtensionsClient) getAzureAsyncOperationStatusHandleResponse(resp *http.Response) (ExtensionsClientGetAzureAsyncOperationStatusResponse, error) {
-	result := ExtensionsClientGetAzureAsyncOperationStatusResponse{RawResponse: resp}
+	result := ExtensionsClientGetAzureAsyncOperationStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AsyncOperationResult); err != nil {
 		return ExtensionsClientGetAzureAsyncOperationStatusResponse{}, err
 	}
@@ -638,7 +626,7 @@ func (client *ExtensionsClient) getAzureMonitorStatusCreateRequest(ctx context.C
 
 // getAzureMonitorStatusHandleResponse handles the GetAzureMonitorStatus response.
 func (client *ExtensionsClient) getAzureMonitorStatusHandleResponse(resp *http.Response) (ExtensionsClientGetAzureMonitorStatusResponse, error) {
-	result := ExtensionsClientGetAzureMonitorStatusResponse{RawResponse: resp}
+	result := ExtensionsClientGetAzureMonitorStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureMonitorResponse); err != nil {
 		return ExtensionsClientGetAzureMonitorStatusResponse{}, err
 	}
@@ -694,7 +682,7 @@ func (client *ExtensionsClient) getMonitoringStatusCreateRequest(ctx context.Con
 
 // getMonitoringStatusHandleResponse handles the GetMonitoringStatus response.
 func (client *ExtensionsClient) getMonitoringStatusHandleResponse(resp *http.Response) (ExtensionsClientGetMonitoringStatusResponse, error) {
-	result := ExtensionsClientGetMonitoringStatusResponse{RawResponse: resp}
+	result := ExtensionsClientGetMonitoringStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ClusterMonitoringResponse); err != nil {
 		return ExtensionsClientGetMonitoringStatusResponse{}, err
 	}

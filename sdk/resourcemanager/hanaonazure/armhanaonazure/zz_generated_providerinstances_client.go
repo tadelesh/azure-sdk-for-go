@@ -35,17 +35,17 @@ type ProviderInstancesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProviderInstancesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ProviderInstancesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProviderInstancesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *ProviderInstancesClient) BeginCreate(ctx context.Context, resource
 	if err != nil {
 		return ProviderInstancesClientCreatePollerResponse{}, err
 	}
-	result := ProviderInstancesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ProviderInstancesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ProviderInstancesClient.Create", "", resp, client.pl)
 	if err != nil {
 		return ProviderInstancesClientCreatePollerResponse{}, err
@@ -137,9 +135,7 @@ func (client *ProviderInstancesClient) BeginDelete(ctx context.Context, resource
 	if err != nil {
 		return ProviderInstancesClientDeletePollerResponse{}, err
 	}
-	result := ProviderInstancesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ProviderInstancesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ProviderInstancesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ProviderInstancesClientDeletePollerResponse{}, err
@@ -251,7 +247,7 @@ func (client *ProviderInstancesClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *ProviderInstancesClient) getHandleResponse(resp *http.Response) (ProviderInstancesClientGetResponse, error) {
-	result := ProviderInstancesClientGetResponse{RawResponse: resp}
+	result := ProviderInstancesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProviderInstance); err != nil {
 		return ProviderInstancesClientGetResponse{}, err
 	}
@@ -304,7 +300,7 @@ func (client *ProviderInstancesClient) listCreateRequest(ctx context.Context, re
 
 // listHandleResponse handles the List response.
 func (client *ProviderInstancesClient) listHandleResponse(resp *http.Response) (ProviderInstancesClientListResponse, error) {
-	result := ProviderInstancesClientListResponse{RawResponse: resp}
+	result := ProviderInstancesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProviderInstanceListResult); err != nil {
 		return ProviderInstancesClientListResponse{}, err
 	}

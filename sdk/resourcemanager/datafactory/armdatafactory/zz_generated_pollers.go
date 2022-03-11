@@ -43,11 +43,10 @@ func (p *DataFlowDebugSessionClientCreatePoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final DataFlowDebugSessionClientCreateResponse will be returned.
 func (p *DataFlowDebugSessionClientCreatePoller) FinalResponse(ctx context.Context) (DataFlowDebugSessionClientCreateResponse, error) {
 	respType := DataFlowDebugSessionClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.CreateDataFlowDebugSessionResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.CreateDataFlowDebugSessionResponse)
 	if err != nil {
 		return DataFlowDebugSessionClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *DataFlowDebugSessionClientExecuteCommandPoller) Poll(ctx context.Contex
 // If the final GET succeeded then the final DataFlowDebugSessionClientExecuteCommandResponse will be returned.
 func (p *DataFlowDebugSessionClientExecuteCommandPoller) FinalResponse(ctx context.Context) (DataFlowDebugSessionClientExecuteCommandResponse, error) {
 	respType := DataFlowDebugSessionClientExecuteCommandResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DataFlowDebugCommandResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.DataFlowDebugCommandResponse)
 	if err != nil {
 		return DataFlowDebugSessionClientExecuteCommandResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *IntegrationRuntimeObjectMetadataClientRefreshPoller) Poll(ctx context.C
 // If the final GET succeeded then the final IntegrationRuntimeObjectMetadataClientRefreshResponse will be returned.
 func (p *IntegrationRuntimeObjectMetadataClientRefreshPoller) FinalResponse(ctx context.Context) (IntegrationRuntimeObjectMetadataClientRefreshResponse, error) {
 	respType := IntegrationRuntimeObjectMetadataClientRefreshResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.SsisObjectMetadataStatusResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.SsisObjectMetadataStatusResponse)
 	if err != nil {
 		return IntegrationRuntimeObjectMetadataClientRefreshResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *IntegrationRuntimesClientStartPoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final IntegrationRuntimesClientStartResponse will be returned.
 func (p *IntegrationRuntimesClientStartPoller) FinalResponse(ctx context.Context) (IntegrationRuntimesClientStartResponse, error) {
 	respType := IntegrationRuntimesClientStartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.IntegrationRuntimeStatusResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.IntegrationRuntimeStatusResponse)
 	if err != nil {
 		return IntegrationRuntimesClientStartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *IntegrationRuntimesClientStopPoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final IntegrationRuntimesClientStopResponse will be returned.
 func (p *IntegrationRuntimesClientStopPoller) FinalResponse(ctx context.Context) (IntegrationRuntimesClientStopResponse, error) {
 	respType := IntegrationRuntimesClientStopResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return IntegrationRuntimesClientStopResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *TriggersClientStartPoller) Poll(ctx context.Context) (*http.Response, e
 // If the final GET succeeded then the final TriggersClientStartResponse will be returned.
 func (p *TriggersClientStartPoller) FinalResponse(ctx context.Context) (TriggersClientStartResponse, error) {
 	respType := TriggersClientStartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return TriggersClientStartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *TriggersClientStopPoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final TriggersClientStopResponse will be returned.
 func (p *TriggersClientStopPoller) FinalResponse(ctx context.Context) (TriggersClientStopResponse, error) {
 	respType := TriggersClientStopResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return TriggersClientStopResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *TriggersClientSubscribeToEventsPoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final TriggersClientSubscribeToEventsResponse will be returned.
 func (p *TriggersClientSubscribeToEventsPoller) FinalResponse(ctx context.Context) (TriggersClientSubscribeToEventsResponse, error) {
 	respType := TriggersClientSubscribeToEventsResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.TriggerSubscriptionOperationStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.TriggerSubscriptionOperationStatus)
 	if err != nil {
 		return TriggersClientSubscribeToEventsResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *TriggersClientUnsubscribeFromEventsPoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final TriggersClientUnsubscribeFromEventsResponse will be returned.
 func (p *TriggersClientUnsubscribeFromEventsPoller) FinalResponse(ctx context.Context) (TriggersClientUnsubscribeFromEventsResponse, error) {
 	respType := TriggersClientUnsubscribeFromEventsResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.TriggerSubscriptionOperationStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.TriggerSubscriptionOperationStatus)
 	if err != nil {
 		return TriggersClientUnsubscribeFromEventsResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

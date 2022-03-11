@@ -32,16 +32,16 @@ type ExportsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewExportsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ExportsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ExportsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *ExportsClient) createOrUpdateCreateRequest(ctx context.Context, sc
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ExportsClient) createOrUpdateHandleResponse(resp *http.Response) (ExportsClientCreateOrUpdateResponse, error) {
-	result := ExportsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ExportsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Export); err != nil {
 		return ExportsClientCreateOrUpdateResponse{}, err
 	}
@@ -132,7 +132,7 @@ func (client *ExportsClient) Delete(ctx context.Context, scope string, exportNam
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ExportsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ExportsClientDeleteResponse{RawResponse: resp}, nil
+	return ExportsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -180,7 +180,7 @@ func (client *ExportsClient) Execute(ctx context.Context, scope string, exportNa
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ExportsClientExecuteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ExportsClientExecuteResponse{RawResponse: resp}, nil
+	return ExportsClientExecuteResponse{}, nil
 }
 
 // executeCreateRequest creates the Execute request.
@@ -255,7 +255,7 @@ func (client *ExportsClient) getCreateRequest(ctx context.Context, scope string,
 
 // getHandleResponse handles the Get response.
 func (client *ExportsClient) getHandleResponse(resp *http.Response) (ExportsClientGetResponse, error) {
-	result := ExportsClientGetResponse{RawResponse: resp}
+	result := ExportsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Export); err != nil {
 		return ExportsClientGetResponse{}, err
 	}
@@ -313,7 +313,7 @@ func (client *ExportsClient) getExecutionHistoryCreateRequest(ctx context.Contex
 
 // getExecutionHistoryHandleResponse handles the GetExecutionHistory response.
 func (client *ExportsClient) getExecutionHistoryHandleResponse(resp *http.Response) (ExportsClientGetExecutionHistoryResponse, error) {
-	result := ExportsClientGetExecutionHistoryResponse{RawResponse: resp}
+	result := ExportsClientGetExecutionHistoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExportExecutionListResult); err != nil {
 		return ExportsClientGetExecutionHistoryResponse{}, err
 	}
@@ -368,7 +368,7 @@ func (client *ExportsClient) listCreateRequest(ctx context.Context, scope string
 
 // listHandleResponse handles the List response.
 func (client *ExportsClient) listHandleResponse(resp *http.Response) (ExportsClientListResponse, error) {
-	result := ExportsClientListResponse{RawResponse: resp}
+	result := ExportsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExportListResult); err != nil {
 		return ExportsClientListResponse{}, err
 	}

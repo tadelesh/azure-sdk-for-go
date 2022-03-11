@@ -35,17 +35,17 @@ type LoadBalancerLoadBalancingRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLoadBalancerLoadBalancingRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LoadBalancerLoadBalancingRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LoadBalancerLoadBalancingRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *LoadBalancerLoadBalancingRulesClient) getCreateRequest(ctx context
 
 // getHandleResponse handles the Get response.
 func (client *LoadBalancerLoadBalancingRulesClient) getHandleResponse(resp *http.Response) (LoadBalancerLoadBalancingRulesClientGetResponse, error) {
-	result := LoadBalancerLoadBalancingRulesClientGetResponse{RawResponse: resp}
+	result := LoadBalancerLoadBalancingRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LoadBalancingRule); err != nil {
 		return LoadBalancerLoadBalancingRulesClientGetResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *LoadBalancerLoadBalancingRulesClient) listCreateRequest(ctx contex
 
 // listHandleResponse handles the List response.
 func (client *LoadBalancerLoadBalancingRulesClient) listHandleResponse(resp *http.Response) (LoadBalancerLoadBalancingRulesClientListResponse, error) {
-	result := LoadBalancerLoadBalancingRulesClientListResponse{RawResponse: resp}
+	result := LoadBalancerLoadBalancingRulesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LoadBalancerLoadBalancingRuleListResult); err != nil {
 		return LoadBalancerLoadBalancingRulesClientListResponse{}, err
 	}

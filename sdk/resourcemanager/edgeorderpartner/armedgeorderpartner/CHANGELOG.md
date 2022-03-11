@@ -1,5 +1,54 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*APISClientListOperationsPartnerPager.NextPage` return value(s) have been changed from `(bool)` to `(APISClientListOperationsPartnerResponse, error)`
+- Function `*APISClientSearchInventoriesPager.NextPage` return value(s) have been changed from `(bool)` to `(APISClientSearchInventoriesResponse, error)`
+- Function `*APISClientListOperationsPartnerPager.PageResponse` has been removed
+- Function `*APISClientSearchInventoriesPager.Err` has been removed
+- Function `*APISClientListOperationsPartnerPager.Err` has been removed
+- Function `*APISClientSearchInventoriesPager.PageResponse` has been removed
+- Struct `APISClientListOperationsPartnerResult` has been removed
+- Struct `APISClientSearchInventoriesResult` has been removed
+- Field `RawResponse` of struct `APISClientManageInventoryMetadataPollerResponse` has been removed
+- Field `APISClientListOperationsPartnerResult` of struct `APISClientListOperationsPartnerResponse` has been removed
+- Field `RawResponse` of struct `APISClientListOperationsPartnerResponse` has been removed
+- Field `RawResponse` of struct `APISClientManageInventoryMetadataResponse` has been removed
+- Field `APISClientSearchInventoriesResult` of struct `APISClientSearchInventoriesResponse` has been removed
+- Field `RawResponse` of struct `APISClientSearchInventoriesResponse` has been removed
+- Field `RawResponse` of struct `APISClientManageLinkResponse` has been removed
+
+### Features Added
+
+- New function `CloudError.MarshalJSON() ([]byte, error)`
+- New function `*APISClientListOperationsPartnerPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*APISClientSearchInventoriesPager.More() bool`
+- New struct `AdditionalErrorInfo`
+- New struct `CloudError`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `OperationListResult` in struct `APISClientListOperationsPartnerResponse`
+- New anonymous field `PartnerInventoryList` in struct `APISClientSearchInventoriesResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `CloudError.MarshalJSON` has been removed
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `AdditionalErrorInfo` has been removed
+- Struct `CloudError` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

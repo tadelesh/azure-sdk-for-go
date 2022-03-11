@@ -34,17 +34,17 @@ type PrivateLinkServicesForO365ManagementActivityAPIClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateLinkServicesForO365ManagementActivityAPIClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateLinkServicesForO365ManagementActivityAPIClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateLinkServicesForO365ManagementActivityAPIClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *PrivateLinkServicesForO365ManagementActivityAPIClient) BeginCreate
 	if err != nil {
 		return PrivateLinkServicesForO365ManagementActivityAPIClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PrivateLinkServicesForO365ManagementActivityAPIClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateLinkServicesForO365ManagementActivityAPIClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateLinkServicesForO365ManagementActivityAPIClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return PrivateLinkServicesForO365ManagementActivityAPIClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *PrivateLinkServicesForO365ManagementActivityAPIClient) BeginDelete
 	if err != nil {
 		return PrivateLinkServicesForO365ManagementActivityAPIClientDeletePollerResponse{}, err
 	}
-	result := PrivateLinkServicesForO365ManagementActivityAPIClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateLinkServicesForO365ManagementActivityAPIClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateLinkServicesForO365ManagementActivityAPIClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return PrivateLinkServicesForO365ManagementActivityAPIClientDeletePollerResponse{}, err
@@ -233,7 +229,7 @@ func (client *PrivateLinkServicesForO365ManagementActivityAPIClient) getCreateRe
 
 // getHandleResponse handles the Get response.
 func (client *PrivateLinkServicesForO365ManagementActivityAPIClient) getHandleResponse(resp *http.Response) (PrivateLinkServicesForO365ManagementActivityAPIClientGetResponse, error) {
-	result := PrivateLinkServicesForO365ManagementActivityAPIClientGetResponse{RawResponse: resp}
+	result := PrivateLinkServicesForO365ManagementActivityAPIClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkServicesForO365ManagementActivityAPIDescription); err != nil {
 		return PrivateLinkServicesForO365ManagementActivityAPIClientGetResponse{}, err
 	}
@@ -276,7 +272,7 @@ func (client *PrivateLinkServicesForO365ManagementActivityAPIClient) listCreateR
 
 // listHandleResponse handles the List response.
 func (client *PrivateLinkServicesForO365ManagementActivityAPIClient) listHandleResponse(resp *http.Response) (PrivateLinkServicesForO365ManagementActivityAPIClientListResponse, error) {
-	result := PrivateLinkServicesForO365ManagementActivityAPIClientListResponse{RawResponse: resp}
+	result := PrivateLinkServicesForO365ManagementActivityAPIClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkServicesForO365ManagementActivityAPIDescriptionListResult); err != nil {
 		return PrivateLinkServicesForO365ManagementActivityAPIClientListResponse{}, err
 	}
@@ -324,7 +320,7 @@ func (client *PrivateLinkServicesForO365ManagementActivityAPIClient) listByResou
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *PrivateLinkServicesForO365ManagementActivityAPIClient) listByResourceGroupHandleResponse(resp *http.Response) (PrivateLinkServicesForO365ManagementActivityAPIClientListByResourceGroupResponse, error) {
-	result := PrivateLinkServicesForO365ManagementActivityAPIClientListByResourceGroupResponse{RawResponse: resp}
+	result := PrivateLinkServicesForO365ManagementActivityAPIClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkServicesForO365ManagementActivityAPIDescriptionListResult); err != nil {
 		return PrivateLinkServicesForO365ManagementActivityAPIClientListByResourceGroupResponse{}, err
 	}
@@ -343,9 +339,7 @@ func (client *PrivateLinkServicesForO365ManagementActivityAPIClient) BeginUpdate
 	if err != nil {
 		return PrivateLinkServicesForO365ManagementActivityAPIClientUpdatePollerResponse{}, err
 	}
-	result := PrivateLinkServicesForO365ManagementActivityAPIClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateLinkServicesForO365ManagementActivityAPIClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateLinkServicesForO365ManagementActivityAPIClient.Update", "location", resp, client.pl)
 	if err != nil {
 		return PrivateLinkServicesForO365ManagementActivityAPIClientUpdatePollerResponse{}, err

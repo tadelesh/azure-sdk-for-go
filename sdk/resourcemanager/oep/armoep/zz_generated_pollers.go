@@ -43,11 +43,10 @@ func (p *EnergyServicesClientCreatePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final EnergyServicesClientCreateResponse will be returned.
 func (p *EnergyServicesClientCreatePoller) FinalResponse(ctx context.Context) (EnergyServicesClientCreateResponse, error) {
 	respType := EnergyServicesClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.EnergyService)
+	_, err := p.pt.FinalResponse(ctx, &respType.EnergyService)
 	if err != nil {
 		return EnergyServicesClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *EnergyServicesClientDeletePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final EnergyServicesClientDeleteResponse will be returned.
 func (p *EnergyServicesClientDeletePoller) FinalResponse(ctx context.Context) (EnergyServicesClientDeleteResponse, error) {
 	respType := EnergyServicesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return EnergyServicesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

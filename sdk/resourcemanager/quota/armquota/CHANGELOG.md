@@ -1,5 +1,111 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationClientListResponse, error)`
+- Function `*UsagesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(UsagesClientListResponse, error)`
+- Function `*RequestStatusClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(RequestStatusClientListResponse, error)`
+- Function `*ClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ClientListResponse, error)`
+- Function `*OperationClientListPager.Err` has been removed
+- Function `*UsagesClientListPager.PageResponse` has been removed
+- Function `*ClientListPager.Err` has been removed
+- Function `*UsagesClientListPager.Err` has been removed
+- Function `*ClientListPager.PageResponse` has been removed
+- Function `*RequestStatusClientListPager.PageResponse` has been removed
+- Function `*OperationClientListPager.PageResponse` has been removed
+- Function `*RequestStatusClientListPager.Err` has been removed
+- Struct `ClientCreateOrUpdateResult` has been removed
+- Struct `ClientGetResult` has been removed
+- Struct `ClientListResult` has been removed
+- Struct `ClientUpdateResult` has been removed
+- Struct `OperationClientListResult` has been removed
+- Struct `RequestStatusClientGetResult` has been removed
+- Struct `RequestStatusClientListResult` has been removed
+- Struct `UsagesClientGetResult` has been removed
+- Struct `UsagesClientListResult` has been removed
+- Field `ClientUpdateResult` of struct `ClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientUpdateResponse` has been removed
+- Field `UsagesClientListResult` of struct `UsagesClientListResponse` has been removed
+- Field `RawResponse` of struct `UsagesClientListResponse` has been removed
+- Field `UsagesClientGetResult` of struct `UsagesClientGetResponse` has been removed
+- Field `RawResponse` of struct `UsagesClientGetResponse` has been removed
+- Field `OperationClientListResult` of struct `OperationClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationClientListResponse` has been removed
+- Field `RequestStatusClientGetResult` of struct `RequestStatusClientGetResponse` has been removed
+- Field `RawResponse` of struct `RequestStatusClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ClientUpdatePollerResponse` has been removed
+- Field `ClientCreateOrUpdateResult` of struct `ClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientCreateOrUpdateResponse` has been removed
+- Field `ClientListResult` of struct `ClientListResponse` has been removed
+- Field `RawResponse` of struct `ClientListResponse` has been removed
+- Field `ClientGetResult` of struct `ClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClientGetResponse` has been removed
+- Field `RequestStatusClientListResult` of struct `RequestStatusClientListResponse` has been removed
+- Field `RawResponse` of struct `RequestStatusClientListResponse` has been removed
+
+### Features Added
+
+- New function `*UsagesClientListPager.More() bool`
+- New function `*RequestStatusClientListPager.More() bool`
+- New function `LimitsResponse.MarshalJSON() ([]byte, error)`
+- New function `ServiceError.MarshalJSON() ([]byte, error)`
+- New function `*ClientListPager.More() bool`
+- New function `*RequestOneResourceProperties.UnmarshalJSON([]byte) error`
+- New function `CreateGenericQuotaRequestParameters.MarshalJSON() ([]byte, error)`
+- New function `*OperationClientListPager.More() bool`
+- New function `RequestOneResourceProperties.MarshalJSON() ([]byte, error)`
+- New struct `CommonResourceProperties`
+- New struct `CreateGenericQuotaRequestParameters`
+- New struct `ExceptionResponse`
+- New struct `LimitsResponse`
+- New struct `RequestOneResourceProperties`
+- New struct `RequestOneResourceSubmitResponse`
+- New struct `RequestStatusDetails`
+- New struct `RequestSubmitResponse`
+- New struct `RequestSubmitResponse202`
+- New struct `ServiceError`
+- New anonymous field `OperationList` in struct `OperationClientListResponse`
+- New anonymous field `CurrentQuotaLimitBase` in struct `ClientUpdateResponse`
+- New anonymous field `RequestDetailsList` in struct `RequestStatusClientListResponse`
+- New anonymous field `CurrentUsagesBase` in struct `UsagesClientGetResponse`
+- New field `ETag` in struct `UsagesClientGetResponse`
+- New anonymous field `RequestDetails` in struct `RequestStatusClientGetResponse`
+- New anonymous field `UsagesLimits` in struct `UsagesClientListResponse`
+- New field `ETag` in struct `UsagesClientListResponse`
+- New anonymous field `Limits` in struct `ClientListResponse`
+- New field `ETag` in struct `ClientListResponse`
+- New anonymous field `CurrentQuotaLimitBase` in struct `ClientGetResponse`
+- New field `ETag` in struct `ClientGetResponse`
+- New anonymous field `CurrentQuotaLimitBase` in struct `ClientCreateOrUpdateResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `Properties.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `UsagesProperties.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Function `LimitsResponse.MarshalJSON` has been removed
+- Function `*RequestOneResourceProperties.UnmarshalJSON` has been removed
+- Function `CreateGenericQuotaRequestParameters.MarshalJSON` has been removed
+- Function `ServiceError.MarshalJSON` has been removed
+- Function `RequestOneResourceProperties.MarshalJSON` has been removed
+- Struct `CommonResourceProperties` has been removed
+- Struct `CreateGenericQuotaRequestParameters` has been removed
+- Struct `ExceptionResponse` has been removed
+- Struct `LimitsResponse` has been removed
+- Struct `RequestOneResourceProperties` has been removed
+- Struct `RequestOneResourceSubmitResponse` has been removed
+- Struct `RequestStatusDetails` has been removed
+- Struct `RequestSubmitResponse` has been removed
+- Struct `RequestSubmitResponse202` has been removed
+- Struct `ServiceError` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

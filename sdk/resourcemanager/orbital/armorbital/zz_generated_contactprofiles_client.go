@@ -34,17 +34,17 @@ type ContactProfilesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewContactProfilesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ContactProfilesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ContactProfilesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *ContactProfilesClient) BeginCreateOrUpdate(ctx context.Context, re
 	if err != nil {
 		return ContactProfilesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ContactProfilesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ContactProfilesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ContactProfilesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ContactProfilesClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *ContactProfilesClient) BeginDelete(ctx context.Context, resourceGr
 	if err != nil {
 		return ContactProfilesClientDeletePollerResponse{}, err
 	}
-	result := ContactProfilesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ContactProfilesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ContactProfilesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return ContactProfilesClientDeletePollerResponse{}, err
@@ -232,7 +228,7 @@ func (client *ContactProfilesClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *ContactProfilesClient) getHandleResponse(resp *http.Response) (ContactProfilesClientGetResponse, error) {
-	result := ContactProfilesClientGetResponse{RawResponse: resp}
+	result := ContactProfilesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContactProfile); err != nil {
 		return ContactProfilesClientGetResponse{}, err
 	}
@@ -243,19 +239,13 @@ func (client *ContactProfilesClient) getHandleResponse(resp *http.Response) (Con
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - ContactProfilesClientListOptions contains the optional parameters for the ContactProfilesClient.List method.
-func (client *ContactProfilesClient) List(ctx context.Context, resourceGroupName string, options *ContactProfilesClientListOptions) (ContactProfilesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, options)
-	if err != nil {
-		return ContactProfilesClientListResponse{}, err
+func (client *ContactProfilesClient) List(resourceGroupName string, options *ContactProfilesClientListOptions) *ContactProfilesClientListPager {
+	return &ContactProfilesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ContactProfilesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ContactProfilesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -282,7 +272,7 @@ func (client *ContactProfilesClient) listCreateRequest(ctx context.Context, reso
 
 // listHandleResponse handles the List response.
 func (client *ContactProfilesClient) listHandleResponse(resp *http.Response) (ContactProfilesClientListResponse, error) {
-	result := ContactProfilesClientListResponse{RawResponse: resp}
+	result := ContactProfilesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContactProfileListResult); err != nil {
 		return ContactProfilesClientListResponse{}, err
 	}
@@ -293,19 +283,13 @@ func (client *ContactProfilesClient) listHandleResponse(resp *http.Response) (Co
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ContactProfilesClientListBySubscriptionOptions contains the optional parameters for the ContactProfilesClient.ListBySubscription
 // method.
-func (client *ContactProfilesClient) ListBySubscription(ctx context.Context, options *ContactProfilesClientListBySubscriptionOptions) (ContactProfilesClientListBySubscriptionResponse, error) {
-	req, err := client.listBySubscriptionCreateRequest(ctx, options)
-	if err != nil {
-		return ContactProfilesClientListBySubscriptionResponse{}, err
+func (client *ContactProfilesClient) ListBySubscription(options *ContactProfilesClientListBySubscriptionOptions) *ContactProfilesClientListBySubscriptionPager {
+	return &ContactProfilesClientListBySubscriptionPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listBySubscriptionCreateRequest(ctx, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ContactProfilesClientListBySubscriptionResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ContactProfilesClientListBySubscriptionResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listBySubscriptionHandleResponse(resp)
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
@@ -328,7 +312,7 @@ func (client *ContactProfilesClient) listBySubscriptionCreateRequest(ctx context
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *ContactProfilesClient) listBySubscriptionHandleResponse(resp *http.Response) (ContactProfilesClientListBySubscriptionResponse, error) {
-	result := ContactProfilesClientListBySubscriptionResponse{RawResponse: resp}
+	result := ContactProfilesClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContactProfileListResult); err != nil {
 		return ContactProfilesClientListBySubscriptionResponse{}, err
 	}
@@ -385,7 +369,7 @@ func (client *ContactProfilesClient) updateTagsCreateRequest(ctx context.Context
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *ContactProfilesClient) updateTagsHandleResponse(resp *http.Response) (ContactProfilesClientUpdateTagsResponse, error) {
-	result := ContactProfilesClientUpdateTagsResponse{RawResponse: resp}
+	result := ContactProfilesClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContactProfile); err != nil {
 		return ContactProfilesClientUpdateTagsResponse{}, err
 	}

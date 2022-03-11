@@ -9,21 +9,21 @@
 package armsignalr
 
 const (
-	moduleName = "armsignalr"
-	moduleVersion = "v0.2.0"
+	moduleName    = "armsignalr"
+	moduleVersion = "v0.3.0"
 )
 
-// ACLAction - Default action when no other rule matches
+// ACLAction - Azure Networking ACL Action.
 type ACLAction string
 
 const (
 	ACLActionAllow ACLAction = "Allow"
-	ACLActionDeny ACLAction = "Deny"
+	ACLActionDeny  ACLAction = "Deny"
 )
 
 // PossibleACLActionValues returns the possible values for the ACLAction const type.
 func PossibleACLActionValues() []ACLAction {
-	return []ACLAction{	
+	return []ACLAction{
 		ACLActionAllow,
 		ACLActionDeny,
 	}
@@ -38,15 +38,15 @@ func (c ACLAction) ToPtr() *ACLAction {
 type CreatedByType string
 
 const (
-	CreatedByTypeApplication CreatedByType = "Application"
-	CreatedByTypeKey CreatedByType = "Key"
+	CreatedByTypeApplication     CreatedByType = "Application"
+	CreatedByTypeKey             CreatedByType = "Key"
 	CreatedByTypeManagedIdentity CreatedByType = "ManagedIdentity"
-	CreatedByTypeUser CreatedByType = "User"
+	CreatedByTypeUser            CreatedByType = "User"
 )
 
 // PossibleCreatedByTypeValues returns the possible values for the CreatedByType const type.
 func PossibleCreatedByTypeValues() []CreatedByType {
-	return []CreatedByType{	
+	return []CreatedByType{
 		CreatedByTypeApplication,
 		CreatedByTypeKey,
 		CreatedByTypeManagedIdentity,
@@ -74,14 +74,14 @@ type FeatureFlags string
 
 const (
 	FeatureFlagsEnableConnectivityLogs FeatureFlags = "EnableConnectivityLogs"
-	FeatureFlagsEnableLiveTrace FeatureFlags = "EnableLiveTrace"
-	FeatureFlagsEnableMessagingLogs FeatureFlags = "EnableMessagingLogs"
-	FeatureFlagsServiceMode FeatureFlags = "ServiceMode"
+	FeatureFlagsEnableLiveTrace        FeatureFlags = "EnableLiveTrace"
+	FeatureFlagsEnableMessagingLogs    FeatureFlags = "EnableMessagingLogs"
+	FeatureFlagsServiceMode            FeatureFlags = "ServiceMode"
 )
 
 // PossibleFeatureFlagsValues returns the possible values for the FeatureFlags const type.
 func PossibleFeatureFlagsValues() []FeatureFlags {
-	return []FeatureFlags{	
+	return []FeatureFlags{
 		FeatureFlagsEnableConnectivityLogs,
 		FeatureFlagsEnableLiveTrace,
 		FeatureFlagsEnableMessagingLogs,
@@ -94,18 +94,20 @@ func (c FeatureFlags) ToPtr() *FeatureFlags {
 	return &c
 }
 
-// KeyType - The keyType to regenerate. Must be either 'primary' or 'secondary'(case-insensitive).
+// KeyType - The type of access key.
 type KeyType string
 
 const (
-	KeyTypePrimary KeyType = "Primary"
+	KeyTypePrimary   KeyType = "Primary"
+	KeyTypeSalt      KeyType = "Salt"
 	KeyTypeSecondary KeyType = "Secondary"
 )
 
 // PossibleKeyTypeValues returns the possible values for the KeyType const type.
 func PossibleKeyTypeValues() []KeyType {
-	return []KeyType{	
+	return []KeyType{
 		KeyTypePrimary,
+		KeyTypeSalt,
 		KeyTypeSecondary,
 	}
 }
@@ -115,18 +117,18 @@ func (c KeyType) ToPtr() *KeyType {
 	return &c
 }
 
-// ManagedIdentityType - Represent the identity type: systemAssigned, userAssigned, None
+// ManagedIdentityType - Represents the identity type: systemAssigned, userAssigned, None
 type ManagedIdentityType string
 
 const (
-	ManagedIdentityTypeNone ManagedIdentityType = "None"
+	ManagedIdentityTypeNone           ManagedIdentityType = "None"
 	ManagedIdentityTypeSystemAssigned ManagedIdentityType = "SystemAssigned"
-	ManagedIdentityTypeUserAssigned ManagedIdentityType = "UserAssigned"
+	ManagedIdentityTypeUserAssigned   ManagedIdentityType = "UserAssigned"
 )
 
 // PossibleManagedIdentityTypeValues returns the possible values for the ManagedIdentityType const type.
 func PossibleManagedIdentityTypeValues() []ManagedIdentityType {
-	return []ManagedIdentityType{	
+	return []ManagedIdentityType{
 		ManagedIdentityTypeNone,
 		ManagedIdentityTypeSystemAssigned,
 		ManagedIdentityTypeUserAssigned,
@@ -143,15 +145,15 @@ func (c ManagedIdentityType) ToPtr() *ManagedIdentityType {
 type PrivateLinkServiceConnectionStatus string
 
 const (
-	PrivateLinkServiceConnectionStatusApproved PrivateLinkServiceConnectionStatus = "Approved"
+	PrivateLinkServiceConnectionStatusApproved     PrivateLinkServiceConnectionStatus = "Approved"
 	PrivateLinkServiceConnectionStatusDisconnected PrivateLinkServiceConnectionStatus = "Disconnected"
-	PrivateLinkServiceConnectionStatusPending PrivateLinkServiceConnectionStatus = "Pending"
-	PrivateLinkServiceConnectionStatusRejected PrivateLinkServiceConnectionStatus = "Rejected"
+	PrivateLinkServiceConnectionStatusPending      PrivateLinkServiceConnectionStatus = "Pending"
+	PrivateLinkServiceConnectionStatusRejected     PrivateLinkServiceConnectionStatus = "Rejected"
 )
 
 // PossiblePrivateLinkServiceConnectionStatusValues returns the possible values for the PrivateLinkServiceConnectionStatus const type.
 func PossiblePrivateLinkServiceConnectionStatusValues() []PrivateLinkServiceConnectionStatus {
-	return []PrivateLinkServiceConnectionStatus{	
+	return []PrivateLinkServiceConnectionStatus{
 		PrivateLinkServiceConnectionStatusApproved,
 		PrivateLinkServiceConnectionStatusDisconnected,
 		PrivateLinkServiceConnectionStatusPending,
@@ -168,20 +170,20 @@ func (c PrivateLinkServiceConnectionStatus) ToPtr() *PrivateLinkServiceConnectio
 type ProvisioningState string
 
 const (
-	ProvisioningStateCanceled ProvisioningState = "Canceled"
-	ProvisioningStateCreating ProvisioningState = "Creating"
-	ProvisioningStateDeleting ProvisioningState = "Deleting"
-	ProvisioningStateFailed ProvisioningState = "Failed"
-	ProvisioningStateMoving ProvisioningState = "Moving"
-	ProvisioningStateRunning ProvisioningState = "Running"
+	ProvisioningStateCanceled  ProvisioningState = "Canceled"
+	ProvisioningStateCreating  ProvisioningState = "Creating"
+	ProvisioningStateDeleting  ProvisioningState = "Deleting"
+	ProvisioningStateFailed    ProvisioningState = "Failed"
+	ProvisioningStateMoving    ProvisioningState = "Moving"
+	ProvisioningStateRunning   ProvisioningState = "Running"
 	ProvisioningStateSucceeded ProvisioningState = "Succeeded"
-	ProvisioningStateUnknown ProvisioningState = "Unknown"
-	ProvisioningStateUpdating ProvisioningState = "Updating"
+	ProvisioningStateUnknown   ProvisioningState = "Unknown"
+	ProvisioningStateUpdating  ProvisioningState = "Updating"
 )
 
 // PossibleProvisioningStateValues returns the possible values for the ProvisioningState const type.
 func PossibleProvisioningStateValues() []ProvisioningState {
-	return []ProvisioningState{	
+	return []ProvisioningState{
 		ProvisioningStateCanceled,
 		ProvisioningStateCreating,
 		ProvisioningStateDeleting,
@@ -199,17 +201,40 @@ func (c ProvisioningState) ToPtr() *ProvisioningState {
 	return &c
 }
 
-// ServiceKind - The kind of the service - e.g. "SignalR" for "Microsoft.SignalRService/SignalR"
+// ScaleType - The scale type applicable to the sku.
+type ScaleType string
+
+const (
+	ScaleTypeAutomatic ScaleType = "Automatic"
+	ScaleTypeManual    ScaleType = "Manual"
+	ScaleTypeNone      ScaleType = "None"
+)
+
+// PossibleScaleTypeValues returns the possible values for the ScaleType const type.
+func PossibleScaleTypeValues() []ScaleType {
+	return []ScaleType{
+		ScaleTypeAutomatic,
+		ScaleTypeManual,
+		ScaleTypeNone,
+	}
+}
+
+// ToPtr returns a *ScaleType pointing to the current value.
+func (c ScaleType) ToPtr() *ScaleType {
+	return &c
+}
+
+// ServiceKind - The kind of the service, it can be SignalR or RawWebSockets
 type ServiceKind string
 
 const (
 	ServiceKindRawWebSockets ServiceKind = "RawWebSockets"
-	ServiceKindSignalR ServiceKind = "SignalR"
+	ServiceKindSignalR       ServiceKind = "SignalR"
 )
 
 // PossibleServiceKindValues returns the possible values for the ServiceKind const type.
 func PossibleServiceKindValues() []ServiceKind {
-	return []ServiceKind{	
+	return []ServiceKind{
 		ServiceKindRawWebSockets,
 		ServiceKindSignalR,
 	}
@@ -224,16 +249,16 @@ func (c ServiceKind) ToPtr() *ServiceKind {
 type SharedPrivateLinkResourceStatus string
 
 const (
-	SharedPrivateLinkResourceStatusApproved SharedPrivateLinkResourceStatus = "Approved"
+	SharedPrivateLinkResourceStatusApproved     SharedPrivateLinkResourceStatus = "Approved"
 	SharedPrivateLinkResourceStatusDisconnected SharedPrivateLinkResourceStatus = "Disconnected"
-	SharedPrivateLinkResourceStatusPending SharedPrivateLinkResourceStatus = "Pending"
-	SharedPrivateLinkResourceStatusRejected SharedPrivateLinkResourceStatus = "Rejected"
-	SharedPrivateLinkResourceStatusTimeout SharedPrivateLinkResourceStatus = "Timeout"
+	SharedPrivateLinkResourceStatusPending      SharedPrivateLinkResourceStatus = "Pending"
+	SharedPrivateLinkResourceStatusRejected     SharedPrivateLinkResourceStatus = "Rejected"
+	SharedPrivateLinkResourceStatusTimeout      SharedPrivateLinkResourceStatus = "Timeout"
 )
 
 // PossibleSharedPrivateLinkResourceStatusValues returns the possible values for the SharedPrivateLinkResourceStatus const type.
 func PossibleSharedPrivateLinkResourceStatusValues() []SharedPrivateLinkResourceStatus {
-	return []SharedPrivateLinkResourceStatus{	
+	return []SharedPrivateLinkResourceStatus{
 		SharedPrivateLinkResourceStatusApproved,
 		SharedPrivateLinkResourceStatusDisconnected,
 		SharedPrivateLinkResourceStatusPending,
@@ -247,19 +272,19 @@ func (c SharedPrivateLinkResourceStatus) ToPtr() *SharedPrivateLinkResourceStatu
 	return &c
 }
 
-// SignalRRequestType - Allowed request types. The value can be one or more of: ClientConnection, ServerConnection, RESTAPI.
+// SignalRRequestType - The incoming request type to the service
 type SignalRRequestType string
 
 const (
 	SignalRRequestTypeClientConnection SignalRRequestType = "ClientConnection"
-	SignalRRequestTypeRESTAPI SignalRRequestType = "RESTAPI"
+	SignalRRequestTypeRESTAPI          SignalRRequestType = "RESTAPI"
 	SignalRRequestTypeServerConnection SignalRRequestType = "ServerConnection"
-	SignalRRequestTypeTrace SignalRRequestType = "Trace"
+	SignalRRequestTypeTrace            SignalRRequestType = "Trace"
 )
 
 // PossibleSignalRRequestTypeValues returns the possible values for the SignalRRequestType const type.
 func PossibleSignalRRequestTypeValues() []SignalRRequestType {
-	return []SignalRRequestType{	
+	return []SignalRRequestType{
 		SignalRRequestTypeClientConnection,
 		SignalRRequestTypeRESTAPI,
 		SignalRRequestTypeServerConnection,
@@ -277,15 +302,15 @@ func (c SignalRRequestType) ToPtr() *SignalRRequestType {
 type SignalRSKUTier string
 
 const (
-	SignalRSKUTierBasic SignalRSKUTier = "Basic"
-	SignalRSKUTierFree SignalRSKUTier = "Free"
-	SignalRSKUTierPremium SignalRSKUTier = "Premium"
+	SignalRSKUTierBasic    SignalRSKUTier = "Basic"
+	SignalRSKUTierFree     SignalRSKUTier = "Free"
+	SignalRSKUTierPremium  SignalRSKUTier = "Premium"
 	SignalRSKUTierStandard SignalRSKUTier = "Standard"
 )
 
 // PossibleSignalRSKUTierValues returns the possible values for the SignalRSKUTier const type.
 func PossibleSignalRSKUTierValues() []SignalRSKUTier {
-	return []SignalRSKUTier{	
+	return []SignalRSKUTier{
 		SignalRSKUTierBasic,
 		SignalRSKUTierFree,
 		SignalRSKUTierPremium,
@@ -298,17 +323,17 @@ func (c SignalRSKUTier) ToPtr() *SignalRSKUTier {
 	return &c
 }
 
-// UpstreamAuthType - Gets or sets the type of auth. None or ManagedIdentity is supported now.
+// UpstreamAuthType - Upstream auth type enum.
 type UpstreamAuthType string
 
 const (
 	UpstreamAuthTypeManagedIdentity UpstreamAuthType = "ManagedIdentity"
-	UpstreamAuthTypeNone UpstreamAuthType = "None"
+	UpstreamAuthTypeNone            UpstreamAuthType = "None"
 )
 
 // PossibleUpstreamAuthTypeValues returns the possible values for the UpstreamAuthType const type.
 func PossibleUpstreamAuthTypeValues() []UpstreamAuthType {
-	return []UpstreamAuthType{	
+	return []UpstreamAuthType{
 		UpstreamAuthTypeManagedIdentity,
 		UpstreamAuthTypeNone,
 	}
@@ -318,4 +343,3 @@ func PossibleUpstreamAuthTypeValues() []UpstreamAuthType {
 func (c UpstreamAuthType) ToPtr() *UpstreamAuthType {
 	return &c
 }
-

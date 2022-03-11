@@ -34,17 +34,17 @@ type WebTestLocationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWebTestLocationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WebTestLocationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WebTestLocationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -54,19 +54,13 @@ func NewWebTestLocationsClient(subscriptionID string, credential azcore.TokenCre
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // resourceName - The name of the Application Insights component resource.
 // options - WebTestLocationsClientListOptions contains the optional parameters for the WebTestLocationsClient.List method.
-func (client *WebTestLocationsClient) List(ctx context.Context, resourceGroupName string, resourceName string, options *WebTestLocationsClientListOptions) (WebTestLocationsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
-	if err != nil {
-		return WebTestLocationsClientListResponse{}, err
+func (client *WebTestLocationsClient) List(resourceGroupName string, resourceName string, options *WebTestLocationsClientListOptions) *WebTestLocationsClientListPager {
+	return &WebTestLocationsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return WebTestLocationsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return WebTestLocationsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -97,7 +91,7 @@ func (client *WebTestLocationsClient) listCreateRequest(ctx context.Context, res
 
 // listHandleResponse handles the List response.
 func (client *WebTestLocationsClient) listHandleResponse(resp *http.Response) (WebTestLocationsClientListResponse, error) {
-	result := WebTestLocationsClientListResponse{RawResponse: resp}
+	result := WebTestLocationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WebTestLocationsListResult); err != nil {
 		return WebTestLocationsClientListResponse{}, err
 	}

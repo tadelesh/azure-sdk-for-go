@@ -34,17 +34,17 @@ type ExtensionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewExtensionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ExtensionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ExtensionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *ExtensionsClient) createCreateRequest(ctx context.Context, resourc
 
 // createHandleResponse handles the Create response.
 func (client *ExtensionsClient) createHandleResponse(resp *http.Response) (ExtensionsClientCreateResponse, error) {
-	result := ExtensionsClientCreateResponse{RawResponse: resp}
+	result := ExtensionsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExtensionResource); err != nil {
 		return ExtensionsClientCreateResponse{}, err
 	}
@@ -128,7 +128,7 @@ func (client *ExtensionsClient) Delete(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ExtensionsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ExtensionsClientDeleteResponse{RawResponse: resp}, nil
+	return ExtensionsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -213,7 +213,7 @@ func (client *ExtensionsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *ExtensionsClient) getHandleResponse(resp *http.Response) (ExtensionsClientGetResponse, error) {
-	result := ExtensionsClientGetResponse{RawResponse: resp}
+	result := ExtensionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExtensionResource); err != nil {
 		return ExtensionsClientGetResponse{}, err
 	}
@@ -269,7 +269,7 @@ func (client *ExtensionsClient) listByAccountCreateRequest(ctx context.Context, 
 
 // listByAccountHandleResponse handles the ListByAccount response.
 func (client *ExtensionsClient) listByAccountHandleResponse(resp *http.Response) (ExtensionsClientListByAccountResponse, error) {
-	result := ExtensionsClientListByAccountResponse{RawResponse: resp}
+	result := ExtensionsClientListByAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExtensionResourceListResult); err != nil {
 		return ExtensionsClientListByAccountResponse{}, err
 	}
@@ -330,7 +330,7 @@ func (client *ExtensionsClient) updateCreateRequest(ctx context.Context, resourc
 
 // updateHandleResponse handles the Update response.
 func (client *ExtensionsClient) updateHandleResponse(resp *http.Response) (ExtensionsClientUpdateResponse, error) {
-	result := ExtensionsClientUpdateResponse{RawResponse: resp}
+	result := ExtensionsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExtensionResource); err != nil {
 		return ExtensionsClientUpdateResponse{}, err
 	}

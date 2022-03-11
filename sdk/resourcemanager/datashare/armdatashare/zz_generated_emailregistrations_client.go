@@ -32,16 +32,16 @@ type EmailRegistrationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewEmailRegistrationsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *EmailRegistrationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &EmailRegistrationsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -87,7 +87,7 @@ func (client *EmailRegistrationsClient) activateEmailCreateRequest(ctx context.C
 
 // activateEmailHandleResponse handles the ActivateEmail response.
 func (client *EmailRegistrationsClient) activateEmailHandleResponse(resp *http.Response) (EmailRegistrationsClientActivateEmailResponse, error) {
-	result := EmailRegistrationsClientActivateEmailResponse{RawResponse: resp}
+	result := EmailRegistrationsClientActivateEmailResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EmailRegistration); err != nil {
 		return EmailRegistrationsClientActivateEmailResponse{}, err
 	}
@@ -134,7 +134,7 @@ func (client *EmailRegistrationsClient) registerEmailCreateRequest(ctx context.C
 
 // registerEmailHandleResponse handles the RegisterEmail response.
 func (client *EmailRegistrationsClient) registerEmailHandleResponse(resp *http.Response) (EmailRegistrationsClientRegisterEmailResponse, error) {
-	result := EmailRegistrationsClientRegisterEmailResponse{RawResponse: resp}
+	result := EmailRegistrationsClientRegisterEmailResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EmailRegistration); err != nil {
 		return EmailRegistrationsClientRegisterEmailResponse{}, err
 	}

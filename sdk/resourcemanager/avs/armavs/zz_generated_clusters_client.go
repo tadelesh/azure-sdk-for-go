@@ -34,17 +34,17 @@ type ClustersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewClustersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ClustersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ClustersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *ClustersClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return ClustersClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ClustersClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClustersClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ClustersClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ClustersClientCreateOrUpdatePollerResponse{}, err
@@ -133,9 +131,7 @@ func (client *ClustersClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ClustersClientDeletePollerResponse{}, err
 	}
-	result := ClustersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClustersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ClustersClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ClustersClientDeletePollerResponse{}, err
@@ -246,7 +242,7 @@ func (client *ClustersClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *ClustersClient) getHandleResponse(resp *http.Response) (ClustersClientGetResponse, error) {
-	result := ClustersClientGetResponse{RawResponse: resp}
+	result := ClustersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Cluster); err != nil {
 		return ClustersClientGetResponse{}, err
 	}
@@ -298,7 +294,7 @@ func (client *ClustersClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *ClustersClient) listHandleResponse(resp *http.Response) (ClustersClientListResponse, error) {
-	result := ClustersClientListResponse{RawResponse: resp}
+	result := ClustersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ClusterList); err != nil {
 		return ClustersClientListResponse{}, err
 	}
@@ -317,9 +313,7 @@ func (client *ClustersClient) BeginUpdate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ClustersClientUpdatePollerResponse{}, err
 	}
-	result := ClustersClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClustersClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ClustersClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ClustersClientUpdatePollerResponse{}, err

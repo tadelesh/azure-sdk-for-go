@@ -34,17 +34,17 @@ type LedgerClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLedgerClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LedgerClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LedgerClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -60,9 +60,7 @@ func (client *LedgerClient) BeginCreate(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return LedgerClientCreatePollerResponse{}, err
 	}
-	result := LedgerClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LedgerClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("LedgerClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return LedgerClientCreatePollerResponse{}, err
@@ -126,9 +124,7 @@ func (client *LedgerClient) BeginDelete(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return LedgerClientDeletePollerResponse{}, err
 	}
-	result := LedgerClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := LedgerClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("LedgerClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return LedgerClientDeletePollerResponse{}, err
@@ -230,7 +226,7 @@ func (client *LedgerClient) getCreateRequest(ctx context.Context, resourceGroupN
 
 // getHandleResponse handles the Get response.
 func (client *LedgerClient) getHandleResponse(resp *http.Response) (LedgerClientGetResponse, error) {
-	result := LedgerClientGetResponse{RawResponse: resp}
+	result := LedgerClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfidentialLedger); err != nil {
 		return LedgerClientGetResponse{}, err
 	}
@@ -281,7 +277,7 @@ func (client *LedgerClient) listByResourceGroupCreateRequest(ctx context.Context
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *LedgerClient) listByResourceGroupHandleResponse(resp *http.Response) (LedgerClientListByResourceGroupResponse, error) {
-	result := LedgerClientListByResourceGroupResponse{RawResponse: resp}
+	result := LedgerClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.List); err != nil {
 		return LedgerClientListByResourceGroupResponse{}, err
 	}
@@ -327,7 +323,7 @@ func (client *LedgerClient) listBySubscriptionCreateRequest(ctx context.Context,
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *LedgerClient) listBySubscriptionHandleResponse(resp *http.Response) (LedgerClientListBySubscriptionResponse, error) {
-	result := LedgerClientListBySubscriptionResponse{RawResponse: resp}
+	result := LedgerClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.List); err != nil {
 		return LedgerClientListBySubscriptionResponse{}, err
 	}
@@ -345,9 +341,7 @@ func (client *LedgerClient) BeginUpdate(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return LedgerClientUpdatePollerResponse{}, err
 	}
-	result := LedgerClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LedgerClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("LedgerClient.Update", "", resp, client.pl)
 	if err != nil {
 		return LedgerClientUpdatePollerResponse{}, err

@@ -34,17 +34,17 @@ type ManagedPrivateEndpointsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedPrivateEndpointsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedPrivateEndpointsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedPrivateEndpointsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -112,7 +112,7 @@ func (client *ManagedPrivateEndpointsClient) createOrUpdateCreateRequest(ctx con
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ManagedPrivateEndpointsClient) createOrUpdateHandleResponse(resp *http.Response) (ManagedPrivateEndpointsClientCreateOrUpdateResponse, error) {
-	result := ManagedPrivateEndpointsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ManagedPrivateEndpointsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedPrivateEndpointResource); err != nil {
 		return ManagedPrivateEndpointsClientCreateOrUpdateResponse{}, err
 	}
@@ -139,7 +139,7 @@ func (client *ManagedPrivateEndpointsClient) Delete(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ManagedPrivateEndpointsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ManagedPrivateEndpointsClientDeleteResponse{RawResponse: resp}, nil
+	return ManagedPrivateEndpointsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -238,7 +238,7 @@ func (client *ManagedPrivateEndpointsClient) getCreateRequest(ctx context.Contex
 
 // getHandleResponse handles the Get response.
 func (client *ManagedPrivateEndpointsClient) getHandleResponse(resp *http.Response) (ManagedPrivateEndpointsClientGetResponse, error) {
-	result := ManagedPrivateEndpointsClientGetResponse{RawResponse: resp}
+	result := ManagedPrivateEndpointsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedPrivateEndpointResource); err != nil {
 		return ManagedPrivateEndpointsClientGetResponse{}, err
 	}
@@ -296,7 +296,7 @@ func (client *ManagedPrivateEndpointsClient) listByFactoryCreateRequest(ctx cont
 
 // listByFactoryHandleResponse handles the ListByFactory response.
 func (client *ManagedPrivateEndpointsClient) listByFactoryHandleResponse(resp *http.Response) (ManagedPrivateEndpointsClientListByFactoryResponse, error) {
-	result := ManagedPrivateEndpointsClientListByFactoryResponse{RawResponse: resp}
+	result := ManagedPrivateEndpointsClientListByFactoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedPrivateEndpointListResponse); err != nil {
 		return ManagedPrivateEndpointsClientListByFactoryResponse{}, err
 	}

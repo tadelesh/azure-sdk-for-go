@@ -34,17 +34,17 @@ type SQLPoolTransparentDataEncryptionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLPoolTransparentDataEncryptionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLPoolTransparentDataEncryptionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLPoolTransparentDataEncryptionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *SQLPoolTransparentDataEncryptionsClient) createOrUpdateCreateReque
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *SQLPoolTransparentDataEncryptionsClient) createOrUpdateHandleResponse(resp *http.Response) (SQLPoolTransparentDataEncryptionsClientCreateOrUpdateResponse, error) {
-	result := SQLPoolTransparentDataEncryptionsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := SQLPoolTransparentDataEncryptionsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TransparentDataEncryption); err != nil {
 		return SQLPoolTransparentDataEncryptionsClientCreateOrUpdateResponse{}, err
 	}
@@ -175,7 +175,7 @@ func (client *SQLPoolTransparentDataEncryptionsClient) getCreateRequest(ctx cont
 
 // getHandleResponse handles the Get response.
 func (client *SQLPoolTransparentDataEncryptionsClient) getHandleResponse(resp *http.Response) (SQLPoolTransparentDataEncryptionsClientGetResponse, error) {
-	result := SQLPoolTransparentDataEncryptionsClientGetResponse{RawResponse: resp}
+	result := SQLPoolTransparentDataEncryptionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TransparentDataEncryption); err != nil {
 		return SQLPoolTransparentDataEncryptionsClientGetResponse{}, err
 	}
@@ -233,7 +233,7 @@ func (client *SQLPoolTransparentDataEncryptionsClient) listCreateRequest(ctx con
 
 // listHandleResponse handles the List response.
 func (client *SQLPoolTransparentDataEncryptionsClient) listHandleResponse(resp *http.Response) (SQLPoolTransparentDataEncryptionsClientListResponse, error) {
-	result := SQLPoolTransparentDataEncryptionsClientListResponse{RawResponse: resp}
+	result := SQLPoolTransparentDataEncryptionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TransparentDataEncryptionListResult); err != nil {
 		return SQLPoolTransparentDataEncryptionsClientListResponse{}, err
 	}

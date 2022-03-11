@@ -34,17 +34,17 @@ type DatastoresClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDatastoresClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DatastoresClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DatastoresClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *DatastoresClient) BeginCreateOrUpdate(ctx context.Context, resourc
 	if err != nil {
 		return DatastoresClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DatastoresClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatastoresClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DatastoresClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DatastoresClientCreateOrUpdatePollerResponse{}, err
@@ -139,9 +137,7 @@ func (client *DatastoresClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return DatastoresClientDeletePollerResponse{}, err
 	}
-	result := DatastoresClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DatastoresClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DatastoresClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DatastoresClientDeletePollerResponse{}, err
@@ -261,7 +257,7 @@ func (client *DatastoresClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *DatastoresClient) getHandleResponse(resp *http.Response) (DatastoresClientGetResponse, error) {
-	result := DatastoresClientGetResponse{RawResponse: resp}
+	result := DatastoresClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Datastore); err != nil {
 		return DatastoresClientGetResponse{}, err
 	}
@@ -318,7 +314,7 @@ func (client *DatastoresClient) listCreateRequest(ctx context.Context, resourceG
 
 // listHandleResponse handles the List response.
 func (client *DatastoresClient) listHandleResponse(resp *http.Response) (DatastoresClientListResponse, error) {
-	result := DatastoresClientListResponse{RawResponse: resp}
+	result := DatastoresClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatastoreList); err != nil {
 		return DatastoresClientListResponse{}, err
 	}

@@ -34,17 +34,17 @@ type AccountClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAccountClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AccountClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AccountClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *AccountClient) BeginCreate(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return AccountClientCreatePollerResponse{}, err
 	}
-	result := AccountClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AccountClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("AccountClient.Create", "location", resp, client.pl)
 	if err != nil {
 		return AccountClientCreatePollerResponse{}, err
@@ -131,9 +129,7 @@ func (client *AccountClient) BeginDelete(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return AccountClientDeletePollerResponse{}, err
 	}
-	result := AccountClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AccountClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AccountClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return AccountClientDeletePollerResponse{}, err
@@ -235,7 +231,7 @@ func (client *AccountClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *AccountClient) getHandleResponse(resp *http.Response) (AccountClientGetResponse, error) {
-	result := AccountClientGetResponse{RawResponse: resp}
+	result := AccountClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Account); err != nil {
 		return AccountClientGetResponse{}, err
 	}
@@ -293,7 +289,7 @@ func (client *AccountClient) getKeysCreateRequest(ctx context.Context, resourceG
 
 // getKeysHandleResponse handles the GetKeys response.
 func (client *AccountClient) getKeysHandleResponse(resp *http.Response) (AccountClientGetKeysResponse, error) {
-	result := AccountClientGetKeysResponse{RawResponse: resp}
+	result := AccountClientGetKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountKeys); err != nil {
 		return AccountClientGetKeysResponse{}, err
 	}
@@ -335,7 +331,7 @@ func (client *AccountClient) listCreateRequest(ctx context.Context, options *Acc
 
 // listHandleResponse handles the List response.
 func (client *AccountClient) listHandleResponse(resp *http.Response) (AccountClientListResponse, error) {
-	result := AccountClientListResponse{RawResponse: resp}
+	result := AccountClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountListResult); err != nil {
 		return AccountClientListResponse{}, err
 	}
@@ -383,7 +379,7 @@ func (client *AccountClient) listByResourceGroupCreateRequest(ctx context.Contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *AccountClient) listByResourceGroupHandleResponse(resp *http.Response) (AccountClientListByResourceGroupResponse, error) {
-	result := AccountClientListByResourceGroupResponse{RawResponse: resp}
+	result := AccountClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountListResult); err != nil {
 		return AccountClientListByResourceGroupResponse{}, err
 	}
@@ -440,7 +436,7 @@ func (client *AccountClient) listOutboundNetworkDependenciesEndpointsCreateReque
 
 // listOutboundNetworkDependenciesEndpointsHandleResponse handles the ListOutboundNetworkDependenciesEndpoints response.
 func (client *AccountClient) listOutboundNetworkDependenciesEndpointsHandleResponse(resp *http.Response) (AccountClientListOutboundNetworkDependenciesEndpointsResponse, error) {
-	result := AccountClientListOutboundNetworkDependenciesEndpointsResponse{RawResponse: resp}
+	result := AccountClientListOutboundNetworkDependenciesEndpointsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OutboundEnvironmentEndpointCollection); err != nil {
 		return AccountClientListOutboundNetworkDependenciesEndpointsResponse{}, err
 	}
@@ -499,7 +495,7 @@ func (client *AccountClient) regenerateKeyCreateRequest(ctx context.Context, res
 
 // regenerateKeyHandleResponse handles the RegenerateKey response.
 func (client *AccountClient) regenerateKeyHandleResponse(resp *http.Response) (AccountClientRegenerateKeyResponse, error) {
-	result := AccountClientRegenerateKeyResponse{RawResponse: resp}
+	result := AccountClientRegenerateKeyResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountKeys); err != nil {
 		return AccountClientRegenerateKeyResponse{}, err
 	}
@@ -525,7 +521,7 @@ func (client *AccountClient) SynchronizeAutoStorageKeys(ctx context.Context, res
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return AccountClientSynchronizeAutoStorageKeysResponse{}, runtime.NewResponseError(resp)
 	}
-	return AccountClientSynchronizeAutoStorageKeysResponse{RawResponse: resp}, nil
+	return AccountClientSynchronizeAutoStorageKeysResponse{}, nil
 }
 
 // synchronizeAutoStorageKeysCreateRequest creates the SynchronizeAutoStorageKeys request.
@@ -603,7 +599,7 @@ func (client *AccountClient) updateCreateRequest(ctx context.Context, resourceGr
 
 // updateHandleResponse handles the Update response.
 func (client *AccountClient) updateHandleResponse(resp *http.Response) (AccountClientUpdateResponse, error) {
-	result := AccountClientUpdateResponse{RawResponse: resp}
+	result := AccountClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Account); err != nil {
 		return AccountClientUpdateResponse{}, err
 	}

@@ -36,17 +36,17 @@ type StorageAccountsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewStorageAccountsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *StorageAccountsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &StorageAccountsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -70,7 +70,7 @@ func (client *StorageAccountsClient) Add(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return StorageAccountsClientAddResponse{}, runtime.NewResponseError(resp)
 	}
-	return StorageAccountsClientAddResponse{RawResponse: resp}, nil
+	return StorageAccountsClientAddResponse{}, nil
 }
 
 // addCreateRequest creates the Add request.
@@ -121,7 +121,7 @@ func (client *StorageAccountsClient) Delete(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return StorageAccountsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return StorageAccountsClientDeleteResponse{RawResponse: resp}, nil
+	return StorageAccountsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -207,7 +207,7 @@ func (client *StorageAccountsClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *StorageAccountsClient) getHandleResponse(resp *http.Response) (StorageAccountsClientGetResponse, error) {
-	result := StorageAccountsClientGetResponse{RawResponse: resp}
+	result := StorageAccountsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StorageAccountInformation); err != nil {
 		return StorageAccountsClientGetResponse{}, err
 	}
@@ -274,7 +274,7 @@ func (client *StorageAccountsClient) getStorageContainerCreateRequest(ctx contex
 
 // getStorageContainerHandleResponse handles the GetStorageContainer response.
 func (client *StorageAccountsClient) getStorageContainerHandleResponse(resp *http.Response) (StorageAccountsClientGetStorageContainerResponse, error) {
-	result := StorageAccountsClientGetStorageContainerResponse{RawResponse: resp}
+	result := StorageAccountsClientGetStorageContainerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StorageContainer); err != nil {
 		return StorageAccountsClientGetStorageContainerResponse{}, err
 	}
@@ -346,7 +346,7 @@ func (client *StorageAccountsClient) listByAccountCreateRequest(ctx context.Cont
 
 // listByAccountHandleResponse handles the ListByAccount response.
 func (client *StorageAccountsClient) listByAccountHandleResponse(resp *http.Response) (StorageAccountsClientListByAccountResponse, error) {
-	result := StorageAccountsClientListByAccountResponse{RawResponse: resp}
+	result := StorageAccountsClientListByAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StorageAccountInformationListResult); err != nil {
 		return StorageAccountsClientListByAccountResponse{}, err
 	}
@@ -410,7 +410,7 @@ func (client *StorageAccountsClient) listSasTokensCreateRequest(ctx context.Cont
 
 // listSasTokensHandleResponse handles the ListSasTokens response.
 func (client *StorageAccountsClient) listSasTokensHandleResponse(resp *http.Response) (StorageAccountsClientListSasTokensResponse, error) {
-	result := StorageAccountsClientListSasTokensResponse{RawResponse: resp}
+	result := StorageAccountsClientListSasTokensResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SasTokenInformationListResult); err != nil {
 		return StorageAccountsClientListSasTokensResponse{}, err
 	}
@@ -469,7 +469,7 @@ func (client *StorageAccountsClient) listStorageContainersCreateRequest(ctx cont
 
 // listStorageContainersHandleResponse handles the ListStorageContainers response.
 func (client *StorageAccountsClient) listStorageContainersHandleResponse(resp *http.Response) (StorageAccountsClientListStorageContainersResponse, error) {
-	result := StorageAccountsClientListStorageContainersResponse{RawResponse: resp}
+	result := StorageAccountsClientListStorageContainersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StorageContainerListResult); err != nil {
 		return StorageAccountsClientListStorageContainersResponse{}, err
 	}
@@ -495,7 +495,7 @@ func (client *StorageAccountsClient) Update(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return StorageAccountsClientUpdateResponse{}, runtime.NewResponseError(resp)
 	}
-	return StorageAccountsClientUpdateResponse{RawResponse: resp}, nil
+	return StorageAccountsClientUpdateResponse{}, nil
 }
 
 // updateCreateRequest creates the Update request.

@@ -34,17 +34,17 @@ type SourceControlsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSourceControlsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SourceControlsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SourceControlsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *SourceControlsClient) createCreateRequest(ctx context.Context, res
 
 // createHandleResponse handles the Create response.
 func (client *SourceControlsClient) createHandleResponse(resp *http.Response) (SourceControlsClientCreateResponse, error) {
-	result := SourceControlsClientCreateResponse{RawResponse: resp}
+	result := SourceControlsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceControl); err != nil {
 		return SourceControlsClientCreateResponse{}, err
 	}
@@ -128,7 +128,7 @@ func (client *SourceControlsClient) Delete(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SourceControlsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SourceControlsClientDeleteResponse{RawResponse: resp}, nil
+	return SourceControlsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -214,7 +214,7 @@ func (client *SourceControlsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *SourceControlsClient) getHandleResponse(resp *http.Response) (SourceControlsClientGetResponse, error) {
-	result := SourceControlsClientGetResponse{RawResponse: resp}
+	result := SourceControlsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceControl); err != nil {
 		return SourceControlsClientGetResponse{}, err
 	}
@@ -266,7 +266,7 @@ func (client *SourceControlsClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *SourceControlsClient) listHandleResponse(resp *http.Response) (SourceControlsClientListResponse, error) {
-	result := SourceControlsClientListResponse{RawResponse: resp}
+	result := SourceControlsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceControlList); err != nil {
 		return SourceControlsClientListResponse{}, err
 	}

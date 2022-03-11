@@ -34,17 +34,17 @@ type ServiceReplicaClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServiceReplicaClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServiceReplicaClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServiceReplicaClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *ServiceReplicaClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *ServiceReplicaClient) getHandleResponse(resp *http.Response) (ServiceReplicaClientGetResponse, error) {
-	result := ServiceReplicaClientGetResponse{RawResponse: resp}
+	result := ServiceReplicaClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceReplicaDescription); err != nil {
 		return ServiceReplicaClientGetResponse{}, err
 	}
@@ -151,7 +151,7 @@ func (client *ServiceReplicaClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *ServiceReplicaClient) listHandleResponse(resp *http.Response) (ServiceReplicaClientListResponse, error) {
-	result := ServiceReplicaClientListResponse{RawResponse: resp}
+	result := ServiceReplicaClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceReplicaDescriptionList); err != nil {
 		return ServiceReplicaClientListResponse{}, err
 	}

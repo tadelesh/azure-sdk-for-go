@@ -34,17 +34,17 @@ type WorkloadNetworksClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkloadNetworksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkloadNetworksClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkloadNetworksClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *WorkloadNetworksClient) BeginCreateDNSService(ctx context.Context,
 	if err != nil {
 		return WorkloadNetworksClientCreateDNSServicePollerResponse{}, err
 	}
-	result := WorkloadNetworksClientCreateDNSServicePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientCreateDNSServicePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.CreateDNSService", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientCreateDNSServicePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *WorkloadNetworksClient) BeginCreateDNSZone(ctx context.Context, re
 	if err != nil {
 		return WorkloadNetworksClientCreateDNSZonePollerResponse{}, err
 	}
-	result := WorkloadNetworksClientCreateDNSZonePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientCreateDNSZonePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.CreateDNSZone", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientCreateDNSZonePollerResponse{}, err
@@ -208,9 +204,7 @@ func (client *WorkloadNetworksClient) BeginCreateDhcp(ctx context.Context, resou
 	if err != nil {
 		return WorkloadNetworksClientCreateDhcpPollerResponse{}, err
 	}
-	result := WorkloadNetworksClientCreateDhcpPollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientCreateDhcpPollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.CreateDhcp", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientCreateDhcpPollerResponse{}, err
@@ -281,9 +275,7 @@ func (client *WorkloadNetworksClient) BeginCreatePortMirroring(ctx context.Conte
 	if err != nil {
 		return WorkloadNetworksClientCreatePortMirroringPollerResponse{}, err
 	}
-	result := WorkloadNetworksClientCreatePortMirroringPollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientCreatePortMirroringPollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.CreatePortMirroring", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientCreatePortMirroringPollerResponse{}, err
@@ -354,9 +346,7 @@ func (client *WorkloadNetworksClient) BeginCreatePublicIP(ctx context.Context, r
 	if err != nil {
 		return WorkloadNetworksClientCreatePublicIPPollerResponse{}, err
 	}
-	result := WorkloadNetworksClientCreatePublicIPPollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientCreatePublicIPPollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.CreatePublicIP", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientCreatePublicIPPollerResponse{}, err
@@ -427,9 +417,7 @@ func (client *WorkloadNetworksClient) BeginCreateSegments(ctx context.Context, r
 	if err != nil {
 		return WorkloadNetworksClientCreateSegmentsPollerResponse{}, err
 	}
-	result := WorkloadNetworksClientCreateSegmentsPollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientCreateSegmentsPollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.CreateSegments", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientCreateSegmentsPollerResponse{}, err
@@ -500,9 +488,7 @@ func (client *WorkloadNetworksClient) BeginCreateVMGroup(ctx context.Context, re
 	if err != nil {
 		return WorkloadNetworksClientCreateVMGroupPollerResponse{}, err
 	}
-	result := WorkloadNetworksClientCreateVMGroupPollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientCreateVMGroupPollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.CreateVMGroup", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientCreateVMGroupPollerResponse{}, err
@@ -572,9 +558,7 @@ func (client *WorkloadNetworksClient) BeginDeleteDNSService(ctx context.Context,
 	if err != nil {
 		return WorkloadNetworksClientDeleteDNSServicePollerResponse{}, err
 	}
-	result := WorkloadNetworksClientDeleteDNSServicePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientDeleteDNSServicePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.DeleteDNSService", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientDeleteDNSServicePollerResponse{}, err
@@ -644,9 +628,7 @@ func (client *WorkloadNetworksClient) BeginDeleteDNSZone(ctx context.Context, re
 	if err != nil {
 		return WorkloadNetworksClientDeleteDNSZonePollerResponse{}, err
 	}
-	result := WorkloadNetworksClientDeleteDNSZonePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientDeleteDNSZonePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.DeleteDNSZone", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientDeleteDNSZonePollerResponse{}, err
@@ -716,9 +698,7 @@ func (client *WorkloadNetworksClient) BeginDeleteDhcp(ctx context.Context, resou
 	if err != nil {
 		return WorkloadNetworksClientDeleteDhcpPollerResponse{}, err
 	}
-	result := WorkloadNetworksClientDeleteDhcpPollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientDeleteDhcpPollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.DeleteDhcp", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientDeleteDhcpPollerResponse{}, err
@@ -788,9 +768,7 @@ func (client *WorkloadNetworksClient) BeginDeletePortMirroring(ctx context.Conte
 	if err != nil {
 		return WorkloadNetworksClientDeletePortMirroringPollerResponse{}, err
 	}
-	result := WorkloadNetworksClientDeletePortMirroringPollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientDeletePortMirroringPollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.DeletePortMirroring", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientDeletePortMirroringPollerResponse{}, err
@@ -860,9 +838,7 @@ func (client *WorkloadNetworksClient) BeginDeletePublicIP(ctx context.Context, r
 	if err != nil {
 		return WorkloadNetworksClientDeletePublicIPPollerResponse{}, err
 	}
-	result := WorkloadNetworksClientDeletePublicIPPollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientDeletePublicIPPollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.DeletePublicIP", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientDeletePublicIPPollerResponse{}, err
@@ -932,9 +908,7 @@ func (client *WorkloadNetworksClient) BeginDeleteSegment(ctx context.Context, re
 	if err != nil {
 		return WorkloadNetworksClientDeleteSegmentPollerResponse{}, err
 	}
-	result := WorkloadNetworksClientDeleteSegmentPollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientDeleteSegmentPollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.DeleteSegment", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientDeleteSegmentPollerResponse{}, err
@@ -1004,9 +978,7 @@ func (client *WorkloadNetworksClient) BeginDeleteVMGroup(ctx context.Context, re
 	if err != nil {
 		return WorkloadNetworksClientDeleteVMGroupPollerResponse{}, err
 	}
-	result := WorkloadNetworksClientDeleteVMGroupPollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientDeleteVMGroupPollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.DeleteVMGroup", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientDeleteVMGroupPollerResponse{}, err
@@ -1118,7 +1090,7 @@ func (client *WorkloadNetworksClient) getDNSServiceCreateRequest(ctx context.Con
 
 // getDNSServiceHandleResponse handles the GetDNSService response.
 func (client *WorkloadNetworksClient) getDNSServiceHandleResponse(resp *http.Response) (WorkloadNetworksClientGetDNSServiceResponse, error) {
-	result := WorkloadNetworksClientGetDNSServiceResponse{RawResponse: resp}
+	result := WorkloadNetworksClientGetDNSServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkDNSService); err != nil {
 		return WorkloadNetworksClientGetDNSServiceResponse{}, err
 	}
@@ -1179,7 +1151,7 @@ func (client *WorkloadNetworksClient) getDNSZoneCreateRequest(ctx context.Contex
 
 // getDNSZoneHandleResponse handles the GetDNSZone response.
 func (client *WorkloadNetworksClient) getDNSZoneHandleResponse(resp *http.Response) (WorkloadNetworksClientGetDNSZoneResponse, error) {
-	result := WorkloadNetworksClientGetDNSZoneResponse{RawResponse: resp}
+	result := WorkloadNetworksClientGetDNSZoneResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkDNSZone); err != nil {
 		return WorkloadNetworksClientGetDNSZoneResponse{}, err
 	}
@@ -1240,7 +1212,7 @@ func (client *WorkloadNetworksClient) getDhcpCreateRequest(ctx context.Context, 
 
 // getDhcpHandleResponse handles the GetDhcp response.
 func (client *WorkloadNetworksClient) getDhcpHandleResponse(resp *http.Response) (WorkloadNetworksClientGetDhcpResponse, error) {
-	result := WorkloadNetworksClientGetDhcpResponse{RawResponse: resp}
+	result := WorkloadNetworksClientGetDhcpResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkDhcp); err != nil {
 		return WorkloadNetworksClientGetDhcpResponse{}, err
 	}
@@ -1301,7 +1273,7 @@ func (client *WorkloadNetworksClient) getGatewayCreateRequest(ctx context.Contex
 
 // getGatewayHandleResponse handles the GetGateway response.
 func (client *WorkloadNetworksClient) getGatewayHandleResponse(resp *http.Response) (WorkloadNetworksClientGetGatewayResponse, error) {
-	result := WorkloadNetworksClientGetGatewayResponse{RawResponse: resp}
+	result := WorkloadNetworksClientGetGatewayResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkGateway); err != nil {
 		return WorkloadNetworksClientGetGatewayResponse{}, err
 	}
@@ -1362,7 +1334,7 @@ func (client *WorkloadNetworksClient) getPortMirroringCreateRequest(ctx context.
 
 // getPortMirroringHandleResponse handles the GetPortMirroring response.
 func (client *WorkloadNetworksClient) getPortMirroringHandleResponse(resp *http.Response) (WorkloadNetworksClientGetPortMirroringResponse, error) {
-	result := WorkloadNetworksClientGetPortMirroringResponse{RawResponse: resp}
+	result := WorkloadNetworksClientGetPortMirroringResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkPortMirroring); err != nil {
 		return WorkloadNetworksClientGetPortMirroringResponse{}, err
 	}
@@ -1423,7 +1395,7 @@ func (client *WorkloadNetworksClient) getPublicIPCreateRequest(ctx context.Conte
 
 // getPublicIPHandleResponse handles the GetPublicIP response.
 func (client *WorkloadNetworksClient) getPublicIPHandleResponse(resp *http.Response) (WorkloadNetworksClientGetPublicIPResponse, error) {
-	result := WorkloadNetworksClientGetPublicIPResponse{RawResponse: resp}
+	result := WorkloadNetworksClientGetPublicIPResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkPublicIP); err != nil {
 		return WorkloadNetworksClientGetPublicIPResponse{}, err
 	}
@@ -1484,7 +1456,7 @@ func (client *WorkloadNetworksClient) getSegmentCreateRequest(ctx context.Contex
 
 // getSegmentHandleResponse handles the GetSegment response.
 func (client *WorkloadNetworksClient) getSegmentHandleResponse(resp *http.Response) (WorkloadNetworksClientGetSegmentResponse, error) {
-	result := WorkloadNetworksClientGetSegmentResponse{RawResponse: resp}
+	result := WorkloadNetworksClientGetSegmentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkSegment); err != nil {
 		return WorkloadNetworksClientGetSegmentResponse{}, err
 	}
@@ -1545,7 +1517,7 @@ func (client *WorkloadNetworksClient) getVMGroupCreateRequest(ctx context.Contex
 
 // getVMGroupHandleResponse handles the GetVMGroup response.
 func (client *WorkloadNetworksClient) getVMGroupHandleResponse(resp *http.Response) (WorkloadNetworksClientGetVMGroupResponse, error) {
-	result := WorkloadNetworksClientGetVMGroupResponse{RawResponse: resp}
+	result := WorkloadNetworksClientGetVMGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkVMGroup); err != nil {
 		return WorkloadNetworksClientGetVMGroupResponse{}, err
 	}
@@ -1606,7 +1578,7 @@ func (client *WorkloadNetworksClient) getVirtualMachineCreateRequest(ctx context
 
 // getVirtualMachineHandleResponse handles the GetVirtualMachine response.
 func (client *WorkloadNetworksClient) getVirtualMachineHandleResponse(resp *http.Response) (WorkloadNetworksClientGetVirtualMachineResponse, error) {
-	result := WorkloadNetworksClientGetVirtualMachineResponse{RawResponse: resp}
+	result := WorkloadNetworksClientGetVirtualMachineResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkVirtualMachine); err != nil {
 		return WorkloadNetworksClientGetVirtualMachineResponse{}, err
 	}
@@ -1659,7 +1631,7 @@ func (client *WorkloadNetworksClient) listDNSServicesCreateRequest(ctx context.C
 
 // listDNSServicesHandleResponse handles the ListDNSServices response.
 func (client *WorkloadNetworksClient) listDNSServicesHandleResponse(resp *http.Response) (WorkloadNetworksClientListDNSServicesResponse, error) {
-	result := WorkloadNetworksClientListDNSServicesResponse{RawResponse: resp}
+	result := WorkloadNetworksClientListDNSServicesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkDNSServicesList); err != nil {
 		return WorkloadNetworksClientListDNSServicesResponse{}, err
 	}
@@ -1712,7 +1684,7 @@ func (client *WorkloadNetworksClient) listDNSZonesCreateRequest(ctx context.Cont
 
 // listDNSZonesHandleResponse handles the ListDNSZones response.
 func (client *WorkloadNetworksClient) listDNSZonesHandleResponse(resp *http.Response) (WorkloadNetworksClientListDNSZonesResponse, error) {
-	result := WorkloadNetworksClientListDNSZonesResponse{RawResponse: resp}
+	result := WorkloadNetworksClientListDNSZonesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkDNSZonesList); err != nil {
 		return WorkloadNetworksClientListDNSZonesResponse{}, err
 	}
@@ -1765,7 +1737,7 @@ func (client *WorkloadNetworksClient) listDhcpCreateRequest(ctx context.Context,
 
 // listDhcpHandleResponse handles the ListDhcp response.
 func (client *WorkloadNetworksClient) listDhcpHandleResponse(resp *http.Response) (WorkloadNetworksClientListDhcpResponse, error) {
-	result := WorkloadNetworksClientListDhcpResponse{RawResponse: resp}
+	result := WorkloadNetworksClientListDhcpResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkDhcpList); err != nil {
 		return WorkloadNetworksClientListDhcpResponse{}, err
 	}
@@ -1818,7 +1790,7 @@ func (client *WorkloadNetworksClient) listGatewaysCreateRequest(ctx context.Cont
 
 // listGatewaysHandleResponse handles the ListGateways response.
 func (client *WorkloadNetworksClient) listGatewaysHandleResponse(resp *http.Response) (WorkloadNetworksClientListGatewaysResponse, error) {
-	result := WorkloadNetworksClientListGatewaysResponse{RawResponse: resp}
+	result := WorkloadNetworksClientListGatewaysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkGatewayList); err != nil {
 		return WorkloadNetworksClientListGatewaysResponse{}, err
 	}
@@ -1871,7 +1843,7 @@ func (client *WorkloadNetworksClient) listPortMirroringCreateRequest(ctx context
 
 // listPortMirroringHandleResponse handles the ListPortMirroring response.
 func (client *WorkloadNetworksClient) listPortMirroringHandleResponse(resp *http.Response) (WorkloadNetworksClientListPortMirroringResponse, error) {
-	result := WorkloadNetworksClientListPortMirroringResponse{RawResponse: resp}
+	result := WorkloadNetworksClientListPortMirroringResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkPortMirroringList); err != nil {
 		return WorkloadNetworksClientListPortMirroringResponse{}, err
 	}
@@ -1924,7 +1896,7 @@ func (client *WorkloadNetworksClient) listPublicIPsCreateRequest(ctx context.Con
 
 // listPublicIPsHandleResponse handles the ListPublicIPs response.
 func (client *WorkloadNetworksClient) listPublicIPsHandleResponse(resp *http.Response) (WorkloadNetworksClientListPublicIPsResponse, error) {
-	result := WorkloadNetworksClientListPublicIPsResponse{RawResponse: resp}
+	result := WorkloadNetworksClientListPublicIPsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkPublicIPsList); err != nil {
 		return WorkloadNetworksClientListPublicIPsResponse{}, err
 	}
@@ -1977,7 +1949,7 @@ func (client *WorkloadNetworksClient) listSegmentsCreateRequest(ctx context.Cont
 
 // listSegmentsHandleResponse handles the ListSegments response.
 func (client *WorkloadNetworksClient) listSegmentsHandleResponse(resp *http.Response) (WorkloadNetworksClientListSegmentsResponse, error) {
-	result := WorkloadNetworksClientListSegmentsResponse{RawResponse: resp}
+	result := WorkloadNetworksClientListSegmentsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkSegmentsList); err != nil {
 		return WorkloadNetworksClientListSegmentsResponse{}, err
 	}
@@ -2030,7 +2002,7 @@ func (client *WorkloadNetworksClient) listVMGroupsCreateRequest(ctx context.Cont
 
 // listVMGroupsHandleResponse handles the ListVMGroups response.
 func (client *WorkloadNetworksClient) listVMGroupsHandleResponse(resp *http.Response) (WorkloadNetworksClientListVMGroupsResponse, error) {
-	result := WorkloadNetworksClientListVMGroupsResponse{RawResponse: resp}
+	result := WorkloadNetworksClientListVMGroupsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkVMGroupsList); err != nil {
 		return WorkloadNetworksClientListVMGroupsResponse{}, err
 	}
@@ -2083,7 +2055,7 @@ func (client *WorkloadNetworksClient) listVirtualMachinesCreateRequest(ctx conte
 
 // listVirtualMachinesHandleResponse handles the ListVirtualMachines response.
 func (client *WorkloadNetworksClient) listVirtualMachinesHandleResponse(resp *http.Response) (WorkloadNetworksClientListVirtualMachinesResponse, error) {
-	result := WorkloadNetworksClientListVirtualMachinesResponse{RawResponse: resp}
+	result := WorkloadNetworksClientListVirtualMachinesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkloadNetworkVirtualMachinesList); err != nil {
 		return WorkloadNetworksClientListVirtualMachinesResponse{}, err
 	}
@@ -2103,9 +2075,7 @@ func (client *WorkloadNetworksClient) BeginUpdateDNSService(ctx context.Context,
 	if err != nil {
 		return WorkloadNetworksClientUpdateDNSServicePollerResponse{}, err
 	}
-	result := WorkloadNetworksClientUpdateDNSServicePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientUpdateDNSServicePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.UpdateDNSService", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientUpdateDNSServicePollerResponse{}, err
@@ -2176,9 +2146,7 @@ func (client *WorkloadNetworksClient) BeginUpdateDNSZone(ctx context.Context, re
 	if err != nil {
 		return WorkloadNetworksClientUpdateDNSZonePollerResponse{}, err
 	}
-	result := WorkloadNetworksClientUpdateDNSZonePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientUpdateDNSZonePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.UpdateDNSZone", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientUpdateDNSZonePollerResponse{}, err
@@ -2249,9 +2217,7 @@ func (client *WorkloadNetworksClient) BeginUpdateDhcp(ctx context.Context, resou
 	if err != nil {
 		return WorkloadNetworksClientUpdateDhcpPollerResponse{}, err
 	}
-	result := WorkloadNetworksClientUpdateDhcpPollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientUpdateDhcpPollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.UpdateDhcp", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientUpdateDhcpPollerResponse{}, err
@@ -2322,9 +2288,7 @@ func (client *WorkloadNetworksClient) BeginUpdatePortMirroring(ctx context.Conte
 	if err != nil {
 		return WorkloadNetworksClientUpdatePortMirroringPollerResponse{}, err
 	}
-	result := WorkloadNetworksClientUpdatePortMirroringPollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientUpdatePortMirroringPollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.UpdatePortMirroring", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientUpdatePortMirroringPollerResponse{}, err
@@ -2395,9 +2359,7 @@ func (client *WorkloadNetworksClient) BeginUpdateSegments(ctx context.Context, r
 	if err != nil {
 		return WorkloadNetworksClientUpdateSegmentsPollerResponse{}, err
 	}
-	result := WorkloadNetworksClientUpdateSegmentsPollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientUpdateSegmentsPollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.UpdateSegments", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientUpdateSegmentsPollerResponse{}, err
@@ -2468,9 +2430,7 @@ func (client *WorkloadNetworksClient) BeginUpdateVMGroup(ctx context.Context, re
 	if err != nil {
 		return WorkloadNetworksClientUpdateVMGroupPollerResponse{}, err
 	}
-	result := WorkloadNetworksClientUpdateVMGroupPollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkloadNetworksClientUpdateVMGroupPollerResponse{}
 	pt, err := armruntime.NewPoller("WorkloadNetworksClient.UpdateVMGroup", "", resp, client.pl)
 	if err != nil {
 		return WorkloadNetworksClientUpdateVMGroupPollerResponse{}, err

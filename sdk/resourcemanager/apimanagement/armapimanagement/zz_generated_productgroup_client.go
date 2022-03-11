@@ -36,17 +36,17 @@ type ProductGroupClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProductGroupClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ProductGroupClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProductGroupClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -67,7 +67,7 @@ func (client *ProductGroupClient) CheckEntityExists(ctx context.Context, resourc
 	if err != nil {
 		return ProductGroupClientCheckEntityExistsResponse{}, err
 	}
-	result := ProductGroupClientCheckEntityExistsResponse{RawResponse: resp}
+	result := ProductGroupClientCheckEntityExistsResponse{}
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		result.Success = true
 	}
@@ -167,7 +167,7 @@ func (client *ProductGroupClient) createOrUpdateCreateRequest(ctx context.Contex
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ProductGroupClient) createOrUpdateHandleResponse(resp *http.Response) (ProductGroupClientCreateOrUpdateResponse, error) {
-	result := ProductGroupClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ProductGroupClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GroupContract); err != nil {
 		return ProductGroupClientCreateOrUpdateResponse{}, err
 	}
@@ -193,7 +193,7 @@ func (client *ProductGroupClient) Delete(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ProductGroupClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ProductGroupClientDeleteResponse{RawResponse: resp}, nil
+	return ProductGroupClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -290,7 +290,7 @@ func (client *ProductGroupClient) listByProductCreateRequest(ctx context.Context
 
 // listByProductHandleResponse handles the ListByProduct response.
 func (client *ProductGroupClient) listByProductHandleResponse(resp *http.Response) (ProductGroupClientListByProductResponse, error) {
-	result := ProductGroupClientListByProductResponse{RawResponse: resp}
+	result := ProductGroupClientListByProductResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GroupCollection); err != nil {
 		return ProductGroupClientListByProductResponse{}, err
 	}

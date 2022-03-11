@@ -34,17 +34,17 @@ type CollectionPartitionClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCollectionPartitionClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CollectionPartitionClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CollectionPartitionClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -60,19 +60,13 @@ func NewCollectionPartitionClient(subscriptionID string, credential azcore.Token
 // and timeGrain. The supported operator is eq.
 // options - CollectionPartitionClientListMetricsOptions contains the optional parameters for the CollectionPartitionClient.ListMetrics
 // method.
-func (client *CollectionPartitionClient) ListMetrics(ctx context.Context, resourceGroupName string, accountName string, databaseRid string, collectionRid string, filter string, options *CollectionPartitionClientListMetricsOptions) (CollectionPartitionClientListMetricsResponse, error) {
-	req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, databaseRid, collectionRid, filter, options)
-	if err != nil {
-		return CollectionPartitionClientListMetricsResponse{}, err
+func (client *CollectionPartitionClient) ListMetrics(resourceGroupName string, accountName string, databaseRid string, collectionRid string, filter string, options *CollectionPartitionClientListMetricsOptions) *CollectionPartitionClientListMetricsPager {
+	return &CollectionPartitionClientListMetricsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, databaseRid, collectionRid, filter, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return CollectionPartitionClientListMetricsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return CollectionPartitionClientListMetricsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listMetricsHandleResponse(resp)
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.
@@ -112,7 +106,7 @@ func (client *CollectionPartitionClient) listMetricsCreateRequest(ctx context.Co
 
 // listMetricsHandleResponse handles the ListMetrics response.
 func (client *CollectionPartitionClient) listMetricsHandleResponse(resp *http.Response) (CollectionPartitionClientListMetricsResponse, error) {
-	result := CollectionPartitionClientListMetricsResponse{RawResponse: resp}
+	result := CollectionPartitionClientListMetricsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PartitionMetricListResult); err != nil {
 		return CollectionPartitionClientListMetricsResponse{}, err
 	}
@@ -127,19 +121,13 @@ func (client *CollectionPartitionClient) listMetricsHandleResponse(resp *http.Re
 // collectionRid - Cosmos DB collection rid.
 // options - CollectionPartitionClientListUsagesOptions contains the optional parameters for the CollectionPartitionClient.ListUsages
 // method.
-func (client *CollectionPartitionClient) ListUsages(ctx context.Context, resourceGroupName string, accountName string, databaseRid string, collectionRid string, options *CollectionPartitionClientListUsagesOptions) (CollectionPartitionClientListUsagesResponse, error) {
-	req, err := client.listUsagesCreateRequest(ctx, resourceGroupName, accountName, databaseRid, collectionRid, options)
-	if err != nil {
-		return CollectionPartitionClientListUsagesResponse{}, err
+func (client *CollectionPartitionClient) ListUsages(resourceGroupName string, accountName string, databaseRid string, collectionRid string, options *CollectionPartitionClientListUsagesOptions) *CollectionPartitionClientListUsagesPager {
+	return &CollectionPartitionClientListUsagesPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listUsagesCreateRequest(ctx, resourceGroupName, accountName, databaseRid, collectionRid, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return CollectionPartitionClientListUsagesResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return CollectionPartitionClientListUsagesResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listUsagesHandleResponse(resp)
 }
 
 // listUsagesCreateRequest creates the ListUsages request.
@@ -181,7 +169,7 @@ func (client *CollectionPartitionClient) listUsagesCreateRequest(ctx context.Con
 
 // listUsagesHandleResponse handles the ListUsages response.
 func (client *CollectionPartitionClient) listUsagesHandleResponse(resp *http.Response) (CollectionPartitionClientListUsagesResponse, error) {
-	result := CollectionPartitionClientListUsagesResponse{RawResponse: resp}
+	result := CollectionPartitionClientListUsagesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PartitionUsagesResult); err != nil {
 		return CollectionPartitionClientListUsagesResponse{}, err
 	}

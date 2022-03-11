@@ -29,16 +29,16 @@ type PipelineTemplateDefinitionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPipelineTemplateDefinitionsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *PipelineTemplateDefinitionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PipelineTemplateDefinitionsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -75,7 +75,7 @@ func (client *PipelineTemplateDefinitionsClient) listCreateRequest(ctx context.C
 
 // listHandleResponse handles the List response.
 func (client *PipelineTemplateDefinitionsClient) listHandleResponse(resp *http.Response) (PipelineTemplateDefinitionsClientListResponse, error) {
-	result := PipelineTemplateDefinitionsClientListResponse{RawResponse: resp}
+	result := PipelineTemplateDefinitionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PipelineTemplateDefinitionListResult); err != nil {
 		return PipelineTemplateDefinitionsClientListResponse{}, err
 	}

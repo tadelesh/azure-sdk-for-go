@@ -34,17 +34,17 @@ type RoleInstancesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRoleInstancesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RoleInstancesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RoleInstancesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -107,7 +107,7 @@ func (client *RoleInstancesClient) getCreateRequest(ctx context.Context, locatio
 
 // getHandleResponse handles the Get response.
 func (client *RoleInstancesClient) getHandleResponse(resp *http.Response) (RoleInstancesClientGetResponse, error) {
-	result := RoleInstancesClientGetResponse{RawResponse: resp}
+	result := RoleInstancesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RoleInstance); err != nil {
 		return RoleInstancesClientGetResponse{}, err
 	}
@@ -164,7 +164,7 @@ func (client *RoleInstancesClient) listCreateRequest(ctx context.Context, locati
 
 // listHandleResponse handles the List response.
 func (client *RoleInstancesClient) listHandleResponse(resp *http.Response) (RoleInstancesClientListResponse, error) {
-	result := RoleInstancesClientListResponse{RawResponse: resp}
+	result := RoleInstancesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkFunctionRoleInstanceListResult); err != nil {
 		return RoleInstancesClientListResponse{}, err
 	}
@@ -184,9 +184,7 @@ func (client *RoleInstancesClient) BeginRestart(ctx context.Context, locationNam
 	if err != nil {
 		return RoleInstancesClientRestartPollerResponse{}, err
 	}
-	result := RoleInstancesClientRestartPollerResponse{
-		RawResponse: resp,
-	}
+	result := RoleInstancesClientRestartPollerResponse{}
 	pt, err := armruntime.NewPoller("RoleInstancesClient.Restart", "location", resp, client.pl)
 	if err != nil {
 		return RoleInstancesClientRestartPollerResponse{}, err
@@ -261,9 +259,7 @@ func (client *RoleInstancesClient) BeginStart(ctx context.Context, locationName 
 	if err != nil {
 		return RoleInstancesClientStartPollerResponse{}, err
 	}
-	result := RoleInstancesClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := RoleInstancesClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("RoleInstancesClient.Start", "location", resp, client.pl)
 	if err != nil {
 		return RoleInstancesClientStartPollerResponse{}, err
@@ -337,9 +333,7 @@ func (client *RoleInstancesClient) BeginStop(ctx context.Context, locationName s
 	if err != nil {
 		return RoleInstancesClientStopPollerResponse{}, err
 	}
-	result := RoleInstancesClientStopPollerResponse{
-		RawResponse: resp,
-	}
+	result := RoleInstancesClientStopPollerResponse{}
 	pt, err := armruntime.NewPoller("RoleInstancesClient.Stop", "location", resp, client.pl)
 	if err != nil {
 		return RoleInstancesClientStopPollerResponse{}, err

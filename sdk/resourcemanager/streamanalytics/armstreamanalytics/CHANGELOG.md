@@ -1,5 +1,247 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ClustersClientListStreamingJobsPager.NextPage` return value(s) have been changed from `(bool)` to `(ClustersClientListStreamingJobsResponse, error)`
+- Function `*PrivateEndpointsClientListByClusterPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateEndpointsClientListByClusterResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ClustersClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ClustersClientListBySubscriptionResponse, error)`
+- Function `*FunctionsClientListByStreamingJobPager.NextPage` return value(s) have been changed from `(bool)` to `(FunctionsClientListByStreamingJobResponse, error)`
+- Function `*StreamingJobsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(StreamingJobsClientListResponse, error)`
+- Function `*OutputsClientListByStreamingJobPager.NextPage` return value(s) have been changed from `(bool)` to `(OutputsClientListByStreamingJobResponse, error)`
+- Function `*ClustersClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ClustersClientListByResourceGroupResponse, error)`
+- Function `*StreamingJobsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(StreamingJobsClientListByResourceGroupResponse, error)`
+- Function `*InputsClientListByStreamingJobPager.NextPage` return value(s) have been changed from `(bool)` to `(InputsClientListByStreamingJobResponse, error)`
+- Function `*StreamingJobsClientListByResourceGroupPager.Err` has been removed
+- Function `*FunctionsClientListByStreamingJobPager.Err` has been removed
+- Function `*ClustersClientListStreamingJobsPager.PageResponse` has been removed
+- Function `*InputsClientListByStreamingJobPager.PageResponse` has been removed
+- Function `*OutputsClientListByStreamingJobPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*StreamingJobsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*StreamingJobsClientListPager.PageResponse` has been removed
+- Function `*ClustersClientListBySubscriptionPager.Err` has been removed
+- Function `*StreamingJobsClientListPager.Err` has been removed
+- Function `*ClustersClientListStreamingJobsPager.Err` has been removed
+- Function `*ClustersClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*FunctionsClientListByStreamingJobPager.PageResponse` has been removed
+- Function `*ClustersClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*PrivateEndpointsClientListByClusterPager.PageResponse` has been removed
+- Function `*PrivateEndpointsClientListByClusterPager.Err` has been removed
+- Function `*OutputsClientListByStreamingJobPager.Err` has been removed
+- Function `*ClustersClientListByResourceGroupPager.Err` has been removed
+- Function `*InputsClientListByStreamingJobPager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Struct `ClustersClientCreateOrUpdateResult` has been removed
+- Struct `ClustersClientGetResult` has been removed
+- Struct `ClustersClientListByResourceGroupResult` has been removed
+- Struct `ClustersClientListBySubscriptionResult` has been removed
+- Struct `ClustersClientListStreamingJobsResult` has been removed
+- Struct `ClustersClientUpdateResult` has been removed
+- Struct `FunctionsClientCreateOrReplaceResult` has been removed
+- Struct `FunctionsClientGetResult` has been removed
+- Struct `FunctionsClientListByStreamingJobResult` has been removed
+- Struct `FunctionsClientRetrieveDefaultDefinitionResult` has been removed
+- Struct `FunctionsClientTestResult` has been removed
+- Struct `FunctionsClientUpdateResult` has been removed
+- Struct `InputsClientCreateOrReplaceResult` has been removed
+- Struct `InputsClientGetResult` has been removed
+- Struct `InputsClientListByStreamingJobResult` has been removed
+- Struct `InputsClientTestResult` has been removed
+- Struct `InputsClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `OutputsClientCreateOrReplaceResult` has been removed
+- Struct `OutputsClientGetResult` has been removed
+- Struct `OutputsClientListByStreamingJobResult` has been removed
+- Struct `OutputsClientTestResult` has been removed
+- Struct `OutputsClientUpdateResult` has been removed
+- Struct `PrivateEndpointsClientCreateOrUpdateResult` has been removed
+- Struct `PrivateEndpointsClientGetResult` has been removed
+- Struct `PrivateEndpointsClientListByClusterResult` has been removed
+- Struct `StreamingJobsClientCreateOrReplaceResult` has been removed
+- Struct `StreamingJobsClientGetResult` has been removed
+- Struct `StreamingJobsClientListByResourceGroupResult` has been removed
+- Struct `StreamingJobsClientListResult` has been removed
+- Struct `StreamingJobsClientUpdateResult` has been removed
+- Struct `SubscriptionsClientListQuotasResult` has been removed
+- Struct `TransformationsClientCreateOrReplaceResult` has been removed
+- Struct `TransformationsClientGetResult` has been removed
+- Struct `TransformationsClientUpdateResult` has been removed
+- Field `ClustersClientCreateOrUpdateResult` of struct `ClustersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `StreamingJobsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `OutputsClientDeleteResponse` has been removed
+- Field `ClustersClientListBySubscriptionResult` of struct `ClustersClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `StreamingJobsClientCreateOrReplacePollerResponse` has been removed
+- Field `OutputsClientGetResult` of struct `OutputsClientGetResponse` has been removed
+- Field `RawResponse` of struct `OutputsClientGetResponse` has been removed
+- Field `RawResponse` of struct `StreamingJobsClientStopResponse` has been removed
+- Field `InputsClientCreateOrReplaceResult` of struct `InputsClientCreateOrReplaceResponse` has been removed
+- Field `RawResponse` of struct `InputsClientCreateOrReplaceResponse` has been removed
+- Field `InputsClientTestResult` of struct `InputsClientTestResponse` has been removed
+- Field `RawResponse` of struct `InputsClientTestResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointsClientDeletePollerResponse` has been removed
+- Field `FunctionsClientListByStreamingJobResult` of struct `FunctionsClientListByStreamingJobResponse` has been removed
+- Field `RawResponse` of struct `FunctionsClientListByStreamingJobResponse` has been removed
+- Field `OutputsClientUpdateResult` of struct `OutputsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `OutputsClientUpdateResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `StreamingJobsClientStartPollerResponse` has been removed
+- Field `PrivateEndpointsClientListByClusterResult` of struct `PrivateEndpointsClientListByClusterResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointsClientListByClusterResponse` has been removed
+- Field `PrivateEndpointsClientCreateOrUpdateResult` of struct `PrivateEndpointsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientDeleteResponse` has been removed
+- Field `ClustersClientListByResourceGroupResult` of struct `ClustersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListByResourceGroupResponse` has been removed
+- Field `OutputsClientCreateOrReplaceResult` of struct `OutputsClientCreateOrReplaceResponse` has been removed
+- Field `RawResponse` of struct `OutputsClientCreateOrReplaceResponse` has been removed
+- Field `RawResponse` of struct `StreamingJobsClientScalePollerResponse` has been removed
+- Field `OutputsClientListByStreamingJobResult` of struct `OutputsClientListByStreamingJobResponse` has been removed
+- Field `RawResponse` of struct `OutputsClientListByStreamingJobResponse` has been removed
+- Field `RawResponse` of struct `StreamingJobsClientStartResponse` has been removed
+- Field `RawResponse` of struct `FunctionsClientDeleteResponse` has been removed
+- Field `FunctionsClientCreateOrReplaceResult` of struct `FunctionsClientCreateOrReplaceResponse` has been removed
+- Field `RawResponse` of struct `FunctionsClientCreateOrReplaceResponse` has been removed
+- Field `StreamingJobsClientUpdateResult` of struct `StreamingJobsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `StreamingJobsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `InputsClientTestPollerResponse` has been removed
+- Field `ClustersClientGetResult` of struct `ClustersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientGetResponse` has been removed
+- Field `InputsClientGetResult` of struct `InputsClientGetResponse` has been removed
+- Field `RawResponse` of struct `InputsClientGetResponse` has been removed
+- Field `FunctionsClientGetResult` of struct `FunctionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `FunctionsClientGetResponse` has been removed
+- Field `OutputsClientTestResult` of struct `OutputsClientTestResponse` has been removed
+- Field `RawResponse` of struct `OutputsClientTestResponse` has been removed
+- Field `StreamingJobsClientListResult` of struct `StreamingJobsClientListResponse` has been removed
+- Field `RawResponse` of struct `StreamingJobsClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointsClientDeleteResponse` has been removed
+- Field `ClustersClientUpdateResult` of struct `ClustersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `OutputsClientTestPollerResponse` has been removed
+- Field `RawResponse` of struct `StreamingJobsClientStopPollerResponse` has been removed
+- Field `PrivateEndpointsClientGetResult` of struct `PrivateEndpointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointsClientGetResponse` has been removed
+- Field `StreamingJobsClientListByResourceGroupResult` of struct `StreamingJobsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `StreamingJobsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `FunctionsClientTestPollerResponse` has been removed
+- Field `StreamingJobsClientCreateOrReplaceResult` of struct `StreamingJobsClientCreateOrReplaceResponse` has been removed
+- Field `RawResponse` of struct `StreamingJobsClientCreateOrReplaceResponse` has been removed
+- Field `FunctionsClientRetrieveDefaultDefinitionResult` of struct `FunctionsClientRetrieveDefaultDefinitionResponse` has been removed
+- Field `RawResponse` of struct `FunctionsClientRetrieveDefaultDefinitionResponse` has been removed
+- Field `SubscriptionsClientListQuotasResult` of struct `SubscriptionsClientListQuotasResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionsClientListQuotasResponse` has been removed
+- Field `ClustersClientListStreamingJobsResult` of struct `ClustersClientListStreamingJobsResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListStreamingJobsResponse` has been removed
+- Field `RawResponse` of struct `StreamingJobsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `StreamingJobsClientScaleResponse` has been removed
+- Field `FunctionsClientTestResult` of struct `FunctionsClientTestResponse` has been removed
+- Field `RawResponse` of struct `FunctionsClientTestResponse` has been removed
+- Field `InputsClientUpdateResult` of struct `InputsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `InputsClientUpdateResponse` has been removed
+- Field `FunctionsClientUpdateResult` of struct `FunctionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `FunctionsClientUpdateResponse` has been removed
+- Field `TransformationsClientCreateOrReplaceResult` of struct `TransformationsClientCreateOrReplaceResponse` has been removed
+- Field `RawResponse` of struct `TransformationsClientCreateOrReplaceResponse` has been removed
+- Field `TransformationsClientGetResult` of struct `TransformationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `TransformationsClientGetResponse` has been removed
+- Field `TransformationsClientUpdateResult` of struct `TransformationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `TransformationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `InputsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientDeletePollerResponse` has been removed
+- Field `InputsClientListByStreamingJobResult` of struct `InputsClientListByStreamingJobResponse` has been removed
+- Field `RawResponse` of struct `InputsClientListByStreamingJobResponse` has been removed
+- Field `StreamingJobsClientGetResult` of struct `StreamingJobsClientGetResponse` has been removed
+- Field `RawResponse` of struct `StreamingJobsClientGetResponse` has been removed
+
+### Features Added
+
+- New function `*InputsClientListByStreamingJobPager.More() bool`
+- New function `*ClustersClientListStreamingJobsPager.More() bool`
+- New function `*FunctionsClientListByStreamingJobPager.More() bool`
+- New function `*StreamingJobsClientListByResourceGroupPager.More() bool`
+- New function `*OutputsClientListByStreamingJobPager.More() bool`
+- New function `*StreamingJobsClientListPager.More() bool`
+- New function `*ClustersClientListByResourceGroupPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*ClustersClientListBySubscriptionPager.More() bool`
+- New function `*PrivateEndpointsClientListByClusterPager.More() bool`
+- New function `ErrorError.MarshalJSON() ([]byte, error)`
+- New struct `Error`
+- New struct `ErrorDetails`
+- New struct `ErrorError`
+- New anonymous field `Function` in struct `FunctionsClientRetrieveDefaultDefinitionResponse`
+- New anonymous field `ResourceTestStatus` in struct `FunctionsClientTestResponse`
+- New anonymous field `Function` in struct `FunctionsClientGetResponse`
+- New field `ETag` in struct `FunctionsClientGetResponse`
+- New anonymous field `StreamingJobListResult` in struct `StreamingJobsClientListByResourceGroupResponse`
+- New anonymous field `ResourceTestStatus` in struct `OutputsClientTestResponse`
+- New anonymous field `Output` in struct `OutputsClientGetResponse`
+- New field `ETag` in struct `OutputsClientGetResponse`
+- New anonymous field `PrivateEndpoint` in struct `PrivateEndpointsClientCreateOrUpdateResponse`
+- New anonymous field `StreamingJobListResult` in struct `StreamingJobsClientListResponse`
+- New anonymous field `Cluster` in struct `ClustersClientUpdateResponse`
+- New anonymous field `StreamingJob` in struct `StreamingJobsClientGetResponse`
+- New field `ETag` in struct `StreamingJobsClientGetResponse`
+- New anonymous field `Output` in struct `OutputsClientUpdateResponse`
+- New field `ETag` in struct `OutputsClientUpdateResponse`
+- New anonymous field `Transformation` in struct `TransformationsClientGetResponse`
+- New field `ETag` in struct `TransformationsClientGetResponse`
+- New anonymous field `Transformation` in struct `TransformationsClientUpdateResponse`
+- New field `ETag` in struct `TransformationsClientUpdateResponse`
+- New anonymous field `Output` in struct `OutputsClientCreateOrReplaceResponse`
+- New field `ETag` in struct `OutputsClientCreateOrReplaceResponse`
+- New anonymous field `Function` in struct `FunctionsClientUpdateResponse`
+- New field `ETag` in struct `FunctionsClientUpdateResponse`
+- New anonymous field `SubscriptionQuotasListResult` in struct `SubscriptionsClientListQuotasResponse`
+- New anonymous field `Cluster` in struct `ClustersClientCreateOrUpdateResponse`
+- New anonymous field `ClusterListResult` in struct `ClustersClientListByResourceGroupResponse`
+- New anonymous field `InputListResult` in struct `InputsClientListByStreamingJobResponse`
+- New anonymous field `ResourceTestStatus` in struct `InputsClientTestResponse`
+- New anonymous field `Transformation` in struct `TransformationsClientCreateOrReplaceResponse`
+- New field `ETag` in struct `TransformationsClientCreateOrReplaceResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `Input` in struct `InputsClientCreateOrReplaceResponse`
+- New field `ETag` in struct `InputsClientCreateOrReplaceResponse`
+- New anonymous field `Input` in struct `InputsClientUpdateResponse`
+- New field `ETag` in struct `InputsClientUpdateResponse`
+- New anonymous field `Input` in struct `InputsClientGetResponse`
+- New field `ETag` in struct `InputsClientGetResponse`
+- New anonymous field `PrivateEndpointListResult` in struct `PrivateEndpointsClientListByClusterResponse`
+- New anonymous field `FunctionListResult` in struct `FunctionsClientListByStreamingJobResponse`
+- New anonymous field `Cluster` in struct `ClustersClientGetResponse`
+- New anonymous field `Function` in struct `FunctionsClientCreateOrReplaceResponse`
+- New field `ETag` in struct `FunctionsClientCreateOrReplaceResponse`
+- New anonymous field `ClusterListResult` in struct `ClustersClientListBySubscriptionResponse`
+- New anonymous field `ClusterJobListResult` in struct `ClustersClientListStreamingJobsResponse`
+- New anonymous field `OutputListResult` in struct `OutputsClientListByStreamingJobResponse`
+- New anonymous field `StreamingJob` in struct `StreamingJobsClientUpdateResponse`
+- New field `ETag` in struct `StreamingJobsClientUpdateResponse`
+- New anonymous field `StreamingJob` in struct `StreamingJobsClientCreateOrReplaceResponse`
+- New anonymous field `PrivateEndpoint` in struct `PrivateEndpointsClientGetResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `ServiceBusQueueOutputDataSourceProperties.SystemPropertyColumns` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `AvroSerialization.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `ParquetSerialization.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Function `ErrorError.MarshalJSON` has been removed
+- Struct `Error` has been removed
+- Struct `ErrorDetails` has been removed
+- Struct `ErrorError` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

@@ -29,16 +29,16 @@ type GeographicHierarchiesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGeographicHierarchiesClient(credential azcore.TokenCredential, options *arm.ClientOptions) *GeographicHierarchiesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GeographicHierarchiesClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -78,7 +78,7 @@ func (client *GeographicHierarchiesClient) getDefaultCreateRequest(ctx context.C
 
 // getDefaultHandleResponse handles the GetDefault response.
 func (client *GeographicHierarchiesClient) getDefaultHandleResponse(resp *http.Response) (GeographicHierarchiesClientGetDefaultResponse, error) {
-	result := GeographicHierarchiesClientGetDefaultResponse{RawResponse: resp}
+	result := GeographicHierarchiesClientGetDefaultResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GeographicHierarchy); err != nil {
 		return GeographicHierarchiesClientGetDefaultResponse{}, err
 	}

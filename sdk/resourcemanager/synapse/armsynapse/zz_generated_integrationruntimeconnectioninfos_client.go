@@ -34,17 +34,17 @@ type IntegrationRuntimeConnectionInfosClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIntegrationRuntimeConnectionInfosClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IntegrationRuntimeConnectionInfosClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IntegrationRuntimeConnectionInfosClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *IntegrationRuntimeConnectionInfosClient) getCreateRequest(ctx cont
 
 // getHandleResponse handles the Get response.
 func (client *IntegrationRuntimeConnectionInfosClient) getHandleResponse(resp *http.Response) (IntegrationRuntimeConnectionInfosClientGetResponse, error) {
-	result := IntegrationRuntimeConnectionInfosClientGetResponse{RawResponse: resp}
+	result := IntegrationRuntimeConnectionInfosClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationRuntimeConnectionInfo); err != nil {
 		return IntegrationRuntimeConnectionInfosClientGetResponse{}, err
 	}

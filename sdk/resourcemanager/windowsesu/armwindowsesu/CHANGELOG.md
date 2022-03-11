@@ -1,5 +1,65 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*MultipleActivationKeysClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(MultipleActivationKeysClientListByResourceGroupResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*MultipleActivationKeysClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(MultipleActivationKeysClientListResponse, error)`
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*MultipleActivationKeysClientListByResourceGroupPager.Err` has been removed
+- Function `*MultipleActivationKeysClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*MultipleActivationKeysClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*MultipleActivationKeysClientListPager.Err` has been removed
+- Struct `MultipleActivationKeysClientCreateResult` has been removed
+- Struct `MultipleActivationKeysClientGetResult` has been removed
+- Struct `MultipleActivationKeysClientListByResourceGroupResult` has been removed
+- Struct `MultipleActivationKeysClientListResult` has been removed
+- Struct `MultipleActivationKeysClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `RawResponse` of struct `MultipleActivationKeysClientCreatePollerResponse` has been removed
+- Field `RawResponse` of struct `MultipleActivationKeysClientDeleteResponse` has been removed
+- Field `MultipleActivationKeysClientGetResult` of struct `MultipleActivationKeysClientGetResponse` has been removed
+- Field `RawResponse` of struct `MultipleActivationKeysClientGetResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `MultipleActivationKeysClientCreateResult` of struct `MultipleActivationKeysClientCreateResponse` has been removed
+- Field `RawResponse` of struct `MultipleActivationKeysClientCreateResponse` has been removed
+- Field `MultipleActivationKeysClientListResult` of struct `MultipleActivationKeysClientListResponse` has been removed
+- Field `RawResponse` of struct `MultipleActivationKeysClientListResponse` has been removed
+- Field `MultipleActivationKeysClientUpdateResult` of struct `MultipleActivationKeysClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `MultipleActivationKeysClientUpdateResponse` has been removed
+- Field `MultipleActivationKeysClientListByResourceGroupResult` of struct `MultipleActivationKeysClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `MultipleActivationKeysClientListByResourceGroupResponse` has been removed
+
+### Features Added
+
+- New function `*MultipleActivationKeysClientListPager.More() bool`
+- New function `ErrorDefinition.MarshalJSON() ([]byte, error)`
+- New function `*MultipleActivationKeysClientListByResourceGroupPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New struct `ErrorDefinition`
+- New struct `ErrorResponse`
+- New anonymous field `MultipleActivationKey` in struct `MultipleActivationKeysClientGetResponse`
+- New anonymous field `MultipleActivationKey` in struct `MultipleActivationKeysClientUpdateResponse`
+- New anonymous field `OperationList` in struct `OperationsClientListResponse`
+- New anonymous field `MultipleActivationKey` in struct `MultipleActivationKeysClientCreateResponse`
+- New anonymous field `MultipleActivationKeyList` in struct `MultipleActivationKeysClientListByResourceGroupResponse`
+- New anonymous field `MultipleActivationKeyList` in struct `MultipleActivationKeysClientListResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDefinition.MarshalJSON` has been removed
+- Struct `ErrorDefinition` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

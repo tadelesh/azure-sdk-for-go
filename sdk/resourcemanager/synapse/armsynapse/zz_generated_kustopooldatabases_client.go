@@ -34,17 +34,17 @@ type KustoPoolDatabasesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewKustoPoolDatabasesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *KustoPoolDatabasesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &KustoPoolDatabasesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *KustoPoolDatabasesClient) BeginCreateOrUpdate(ctx context.Context,
 	if err != nil {
 		return KustoPoolDatabasesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := KustoPoolDatabasesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := KustoPoolDatabasesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("KustoPoolDatabasesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return KustoPoolDatabasesClientCreateOrUpdatePollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *KustoPoolDatabasesClient) BeginDelete(ctx context.Context, resourc
 	if err != nil {
 		return KustoPoolDatabasesClientDeletePollerResponse{}, err
 	}
-	result := KustoPoolDatabasesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := KustoPoolDatabasesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("KustoPoolDatabasesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return KustoPoolDatabasesClientDeletePollerResponse{}, err
@@ -262,7 +258,7 @@ func (client *KustoPoolDatabasesClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *KustoPoolDatabasesClient) getHandleResponse(resp *http.Response) (KustoPoolDatabasesClientGetResponse, error) {
-	result := KustoPoolDatabasesClientGetResponse{RawResponse: resp}
+	result := KustoPoolDatabasesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return KustoPoolDatabasesClientGetResponse{}, err
 	}
@@ -276,19 +272,13 @@ func (client *KustoPoolDatabasesClient) getHandleResponse(resp *http.Response) (
 // kustoPoolName - The name of the Kusto pool.
 // options - KustoPoolDatabasesClientListByKustoPoolOptions contains the optional parameters for the KustoPoolDatabasesClient.ListByKustoPool
 // method.
-func (client *KustoPoolDatabasesClient) ListByKustoPool(ctx context.Context, resourceGroupName string, workspaceName string, kustoPoolName string, options *KustoPoolDatabasesClientListByKustoPoolOptions) (KustoPoolDatabasesClientListByKustoPoolResponse, error) {
-	req, err := client.listByKustoPoolCreateRequest(ctx, resourceGroupName, workspaceName, kustoPoolName, options)
-	if err != nil {
-		return KustoPoolDatabasesClientListByKustoPoolResponse{}, err
+func (client *KustoPoolDatabasesClient) ListByKustoPool(resourceGroupName string, workspaceName string, kustoPoolName string, options *KustoPoolDatabasesClientListByKustoPoolOptions) *KustoPoolDatabasesClientListByKustoPoolPager {
+	return &KustoPoolDatabasesClientListByKustoPoolPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByKustoPoolCreateRequest(ctx, resourceGroupName, workspaceName, kustoPoolName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return KustoPoolDatabasesClientListByKustoPoolResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return KustoPoolDatabasesClientListByKustoPoolResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByKustoPoolHandleResponse(resp)
 }
 
 // listByKustoPoolCreateRequest creates the ListByKustoPool request.
@@ -323,7 +313,7 @@ func (client *KustoPoolDatabasesClient) listByKustoPoolCreateRequest(ctx context
 
 // listByKustoPoolHandleResponse handles the ListByKustoPool response.
 func (client *KustoPoolDatabasesClient) listByKustoPoolHandleResponse(resp *http.Response) (KustoPoolDatabasesClientListByKustoPoolResponse, error) {
-	result := KustoPoolDatabasesClientListByKustoPoolResponse{RawResponse: resp}
+	result := KustoPoolDatabasesClientListByKustoPoolResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseListResult); err != nil {
 		return KustoPoolDatabasesClientListByKustoPoolResponse{}, err
 	}
@@ -344,9 +334,7 @@ func (client *KustoPoolDatabasesClient) BeginUpdate(ctx context.Context, resourc
 	if err != nil {
 		return KustoPoolDatabasesClientUpdatePollerResponse{}, err
 	}
-	result := KustoPoolDatabasesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := KustoPoolDatabasesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("KustoPoolDatabasesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return KustoPoolDatabasesClientUpdatePollerResponse{}, err

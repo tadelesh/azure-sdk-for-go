@@ -1,5 +1,82 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OrganizationClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(OrganizationClientListBySubscriptionResponse, error)`
+- Function `*OrganizationClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(OrganizationClientListByResourceGroupResponse, error)`
+- Function `*MarketplaceAgreementsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(MarketplaceAgreementsClientListResponse, error)`
+- Function `*OrganizationOperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OrganizationOperationsClientListResponse, error)`
+- Function `*OrganizationClientListByResourceGroupPager.Err` has been removed
+- Function `*OrganizationClientListBySubscriptionPager.Err` has been removed
+- Function `*MarketplaceAgreementsClientListPager.Err` has been removed
+- Function `*MarketplaceAgreementsClientListPager.PageResponse` has been removed
+- Function `*OrganizationClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*OrganizationOperationsClientListPager.PageResponse` has been removed
+- Function `*OrganizationClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*OrganizationOperationsClientListPager.Err` has been removed
+- Struct `MarketplaceAgreementsClientCreateResult` has been removed
+- Struct `MarketplaceAgreementsClientListResult` has been removed
+- Struct `OrganizationClientCreateResult` has been removed
+- Struct `OrganizationClientGetResult` has been removed
+- Struct `OrganizationClientListByResourceGroupResult` has been removed
+- Struct `OrganizationClientListBySubscriptionResult` has been removed
+- Struct `OrganizationClientUpdateResult` has been removed
+- Struct `OrganizationOperationsClientListResult` has been removed
+- Struct `ValidationsClientValidateOrganizationResult` has been removed
+- Field `OrganizationClientGetResult` of struct `OrganizationClientGetResponse` has been removed
+- Field `RawResponse` of struct `OrganizationClientGetResponse` has been removed
+- Field `OrganizationClientListBySubscriptionResult` of struct `OrganizationClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `OrganizationClientListBySubscriptionResponse` has been removed
+- Field `OrganizationOperationsClientListResult` of struct `OrganizationOperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OrganizationOperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OrganizationClientDeleteResponse` has been removed
+- Field `OrganizationClientUpdateResult` of struct `OrganizationClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `OrganizationClientUpdateResponse` has been removed
+- Field `OrganizationClientCreateResult` of struct `OrganizationClientCreateResponse` has been removed
+- Field `RawResponse` of struct `OrganizationClientCreateResponse` has been removed
+- Field `ValidationsClientValidateOrganizationResult` of struct `ValidationsClientValidateOrganizationResponse` has been removed
+- Field `RawResponse` of struct `ValidationsClientValidateOrganizationResponse` has been removed
+- Field `MarketplaceAgreementsClientListResult` of struct `MarketplaceAgreementsClientListResponse` has been removed
+- Field `RawResponse` of struct `MarketplaceAgreementsClientListResponse` has been removed
+- Field `OrganizationClientListByResourceGroupResult` of struct `OrganizationClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `OrganizationClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `OrganizationClientDeletePollerResponse` has been removed
+- Field `MarketplaceAgreementsClientCreateResult` of struct `MarketplaceAgreementsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `MarketplaceAgreementsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `OrganizationClientCreatePollerResponse` has been removed
+
+### Features Added
+
+- New function `*OrganizationClientListBySubscriptionPager.More() bool`
+- New function `*OrganizationOperationsClientListPager.More() bool`
+- New function `*MarketplaceAgreementsClientListPager.More() bool`
+- New function `ErrorResponseBody.MarshalJSON() ([]byte, error)`
+- New function `*OrganizationClientListByResourceGroupPager.More() bool`
+- New struct `ErrorResponseBody`
+- New struct `ResourceProviderDefaultErrorResponse`
+- New anonymous field `OrganizationResourceListResult` in struct `OrganizationClientListByResourceGroupResponse`
+- New anonymous field `OrganizationResource` in struct `ValidationsClientValidateOrganizationResponse`
+- New anonymous field `OrganizationResource` in struct `OrganizationClientUpdateResponse`
+- New anonymous field `AgreementResourceListResponse` in struct `MarketplaceAgreementsClientListResponse`
+- New anonymous field `OperationListResult` in struct `OrganizationOperationsClientListResponse`
+- New anonymous field `AgreementResource` in struct `MarketplaceAgreementsClientCreateResponse`
+- New anonymous field `OrganizationResource` in struct `OrganizationClientGetResponse`
+- New anonymous field `OrganizationResourceListResult` in struct `OrganizationClientListBySubscriptionResponse`
+- New anonymous field `OrganizationResource` in struct `OrganizationClientCreateResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorResponseBody.MarshalJSON` has been removed
+- Struct `ErrorResponseBody` has been removed
+- Struct `ResourceProviderDefaultErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

@@ -34,17 +34,17 @@ type TestTypesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTestTypesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TestTypesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TestTypesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *TestTypesClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *TestTypesClient) getHandleResponse(resp *http.Response) (TestTypesClientGetResponse, error) {
-	result := TestTypesClientGetResponse{RawResponse: resp}
+	result := TestTypesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TestTypeResource); err != nil {
 		return TestTypesClientGetResponse{}, err
 	}
@@ -154,7 +154,7 @@ func (client *TestTypesClient) listCreateRequest(ctx context.Context, resourceGr
 
 // listHandleResponse handles the List response.
 func (client *TestTypesClient) listHandleResponse(resp *http.Response) (TestTypesClientListResponse, error) {
-	result := TestTypesClientListResponse{RawResponse: resp}
+	result := TestTypesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TestTypeListResult); err != nil {
 		return TestTypesClientListResponse{}, err
 	}

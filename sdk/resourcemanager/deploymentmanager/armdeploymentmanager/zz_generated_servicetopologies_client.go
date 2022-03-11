@@ -35,17 +35,17 @@ type ServiceTopologiesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServiceTopologiesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServiceTopologiesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServiceTopologiesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *ServiceTopologiesClient) createOrUpdateCreateRequest(ctx context.C
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ServiceTopologiesClient) createOrUpdateHandleResponse(resp *http.Response) (ServiceTopologiesClientCreateOrUpdateResponse, error) {
-	result := ServiceTopologiesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ServiceTopologiesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceTopologyResource); err != nil {
 		return ServiceTopologiesClientCreateOrUpdateResponse{}, err
 	}
@@ -125,7 +125,7 @@ func (client *ServiceTopologiesClient) Delete(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ServiceTopologiesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ServiceTopologiesClientDeleteResponse{RawResponse: resp}, nil
+	return ServiceTopologiesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -202,7 +202,7 @@ func (client *ServiceTopologiesClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *ServiceTopologiesClient) getHandleResponse(resp *http.Response) (ServiceTopologiesClientGetResponse, error) {
-	result := ServiceTopologiesClientGetResponse{RawResponse: resp}
+	result := ServiceTopologiesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceTopologyResource); err != nil {
 		return ServiceTopologiesClientGetResponse{}, err
 	}
@@ -252,7 +252,7 @@ func (client *ServiceTopologiesClient) listCreateRequest(ctx context.Context, re
 
 // listHandleResponse handles the List response.
 func (client *ServiceTopologiesClient) listHandleResponse(resp *http.Response) (ServiceTopologiesClientListResponse, error) {
-	result := ServiceTopologiesClientListResponse{RawResponse: resp}
+	result := ServiceTopologiesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceTopologyResourceArray); err != nil {
 		return ServiceTopologiesClientListResponse{}, err
 	}

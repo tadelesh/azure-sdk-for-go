@@ -35,17 +35,17 @@ type ProfilesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProfilesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ProfilesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProfilesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *ProfilesClient) createOrUpdateCreateRequest(ctx context.Context, r
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ProfilesClient) createOrUpdateHandleResponse(resp *http.Response) (ProfilesClientCreateOrUpdateResponse, error) {
-	result := ProfilesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ProfilesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Profile); err != nil {
 		return ProfilesClientCreateOrUpdateResponse{}, err
 	}
@@ -116,9 +116,7 @@ func (client *ProfilesClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ProfilesClientDeletePollerResponse{}, err
 	}
-	result := ProfilesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ProfilesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ProfilesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return ProfilesClientDeletePollerResponse{}, err
@@ -223,7 +221,7 @@ func (client *ProfilesClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *ProfilesClient) getHandleResponse(resp *http.Response) (ProfilesClientGetResponse, error) {
-	result := ProfilesClientGetResponse{RawResponse: resp}
+	result := ProfilesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Profile); err != nil {
 		return ProfilesClientGetResponse{}, err
 	}
@@ -270,7 +268,7 @@ func (client *ProfilesClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *ProfilesClient) listHandleResponse(resp *http.Response) (ProfilesClientListResponse, error) {
-	result := ProfilesClientListResponse{RawResponse: resp}
+	result := ProfilesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProfileListResult); err != nil {
 		return ProfilesClientListResponse{}, err
 	}
@@ -312,7 +310,7 @@ func (client *ProfilesClient) listAllCreateRequest(ctx context.Context, options 
 
 // listAllHandleResponse handles the ListAll response.
 func (client *ProfilesClient) listAllHandleResponse(resp *http.Response) (ProfilesClientListAllResponse, error) {
-	result := ProfilesClientListAllResponse{RawResponse: resp}
+	result := ProfilesClientListAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProfileListResult); err != nil {
 		return ProfilesClientListAllResponse{}, err
 	}
@@ -368,7 +366,7 @@ func (client *ProfilesClient) updateTagsCreateRequest(ctx context.Context, resou
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *ProfilesClient) updateTagsHandleResponse(resp *http.Response) (ProfilesClientUpdateTagsResponse, error) {
-	result := ProfilesClientUpdateTagsResponse{RawResponse: resp}
+	result := ProfilesClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Profile); err != nil {
 		return ProfilesClientUpdateTagsResponse{}, err
 	}

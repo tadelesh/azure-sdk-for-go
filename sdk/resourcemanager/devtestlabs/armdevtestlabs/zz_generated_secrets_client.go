@@ -35,17 +35,17 @@ type SecretsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSecretsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SecretsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SecretsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *SecretsClient) BeginCreateOrUpdate(ctx context.Context, resourceGr
 	if err != nil {
 		return SecretsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := SecretsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SecretsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SecretsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return SecretsClientCreateOrUpdatePollerResponse{}, err
@@ -147,7 +145,7 @@ func (client *SecretsClient) Delete(ctx context.Context, resourceGroupName strin
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SecretsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SecretsClientDeleteResponse{RawResponse: resp}, nil
+	return SecretsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -245,7 +243,7 @@ func (client *SecretsClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *SecretsClient) getHandleResponse(resp *http.Response) (SecretsClientGetResponse, error) {
-	result := SecretsClientGetResponse{RawResponse: resp}
+	result := SecretsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Secret); err != nil {
 		return SecretsClientGetResponse{}, err
 	}
@@ -314,7 +312,7 @@ func (client *SecretsClient) listCreateRequest(ctx context.Context, resourceGrou
 
 // listHandleResponse handles the List response.
 func (client *SecretsClient) listHandleResponse(resp *http.Response) (SecretsClientListResponse, error) {
-	result := SecretsClientListResponse{RawResponse: resp}
+	result := SecretsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecretList); err != nil {
 		return SecretsClientListResponse{}, err
 	}
@@ -380,7 +378,7 @@ func (client *SecretsClient) updateCreateRequest(ctx context.Context, resourceGr
 
 // updateHandleResponse handles the Update response.
 func (client *SecretsClient) updateHandleResponse(resp *http.Response) (SecretsClientUpdateResponse, error) {
-	result := SecretsClientUpdateResponse{RawResponse: resp}
+	result := SecretsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Secret); err != nil {
 		return SecretsClientUpdateResponse{}, err
 	}

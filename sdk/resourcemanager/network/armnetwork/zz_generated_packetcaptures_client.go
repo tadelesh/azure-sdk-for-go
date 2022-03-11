@@ -35,17 +35,17 @@ type PacketCapturesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPacketCapturesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PacketCapturesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PacketCapturesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *PacketCapturesClient) BeginCreate(ctx context.Context, resourceGro
 	if err != nil {
 		return PacketCapturesClientCreatePollerResponse{}, err
 	}
-	result := PacketCapturesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PacketCapturesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("PacketCapturesClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return PacketCapturesClientCreatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *PacketCapturesClient) BeginDelete(ctx context.Context, resourceGro
 	if err != nil {
 		return PacketCapturesClientDeletePollerResponse{}, err
 	}
-	result := PacketCapturesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PacketCapturesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PacketCapturesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return PacketCapturesClientDeletePollerResponse{}, err
@@ -248,7 +244,7 @@ func (client *PacketCapturesClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *PacketCapturesClient) getHandleResponse(resp *http.Response) (PacketCapturesClientGetResponse, error) {
-	result := PacketCapturesClientGetResponse{RawResponse: resp}
+	result := PacketCapturesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PacketCaptureResult); err != nil {
 		return PacketCapturesClientGetResponse{}, err
 	}
@@ -267,9 +263,7 @@ func (client *PacketCapturesClient) BeginGetStatus(ctx context.Context, resource
 	if err != nil {
 		return PacketCapturesClientGetStatusPollerResponse{}, err
 	}
-	result := PacketCapturesClientGetStatusPollerResponse{
-		RawResponse: resp,
-	}
+	result := PacketCapturesClientGetStatusPollerResponse{}
 	pt, err := armruntime.NewPoller("PacketCapturesClient.GetStatus", "location", resp, client.pl)
 	if err != nil {
 		return PacketCapturesClientGetStatusPollerResponse{}, err
@@ -332,19 +326,13 @@ func (client *PacketCapturesClient) getStatusCreateRequest(ctx context.Context, 
 // resourceGroupName - The name of the resource group.
 // networkWatcherName - The name of the Network Watcher resource.
 // options - PacketCapturesClientListOptions contains the optional parameters for the PacketCapturesClient.List method.
-func (client *PacketCapturesClient) List(ctx context.Context, resourceGroupName string, networkWatcherName string, options *PacketCapturesClientListOptions) (PacketCapturesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, networkWatcherName, options)
-	if err != nil {
-		return PacketCapturesClientListResponse{}, err
+func (client *PacketCapturesClient) List(resourceGroupName string, networkWatcherName string, options *PacketCapturesClientListOptions) *PacketCapturesClientListPager {
+	return &PacketCapturesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, networkWatcherName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return PacketCapturesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return PacketCapturesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -375,7 +363,7 @@ func (client *PacketCapturesClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *PacketCapturesClient) listHandleResponse(resp *http.Response) (PacketCapturesClientListResponse, error) {
-	result := PacketCapturesClientListResponse{RawResponse: resp}
+	result := PacketCapturesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PacketCaptureListResult); err != nil {
 		return PacketCapturesClientListResponse{}, err
 	}
@@ -394,9 +382,7 @@ func (client *PacketCapturesClient) BeginStop(ctx context.Context, resourceGroup
 	if err != nil {
 		return PacketCapturesClientStopPollerResponse{}, err
 	}
-	result := PacketCapturesClientStopPollerResponse{
-		RawResponse: resp,
-	}
+	result := PacketCapturesClientStopPollerResponse{}
 	pt, err := armruntime.NewPoller("PacketCapturesClient.Stop", "location", resp, client.pl)
 	if err != nil {
 		return PacketCapturesClientStopPollerResponse{}, err

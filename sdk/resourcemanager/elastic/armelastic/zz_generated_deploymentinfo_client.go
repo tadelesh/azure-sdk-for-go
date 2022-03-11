@@ -42,17 +42,17 @@ type DeploymentInfoClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDeploymentInfoClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DeploymentInfoClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DeploymentInfoClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *DeploymentInfoClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *DeploymentInfoClient) listHandleResponse(resp *http.Response) (DeploymentInfoClientListResponse, error) {
-	result := DeploymentInfoClientListResponse{RawResponse: resp}
+	result := DeploymentInfoClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentInfoResponse); err != nil {
 		return DeploymentInfoClientListResponse{}, err
 	}

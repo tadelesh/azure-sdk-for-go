@@ -35,17 +35,17 @@ type AgentPoolsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAgentPoolsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AgentPoolsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AgentPoolsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *AgentPoolsClient) BeginCreateOrUpdate(ctx context.Context, resourc
 	if err != nil {
 		return AgentPoolsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := AgentPoolsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AgentPoolsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AgentPoolsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return AgentPoolsClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *AgentPoolsClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return AgentPoolsClientDeletePollerResponse{}, err
 	}
-	result := AgentPoolsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AgentPoolsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AgentPoolsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return AgentPoolsClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *AgentPoolsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *AgentPoolsClient) getHandleResponse(resp *http.Response) (AgentPoolsClientGetResponse, error) {
-	result := AgentPoolsClientGetResponse{RawResponse: resp}
+	result := AgentPoolsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AgentPool); err != nil {
 		return AgentPoolsClientGetResponse{}, err
 	}
@@ -304,7 +300,7 @@ func (client *AgentPoolsClient) getAvailableAgentPoolVersionsCreateRequest(ctx c
 
 // getAvailableAgentPoolVersionsHandleResponse handles the GetAvailableAgentPoolVersions response.
 func (client *AgentPoolsClient) getAvailableAgentPoolVersionsHandleResponse(resp *http.Response) (AgentPoolsClientGetAvailableAgentPoolVersionsResponse, error) {
-	result := AgentPoolsClientGetAvailableAgentPoolVersionsResponse{RawResponse: resp}
+	result := AgentPoolsClientGetAvailableAgentPoolVersionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AgentPoolAvailableVersions); err != nil {
 		return AgentPoolsClientGetAvailableAgentPoolVersionsResponse{}, err
 	}
@@ -365,7 +361,7 @@ func (client *AgentPoolsClient) getUpgradeProfileCreateRequest(ctx context.Conte
 
 // getUpgradeProfileHandleResponse handles the GetUpgradeProfile response.
 func (client *AgentPoolsClient) getUpgradeProfileHandleResponse(resp *http.Response) (AgentPoolsClientGetUpgradeProfileResponse, error) {
-	result := AgentPoolsClientGetUpgradeProfileResponse{RawResponse: resp}
+	result := AgentPoolsClientGetUpgradeProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AgentPoolUpgradeProfile); err != nil {
 		return AgentPoolsClientGetUpgradeProfileResponse{}, err
 	}
@@ -417,7 +413,7 @@ func (client *AgentPoolsClient) listCreateRequest(ctx context.Context, resourceG
 
 // listHandleResponse handles the List response.
 func (client *AgentPoolsClient) listHandleResponse(resp *http.Response) (AgentPoolsClientListResponse, error) {
-	result := AgentPoolsClientListResponse{RawResponse: resp}
+	result := AgentPoolsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AgentPoolListResult); err != nil {
 		return AgentPoolsClientListResponse{}, err
 	}
@@ -438,9 +434,7 @@ func (client *AgentPoolsClient) BeginUpgradeNodeImageVersion(ctx context.Context
 	if err != nil {
 		return AgentPoolsClientUpgradeNodeImageVersionPollerResponse{}, err
 	}
-	result := AgentPoolsClientUpgradeNodeImageVersionPollerResponse{
-		RawResponse: resp,
-	}
+	result := AgentPoolsClientUpgradeNodeImageVersionPollerResponse{}
 	pt, err := armruntime.NewPoller("AgentPoolsClient.UpgradeNodeImageVersion", "", resp, client.pl)
 	if err != nil {
 		return AgentPoolsClientUpgradeNodeImageVersionPollerResponse{}, err

@@ -11,7 +11,6 @@ package armextendedlocation
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
@@ -19,9 +18,6 @@ import (
 type CustomLocationsClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *CustomLocationsClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -29,11 +25,10 @@ type CustomLocationsClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l CustomLocationsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CustomLocationsClientCreateOrUpdateResponse, error) {
 	respType := CustomLocationsClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.CustomLocation)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.CustomLocation)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -46,24 +41,16 @@ func (l *CustomLocationsClientCreateOrUpdatePollerResponse) Resume(ctx context.C
 	poller := &CustomLocationsClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // CustomLocationsClientCreateOrUpdateResponse contains the response from method CustomLocationsClient.CreateOrUpdate.
 type CustomLocationsClientCreateOrUpdateResponse struct {
-	CustomLocationsClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CustomLocationsClientCreateOrUpdateResult contains the result from method CustomLocationsClient.CreateOrUpdate.
-type CustomLocationsClientCreateOrUpdateResult struct {
 	CustomLocation
 }
 
@@ -71,9 +58,6 @@ type CustomLocationsClientCreateOrUpdateResult struct {
 type CustomLocationsClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *CustomLocationsClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -81,11 +65,10 @@ type CustomLocationsClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l CustomLocationsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CustomLocationsClientDeleteResponse, error) {
 	respType := CustomLocationsClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -98,89 +81,45 @@ func (l *CustomLocationsClientDeletePollerResponse) Resume(ctx context.Context, 
 	poller := &CustomLocationsClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // CustomLocationsClientDeleteResponse contains the response from method CustomLocationsClient.Delete.
 type CustomLocationsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // CustomLocationsClientGetResponse contains the response from method CustomLocationsClient.Get.
 type CustomLocationsClientGetResponse struct {
-	CustomLocationsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CustomLocationsClientGetResult contains the result from method CustomLocationsClient.Get.
-type CustomLocationsClientGetResult struct {
 	CustomLocation
 }
 
 // CustomLocationsClientListByResourceGroupResponse contains the response from method CustomLocationsClient.ListByResourceGroup.
 type CustomLocationsClientListByResourceGroupResponse struct {
-	CustomLocationsClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CustomLocationsClientListByResourceGroupResult contains the result from method CustomLocationsClient.ListByResourceGroup.
-type CustomLocationsClientListByResourceGroupResult struct {
 	CustomLocationListResult
 }
 
 // CustomLocationsClientListBySubscriptionResponse contains the response from method CustomLocationsClient.ListBySubscription.
 type CustomLocationsClientListBySubscriptionResponse struct {
-	CustomLocationsClientListBySubscriptionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CustomLocationsClientListBySubscriptionResult contains the result from method CustomLocationsClient.ListBySubscription.
-type CustomLocationsClientListBySubscriptionResult struct {
 	CustomLocationListResult
 }
 
 // CustomLocationsClientListEnabledResourceTypesResponse contains the response from method CustomLocationsClient.ListEnabledResourceTypes.
 type CustomLocationsClientListEnabledResourceTypesResponse struct {
-	CustomLocationsClientListEnabledResourceTypesResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CustomLocationsClientListEnabledResourceTypesResult contains the result from method CustomLocationsClient.ListEnabledResourceTypes.
-type CustomLocationsClientListEnabledResourceTypesResult struct {
 	EnabledResourceTypesListResult
 }
 
 // CustomLocationsClientListOperationsResponse contains the response from method CustomLocationsClient.ListOperations.
 type CustomLocationsClientListOperationsResponse struct {
-	CustomLocationsClientListOperationsResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CustomLocationsClientListOperationsResult contains the result from method CustomLocationsClient.ListOperations.
-type CustomLocationsClientListOperationsResult struct {
 	CustomLocationOperationsList
 }
 
 // CustomLocationsClientUpdateResponse contains the response from method CustomLocationsClient.Update.
 type CustomLocationsClientUpdateResponse struct {
-	CustomLocationsClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CustomLocationsClientUpdateResult contains the result from method CustomLocationsClient.Update.
-type CustomLocationsClientUpdateResult struct {
 	CustomLocation
 }

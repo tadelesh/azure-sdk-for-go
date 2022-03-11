@@ -11,85 +11,41 @@ package armpowerbidedicated
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // AutoScaleVCoresClientCreateResponse contains the response from method AutoScaleVCoresClient.Create.
 type AutoScaleVCoresClientCreateResponse struct {
-	AutoScaleVCoresClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AutoScaleVCoresClientCreateResult contains the result from method AutoScaleVCoresClient.Create.
-type AutoScaleVCoresClientCreateResult struct {
 	AutoScaleVCore
 }
 
 // AutoScaleVCoresClientDeleteResponse contains the response from method AutoScaleVCoresClient.Delete.
 type AutoScaleVCoresClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // AutoScaleVCoresClientGetResponse contains the response from method AutoScaleVCoresClient.Get.
 type AutoScaleVCoresClientGetResponse struct {
-	AutoScaleVCoresClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AutoScaleVCoresClientGetResult contains the result from method AutoScaleVCoresClient.Get.
-type AutoScaleVCoresClientGetResult struct {
 	AutoScaleVCore
 }
 
 // AutoScaleVCoresClientListByResourceGroupResponse contains the response from method AutoScaleVCoresClient.ListByResourceGroup.
 type AutoScaleVCoresClientListByResourceGroupResponse struct {
-	AutoScaleVCoresClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AutoScaleVCoresClientListByResourceGroupResult contains the result from method AutoScaleVCoresClient.ListByResourceGroup.
-type AutoScaleVCoresClientListByResourceGroupResult struct {
 	AutoScaleVCoreListResult
 }
 
 // AutoScaleVCoresClientListBySubscriptionResponse contains the response from method AutoScaleVCoresClient.ListBySubscription.
 type AutoScaleVCoresClientListBySubscriptionResponse struct {
-	AutoScaleVCoresClientListBySubscriptionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AutoScaleVCoresClientListBySubscriptionResult contains the result from method AutoScaleVCoresClient.ListBySubscription.
-type AutoScaleVCoresClientListBySubscriptionResult struct {
 	AutoScaleVCoreListResult
 }
 
 // AutoScaleVCoresClientUpdateResponse contains the response from method AutoScaleVCoresClient.Update.
 type AutoScaleVCoresClientUpdateResponse struct {
-	AutoScaleVCoresClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AutoScaleVCoresClientUpdateResult contains the result from method AutoScaleVCoresClient.Update.
-type AutoScaleVCoresClientUpdateResult struct {
 	AutoScaleVCore
 }
 
 // CapacitiesClientCheckNameAvailabilityResponse contains the response from method CapacitiesClient.CheckNameAvailability.
 type CapacitiesClientCheckNameAvailabilityResponse struct {
-	CapacitiesClientCheckNameAvailabilityResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CapacitiesClientCheckNameAvailabilityResult contains the result from method CapacitiesClient.CheckNameAvailability.
-type CapacitiesClientCheckNameAvailabilityResult struct {
 	CheckCapacityNameAvailabilityResult
 }
 
@@ -97,9 +53,6 @@ type CapacitiesClientCheckNameAvailabilityResult struct {
 type CapacitiesClientCreatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *CapacitiesClientCreatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -107,11 +60,10 @@ type CapacitiesClientCreatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l CapacitiesClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CapacitiesClientCreateResponse, error) {
 	respType := CapacitiesClientCreateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DedicatedCapacity)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DedicatedCapacity)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -124,24 +76,16 @@ func (l *CapacitiesClientCreatePollerResponse) Resume(ctx context.Context, clien
 	poller := &CapacitiesClientCreatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // CapacitiesClientCreateResponse contains the response from method CapacitiesClient.Create.
 type CapacitiesClientCreateResponse struct {
-	CapacitiesClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CapacitiesClientCreateResult contains the result from method CapacitiesClient.Create.
-type CapacitiesClientCreateResult struct {
 	DedicatedCapacity
 }
 
@@ -149,9 +93,6 @@ type CapacitiesClientCreateResult struct {
 type CapacitiesClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *CapacitiesClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -159,11 +100,10 @@ type CapacitiesClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l CapacitiesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CapacitiesClientDeleteResponse, error) {
 	respType := CapacitiesClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -176,78 +116,41 @@ func (l *CapacitiesClientDeletePollerResponse) Resume(ctx context.Context, clien
 	poller := &CapacitiesClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // CapacitiesClientDeleteResponse contains the response from method CapacitiesClient.Delete.
 type CapacitiesClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // CapacitiesClientGetDetailsResponse contains the response from method CapacitiesClient.GetDetails.
 type CapacitiesClientGetDetailsResponse struct {
-	CapacitiesClientGetDetailsResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CapacitiesClientGetDetailsResult contains the result from method CapacitiesClient.GetDetails.
-type CapacitiesClientGetDetailsResult struct {
 	DedicatedCapacity
 }
 
 // CapacitiesClientListByResourceGroupResponse contains the response from method CapacitiesClient.ListByResourceGroup.
 type CapacitiesClientListByResourceGroupResponse struct {
-	CapacitiesClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CapacitiesClientListByResourceGroupResult contains the result from method CapacitiesClient.ListByResourceGroup.
-type CapacitiesClientListByResourceGroupResult struct {
 	DedicatedCapacities
 }
 
 // CapacitiesClientListResponse contains the response from method CapacitiesClient.List.
 type CapacitiesClientListResponse struct {
-	CapacitiesClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CapacitiesClientListResult contains the result from method CapacitiesClient.List.
-type CapacitiesClientListResult struct {
 	DedicatedCapacities
 }
 
 // CapacitiesClientListSKUsForCapacityResponse contains the response from method CapacitiesClient.ListSKUsForCapacity.
 type CapacitiesClientListSKUsForCapacityResponse struct {
-	CapacitiesClientListSKUsForCapacityResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CapacitiesClientListSKUsForCapacityResult contains the result from method CapacitiesClient.ListSKUsForCapacity.
-type CapacitiesClientListSKUsForCapacityResult struct {
 	SKUEnumerationForExistingResourceResult
 }
 
 // CapacitiesClientListSKUsResponse contains the response from method CapacitiesClient.ListSKUs.
 type CapacitiesClientListSKUsResponse struct {
-	CapacitiesClientListSKUsResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CapacitiesClientListSKUsResult contains the result from method CapacitiesClient.ListSKUs.
-type CapacitiesClientListSKUsResult struct {
 	SKUEnumerationForNewResourceResult
 }
 
@@ -255,9 +158,6 @@ type CapacitiesClientListSKUsResult struct {
 type CapacitiesClientResumePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *CapacitiesClientResumePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -265,11 +165,10 @@ type CapacitiesClientResumePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l CapacitiesClientResumePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CapacitiesClientResumeResponse, error) {
 	respType := CapacitiesClientResumeResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -282,28 +181,23 @@ func (l *CapacitiesClientResumePollerResponse) Resume(ctx context.Context, clien
 	poller := &CapacitiesClientResumePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // CapacitiesClientResumeResponse contains the response from method CapacitiesClient.Resume.
 type CapacitiesClientResumeResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // CapacitiesClientSuspendPollerResponse contains the response from method CapacitiesClient.Suspend.
 type CapacitiesClientSuspendPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *CapacitiesClientSuspendPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -311,11 +205,10 @@ type CapacitiesClientSuspendPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l CapacitiesClientSuspendPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CapacitiesClientSuspendResponse, error) {
 	respType := CapacitiesClientSuspendResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -328,28 +221,23 @@ func (l *CapacitiesClientSuspendPollerResponse) Resume(ctx context.Context, clie
 	poller := &CapacitiesClientSuspendPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // CapacitiesClientSuspendResponse contains the response from method CapacitiesClient.Suspend.
 type CapacitiesClientSuspendResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // CapacitiesClientUpdatePollerResponse contains the response from method CapacitiesClient.Update.
 type CapacitiesClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *CapacitiesClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -357,11 +245,10 @@ type CapacitiesClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l CapacitiesClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (CapacitiesClientUpdateResponse, error) {
 	respType := CapacitiesClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DedicatedCapacity)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DedicatedCapacity)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -374,35 +261,20 @@ func (l *CapacitiesClientUpdatePollerResponse) Resume(ctx context.Context, clien
 	poller := &CapacitiesClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // CapacitiesClientUpdateResponse contains the response from method CapacitiesClient.Update.
 type CapacitiesClientUpdateResponse struct {
-	CapacitiesClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CapacitiesClientUpdateResult contains the result from method CapacitiesClient.Update.
-type CapacitiesClientUpdateResult struct {
 	DedicatedCapacity
 }
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	OperationListResult
 }

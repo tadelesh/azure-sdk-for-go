@@ -34,17 +34,17 @@ type ComponentLinkedStorageAccountsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewComponentLinkedStorageAccountsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ComponentLinkedStorageAccountsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ComponentLinkedStorageAccountsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *ComponentLinkedStorageAccountsClient) createAndUpdateCreateRequest
 
 // createAndUpdateHandleResponse handles the CreateAndUpdate response.
 func (client *ComponentLinkedStorageAccountsClient) createAndUpdateHandleResponse(resp *http.Response) (ComponentLinkedStorageAccountsClientCreateAndUpdateResponse, error) {
-	result := ComponentLinkedStorageAccountsClientCreateAndUpdateResponse{RawResponse: resp}
+	result := ComponentLinkedStorageAccountsClientCreateAndUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentLinkedStorageAccounts); err != nil {
 		return ComponentLinkedStorageAccountsClientCreateAndUpdateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *ComponentLinkedStorageAccountsClient) Delete(ctx context.Context, 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ComponentLinkedStorageAccountsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ComponentLinkedStorageAccountsClientDeleteResponse{RawResponse: resp}, nil
+	return ComponentLinkedStorageAccountsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -218,7 +218,7 @@ func (client *ComponentLinkedStorageAccountsClient) getCreateRequest(ctx context
 
 // getHandleResponse handles the Get response.
 func (client *ComponentLinkedStorageAccountsClient) getHandleResponse(resp *http.Response) (ComponentLinkedStorageAccountsClientGetResponse, error) {
-	result := ComponentLinkedStorageAccountsClientGetResponse{RawResponse: resp}
+	result := ComponentLinkedStorageAccountsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentLinkedStorageAccounts); err != nil {
 		return ComponentLinkedStorageAccountsClientGetResponse{}, err
 	}
@@ -281,7 +281,7 @@ func (client *ComponentLinkedStorageAccountsClient) updateCreateRequest(ctx cont
 
 // updateHandleResponse handles the Update response.
 func (client *ComponentLinkedStorageAccountsClient) updateHandleResponse(resp *http.Response) (ComponentLinkedStorageAccountsClientUpdateResponse, error) {
-	result := ComponentLinkedStorageAccountsClientUpdateResponse{RawResponse: resp}
+	result := ComponentLinkedStorageAccountsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ComponentLinkedStorageAccounts); err != nil {
 		return ComponentLinkedStorageAccountsClientUpdateResponse{}, err
 	}

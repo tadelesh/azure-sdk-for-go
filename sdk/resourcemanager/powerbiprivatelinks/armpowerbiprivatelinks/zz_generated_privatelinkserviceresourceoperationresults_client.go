@@ -36,18 +36,18 @@ type PrivateLinkServiceResourceOperationResultsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateLinkServiceResourceOperationResultsClient(subscriptionID string, operationID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateLinkServiceResourceOperationResultsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateLinkServiceResourceOperationResultsClient{
 		subscriptionID: subscriptionID,
 		operationID:    operationID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *PrivateLinkServiceResourceOperationResultsClient) BeginGet(ctx con
 	if err != nil {
 		return PrivateLinkServiceResourceOperationResultsClientGetPollerResponse{}, err
 	}
-	result := PrivateLinkServiceResourceOperationResultsClientGetPollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateLinkServiceResourceOperationResultsClientGetPollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateLinkServiceResourceOperationResultsClient.Get", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return PrivateLinkServiceResourceOperationResultsClientGetPollerResponse{}, err

@@ -34,17 +34,17 @@ type ProviderShareSubscriptionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProviderShareSubscriptionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ProviderShareSubscriptionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProviderShareSubscriptionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -109,7 +109,7 @@ func (client *ProviderShareSubscriptionsClient) adjustCreateRequest(ctx context.
 
 // adjustHandleResponse handles the Adjust response.
 func (client *ProviderShareSubscriptionsClient) adjustHandleResponse(resp *http.Response) (ProviderShareSubscriptionsClientAdjustResponse, error) {
-	result := ProviderShareSubscriptionsClientAdjustResponse{RawResponse: resp}
+	result := ProviderShareSubscriptionsClientAdjustResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProviderShareSubscription); err != nil {
 		return ProviderShareSubscriptionsClientAdjustResponse{}, err
 	}
@@ -175,7 +175,7 @@ func (client *ProviderShareSubscriptionsClient) getByShareCreateRequest(ctx cont
 
 // getByShareHandleResponse handles the GetByShare response.
 func (client *ProviderShareSubscriptionsClient) getByShareHandleResponse(resp *http.Response) (ProviderShareSubscriptionsClientGetByShareResponse, error) {
-	result := ProviderShareSubscriptionsClientGetByShareResponse{RawResponse: resp}
+	result := ProviderShareSubscriptionsClientGetByShareResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProviderShareSubscription); err != nil {
 		return ProviderShareSubscriptionsClientGetByShareResponse{}, err
 	}
@@ -236,7 +236,7 @@ func (client *ProviderShareSubscriptionsClient) listByShareCreateRequest(ctx con
 
 // listByShareHandleResponse handles the ListByShare response.
 func (client *ProviderShareSubscriptionsClient) listByShareHandleResponse(resp *http.Response) (ProviderShareSubscriptionsClientListByShareResponse, error) {
-	result := ProviderShareSubscriptionsClientListByShareResponse{RawResponse: resp}
+	result := ProviderShareSubscriptionsClientListByShareResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProviderShareSubscriptionList); err != nil {
 		return ProviderShareSubscriptionsClientListByShareResponse{}, err
 	}
@@ -303,7 +303,7 @@ func (client *ProviderShareSubscriptionsClient) reinstateCreateRequest(ctx conte
 
 // reinstateHandleResponse handles the Reinstate response.
 func (client *ProviderShareSubscriptionsClient) reinstateHandleResponse(resp *http.Response) (ProviderShareSubscriptionsClientReinstateResponse, error) {
-	result := ProviderShareSubscriptionsClientReinstateResponse{RawResponse: resp}
+	result := ProviderShareSubscriptionsClientReinstateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProviderShareSubscription); err != nil {
 		return ProviderShareSubscriptionsClientReinstateResponse{}, err
 	}
@@ -323,9 +323,7 @@ func (client *ProviderShareSubscriptionsClient) BeginRevoke(ctx context.Context,
 	if err != nil {
 		return ProviderShareSubscriptionsClientRevokePollerResponse{}, err
 	}
-	result := ProviderShareSubscriptionsClientRevokePollerResponse{
-		RawResponse: resp,
-	}
+	result := ProviderShareSubscriptionsClientRevokePollerResponse{}
 	pt, err := armruntime.NewPoller("ProviderShareSubscriptionsClient.Revoke", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ProviderShareSubscriptionsClientRevokePollerResponse{}, err

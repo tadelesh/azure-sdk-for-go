@@ -38,19 +38,19 @@ type ReplicationFabricsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReplicationFabricsClient(resourceName string, resourceGroupName string, subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReplicationFabricsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReplicationFabricsClient{
 		resourceName:      resourceName,
 		resourceGroupName: resourceGroupName,
 		subscriptionID:    subscriptionID,
-		host:              string(cp.Endpoint),
-		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:              string(ep),
+		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -65,9 +65,7 @@ func (client *ReplicationFabricsClient) BeginCheckConsistency(ctx context.Contex
 	if err != nil {
 		return ReplicationFabricsClientCheckConsistencyPollerResponse{}, err
 	}
-	result := ReplicationFabricsClientCheckConsistencyPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationFabricsClientCheckConsistencyPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationFabricsClient.CheckConsistency", "", resp, client.pl)
 	if err != nil {
 		return ReplicationFabricsClientCheckConsistencyPollerResponse{}, err
@@ -119,7 +117,7 @@ func (client *ReplicationFabricsClient) checkConsistencyCreateRequest(ctx contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -136,9 +134,7 @@ func (client *ReplicationFabricsClient) BeginCreate(ctx context.Context, fabricN
 	if err != nil {
 		return ReplicationFabricsClientCreatePollerResponse{}, err
 	}
-	result := ReplicationFabricsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationFabricsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationFabricsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return ReplicationFabricsClientCreatePollerResponse{}, err
@@ -190,7 +186,7 @@ func (client *ReplicationFabricsClient) createCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, input)
@@ -206,9 +202,7 @@ func (client *ReplicationFabricsClient) BeginDelete(ctx context.Context, fabricN
 	if err != nil {
 		return ReplicationFabricsClientDeletePollerResponse{}, err
 	}
-	result := ReplicationFabricsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationFabricsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationFabricsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ReplicationFabricsClientDeletePollerResponse{}, err
@@ -260,7 +254,7 @@ func (client *ReplicationFabricsClient) deleteCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	return req, nil
 }
@@ -308,7 +302,7 @@ func (client *ReplicationFabricsClient) getCreateRequest(ctx context.Context, fa
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	if options != nil && options.Filter != nil {
 		reqQP.Set("$filter", *options.Filter)
 	}
@@ -319,7 +313,7 @@ func (client *ReplicationFabricsClient) getCreateRequest(ctx context.Context, fa
 
 // getHandleResponse handles the Get response.
 func (client *ReplicationFabricsClient) getHandleResponse(resp *http.Response) (ReplicationFabricsClientGetResponse, error) {
-	result := ReplicationFabricsClientGetResponse{RawResponse: resp}
+	result := ReplicationFabricsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Fabric); err != nil {
 		return ReplicationFabricsClientGetResponse{}, err
 	}
@@ -361,7 +355,7 @@ func (client *ReplicationFabricsClient) listCreateRequest(ctx context.Context, o
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -369,7 +363,7 @@ func (client *ReplicationFabricsClient) listCreateRequest(ctx context.Context, o
 
 // listHandleResponse handles the List response.
 func (client *ReplicationFabricsClient) listHandleResponse(resp *http.Response) (ReplicationFabricsClientListResponse, error) {
-	result := ReplicationFabricsClientListResponse{RawResponse: resp}
+	result := ReplicationFabricsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FabricCollection); err != nil {
 		return ReplicationFabricsClientListResponse{}, err
 	}
@@ -386,9 +380,7 @@ func (client *ReplicationFabricsClient) BeginMigrateToAAD(ctx context.Context, f
 	if err != nil {
 		return ReplicationFabricsClientMigrateToAADPollerResponse{}, err
 	}
-	result := ReplicationFabricsClientMigrateToAADPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationFabricsClientMigrateToAADPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationFabricsClient.MigrateToAAD", "", resp, client.pl)
 	if err != nil {
 		return ReplicationFabricsClientMigrateToAADPollerResponse{}, err
@@ -440,7 +432,7 @@ func (client *ReplicationFabricsClient) migrateToAADCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	return req, nil
 }
@@ -455,9 +447,7 @@ func (client *ReplicationFabricsClient) BeginPurge(ctx context.Context, fabricNa
 	if err != nil {
 		return ReplicationFabricsClientPurgePollerResponse{}, err
 	}
-	result := ReplicationFabricsClientPurgePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationFabricsClientPurgePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationFabricsClient.Purge", "", resp, client.pl)
 	if err != nil {
 		return ReplicationFabricsClientPurgePollerResponse{}, err
@@ -509,7 +499,7 @@ func (client *ReplicationFabricsClient) purgeCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	return req, nil
 }
@@ -525,9 +515,7 @@ func (client *ReplicationFabricsClient) BeginReassociateGateway(ctx context.Cont
 	if err != nil {
 		return ReplicationFabricsClientReassociateGatewayPollerResponse{}, err
 	}
-	result := ReplicationFabricsClientReassociateGatewayPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationFabricsClientReassociateGatewayPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationFabricsClient.ReassociateGateway", "", resp, client.pl)
 	if err != nil {
 		return ReplicationFabricsClientReassociateGatewayPollerResponse{}, err
@@ -579,7 +567,7 @@ func (client *ReplicationFabricsClient) reassociateGatewayCreateRequest(ctx cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, failoverProcessServerRequest)
@@ -596,9 +584,7 @@ func (client *ReplicationFabricsClient) BeginRenewCertificate(ctx context.Contex
 	if err != nil {
 		return ReplicationFabricsClientRenewCertificatePollerResponse{}, err
 	}
-	result := ReplicationFabricsClientRenewCertificatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationFabricsClientRenewCertificatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationFabricsClient.RenewCertificate", "", resp, client.pl)
 	if err != nil {
 		return ReplicationFabricsClientRenewCertificatePollerResponse{}, err
@@ -650,7 +636,7 @@ func (client *ReplicationFabricsClient) renewCertificateCreateRequest(ctx contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, renewCertificate)

@@ -34,17 +34,17 @@ type MongoDBResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMongoDBResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MongoDBResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MongoDBResourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *MongoDBResourcesClient) BeginCreateUpdateMongoDBCollection(ctx con
 	if err != nil {
 		return MongoDBResourcesClientCreateUpdateMongoDBCollectionPollerResponse{}, err
 	}
-	result := MongoDBResourcesClientCreateUpdateMongoDBCollectionPollerResponse{
-		RawResponse: resp,
-	}
+	result := MongoDBResourcesClientCreateUpdateMongoDBCollectionPollerResponse{}
 	pt, err := armruntime.NewPoller("MongoDBResourcesClient.CreateUpdateMongoDBCollection", "", resp, client.pl)
 	if err != nil {
 		return MongoDBResourcesClientCreateUpdateMongoDBCollectionPollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *MongoDBResourcesClient) BeginCreateUpdateMongoDBDatabase(ctx conte
 	if err != nil {
 		return MongoDBResourcesClientCreateUpdateMongoDBDatabasePollerResponse{}, err
 	}
-	result := MongoDBResourcesClientCreateUpdateMongoDBDatabasePollerResponse{
-		RawResponse: resp,
-	}
+	result := MongoDBResourcesClientCreateUpdateMongoDBDatabasePollerResponse{}
 	pt, err := armruntime.NewPoller("MongoDBResourcesClient.CreateUpdateMongoDBDatabase", "", resp, client.pl)
 	if err != nil {
 		return MongoDBResourcesClientCreateUpdateMongoDBDatabasePollerResponse{}, err
@@ -213,9 +209,7 @@ func (client *MongoDBResourcesClient) BeginDeleteMongoDBCollection(ctx context.C
 	if err != nil {
 		return MongoDBResourcesClientDeleteMongoDBCollectionPollerResponse{}, err
 	}
-	result := MongoDBResourcesClientDeleteMongoDBCollectionPollerResponse{
-		RawResponse: resp,
-	}
+	result := MongoDBResourcesClientDeleteMongoDBCollectionPollerResponse{}
 	pt, err := armruntime.NewPoller("MongoDBResourcesClient.DeleteMongoDBCollection", "", resp, client.pl)
 	if err != nil {
 		return MongoDBResourcesClientDeleteMongoDBCollectionPollerResponse{}, err
@@ -288,9 +282,7 @@ func (client *MongoDBResourcesClient) BeginDeleteMongoDBDatabase(ctx context.Con
 	if err != nil {
 		return MongoDBResourcesClientDeleteMongoDBDatabasePollerResponse{}, err
 	}
-	result := MongoDBResourcesClientDeleteMongoDBDatabasePollerResponse{
-		RawResponse: resp,
-	}
+	result := MongoDBResourcesClientDeleteMongoDBDatabasePollerResponse{}
 	pt, err := armruntime.NewPoller("MongoDBResourcesClient.DeleteMongoDBDatabase", "", resp, client.pl)
 	if err != nil {
 		return MongoDBResourcesClientDeleteMongoDBDatabasePollerResponse{}, err
@@ -406,7 +398,7 @@ func (client *MongoDBResourcesClient) getMongoDBCollectionCreateRequest(ctx cont
 
 // getMongoDBCollectionHandleResponse handles the GetMongoDBCollection response.
 func (client *MongoDBResourcesClient) getMongoDBCollectionHandleResponse(resp *http.Response) (MongoDBResourcesClientGetMongoDBCollectionResponse, error) {
-	result := MongoDBResourcesClientGetMongoDBCollectionResponse{RawResponse: resp}
+	result := MongoDBResourcesClientGetMongoDBCollectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MongoDBCollectionGetResults); err != nil {
 		return MongoDBResourcesClientGetMongoDBCollectionResponse{}, err
 	}
@@ -473,7 +465,7 @@ func (client *MongoDBResourcesClient) getMongoDBCollectionThroughputCreateReques
 
 // getMongoDBCollectionThroughputHandleResponse handles the GetMongoDBCollectionThroughput response.
 func (client *MongoDBResourcesClient) getMongoDBCollectionThroughputHandleResponse(resp *http.Response) (MongoDBResourcesClientGetMongoDBCollectionThroughputResponse, error) {
-	result := MongoDBResourcesClientGetMongoDBCollectionThroughputResponse{RawResponse: resp}
+	result := MongoDBResourcesClientGetMongoDBCollectionThroughputResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ThroughputSettingsGetResults); err != nil {
 		return MongoDBResourcesClientGetMongoDBCollectionThroughputResponse{}, err
 	}
@@ -534,7 +526,7 @@ func (client *MongoDBResourcesClient) getMongoDBDatabaseCreateRequest(ctx contex
 
 // getMongoDBDatabaseHandleResponse handles the GetMongoDBDatabase response.
 func (client *MongoDBResourcesClient) getMongoDBDatabaseHandleResponse(resp *http.Response) (MongoDBResourcesClientGetMongoDBDatabaseResponse, error) {
-	result := MongoDBResourcesClientGetMongoDBDatabaseResponse{RawResponse: resp}
+	result := MongoDBResourcesClientGetMongoDBDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MongoDBDatabaseGetResults); err != nil {
 		return MongoDBResourcesClientGetMongoDBDatabaseResponse{}, err
 	}
@@ -596,7 +588,7 @@ func (client *MongoDBResourcesClient) getMongoDBDatabaseThroughputCreateRequest(
 
 // getMongoDBDatabaseThroughputHandleResponse handles the GetMongoDBDatabaseThroughput response.
 func (client *MongoDBResourcesClient) getMongoDBDatabaseThroughputHandleResponse(resp *http.Response) (MongoDBResourcesClientGetMongoDBDatabaseThroughputResponse, error) {
-	result := MongoDBResourcesClientGetMongoDBDatabaseThroughputResponse{RawResponse: resp}
+	result := MongoDBResourcesClientGetMongoDBDatabaseThroughputResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ThroughputSettingsGetResults); err != nil {
 		return MongoDBResourcesClientGetMongoDBDatabaseThroughputResponse{}, err
 	}
@@ -610,19 +602,13 @@ func (client *MongoDBResourcesClient) getMongoDBDatabaseThroughputHandleResponse
 // databaseName - Cosmos DB database name.
 // options - MongoDBResourcesClientListMongoDBCollectionsOptions contains the optional parameters for the MongoDBResourcesClient.ListMongoDBCollections
 // method.
-func (client *MongoDBResourcesClient) ListMongoDBCollections(ctx context.Context, resourceGroupName string, accountName string, databaseName string, options *MongoDBResourcesClientListMongoDBCollectionsOptions) (MongoDBResourcesClientListMongoDBCollectionsResponse, error) {
-	req, err := client.listMongoDBCollectionsCreateRequest(ctx, resourceGroupName, accountName, databaseName, options)
-	if err != nil {
-		return MongoDBResourcesClientListMongoDBCollectionsResponse{}, err
+func (client *MongoDBResourcesClient) ListMongoDBCollections(resourceGroupName string, accountName string, databaseName string, options *MongoDBResourcesClientListMongoDBCollectionsOptions) *MongoDBResourcesClientListMongoDBCollectionsPager {
+	return &MongoDBResourcesClientListMongoDBCollectionsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listMongoDBCollectionsCreateRequest(ctx, resourceGroupName, accountName, databaseName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return MongoDBResourcesClientListMongoDBCollectionsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return MongoDBResourcesClientListMongoDBCollectionsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listMongoDBCollectionsHandleResponse(resp)
 }
 
 // listMongoDBCollectionsCreateRequest creates the ListMongoDBCollections request.
@@ -657,7 +643,7 @@ func (client *MongoDBResourcesClient) listMongoDBCollectionsCreateRequest(ctx co
 
 // listMongoDBCollectionsHandleResponse handles the ListMongoDBCollections response.
 func (client *MongoDBResourcesClient) listMongoDBCollectionsHandleResponse(resp *http.Response) (MongoDBResourcesClientListMongoDBCollectionsResponse, error) {
-	result := MongoDBResourcesClientListMongoDBCollectionsResponse{RawResponse: resp}
+	result := MongoDBResourcesClientListMongoDBCollectionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MongoDBCollectionListResult); err != nil {
 		return MongoDBResourcesClientListMongoDBCollectionsResponse{}, err
 	}
@@ -670,19 +656,13 @@ func (client *MongoDBResourcesClient) listMongoDBCollectionsHandleResponse(resp 
 // accountName - Cosmos DB database account name.
 // options - MongoDBResourcesClientListMongoDBDatabasesOptions contains the optional parameters for the MongoDBResourcesClient.ListMongoDBDatabases
 // method.
-func (client *MongoDBResourcesClient) ListMongoDBDatabases(ctx context.Context, resourceGroupName string, accountName string, options *MongoDBResourcesClientListMongoDBDatabasesOptions) (MongoDBResourcesClientListMongoDBDatabasesResponse, error) {
-	req, err := client.listMongoDBDatabasesCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return MongoDBResourcesClientListMongoDBDatabasesResponse{}, err
+func (client *MongoDBResourcesClient) ListMongoDBDatabases(resourceGroupName string, accountName string, options *MongoDBResourcesClientListMongoDBDatabasesOptions) *MongoDBResourcesClientListMongoDBDatabasesPager {
+	return &MongoDBResourcesClientListMongoDBDatabasesPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listMongoDBDatabasesCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return MongoDBResourcesClientListMongoDBDatabasesResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return MongoDBResourcesClientListMongoDBDatabasesResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listMongoDBDatabasesHandleResponse(resp)
 }
 
 // listMongoDBDatabasesCreateRequest creates the ListMongoDBDatabases request.
@@ -713,7 +693,7 @@ func (client *MongoDBResourcesClient) listMongoDBDatabasesCreateRequest(ctx cont
 
 // listMongoDBDatabasesHandleResponse handles the ListMongoDBDatabases response.
 func (client *MongoDBResourcesClient) listMongoDBDatabasesHandleResponse(resp *http.Response) (MongoDBResourcesClientListMongoDBDatabasesResponse, error) {
-	result := MongoDBResourcesClientListMongoDBDatabasesResponse{RawResponse: resp}
+	result := MongoDBResourcesClientListMongoDBDatabasesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MongoDBDatabaseListResult); err != nil {
 		return MongoDBResourcesClientListMongoDBDatabasesResponse{}, err
 	}
@@ -733,9 +713,7 @@ func (client *MongoDBResourcesClient) BeginMigrateMongoDBCollectionToAutoscale(c
 	if err != nil {
 		return MongoDBResourcesClientMigrateMongoDBCollectionToAutoscalePollerResponse{}, err
 	}
-	result := MongoDBResourcesClientMigrateMongoDBCollectionToAutoscalePollerResponse{
-		RawResponse: resp,
-	}
+	result := MongoDBResourcesClientMigrateMongoDBCollectionToAutoscalePollerResponse{}
 	pt, err := armruntime.NewPoller("MongoDBResourcesClient.MigrateMongoDBCollectionToAutoscale", "", resp, client.pl)
 	if err != nil {
 		return MongoDBResourcesClientMigrateMongoDBCollectionToAutoscalePollerResponse{}, err
@@ -811,9 +789,7 @@ func (client *MongoDBResourcesClient) BeginMigrateMongoDBCollectionToManualThrou
 	if err != nil {
 		return MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputPollerResponse{}, err
 	}
-	result := MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("MongoDBResourcesClient.MigrateMongoDBCollectionToManualThroughput", "", resp, client.pl)
 	if err != nil {
 		return MongoDBResourcesClientMigrateMongoDBCollectionToManualThroughputPollerResponse{}, err
@@ -887,9 +863,7 @@ func (client *MongoDBResourcesClient) BeginMigrateMongoDBDatabaseToAutoscale(ctx
 	if err != nil {
 		return MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscalePollerResponse{}, err
 	}
-	result := MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscalePollerResponse{
-		RawResponse: resp,
-	}
+	result := MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscalePollerResponse{}
 	pt, err := armruntime.NewPoller("MongoDBResourcesClient.MigrateMongoDBDatabaseToAutoscale", "", resp, client.pl)
 	if err != nil {
 		return MongoDBResourcesClientMigrateMongoDBDatabaseToAutoscalePollerResponse{}, err
@@ -959,9 +933,7 @@ func (client *MongoDBResourcesClient) BeginMigrateMongoDBDatabaseToManualThrough
 	if err != nil {
 		return MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputPollerResponse{}, err
 	}
-	result := MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("MongoDBResourcesClient.MigrateMongoDBDatabaseToManualThroughput", "", resp, client.pl)
 	if err != nil {
 		return MongoDBResourcesClientMigrateMongoDBDatabaseToManualThroughputPollerResponse{}, err
@@ -1033,9 +1005,7 @@ func (client *MongoDBResourcesClient) BeginRetrieveContinuousBackupInformation(c
 	if err != nil {
 		return MongoDBResourcesClientRetrieveContinuousBackupInformationPollerResponse{}, err
 	}
-	result := MongoDBResourcesClientRetrieveContinuousBackupInformationPollerResponse{
-		RawResponse: resp,
-	}
+	result := MongoDBResourcesClientRetrieveContinuousBackupInformationPollerResponse{}
 	pt, err := armruntime.NewPoller("MongoDBResourcesClient.RetrieveContinuousBackupInformation", "location", resp, client.pl)
 	if err != nil {
 		return MongoDBResourcesClientRetrieveContinuousBackupInformationPollerResponse{}, err
@@ -1111,9 +1081,7 @@ func (client *MongoDBResourcesClient) BeginUpdateMongoDBCollectionThroughput(ctx
 	if err != nil {
 		return MongoDBResourcesClientUpdateMongoDBCollectionThroughputPollerResponse{}, err
 	}
-	result := MongoDBResourcesClientUpdateMongoDBCollectionThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := MongoDBResourcesClientUpdateMongoDBCollectionThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("MongoDBResourcesClient.UpdateMongoDBCollectionThroughput", "", resp, client.pl)
 	if err != nil {
 		return MongoDBResourcesClientUpdateMongoDBCollectionThroughputPollerResponse{}, err
@@ -1188,9 +1156,7 @@ func (client *MongoDBResourcesClient) BeginUpdateMongoDBDatabaseThroughput(ctx c
 	if err != nil {
 		return MongoDBResourcesClientUpdateMongoDBDatabaseThroughputPollerResponse{}, err
 	}
-	result := MongoDBResourcesClientUpdateMongoDBDatabaseThroughputPollerResponse{
-		RawResponse: resp,
-	}
+	result := MongoDBResourcesClientUpdateMongoDBDatabaseThroughputPollerResponse{}
 	pt, err := armruntime.NewPoller("MongoDBResourcesClient.UpdateMongoDBDatabaseThroughput", "", resp, client.pl)
 	if err != nil {
 		return MongoDBResourcesClientUpdateMongoDBDatabaseThroughputPollerResponse{}, err

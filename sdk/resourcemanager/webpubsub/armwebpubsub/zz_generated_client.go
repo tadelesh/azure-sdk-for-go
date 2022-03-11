@@ -94,7 +94,7 @@ func (client *Client) checkNameAvailabilityCreateRequest(ctx context.Context, lo
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *Client) checkNameAvailabilityHandleResponse(resp *http.Response) (ClientCheckNameAvailabilityResponse, error) {
-	result := ClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := ClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NameAvailability); err != nil {
 		return ClientCheckNameAvailabilityResponse{}, err
 	}
@@ -113,9 +113,7 @@ func (client *Client) BeginCreateOrUpdate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("Client.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ClientCreateOrUpdatePollerResponse{}, err
@@ -180,9 +178,7 @@ func (client *Client) BeginDelete(ctx context.Context, resourceGroupName string,
 	if err != nil {
 		return ClientDeletePollerResponse{}, err
 	}
-	result := ClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("Client.Delete", "", resp, client.pl)
 	if err != nil {
 		return ClientDeletePollerResponse{}, err
@@ -285,7 +281,7 @@ func (client *Client) getCreateRequest(ctx context.Context, resourceGroupName st
 
 // getHandleResponse handles the Get response.
 func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse, error) {
-	result := ClientGetResponse{RawResponse: resp}
+	result := ClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceInfo); err != nil {
 		return ClientGetResponse{}, err
 	}
@@ -333,7 +329,7 @@ func (client *Client) listByResourceGroupCreateRequest(ctx context.Context, reso
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *Client) listByResourceGroupHandleResponse(resp *http.Response) (ClientListByResourceGroupResponse, error) {
-	result := ClientListByResourceGroupResponse{RawResponse: resp}
+	result := ClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceInfoList); err != nil {
 		return ClientListByResourceGroupResponse{}, err
 	}
@@ -375,7 +371,7 @@ func (client *Client) listBySubscriptionCreateRequest(ctx context.Context, optio
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *Client) listBySubscriptionHandleResponse(resp *http.Response) (ClientListBySubscriptionResponse, error) {
-	result := ClientListBySubscriptionResponse{RawResponse: resp}
+	result := ClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceInfoList); err != nil {
 		return ClientListBySubscriptionResponse{}, err
 	}
@@ -431,7 +427,7 @@ func (client *Client) listKeysCreateRequest(ctx context.Context, resourceGroupNa
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *Client) listKeysHandleResponse(resp *http.Response) (ClientListKeysResponse, error) {
-	result := ClientListKeysResponse{RawResponse: resp}
+	result := ClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Keys); err != nil {
 		return ClientListKeysResponse{}, err
 	}
@@ -487,7 +483,7 @@ func (client *Client) listSKUsCreateRequest(ctx context.Context, resourceGroupNa
 
 // listSKUsHandleResponse handles the ListSKUs response.
 func (client *Client) listSKUsHandleResponse(resp *http.Response) (ClientListSKUsResponse, error) {
-	result := ClientListSKUsResponse{RawResponse: resp}
+	result := ClientListSKUsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUList); err != nil {
 		return ClientListSKUsResponse{}, err
 	}
@@ -507,9 +503,7 @@ func (client *Client) BeginRegenerateKey(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return ClientRegenerateKeyPollerResponse{}, err
 	}
-	result := ClientRegenerateKeyPollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientRegenerateKeyPollerResponse{}
 	pt, err := armruntime.NewPoller("Client.RegenerateKey", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ClientRegenerateKeyPollerResponse{}, err
@@ -575,9 +569,7 @@ func (client *Client) BeginRestart(ctx context.Context, resourceGroupName string
 	if err != nil {
 		return ClientRestartPollerResponse{}, err
 	}
-	result := ClientRestartPollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientRestartPollerResponse{}
 	pt, err := armruntime.NewPoller("Client.Restart", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ClientRestartPollerResponse{}, err
@@ -643,9 +635,7 @@ func (client *Client) BeginUpdate(ctx context.Context, resourceGroupName string,
 	if err != nil {
 		return ClientUpdatePollerResponse{}, err
 	}
-	result := ClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("Client.Update", "", resp, client.pl)
 	if err != nil {
 		return ClientUpdatePollerResponse{}, err

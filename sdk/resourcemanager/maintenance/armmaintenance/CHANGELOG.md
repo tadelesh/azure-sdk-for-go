@@ -1,5 +1,185 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClient.List` parameter(s) have been changed from `(context.Context, *OperationsClientListOptions)` to `(*OperationsClientListOptions)`
+- Function `*OperationsClient.List` return value(s) have been changed from `(OperationsClientListResponse, error)` to `(*OperationsClientListPager)`
+- Function `*PublicMaintenanceConfigurationsClient.List` parameter(s) have been changed from `(context.Context, *PublicMaintenanceConfigurationsClientListOptions)` to `(*PublicMaintenanceConfigurationsClientListOptions)`
+- Function `*PublicMaintenanceConfigurationsClient.List` return value(s) have been changed from `(PublicMaintenanceConfigurationsClientListResponse, error)` to `(*PublicMaintenanceConfigurationsClientListPager)`
+- Function `*ConfigurationAssignmentsClient.List` parameter(s) have been changed from `(context.Context, string, string, string, string, *ConfigurationAssignmentsClientListOptions)` to `(string, string, string, string, *ConfigurationAssignmentsClientListOptions)`
+- Function `*ConfigurationAssignmentsClient.List` return value(s) have been changed from `(ConfigurationAssignmentsClientListResponse, error)` to `(*ConfigurationAssignmentsClientListPager)`
+- Function `*ConfigurationsForResourceGroupClient.List` parameter(s) have been changed from `(context.Context, string, *ConfigurationsForResourceGroupClientListOptions)` to `(string, *ConfigurationsForResourceGroupClientListOptions)`
+- Function `*ConfigurationsForResourceGroupClient.List` return value(s) have been changed from `(ConfigurationsForResourceGroupClientListResponse, error)` to `(*ConfigurationsForResourceGroupClientListPager)`
+- Function `*UpdatesClient.List` parameter(s) have been changed from `(context.Context, string, string, string, string, *UpdatesClientListOptions)` to `(string, string, string, string, *UpdatesClientListOptions)`
+- Function `*UpdatesClient.List` return value(s) have been changed from `(UpdatesClientListResponse, error)` to `(*UpdatesClientListPager)`
+- Function `*ConfigurationAssignmentsWithinSubscriptionClient.List` parameter(s) have been changed from `(context.Context, *ConfigurationAssignmentsWithinSubscriptionClientListOptions)` to `(*ConfigurationAssignmentsWithinSubscriptionClientListOptions)`
+- Function `*ConfigurationAssignmentsWithinSubscriptionClient.List` return value(s) have been changed from `(ConfigurationAssignmentsWithinSubscriptionClientListResponse, error)` to `(*ConfigurationAssignmentsWithinSubscriptionClientListPager)`
+- Function `*UpdatesClient.ListParent` parameter(s) have been changed from `(context.Context, string, string, string, string, string, string, *UpdatesClientListParentOptions)` to `(string, string, string, string, string, string, *UpdatesClientListParentOptions)`
+- Function `*UpdatesClient.ListParent` return value(s) have been changed from `(UpdatesClientListParentResponse, error)` to `(*UpdatesClientListParentPager)`
+- Function `*ConfigurationAssignmentsClient.ListParent` parameter(s) have been changed from `(context.Context, string, string, string, string, string, string, *ConfigurationAssignmentsClientListParentOptions)` to `(string, string, string, string, string, string, *ConfigurationAssignmentsClientListParentOptions)`
+- Function `*ConfigurationAssignmentsClient.ListParent` return value(s) have been changed from `(ConfigurationAssignmentsClientListParentResponse, error)` to `(*ConfigurationAssignmentsClientListParentPager)`
+- Function `*ApplyUpdatesClient.List` parameter(s) have been changed from `(context.Context, *ApplyUpdatesClientListOptions)` to `(*ApplyUpdatesClientListOptions)`
+- Function `*ApplyUpdatesClient.List` return value(s) have been changed from `(ApplyUpdatesClientListResponse, error)` to `(*ApplyUpdatesClientListPager)`
+- Function `*ConfigurationsClient.List` parameter(s) have been changed from `(context.Context, *ConfigurationsClientListOptions)` to `(*ConfigurationsClientListOptions)`
+- Function `*ConfigurationsClient.List` return value(s) have been changed from `(ConfigurationsClientListResponse, error)` to `(*ConfigurationsClientListPager)`
+- Function `*ApplyUpdateForResourceGroupClient.List` parameter(s) have been changed from `(context.Context, string, *ApplyUpdateForResourceGroupClientListOptions)` to `(string, *ApplyUpdateForResourceGroupClientListOptions)`
+- Function `*ApplyUpdateForResourceGroupClient.List` return value(s) have been changed from `(ApplyUpdateForResourceGroupClientListResponse, error)` to `(*ApplyUpdateForResourceGroupClientListPager)`
+- Struct `ApplyUpdateForResourceGroupClientListResult` has been removed
+- Struct `ApplyUpdatesClientCreateOrUpdateParentResult` has been removed
+- Struct `ApplyUpdatesClientCreateOrUpdateResult` has been removed
+- Struct `ApplyUpdatesClientGetParentResult` has been removed
+- Struct `ApplyUpdatesClientGetResult` has been removed
+- Struct `ApplyUpdatesClientListResult` has been removed
+- Struct `ConfigurationAssignmentsClientCreateOrUpdateParentResult` has been removed
+- Struct `ConfigurationAssignmentsClientCreateOrUpdateResult` has been removed
+- Struct `ConfigurationAssignmentsClientDeleteParentResult` has been removed
+- Struct `ConfigurationAssignmentsClientDeleteResult` has been removed
+- Struct `ConfigurationAssignmentsClientGetParentResult` has been removed
+- Struct `ConfigurationAssignmentsClientGetResult` has been removed
+- Struct `ConfigurationAssignmentsClientListParentResult` has been removed
+- Struct `ConfigurationAssignmentsClientListResult` has been removed
+- Struct `ConfigurationAssignmentsWithinSubscriptionClientListResult` has been removed
+- Struct `ConfigurationsClientCreateOrUpdateResult` has been removed
+- Struct `ConfigurationsClientDeleteResult` has been removed
+- Struct `ConfigurationsClientGetResult` has been removed
+- Struct `ConfigurationsClientListResult` has been removed
+- Struct `ConfigurationsClientUpdateResult` has been removed
+- Struct `ConfigurationsForResourceGroupClientListResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PublicMaintenanceConfigurationsClientGetResult` has been removed
+- Struct `PublicMaintenanceConfigurationsClientListResult` has been removed
+- Struct `UpdatesClientListParentResult` has been removed
+- Struct `UpdatesClientListResult` has been removed
+- Field `UpdatesClientListParentResult` of struct `UpdatesClientListParentResponse` has been removed
+- Field `RawResponse` of struct `UpdatesClientListParentResponse` has been removed
+- Field `ApplyUpdatesClientCreateOrUpdateParentResult` of struct `ApplyUpdatesClientCreateOrUpdateParentResponse` has been removed
+- Field `RawResponse` of struct `ApplyUpdatesClientCreateOrUpdateParentResponse` has been removed
+- Field `ConfigurationAssignmentsClientDeleteParentResult` of struct `ConfigurationAssignmentsClientDeleteParentResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationAssignmentsClientDeleteParentResponse` has been removed
+- Field `ApplyUpdatesClientGetResult` of struct `ApplyUpdatesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ApplyUpdatesClientGetResponse` has been removed
+- Field `ConfigurationsForResourceGroupClientListResult` of struct `ConfigurationsForResourceGroupClientListResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsForResourceGroupClientListResponse` has been removed
+- Field `ConfigurationsClientDeleteResult` of struct `ConfigurationsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientDeleteResponse` has been removed
+- Field `PublicMaintenanceConfigurationsClientGetResult` of struct `PublicMaintenanceConfigurationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PublicMaintenanceConfigurationsClientGetResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `UpdatesClientListResult` of struct `UpdatesClientListResponse` has been removed
+- Field `RawResponse` of struct `UpdatesClientListResponse` has been removed
+- Field `ConfigurationAssignmentsClientGetResult` of struct `ConfigurationAssignmentsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationAssignmentsClientGetResponse` has been removed
+- Field `ConfigurationAssignmentsClientListParentResult` of struct `ConfigurationAssignmentsClientListParentResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationAssignmentsClientListParentResponse` has been removed
+- Field `ConfigurationAssignmentsClientCreateOrUpdateResult` of struct `ConfigurationAssignmentsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationAssignmentsClientCreateOrUpdateResponse` has been removed
+- Field `ConfigurationAssignmentsWithinSubscriptionClientListResult` of struct `ConfigurationAssignmentsWithinSubscriptionClientListResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationAssignmentsWithinSubscriptionClientListResponse` has been removed
+- Field `ConfigurationAssignmentsClientGetParentResult` of struct `ConfigurationAssignmentsClientGetParentResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationAssignmentsClientGetParentResponse` has been removed
+- Field `ApplyUpdatesClientGetParentResult` of struct `ApplyUpdatesClientGetParentResponse` has been removed
+- Field `RawResponse` of struct `ApplyUpdatesClientGetParentResponse` has been removed
+- Field `ConfigurationAssignmentsClientDeleteResult` of struct `ConfigurationAssignmentsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationAssignmentsClientDeleteResponse` has been removed
+- Field `PublicMaintenanceConfigurationsClientListResult` of struct `PublicMaintenanceConfigurationsClientListResponse` has been removed
+- Field `RawResponse` of struct `PublicMaintenanceConfigurationsClientListResponse` has been removed
+- Field `ConfigurationsClientCreateOrUpdateResult` of struct `ConfigurationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientCreateOrUpdateResponse` has been removed
+- Field `ConfigurationsClientListResult` of struct `ConfigurationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientListResponse` has been removed
+- Field `ConfigurationAssignmentsClientListResult` of struct `ConfigurationAssignmentsClientListResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationAssignmentsClientListResponse` has been removed
+- Field `ConfigurationsClientUpdateResult` of struct `ConfigurationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientUpdateResponse` has been removed
+- Field `ConfigurationAssignmentsClientCreateOrUpdateParentResult` of struct `ConfigurationAssignmentsClientCreateOrUpdateParentResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationAssignmentsClientCreateOrUpdateParentResponse` has been removed
+- Field `ConfigurationsClientGetResult` of struct `ConfigurationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientGetResponse` has been removed
+- Field `ApplyUpdatesClientCreateOrUpdateResult` of struct `ApplyUpdatesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ApplyUpdatesClientCreateOrUpdateResponse` has been removed
+- Field `ApplyUpdatesClientListResult` of struct `ApplyUpdatesClientListResponse` has been removed
+- Field `RawResponse` of struct `ApplyUpdatesClientListResponse` has been removed
+- Field `ApplyUpdateForResourceGroupClientListResult` of struct `ApplyUpdateForResourceGroupClientListResponse` has been removed
+- Field `RawResponse` of struct `ApplyUpdateForResourceGroupClientListResponse` has been removed
+
+### Features Added
+
+- New function `*ConfigurationAssignmentsClientListPager.NextPage(context.Context) (ConfigurationAssignmentsClientListResponse, error)`
+- New function `*PublicMaintenanceConfigurationsClientListPager.More() bool`
+- New function `*ApplyUpdatesClientListPager.More() bool`
+- New function `*ConfigurationAssignmentsClientListParentPager.NextPage(context.Context) (ConfigurationAssignmentsClientListParentResponse, error)`
+- New function `*ConfigurationAssignmentsWithinSubscriptionClientListPager.NextPage(context.Context) (ConfigurationAssignmentsWithinSubscriptionClientListResponse, error)`
+- New function `*UpdatesClientListPager.NextPage(context.Context) (UpdatesClientListResponse, error)`
+- New function `*PublicMaintenanceConfigurationsClientListPager.NextPage(context.Context) (PublicMaintenanceConfigurationsClientListResponse, error)`
+- New function `*UpdatesClientListPager.More() bool`
+- New function `*ConfigurationsClientListPager.More() bool`
+- New function `*ConfigurationAssignmentsClientListPager.More() bool`
+- New function `*ApplyUpdateForResourceGroupClientListPager.More() bool`
+- New function `*ConfigurationAssignmentsClientListParentPager.More() bool`
+- New function `*ConfigurationsForResourceGroupClientListPager.More() bool`
+- New function `*ConfigurationsClientListPager.NextPage(context.Context) (ConfigurationsClientListResponse, error)`
+- New function `*UpdatesClientListParentPager.More() bool`
+- New function `*ConfigurationAssignmentsWithinSubscriptionClientListPager.More() bool`
+- New function `*UpdatesClientListParentPager.NextPage(context.Context) (UpdatesClientListParentResponse, error)`
+- New function `*OperationsClientListPager.NextPage(context.Context) (OperationsClientListResponse, error)`
+- New function `*ConfigurationsForResourceGroupClientListPager.NextPage(context.Context) (ConfigurationsForResourceGroupClientListResponse, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*ApplyUpdateForResourceGroupClientListPager.NextPage(context.Context) (ApplyUpdateForResourceGroupClientListResponse, error)`
+- New function `*ApplyUpdatesClientListPager.NextPage(context.Context) (ApplyUpdatesClientListResponse, error)`
+- New struct `ApplyUpdateForResourceGroupClientListPager`
+- New struct `ApplyUpdatesClientListPager`
+- New struct `ConfigurationAssignmentsClientListPager`
+- New struct `ConfigurationAssignmentsClientListParentPager`
+- New struct `ConfigurationAssignmentsWithinSubscriptionClientListPager`
+- New struct `ConfigurationsClientListPager`
+- New struct `ConfigurationsForResourceGroupClientListPager`
+- New struct `Error`
+- New struct `ErrorDetails`
+- New struct `OperationsClientListPager`
+- New struct `PublicMaintenanceConfigurationsClientListPager`
+- New struct `UpdatesClientListPager`
+- New struct `UpdatesClientListParentPager`
+- New anonymous field `ConfigurationAssignment` in struct `ConfigurationAssignmentsClientCreateOrUpdateResponse`
+- New anonymous field `Configuration` in struct `ConfigurationsClientCreateOrUpdateResponse`
+- New anonymous field `ApplyUpdate` in struct `ApplyUpdatesClientGetParentResponse`
+- New anonymous field `OperationsListResult` in struct `OperationsClientListResponse`
+- New anonymous field `ApplyUpdate` in struct `ApplyUpdatesClientGetResponse`
+- New anonymous field `Configuration` in struct `PublicMaintenanceConfigurationsClientGetResponse`
+- New anonymous field `ConfigurationAssignment` in struct `ConfigurationAssignmentsClientGetParentResponse`
+- New anonymous field `ListConfigurationAssignmentsResult` in struct `ConfigurationAssignmentsWithinSubscriptionClientListResponse`
+- New anonymous field `ConfigurationAssignment` in struct `ConfigurationAssignmentsClientCreateOrUpdateParentResponse`
+- New anonymous field `ApplyUpdate` in struct `ApplyUpdatesClientCreateOrUpdateResponse`
+- New anonymous field `Configuration` in struct `ConfigurationsClientUpdateResponse`
+- New anonymous field `Configuration` in struct `ConfigurationsClientDeleteResponse`
+- New anonymous field `ListApplyUpdate` in struct `ApplyUpdateForResourceGroupClientListResponse`
+- New anonymous field `ListMaintenanceConfigurationsResult` in struct `PublicMaintenanceConfigurationsClientListResponse`
+- New anonymous field `ListConfigurationAssignmentsResult` in struct `ConfigurationAssignmentsClientListParentResponse`
+- New anonymous field `ListUpdatesResult` in struct `UpdatesClientListParentResponse`
+- New anonymous field `ListUpdatesResult` in struct `UpdatesClientListResponse`
+- New anonymous field `ConfigurationAssignment` in struct `ConfigurationAssignmentsClientDeleteResponse`
+- New anonymous field `ListMaintenanceConfigurationsResult` in struct `ConfigurationsClientListResponse`
+- New anonymous field `ListApplyUpdate` in struct `ApplyUpdatesClientListResponse`
+- New anonymous field `ApplyUpdate` in struct `ApplyUpdatesClientCreateOrUpdateParentResponse`
+- New anonymous field `ListMaintenanceConfigurationsResult` in struct `ConfigurationsForResourceGroupClientListResponse`
+- New anonymous field `ConfigurationAssignment` in struct `ConfigurationAssignmentsClientGetResponse`
+- New anonymous field `ListConfigurationAssignmentsResult` in struct `ConfigurationAssignmentsClientListResponse`
+- New anonymous field `ConfigurationAssignment` in struct `ConfigurationAssignmentsClientDeleteParentResponse`
+- New anonymous field `Configuration` in struct `ConfigurationsClientGetResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `Operation.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Struct `Error` has been removed
+- Struct `ErrorDetails` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

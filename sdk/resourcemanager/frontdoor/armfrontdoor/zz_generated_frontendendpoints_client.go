@@ -35,17 +35,17 @@ type FrontendEndpointsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFrontendEndpointsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FrontendEndpointsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FrontendEndpointsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *FrontendEndpointsClient) BeginDisableHTTPS(ctx context.Context, re
 	if err != nil {
 		return FrontendEndpointsClientDisableHTTPSPollerResponse{}, err
 	}
-	result := FrontendEndpointsClientDisableHTTPSPollerResponse{
-		RawResponse: resp,
-	}
+	result := FrontendEndpointsClientDisableHTTPSPollerResponse{}
 	pt, err := armruntime.NewPoller("FrontendEndpointsClient.DisableHTTPS", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return FrontendEndpointsClientDisableHTTPSPollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *FrontendEndpointsClient) BeginEnableHTTPS(ctx context.Context, res
 	if err != nil {
 		return FrontendEndpointsClientEnableHTTPSPollerResponse{}, err
 	}
-	result := FrontendEndpointsClientEnableHTTPSPollerResponse{
-		RawResponse: resp,
-	}
+	result := FrontendEndpointsClientEnableHTTPSPollerResponse{}
 	pt, err := armruntime.NewPoller("FrontendEndpointsClient.EnableHTTPS", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return FrontendEndpointsClientEnableHTTPSPollerResponse{}, err
@@ -248,7 +244,7 @@ func (client *FrontendEndpointsClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *FrontendEndpointsClient) getHandleResponse(resp *http.Response) (FrontendEndpointsClientGetResponse, error) {
-	result := FrontendEndpointsClientGetResponse{RawResponse: resp}
+	result := FrontendEndpointsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FrontendEndpoint); err != nil {
 		return FrontendEndpointsClientGetResponse{}, err
 	}
@@ -301,7 +297,7 @@ func (client *FrontendEndpointsClient) listByFrontDoorCreateRequest(ctx context.
 
 // listByFrontDoorHandleResponse handles the ListByFrontDoor response.
 func (client *FrontendEndpointsClient) listByFrontDoorHandleResponse(resp *http.Response) (FrontendEndpointsClientListByFrontDoorResponse, error) {
-	result := FrontendEndpointsClientListByFrontDoorResponse{RawResponse: resp}
+	result := FrontendEndpointsClientListByFrontDoorResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FrontendEndpointsListResult); err != nil {
 		return FrontendEndpointsClientListByFrontDoorResponse{}, err
 	}

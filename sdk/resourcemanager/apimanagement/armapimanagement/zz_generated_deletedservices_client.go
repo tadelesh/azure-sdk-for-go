@@ -35,17 +35,17 @@ type DeletedServicesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDeletedServicesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DeletedServicesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DeletedServicesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *DeletedServicesClient) getByNameCreateRequest(ctx context.Context,
 
 // getByNameHandleResponse handles the GetByName response.
 func (client *DeletedServicesClient) getByNameHandleResponse(resp *http.Response) (DeletedServicesClientGetByNameResponse, error) {
-	result := DeletedServicesClientGetByNameResponse{RawResponse: resp}
+	result := DeletedServicesClientGetByNameResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedServiceContract); err != nil {
 		return DeletedServicesClientGetByNameResponse{}, err
 	}
@@ -142,7 +142,7 @@ func (client *DeletedServicesClient) listBySubscriptionCreateRequest(ctx context
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *DeletedServicesClient) listBySubscriptionHandleResponse(resp *http.Response) (DeletedServicesClientListBySubscriptionResponse, error) {
-	result := DeletedServicesClientListBySubscriptionResponse{RawResponse: resp}
+	result := DeletedServicesClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedServicesCollection); err != nil {
 		return DeletedServicesClientListBySubscriptionResponse{}, err
 	}
@@ -160,9 +160,7 @@ func (client *DeletedServicesClient) BeginPurge(ctx context.Context, serviceName
 	if err != nil {
 		return DeletedServicesClientPurgePollerResponse{}, err
 	}
-	result := DeletedServicesClientPurgePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeletedServicesClientPurgePollerResponse{}
 	pt, err := armruntime.NewPoller("DeletedServicesClient.Purge", "location", resp, client.pl)
 	if err != nil {
 		return DeletedServicesClientPurgePollerResponse{}, err

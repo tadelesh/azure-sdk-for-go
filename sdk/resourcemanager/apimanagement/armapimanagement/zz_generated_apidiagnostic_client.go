@@ -36,17 +36,17 @@ type APIDiagnosticClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAPIDiagnosticClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *APIDiagnosticClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &APIDiagnosticClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -114,7 +114,7 @@ func (client *APIDiagnosticClient) createOrUpdateCreateRequest(ctx context.Conte
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *APIDiagnosticClient) createOrUpdateHandleResponse(resp *http.Response) (APIDiagnosticClientCreateOrUpdateResponse, error) {
-	result := APIDiagnosticClientCreateOrUpdateResponse{RawResponse: resp}
+	result := APIDiagnosticClientCreateOrUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -145,7 +145,7 @@ func (client *APIDiagnosticClient) Delete(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return APIDiagnosticClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return APIDiagnosticClientDeleteResponse{RawResponse: resp}, nil
+	return APIDiagnosticClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -241,7 +241,7 @@ func (client *APIDiagnosticClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *APIDiagnosticClient) getHandleResponse(resp *http.Response) (APIDiagnosticClientGetResponse, error) {
-	result := APIDiagnosticClientGetResponse{RawResponse: resp}
+	result := APIDiagnosticClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -306,7 +306,7 @@ func (client *APIDiagnosticClient) getEntityTagCreateRequest(ctx context.Context
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *APIDiagnosticClient) getEntityTagHandleResponse(resp *http.Response) (APIDiagnosticClientGetEntityTagResponse, error) {
-	result := APIDiagnosticClientGetEntityTagResponse{RawResponse: resp}
+	result := APIDiagnosticClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -376,7 +376,7 @@ func (client *APIDiagnosticClient) listByServiceCreateRequest(ctx context.Contex
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *APIDiagnosticClient) listByServiceHandleResponse(resp *http.Response) (APIDiagnosticClientListByServiceResponse, error) {
-	result := APIDiagnosticClientListByServiceResponse{RawResponse: resp}
+	result := APIDiagnosticClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiagnosticCollection); err != nil {
 		return APIDiagnosticClientListByServiceResponse{}, err
 	}
@@ -445,7 +445,7 @@ func (client *APIDiagnosticClient) updateCreateRequest(ctx context.Context, reso
 
 // updateHandleResponse handles the Update response.
 func (client *APIDiagnosticClient) updateHandleResponse(resp *http.Response) (APIDiagnosticClientUpdateResponse, error) {
-	result := APIDiagnosticClientUpdateResponse{RawResponse: resp}
+	result := APIDiagnosticClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

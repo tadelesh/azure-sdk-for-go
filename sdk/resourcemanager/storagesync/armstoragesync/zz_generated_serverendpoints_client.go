@@ -34,17 +34,17 @@ type ServerEndpointsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServerEndpointsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServerEndpointsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServerEndpointsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ServerEndpointsClient) BeginCreate(ctx context.Context, resourceGr
 	if err != nil {
 		return ServerEndpointsClientCreatePollerResponse{}, err
 	}
-	result := ServerEndpointsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerEndpointsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerEndpointsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return ServerEndpointsClientCreatePollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *ServerEndpointsClient) BeginDelete(ctx context.Context, resourceGr
 	if err != nil {
 		return ServerEndpointsClientDeletePollerResponse{}, err
 	}
-	result := ServerEndpointsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerEndpointsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerEndpointsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ServerEndpointsClientDeletePollerResponse{}, err
@@ -262,7 +258,7 @@ func (client *ServerEndpointsClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *ServerEndpointsClient) getHandleResponse(resp *http.Response) (ServerEndpointsClientGetResponse, error) {
-	result := ServerEndpointsClientGetResponse{RawResponse: resp}
+	result := ServerEndpointsClientGetResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -282,19 +278,13 @@ func (client *ServerEndpointsClient) getHandleResponse(resp *http.Response) (Ser
 // syncGroupName - Name of Sync Group resource.
 // options - ServerEndpointsClientListBySyncGroupOptions contains the optional parameters for the ServerEndpointsClient.ListBySyncGroup
 // method.
-func (client *ServerEndpointsClient) ListBySyncGroup(ctx context.Context, resourceGroupName string, storageSyncServiceName string, syncGroupName string, options *ServerEndpointsClientListBySyncGroupOptions) (ServerEndpointsClientListBySyncGroupResponse, error) {
-	req, err := client.listBySyncGroupCreateRequest(ctx, resourceGroupName, storageSyncServiceName, syncGroupName, options)
-	if err != nil {
-		return ServerEndpointsClientListBySyncGroupResponse{}, err
+func (client *ServerEndpointsClient) ListBySyncGroup(resourceGroupName string, storageSyncServiceName string, syncGroupName string, options *ServerEndpointsClientListBySyncGroupOptions) *ServerEndpointsClientListBySyncGroupPager {
+	return &ServerEndpointsClientListBySyncGroupPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listBySyncGroupCreateRequest(ctx, resourceGroupName, storageSyncServiceName, syncGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ServerEndpointsClientListBySyncGroupResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ServerEndpointsClientListBySyncGroupResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listBySyncGroupHandleResponse(resp)
 }
 
 // listBySyncGroupCreateRequest creates the ListBySyncGroup request.
@@ -329,7 +319,7 @@ func (client *ServerEndpointsClient) listBySyncGroupCreateRequest(ctx context.Co
 
 // listBySyncGroupHandleResponse handles the ListBySyncGroup response.
 func (client *ServerEndpointsClient) listBySyncGroupHandleResponse(resp *http.Response) (ServerEndpointsClientListBySyncGroupResponse, error) {
-	result := ServerEndpointsClientListBySyncGroupResponse{RawResponse: resp}
+	result := ServerEndpointsClientListBySyncGroupResponse{}
 	if val := resp.Header.Get("Location"); val != "" {
 		result.Location = &val
 	}
@@ -359,9 +349,7 @@ func (client *ServerEndpointsClient) BeginRecallAction(ctx context.Context, reso
 	if err != nil {
 		return ServerEndpointsClientRecallActionPollerResponse{}, err
 	}
-	result := ServerEndpointsClientRecallActionPollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerEndpointsClientRecallActionPollerResponse{}
 	pt, err := armruntime.NewPoller("ServerEndpointsClient.RecallAction", "", resp, client.pl)
 	if err != nil {
 		return ServerEndpointsClientRecallActionPollerResponse{}, err
@@ -436,9 +424,7 @@ func (client *ServerEndpointsClient) BeginUpdate(ctx context.Context, resourceGr
 	if err != nil {
 		return ServerEndpointsClientUpdatePollerResponse{}, err
 	}
-	result := ServerEndpointsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerEndpointsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerEndpointsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ServerEndpointsClientUpdatePollerResponse{}, err

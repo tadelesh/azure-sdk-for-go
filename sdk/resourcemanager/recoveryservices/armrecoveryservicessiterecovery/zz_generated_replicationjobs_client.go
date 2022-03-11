@@ -38,19 +38,19 @@ type ReplicationJobsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReplicationJobsClient(resourceName string, resourceGroupName string, subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReplicationJobsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReplicationJobsClient{
 		resourceName:      resourceName,
 		resourceGroupName: resourceGroupName,
 		subscriptionID:    subscriptionID,
-		host:              string(cp.Endpoint),
-		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:              string(ep),
+		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -65,9 +65,7 @@ func (client *ReplicationJobsClient) BeginCancel(ctx context.Context, jobName st
 	if err != nil {
 		return ReplicationJobsClientCancelPollerResponse{}, err
 	}
-	result := ReplicationJobsClientCancelPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationJobsClientCancelPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationJobsClient.Cancel", "", resp, client.pl)
 	if err != nil {
 		return ReplicationJobsClientCancelPollerResponse{}, err
@@ -119,7 +117,7 @@ func (client *ReplicationJobsClient) cancelCreateRequest(ctx context.Context, jo
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -135,9 +133,7 @@ func (client *ReplicationJobsClient) BeginExport(ctx context.Context, jobQueryPa
 	if err != nil {
 		return ReplicationJobsClientExportPollerResponse{}, err
 	}
-	result := ReplicationJobsClientExportPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationJobsClientExportPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationJobsClient.Export", "", resp, client.pl)
 	if err != nil {
 		return ReplicationJobsClientExportPollerResponse{}, err
@@ -185,7 +181,7 @@ func (client *ReplicationJobsClient) exportCreateRequest(ctx context.Context, jo
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, jobQueryParameter)
@@ -234,7 +230,7 @@ func (client *ReplicationJobsClient) getCreateRequest(ctx context.Context, jobNa
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -242,7 +238,7 @@ func (client *ReplicationJobsClient) getCreateRequest(ctx context.Context, jobNa
 
 // getHandleResponse handles the Get response.
 func (client *ReplicationJobsClient) getHandleResponse(resp *http.Response) (ReplicationJobsClientGetResponse, error) {
-	result := ReplicationJobsClientGetResponse{RawResponse: resp}
+	result := ReplicationJobsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Job); err != nil {
 		return ReplicationJobsClientGetResponse{}, err
 	}
@@ -284,7 +280,7 @@ func (client *ReplicationJobsClient) listCreateRequest(ctx context.Context, opti
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	if options != nil && options.Filter != nil {
 		reqQP.Set("$filter", *options.Filter)
 	}
@@ -295,7 +291,7 @@ func (client *ReplicationJobsClient) listCreateRequest(ctx context.Context, opti
 
 // listHandleResponse handles the List response.
 func (client *ReplicationJobsClient) listHandleResponse(resp *http.Response) (ReplicationJobsClientListResponse, error) {
-	result := ReplicationJobsClientListResponse{RawResponse: resp}
+	result := ReplicationJobsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobCollection); err != nil {
 		return ReplicationJobsClientListResponse{}, err
 	}
@@ -312,9 +308,7 @@ func (client *ReplicationJobsClient) BeginRestart(ctx context.Context, jobName s
 	if err != nil {
 		return ReplicationJobsClientRestartPollerResponse{}, err
 	}
-	result := ReplicationJobsClientRestartPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationJobsClientRestartPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationJobsClient.Restart", "", resp, client.pl)
 	if err != nil {
 		return ReplicationJobsClientRestartPollerResponse{}, err
@@ -366,7 +360,7 @@ func (client *ReplicationJobsClient) restartCreateRequest(ctx context.Context, j
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -383,9 +377,7 @@ func (client *ReplicationJobsClient) BeginResume(ctx context.Context, jobName st
 	if err != nil {
 		return ReplicationJobsClientResumePollerResponse{}, err
 	}
-	result := ReplicationJobsClientResumePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationJobsClientResumePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationJobsClient.Resume", "", resp, client.pl)
 	if err != nil {
 		return ReplicationJobsClientResumePollerResponse{}, err
@@ -437,7 +429,7 @@ func (client *ReplicationJobsClient) resumeCreateRequest(ctx context.Context, jo
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, resumeJobParams)

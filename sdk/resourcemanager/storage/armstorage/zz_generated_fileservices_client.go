@@ -101,7 +101,7 @@ func (client *FileServicesClient) getServicePropertiesCreateRequest(ctx context.
 
 // getServicePropertiesHandleResponse handles the GetServiceProperties response.
 func (client *FileServicesClient) getServicePropertiesHandleResponse(resp *http.Response) (FileServicesClientGetServicePropertiesResponse, error) {
-	result := FileServicesClientGetServicePropertiesResponse{RawResponse: resp}
+	result := FileServicesClientGetServicePropertiesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FileServiceProperties); err != nil {
 		return FileServicesClientGetServicePropertiesResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *FileServicesClient) listCreateRequest(ctx context.Context, resourc
 
 // listHandleResponse handles the List response.
 func (client *FileServicesClient) listHandleResponse(resp *http.Response) (FileServicesClientListResponse, error) {
-	result := FileServicesClientListResponse{RawResponse: resp}
+	result := FileServicesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FileServiceItems); err != nil {
 		return FileServicesClientListResponse{}, err
 	}
@@ -217,7 +217,7 @@ func (client *FileServicesClient) setServicePropertiesCreateRequest(ctx context.
 
 // setServicePropertiesHandleResponse handles the SetServiceProperties response.
 func (client *FileServicesClient) setServicePropertiesHandleResponse(resp *http.Response) (FileServicesClientSetServicePropertiesResponse, error) {
-	result := FileServicesClientSetServicePropertiesResponse{RawResponse: resp}
+	result := FileServicesClientSetServicePropertiesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FileServiceProperties); err != nil {
 		return FileServicesClientSetServicePropertiesResponse{}, err
 	}

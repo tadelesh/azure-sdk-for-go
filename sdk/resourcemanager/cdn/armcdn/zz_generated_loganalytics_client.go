@@ -101,7 +101,7 @@ func (client *LogAnalyticsClient) getLogAnalyticsLocationsCreateRequest(ctx cont
 
 // getLogAnalyticsLocationsHandleResponse handles the GetLogAnalyticsLocations response.
 func (client *LogAnalyticsClient) getLogAnalyticsLocationsHandleResponse(resp *http.Response) (LogAnalyticsClientGetLogAnalyticsLocationsResponse, error) {
-	result := LogAnalyticsClientGetLogAnalyticsLocationsResponse{RawResponse: resp}
+	result := LogAnalyticsClientGetLogAnalyticsLocationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContinentsResponse); err != nil {
 		return LogAnalyticsClientGetLogAnalyticsLocationsResponse{}, err
 	}
@@ -185,7 +185,7 @@ func (client *LogAnalyticsClient) getLogAnalyticsMetricsCreateRequest(ctx contex
 
 // getLogAnalyticsMetricsHandleResponse handles the GetLogAnalyticsMetrics response.
 func (client *LogAnalyticsClient) getLogAnalyticsMetricsHandleResponse(resp *http.Response) (LogAnalyticsClientGetLogAnalyticsMetricsResponse, error) {
-	result := LogAnalyticsClientGetLogAnalyticsMetricsResponse{RawResponse: resp}
+	result := LogAnalyticsClientGetLogAnalyticsMetricsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetricsResponse); err != nil {
 		return LogAnalyticsClientGetLogAnalyticsMetricsResponse{}, err
 	}
@@ -256,7 +256,7 @@ func (client *LogAnalyticsClient) getLogAnalyticsRankingsCreateRequest(ctx conte
 
 // getLogAnalyticsRankingsHandleResponse handles the GetLogAnalyticsRankings response.
 func (client *LogAnalyticsClient) getLogAnalyticsRankingsHandleResponse(resp *http.Response) (LogAnalyticsClientGetLogAnalyticsRankingsResponse, error) {
-	result := LogAnalyticsClientGetLogAnalyticsRankingsResponse{RawResponse: resp}
+	result := LogAnalyticsClientGetLogAnalyticsRankingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RankingsResponse); err != nil {
 		return LogAnalyticsClientGetLogAnalyticsRankingsResponse{}, err
 	}
@@ -313,7 +313,7 @@ func (client *LogAnalyticsClient) getLogAnalyticsResourcesCreateRequest(ctx cont
 
 // getLogAnalyticsResourcesHandleResponse handles the GetLogAnalyticsResources response.
 func (client *LogAnalyticsClient) getLogAnalyticsResourcesHandleResponse(resp *http.Response) (LogAnalyticsClientGetLogAnalyticsResourcesResponse, error) {
-	result := LogAnalyticsClientGetLogAnalyticsResourcesResponse{RawResponse: resp}
+	result := LogAnalyticsClientGetLogAnalyticsResourcesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourcesResponse); err != nil {
 		return LogAnalyticsClientGetLogAnalyticsResourcesResponse{}, err
 	}
@@ -391,7 +391,7 @@ func (client *LogAnalyticsClient) getWafLogAnalyticsMetricsCreateRequest(ctx con
 
 // getWafLogAnalyticsMetricsHandleResponse handles the GetWafLogAnalyticsMetrics response.
 func (client *LogAnalyticsClient) getWafLogAnalyticsMetricsHandleResponse(resp *http.Response) (LogAnalyticsClientGetWafLogAnalyticsMetricsResponse, error) {
-	result := LogAnalyticsClientGetWafLogAnalyticsMetricsResponse{RawResponse: resp}
+	result := LogAnalyticsClientGetWafLogAnalyticsMetricsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WafMetricsResponse); err != nil {
 		return LogAnalyticsClientGetWafLogAnalyticsMetricsResponse{}, err
 	}
@@ -467,7 +467,7 @@ func (client *LogAnalyticsClient) getWafLogAnalyticsRankingsCreateRequest(ctx co
 
 // getWafLogAnalyticsRankingsHandleResponse handles the GetWafLogAnalyticsRankings response.
 func (client *LogAnalyticsClient) getWafLogAnalyticsRankingsHandleResponse(resp *http.Response) (LogAnalyticsClientGetWafLogAnalyticsRankingsResponse, error) {
-	result := LogAnalyticsClientGetWafLogAnalyticsRankingsResponse{RawResponse: resp}
+	result := LogAnalyticsClientGetWafLogAnalyticsRankingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WafRankingsResponse); err != nil {
 		return LogAnalyticsClientGetWafLogAnalyticsRankingsResponse{}, err
 	}

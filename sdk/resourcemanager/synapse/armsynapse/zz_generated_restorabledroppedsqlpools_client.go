@@ -34,17 +34,17 @@ type RestorableDroppedSQLPoolsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRestorableDroppedSQLPoolsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RestorableDroppedSQLPoolsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RestorableDroppedSQLPoolsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *RestorableDroppedSQLPoolsClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *RestorableDroppedSQLPoolsClient) getHandleResponse(resp *http.Response) (RestorableDroppedSQLPoolsClientGetResponse, error) {
-	result := RestorableDroppedSQLPoolsClientGetResponse{RawResponse: resp}
+	result := RestorableDroppedSQLPoolsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorableDroppedSQLPool); err != nil {
 		return RestorableDroppedSQLPoolsClientGetResponse{}, err
 	}
@@ -116,19 +116,13 @@ func (client *RestorableDroppedSQLPoolsClient) getHandleResponse(resp *http.Resp
 // workspaceName - The name of the workspace.
 // options - RestorableDroppedSQLPoolsClientListByWorkspaceOptions contains the optional parameters for the RestorableDroppedSQLPoolsClient.ListByWorkspace
 // method.
-func (client *RestorableDroppedSQLPoolsClient) ListByWorkspace(ctx context.Context, resourceGroupName string, workspaceName string, options *RestorableDroppedSQLPoolsClientListByWorkspaceOptions) (RestorableDroppedSQLPoolsClientListByWorkspaceResponse, error) {
-	req, err := client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
-	if err != nil {
-		return RestorableDroppedSQLPoolsClientListByWorkspaceResponse{}, err
+func (client *RestorableDroppedSQLPoolsClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *RestorableDroppedSQLPoolsClientListByWorkspaceOptions) *RestorableDroppedSQLPoolsClientListByWorkspacePager {
+	return &RestorableDroppedSQLPoolsClientListByWorkspacePager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return RestorableDroppedSQLPoolsClientListByWorkspaceResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return RestorableDroppedSQLPoolsClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByWorkspaceHandleResponse(resp)
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.
@@ -159,7 +153,7 @@ func (client *RestorableDroppedSQLPoolsClient) listByWorkspaceCreateRequest(ctx 
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *RestorableDroppedSQLPoolsClient) listByWorkspaceHandleResponse(resp *http.Response) (RestorableDroppedSQLPoolsClientListByWorkspaceResponse, error) {
-	result := RestorableDroppedSQLPoolsClientListByWorkspaceResponse{RawResponse: resp}
+	result := RestorableDroppedSQLPoolsClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestorableDroppedSQLPoolListResult); err != nil {
 		return RestorableDroppedSQLPoolsClientListByWorkspaceResponse{}, err
 	}

@@ -34,17 +34,17 @@ type NotificationRegistrationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewNotificationRegistrationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *NotificationRegistrationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &NotificationRegistrationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *NotificationRegistrationsClient) createOrUpdateCreateRequest(ctx c
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *NotificationRegistrationsClient) createOrUpdateHandleResponse(resp *http.Response) (NotificationRegistrationsClientCreateOrUpdateResponse, error) {
-	result := NotificationRegistrationsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := NotificationRegistrationsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotificationRegistration); err != nil {
 		return NotificationRegistrationsClientCreateOrUpdateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *NotificationRegistrationsClient) Delete(ctx context.Context, provi
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return NotificationRegistrationsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return NotificationRegistrationsClientDeleteResponse{RawResponse: resp}, nil
+	return NotificationRegistrationsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -202,7 +202,7 @@ func (client *NotificationRegistrationsClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *NotificationRegistrationsClient) getHandleResponse(resp *http.Response) (NotificationRegistrationsClientGetResponse, error) {
-	result := NotificationRegistrationsClientGetResponse{RawResponse: resp}
+	result := NotificationRegistrationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotificationRegistration); err != nil {
 		return NotificationRegistrationsClientGetResponse{}, err
 	}
@@ -250,7 +250,7 @@ func (client *NotificationRegistrationsClient) listByProviderRegistrationCreateR
 
 // listByProviderRegistrationHandleResponse handles the ListByProviderRegistration response.
 func (client *NotificationRegistrationsClient) listByProviderRegistrationHandleResponse(resp *http.Response) (NotificationRegistrationsClientListByProviderRegistrationResponse, error) {
-	result := NotificationRegistrationsClientListByProviderRegistrationResponse{RawResponse: resp}
+	result := NotificationRegistrationsClientListByProviderRegistrationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotificationRegistrationArrayResponseWithContinuation); err != nil {
 		return NotificationRegistrationsClientListByProviderRegistrationResponse{}, err
 	}

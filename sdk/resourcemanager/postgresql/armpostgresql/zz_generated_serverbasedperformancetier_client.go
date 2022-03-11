@@ -34,17 +34,17 @@ type ServerBasedPerformanceTierClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServerBasedPerformanceTierClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServerBasedPerformanceTierClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServerBasedPerformanceTierClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -55,19 +55,13 @@ func NewServerBasedPerformanceTierClient(subscriptionID string, credential azcor
 // serverName - The name of the server.
 // options - ServerBasedPerformanceTierClientListOptions contains the optional parameters for the ServerBasedPerformanceTierClient.List
 // method.
-func (client *ServerBasedPerformanceTierClient) List(ctx context.Context, resourceGroupName string, serverName string, options *ServerBasedPerformanceTierClientListOptions) (ServerBasedPerformanceTierClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, serverName, options)
-	if err != nil {
-		return ServerBasedPerformanceTierClientListResponse{}, err
+func (client *ServerBasedPerformanceTierClient) List(resourceGroupName string, serverName string, options *ServerBasedPerformanceTierClientListOptions) *ServerBasedPerformanceTierClientListPager {
+	return &ServerBasedPerformanceTierClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, serverName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ServerBasedPerformanceTierClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ServerBasedPerformanceTierClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -98,7 +92,7 @@ func (client *ServerBasedPerformanceTierClient) listCreateRequest(ctx context.Co
 
 // listHandleResponse handles the List response.
 func (client *ServerBasedPerformanceTierClient) listHandleResponse(resp *http.Response) (ServerBasedPerformanceTierClientListResponse, error) {
-	result := ServerBasedPerformanceTierClientListResponse{RawResponse: resp}
+	result := ServerBasedPerformanceTierClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PerformanceTierListResult); err != nil {
 		return ServerBasedPerformanceTierClientListResponse{}, err
 	}

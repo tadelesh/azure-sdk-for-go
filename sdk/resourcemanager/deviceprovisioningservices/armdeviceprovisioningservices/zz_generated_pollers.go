@@ -43,11 +43,10 @@ func (p *IotDpsResourceClientCreateOrUpdatePoller) Poll(ctx context.Context) (*h
 // If the final GET succeeded then the final IotDpsResourceClientCreateOrUpdateResponse will be returned.
 func (p *IotDpsResourceClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (IotDpsResourceClientCreateOrUpdateResponse, error) {
 	respType := IotDpsResourceClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ProvisioningServiceDescription)
+	_, err := p.pt.FinalResponse(ctx, &respType.ProvisioningServiceDescription)
 	if err != nil {
 		return IotDpsResourceClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionPoller) Poll
 // If the final GET succeeded then the final IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionResponse will be returned.
 func (p *IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionPoller) FinalResponse(ctx context.Context) (IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionResponse, error) {
 	respType := IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *IotDpsResourceClientDeletePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final IotDpsResourceClientDeleteResponse will be returned.
 func (p *IotDpsResourceClientDeletePoller) FinalResponse(ctx context.Context) (IotDpsResourceClientDeleteResponse, error) {
 	respType := IotDpsResourceClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return IotDpsResourceClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *IotDpsResourceClientDeletePrivateEndpointConnectionPoller) Poll(ctx con
 // If the final GET succeeded then the final IotDpsResourceClientDeletePrivateEndpointConnectionResponse will be returned.
 func (p *IotDpsResourceClientDeletePrivateEndpointConnectionPoller) FinalResponse(ctx context.Context) (IotDpsResourceClientDeletePrivateEndpointConnectionResponse, error) {
 	respType := IotDpsResourceClientDeletePrivateEndpointConnectionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return IotDpsResourceClientDeletePrivateEndpointConnectionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *IotDpsResourceClientUpdatePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final IotDpsResourceClientUpdateResponse will be returned.
 func (p *IotDpsResourceClientUpdatePoller) FinalResponse(ctx context.Context) (IotDpsResourceClientUpdateResponse, error) {
 	respType := IotDpsResourceClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ProvisioningServiceDescription)
+	_, err := p.pt.FinalResponse(ctx, &respType.ProvisioningServiceDescription)
 	if err != nil {
 		return IotDpsResourceClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

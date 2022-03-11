@@ -112,7 +112,7 @@ func (client *SoftwareInventoriesClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *SoftwareInventoriesClient) getHandleResponse(resp *http.Response) (SoftwareInventoriesClientGetResponse, error) {
-	result := SoftwareInventoriesClientGetResponse{RawResponse: resp}
+	result := SoftwareInventoriesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Software); err != nil {
 		return SoftwareInventoriesClientGetResponse{}, err
 	}
@@ -175,7 +175,7 @@ func (client *SoftwareInventoriesClient) listByExtendedResourceCreateRequest(ctx
 
 // listByExtendedResourceHandleResponse handles the ListByExtendedResource response.
 func (client *SoftwareInventoriesClient) listByExtendedResourceHandleResponse(resp *http.Response) (SoftwareInventoriesClientListByExtendedResourceResponse, error) {
-	result := SoftwareInventoriesClientListByExtendedResourceResponse{RawResponse: resp}
+	result := SoftwareInventoriesClientListByExtendedResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SoftwaresList); err != nil {
 		return SoftwareInventoriesClientListByExtendedResourceResponse{}, err
 	}
@@ -218,7 +218,7 @@ func (client *SoftwareInventoriesClient) listBySubscriptionCreateRequest(ctx con
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *SoftwareInventoriesClient) listBySubscriptionHandleResponse(resp *http.Response) (SoftwareInventoriesClientListBySubscriptionResponse, error) {
-	result := SoftwareInventoriesClientListBySubscriptionResponse{RawResponse: resp}
+	result := SoftwareInventoriesClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SoftwaresList); err != nil {
 		return SoftwareInventoriesClientListBySubscriptionResponse{}, err
 	}

@@ -34,17 +34,17 @@ type BackupInstancesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBackupInstancesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BackupInstancesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BackupInstancesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *BackupInstancesClient) BeginAdhocBackup(ctx context.Context, vault
 	if err != nil {
 		return BackupInstancesClientAdhocBackupPollerResponse{}, err
 	}
-	result := BackupInstancesClientAdhocBackupPollerResponse{
-		RawResponse: resp,
-	}
+	result := BackupInstancesClientAdhocBackupPollerResponse{}
 	pt, err := armruntime.NewPoller("BackupInstancesClient.AdhocBackup", "", resp, client.pl)
 	if err != nil {
 		return BackupInstancesClientAdhocBackupPollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *BackupInstancesClient) BeginCreateOrUpdate(ctx context.Context, va
 	if err != nil {
 		return BackupInstancesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := BackupInstancesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := BackupInstancesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("BackupInstancesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return BackupInstancesClientCreateOrUpdatePollerResponse{}, err
@@ -207,9 +203,7 @@ func (client *BackupInstancesClient) BeginDelete(ctx context.Context, vaultName 
 	if err != nil {
 		return BackupInstancesClientDeletePollerResponse{}, err
 	}
-	result := BackupInstancesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := BackupInstancesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("BackupInstancesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return BackupInstancesClientDeletePollerResponse{}, err
@@ -320,7 +314,7 @@ func (client *BackupInstancesClient) getCreateRequest(ctx context.Context, vault
 
 // getHandleResponse handles the Get response.
 func (client *BackupInstancesClient) getHandleResponse(resp *http.Response) (BackupInstancesClientGetResponse, error) {
-	result := BackupInstancesClientGetResponse{RawResponse: resp}
+	result := BackupInstancesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupInstanceResource); err != nil {
 		return BackupInstancesClientGetResponse{}, err
 	}
@@ -372,7 +366,7 @@ func (client *BackupInstancesClient) listCreateRequest(ctx context.Context, vaul
 
 // listHandleResponse handles the List response.
 func (client *BackupInstancesClient) listHandleResponse(resp *http.Response) (BackupInstancesClientListResponse, error) {
-	result := BackupInstancesClientListResponse{RawResponse: resp}
+	result := BackupInstancesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupInstanceResourceList); err != nil {
 		return BackupInstancesClientListResponse{}, err
 	}
@@ -391,9 +385,7 @@ func (client *BackupInstancesClient) BeginTriggerRehydrate(ctx context.Context, 
 	if err != nil {
 		return BackupInstancesClientTriggerRehydratePollerResponse{}, err
 	}
-	result := BackupInstancesClientTriggerRehydratePollerResponse{
-		RawResponse: resp,
-	}
+	result := BackupInstancesClientTriggerRehydratePollerResponse{}
 	pt, err := armruntime.NewPoller("BackupInstancesClient.TriggerRehydrate", "", resp, client.pl)
 	if err != nil {
 		return BackupInstancesClientTriggerRehydratePollerResponse{}, err
@@ -464,9 +456,7 @@ func (client *BackupInstancesClient) BeginTriggerRestore(ctx context.Context, va
 	if err != nil {
 		return BackupInstancesClientTriggerRestorePollerResponse{}, err
 	}
-	result := BackupInstancesClientTriggerRestorePollerResponse{
-		RawResponse: resp,
-	}
+	result := BackupInstancesClientTriggerRestorePollerResponse{}
 	pt, err := armruntime.NewPoller("BackupInstancesClient.TriggerRestore", "", resp, client.pl)
 	if err != nil {
 		return BackupInstancesClientTriggerRestorePollerResponse{}, err
@@ -536,9 +526,7 @@ func (client *BackupInstancesClient) BeginValidateForBackup(ctx context.Context,
 	if err != nil {
 		return BackupInstancesClientValidateForBackupPollerResponse{}, err
 	}
-	result := BackupInstancesClientValidateForBackupPollerResponse{
-		RawResponse: resp,
-	}
+	result := BackupInstancesClientValidateForBackupPollerResponse{}
 	pt, err := armruntime.NewPoller("BackupInstancesClient.ValidateForBackup", "", resp, client.pl)
 	if err != nil {
 		return BackupInstancesClientValidateForBackupPollerResponse{}, err
@@ -605,9 +593,7 @@ func (client *BackupInstancesClient) BeginValidateForRestore(ctx context.Context
 	if err != nil {
 		return BackupInstancesClientValidateForRestorePollerResponse{}, err
 	}
-	result := BackupInstancesClientValidateForRestorePollerResponse{
-		RawResponse: resp,
-	}
+	result := BackupInstancesClientValidateForRestorePollerResponse{}
 	pt, err := armruntime.NewPoller("BackupInstancesClient.ValidateForRestore", "", resp, client.pl)
 	if err != nil {
 		return BackupInstancesClientValidateForRestorePollerResponse{}, err

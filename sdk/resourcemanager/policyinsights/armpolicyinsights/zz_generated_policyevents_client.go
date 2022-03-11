@@ -34,16 +34,16 @@ type PolicyEventsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPolicyEventsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *PolicyEventsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PolicyEventsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -119,7 +119,7 @@ func (client *PolicyEventsClient) listQueryResultsForManagementGroupCreateReques
 
 // listQueryResultsForManagementGroupHandleResponse handles the ListQueryResultsForManagementGroup response.
 func (client *PolicyEventsClient) listQueryResultsForManagementGroupHandleResponse(resp *http.Response) (PolicyEventsClientListQueryResultsForManagementGroupResponse, error) {
-	result := PolicyEventsClientListQueryResultsForManagementGroupResponse{RawResponse: resp}
+	result := PolicyEventsClientListQueryResultsForManagementGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyEventsQueryResults); err != nil {
 		return PolicyEventsClientListQueryResultsForManagementGroupResponse{}, err
 	}
@@ -203,7 +203,7 @@ func (client *PolicyEventsClient) listQueryResultsForPolicyDefinitionCreateReque
 
 // listQueryResultsForPolicyDefinitionHandleResponse handles the ListQueryResultsForPolicyDefinition response.
 func (client *PolicyEventsClient) listQueryResultsForPolicyDefinitionHandleResponse(resp *http.Response) (PolicyEventsClientListQueryResultsForPolicyDefinitionResponse, error) {
-	result := PolicyEventsClientListQueryResultsForPolicyDefinitionResponse{RawResponse: resp}
+	result := PolicyEventsClientListQueryResultsForPolicyDefinitionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyEventsQueryResults); err != nil {
 		return PolicyEventsClientListQueryResultsForPolicyDefinitionResponse{}, err
 	}
@@ -287,7 +287,7 @@ func (client *PolicyEventsClient) listQueryResultsForPolicySetDefinitionCreateRe
 
 // listQueryResultsForPolicySetDefinitionHandleResponse handles the ListQueryResultsForPolicySetDefinition response.
 func (client *PolicyEventsClient) listQueryResultsForPolicySetDefinitionHandleResponse(resp *http.Response) (PolicyEventsClientListQueryResultsForPolicySetDefinitionResponse, error) {
-	result := PolicyEventsClientListQueryResultsForPolicySetDefinitionResponse{RawResponse: resp}
+	result := PolicyEventsClientListQueryResultsForPolicySetDefinitionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyEventsQueryResults); err != nil {
 		return PolicyEventsClientListQueryResultsForPolicySetDefinitionResponse{}, err
 	}
@@ -360,7 +360,7 @@ func (client *PolicyEventsClient) listQueryResultsForResourceCreateRequest(ctx c
 
 // listQueryResultsForResourceHandleResponse handles the ListQueryResultsForResource response.
 func (client *PolicyEventsClient) listQueryResultsForResourceHandleResponse(resp *http.Response) (PolicyEventsClientListQueryResultsForResourceResponse, error) {
-	result := PolicyEventsClientListQueryResultsForResourceResponse{RawResponse: resp}
+	result := PolicyEventsClientListQueryResultsForResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyEventsQueryResults); err != nil {
 		return PolicyEventsClientListQueryResultsForResourceResponse{}, err
 	}
@@ -438,7 +438,7 @@ func (client *PolicyEventsClient) listQueryResultsForResourceGroupCreateRequest(
 
 // listQueryResultsForResourceGroupHandleResponse handles the ListQueryResultsForResourceGroup response.
 func (client *PolicyEventsClient) listQueryResultsForResourceGroupHandleResponse(resp *http.Response) (PolicyEventsClientListQueryResultsForResourceGroupResponse, error) {
-	result := PolicyEventsClientListQueryResultsForResourceGroupResponse{RawResponse: resp}
+	result := PolicyEventsClientListQueryResultsForResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyEventsQueryResults); err != nil {
 		return PolicyEventsClientListQueryResultsForResourceGroupResponse{}, err
 	}
@@ -527,7 +527,7 @@ func (client *PolicyEventsClient) listQueryResultsForResourceGroupLevelPolicyAss
 
 // listQueryResultsForResourceGroupLevelPolicyAssignmentHandleResponse handles the ListQueryResultsForResourceGroupLevelPolicyAssignment response.
 func (client *PolicyEventsClient) listQueryResultsForResourceGroupLevelPolicyAssignmentHandleResponse(resp *http.Response) (PolicyEventsClientListQueryResultsForResourceGroupLevelPolicyAssignmentResponse, error) {
-	result := PolicyEventsClientListQueryResultsForResourceGroupLevelPolicyAssignmentResponse{RawResponse: resp}
+	result := PolicyEventsClientListQueryResultsForResourceGroupLevelPolicyAssignmentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyEventsQueryResults); err != nil {
 		return PolicyEventsClientListQueryResultsForResourceGroupLevelPolicyAssignmentResponse{}, err
 	}
@@ -600,7 +600,7 @@ func (client *PolicyEventsClient) listQueryResultsForSubscriptionCreateRequest(c
 
 // listQueryResultsForSubscriptionHandleResponse handles the ListQueryResultsForSubscription response.
 func (client *PolicyEventsClient) listQueryResultsForSubscriptionHandleResponse(resp *http.Response) (PolicyEventsClientListQueryResultsForSubscriptionResponse, error) {
-	result := PolicyEventsClientListQueryResultsForSubscriptionResponse{RawResponse: resp}
+	result := PolicyEventsClientListQueryResultsForSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyEventsQueryResults); err != nil {
 		return PolicyEventsClientListQueryResultsForSubscriptionResponse{}, err
 	}
@@ -684,7 +684,7 @@ func (client *PolicyEventsClient) listQueryResultsForSubscriptionLevelPolicyAssi
 
 // listQueryResultsForSubscriptionLevelPolicyAssignmentHandleResponse handles the ListQueryResultsForSubscriptionLevelPolicyAssignment response.
 func (client *PolicyEventsClient) listQueryResultsForSubscriptionLevelPolicyAssignmentHandleResponse(resp *http.Response) (PolicyEventsClientListQueryResultsForSubscriptionLevelPolicyAssignmentResponse, error) {
-	result := PolicyEventsClientListQueryResultsForSubscriptionLevelPolicyAssignmentResponse{RawResponse: resp}
+	result := PolicyEventsClientListQueryResultsForSubscriptionLevelPolicyAssignmentResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyEventsQueryResults); err != nil {
 		return PolicyEventsClientListQueryResultsForSubscriptionLevelPolicyAssignmentResponse{}, err
 	}

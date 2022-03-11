@@ -34,17 +34,17 @@ type LedgerDigestUploadsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLedgerDigestUploadsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LedgerDigestUploadsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LedgerDigestUploadsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *LedgerDigestUploadsClient) BeginCreateOrUpdate(ctx context.Context
 	if err != nil {
 		return LedgerDigestUploadsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := LedgerDigestUploadsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LedgerDigestUploadsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("LedgerDigestUploadsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return LedgerDigestUploadsClientCreateOrUpdatePollerResponse{}, err
@@ -139,9 +137,7 @@ func (client *LedgerDigestUploadsClient) BeginDisable(ctx context.Context, resou
 	if err != nil {
 		return LedgerDigestUploadsClientDisablePollerResponse{}, err
 	}
-	result := LedgerDigestUploadsClientDisablePollerResponse{
-		RawResponse: resp,
-	}
+	result := LedgerDigestUploadsClientDisablePollerResponse{}
 	pt, err := armruntime.NewPoller("LedgerDigestUploadsClient.Disable", "", resp, client.pl)
 	if err != nil {
 		return LedgerDigestUploadsClientDisablePollerResponse{}, err
@@ -261,7 +257,7 @@ func (client *LedgerDigestUploadsClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *LedgerDigestUploadsClient) getHandleResponse(resp *http.Response) (LedgerDigestUploadsClientGetResponse, error) {
-	result := LedgerDigestUploadsClientGetResponse{RawResponse: resp}
+	result := LedgerDigestUploadsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LedgerDigestUploads); err != nil {
 		return LedgerDigestUploadsClientGetResponse{}, err
 	}
@@ -320,7 +316,7 @@ func (client *LedgerDigestUploadsClient) listByDatabaseCreateRequest(ctx context
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *LedgerDigestUploadsClient) listByDatabaseHandleResponse(resp *http.Response) (LedgerDigestUploadsClientListByDatabaseResponse, error) {
-	result := LedgerDigestUploadsClientListByDatabaseResponse{RawResponse: resp}
+	result := LedgerDigestUploadsClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LedgerDigestUploadsListResult); err != nil {
 		return LedgerDigestUploadsClientListByDatabaseResponse{}, err
 	}

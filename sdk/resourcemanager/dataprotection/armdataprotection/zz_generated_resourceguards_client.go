@@ -34,17 +34,17 @@ type ResourceGuardsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewResourceGuardsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ResourceGuardsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ResourceGuardsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -66,7 +66,7 @@ func (client *ResourceGuardsClient) Delete(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ResourceGuardsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ResourceGuardsClientDeleteResponse{RawResponse: resp}, nil
+	return ResourceGuardsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -143,7 +143,7 @@ func (client *ResourceGuardsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *ResourceGuardsClient) getHandleResponse(resp *http.Response) (ResourceGuardsClientGetResponse, error) {
-	result := ResourceGuardsClientGetResponse{RawResponse: resp}
+	result := ResourceGuardsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceGuardResource); err != nil {
 		return ResourceGuardsClientGetResponse{}, err
 	}
@@ -196,7 +196,7 @@ func (client *ResourceGuardsClient) getBackupSecurityPINRequestsObjectsCreateReq
 
 // getBackupSecurityPINRequestsObjectsHandleResponse handles the GetBackupSecurityPINRequestsObjects response.
 func (client *ResourceGuardsClient) getBackupSecurityPINRequestsObjectsHandleResponse(resp *http.Response) (ResourceGuardsClientGetBackupSecurityPINRequestsObjectsResponse, error) {
-	result := ResourceGuardsClientGetBackupSecurityPINRequestsObjectsResponse{RawResponse: resp}
+	result := ResourceGuardsClientGetBackupSecurityPINRequestsObjectsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DppBaseResourceList); err != nil {
 		return ResourceGuardsClientGetBackupSecurityPINRequestsObjectsResponse{}, err
 	}
@@ -256,7 +256,7 @@ func (client *ResourceGuardsClient) getDefaultBackupSecurityPINRequestsObjectCre
 
 // getDefaultBackupSecurityPINRequestsObjectHandleResponse handles the GetDefaultBackupSecurityPINRequestsObject response.
 func (client *ResourceGuardsClient) getDefaultBackupSecurityPINRequestsObjectHandleResponse(resp *http.Response) (ResourceGuardsClientGetDefaultBackupSecurityPINRequestsObjectResponse, error) {
-	result := ResourceGuardsClientGetDefaultBackupSecurityPINRequestsObjectResponse{RawResponse: resp}
+	result := ResourceGuardsClientGetDefaultBackupSecurityPINRequestsObjectResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DppBaseResource); err != nil {
 		return ResourceGuardsClientGetDefaultBackupSecurityPINRequestsObjectResponse{}, err
 	}
@@ -316,7 +316,7 @@ func (client *ResourceGuardsClient) getDefaultDeleteProtectedItemRequestsObjectC
 
 // getDefaultDeleteProtectedItemRequestsObjectHandleResponse handles the GetDefaultDeleteProtectedItemRequestsObject response.
 func (client *ResourceGuardsClient) getDefaultDeleteProtectedItemRequestsObjectHandleResponse(resp *http.Response) (ResourceGuardsClientGetDefaultDeleteProtectedItemRequestsObjectResponse, error) {
-	result := ResourceGuardsClientGetDefaultDeleteProtectedItemRequestsObjectResponse{RawResponse: resp}
+	result := ResourceGuardsClientGetDefaultDeleteProtectedItemRequestsObjectResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DppBaseResource); err != nil {
 		return ResourceGuardsClientGetDefaultDeleteProtectedItemRequestsObjectResponse{}, err
 	}
@@ -376,7 +376,7 @@ func (client *ResourceGuardsClient) getDefaultDeleteResourceGuardProxyRequestsOb
 
 // getDefaultDeleteResourceGuardProxyRequestsObjectHandleResponse handles the GetDefaultDeleteResourceGuardProxyRequestsObject response.
 func (client *ResourceGuardsClient) getDefaultDeleteResourceGuardProxyRequestsObjectHandleResponse(resp *http.Response) (ResourceGuardsClientGetDefaultDeleteResourceGuardProxyRequestsObjectResponse, error) {
-	result := ResourceGuardsClientGetDefaultDeleteResourceGuardProxyRequestsObjectResponse{RawResponse: resp}
+	result := ResourceGuardsClientGetDefaultDeleteResourceGuardProxyRequestsObjectResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DppBaseResource); err != nil {
 		return ResourceGuardsClientGetDefaultDeleteResourceGuardProxyRequestsObjectResponse{}, err
 	}
@@ -436,7 +436,7 @@ func (client *ResourceGuardsClient) getDefaultDisableSoftDeleteRequestsObjectCre
 
 // getDefaultDisableSoftDeleteRequestsObjectHandleResponse handles the GetDefaultDisableSoftDeleteRequestsObject response.
 func (client *ResourceGuardsClient) getDefaultDisableSoftDeleteRequestsObjectHandleResponse(resp *http.Response) (ResourceGuardsClientGetDefaultDisableSoftDeleteRequestsObjectResponse, error) {
-	result := ResourceGuardsClientGetDefaultDisableSoftDeleteRequestsObjectResponse{RawResponse: resp}
+	result := ResourceGuardsClientGetDefaultDisableSoftDeleteRequestsObjectResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DppBaseResource); err != nil {
 		return ResourceGuardsClientGetDefaultDisableSoftDeleteRequestsObjectResponse{}, err
 	}
@@ -496,7 +496,7 @@ func (client *ResourceGuardsClient) getDefaultUpdateProtectedItemRequestsObjectC
 
 // getDefaultUpdateProtectedItemRequestsObjectHandleResponse handles the GetDefaultUpdateProtectedItemRequestsObject response.
 func (client *ResourceGuardsClient) getDefaultUpdateProtectedItemRequestsObjectHandleResponse(resp *http.Response) (ResourceGuardsClientGetDefaultUpdateProtectedItemRequestsObjectResponse, error) {
-	result := ResourceGuardsClientGetDefaultUpdateProtectedItemRequestsObjectResponse{RawResponse: resp}
+	result := ResourceGuardsClientGetDefaultUpdateProtectedItemRequestsObjectResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DppBaseResource); err != nil {
 		return ResourceGuardsClientGetDefaultUpdateProtectedItemRequestsObjectResponse{}, err
 	}
@@ -556,7 +556,7 @@ func (client *ResourceGuardsClient) getDefaultUpdateProtectionPolicyRequestsObje
 
 // getDefaultUpdateProtectionPolicyRequestsObjectHandleResponse handles the GetDefaultUpdateProtectionPolicyRequestsObject response.
 func (client *ResourceGuardsClient) getDefaultUpdateProtectionPolicyRequestsObjectHandleResponse(resp *http.Response) (ResourceGuardsClientGetDefaultUpdateProtectionPolicyRequestsObjectResponse, error) {
-	result := ResourceGuardsClientGetDefaultUpdateProtectionPolicyRequestsObjectResponse{RawResponse: resp}
+	result := ResourceGuardsClientGetDefaultUpdateProtectionPolicyRequestsObjectResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DppBaseResource); err != nil {
 		return ResourceGuardsClientGetDefaultUpdateProtectionPolicyRequestsObjectResponse{}, err
 	}
@@ -609,7 +609,7 @@ func (client *ResourceGuardsClient) getDeleteProtectedItemRequestsObjectsCreateR
 
 // getDeleteProtectedItemRequestsObjectsHandleResponse handles the GetDeleteProtectedItemRequestsObjects response.
 func (client *ResourceGuardsClient) getDeleteProtectedItemRequestsObjectsHandleResponse(resp *http.Response) (ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsResponse, error) {
-	result := ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsResponse{RawResponse: resp}
+	result := ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DppBaseResourceList); err != nil {
 		return ResourceGuardsClientGetDeleteProtectedItemRequestsObjectsResponse{}, err
 	}
@@ -662,7 +662,7 @@ func (client *ResourceGuardsClient) getDeleteResourceGuardProxyRequestsObjectsCr
 
 // getDeleteResourceGuardProxyRequestsObjectsHandleResponse handles the GetDeleteResourceGuardProxyRequestsObjects response.
 func (client *ResourceGuardsClient) getDeleteResourceGuardProxyRequestsObjectsHandleResponse(resp *http.Response) (ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsResponse, error) {
-	result := ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsResponse{RawResponse: resp}
+	result := ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DppBaseResourceList); err != nil {
 		return ResourceGuardsClientGetDeleteResourceGuardProxyRequestsObjectsResponse{}, err
 	}
@@ -715,7 +715,7 @@ func (client *ResourceGuardsClient) getDisableSoftDeleteRequestsObjectsCreateReq
 
 // getDisableSoftDeleteRequestsObjectsHandleResponse handles the GetDisableSoftDeleteRequestsObjects response.
 func (client *ResourceGuardsClient) getDisableSoftDeleteRequestsObjectsHandleResponse(resp *http.Response) (ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsResponse, error) {
-	result := ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsResponse{RawResponse: resp}
+	result := ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DppBaseResourceList); err != nil {
 		return ResourceGuardsClientGetDisableSoftDeleteRequestsObjectsResponse{}, err
 	}
@@ -763,7 +763,7 @@ func (client *ResourceGuardsClient) getResourcesInResourceGroupCreateRequest(ctx
 
 // getResourcesInResourceGroupHandleResponse handles the GetResourcesInResourceGroup response.
 func (client *ResourceGuardsClient) getResourcesInResourceGroupHandleResponse(resp *http.Response) (ResourceGuardsClientGetResourcesInResourceGroupResponse, error) {
-	result := ResourceGuardsClientGetResourcesInResourceGroupResponse{RawResponse: resp}
+	result := ResourceGuardsClientGetResourcesInResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceGuardResourceList); err != nil {
 		return ResourceGuardsClientGetResourcesInResourceGroupResponse{}, err
 	}
@@ -806,7 +806,7 @@ func (client *ResourceGuardsClient) getResourcesInSubscriptionCreateRequest(ctx 
 
 // getResourcesInSubscriptionHandleResponse handles the GetResourcesInSubscription response.
 func (client *ResourceGuardsClient) getResourcesInSubscriptionHandleResponse(resp *http.Response) (ResourceGuardsClientGetResourcesInSubscriptionResponse, error) {
-	result := ResourceGuardsClientGetResourcesInSubscriptionResponse{RawResponse: resp}
+	result := ResourceGuardsClientGetResourcesInSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceGuardResourceList); err != nil {
 		return ResourceGuardsClientGetResourcesInSubscriptionResponse{}, err
 	}
@@ -859,7 +859,7 @@ func (client *ResourceGuardsClient) getUpdateProtectedItemRequestsObjectsCreateR
 
 // getUpdateProtectedItemRequestsObjectsHandleResponse handles the GetUpdateProtectedItemRequestsObjects response.
 func (client *ResourceGuardsClient) getUpdateProtectedItemRequestsObjectsHandleResponse(resp *http.Response) (ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsResponse, error) {
-	result := ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsResponse{RawResponse: resp}
+	result := ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DppBaseResourceList); err != nil {
 		return ResourceGuardsClientGetUpdateProtectedItemRequestsObjectsResponse{}, err
 	}
@@ -912,7 +912,7 @@ func (client *ResourceGuardsClient) getUpdateProtectionPolicyRequestsObjectsCrea
 
 // getUpdateProtectionPolicyRequestsObjectsHandleResponse handles the GetUpdateProtectionPolicyRequestsObjects response.
 func (client *ResourceGuardsClient) getUpdateProtectionPolicyRequestsObjectsHandleResponse(resp *http.Response) (ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsResponse, error) {
-	result := ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsResponse{RawResponse: resp}
+	result := ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DppBaseResourceList); err != nil {
 		return ResourceGuardsClientGetUpdateProtectionPolicyRequestsObjectsResponse{}, err
 	}
@@ -968,7 +968,7 @@ func (client *ResourceGuardsClient) patchCreateRequest(ctx context.Context, reso
 
 // patchHandleResponse handles the Patch response.
 func (client *ResourceGuardsClient) patchHandleResponse(resp *http.Response) (ResourceGuardsClientPatchResponse, error) {
-	result := ResourceGuardsClientPatchResponse{RawResponse: resp}
+	result := ResourceGuardsClientPatchResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceGuardResource); err != nil {
 		return ResourceGuardsClientPatchResponse{}, err
 	}
@@ -1024,7 +1024,7 @@ func (client *ResourceGuardsClient) putCreateRequest(ctx context.Context, resour
 
 // putHandleResponse handles the Put response.
 func (client *ResourceGuardsClient) putHandleResponse(resp *http.Response) (ResourceGuardsClientPutResponse, error) {
-	result := ResourceGuardsClientPutResponse{RawResponse: resp}
+	result := ResourceGuardsClientPutResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceGuardResource); err != nil {
 		return ResourceGuardsClientPutResponse{}, err
 	}

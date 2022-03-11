@@ -43,11 +43,10 @@ func (p *DscCompilationJobClientCreatePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final DscCompilationJobClientCreateResponse will be returned.
 func (p *DscCompilationJobClientCreatePoller) FinalResponse(ctx context.Context) (DscCompilationJobClientCreateResponse, error) {
 	respType := DscCompilationJobClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DscCompilationJob)
+	_, err := p.pt.FinalResponse(ctx, &respType.DscCompilationJob)
 	if err != nil {
 		return DscCompilationJobClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *DscNodeConfigurationClientCreateOrUpdatePoller) Poll(ctx context.Contex
 // If the final GET succeeded then the final DscNodeConfigurationClientCreateOrUpdateResponse will be returned.
 func (p *DscNodeConfigurationClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (DscNodeConfigurationClientCreateOrUpdateResponse, error) {
 	respType := DscNodeConfigurationClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DscNodeConfiguration)
+	_, err := p.pt.FinalResponse(ctx, &respType.DscNodeConfiguration)
 	if err != nil {
 		return DscNodeConfigurationClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *PrivateEndpointConnectionsClientCreateOrUpdatePoller) Poll(ctx context.
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientCreateOrUpdateResponse will be returned.
 func (p *PrivateEndpointConnectionsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientCreateOrUpdateResponse, error) {
 	respType := PrivateEndpointConnectionsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return PrivateEndpointConnectionsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *PrivateEndpointConnectionsClientDeletePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionsClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointConnectionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *RunbookClientPublishPoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final RunbookClientPublishResponse will be returned.
 func (p *RunbookClientPublishPoller) FinalResponse(ctx context.Context) (RunbookClientPublishResponse, error) {
 	respType := RunbookClientPublishResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return RunbookClientPublishResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *RunbookDraftClientReplaceContentPoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final RunbookDraftClientReplaceContentResponse will be returned.
 func (p *RunbookDraftClientReplaceContentPoller) FinalResponse(ctx context.Context) (RunbookDraftClientReplaceContentResponse, error) {
 	respType := RunbookDraftClientReplaceContentResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, &respType.Body)
 	if err != nil {
 		return RunbookDraftClientReplaceContentResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

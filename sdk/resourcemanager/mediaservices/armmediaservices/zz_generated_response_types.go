@@ -11,415 +11,196 @@ package armmediaservices
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // AccountFiltersClientCreateOrUpdateResponse contains the response from method AccountFiltersClient.CreateOrUpdate.
 type AccountFiltersClientCreateOrUpdateResponse struct {
-	AccountFiltersClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AccountFiltersClientCreateOrUpdateResult contains the result from method AccountFiltersClient.CreateOrUpdate.
-type AccountFiltersClientCreateOrUpdateResult struct {
 	AccountFilter
 }
 
 // AccountFiltersClientDeleteResponse contains the response from method AccountFiltersClient.Delete.
 type AccountFiltersClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // AccountFiltersClientGetResponse contains the response from method AccountFiltersClient.Get.
 type AccountFiltersClientGetResponse struct {
-	AccountFiltersClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AccountFiltersClientGetResult contains the result from method AccountFiltersClient.Get.
-type AccountFiltersClientGetResult struct {
 	AccountFilter
 }
 
 // AccountFiltersClientListResponse contains the response from method AccountFiltersClient.List.
 type AccountFiltersClientListResponse struct {
-	AccountFiltersClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AccountFiltersClientListResult contains the result from method AccountFiltersClient.List.
-type AccountFiltersClientListResult struct {
 	AccountFilterCollection
 }
 
 // AccountFiltersClientUpdateResponse contains the response from method AccountFiltersClient.Update.
 type AccountFiltersClientUpdateResponse struct {
-	AccountFiltersClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AccountFiltersClientUpdateResult contains the result from method AccountFiltersClient.Update.
-type AccountFiltersClientUpdateResult struct {
 	AccountFilter
 }
 
 // AssetFiltersClientCreateOrUpdateResponse contains the response from method AssetFiltersClient.CreateOrUpdate.
 type AssetFiltersClientCreateOrUpdateResponse struct {
-	AssetFiltersClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AssetFiltersClientCreateOrUpdateResult contains the result from method AssetFiltersClient.CreateOrUpdate.
-type AssetFiltersClientCreateOrUpdateResult struct {
 	AssetFilter
 }
 
 // AssetFiltersClientDeleteResponse contains the response from method AssetFiltersClient.Delete.
 type AssetFiltersClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // AssetFiltersClientGetResponse contains the response from method AssetFiltersClient.Get.
 type AssetFiltersClientGetResponse struct {
-	AssetFiltersClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AssetFiltersClientGetResult contains the result from method AssetFiltersClient.Get.
-type AssetFiltersClientGetResult struct {
 	AssetFilter
 }
 
 // AssetFiltersClientListResponse contains the response from method AssetFiltersClient.List.
 type AssetFiltersClientListResponse struct {
-	AssetFiltersClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AssetFiltersClientListResult contains the result from method AssetFiltersClient.List.
-type AssetFiltersClientListResult struct {
 	AssetFilterCollection
 }
 
 // AssetFiltersClientUpdateResponse contains the response from method AssetFiltersClient.Update.
 type AssetFiltersClientUpdateResponse struct {
-	AssetFiltersClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AssetFiltersClientUpdateResult contains the result from method AssetFiltersClient.Update.
-type AssetFiltersClientUpdateResult struct {
 	AssetFilter
 }
 
 // AssetsClientCreateOrUpdateResponse contains the response from method AssetsClient.CreateOrUpdate.
 type AssetsClientCreateOrUpdateResponse struct {
-	AssetsClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AssetsClientCreateOrUpdateResult contains the result from method AssetsClient.CreateOrUpdate.
-type AssetsClientCreateOrUpdateResult struct {
 	Asset
 }
 
 // AssetsClientDeleteResponse contains the response from method AssetsClient.Delete.
 type AssetsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // AssetsClientGetEncryptionKeyResponse contains the response from method AssetsClient.GetEncryptionKey.
 type AssetsClientGetEncryptionKeyResponse struct {
-	AssetsClientGetEncryptionKeyResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AssetsClientGetEncryptionKeyResult contains the result from method AssetsClient.GetEncryptionKey.
-type AssetsClientGetEncryptionKeyResult struct {
 	StorageEncryptedAssetDecryptionData
 }
 
 // AssetsClientGetResponse contains the response from method AssetsClient.Get.
 type AssetsClientGetResponse struct {
-	AssetsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AssetsClientGetResult contains the result from method AssetsClient.Get.
-type AssetsClientGetResult struct {
 	Asset
 }
 
 // AssetsClientListContainerSasResponse contains the response from method AssetsClient.ListContainerSas.
 type AssetsClientListContainerSasResponse struct {
-	AssetsClientListContainerSasResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AssetsClientListContainerSasResult contains the result from method AssetsClient.ListContainerSas.
-type AssetsClientListContainerSasResult struct {
 	AssetContainerSas
 }
 
 // AssetsClientListResponse contains the response from method AssetsClient.List.
 type AssetsClientListResponse struct {
-	AssetsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AssetsClientListResult contains the result from method AssetsClient.List.
-type AssetsClientListResult struct {
 	AssetCollection
 }
 
 // AssetsClientListStreamingLocatorsResponse contains the response from method AssetsClient.ListStreamingLocators.
 type AssetsClientListStreamingLocatorsResponse struct {
-	AssetsClientListStreamingLocatorsResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AssetsClientListStreamingLocatorsResult contains the result from method AssetsClient.ListStreamingLocators.
-type AssetsClientListStreamingLocatorsResult struct {
 	ListStreamingLocatorsResponse
 }
 
 // AssetsClientUpdateResponse contains the response from method AssetsClient.Update.
 type AssetsClientUpdateResponse struct {
-	AssetsClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// AssetsClientUpdateResult contains the result from method AssetsClient.Update.
-type AssetsClientUpdateResult struct {
 	Asset
 }
 
 // ClientCreateOrUpdateResponse contains the response from method Client.CreateOrUpdate.
 type ClientCreateOrUpdateResponse struct {
-	ClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ClientCreateOrUpdateResult contains the result from method Client.CreateOrUpdate.
-type ClientCreateOrUpdateResult struct {
 	MediaService
 }
 
 // ClientDeleteResponse contains the response from method Client.Delete.
 type ClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // ClientGetResponse contains the response from method Client.Get.
 type ClientGetResponse struct {
-	ClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ClientGetResult contains the result from method Client.Get.
-type ClientGetResult struct {
 	MediaService
 }
 
 // ClientListBySubscriptionResponse contains the response from method Client.ListBySubscription.
 type ClientListBySubscriptionResponse struct {
-	ClientListBySubscriptionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ClientListBySubscriptionResult contains the result from method Client.ListBySubscription.
-type ClientListBySubscriptionResult struct {
 	MediaServiceCollection
 }
 
 // ClientListEdgePoliciesResponse contains the response from method Client.ListEdgePolicies.
 type ClientListEdgePoliciesResponse struct {
-	ClientListEdgePoliciesResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ClientListEdgePoliciesResult contains the result from method Client.ListEdgePolicies.
-type ClientListEdgePoliciesResult struct {
 	EdgePolicies
 }
 
 // ClientListResponse contains the response from method Client.List.
 type ClientListResponse struct {
-	ClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ClientListResult contains the result from method Client.List.
-type ClientListResult struct {
 	MediaServiceCollection
 }
 
 // ClientSyncStorageKeysResponse contains the response from method Client.SyncStorageKeys.
 type ClientSyncStorageKeysResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // ClientUpdateResponse contains the response from method Client.Update.
 type ClientUpdateResponse struct {
-	ClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ClientUpdateResult contains the result from method Client.Update.
-type ClientUpdateResult struct {
 	MediaService
 }
 
 // ContentKeyPoliciesClientCreateOrUpdateResponse contains the response from method ContentKeyPoliciesClient.CreateOrUpdate.
 type ContentKeyPoliciesClientCreateOrUpdateResponse struct {
-	ContentKeyPoliciesClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ContentKeyPoliciesClientCreateOrUpdateResult contains the result from method ContentKeyPoliciesClient.CreateOrUpdate.
-type ContentKeyPoliciesClientCreateOrUpdateResult struct {
 	ContentKeyPolicy
 }
 
 // ContentKeyPoliciesClientDeleteResponse contains the response from method ContentKeyPoliciesClient.Delete.
 type ContentKeyPoliciesClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // ContentKeyPoliciesClientGetPolicyPropertiesWithSecretsResponse contains the response from method ContentKeyPoliciesClient.GetPolicyPropertiesWithSecrets.
 type ContentKeyPoliciesClientGetPolicyPropertiesWithSecretsResponse struct {
-	ContentKeyPoliciesClientGetPolicyPropertiesWithSecretsResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ContentKeyPoliciesClientGetPolicyPropertiesWithSecretsResult contains the result from method ContentKeyPoliciesClient.GetPolicyPropertiesWithSecrets.
-type ContentKeyPoliciesClientGetPolicyPropertiesWithSecretsResult struct {
 	ContentKeyPolicyProperties
 }
 
 // ContentKeyPoliciesClientGetResponse contains the response from method ContentKeyPoliciesClient.Get.
 type ContentKeyPoliciesClientGetResponse struct {
-	ContentKeyPoliciesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ContentKeyPoliciesClientGetResult contains the result from method ContentKeyPoliciesClient.Get.
-type ContentKeyPoliciesClientGetResult struct {
 	ContentKeyPolicy
 }
 
 // ContentKeyPoliciesClientListResponse contains the response from method ContentKeyPoliciesClient.List.
 type ContentKeyPoliciesClientListResponse struct {
-	ContentKeyPoliciesClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ContentKeyPoliciesClientListResult contains the result from method ContentKeyPoliciesClient.List.
-type ContentKeyPoliciesClientListResult struct {
 	ContentKeyPolicyCollection
 }
 
 // ContentKeyPoliciesClientUpdateResponse contains the response from method ContentKeyPoliciesClient.Update.
 type ContentKeyPoliciesClientUpdateResponse struct {
-	ContentKeyPoliciesClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ContentKeyPoliciesClientUpdateResult contains the result from method ContentKeyPoliciesClient.Update.
-type ContentKeyPoliciesClientUpdateResult struct {
 	ContentKeyPolicy
 }
 
 // JobsClientCancelJobResponse contains the response from method JobsClient.CancelJob.
 type JobsClientCancelJobResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // JobsClientCreateResponse contains the response from method JobsClient.Create.
 type JobsClientCreateResponse struct {
-	JobsClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// JobsClientCreateResult contains the result from method JobsClient.Create.
-type JobsClientCreateResult struct {
 	Job
 }
 
 // JobsClientDeleteResponse contains the response from method JobsClient.Delete.
 type JobsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // JobsClientGetResponse contains the response from method JobsClient.Get.
 type JobsClientGetResponse struct {
-	JobsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// JobsClientGetResult contains the result from method JobsClient.Get.
-type JobsClientGetResult struct {
 	Job
 }
 
 // JobsClientListResponse contains the response from method JobsClient.List.
 type JobsClientListResponse struct {
-	JobsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// JobsClientListResult contains the result from method JobsClient.List.
-type JobsClientListResult struct {
 	JobCollection
 }
 
 // JobsClientUpdateResponse contains the response from method JobsClient.Update.
 type JobsClientUpdateResponse struct {
-	JobsClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// JobsClientUpdateResult contains the result from method JobsClient.Update.
-type JobsClientUpdateResult struct {
 	Job
 }
 
@@ -427,9 +208,6 @@ type JobsClientUpdateResult struct {
 type LiveEventsClientAllocatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *LiveEventsClientAllocatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -437,11 +215,10 @@ type LiveEventsClientAllocatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l LiveEventsClientAllocatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LiveEventsClientAllocateResponse, error) {
 	respType := LiveEventsClientAllocateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -454,28 +231,23 @@ func (l *LiveEventsClientAllocatePollerResponse) Resume(ctx context.Context, cli
 	poller := &LiveEventsClientAllocatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // LiveEventsClientAllocateResponse contains the response from method LiveEventsClient.Allocate.
 type LiveEventsClientAllocateResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // LiveEventsClientCreatePollerResponse contains the response from method LiveEventsClient.Create.
 type LiveEventsClientCreatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *LiveEventsClientCreatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -483,11 +255,10 @@ type LiveEventsClientCreatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l LiveEventsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LiveEventsClientCreateResponse, error) {
 	respType := LiveEventsClientCreateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.LiveEvent)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.LiveEvent)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -500,24 +271,16 @@ func (l *LiveEventsClientCreatePollerResponse) Resume(ctx context.Context, clien
 	poller := &LiveEventsClientCreatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // LiveEventsClientCreateResponse contains the response from method LiveEventsClient.Create.
 type LiveEventsClientCreateResponse struct {
-	LiveEventsClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LiveEventsClientCreateResult contains the result from method LiveEventsClient.Create.
-type LiveEventsClientCreateResult struct {
 	LiveEvent
 }
 
@@ -525,9 +288,6 @@ type LiveEventsClientCreateResult struct {
 type LiveEventsClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *LiveEventsClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -535,11 +295,10 @@ type LiveEventsClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l LiveEventsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LiveEventsClientDeleteResponse, error) {
 	respType := LiveEventsClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -552,42 +311,26 @@ func (l *LiveEventsClientDeletePollerResponse) Resume(ctx context.Context, clien
 	poller := &LiveEventsClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // LiveEventsClientDeleteResponse contains the response from method LiveEventsClient.Delete.
 type LiveEventsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // LiveEventsClientGetResponse contains the response from method LiveEventsClient.Get.
 type LiveEventsClientGetResponse struct {
-	LiveEventsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LiveEventsClientGetResult contains the result from method LiveEventsClient.Get.
-type LiveEventsClientGetResult struct {
 	LiveEvent
 }
 
 // LiveEventsClientListResponse contains the response from method LiveEventsClient.List.
 type LiveEventsClientListResponse struct {
-	LiveEventsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LiveEventsClientListResult contains the result from method LiveEventsClient.List.
-type LiveEventsClientListResult struct {
 	LiveEventListResult
 }
 
@@ -595,9 +338,6 @@ type LiveEventsClientListResult struct {
 type LiveEventsClientResetPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *LiveEventsClientResetPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -605,11 +345,10 @@ type LiveEventsClientResetPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l LiveEventsClientResetPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LiveEventsClientResetResponse, error) {
 	respType := LiveEventsClientResetResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -622,28 +361,23 @@ func (l *LiveEventsClientResetPollerResponse) Resume(ctx context.Context, client
 	poller := &LiveEventsClientResetPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // LiveEventsClientResetResponse contains the response from method LiveEventsClient.Reset.
 type LiveEventsClientResetResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // LiveEventsClientStartPollerResponse contains the response from method LiveEventsClient.Start.
 type LiveEventsClientStartPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *LiveEventsClientStartPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -651,11 +385,10 @@ type LiveEventsClientStartPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l LiveEventsClientStartPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LiveEventsClientStartResponse, error) {
 	respType := LiveEventsClientStartResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -668,28 +401,23 @@ func (l *LiveEventsClientStartPollerResponse) Resume(ctx context.Context, client
 	poller := &LiveEventsClientStartPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // LiveEventsClientStartResponse contains the response from method LiveEventsClient.Start.
 type LiveEventsClientStartResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // LiveEventsClientStopPollerResponse contains the response from method LiveEventsClient.Stop.
 type LiveEventsClientStopPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *LiveEventsClientStopPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -697,11 +425,10 @@ type LiveEventsClientStopPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l LiveEventsClientStopPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LiveEventsClientStopResponse, error) {
 	respType := LiveEventsClientStopResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -714,28 +441,23 @@ func (l *LiveEventsClientStopPollerResponse) Resume(ctx context.Context, client 
 	poller := &LiveEventsClientStopPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // LiveEventsClientStopResponse contains the response from method LiveEventsClient.Stop.
 type LiveEventsClientStopResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // LiveEventsClientUpdatePollerResponse contains the response from method LiveEventsClient.Update.
 type LiveEventsClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *LiveEventsClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -743,11 +465,10 @@ type LiveEventsClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l LiveEventsClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LiveEventsClientUpdateResponse, error) {
 	respType := LiveEventsClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.LiveEvent)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.LiveEvent)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -760,24 +481,16 @@ func (l *LiveEventsClientUpdatePollerResponse) Resume(ctx context.Context, clien
 	poller := &LiveEventsClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // LiveEventsClientUpdateResponse contains the response from method LiveEventsClient.Update.
 type LiveEventsClientUpdateResponse struct {
-	LiveEventsClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LiveEventsClientUpdateResult contains the result from method LiveEventsClient.Update.
-type LiveEventsClientUpdateResult struct {
 	LiveEvent
 }
 
@@ -785,9 +498,6 @@ type LiveEventsClientUpdateResult struct {
 type LiveOutputsClientCreatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *LiveOutputsClientCreatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -795,11 +505,10 @@ type LiveOutputsClientCreatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l LiveOutputsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LiveOutputsClientCreateResponse, error) {
 	respType := LiveOutputsClientCreateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.LiveOutput)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.LiveOutput)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -812,24 +521,16 @@ func (l *LiveOutputsClientCreatePollerResponse) Resume(ctx context.Context, clie
 	poller := &LiveOutputsClientCreatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // LiveOutputsClientCreateResponse contains the response from method LiveOutputsClient.Create.
 type LiveOutputsClientCreateResponse struct {
-	LiveOutputsClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LiveOutputsClientCreateResult contains the result from method LiveOutputsClient.Create.
-type LiveOutputsClientCreateResult struct {
 	LiveOutput
 }
 
@@ -837,9 +538,6 @@ type LiveOutputsClientCreateResult struct {
 type LiveOutputsClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *LiveOutputsClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -847,11 +545,10 @@ type LiveOutputsClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l LiveOutputsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (LiveOutputsClientDeleteResponse, error) {
 	respType := LiveOutputsClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -864,132 +561,66 @@ func (l *LiveOutputsClientDeletePollerResponse) Resume(ctx context.Context, clie
 	poller := &LiveOutputsClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // LiveOutputsClientDeleteResponse contains the response from method LiveOutputsClient.Delete.
 type LiveOutputsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // LiveOutputsClientGetResponse contains the response from method LiveOutputsClient.Get.
 type LiveOutputsClientGetResponse struct {
-	LiveOutputsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LiveOutputsClientGetResult contains the result from method LiveOutputsClient.Get.
-type LiveOutputsClientGetResult struct {
 	LiveOutput
 }
 
 // LiveOutputsClientListResponse contains the response from method LiveOutputsClient.List.
 type LiveOutputsClientListResponse struct {
-	LiveOutputsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LiveOutputsClientListResult contains the result from method LiveOutputsClient.List.
-type LiveOutputsClientListResult struct {
 	LiveOutputListResult
 }
 
 // LocationsClientCheckNameAvailabilityResponse contains the response from method LocationsClient.CheckNameAvailability.
 type LocationsClientCheckNameAvailabilityResponse struct {
-	LocationsClientCheckNameAvailabilityResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// LocationsClientCheckNameAvailabilityResult contains the result from method LocationsClient.CheckNameAvailability.
-type LocationsClientCheckNameAvailabilityResult struct {
 	EntityNameAvailabilityCheckOutput
 }
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	OperationCollection
 }
 
 // PrivateEndpointConnectionsClientCreateOrUpdateResponse contains the response from method PrivateEndpointConnectionsClient.CreateOrUpdate.
 type PrivateEndpointConnectionsClientCreateOrUpdateResponse struct {
-	PrivateEndpointConnectionsClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateEndpointConnectionsClientCreateOrUpdateResult contains the result from method PrivateEndpointConnectionsClient.CreateOrUpdate.
-type PrivateEndpointConnectionsClientCreateOrUpdateResult struct {
 	PrivateEndpointConnection
 }
 
 // PrivateEndpointConnectionsClientDeleteResponse contains the response from method PrivateEndpointConnectionsClient.Delete.
 type PrivateEndpointConnectionsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // PrivateEndpointConnectionsClientGetResponse contains the response from method PrivateEndpointConnectionsClient.Get.
 type PrivateEndpointConnectionsClientGetResponse struct {
-	PrivateEndpointConnectionsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateEndpointConnectionsClientGetResult contains the result from method PrivateEndpointConnectionsClient.Get.
-type PrivateEndpointConnectionsClientGetResult struct {
 	PrivateEndpointConnection
 }
 
 // PrivateEndpointConnectionsClientListResponse contains the response from method PrivateEndpointConnectionsClient.List.
 type PrivateEndpointConnectionsClientListResponse struct {
-	PrivateEndpointConnectionsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateEndpointConnectionsClientListResult contains the result from method PrivateEndpointConnectionsClient.List.
-type PrivateEndpointConnectionsClientListResult struct {
 	PrivateEndpointConnectionListResult
 }
 
 // PrivateLinkResourcesClientGetResponse contains the response from method PrivateLinkResourcesClient.Get.
 type PrivateLinkResourcesClientGetResponse struct {
-	PrivateLinkResourcesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateLinkResourcesClientGetResult contains the result from method PrivateLinkResourcesClient.Get.
-type PrivateLinkResourcesClientGetResult struct {
 	PrivateLinkResource
 }
 
 // PrivateLinkResourcesClientListResponse contains the response from method PrivateLinkResourcesClient.List.
 type PrivateLinkResourcesClientListResponse struct {
-	PrivateLinkResourcesClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateLinkResourcesClientListResult contains the result from method PrivateLinkResourcesClient.List.
-type PrivateLinkResourcesClientListResult struct {
 	PrivateLinkResourceListResult
 }
 
@@ -997,9 +628,6 @@ type PrivateLinkResourcesClientListResult struct {
 type StreamingEndpointsClientCreatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *StreamingEndpointsClientCreatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -1007,11 +635,10 @@ type StreamingEndpointsClientCreatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l StreamingEndpointsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StreamingEndpointsClientCreateResponse, error) {
 	respType := StreamingEndpointsClientCreateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.StreamingEndpoint)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.StreamingEndpoint)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1024,24 +651,16 @@ func (l *StreamingEndpointsClientCreatePollerResponse) Resume(ctx context.Contex
 	poller := &StreamingEndpointsClientCreatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // StreamingEndpointsClientCreateResponse contains the response from method StreamingEndpointsClient.Create.
 type StreamingEndpointsClientCreateResponse struct {
-	StreamingEndpointsClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// StreamingEndpointsClientCreateResult contains the result from method StreamingEndpointsClient.Create.
-type StreamingEndpointsClientCreateResult struct {
 	StreamingEndpoint
 }
 
@@ -1049,9 +668,6 @@ type StreamingEndpointsClientCreateResult struct {
 type StreamingEndpointsClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *StreamingEndpointsClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -1059,11 +675,10 @@ type StreamingEndpointsClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l StreamingEndpointsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StreamingEndpointsClientDeleteResponse, error) {
 	respType := StreamingEndpointsClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1076,42 +691,26 @@ func (l *StreamingEndpointsClientDeletePollerResponse) Resume(ctx context.Contex
 	poller := &StreamingEndpointsClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // StreamingEndpointsClientDeleteResponse contains the response from method StreamingEndpointsClient.Delete.
 type StreamingEndpointsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // StreamingEndpointsClientGetResponse contains the response from method StreamingEndpointsClient.Get.
 type StreamingEndpointsClientGetResponse struct {
-	StreamingEndpointsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// StreamingEndpointsClientGetResult contains the result from method StreamingEndpointsClient.Get.
-type StreamingEndpointsClientGetResult struct {
 	StreamingEndpoint
 }
 
 // StreamingEndpointsClientListResponse contains the response from method StreamingEndpointsClient.List.
 type StreamingEndpointsClientListResponse struct {
-	StreamingEndpointsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// StreamingEndpointsClientListResult contains the result from method StreamingEndpointsClient.List.
-type StreamingEndpointsClientListResult struct {
 	StreamingEndpointListResult
 }
 
@@ -1119,9 +718,6 @@ type StreamingEndpointsClientListResult struct {
 type StreamingEndpointsClientScalePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *StreamingEndpointsClientScalePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -1129,11 +725,10 @@ type StreamingEndpointsClientScalePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l StreamingEndpointsClientScalePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StreamingEndpointsClientScaleResponse, error) {
 	respType := StreamingEndpointsClientScaleResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1146,28 +741,23 @@ func (l *StreamingEndpointsClientScalePollerResponse) Resume(ctx context.Context
 	poller := &StreamingEndpointsClientScalePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // StreamingEndpointsClientScaleResponse contains the response from method StreamingEndpointsClient.Scale.
 type StreamingEndpointsClientScaleResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // StreamingEndpointsClientStartPollerResponse contains the response from method StreamingEndpointsClient.Start.
 type StreamingEndpointsClientStartPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *StreamingEndpointsClientStartPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -1175,11 +765,10 @@ type StreamingEndpointsClientStartPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l StreamingEndpointsClientStartPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StreamingEndpointsClientStartResponse, error) {
 	respType := StreamingEndpointsClientStartResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1192,28 +781,23 @@ func (l *StreamingEndpointsClientStartPollerResponse) Resume(ctx context.Context
 	poller := &StreamingEndpointsClientStartPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // StreamingEndpointsClientStartResponse contains the response from method StreamingEndpointsClient.Start.
 type StreamingEndpointsClientStartResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // StreamingEndpointsClientStopPollerResponse contains the response from method StreamingEndpointsClient.Stop.
 type StreamingEndpointsClientStopPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *StreamingEndpointsClientStopPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -1221,11 +805,10 @@ type StreamingEndpointsClientStopPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l StreamingEndpointsClientStopPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StreamingEndpointsClientStopResponse, error) {
 	respType := StreamingEndpointsClientStopResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1238,28 +821,23 @@ func (l *StreamingEndpointsClientStopPollerResponse) Resume(ctx context.Context,
 	poller := &StreamingEndpointsClientStopPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // StreamingEndpointsClientStopResponse contains the response from method StreamingEndpointsClient.Stop.
 type StreamingEndpointsClientStopResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // StreamingEndpointsClientUpdatePollerResponse contains the response from method StreamingEndpointsClient.Update.
 type StreamingEndpointsClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *StreamingEndpointsClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -1267,11 +845,10 @@ type StreamingEndpointsClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l StreamingEndpointsClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (StreamingEndpointsClientUpdateResponse, error) {
 	respType := StreamingEndpointsClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.StreamingEndpoint)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.StreamingEndpoint)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1284,185 +861,90 @@ func (l *StreamingEndpointsClientUpdatePollerResponse) Resume(ctx context.Contex
 	poller := &StreamingEndpointsClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // StreamingEndpointsClientUpdateResponse contains the response from method StreamingEndpointsClient.Update.
 type StreamingEndpointsClientUpdateResponse struct {
-	StreamingEndpointsClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// StreamingEndpointsClientUpdateResult contains the result from method StreamingEndpointsClient.Update.
-type StreamingEndpointsClientUpdateResult struct {
 	StreamingEndpoint
 }
 
 // StreamingLocatorsClientCreateResponse contains the response from method StreamingLocatorsClient.Create.
 type StreamingLocatorsClientCreateResponse struct {
-	StreamingLocatorsClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// StreamingLocatorsClientCreateResult contains the result from method StreamingLocatorsClient.Create.
-type StreamingLocatorsClientCreateResult struct {
 	StreamingLocator
 }
 
 // StreamingLocatorsClientDeleteResponse contains the response from method StreamingLocatorsClient.Delete.
 type StreamingLocatorsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // StreamingLocatorsClientGetResponse contains the response from method StreamingLocatorsClient.Get.
 type StreamingLocatorsClientGetResponse struct {
-	StreamingLocatorsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// StreamingLocatorsClientGetResult contains the result from method StreamingLocatorsClient.Get.
-type StreamingLocatorsClientGetResult struct {
 	StreamingLocator
 }
 
 // StreamingLocatorsClientListContentKeysResponse contains the response from method StreamingLocatorsClient.ListContentKeys.
 type StreamingLocatorsClientListContentKeysResponse struct {
-	StreamingLocatorsClientListContentKeysResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// StreamingLocatorsClientListContentKeysResult contains the result from method StreamingLocatorsClient.ListContentKeys.
-type StreamingLocatorsClientListContentKeysResult struct {
 	ListContentKeysResponse
 }
 
 // StreamingLocatorsClientListPathsResponse contains the response from method StreamingLocatorsClient.ListPaths.
 type StreamingLocatorsClientListPathsResponse struct {
-	StreamingLocatorsClientListPathsResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// StreamingLocatorsClientListPathsResult contains the result from method StreamingLocatorsClient.ListPaths.
-type StreamingLocatorsClientListPathsResult struct {
 	ListPathsResponse
 }
 
 // StreamingLocatorsClientListResponse contains the response from method StreamingLocatorsClient.List.
 type StreamingLocatorsClientListResponse struct {
-	StreamingLocatorsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// StreamingLocatorsClientListResult contains the result from method StreamingLocatorsClient.List.
-type StreamingLocatorsClientListResult struct {
 	StreamingLocatorCollection
 }
 
 // StreamingPoliciesClientCreateResponse contains the response from method StreamingPoliciesClient.Create.
 type StreamingPoliciesClientCreateResponse struct {
-	StreamingPoliciesClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// StreamingPoliciesClientCreateResult contains the result from method StreamingPoliciesClient.Create.
-type StreamingPoliciesClientCreateResult struct {
 	StreamingPolicy
 }
 
 // StreamingPoliciesClientDeleteResponse contains the response from method StreamingPoliciesClient.Delete.
 type StreamingPoliciesClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // StreamingPoliciesClientGetResponse contains the response from method StreamingPoliciesClient.Get.
 type StreamingPoliciesClientGetResponse struct {
-	StreamingPoliciesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// StreamingPoliciesClientGetResult contains the result from method StreamingPoliciesClient.Get.
-type StreamingPoliciesClientGetResult struct {
 	StreamingPolicy
 }
 
 // StreamingPoliciesClientListResponse contains the response from method StreamingPoliciesClient.List.
 type StreamingPoliciesClientListResponse struct {
-	StreamingPoliciesClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// StreamingPoliciesClientListResult contains the result from method StreamingPoliciesClient.List.
-type StreamingPoliciesClientListResult struct {
 	StreamingPolicyCollection
 }
 
 // TransformsClientCreateOrUpdateResponse contains the response from method TransformsClient.CreateOrUpdate.
 type TransformsClientCreateOrUpdateResponse struct {
-	TransformsClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// TransformsClientCreateOrUpdateResult contains the result from method TransformsClient.CreateOrUpdate.
-type TransformsClientCreateOrUpdateResult struct {
 	Transform
 }
 
 // TransformsClientDeleteResponse contains the response from method TransformsClient.Delete.
 type TransformsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // TransformsClientGetResponse contains the response from method TransformsClient.Get.
 type TransformsClientGetResponse struct {
-	TransformsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// TransformsClientGetResult contains the result from method TransformsClient.Get.
-type TransformsClientGetResult struct {
 	Transform
 }
 
 // TransformsClientListResponse contains the response from method TransformsClient.List.
 type TransformsClientListResponse struct {
-	TransformsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// TransformsClientListResult contains the result from method TransformsClient.List.
-type TransformsClientListResult struct {
 	TransformCollection
 }
 
 // TransformsClientUpdateResponse contains the response from method TransformsClient.Update.
 type TransformsClientUpdateResponse struct {
-	TransformsClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// TransformsClientUpdateResult contains the result from method TransformsClient.Update.
-type TransformsClientUpdateResult struct {
 	Transform
 }

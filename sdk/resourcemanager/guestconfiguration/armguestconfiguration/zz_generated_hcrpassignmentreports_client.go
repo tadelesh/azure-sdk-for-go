@@ -109,7 +109,7 @@ func (client *HCRPAssignmentReportsClient) getCreateRequest(ctx context.Context,
 
 // getHandleResponse handles the Get response.
 func (client *HCRPAssignmentReportsClient) getHandleResponse(resp *http.Response) (HCRPAssignmentReportsClientGetResponse, error) {
-	result := HCRPAssignmentReportsClientGetResponse{RawResponse: resp}
+	result := HCRPAssignmentReportsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssignmentReport); err != nil {
 		return HCRPAssignmentReportsClientGetResponse{}, err
 	}
@@ -170,7 +170,7 @@ func (client *HCRPAssignmentReportsClient) listCreateRequest(ctx context.Context
 
 // listHandleResponse handles the List response.
 func (client *HCRPAssignmentReportsClient) listHandleResponse(resp *http.Response) (HCRPAssignmentReportsClientListResponse, error) {
-	result := HCRPAssignmentReportsClientListResponse{RawResponse: resp}
+	result := HCRPAssignmentReportsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssignmentReportList); err != nil {
 		return HCRPAssignmentReportsClientListResponse{}, err
 	}

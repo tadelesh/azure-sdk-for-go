@@ -43,11 +43,10 @@ func (p *ReplicationFabricsClientCheckConsistencyPoller) Poll(ctx context.Contex
 // If the final GET succeeded then the final ReplicationFabricsClientCheckConsistencyResponse will be returned.
 func (p *ReplicationFabricsClientCheckConsistencyPoller) FinalResponse(ctx context.Context) (ReplicationFabricsClientCheckConsistencyResponse, error) {
 	respType := ReplicationFabricsClientCheckConsistencyResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Fabric)
+	_, err := p.pt.FinalResponse(ctx, &respType.Fabric)
 	if err != nil {
 		return ReplicationFabricsClientCheckConsistencyResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ReplicationFabricsClientCreatePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final ReplicationFabricsClientCreateResponse will be returned.
 func (p *ReplicationFabricsClientCreatePoller) FinalResponse(ctx context.Context) (ReplicationFabricsClientCreateResponse, error) {
 	respType := ReplicationFabricsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Fabric)
+	_, err := p.pt.FinalResponse(ctx, &respType.Fabric)
 	if err != nil {
 		return ReplicationFabricsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ReplicationFabricsClientDeletePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final ReplicationFabricsClientDeleteResponse will be returned.
 func (p *ReplicationFabricsClientDeletePoller) FinalResponse(ctx context.Context) (ReplicationFabricsClientDeleteResponse, error) {
 	respType := ReplicationFabricsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ReplicationFabricsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *ReplicationFabricsClientMigrateToAADPoller) Poll(ctx context.Context) (
 // If the final GET succeeded then the final ReplicationFabricsClientMigrateToAADResponse will be returned.
 func (p *ReplicationFabricsClientMigrateToAADPoller) FinalResponse(ctx context.Context) (ReplicationFabricsClientMigrateToAADResponse, error) {
 	respType := ReplicationFabricsClientMigrateToAADResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ReplicationFabricsClientMigrateToAADResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *ReplicationFabricsClientPurgePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final ReplicationFabricsClientPurgeResponse will be returned.
 func (p *ReplicationFabricsClientPurgePoller) FinalResponse(ctx context.Context) (ReplicationFabricsClientPurgeResponse, error) {
 	respType := ReplicationFabricsClientPurgeResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ReplicationFabricsClientPurgeResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *ReplicationFabricsClientReassociateGatewayPoller) Poll(ctx context.Cont
 // If the final GET succeeded then the final ReplicationFabricsClientReassociateGatewayResponse will be returned.
 func (p *ReplicationFabricsClientReassociateGatewayPoller) FinalResponse(ctx context.Context) (ReplicationFabricsClientReassociateGatewayResponse, error) {
 	respType := ReplicationFabricsClientReassociateGatewayResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Fabric)
+	_, err := p.pt.FinalResponse(ctx, &respType.Fabric)
 	if err != nil {
 		return ReplicationFabricsClientReassociateGatewayResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *ReplicationFabricsClientRenewCertificatePoller) Poll(ctx context.Contex
 // If the final GET succeeded then the final ReplicationFabricsClientRenewCertificateResponse will be returned.
 func (p *ReplicationFabricsClientRenewCertificatePoller) FinalResponse(ctx context.Context) (ReplicationFabricsClientRenewCertificateResponse, error) {
 	respType := ReplicationFabricsClientRenewCertificateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Fabric)
+	_, err := p.pt.FinalResponse(ctx, &respType.Fabric)
 	if err != nil {
 		return ReplicationFabricsClientRenewCertificateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *ReplicationJobsClientCancelPoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final ReplicationJobsClientCancelResponse will be returned.
 func (p *ReplicationJobsClientCancelPoller) FinalResponse(ctx context.Context) (ReplicationJobsClientCancelResponse, error) {
 	respType := ReplicationJobsClientCancelResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Job)
+	_, err := p.pt.FinalResponse(ctx, &respType.Job)
 	if err != nil {
 		return ReplicationJobsClientCancelResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *ReplicationJobsClientExportPoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final ReplicationJobsClientExportResponse will be returned.
 func (p *ReplicationJobsClientExportPoller) FinalResponse(ctx context.Context) (ReplicationJobsClientExportResponse, error) {
 	respType := ReplicationJobsClientExportResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Job)
+	_, err := p.pt.FinalResponse(ctx, &respType.Job)
 	if err != nil {
 		return ReplicationJobsClientExportResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -430,11 +421,10 @@ func (p *ReplicationJobsClientRestartPoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final ReplicationJobsClientRestartResponse will be returned.
 func (p *ReplicationJobsClientRestartPoller) FinalResponse(ctx context.Context) (ReplicationJobsClientRestartResponse, error) {
 	respType := ReplicationJobsClientRestartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Job)
+	_, err := p.pt.FinalResponse(ctx, &respType.Job)
 	if err != nil {
 		return ReplicationJobsClientRestartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -473,11 +463,10 @@ func (p *ReplicationJobsClientResumePoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final ReplicationJobsClientResumeResponse will be returned.
 func (p *ReplicationJobsClientResumePoller) FinalResponse(ctx context.Context) (ReplicationJobsClientResumeResponse, error) {
 	respType := ReplicationJobsClientResumeResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Job)
+	_, err := p.pt.FinalResponse(ctx, &respType.Job)
 	if err != nil {
 		return ReplicationJobsClientResumeResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -516,11 +505,10 @@ func (p *ReplicationMigrationItemsClientCreatePoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final ReplicationMigrationItemsClientCreateResponse will be returned.
 func (p *ReplicationMigrationItemsClientCreatePoller) FinalResponse(ctx context.Context) (ReplicationMigrationItemsClientCreateResponse, error) {
 	respType := ReplicationMigrationItemsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MigrationItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.MigrationItem)
 	if err != nil {
 		return ReplicationMigrationItemsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -559,11 +547,10 @@ func (p *ReplicationMigrationItemsClientDeletePoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final ReplicationMigrationItemsClientDeleteResponse will be returned.
 func (p *ReplicationMigrationItemsClientDeletePoller) FinalResponse(ctx context.Context) (ReplicationMigrationItemsClientDeleteResponse, error) {
 	respType := ReplicationMigrationItemsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ReplicationMigrationItemsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -602,11 +589,10 @@ func (p *ReplicationMigrationItemsClientMigratePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final ReplicationMigrationItemsClientMigrateResponse will be returned.
 func (p *ReplicationMigrationItemsClientMigratePoller) FinalResponse(ctx context.Context) (ReplicationMigrationItemsClientMigrateResponse, error) {
 	respType := ReplicationMigrationItemsClientMigrateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MigrationItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.MigrationItem)
 	if err != nil {
 		return ReplicationMigrationItemsClientMigrateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -645,11 +631,10 @@ func (p *ReplicationMigrationItemsClientResyncPoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final ReplicationMigrationItemsClientResyncResponse will be returned.
 func (p *ReplicationMigrationItemsClientResyncPoller) FinalResponse(ctx context.Context) (ReplicationMigrationItemsClientResyncResponse, error) {
 	respType := ReplicationMigrationItemsClientResyncResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MigrationItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.MigrationItem)
 	if err != nil {
 		return ReplicationMigrationItemsClientResyncResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -688,11 +673,10 @@ func (p *ReplicationMigrationItemsClientTestMigrateCleanupPoller) Poll(ctx conte
 // If the final GET succeeded then the final ReplicationMigrationItemsClientTestMigrateCleanupResponse will be returned.
 func (p *ReplicationMigrationItemsClientTestMigrateCleanupPoller) FinalResponse(ctx context.Context) (ReplicationMigrationItemsClientTestMigrateCleanupResponse, error) {
 	respType := ReplicationMigrationItemsClientTestMigrateCleanupResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MigrationItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.MigrationItem)
 	if err != nil {
 		return ReplicationMigrationItemsClientTestMigrateCleanupResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -731,11 +715,10 @@ func (p *ReplicationMigrationItemsClientTestMigratePoller) Poll(ctx context.Cont
 // If the final GET succeeded then the final ReplicationMigrationItemsClientTestMigrateResponse will be returned.
 func (p *ReplicationMigrationItemsClientTestMigratePoller) FinalResponse(ctx context.Context) (ReplicationMigrationItemsClientTestMigrateResponse, error) {
 	respType := ReplicationMigrationItemsClientTestMigrateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MigrationItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.MigrationItem)
 	if err != nil {
 		return ReplicationMigrationItemsClientTestMigrateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -774,11 +757,10 @@ func (p *ReplicationMigrationItemsClientUpdatePoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final ReplicationMigrationItemsClientUpdateResponse will be returned.
 func (p *ReplicationMigrationItemsClientUpdatePoller) FinalResponse(ctx context.Context) (ReplicationMigrationItemsClientUpdateResponse, error) {
 	respType := ReplicationMigrationItemsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MigrationItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.MigrationItem)
 	if err != nil {
 		return ReplicationMigrationItemsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -817,11 +799,10 @@ func (p *ReplicationNetworkMappingsClientCreatePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final ReplicationNetworkMappingsClientCreateResponse will be returned.
 func (p *ReplicationNetworkMappingsClientCreatePoller) FinalResponse(ctx context.Context) (ReplicationNetworkMappingsClientCreateResponse, error) {
 	respType := ReplicationNetworkMappingsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.NetworkMapping)
+	_, err := p.pt.FinalResponse(ctx, &respType.NetworkMapping)
 	if err != nil {
 		return ReplicationNetworkMappingsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -860,11 +841,10 @@ func (p *ReplicationNetworkMappingsClientDeletePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final ReplicationNetworkMappingsClientDeleteResponse will be returned.
 func (p *ReplicationNetworkMappingsClientDeletePoller) FinalResponse(ctx context.Context) (ReplicationNetworkMappingsClientDeleteResponse, error) {
 	respType := ReplicationNetworkMappingsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ReplicationNetworkMappingsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -903,11 +883,10 @@ func (p *ReplicationNetworkMappingsClientUpdatePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final ReplicationNetworkMappingsClientUpdateResponse will be returned.
 func (p *ReplicationNetworkMappingsClientUpdatePoller) FinalResponse(ctx context.Context) (ReplicationNetworkMappingsClientUpdateResponse, error) {
 	respType := ReplicationNetworkMappingsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.NetworkMapping)
+	_, err := p.pt.FinalResponse(ctx, &respType.NetworkMapping)
 	if err != nil {
 		return ReplicationNetworkMappingsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -946,11 +925,10 @@ func (p *ReplicationPoliciesClientCreatePoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final ReplicationPoliciesClientCreateResponse will be returned.
 func (p *ReplicationPoliciesClientCreatePoller) FinalResponse(ctx context.Context) (ReplicationPoliciesClientCreateResponse, error) {
 	respType := ReplicationPoliciesClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Policy)
+	_, err := p.pt.FinalResponse(ctx, &respType.Policy)
 	if err != nil {
 		return ReplicationPoliciesClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -989,11 +967,10 @@ func (p *ReplicationPoliciesClientDeletePoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final ReplicationPoliciesClientDeleteResponse will be returned.
 func (p *ReplicationPoliciesClientDeletePoller) FinalResponse(ctx context.Context) (ReplicationPoliciesClientDeleteResponse, error) {
 	respType := ReplicationPoliciesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ReplicationPoliciesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1032,11 +1009,10 @@ func (p *ReplicationPoliciesClientUpdatePoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final ReplicationPoliciesClientUpdateResponse will be returned.
 func (p *ReplicationPoliciesClientUpdatePoller) FinalResponse(ctx context.Context) (ReplicationPoliciesClientUpdateResponse, error) {
 	respType := ReplicationPoliciesClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Policy)
+	_, err := p.pt.FinalResponse(ctx, &respType.Policy)
 	if err != nil {
 		return ReplicationPoliciesClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1075,11 +1051,10 @@ func (p *ReplicationProtectedItemsClientAddDisksPoller) Poll(ctx context.Context
 // If the final GET succeeded then the final ReplicationProtectedItemsClientAddDisksResponse will be returned.
 func (p *ReplicationProtectedItemsClientAddDisksPoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientAddDisksResponse, error) {
 	respType := ReplicationProtectedItemsClientAddDisksResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
 	if err != nil {
 		return ReplicationProtectedItemsClientAddDisksResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1118,11 +1093,10 @@ func (p *ReplicationProtectedItemsClientApplyRecoveryPointPoller) Poll(ctx conte
 // If the final GET succeeded then the final ReplicationProtectedItemsClientApplyRecoveryPointResponse will be returned.
 func (p *ReplicationProtectedItemsClientApplyRecoveryPointPoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientApplyRecoveryPointResponse, error) {
 	respType := ReplicationProtectedItemsClientApplyRecoveryPointResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
 	if err != nil {
 		return ReplicationProtectedItemsClientApplyRecoveryPointResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1161,11 +1135,10 @@ func (p *ReplicationProtectedItemsClientCreatePoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final ReplicationProtectedItemsClientCreateResponse will be returned.
 func (p *ReplicationProtectedItemsClientCreatePoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientCreateResponse, error) {
 	respType := ReplicationProtectedItemsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
 	if err != nil {
 		return ReplicationProtectedItemsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1204,11 +1177,10 @@ func (p *ReplicationProtectedItemsClientDeletePoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final ReplicationProtectedItemsClientDeleteResponse will be returned.
 func (p *ReplicationProtectedItemsClientDeletePoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientDeleteResponse, error) {
 	respType := ReplicationProtectedItemsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ReplicationProtectedItemsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1247,11 +1219,10 @@ func (p *ReplicationProtectedItemsClientFailoverCancelPoller) Poll(ctx context.C
 // If the final GET succeeded then the final ReplicationProtectedItemsClientFailoverCancelResponse will be returned.
 func (p *ReplicationProtectedItemsClientFailoverCancelPoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientFailoverCancelResponse, error) {
 	respType := ReplicationProtectedItemsClientFailoverCancelResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
 	if err != nil {
 		return ReplicationProtectedItemsClientFailoverCancelResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1290,11 +1261,10 @@ func (p *ReplicationProtectedItemsClientFailoverCommitPoller) Poll(ctx context.C
 // If the final GET succeeded then the final ReplicationProtectedItemsClientFailoverCommitResponse will be returned.
 func (p *ReplicationProtectedItemsClientFailoverCommitPoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientFailoverCommitResponse, error) {
 	respType := ReplicationProtectedItemsClientFailoverCommitResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
 	if err != nil {
 		return ReplicationProtectedItemsClientFailoverCommitResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1333,11 +1303,10 @@ func (p *ReplicationProtectedItemsClientPlannedFailoverPoller) Poll(ctx context.
 // If the final GET succeeded then the final ReplicationProtectedItemsClientPlannedFailoverResponse will be returned.
 func (p *ReplicationProtectedItemsClientPlannedFailoverPoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientPlannedFailoverResponse, error) {
 	respType := ReplicationProtectedItemsClientPlannedFailoverResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
 	if err != nil {
 		return ReplicationProtectedItemsClientPlannedFailoverResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1376,11 +1345,10 @@ func (p *ReplicationProtectedItemsClientPurgePoller) Poll(ctx context.Context) (
 // If the final GET succeeded then the final ReplicationProtectedItemsClientPurgeResponse will be returned.
 func (p *ReplicationProtectedItemsClientPurgePoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientPurgeResponse, error) {
 	respType := ReplicationProtectedItemsClientPurgeResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ReplicationProtectedItemsClientPurgeResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1419,11 +1387,10 @@ func (p *ReplicationProtectedItemsClientRemoveDisksPoller) Poll(ctx context.Cont
 // If the final GET succeeded then the final ReplicationProtectedItemsClientRemoveDisksResponse will be returned.
 func (p *ReplicationProtectedItemsClientRemoveDisksPoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientRemoveDisksResponse, error) {
 	respType := ReplicationProtectedItemsClientRemoveDisksResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
 	if err != nil {
 		return ReplicationProtectedItemsClientRemoveDisksResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1462,11 +1429,10 @@ func (p *ReplicationProtectedItemsClientRepairReplicationPoller) Poll(ctx contex
 // If the final GET succeeded then the final ReplicationProtectedItemsClientRepairReplicationResponse will be returned.
 func (p *ReplicationProtectedItemsClientRepairReplicationPoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientRepairReplicationResponse, error) {
 	respType := ReplicationProtectedItemsClientRepairReplicationResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
 	if err != nil {
 		return ReplicationProtectedItemsClientRepairReplicationResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1505,11 +1471,10 @@ func (p *ReplicationProtectedItemsClientReprotectPoller) Poll(ctx context.Contex
 // If the final GET succeeded then the final ReplicationProtectedItemsClientReprotectResponse will be returned.
 func (p *ReplicationProtectedItemsClientReprotectPoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientReprotectResponse, error) {
 	respType := ReplicationProtectedItemsClientReprotectResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
 	if err != nil {
 		return ReplicationProtectedItemsClientReprotectResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1548,11 +1513,10 @@ func (p *ReplicationProtectedItemsClientResolveHealthErrorsPoller) Poll(ctx cont
 // If the final GET succeeded then the final ReplicationProtectedItemsClientResolveHealthErrorsResponse will be returned.
 func (p *ReplicationProtectedItemsClientResolveHealthErrorsPoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientResolveHealthErrorsResponse, error) {
 	respType := ReplicationProtectedItemsClientResolveHealthErrorsResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
 	if err != nil {
 		return ReplicationProtectedItemsClientResolveHealthErrorsResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1591,11 +1555,10 @@ func (p *ReplicationProtectedItemsClientSwitchProviderPoller) Poll(ctx context.C
 // If the final GET succeeded then the final ReplicationProtectedItemsClientSwitchProviderResponse will be returned.
 func (p *ReplicationProtectedItemsClientSwitchProviderPoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientSwitchProviderResponse, error) {
 	respType := ReplicationProtectedItemsClientSwitchProviderResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
 	if err != nil {
 		return ReplicationProtectedItemsClientSwitchProviderResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1634,11 +1597,10 @@ func (p *ReplicationProtectedItemsClientTestFailoverCleanupPoller) Poll(ctx cont
 // If the final GET succeeded then the final ReplicationProtectedItemsClientTestFailoverCleanupResponse will be returned.
 func (p *ReplicationProtectedItemsClientTestFailoverCleanupPoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientTestFailoverCleanupResponse, error) {
 	respType := ReplicationProtectedItemsClientTestFailoverCleanupResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
 	if err != nil {
 		return ReplicationProtectedItemsClientTestFailoverCleanupResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1677,11 +1639,10 @@ func (p *ReplicationProtectedItemsClientTestFailoverPoller) Poll(ctx context.Con
 // If the final GET succeeded then the final ReplicationProtectedItemsClientTestFailoverResponse will be returned.
 func (p *ReplicationProtectedItemsClientTestFailoverPoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientTestFailoverResponse, error) {
 	respType := ReplicationProtectedItemsClientTestFailoverResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
 	if err != nil {
 		return ReplicationProtectedItemsClientTestFailoverResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1720,11 +1681,10 @@ func (p *ReplicationProtectedItemsClientUnplannedFailoverPoller) Poll(ctx contex
 // If the final GET succeeded then the final ReplicationProtectedItemsClientUnplannedFailoverResponse will be returned.
 func (p *ReplicationProtectedItemsClientUnplannedFailoverPoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientUnplannedFailoverResponse, error) {
 	respType := ReplicationProtectedItemsClientUnplannedFailoverResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
 	if err != nil {
 		return ReplicationProtectedItemsClientUnplannedFailoverResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1763,11 +1723,10 @@ func (p *ReplicationProtectedItemsClientUpdateAppliancePoller) Poll(ctx context.
 // If the final GET succeeded then the final ReplicationProtectedItemsClientUpdateApplianceResponse will be returned.
 func (p *ReplicationProtectedItemsClientUpdateAppliancePoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientUpdateApplianceResponse, error) {
 	respType := ReplicationProtectedItemsClientUpdateApplianceResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
 	if err != nil {
 		return ReplicationProtectedItemsClientUpdateApplianceResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1806,11 +1765,10 @@ func (p *ReplicationProtectedItemsClientUpdateMobilityServicePoller) Poll(ctx co
 // If the final GET succeeded then the final ReplicationProtectedItemsClientUpdateMobilityServiceResponse will be returned.
 func (p *ReplicationProtectedItemsClientUpdateMobilityServicePoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientUpdateMobilityServiceResponse, error) {
 	respType := ReplicationProtectedItemsClientUpdateMobilityServiceResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
 	if err != nil {
 		return ReplicationProtectedItemsClientUpdateMobilityServiceResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1849,11 +1807,10 @@ func (p *ReplicationProtectedItemsClientUpdatePoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final ReplicationProtectedItemsClientUpdateResponse will be returned.
 func (p *ReplicationProtectedItemsClientUpdatePoller) FinalResponse(ctx context.Context) (ReplicationProtectedItemsClientUpdateResponse, error) {
 	respType := ReplicationProtectedItemsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
+	_, err := p.pt.FinalResponse(ctx, &respType.ReplicationProtectedItem)
 	if err != nil {
 		return ReplicationProtectedItemsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1892,11 +1849,10 @@ func (p *ReplicationProtectionContainerMappingsClientCreatePoller) Poll(ctx cont
 // If the final GET succeeded then the final ReplicationProtectionContainerMappingsClientCreateResponse will be returned.
 func (p *ReplicationProtectionContainerMappingsClientCreatePoller) FinalResponse(ctx context.Context) (ReplicationProtectionContainerMappingsClientCreateResponse, error) {
 	respType := ReplicationProtectionContainerMappingsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ProtectionContainerMapping)
+	_, err := p.pt.FinalResponse(ctx, &respType.ProtectionContainerMapping)
 	if err != nil {
 		return ReplicationProtectionContainerMappingsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1935,11 +1891,10 @@ func (p *ReplicationProtectionContainerMappingsClientDeletePoller) Poll(ctx cont
 // If the final GET succeeded then the final ReplicationProtectionContainerMappingsClientDeleteResponse will be returned.
 func (p *ReplicationProtectionContainerMappingsClientDeletePoller) FinalResponse(ctx context.Context) (ReplicationProtectionContainerMappingsClientDeleteResponse, error) {
 	respType := ReplicationProtectionContainerMappingsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ReplicationProtectionContainerMappingsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -1978,11 +1933,10 @@ func (p *ReplicationProtectionContainerMappingsClientPurgePoller) Poll(ctx conte
 // If the final GET succeeded then the final ReplicationProtectionContainerMappingsClientPurgeResponse will be returned.
 func (p *ReplicationProtectionContainerMappingsClientPurgePoller) FinalResponse(ctx context.Context) (ReplicationProtectionContainerMappingsClientPurgeResponse, error) {
 	respType := ReplicationProtectionContainerMappingsClientPurgeResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ReplicationProtectionContainerMappingsClientPurgeResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2021,11 +1975,10 @@ func (p *ReplicationProtectionContainerMappingsClientUpdatePoller) Poll(ctx cont
 // If the final GET succeeded then the final ReplicationProtectionContainerMappingsClientUpdateResponse will be returned.
 func (p *ReplicationProtectionContainerMappingsClientUpdatePoller) FinalResponse(ctx context.Context) (ReplicationProtectionContainerMappingsClientUpdateResponse, error) {
 	respType := ReplicationProtectionContainerMappingsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ProtectionContainerMapping)
+	_, err := p.pt.FinalResponse(ctx, &respType.ProtectionContainerMapping)
 	if err != nil {
 		return ReplicationProtectionContainerMappingsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2064,11 +2017,10 @@ func (p *ReplicationProtectionContainersClientCreatePoller) Poll(ctx context.Con
 // If the final GET succeeded then the final ReplicationProtectionContainersClientCreateResponse will be returned.
 func (p *ReplicationProtectionContainersClientCreatePoller) FinalResponse(ctx context.Context) (ReplicationProtectionContainersClientCreateResponse, error) {
 	respType := ReplicationProtectionContainersClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ProtectionContainer)
+	_, err := p.pt.FinalResponse(ctx, &respType.ProtectionContainer)
 	if err != nil {
 		return ReplicationProtectionContainersClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2107,11 +2059,10 @@ func (p *ReplicationProtectionContainersClientDeletePoller) Poll(ctx context.Con
 // If the final GET succeeded then the final ReplicationProtectionContainersClientDeleteResponse will be returned.
 func (p *ReplicationProtectionContainersClientDeletePoller) FinalResponse(ctx context.Context) (ReplicationProtectionContainersClientDeleteResponse, error) {
 	respType := ReplicationProtectionContainersClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ReplicationProtectionContainersClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2150,11 +2101,10 @@ func (p *ReplicationProtectionContainersClientDiscoverProtectableItemPoller) Pol
 // If the final GET succeeded then the final ReplicationProtectionContainersClientDiscoverProtectableItemResponse will be returned.
 func (p *ReplicationProtectionContainersClientDiscoverProtectableItemPoller) FinalResponse(ctx context.Context) (ReplicationProtectionContainersClientDiscoverProtectableItemResponse, error) {
 	respType := ReplicationProtectionContainersClientDiscoverProtectableItemResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ProtectionContainer)
+	_, err := p.pt.FinalResponse(ctx, &respType.ProtectionContainer)
 	if err != nil {
 		return ReplicationProtectionContainersClientDiscoverProtectableItemResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2193,11 +2143,10 @@ func (p *ReplicationProtectionContainersClientSwitchProtectionPoller) Poll(ctx c
 // If the final GET succeeded then the final ReplicationProtectionContainersClientSwitchProtectionResponse will be returned.
 func (p *ReplicationProtectionContainersClientSwitchProtectionPoller) FinalResponse(ctx context.Context) (ReplicationProtectionContainersClientSwitchProtectionResponse, error) {
 	respType := ReplicationProtectionContainersClientSwitchProtectionResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ProtectionContainer)
+	_, err := p.pt.FinalResponse(ctx, &respType.ProtectionContainer)
 	if err != nil {
 		return ReplicationProtectionContainersClientSwitchProtectionResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2236,11 +2185,10 @@ func (p *ReplicationRecoveryPlansClientCreatePoller) Poll(ctx context.Context) (
 // If the final GET succeeded then the final ReplicationRecoveryPlansClientCreateResponse will be returned.
 func (p *ReplicationRecoveryPlansClientCreatePoller) FinalResponse(ctx context.Context) (ReplicationRecoveryPlansClientCreateResponse, error) {
 	respType := ReplicationRecoveryPlansClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
+	_, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
 	if err != nil {
 		return ReplicationRecoveryPlansClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2279,11 +2227,10 @@ func (p *ReplicationRecoveryPlansClientDeletePoller) Poll(ctx context.Context) (
 // If the final GET succeeded then the final ReplicationRecoveryPlansClientDeleteResponse will be returned.
 func (p *ReplicationRecoveryPlansClientDeletePoller) FinalResponse(ctx context.Context) (ReplicationRecoveryPlansClientDeleteResponse, error) {
 	respType := ReplicationRecoveryPlansClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ReplicationRecoveryPlansClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2322,11 +2269,10 @@ func (p *ReplicationRecoveryPlansClientFailoverCancelPoller) Poll(ctx context.Co
 // If the final GET succeeded then the final ReplicationRecoveryPlansClientFailoverCancelResponse will be returned.
 func (p *ReplicationRecoveryPlansClientFailoverCancelPoller) FinalResponse(ctx context.Context) (ReplicationRecoveryPlansClientFailoverCancelResponse, error) {
 	respType := ReplicationRecoveryPlansClientFailoverCancelResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
+	_, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
 	if err != nil {
 		return ReplicationRecoveryPlansClientFailoverCancelResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2365,11 +2311,10 @@ func (p *ReplicationRecoveryPlansClientFailoverCommitPoller) Poll(ctx context.Co
 // If the final GET succeeded then the final ReplicationRecoveryPlansClientFailoverCommitResponse will be returned.
 func (p *ReplicationRecoveryPlansClientFailoverCommitPoller) FinalResponse(ctx context.Context) (ReplicationRecoveryPlansClientFailoverCommitResponse, error) {
 	respType := ReplicationRecoveryPlansClientFailoverCommitResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
+	_, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
 	if err != nil {
 		return ReplicationRecoveryPlansClientFailoverCommitResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2408,11 +2353,10 @@ func (p *ReplicationRecoveryPlansClientPlannedFailoverPoller) Poll(ctx context.C
 // If the final GET succeeded then the final ReplicationRecoveryPlansClientPlannedFailoverResponse will be returned.
 func (p *ReplicationRecoveryPlansClientPlannedFailoverPoller) FinalResponse(ctx context.Context) (ReplicationRecoveryPlansClientPlannedFailoverResponse, error) {
 	respType := ReplicationRecoveryPlansClientPlannedFailoverResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
+	_, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
 	if err != nil {
 		return ReplicationRecoveryPlansClientPlannedFailoverResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2451,11 +2395,10 @@ func (p *ReplicationRecoveryPlansClientReprotectPoller) Poll(ctx context.Context
 // If the final GET succeeded then the final ReplicationRecoveryPlansClientReprotectResponse will be returned.
 func (p *ReplicationRecoveryPlansClientReprotectPoller) FinalResponse(ctx context.Context) (ReplicationRecoveryPlansClientReprotectResponse, error) {
 	respType := ReplicationRecoveryPlansClientReprotectResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
+	_, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
 	if err != nil {
 		return ReplicationRecoveryPlansClientReprotectResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2494,11 +2437,10 @@ func (p *ReplicationRecoveryPlansClientTestFailoverCleanupPoller) Poll(ctx conte
 // If the final GET succeeded then the final ReplicationRecoveryPlansClientTestFailoverCleanupResponse will be returned.
 func (p *ReplicationRecoveryPlansClientTestFailoverCleanupPoller) FinalResponse(ctx context.Context) (ReplicationRecoveryPlansClientTestFailoverCleanupResponse, error) {
 	respType := ReplicationRecoveryPlansClientTestFailoverCleanupResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
+	_, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
 	if err != nil {
 		return ReplicationRecoveryPlansClientTestFailoverCleanupResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2537,11 +2479,10 @@ func (p *ReplicationRecoveryPlansClientTestFailoverPoller) Poll(ctx context.Cont
 // If the final GET succeeded then the final ReplicationRecoveryPlansClientTestFailoverResponse will be returned.
 func (p *ReplicationRecoveryPlansClientTestFailoverPoller) FinalResponse(ctx context.Context) (ReplicationRecoveryPlansClientTestFailoverResponse, error) {
 	respType := ReplicationRecoveryPlansClientTestFailoverResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
+	_, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
 	if err != nil {
 		return ReplicationRecoveryPlansClientTestFailoverResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2580,11 +2521,10 @@ func (p *ReplicationRecoveryPlansClientUnplannedFailoverPoller) Poll(ctx context
 // If the final GET succeeded then the final ReplicationRecoveryPlansClientUnplannedFailoverResponse will be returned.
 func (p *ReplicationRecoveryPlansClientUnplannedFailoverPoller) FinalResponse(ctx context.Context) (ReplicationRecoveryPlansClientUnplannedFailoverResponse, error) {
 	respType := ReplicationRecoveryPlansClientUnplannedFailoverResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
+	_, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
 	if err != nil {
 		return ReplicationRecoveryPlansClientUnplannedFailoverResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2623,11 +2563,10 @@ func (p *ReplicationRecoveryPlansClientUpdatePoller) Poll(ctx context.Context) (
 // If the final GET succeeded then the final ReplicationRecoveryPlansClientUpdateResponse will be returned.
 func (p *ReplicationRecoveryPlansClientUpdatePoller) FinalResponse(ctx context.Context) (ReplicationRecoveryPlansClientUpdateResponse, error) {
 	respType := ReplicationRecoveryPlansClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
+	_, err := p.pt.FinalResponse(ctx, &respType.RecoveryPlan)
 	if err != nil {
 		return ReplicationRecoveryPlansClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2666,11 +2605,10 @@ func (p *ReplicationRecoveryServicesProvidersClientCreatePoller) Poll(ctx contex
 // If the final GET succeeded then the final ReplicationRecoveryServicesProvidersClientCreateResponse will be returned.
 func (p *ReplicationRecoveryServicesProvidersClientCreatePoller) FinalResponse(ctx context.Context) (ReplicationRecoveryServicesProvidersClientCreateResponse, error) {
 	respType := ReplicationRecoveryServicesProvidersClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RecoveryServicesProvider)
+	_, err := p.pt.FinalResponse(ctx, &respType.RecoveryServicesProvider)
 	if err != nil {
 		return ReplicationRecoveryServicesProvidersClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2709,11 +2647,10 @@ func (p *ReplicationRecoveryServicesProvidersClientDeletePoller) Poll(ctx contex
 // If the final GET succeeded then the final ReplicationRecoveryServicesProvidersClientDeleteResponse will be returned.
 func (p *ReplicationRecoveryServicesProvidersClientDeletePoller) FinalResponse(ctx context.Context) (ReplicationRecoveryServicesProvidersClientDeleteResponse, error) {
 	respType := ReplicationRecoveryServicesProvidersClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ReplicationRecoveryServicesProvidersClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2752,11 +2689,10 @@ func (p *ReplicationRecoveryServicesProvidersClientPurgePoller) Poll(ctx context
 // If the final GET succeeded then the final ReplicationRecoveryServicesProvidersClientPurgeResponse will be returned.
 func (p *ReplicationRecoveryServicesProvidersClientPurgePoller) FinalResponse(ctx context.Context) (ReplicationRecoveryServicesProvidersClientPurgeResponse, error) {
 	respType := ReplicationRecoveryServicesProvidersClientPurgeResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ReplicationRecoveryServicesProvidersClientPurgeResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2795,11 +2731,10 @@ func (p *ReplicationRecoveryServicesProvidersClientRefreshProviderPoller) Poll(c
 // If the final GET succeeded then the final ReplicationRecoveryServicesProvidersClientRefreshProviderResponse will be returned.
 func (p *ReplicationRecoveryServicesProvidersClientRefreshProviderPoller) FinalResponse(ctx context.Context) (ReplicationRecoveryServicesProvidersClientRefreshProviderResponse, error) {
 	respType := ReplicationRecoveryServicesProvidersClientRefreshProviderResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RecoveryServicesProvider)
+	_, err := p.pt.FinalResponse(ctx, &respType.RecoveryServicesProvider)
 	if err != nil {
 		return ReplicationRecoveryServicesProvidersClientRefreshProviderResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2838,11 +2773,10 @@ func (p *ReplicationStorageClassificationMappingsClientCreatePoller) Poll(ctx co
 // If the final GET succeeded then the final ReplicationStorageClassificationMappingsClientCreateResponse will be returned.
 func (p *ReplicationStorageClassificationMappingsClientCreatePoller) FinalResponse(ctx context.Context) (ReplicationStorageClassificationMappingsClientCreateResponse, error) {
 	respType := ReplicationStorageClassificationMappingsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.StorageClassificationMapping)
+	_, err := p.pt.FinalResponse(ctx, &respType.StorageClassificationMapping)
 	if err != nil {
 		return ReplicationStorageClassificationMappingsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2881,11 +2815,10 @@ func (p *ReplicationStorageClassificationMappingsClientDeletePoller) Poll(ctx co
 // If the final GET succeeded then the final ReplicationStorageClassificationMappingsClientDeleteResponse will be returned.
 func (p *ReplicationStorageClassificationMappingsClientDeletePoller) FinalResponse(ctx context.Context) (ReplicationStorageClassificationMappingsClientDeleteResponse, error) {
 	respType := ReplicationStorageClassificationMappingsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ReplicationStorageClassificationMappingsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2924,11 +2857,10 @@ func (p *ReplicationVaultHealthClientRefreshPoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final ReplicationVaultHealthClientRefreshResponse will be returned.
 func (p *ReplicationVaultHealthClientRefreshPoller) FinalResponse(ctx context.Context) (ReplicationVaultHealthClientRefreshResponse, error) {
 	respType := ReplicationVaultHealthClientRefreshResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.VaultHealthDetails)
+	_, err := p.pt.FinalResponse(ctx, &respType.VaultHealthDetails)
 	if err != nil {
 		return ReplicationVaultHealthClientRefreshResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -2967,11 +2899,10 @@ func (p *ReplicationVaultSettingClientCreatePoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final ReplicationVaultSettingClientCreateResponse will be returned.
 func (p *ReplicationVaultSettingClientCreatePoller) FinalResponse(ctx context.Context) (ReplicationVaultSettingClientCreateResponse, error) {
 	respType := ReplicationVaultSettingClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.VaultSetting)
+	_, err := p.pt.FinalResponse(ctx, &respType.VaultSetting)
 	if err != nil {
 		return ReplicationVaultSettingClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -3010,11 +2941,10 @@ func (p *ReplicationvCentersClientCreatePoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final ReplicationvCentersClientCreateResponse will be returned.
 func (p *ReplicationvCentersClientCreatePoller) FinalResponse(ctx context.Context) (ReplicationvCentersClientCreateResponse, error) {
 	respType := ReplicationvCentersClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.VCenter)
+	_, err := p.pt.FinalResponse(ctx, &respType.VCenter)
 	if err != nil {
 		return ReplicationvCentersClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -3053,11 +2983,10 @@ func (p *ReplicationvCentersClientDeletePoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final ReplicationvCentersClientDeleteResponse will be returned.
 func (p *ReplicationvCentersClientDeletePoller) FinalResponse(ctx context.Context) (ReplicationvCentersClientDeleteResponse, error) {
 	respType := ReplicationvCentersClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ReplicationvCentersClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -3096,11 +3025,10 @@ func (p *ReplicationvCentersClientUpdatePoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final ReplicationvCentersClientUpdateResponse will be returned.
 func (p *ReplicationvCentersClientUpdatePoller) FinalResponse(ctx context.Context) (ReplicationvCentersClientUpdateResponse, error) {
 	respType := ReplicationvCentersClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.VCenter)
+	_, err := p.pt.FinalResponse(ctx, &respType.VCenter)
 	if err != nil {
 		return ReplicationvCentersClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

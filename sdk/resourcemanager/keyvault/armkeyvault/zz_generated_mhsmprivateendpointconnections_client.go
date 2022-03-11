@@ -36,17 +36,17 @@ type MHSMPrivateEndpointConnectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMHSMPrivateEndpointConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MHSMPrivateEndpointConnectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MHSMPrivateEndpointConnectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *MHSMPrivateEndpointConnectionsClient) BeginDelete(ctx context.Cont
 	if err != nil {
 		return MHSMPrivateEndpointConnectionsClientDeletePollerResponse{}, err
 	}
-	result := MHSMPrivateEndpointConnectionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := MHSMPrivateEndpointConnectionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("MHSMPrivateEndpointConnectionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return MHSMPrivateEndpointConnectionsClientDeletePollerResponse{}, err
@@ -177,7 +175,7 @@ func (client *MHSMPrivateEndpointConnectionsClient) getCreateRequest(ctx context
 
 // getHandleResponse handles the Get response.
 func (client *MHSMPrivateEndpointConnectionsClient) getHandleResponse(resp *http.Response) (MHSMPrivateEndpointConnectionsClientGetResponse, error) {
-	result := MHSMPrivateEndpointConnectionsClientGetResponse{RawResponse: resp}
+	result := MHSMPrivateEndpointConnectionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MHSMPrivateEndpointConnection); err != nil {
 		return MHSMPrivateEndpointConnectionsClientGetResponse{}, err
 	}
@@ -231,7 +229,7 @@ func (client *MHSMPrivateEndpointConnectionsClient) listByResourceCreateRequest(
 
 // listByResourceHandleResponse handles the ListByResource response.
 func (client *MHSMPrivateEndpointConnectionsClient) listByResourceHandleResponse(resp *http.Response) (MHSMPrivateEndpointConnectionsClientListByResourceResponse, error) {
-	result := MHSMPrivateEndpointConnectionsClientListByResourceResponse{RawResponse: resp}
+	result := MHSMPrivateEndpointConnectionsClientListByResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MHSMPrivateEndpointConnectionsListResult); err != nil {
 		return MHSMPrivateEndpointConnectionsClientListByResourceResponse{}, err
 	}
@@ -293,7 +291,7 @@ func (client *MHSMPrivateEndpointConnectionsClient) putCreateRequest(ctx context
 
 // putHandleResponse handles the Put response.
 func (client *MHSMPrivateEndpointConnectionsClient) putHandleResponse(resp *http.Response) (MHSMPrivateEndpointConnectionsClientPutResponse, error) {
-	result := MHSMPrivateEndpointConnectionsClientPutResponse{RawResponse: resp}
+	result := MHSMPrivateEndpointConnectionsClientPutResponse{}
 	if val := resp.Header.Get("Retry-After"); val != "" {
 		retryAfter32, err := strconv.ParseInt(val, 10, 32)
 		retryAfter := int32(retryAfter32)

@@ -35,17 +35,17 @@ type LocalNetworkGatewaysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLocalNetworkGatewaysClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LocalNetworkGatewaysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LocalNetworkGatewaysClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *LocalNetworkGatewaysClient) BeginCreateOrUpdate(ctx context.Contex
 	if err != nil {
 		return LocalNetworkGatewaysClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := LocalNetworkGatewaysClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LocalNetworkGatewaysClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("LocalNetworkGatewaysClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return LocalNetworkGatewaysClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *LocalNetworkGatewaysClient) BeginDelete(ctx context.Context, resou
 	if err != nil {
 		return LocalNetworkGatewaysClientDeletePollerResponse{}, err
 	}
-	result := LocalNetworkGatewaysClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := LocalNetworkGatewaysClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("LocalNetworkGatewaysClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return LocalNetworkGatewaysClientDeletePollerResponse{}, err
@@ -234,7 +230,7 @@ func (client *LocalNetworkGatewaysClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *LocalNetworkGatewaysClient) getHandleResponse(resp *http.Response) (LocalNetworkGatewaysClientGetResponse, error) {
-	result := LocalNetworkGatewaysClientGetResponse{RawResponse: resp}
+	result := LocalNetworkGatewaysClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LocalNetworkGateway); err != nil {
 		return LocalNetworkGatewaysClientGetResponse{}, err
 	}
@@ -282,7 +278,7 @@ func (client *LocalNetworkGatewaysClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *LocalNetworkGatewaysClient) listHandleResponse(resp *http.Response) (LocalNetworkGatewaysClientListResponse, error) {
-	result := LocalNetworkGatewaysClientListResponse{RawResponse: resp}
+	result := LocalNetworkGatewaysClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LocalNetworkGatewayListResult); err != nil {
 		return LocalNetworkGatewaysClientListResponse{}, err
 	}
@@ -339,7 +335,7 @@ func (client *LocalNetworkGatewaysClient) updateTagsCreateRequest(ctx context.Co
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *LocalNetworkGatewaysClient) updateTagsHandleResponse(resp *http.Response) (LocalNetworkGatewaysClientUpdateTagsResponse, error) {
-	result := LocalNetworkGatewaysClientUpdateTagsResponse{RawResponse: resp}
+	result := LocalNetworkGatewaysClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LocalNetworkGateway); err != nil {
 		return LocalNetworkGatewaysClientUpdateTagsResponse{}, err
 	}

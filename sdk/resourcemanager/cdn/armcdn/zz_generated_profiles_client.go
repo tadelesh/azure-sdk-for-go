@@ -62,9 +62,7 @@ func (client *ProfilesClient) BeginCreate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ProfilesClientCreatePollerResponse{}, err
 	}
-	result := ProfilesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ProfilesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ProfilesClient.Create", "", resp, client.pl)
 	if err != nil {
 		return ProfilesClientCreatePollerResponse{}, err
@@ -132,9 +130,7 @@ func (client *ProfilesClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ProfilesClientDeletePollerResponse{}, err
 	}
-	result := ProfilesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ProfilesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ProfilesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ProfilesClientDeletePollerResponse{}, err
@@ -241,7 +237,7 @@ func (client *ProfilesClient) generateSsoURICreateRequest(ctx context.Context, r
 
 // generateSsoURIHandleResponse handles the GenerateSsoURI response.
 func (client *ProfilesClient) generateSsoURIHandleResponse(resp *http.Response) (ProfilesClientGenerateSsoURIResponse, error) {
-	result := ProfilesClientGenerateSsoURIResponse{RawResponse: resp}
+	result := ProfilesClientGenerateSsoURIResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SsoURI); err != nil {
 		return ProfilesClientGenerateSsoURIResponse{}, err
 	}
@@ -298,7 +294,7 @@ func (client *ProfilesClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *ProfilesClient) getHandleResponse(resp *http.Response) (ProfilesClientGetResponse, error) {
-	result := ProfilesClientGetResponse{RawResponse: resp}
+	result := ProfilesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Profile); err != nil {
 		return ProfilesClientGetResponse{}, err
 	}
@@ -340,7 +336,7 @@ func (client *ProfilesClient) listCreateRequest(ctx context.Context, options *Pr
 
 // listHandleResponse handles the List response.
 func (client *ProfilesClient) listHandleResponse(resp *http.Response) (ProfilesClientListResponse, error) {
-	result := ProfilesClientListResponse{RawResponse: resp}
+	result := ProfilesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProfileListResult); err != nil {
 		return ProfilesClientListResponse{}, err
 	}
@@ -389,7 +385,7 @@ func (client *ProfilesClient) listByResourceGroupCreateRequest(ctx context.Conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ProfilesClient) listByResourceGroupHandleResponse(resp *http.Response) (ProfilesClientListByResourceGroupResponse, error) {
-	result := ProfilesClientListByResourceGroupResponse{RawResponse: resp}
+	result := ProfilesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProfileListResult); err != nil {
 		return ProfilesClientListByResourceGroupResponse{}, err
 	}
@@ -444,7 +440,7 @@ func (client *ProfilesClient) listResourceUsageCreateRequest(ctx context.Context
 
 // listResourceUsageHandleResponse handles the ListResourceUsage response.
 func (client *ProfilesClient) listResourceUsageHandleResponse(resp *http.Response) (ProfilesClientListResourceUsageResponse, error) {
-	result := ProfilesClientListResourceUsageResponse{RawResponse: resp}
+	result := ProfilesClientListResourceUsageResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceUsageListResult); err != nil {
 		return ProfilesClientListResourceUsageResponse{}, err
 	}
@@ -502,7 +498,7 @@ func (client *ProfilesClient) listSupportedOptimizationTypesCreateRequest(ctx co
 
 // listSupportedOptimizationTypesHandleResponse handles the ListSupportedOptimizationTypes response.
 func (client *ProfilesClient) listSupportedOptimizationTypesHandleResponse(resp *http.Response) (ProfilesClientListSupportedOptimizationTypesResponse, error) {
-	result := ProfilesClientListSupportedOptimizationTypesResponse{RawResponse: resp}
+	result := ProfilesClientListSupportedOptimizationTypesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SupportedOptimizationTypesListResult); err != nil {
 		return ProfilesClientListSupportedOptimizationTypesResponse{}, err
 	}
@@ -522,9 +518,7 @@ func (client *ProfilesClient) BeginUpdate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ProfilesClientUpdatePollerResponse{}, err
 	}
-	result := ProfilesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ProfilesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ProfilesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ProfilesClientUpdatePollerResponse{}, err

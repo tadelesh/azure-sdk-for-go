@@ -35,17 +35,17 @@ type SessionHostsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSessionHostsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SessionHostsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SessionHostsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -68,7 +68,7 @@ func (client *SessionHostsClient) Delete(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SessionHostsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SessionHostsClientDeleteResponse{RawResponse: resp}, nil
+	return SessionHostsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -157,7 +157,7 @@ func (client *SessionHostsClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *SessionHostsClient) getHandleResponse(resp *http.Response) (SessionHostsClientGetResponse, error) {
-	result := SessionHostsClientGetResponse{RawResponse: resp}
+	result := SessionHostsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SessionHost); err != nil {
 		return SessionHostsClientGetResponse{}, err
 	}
@@ -209,7 +209,7 @@ func (client *SessionHostsClient) listCreateRequest(ctx context.Context, resourc
 
 // listHandleResponse handles the List response.
 func (client *SessionHostsClient) listHandleResponse(resp *http.Response) (SessionHostsClientListResponse, error) {
-	result := SessionHostsClientListResponse{RawResponse: resp}
+	result := SessionHostsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SessionHostList); err != nil {
 		return SessionHostsClientListResponse{}, err
 	}
@@ -275,7 +275,7 @@ func (client *SessionHostsClient) updateCreateRequest(ctx context.Context, resou
 
 // updateHandleResponse handles the Update response.
 func (client *SessionHostsClient) updateHandleResponse(resp *http.Response) (SessionHostsClientUpdateResponse, error) {
-	result := SessionHostsClientUpdateResponse{RawResponse: resp}
+	result := SessionHostsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SessionHost); err != nil {
 		return SessionHostsClientUpdateResponse{}, err
 	}

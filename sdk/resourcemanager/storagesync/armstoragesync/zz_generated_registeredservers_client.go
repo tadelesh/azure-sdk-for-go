@@ -34,17 +34,17 @@ type RegisteredServersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRegisteredServersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RegisteredServersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RegisteredServersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *RegisteredServersClient) BeginCreate(ctx context.Context, resource
 	if err != nil {
 		return RegisteredServersClientCreatePollerResponse{}, err
 	}
-	result := RegisteredServersClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := RegisteredServersClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("RegisteredServersClient.Create", "", resp, client.pl)
 	if err != nil {
 		return RegisteredServersClientCreatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *RegisteredServersClient) BeginDelete(ctx context.Context, resource
 	if err != nil {
 		return RegisteredServersClientDeletePollerResponse{}, err
 	}
-	result := RegisteredServersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := RegisteredServersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("RegisteredServersClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return RegisteredServersClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *RegisteredServersClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *RegisteredServersClient) getHandleResponse(resp *http.Response) (RegisteredServersClientGetResponse, error) {
-	result := RegisteredServersClientGetResponse{RawResponse: resp}
+	result := RegisteredServersClientGetResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -266,19 +262,13 @@ func (client *RegisteredServersClient) getHandleResponse(resp *http.Response) (R
 // storageSyncServiceName - Name of Storage Sync Service resource.
 // options - RegisteredServersClientListByStorageSyncServiceOptions contains the optional parameters for the RegisteredServersClient.ListByStorageSyncService
 // method.
-func (client *RegisteredServersClient) ListByStorageSyncService(ctx context.Context, resourceGroupName string, storageSyncServiceName string, options *RegisteredServersClientListByStorageSyncServiceOptions) (RegisteredServersClientListByStorageSyncServiceResponse, error) {
-	req, err := client.listByStorageSyncServiceCreateRequest(ctx, resourceGroupName, storageSyncServiceName, options)
-	if err != nil {
-		return RegisteredServersClientListByStorageSyncServiceResponse{}, err
+func (client *RegisteredServersClient) ListByStorageSyncService(resourceGroupName string, storageSyncServiceName string, options *RegisteredServersClientListByStorageSyncServiceOptions) *RegisteredServersClientListByStorageSyncServicePager {
+	return &RegisteredServersClientListByStorageSyncServicePager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByStorageSyncServiceCreateRequest(ctx, resourceGroupName, storageSyncServiceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return RegisteredServersClientListByStorageSyncServiceResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return RegisteredServersClientListByStorageSyncServiceResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByStorageSyncServiceHandleResponse(resp)
 }
 
 // listByStorageSyncServiceCreateRequest creates the ListByStorageSyncService request.
@@ -309,7 +299,7 @@ func (client *RegisteredServersClient) listByStorageSyncServiceCreateRequest(ctx
 
 // listByStorageSyncServiceHandleResponse handles the ListByStorageSyncService response.
 func (client *RegisteredServersClient) listByStorageSyncServiceHandleResponse(resp *http.Response) (RegisteredServersClientListByStorageSyncServiceResponse, error) {
-	result := RegisteredServersClientListByStorageSyncServiceResponse{RawResponse: resp}
+	result := RegisteredServersClientListByStorageSyncServiceResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -335,9 +325,7 @@ func (client *RegisteredServersClient) BeginTriggerRollover(ctx context.Context,
 	if err != nil {
 		return RegisteredServersClientTriggerRolloverPollerResponse{}, err
 	}
-	result := RegisteredServersClientTriggerRolloverPollerResponse{
-		RawResponse: resp,
-	}
+	result := RegisteredServersClientTriggerRolloverPollerResponse{}
 	pt, err := armruntime.NewPoller("RegisteredServersClient.TriggerRollover", "", resp, client.pl)
 	if err != nil {
 		return RegisteredServersClientTriggerRolloverPollerResponse{}, err

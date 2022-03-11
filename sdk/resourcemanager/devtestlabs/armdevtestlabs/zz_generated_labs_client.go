@@ -35,17 +35,17 @@ type LabsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLabsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LabsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LabsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -60,9 +60,7 @@ func (client *LabsClient) BeginClaimAnyVM(ctx context.Context, resourceGroupName
 	if err != nil {
 		return LabsClientClaimAnyVMPollerResponse{}, err
 	}
-	result := LabsClientClaimAnyVMPollerResponse{
-		RawResponse: resp,
-	}
+	result := LabsClientClaimAnyVMPollerResponse{}
 	pt, err := armruntime.NewPoller("LabsClient.ClaimAnyVM", "", resp, client.pl)
 	if err != nil {
 		return LabsClientClaimAnyVMPollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *LabsClient) BeginCreateEnvironment(ctx context.Context, resourceGr
 	if err != nil {
 		return LabsClientCreateEnvironmentPollerResponse{}, err
 	}
-	result := LabsClientCreateEnvironmentPollerResponse{
-		RawResponse: resp,
-	}
+	result := LabsClientCreateEnvironmentPollerResponse{}
 	pt, err := armruntime.NewPoller("LabsClient.CreateEnvironment", "", resp, client.pl)
 	if err != nil {
 		return LabsClientCreateEnvironmentPollerResponse{}, err
@@ -196,9 +192,7 @@ func (client *LabsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroup
 	if err != nil {
 		return LabsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := LabsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LabsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("LabsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return LabsClientCreateOrUpdatePollerResponse{}, err
@@ -262,9 +256,7 @@ func (client *LabsClient) BeginDelete(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return LabsClientDeletePollerResponse{}, err
 	}
-	result := LabsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := LabsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("LabsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return LabsClientDeletePollerResponse{}, err
@@ -330,9 +322,7 @@ func (client *LabsClient) BeginExportResourceUsage(ctx context.Context, resource
 	if err != nil {
 		return LabsClientExportResourceUsagePollerResponse{}, err
 	}
-	result := LabsClientExportResourceUsagePollerResponse{
-		RawResponse: resp,
-	}
+	result := LabsClientExportResourceUsagePollerResponse{}
 	pt, err := armruntime.NewPoller("LabsClient.ExportResourceUsage", "", resp, client.pl)
 	if err != nil {
 		return LabsClientExportResourceUsagePollerResponse{}, err
@@ -435,7 +425,7 @@ func (client *LabsClient) generateUploadURICreateRequest(ctx context.Context, re
 
 // generateUploadURIHandleResponse handles the GenerateUploadURI response.
 func (client *LabsClient) generateUploadURIHandleResponse(resp *http.Response) (LabsClientGenerateUploadURIResponse, error) {
-	result := LabsClientGenerateUploadURIResponse{RawResponse: resp}
+	result := LabsClientGenerateUploadURIResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GenerateUploadURIResponse); err != nil {
 		return LabsClientGenerateUploadURIResponse{}, err
 	}
@@ -493,7 +483,7 @@ func (client *LabsClient) getCreateRequest(ctx context.Context, resourceGroupNam
 
 // getHandleResponse handles the Get response.
 func (client *LabsClient) getHandleResponse(resp *http.Response) (LabsClientGetResponse, error) {
-	result := LabsClientGetResponse{RawResponse: resp}
+	result := LabsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Lab); err != nil {
 		return LabsClientGetResponse{}, err
 	}
@@ -513,9 +503,7 @@ func (client *LabsClient) BeginImportVirtualMachine(ctx context.Context, resourc
 	if err != nil {
 		return LabsClientImportVirtualMachinePollerResponse{}, err
 	}
-	result := LabsClientImportVirtualMachinePollerResponse{
-		RawResponse: resp,
-	}
+	result := LabsClientImportVirtualMachinePollerResponse{}
 	pt, err := armruntime.NewPoller("LabsClient.ImportVirtualMachine", "", resp, client.pl)
 	if err != nil {
 		return LabsClientImportVirtualMachinePollerResponse{}, err
@@ -622,7 +610,7 @@ func (client *LabsClient) listByResourceGroupCreateRequest(ctx context.Context, 
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *LabsClient) listByResourceGroupHandleResponse(resp *http.Response) (LabsClientListByResourceGroupResponse, error) {
-	result := LabsClientListByResourceGroupResponse{RawResponse: resp}
+	result := LabsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LabList); err != nil {
 		return LabsClientListByResourceGroupResponse{}, err
 	}
@@ -676,7 +664,7 @@ func (client *LabsClient) listBySubscriptionCreateRequest(ctx context.Context, o
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *LabsClient) listBySubscriptionHandleResponse(resp *http.Response) (LabsClientListBySubscriptionResponse, error) {
-	result := LabsClientListBySubscriptionResponse{RawResponse: resp}
+	result := LabsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LabList); err != nil {
 		return LabsClientListBySubscriptionResponse{}, err
 	}
@@ -728,7 +716,7 @@ func (client *LabsClient) listVhdsCreateRequest(ctx context.Context, resourceGro
 
 // listVhdsHandleResponse handles the ListVhds response.
 func (client *LabsClient) listVhdsHandleResponse(resp *http.Response) (LabsClientListVhdsResponse, error) {
-	result := LabsClientListVhdsResponse{RawResponse: resp}
+	result := LabsClientListVhdsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LabVhdList); err != nil {
 		return LabsClientListVhdsResponse{}, err
 	}
@@ -784,7 +772,7 @@ func (client *LabsClient) updateCreateRequest(ctx context.Context, resourceGroup
 
 // updateHandleResponse handles the Update response.
 func (client *LabsClient) updateHandleResponse(resp *http.Response) (LabsClientUpdateResponse, error) {
-	result := LabsClientUpdateResponse{RawResponse: resp}
+	result := LabsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Lab); err != nil {
 		return LabsClientUpdateResponse{}, err
 	}

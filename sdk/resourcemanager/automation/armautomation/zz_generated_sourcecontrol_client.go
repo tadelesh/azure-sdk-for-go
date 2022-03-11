@@ -35,17 +35,17 @@ type SourceControlClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSourceControlClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SourceControlClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SourceControlClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *SourceControlClient) createOrUpdateCreateRequest(ctx context.Conte
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *SourceControlClient) createOrUpdateHandleResponse(resp *http.Response) (SourceControlClientCreateOrUpdateResponse, error) {
-	result := SourceControlClientCreateOrUpdateResponse{RawResponse: resp}
+	result := SourceControlClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceControl); err != nil {
 		return SourceControlClientCreateOrUpdateResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *SourceControlClient) Delete(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return SourceControlClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SourceControlClientDeleteResponse{RawResponse: resp}, nil
+	return SourceControlClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -216,7 +216,7 @@ func (client *SourceControlClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *SourceControlClient) getHandleResponse(resp *http.Response) (SourceControlClientGetResponse, error) {
-	result := SourceControlClientGetResponse{RawResponse: resp}
+	result := SourceControlClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceControl); err != nil {
 		return SourceControlClientGetResponse{}, err
 	}
@@ -272,7 +272,7 @@ func (client *SourceControlClient) listByAutomationAccountCreateRequest(ctx cont
 
 // listByAutomationAccountHandleResponse handles the ListByAutomationAccount response.
 func (client *SourceControlClient) listByAutomationAccountHandleResponse(resp *http.Response) (SourceControlClientListByAutomationAccountResponse, error) {
-	result := SourceControlClientListByAutomationAccountResponse{RawResponse: resp}
+	result := SourceControlClientListByAutomationAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceControlListResult); err != nil {
 		return SourceControlClientListByAutomationAccountResponse{}, err
 	}
@@ -333,7 +333,7 @@ func (client *SourceControlClient) updateCreateRequest(ctx context.Context, reso
 
 // updateHandleResponse handles the Update response.
 func (client *SourceControlClient) updateHandleResponse(resp *http.Response) (SourceControlClientUpdateResponse, error) {
-	result := SourceControlClientUpdateResponse{RawResponse: resp}
+	result := SourceControlClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SourceControl); err != nil {
 		return SourceControlClientUpdateResponse{}, err
 	}

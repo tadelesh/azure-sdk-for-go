@@ -34,17 +34,17 @@ type PrivateEndpointConnectionsForSCCPowershellClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateEndpointConnectionsForSCCPowershellClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateEndpointConnectionsForSCCPowershellClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateEndpointConnectionsForSCCPowershellClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *PrivateEndpointConnectionsForSCCPowershellClient) BeginCreateOrUpd
 	if err != nil {
 		return PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateEndpointConnectionsForSCCPowershellClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return PrivateEndpointConnectionsForSCCPowershellClientCreateOrUpdatePollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *PrivateEndpointConnectionsForSCCPowershellClient) BeginDelete(ctx 
 	if err != nil {
 		return PrivateEndpointConnectionsForSCCPowershellClientDeletePollerResponse{}, err
 	}
-	result := PrivateEndpointConnectionsForSCCPowershellClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateEndpointConnectionsForSCCPowershellClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateEndpointConnectionsForSCCPowershellClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return PrivateEndpointConnectionsForSCCPowershellClientDeletePollerResponse{}, err
@@ -248,7 +244,7 @@ func (client *PrivateEndpointConnectionsForSCCPowershellClient) getCreateRequest
 
 // getHandleResponse handles the Get response.
 func (client *PrivateEndpointConnectionsForSCCPowershellClient) getHandleResponse(resp *http.Response) (PrivateEndpointConnectionsForSCCPowershellClientGetResponse, error) {
-	result := PrivateEndpointConnectionsForSCCPowershellClientGetResponse{RawResponse: resp}
+	result := PrivateEndpointConnectionsForSCCPowershellClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnection); err != nil {
 		return PrivateEndpointConnectionsForSCCPowershellClientGetResponse{}, err
 	}
@@ -301,7 +297,7 @@ func (client *PrivateEndpointConnectionsForSCCPowershellClient) listByServiceCre
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *PrivateEndpointConnectionsForSCCPowershellClient) listByServiceHandleResponse(resp *http.Response) (PrivateEndpointConnectionsForSCCPowershellClientListByServiceResponse, error) {
-	result := PrivateEndpointConnectionsForSCCPowershellClientListByServiceResponse{RawResponse: resp}
+	result := PrivateEndpointConnectionsForSCCPowershellClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionListResult); err != nil {
 		return PrivateEndpointConnectionsForSCCPowershellClientListByServiceResponse{}, err
 	}

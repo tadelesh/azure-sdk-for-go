@@ -10,10 +10,12 @@ package armdigitaltwins
 
 const (
 	moduleName    = "armdigitaltwins"
-	moduleVersion = "v0.2.0"
+	moduleVersion = "v0.3.0"
 )
 
-// AuthenticationType - Specifies the authentication type being used for connecting to the endpoint.
+// AuthenticationType - Specifies the authentication type being used for connecting to the endpoint. Defaults to 'KeyBased'.
+// If 'KeyBased' is selected, a connection string must be specified (at least the primary connection
+// string). If 'IdentityBased' is select, the endpointUri and entityPath properties must be specified.
 type AuthenticationType string
 
 const (
@@ -56,6 +58,50 @@ func PossibleConnectionPropertiesProvisioningStateValues() []ConnectionPropertie
 
 // ToPtr returns a *ConnectionPropertiesProvisioningState pointing to the current value.
 func (c ConnectionPropertiesProvisioningState) ToPtr() *ConnectionPropertiesProvisioningState {
+	return &c
+}
+
+// ConnectionType - The type of time series connection resource.
+type ConnectionType string
+
+const (
+	ConnectionTypeAzureDataExplorer ConnectionType = "AzureDataExplorer"
+)
+
+// PossibleConnectionTypeValues returns the possible values for the ConnectionType const type.
+func PossibleConnectionTypeValues() []ConnectionType {
+	return []ConnectionType{
+		ConnectionTypeAzureDataExplorer,
+	}
+}
+
+// ToPtr returns a *ConnectionType pointing to the current value.
+func (c ConnectionType) ToPtr() *ConnectionType {
+	return &c
+}
+
+// CreatedByType - The type of identity that created the resource.
+type CreatedByType string
+
+const (
+	CreatedByTypeApplication     CreatedByType = "Application"
+	CreatedByTypeKey             CreatedByType = "Key"
+	CreatedByTypeManagedIdentity CreatedByType = "ManagedIdentity"
+	CreatedByTypeUser            CreatedByType = "User"
+)
+
+// PossibleCreatedByTypeValues returns the possible values for the CreatedByType const type.
+func PossibleCreatedByTypeValues() []CreatedByType {
+	return []CreatedByType{
+		CreatedByTypeApplication,
+		CreatedByTypeKey,
+		CreatedByTypeManagedIdentity,
+		CreatedByTypeUser,
+	}
+}
+
+// ToPtr returns a *CreatedByType pointing to the current value.
+func (c CreatedByType) ToPtr() *CreatedByType {
 	return &c
 }
 
@@ -245,5 +291,44 @@ func PossibleReasonValues() []Reason {
 
 // ToPtr returns a *Reason pointing to the current value.
 func (c Reason) ToPtr() *Reason {
+	return &c
+}
+
+// TimeSeriesDatabaseConnectionState - The provisioning state.
+type TimeSeriesDatabaseConnectionState string
+
+const (
+	TimeSeriesDatabaseConnectionStateCanceled     TimeSeriesDatabaseConnectionState = "Canceled"
+	TimeSeriesDatabaseConnectionStateDeleted      TimeSeriesDatabaseConnectionState = "Deleted"
+	TimeSeriesDatabaseConnectionStateDeleting     TimeSeriesDatabaseConnectionState = "Deleting"
+	TimeSeriesDatabaseConnectionStateDisabled     TimeSeriesDatabaseConnectionState = "Disabled"
+	TimeSeriesDatabaseConnectionStateFailed       TimeSeriesDatabaseConnectionState = "Failed"
+	TimeSeriesDatabaseConnectionStateMoving       TimeSeriesDatabaseConnectionState = "Moving"
+	TimeSeriesDatabaseConnectionStateProvisioning TimeSeriesDatabaseConnectionState = "Provisioning"
+	TimeSeriesDatabaseConnectionStateRestoring    TimeSeriesDatabaseConnectionState = "Restoring"
+	TimeSeriesDatabaseConnectionStateSucceeded    TimeSeriesDatabaseConnectionState = "Succeeded"
+	TimeSeriesDatabaseConnectionStateSuspending   TimeSeriesDatabaseConnectionState = "Suspending"
+	TimeSeriesDatabaseConnectionStateWarning      TimeSeriesDatabaseConnectionState = "Warning"
+)
+
+// PossibleTimeSeriesDatabaseConnectionStateValues returns the possible values for the TimeSeriesDatabaseConnectionState const type.
+func PossibleTimeSeriesDatabaseConnectionStateValues() []TimeSeriesDatabaseConnectionState {
+	return []TimeSeriesDatabaseConnectionState{
+		TimeSeriesDatabaseConnectionStateCanceled,
+		TimeSeriesDatabaseConnectionStateDeleted,
+		TimeSeriesDatabaseConnectionStateDeleting,
+		TimeSeriesDatabaseConnectionStateDisabled,
+		TimeSeriesDatabaseConnectionStateFailed,
+		TimeSeriesDatabaseConnectionStateMoving,
+		TimeSeriesDatabaseConnectionStateProvisioning,
+		TimeSeriesDatabaseConnectionStateRestoring,
+		TimeSeriesDatabaseConnectionStateSucceeded,
+		TimeSeriesDatabaseConnectionStateSuspending,
+		TimeSeriesDatabaseConnectionStateWarning,
+	}
+}
+
+// ToPtr returns a *TimeSeriesDatabaseConnectionState pointing to the current value.
+func (c TimeSeriesDatabaseConnectionState) ToPtr() *TimeSeriesDatabaseConnectionState {
 	return &c
 }

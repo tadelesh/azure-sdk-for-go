@@ -35,17 +35,17 @@ type ManagedDatabaseSensitivityLabelsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedDatabaseSensitivityLabelsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedDatabaseSensitivityLabelsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedDatabaseSensitivityLabelsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -122,7 +122,7 @@ func (client *ManagedDatabaseSensitivityLabelsClient) createOrUpdateCreateReques
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ManagedDatabaseSensitivityLabelsClient) createOrUpdateHandleResponse(resp *http.Response) (ManagedDatabaseSensitivityLabelsClientCreateOrUpdateResponse, error) {
-	result := ManagedDatabaseSensitivityLabelsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ManagedDatabaseSensitivityLabelsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SensitivityLabel); err != nil {
 		return ManagedDatabaseSensitivityLabelsClientCreateOrUpdateResponse{}, err
 	}
@@ -152,7 +152,7 @@ func (client *ManagedDatabaseSensitivityLabelsClient) Delete(ctx context.Context
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ManagedDatabaseSensitivityLabelsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ManagedDatabaseSensitivityLabelsClientDeleteResponse{RawResponse: resp}, nil
+	return ManagedDatabaseSensitivityLabelsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -220,7 +220,7 @@ func (client *ManagedDatabaseSensitivityLabelsClient) DisableRecommendation(ctx 
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ManagedDatabaseSensitivityLabelsClientDisableRecommendationResponse{}, runtime.NewResponseError(resp)
 	}
-	return ManagedDatabaseSensitivityLabelsClientDisableRecommendationResponse{RawResponse: resp}, nil
+	return ManagedDatabaseSensitivityLabelsClientDisableRecommendationResponse{}, nil
 }
 
 // disableRecommendationCreateRequest creates the DisableRecommendation request.
@@ -289,7 +289,7 @@ func (client *ManagedDatabaseSensitivityLabelsClient) EnableRecommendation(ctx c
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ManagedDatabaseSensitivityLabelsClientEnableRecommendationResponse{}, runtime.NewResponseError(resp)
 	}
-	return ManagedDatabaseSensitivityLabelsClientEnableRecommendationResponse{RawResponse: resp}, nil
+	return ManagedDatabaseSensitivityLabelsClientEnableRecommendationResponse{}, nil
 }
 
 // enableRecommendationCreateRequest creates the EnableRecommendation request.
@@ -409,7 +409,7 @@ func (client *ManagedDatabaseSensitivityLabelsClient) getCreateRequest(ctx conte
 
 // getHandleResponse handles the Get response.
 func (client *ManagedDatabaseSensitivityLabelsClient) getHandleResponse(resp *http.Response) (ManagedDatabaseSensitivityLabelsClientGetResponse, error) {
-	result := ManagedDatabaseSensitivityLabelsClientGetResponse{RawResponse: resp}
+	result := ManagedDatabaseSensitivityLabelsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SensitivityLabel); err != nil {
 		return ManagedDatabaseSensitivityLabelsClientGetResponse{}, err
 	}
@@ -477,7 +477,7 @@ func (client *ManagedDatabaseSensitivityLabelsClient) listCurrentByDatabaseCreat
 
 // listCurrentByDatabaseHandleResponse handles the ListCurrentByDatabase response.
 func (client *ManagedDatabaseSensitivityLabelsClient) listCurrentByDatabaseHandleResponse(resp *http.Response) (ManagedDatabaseSensitivityLabelsClientListCurrentByDatabaseResponse, error) {
-	result := ManagedDatabaseSensitivityLabelsClientListCurrentByDatabaseResponse{RawResponse: resp}
+	result := ManagedDatabaseSensitivityLabelsClientListCurrentByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SensitivityLabelListResult); err != nil {
 		return ManagedDatabaseSensitivityLabelsClientListCurrentByDatabaseResponse{}, err
 	}
@@ -545,7 +545,7 @@ func (client *ManagedDatabaseSensitivityLabelsClient) listRecommendedByDatabaseC
 
 // listRecommendedByDatabaseHandleResponse handles the ListRecommendedByDatabase response.
 func (client *ManagedDatabaseSensitivityLabelsClient) listRecommendedByDatabaseHandleResponse(resp *http.Response) (ManagedDatabaseSensitivityLabelsClientListRecommendedByDatabaseResponse, error) {
-	result := ManagedDatabaseSensitivityLabelsClientListRecommendedByDatabaseResponse{RawResponse: resp}
+	result := ManagedDatabaseSensitivityLabelsClientListRecommendedByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SensitivityLabelListResult); err != nil {
 		return ManagedDatabaseSensitivityLabelsClientListRecommendedByDatabaseResponse{}, err
 	}
@@ -572,7 +572,7 @@ func (client *ManagedDatabaseSensitivityLabelsClient) Update(ctx context.Context
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ManagedDatabaseSensitivityLabelsClientUpdateResponse{}, runtime.NewResponseError(resp)
 	}
-	return ManagedDatabaseSensitivityLabelsClientUpdateResponse{RawResponse: resp}, nil
+	return ManagedDatabaseSensitivityLabelsClientUpdateResponse{}, nil
 }
 
 // updateCreateRequest creates the Update request.

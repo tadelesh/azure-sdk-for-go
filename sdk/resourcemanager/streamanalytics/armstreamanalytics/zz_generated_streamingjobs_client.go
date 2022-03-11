@@ -34,17 +34,17 @@ type StreamingJobsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewStreamingJobsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *StreamingJobsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &StreamingJobsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *StreamingJobsClient) BeginCreateOrReplace(ctx context.Context, res
 	if err != nil {
 		return StreamingJobsClientCreateOrReplacePollerResponse{}, err
 	}
-	result := StreamingJobsClientCreateOrReplacePollerResponse{
-		RawResponse: resp,
-	}
+	result := StreamingJobsClientCreateOrReplacePollerResponse{}
 	pt, err := armruntime.NewPoller("StreamingJobsClient.CreateOrReplace", "", resp, client.pl)
 	if err != nil {
 		return StreamingJobsClientCreateOrReplacePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *StreamingJobsClient) BeginDelete(ctx context.Context, resourceGrou
 	if err != nil {
 		return StreamingJobsClientDeletePollerResponse{}, err
 	}
-	result := StreamingJobsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := StreamingJobsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("StreamingJobsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return StreamingJobsClientDeletePollerResponse{}, err
@@ -242,7 +238,7 @@ func (client *StreamingJobsClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *StreamingJobsClient) getHandleResponse(resp *http.Response) (StreamingJobsClientGetResponse, error) {
-	result := StreamingJobsClientGetResponse{RawResponse: resp}
+	result := StreamingJobsClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -290,7 +286,7 @@ func (client *StreamingJobsClient) listCreateRequest(ctx context.Context, option
 
 // listHandleResponse handles the List response.
 func (client *StreamingJobsClient) listHandleResponse(resp *http.Response) (StreamingJobsClientListResponse, error) {
-	result := StreamingJobsClientListResponse{RawResponse: resp}
+	result := StreamingJobsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StreamingJobListResult); err != nil {
 		return StreamingJobsClientListResponse{}, err
 	}
@@ -341,7 +337,7 @@ func (client *StreamingJobsClient) listByResourceGroupCreateRequest(ctx context.
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *StreamingJobsClient) listByResourceGroupHandleResponse(resp *http.Response) (StreamingJobsClientListByResourceGroupResponse, error) {
-	result := StreamingJobsClientListByResourceGroupResponse{RawResponse: resp}
+	result := StreamingJobsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StreamingJobListResult); err != nil {
 		return StreamingJobsClientListByResourceGroupResponse{}, err
 	}
@@ -359,9 +355,7 @@ func (client *StreamingJobsClient) BeginScale(ctx context.Context, resourceGroup
 	if err != nil {
 		return StreamingJobsClientScalePollerResponse{}, err
 	}
-	result := StreamingJobsClientScalePollerResponse{
-		RawResponse: resp,
-	}
+	result := StreamingJobsClientScalePollerResponse{}
 	pt, err := armruntime.NewPoller("StreamingJobsClient.Scale", "", resp, client.pl)
 	if err != nil {
 		return StreamingJobsClientScalePollerResponse{}, err
@@ -429,9 +423,7 @@ func (client *StreamingJobsClient) BeginStart(ctx context.Context, resourceGroup
 	if err != nil {
 		return StreamingJobsClientStartPollerResponse{}, err
 	}
-	result := StreamingJobsClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := StreamingJobsClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("StreamingJobsClient.Start", "", resp, client.pl)
 	if err != nil {
 		return StreamingJobsClientStartPollerResponse{}, err
@@ -499,9 +491,7 @@ func (client *StreamingJobsClient) BeginStop(ctx context.Context, resourceGroupN
 	if err != nil {
 		return StreamingJobsClientStopPollerResponse{}, err
 	}
-	result := StreamingJobsClientStopPollerResponse{
-		RawResponse: resp,
-	}
+	result := StreamingJobsClientStopPollerResponse{}
 	pt, err := armruntime.NewPoller("StreamingJobsClient.Stop", "", resp, client.pl)
 	if err != nil {
 		return StreamingJobsClientStopPollerResponse{}, err
@@ -612,7 +602,7 @@ func (client *StreamingJobsClient) updateCreateRequest(ctx context.Context, reso
 
 // updateHandleResponse handles the Update response.
 func (client *StreamingJobsClient) updateHandleResponse(resp *http.Response) (StreamingJobsClientUpdateResponse, error) {
-	result := StreamingJobsClientUpdateResponse{RawResponse: resp}
+	result := StreamingJobsClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

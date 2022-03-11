@@ -1,5 +1,49 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Struct `DiagnosticSettingsCategoryClientListResult` has been removed
+- Struct `DiagnosticSettingsClientCreateOrUpdateResult` has been removed
+- Struct `DiagnosticSettingsClientGetResult` has been removed
+- Struct `DiagnosticSettingsClientListResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `DiagnosticSettingsClientGetResult` of struct `DiagnosticSettingsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticSettingsClientGetResponse` has been removed
+- Field `DiagnosticSettingsCategoryClientListResult` of struct `DiagnosticSettingsCategoryClientListResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticSettingsCategoryClientListResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticSettingsClientDeleteResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `DiagnosticSettingsClientCreateOrUpdateResult` of struct `DiagnosticSettingsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticSettingsClientCreateOrUpdateResponse` has been removed
+- Field `DiagnosticSettingsClientListResult` of struct `DiagnosticSettingsClientListResponse` has been removed
+- Field `RawResponse` of struct `DiagnosticSettingsClientListResponse` has been removed
+
+### Features Added
+
+- New function `ErrorDefinition.MarshalJSON() ([]byte, error)`
+- New struct `ErrorDefinition`
+- New struct `ErrorResponse`
+- New anonymous field `DiagnosticSettingsCategoryResourceCollection` in struct `DiagnosticSettingsCategoryClientListResponse`
+- New anonymous field `DiagnosticSettingsResource` in struct `DiagnosticSettingsClientCreateOrUpdateResponse`
+- New anonymous field `OperationsDiscoveryCollection` in struct `OperationsClientListResponse`
+- New anonymous field `DiagnosticSettingsResource` in struct `DiagnosticSettingsClientGetResponse`
+- New anonymous field `DiagnosticSettingsResourceCollection` in struct `DiagnosticSettingsClientListResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `OperationsDiscovery.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Function `ErrorDefinition.MarshalJSON` has been removed
+- Struct `ErrorDefinition` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

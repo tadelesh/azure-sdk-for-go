@@ -32,16 +32,16 @@ type AccountsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAccountsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *AccountsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AccountsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -88,7 +88,7 @@ func (client *AccountsClient) getCreateRequest(ctx context.Context, billingAccou
 
 // getHandleResponse handles the Get response.
 func (client *AccountsClient) getHandleResponse(resp *http.Response) (AccountsClientGetResponse, error) {
-	result := AccountsClientGetResponse{RawResponse: resp}
+	result := AccountsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Account); err != nil {
 		return AccountsClientGetResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *AccountsClient) listCreateRequest(ctx context.Context, options *Ac
 
 // listHandleResponse handles the List response.
 func (client *AccountsClient) listHandleResponse(resp *http.Response) (AccountsClientListResponse, error) {
-	result := AccountsClientListResponse{RawResponse: resp}
+	result := AccountsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountListResult); err != nil {
 		return AccountsClientListResponse{}, err
 	}
@@ -174,7 +174,7 @@ func (client *AccountsClient) listInvoiceSectionsByCreateSubscriptionPermissionC
 
 // listInvoiceSectionsByCreateSubscriptionPermissionHandleResponse handles the ListInvoiceSectionsByCreateSubscriptionPermission response.
 func (client *AccountsClient) listInvoiceSectionsByCreateSubscriptionPermissionHandleResponse(resp *http.Response) (AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse, error) {
-	result := AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse{RawResponse: resp}
+	result := AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InvoiceSectionListWithCreateSubPermissionResult); err != nil {
 		return AccountsClientListInvoiceSectionsByCreateSubscriptionPermissionResponse{}, err
 	}
@@ -192,9 +192,7 @@ func (client *AccountsClient) BeginUpdate(ctx context.Context, billingAccountNam
 	if err != nil {
 		return AccountsClientUpdatePollerResponse{}, err
 	}
-	result := AccountsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AccountsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AccountsClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AccountsClientUpdatePollerResponse{}, err

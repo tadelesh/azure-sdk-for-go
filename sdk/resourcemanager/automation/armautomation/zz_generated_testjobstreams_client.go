@@ -35,17 +35,17 @@ type TestJobStreamsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTestJobStreamsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TestJobStreamsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TestJobStreamsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *TestJobStreamsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *TestJobStreamsClient) getHandleResponse(resp *http.Response) (TestJobStreamsClientGetResponse, error) {
-	result := TestJobStreamsClientGetResponse{RawResponse: resp}
+	result := TestJobStreamsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobStream); err != nil {
 		return TestJobStreamsClientGetResponse{}, err
 	}
@@ -169,7 +169,7 @@ func (client *TestJobStreamsClient) listByTestJobCreateRequest(ctx context.Conte
 
 // listByTestJobHandleResponse handles the ListByTestJob response.
 func (client *TestJobStreamsClient) listByTestJobHandleResponse(resp *http.Response) (TestJobStreamsClientListByTestJobResponse, error) {
-	result := TestJobStreamsClientListByTestJobResponse{RawResponse: resp}
+	result := TestJobStreamsClientListByTestJobResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobStreamListResult); err != nil {
 		return TestJobStreamsClientListByTestJobResponse{}, err
 	}

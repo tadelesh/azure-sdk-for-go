@@ -34,17 +34,17 @@ type InputsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewInputsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *InputsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &InputsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -110,7 +110,7 @@ func (client *InputsClient) createOrReplaceCreateRequest(ctx context.Context, re
 
 // createOrReplaceHandleResponse handles the CreateOrReplace response.
 func (client *InputsClient) createOrReplaceHandleResponse(resp *http.Response) (InputsClientCreateOrReplaceResponse, error) {
-	result := InputsClientCreateOrReplaceResponse{RawResponse: resp}
+	result := InputsClientCreateOrReplaceResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -138,7 +138,7 @@ func (client *InputsClient) Delete(ctx context.Context, resourceGroupName string
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return InputsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return InputsClientDeleteResponse{RawResponse: resp}, nil
+	return InputsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -224,7 +224,7 @@ func (client *InputsClient) getCreateRequest(ctx context.Context, resourceGroupN
 
 // getHandleResponse handles the Get response.
 func (client *InputsClient) getHandleResponse(resp *http.Response) (InputsClientGetResponse, error) {
-	result := InputsClientGetResponse{RawResponse: resp}
+	result := InputsClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -283,7 +283,7 @@ func (client *InputsClient) listByStreamingJobCreateRequest(ctx context.Context,
 
 // listByStreamingJobHandleResponse handles the ListByStreamingJob response.
 func (client *InputsClient) listByStreamingJobHandleResponse(resp *http.Response) (InputsClientListByStreamingJobResponse, error) {
-	result := InputsClientListByStreamingJobResponse{RawResponse: resp}
+	result := InputsClientListByStreamingJobResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InputListResult); err != nil {
 		return InputsClientListByStreamingJobResponse{}, err
 	}
@@ -301,9 +301,7 @@ func (client *InputsClient) BeginTest(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return InputsClientTestPollerResponse{}, err
 	}
-	result := InputsClientTestPollerResponse{
-		RawResponse: resp,
-	}
+	result := InputsClientTestPollerResponse{}
 	pt, err := armruntime.NewPoller("InputsClient.Test", "", resp, client.pl)
 	if err != nil {
 		return InputsClientTestPollerResponse{}, err
@@ -425,7 +423,7 @@ func (client *InputsClient) updateCreateRequest(ctx context.Context, resourceGro
 
 // updateHandleResponse handles the Update response.
 func (client *InputsClient) updateHandleResponse(resp *http.Response) (InputsClientUpdateResponse, error) {
-	result := InputsClientUpdateResponse{RawResponse: resp}
+	result := InputsClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

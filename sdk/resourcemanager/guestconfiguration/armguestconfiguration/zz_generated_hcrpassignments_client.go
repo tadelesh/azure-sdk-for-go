@@ -105,7 +105,7 @@ func (client *HCRPAssignmentsClient) createOrUpdateCreateRequest(ctx context.Con
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *HCRPAssignmentsClient) createOrUpdateHandleResponse(resp *http.Response) (HCRPAssignmentsClientCreateOrUpdateResponse, error) {
-	result := HCRPAssignmentsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := HCRPAssignmentsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Assignment); err != nil {
 		return HCRPAssignmentsClientCreateOrUpdateResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *HCRPAssignmentsClient) Delete(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return HCRPAssignmentsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return HCRPAssignmentsClientDeleteResponse{RawResponse: resp}, nil
+	return HCRPAssignmentsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -216,7 +216,7 @@ func (client *HCRPAssignmentsClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *HCRPAssignmentsClient) getHandleResponse(resp *http.Response) (HCRPAssignmentsClientGetResponse, error) {
-	result := HCRPAssignmentsClientGetResponse{RawResponse: resp}
+	result := HCRPAssignmentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Assignment); err != nil {
 		return HCRPAssignmentsClientGetResponse{}, err
 	}
@@ -228,19 +228,13 @@ func (client *HCRPAssignmentsClient) getHandleResponse(resp *http.Response) (HCR
 // resourceGroupName - The resource group name.
 // machineName - The name of the ARC machine.
 // options - HCRPAssignmentsClientListOptions contains the optional parameters for the HCRPAssignmentsClient.List method.
-func (client *HCRPAssignmentsClient) List(ctx context.Context, resourceGroupName string, machineName string, options *HCRPAssignmentsClientListOptions) (HCRPAssignmentsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, machineName, options)
-	if err != nil {
-		return HCRPAssignmentsClientListResponse{}, err
+func (client *HCRPAssignmentsClient) List(resourceGroupName string, machineName string, options *HCRPAssignmentsClientListOptions) *HCRPAssignmentsClientListPager {
+	return &HCRPAssignmentsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, machineName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return HCRPAssignmentsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return HCRPAssignmentsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -271,7 +265,7 @@ func (client *HCRPAssignmentsClient) listCreateRequest(ctx context.Context, reso
 
 // listHandleResponse handles the List response.
 func (client *HCRPAssignmentsClient) listHandleResponse(resp *http.Response) (HCRPAssignmentsClientListResponse, error) {
-	result := HCRPAssignmentsClientListResponse{RawResponse: resp}
+	result := HCRPAssignmentsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AssignmentList); err != nil {
 		return HCRPAssignmentsClientListResponse{}, err
 	}

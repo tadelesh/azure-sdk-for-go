@@ -11,19 +11,11 @@ package armvirtualmachineimagebuilder
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	OperationListResult
 }
 
@@ -31,9 +23,6 @@ type OperationsClientListResult struct {
 type VirtualMachineImageTemplatesClientCancelPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *VirtualMachineImageTemplatesClientCancelPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -41,11 +30,10 @@ type VirtualMachineImageTemplatesClientCancelPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l VirtualMachineImageTemplatesClientCancelPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualMachineImageTemplatesClientCancelResponse, error) {
 	respType := VirtualMachineImageTemplatesClientCancelResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -58,28 +46,23 @@ func (l *VirtualMachineImageTemplatesClientCancelPollerResponse) Resume(ctx cont
 	poller := &VirtualMachineImageTemplatesClientCancelPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // VirtualMachineImageTemplatesClientCancelResponse contains the response from method VirtualMachineImageTemplatesClient.Cancel.
 type VirtualMachineImageTemplatesClientCancelResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse contains the response from method VirtualMachineImageTemplatesClient.CreateOrUpdate.
 type VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *VirtualMachineImageTemplatesClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -87,11 +70,10 @@ type VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualMachineImageTemplatesClientCreateOrUpdateResponse, error) {
 	respType := VirtualMachineImageTemplatesClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ImageTemplate)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ImageTemplate)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -105,24 +87,16 @@ func (l *VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse) Resume(
 	poller := &VirtualMachineImageTemplatesClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // VirtualMachineImageTemplatesClientCreateOrUpdateResponse contains the response from method VirtualMachineImageTemplatesClient.CreateOrUpdate.
 type VirtualMachineImageTemplatesClientCreateOrUpdateResponse struct {
-	VirtualMachineImageTemplatesClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// VirtualMachineImageTemplatesClientCreateOrUpdateResult contains the result from method VirtualMachineImageTemplatesClient.CreateOrUpdate.
-type VirtualMachineImageTemplatesClientCreateOrUpdateResult struct {
 	ImageTemplate
 }
 
@@ -130,9 +104,6 @@ type VirtualMachineImageTemplatesClientCreateOrUpdateResult struct {
 type VirtualMachineImageTemplatesClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *VirtualMachineImageTemplatesClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -140,11 +111,10 @@ type VirtualMachineImageTemplatesClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l VirtualMachineImageTemplatesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualMachineImageTemplatesClientDeleteResponse, error) {
 	respType := VirtualMachineImageTemplatesClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -157,78 +127,41 @@ func (l *VirtualMachineImageTemplatesClientDeletePollerResponse) Resume(ctx cont
 	poller := &VirtualMachineImageTemplatesClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // VirtualMachineImageTemplatesClientDeleteResponse contains the response from method VirtualMachineImageTemplatesClient.Delete.
 type VirtualMachineImageTemplatesClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // VirtualMachineImageTemplatesClientGetResponse contains the response from method VirtualMachineImageTemplatesClient.Get.
 type VirtualMachineImageTemplatesClientGetResponse struct {
-	VirtualMachineImageTemplatesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// VirtualMachineImageTemplatesClientGetResult contains the result from method VirtualMachineImageTemplatesClient.Get.
-type VirtualMachineImageTemplatesClientGetResult struct {
 	ImageTemplate
 }
 
 // VirtualMachineImageTemplatesClientGetRunOutputResponse contains the response from method VirtualMachineImageTemplatesClient.GetRunOutput.
 type VirtualMachineImageTemplatesClientGetRunOutputResponse struct {
-	VirtualMachineImageTemplatesClientGetRunOutputResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// VirtualMachineImageTemplatesClientGetRunOutputResult contains the result from method VirtualMachineImageTemplatesClient.GetRunOutput.
-type VirtualMachineImageTemplatesClientGetRunOutputResult struct {
 	RunOutput
 }
 
 // VirtualMachineImageTemplatesClientListByResourceGroupResponse contains the response from method VirtualMachineImageTemplatesClient.ListByResourceGroup.
 type VirtualMachineImageTemplatesClientListByResourceGroupResponse struct {
-	VirtualMachineImageTemplatesClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// VirtualMachineImageTemplatesClientListByResourceGroupResult contains the result from method VirtualMachineImageTemplatesClient.ListByResourceGroup.
-type VirtualMachineImageTemplatesClientListByResourceGroupResult struct {
 	ImageTemplateListResult
 }
 
 // VirtualMachineImageTemplatesClientListResponse contains the response from method VirtualMachineImageTemplatesClient.List.
 type VirtualMachineImageTemplatesClientListResponse struct {
-	VirtualMachineImageTemplatesClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// VirtualMachineImageTemplatesClientListResult contains the result from method VirtualMachineImageTemplatesClient.List.
-type VirtualMachineImageTemplatesClientListResult struct {
 	ImageTemplateListResult
 }
 
 // VirtualMachineImageTemplatesClientListRunOutputsResponse contains the response from method VirtualMachineImageTemplatesClient.ListRunOutputs.
 type VirtualMachineImageTemplatesClientListRunOutputsResponse struct {
-	VirtualMachineImageTemplatesClientListRunOutputsResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// VirtualMachineImageTemplatesClientListRunOutputsResult contains the result from method VirtualMachineImageTemplatesClient.ListRunOutputs.
-type VirtualMachineImageTemplatesClientListRunOutputsResult struct {
 	RunOutputCollection
 }
 
@@ -236,9 +169,6 @@ type VirtualMachineImageTemplatesClientListRunOutputsResult struct {
 type VirtualMachineImageTemplatesClientRunPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *VirtualMachineImageTemplatesClientRunPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -246,11 +176,10 @@ type VirtualMachineImageTemplatesClientRunPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l VirtualMachineImageTemplatesClientRunPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualMachineImageTemplatesClientRunResponse, error) {
 	respType := VirtualMachineImageTemplatesClientRunResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -263,28 +192,23 @@ func (l *VirtualMachineImageTemplatesClientRunPollerResponse) Resume(ctx context
 	poller := &VirtualMachineImageTemplatesClientRunPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // VirtualMachineImageTemplatesClientRunResponse contains the response from method VirtualMachineImageTemplatesClient.Run.
 type VirtualMachineImageTemplatesClientRunResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // VirtualMachineImageTemplatesClientUpdatePollerResponse contains the response from method VirtualMachineImageTemplatesClient.Update.
 type VirtualMachineImageTemplatesClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *VirtualMachineImageTemplatesClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -292,11 +216,10 @@ type VirtualMachineImageTemplatesClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l VirtualMachineImageTemplatesClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualMachineImageTemplatesClientUpdateResponse, error) {
 	respType := VirtualMachineImageTemplatesClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ImageTemplate)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ImageTemplate)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -309,23 +232,15 @@ func (l *VirtualMachineImageTemplatesClientUpdatePollerResponse) Resume(ctx cont
 	poller := &VirtualMachineImageTemplatesClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // VirtualMachineImageTemplatesClientUpdateResponse contains the response from method VirtualMachineImageTemplatesClient.Update.
 type VirtualMachineImageTemplatesClientUpdateResponse struct {
-	VirtualMachineImageTemplatesClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// VirtualMachineImageTemplatesClientUpdateResult contains the result from method VirtualMachineImageTemplatesClient.Update.
-type VirtualMachineImageTemplatesClientUpdateResult struct {
 	ImageTemplate
 }

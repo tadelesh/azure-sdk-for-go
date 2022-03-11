@@ -35,17 +35,17 @@ type ScheduleClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewScheduleClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ScheduleClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ScheduleClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *ScheduleClient) createOrUpdateCreateRequest(ctx context.Context, r
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ScheduleClient) createOrUpdateHandleResponse(resp *http.Response) (ScheduleClientCreateOrUpdateResponse, error) {
-	result := ScheduleClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ScheduleClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Schedule); err != nil {
 		return ScheduleClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *ScheduleClient) Delete(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ScheduleClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ScheduleClientDeleteResponse{RawResponse: resp}, nil
+	return ScheduleClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *ScheduleClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *ScheduleClient) getHandleResponse(resp *http.Response) (ScheduleClientGetResponse, error) {
-	result := ScheduleClientGetResponse{RawResponse: resp}
+	result := ScheduleClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Schedule); err != nil {
 		return ScheduleClientGetResponse{}, err
 	}
@@ -268,7 +268,7 @@ func (client *ScheduleClient) listByAutomationAccountCreateRequest(ctx context.C
 
 // listByAutomationAccountHandleResponse handles the ListByAutomationAccount response.
 func (client *ScheduleClient) listByAutomationAccountHandleResponse(resp *http.Response) (ScheduleClientListByAutomationAccountResponse, error) {
-	result := ScheduleClientListByAutomationAccountResponse{RawResponse: resp}
+	result := ScheduleClientListByAutomationAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScheduleListResult); err != nil {
 		return ScheduleClientListByAutomationAccountResponse{}, err
 	}
@@ -329,7 +329,7 @@ func (client *ScheduleClient) updateCreateRequest(ctx context.Context, resourceG
 
 // updateHandleResponse handles the Update response.
 func (client *ScheduleClient) updateHandleResponse(resp *http.Response) (ScheduleClientUpdateResponse, error) {
-	result := ScheduleClientUpdateResponse{RawResponse: resp}
+	result := ScheduleClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Schedule); err != nil {
 		return ScheduleClientUpdateResponse{}, err
 	}

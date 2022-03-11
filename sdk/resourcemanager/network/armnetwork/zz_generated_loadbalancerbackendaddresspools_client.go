@@ -35,17 +35,17 @@ type LoadBalancerBackendAddressPoolsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLoadBalancerBackendAddressPoolsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LoadBalancerBackendAddressPoolsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LoadBalancerBackendAddressPoolsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *LoadBalancerBackendAddressPoolsClient) BeginCreateOrUpdate(ctx con
 	if err != nil {
 		return LoadBalancerBackendAddressPoolsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := LoadBalancerBackendAddressPoolsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LoadBalancerBackendAddressPoolsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("LoadBalancerBackendAddressPoolsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return LoadBalancerBackendAddressPoolsClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *LoadBalancerBackendAddressPoolsClient) BeginDelete(ctx context.Con
 	if err != nil {
 		return LoadBalancerBackendAddressPoolsClientDeletePollerResponse{}, err
 	}
-	result := LoadBalancerBackendAddressPoolsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := LoadBalancerBackendAddressPoolsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("LoadBalancerBackendAddressPoolsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return LoadBalancerBackendAddressPoolsClientDeletePollerResponse{}, err
@@ -249,7 +245,7 @@ func (client *LoadBalancerBackendAddressPoolsClient) getCreateRequest(ctx contex
 
 // getHandleResponse handles the Get response.
 func (client *LoadBalancerBackendAddressPoolsClient) getHandleResponse(resp *http.Response) (LoadBalancerBackendAddressPoolsClientGetResponse, error) {
-	result := LoadBalancerBackendAddressPoolsClientGetResponse{RawResponse: resp}
+	result := LoadBalancerBackendAddressPoolsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackendAddressPool); err != nil {
 		return LoadBalancerBackendAddressPoolsClientGetResponse{}, err
 	}
@@ -302,7 +298,7 @@ func (client *LoadBalancerBackendAddressPoolsClient) listCreateRequest(ctx conte
 
 // listHandleResponse handles the List response.
 func (client *LoadBalancerBackendAddressPoolsClient) listHandleResponse(resp *http.Response) (LoadBalancerBackendAddressPoolsClientListResponse, error) {
-	result := LoadBalancerBackendAddressPoolsClientListResponse{RawResponse: resp}
+	result := LoadBalancerBackendAddressPoolsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LoadBalancerBackendAddressPoolListResult); err != nil {
 		return LoadBalancerBackendAddressPoolsClientListResponse{}, err
 	}

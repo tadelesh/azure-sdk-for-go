@@ -35,17 +35,17 @@ type DdosProtectionPlansClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDdosProtectionPlansClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DdosProtectionPlansClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DdosProtectionPlansClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *DdosProtectionPlansClient) BeginCreateOrUpdate(ctx context.Context
 	if err != nil {
 		return DdosProtectionPlansClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DdosProtectionPlansClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DdosProtectionPlansClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DdosProtectionPlansClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return DdosProtectionPlansClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *DdosProtectionPlansClient) BeginDelete(ctx context.Context, resour
 	if err != nil {
 		return DdosProtectionPlansClientDeletePollerResponse{}, err
 	}
-	result := DdosProtectionPlansClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DdosProtectionPlansClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DdosProtectionPlansClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return DdosProtectionPlansClientDeletePollerResponse{}, err
@@ -233,7 +229,7 @@ func (client *DdosProtectionPlansClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *DdosProtectionPlansClient) getHandleResponse(resp *http.Response) (DdosProtectionPlansClientGetResponse, error) {
-	result := DdosProtectionPlansClientGetResponse{RawResponse: resp}
+	result := DdosProtectionPlansClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DdosProtectionPlan); err != nil {
 		return DdosProtectionPlansClientGetResponse{}, err
 	}
@@ -276,7 +272,7 @@ func (client *DdosProtectionPlansClient) listCreateRequest(ctx context.Context, 
 
 // listHandleResponse handles the List response.
 func (client *DdosProtectionPlansClient) listHandleResponse(resp *http.Response) (DdosProtectionPlansClientListResponse, error) {
-	result := DdosProtectionPlansClientListResponse{RawResponse: resp}
+	result := DdosProtectionPlansClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DdosProtectionPlanListResult); err != nil {
 		return DdosProtectionPlansClientListResponse{}, err
 	}
@@ -324,7 +320,7 @@ func (client *DdosProtectionPlansClient) listByResourceGroupCreateRequest(ctx co
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *DdosProtectionPlansClient) listByResourceGroupHandleResponse(resp *http.Response) (DdosProtectionPlansClientListByResourceGroupResponse, error) {
-	result := DdosProtectionPlansClientListByResourceGroupResponse{RawResponse: resp}
+	result := DdosProtectionPlansClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DdosProtectionPlanListResult); err != nil {
 		return DdosProtectionPlansClientListByResourceGroupResponse{}, err
 	}
@@ -381,7 +377,7 @@ func (client *DdosProtectionPlansClient) updateTagsCreateRequest(ctx context.Con
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *DdosProtectionPlansClient) updateTagsHandleResponse(resp *http.Response) (DdosProtectionPlansClientUpdateTagsResponse, error) {
-	result := DdosProtectionPlansClientUpdateTagsResponse{RawResponse: resp}
+	result := DdosProtectionPlansClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DdosProtectionPlan); err != nil {
 		return DdosProtectionPlansClientUpdateTagsResponse{}, err
 	}

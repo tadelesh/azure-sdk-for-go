@@ -34,17 +34,17 @@ type WorkspacesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkspacesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkspacesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkspacesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *WorkspacesClient) BeginCreateOrUpdate(ctx context.Context, resourc
 	if err != nil {
 		return WorkspacesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := WorkspacesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkspacesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkspacesClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return WorkspacesClientCreateOrUpdatePollerResponse{}, err
@@ -127,9 +125,7 @@ func (client *WorkspacesClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return WorkspacesClientDeletePollerResponse{}, err
 	}
-	result := WorkspacesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkspacesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkspacesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return WorkspacesClientDeletePollerResponse{}, err
@@ -231,7 +227,7 @@ func (client *WorkspacesClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *WorkspacesClient) getHandleResponse(resp *http.Response) (WorkspacesClientGetResponse, error) {
-	result := WorkspacesClientGetResponse{RawResponse: resp}
+	result := WorkspacesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Workspace); err != nil {
 		return WorkspacesClientGetResponse{}, err
 	}
@@ -273,7 +269,7 @@ func (client *WorkspacesClient) listCreateRequest(ctx context.Context, options *
 
 // listHandleResponse handles the List response.
 func (client *WorkspacesClient) listHandleResponse(resp *http.Response) (WorkspacesClientListResponse, error) {
-	result := WorkspacesClientListResponse{RawResponse: resp}
+	result := WorkspacesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceInfoListResult); err != nil {
 		return WorkspacesClientListResponse{}, err
 	}
@@ -321,7 +317,7 @@ func (client *WorkspacesClient) listByResourceGroupCreateRequest(ctx context.Con
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *WorkspacesClient) listByResourceGroupHandleResponse(resp *http.Response) (WorkspacesClientListByResourceGroupResponse, error) {
-	result := WorkspacesClientListByResourceGroupResponse{RawResponse: resp}
+	result := WorkspacesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceInfoListResult); err != nil {
 		return WorkspacesClientListByResourceGroupResponse{}, err
 	}
@@ -339,9 +335,7 @@ func (client *WorkspacesClient) BeginUpdate(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return WorkspacesClientUpdatePollerResponse{}, err
 	}
-	result := WorkspacesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkspacesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkspacesClient.Update", "location", resp, client.pl)
 	if err != nil {
 		return WorkspacesClientUpdatePollerResponse{}, err

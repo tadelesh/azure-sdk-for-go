@@ -1,5 +1,358 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*TransformsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(TransformsClientListResponse, error)`
+- Function `*JobsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(JobsClientListResponse, error)`
+- Function `*AccountFiltersClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(AccountFiltersClientListResponse, error)`
+- Function `*ClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ClientListBySubscriptionResponse, error)`
+- Function `*StreamingLocatorsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(StreamingLocatorsClientListResponse, error)`
+- Function `*AssetFiltersClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(AssetFiltersClientListResponse, error)`
+- Function `*ContentKeyPoliciesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ContentKeyPoliciesClientListResponse, error)`
+- Function `*ClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ClientListResponse, error)`
+- Function `*LiveEventsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(LiveEventsClientListResponse, error)`
+- Function `*AssetsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(AssetsClientListResponse, error)`
+- Function `*StreamingEndpointsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(StreamingEndpointsClientListResponse, error)`
+- Function `*StreamingPoliciesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(StreamingPoliciesClientListResponse, error)`
+- Function `*LiveOutputsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(LiveOutputsClientListResponse, error)`
+- Function `*LiveEventsClientListPager.Err` has been removed
+- Function `*StreamingLocatorsClientListPager.PageResponse` has been removed
+- Function `*AccountFiltersClientListPager.PageResponse` has been removed
+- Function `*AssetsClientListPager.PageResponse` has been removed
+- Function `*LiveOutputsClientListPager.PageResponse` has been removed
+- Function `*JobsClientListPager.PageResponse` has been removed
+- Function `*StreamingPoliciesClientListPager.PageResponse` has been removed
+- Function `*ClientListPager.PageResponse` has been removed
+- Function `*AssetFiltersClientListPager.PageResponse` has been removed
+- Function `*AssetsClientListPager.Err` has been removed
+- Function `*StreamingLocatorsClientListPager.Err` has been removed
+- Function `*StreamingEndpointsClientListPager.PageResponse` has been removed
+- Function `*AccountFiltersClientListPager.Err` has been removed
+- Function `*ClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*ClientListPager.Err` has been removed
+- Function `*TransformsClientListPager.PageResponse` has been removed
+- Function `*LiveOutputsClientListPager.Err` has been removed
+- Function `*LiveEventsClientListPager.PageResponse` has been removed
+- Function `*TransformsClientListPager.Err` has been removed
+- Function `*JobsClientListPager.Err` has been removed
+- Function `*StreamingPoliciesClientListPager.Err` has been removed
+- Function `*ContentKeyPoliciesClientListPager.PageResponse` has been removed
+- Function `*ClientListBySubscriptionPager.Err` has been removed
+- Function `*AssetFiltersClientListPager.Err` has been removed
+- Function `*StreamingEndpointsClientListPager.Err` has been removed
+- Function `*ContentKeyPoliciesClientListPager.Err` has been removed
+- Struct `AccountFiltersClientCreateOrUpdateResult` has been removed
+- Struct `AccountFiltersClientGetResult` has been removed
+- Struct `AccountFiltersClientListResult` has been removed
+- Struct `AccountFiltersClientUpdateResult` has been removed
+- Struct `AssetFiltersClientCreateOrUpdateResult` has been removed
+- Struct `AssetFiltersClientGetResult` has been removed
+- Struct `AssetFiltersClientListResult` has been removed
+- Struct `AssetFiltersClientUpdateResult` has been removed
+- Struct `AssetsClientCreateOrUpdateResult` has been removed
+- Struct `AssetsClientGetEncryptionKeyResult` has been removed
+- Struct `AssetsClientGetResult` has been removed
+- Struct `AssetsClientListContainerSasResult` has been removed
+- Struct `AssetsClientListResult` has been removed
+- Struct `AssetsClientListStreamingLocatorsResult` has been removed
+- Struct `AssetsClientUpdateResult` has been removed
+- Struct `ClientCreateOrUpdateResult` has been removed
+- Struct `ClientGetResult` has been removed
+- Struct `ClientListBySubscriptionResult` has been removed
+- Struct `ClientListEdgePoliciesResult` has been removed
+- Struct `ClientListResult` has been removed
+- Struct `ClientUpdateResult` has been removed
+- Struct `ContentKeyPoliciesClientCreateOrUpdateResult` has been removed
+- Struct `ContentKeyPoliciesClientGetPolicyPropertiesWithSecretsResult` has been removed
+- Struct `ContentKeyPoliciesClientGetResult` has been removed
+- Struct `ContentKeyPoliciesClientListResult` has been removed
+- Struct `ContentKeyPoliciesClientUpdateResult` has been removed
+- Struct `JobsClientCreateResult` has been removed
+- Struct `JobsClientGetResult` has been removed
+- Struct `JobsClientListResult` has been removed
+- Struct `JobsClientUpdateResult` has been removed
+- Struct `LiveEventsClientCreateResult` has been removed
+- Struct `LiveEventsClientGetResult` has been removed
+- Struct `LiveEventsClientListResult` has been removed
+- Struct `LiveEventsClientUpdateResult` has been removed
+- Struct `LiveOutputsClientCreateResult` has been removed
+- Struct `LiveOutputsClientGetResult` has been removed
+- Struct `LiveOutputsClientListResult` has been removed
+- Struct `LocationsClientCheckNameAvailabilityResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientCreateOrUpdateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListResult` has been removed
+- Struct `PrivateLinkResourcesClientGetResult` has been removed
+- Struct `PrivateLinkResourcesClientListResult` has been removed
+- Struct `StreamingEndpointsClientCreateResult` has been removed
+- Struct `StreamingEndpointsClientGetResult` has been removed
+- Struct `StreamingEndpointsClientListResult` has been removed
+- Struct `StreamingEndpointsClientUpdateResult` has been removed
+- Struct `StreamingLocatorsClientCreateResult` has been removed
+- Struct `StreamingLocatorsClientGetResult` has been removed
+- Struct `StreamingLocatorsClientListContentKeysResult` has been removed
+- Struct `StreamingLocatorsClientListPathsResult` has been removed
+- Struct `StreamingLocatorsClientListResult` has been removed
+- Struct `StreamingPoliciesClientCreateResult` has been removed
+- Struct `StreamingPoliciesClientGetResult` has been removed
+- Struct `StreamingPoliciesClientListResult` has been removed
+- Struct `TransformsClientCreateOrUpdateResult` has been removed
+- Struct `TransformsClientGetResult` has been removed
+- Struct `TransformsClientListResult` has been removed
+- Struct `TransformsClientUpdateResult` has been removed
+- Field `LiveEventsClientGetResult` of struct `LiveEventsClientGetResponse` has been removed
+- Field `RawResponse` of struct `LiveEventsClientGetResponse` has been removed
+- Field `RawResponse` of struct `StreamingEndpointsClientDeleteResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `ClientListBySubscriptionResult` of struct `ClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ClientListBySubscriptionResponse` has been removed
+- Field `StreamingLocatorsClientListContentKeysResult` of struct `StreamingLocatorsClientListContentKeysResponse` has been removed
+- Field `RawResponse` of struct `StreamingLocatorsClientListContentKeysResponse` has been removed
+- Field `RawResponse` of struct `LiveEventsClientStopResponse` has been removed
+- Field `RawResponse` of struct `LiveEventsClientStartPollerResponse` has been removed
+- Field `AccountFiltersClientListResult` of struct `AccountFiltersClientListResponse` has been removed
+- Field `RawResponse` of struct `AccountFiltersClientListResponse` has been removed
+- Field `TransformsClientUpdateResult` of struct `TransformsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `TransformsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `LiveEventsClientUpdatePollerResponse` has been removed
+- Field `AssetsClientCreateOrUpdateResult` of struct `AssetsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AssetsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `StreamingLocatorsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `StreamingEndpointsClientScalePollerResponse` has been removed
+- Field `ContentKeyPoliciesClientGetPolicyPropertiesWithSecretsResult` of struct `ContentKeyPoliciesClientGetPolicyPropertiesWithSecretsResponse` has been removed
+- Field `RawResponse` of struct `ContentKeyPoliciesClientGetPolicyPropertiesWithSecretsResponse` has been removed
+- Field `StreamingLocatorsClientCreateResult` of struct `StreamingLocatorsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `StreamingLocatorsClientCreateResponse` has been removed
+- Field `AssetFiltersClientCreateOrUpdateResult` of struct `AssetFiltersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AssetFiltersClientCreateOrUpdateResponse` has been removed
+- Field `ClientUpdateResult` of struct `ClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `StreamingEndpointsClientStopResponse` has been removed
+- Field `RawResponse` of struct `AccountFiltersClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ClientSyncStorageKeysResponse` has been removed
+- Field `RawResponse` of struct `LiveOutputsClientDeletePollerResponse` has been removed
+- Field `ContentKeyPoliciesClientUpdateResult` of struct `ContentKeyPoliciesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ContentKeyPoliciesClientUpdateResponse` has been removed
+- Field `PrivateLinkResourcesClientListResult` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `StreamingLocatorsClientGetResult` of struct `StreamingLocatorsClientGetResponse` has been removed
+- Field `RawResponse` of struct `StreamingLocatorsClientGetResponse` has been removed
+- Field `RawResponse` of struct `TransformsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `LiveEventsClientAllocatePollerResponse` has been removed
+- Field `StreamingPoliciesClientListResult` of struct `StreamingPoliciesClientListResponse` has been removed
+- Field `RawResponse` of struct `StreamingPoliciesClientListResponse` has been removed
+- Field `JobsClientUpdateResult` of struct `JobsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `JobsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `LiveEventsClientAllocateResponse` has been removed
+- Field `AssetsClientListResult` of struct `AssetsClientListResponse` has been removed
+- Field `RawResponse` of struct `AssetsClientListResponse` has been removed
+- Field `JobsClientGetResult` of struct `JobsClientGetResponse` has been removed
+- Field `RawResponse` of struct `JobsClientGetResponse` has been removed
+- Field `ContentKeyPoliciesClientGetResult` of struct `ContentKeyPoliciesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ContentKeyPoliciesClientGetResponse` has been removed
+- Field `RawResponse` of struct `LiveOutputsClientCreatePollerResponse` has been removed
+- Field `TransformsClientListResult` of struct `TransformsClientListResponse` has been removed
+- Field `RawResponse` of struct `TransformsClientListResponse` has been removed
+- Field `AssetsClientListStreamingLocatorsResult` of struct `AssetsClientListStreamingLocatorsResponse` has been removed
+- Field `RawResponse` of struct `AssetsClientListStreamingLocatorsResponse` has been removed
+- Field `RawResponse` of struct `LiveEventsClientStartResponse` has been removed
+- Field `RawResponse` of struct `LiveEventsClientResetPollerResponse` has been removed
+- Field `StreamingEndpointsClientCreateResult` of struct `StreamingEndpointsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `StreamingEndpointsClientCreateResponse` has been removed
+- Field `AssetsClientGetResult` of struct `AssetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AssetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `AssetFiltersClientDeleteResponse` has been removed
+- Field `AccountFiltersClientGetResult` of struct `AccountFiltersClientGetResponse` has been removed
+- Field `RawResponse` of struct `AccountFiltersClientGetResponse` has been removed
+- Field `RawResponse` of struct `JobsClientDeleteResponse` has been removed
+- Field `AssetFiltersClientUpdateResult` of struct `AssetFiltersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AssetFiltersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `JobsClientCancelJobResponse` has been removed
+- Field `ClientCreateOrUpdateResult` of struct `ClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClientCreateOrUpdateResponse` has been removed
+- Field `AssetFiltersClientGetResult` of struct `AssetFiltersClientGetResponse` has been removed
+- Field `RawResponse` of struct `AssetFiltersClientGetResponse` has been removed
+- Field `JobsClientListResult` of struct `JobsClientListResponse` has been removed
+- Field `RawResponse` of struct `JobsClientListResponse` has been removed
+- Field `AssetFiltersClientListResult` of struct `AssetFiltersClientListResponse` has been removed
+- Field `RawResponse` of struct `AssetFiltersClientListResponse` has been removed
+- Field `AssetsClientUpdateResult` of struct `AssetsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AssetsClientUpdateResponse` has been removed
+- Field `StreamingEndpointsClientUpdateResult` of struct `StreamingEndpointsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `StreamingEndpointsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `LiveEventsClientCreatePollerResponse` has been removed
+- Field `ContentKeyPoliciesClientListResult` of struct `ContentKeyPoliciesClientListResponse` has been removed
+- Field `RawResponse` of struct `ContentKeyPoliciesClientListResponse` has been removed
+- Field `AccountFiltersClientUpdateResult` of struct `AccountFiltersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccountFiltersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `StreamingPoliciesClientDeleteResponse` has been removed
+- Field `LiveEventsClientListResult` of struct `LiveEventsClientListResponse` has been removed
+- Field `RawResponse` of struct `LiveEventsClientListResponse` has been removed
+- Field `PrivateEndpointConnectionsClientCreateOrUpdateResult` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `LiveEventsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `LiveEventsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `StreamingEndpointsClientStartPollerResponse` has been removed
+- Field `ClientListResult` of struct `ClientListResponse` has been removed
+- Field `RawResponse` of struct `ClientListResponse` has been removed
+- Field `StreamingEndpointsClientGetResult` of struct `StreamingEndpointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `StreamingEndpointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `StreamingEndpointsClientStopPollerResponse` has been removed
+- Field `RawResponse` of struct `LiveEventsClientResetResponse` has been removed
+- Field `RawResponse` of struct `LiveOutputsClientDeleteResponse` has been removed
+- Field `TransformsClientGetResult` of struct `TransformsClientGetResponse` has been removed
+- Field `RawResponse` of struct `TransformsClientGetResponse` has been removed
+- Field `ContentKeyPoliciesClientCreateOrUpdateResult` of struct `ContentKeyPoliciesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ContentKeyPoliciesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `StreamingEndpointsClientDeletePollerResponse` has been removed
+- Field `LiveEventsClientUpdateResult` of struct `LiveEventsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `LiveEventsClientUpdateResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `LiveOutputsClientListResult` of struct `LiveOutputsClientListResponse` has been removed
+- Field `RawResponse` of struct `LiveOutputsClientListResponse` has been removed
+- Field `StreamingPoliciesClientCreateResult` of struct `StreamingPoliciesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `StreamingPoliciesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `StreamingEndpointsClientCreatePollerResponse` has been removed
+- Field `StreamingEndpointsClientListResult` of struct `StreamingEndpointsClientListResponse` has been removed
+- Field `RawResponse` of struct `StreamingEndpointsClientListResponse` has been removed
+- Field `RawResponse` of struct `StreamingEndpointsClientScaleResponse` has been removed
+- Field `TransformsClientCreateOrUpdateResult` of struct `TransformsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `TransformsClientCreateOrUpdateResponse` has been removed
+- Field `AssetsClientListContainerSasResult` of struct `AssetsClientListContainerSasResponse` has been removed
+- Field `RawResponse` of struct `AssetsClientListContainerSasResponse` has been removed
+- Field `AccountFiltersClientCreateOrUpdateResult` of struct `AccountFiltersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccountFiltersClientCreateOrUpdateResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListResult` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `LocationsClientCheckNameAvailabilityResult` of struct `LocationsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `LocationsClientCheckNameAvailabilityResponse` has been removed
+- Field `StreamingLocatorsClientListResult` of struct `StreamingLocatorsClientListResponse` has been removed
+- Field `RawResponse` of struct `StreamingLocatorsClientListResponse` has been removed
+- Field `RawResponse` of struct `LiveEventsClientStopPollerResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `StreamingPoliciesClientGetResult` of struct `StreamingPoliciesClientGetResponse` has been removed
+- Field `RawResponse` of struct `StreamingPoliciesClientGetResponse` has been removed
+- Field `RawResponse` of struct `StreamingEndpointsClientUpdatePollerResponse` has been removed
+- Field `LiveOutputsClientGetResult` of struct `LiveOutputsClientGetResponse` has been removed
+- Field `RawResponse` of struct `LiveOutputsClientGetResponse` has been removed
+- Field `AssetsClientGetEncryptionKeyResult` of struct `AssetsClientGetEncryptionKeyResponse` has been removed
+- Field `RawResponse` of struct `AssetsClientGetEncryptionKeyResponse` has been removed
+- Field `ClientListEdgePoliciesResult` of struct `ClientListEdgePoliciesResponse` has been removed
+- Field `RawResponse` of struct `ClientListEdgePoliciesResponse` has been removed
+- Field `LiveEventsClientCreateResult` of struct `LiveEventsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `LiveEventsClientCreateResponse` has been removed
+- Field `ClientGetResult` of struct `ClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClientGetResponse` has been removed
+- Field `RawResponse` of struct `AssetsClientDeleteResponse` has been removed
+- Field `PrivateLinkResourcesClientGetResult` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `StreamingLocatorsClientListPathsResult` of struct `StreamingLocatorsClientListPathsResponse` has been removed
+- Field `RawResponse` of struct `StreamingLocatorsClientListPathsResponse` has been removed
+- Field `RawResponse` of struct `StreamingEndpointsClientStartResponse` has been removed
+- Field `JobsClientCreateResult` of struct `JobsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `JobsClientCreateResponse` has been removed
+- Field `LiveOutputsClientCreateResult` of struct `LiveOutputsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `LiveOutputsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ContentKeyPoliciesClientDeleteResponse` has been removed
+
+### Features Added
+
+- New function `*ContentKeyPoliciesClientListPager.More() bool`
+- New function `*ClientListBySubscriptionPager.More() bool`
+- New function `*StreamingPoliciesClientListPager.More() bool`
+- New function `*LiveOutputsClientListPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*StreamingEndpointsClientListPager.More() bool`
+- New function `*AssetsClientListPager.More() bool`
+- New function `*JobsClientListPager.More() bool`
+- New function `*TransformsClientListPager.More() bool`
+- New function `*StreamingLocatorsClientListPager.More() bool`
+- New function `*ClientListPager.More() bool`
+- New function `*AssetFiltersClientListPager.More() bool`
+- New function `*AccountFiltersClientListPager.More() bool`
+- New function `*LiveEventsClientListPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `Transform` in struct `TransformsClientCreateOrUpdateResponse`
+- New anonymous field `ListStreamingLocatorsResponse` in struct `AssetsClientListStreamingLocatorsResponse`
+- New anonymous field `OperationCollection` in struct `OperationsClientListResponse`
+- New anonymous field `AccountFilter` in struct `AccountFiltersClientCreateOrUpdateResponse`
+- New anonymous field `MediaService` in struct `ClientCreateOrUpdateResponse`
+- New anonymous field `ContentKeyPolicy` in struct `ContentKeyPoliciesClientGetResponse`
+- New anonymous field `Transform` in struct `TransformsClientGetResponse`
+- New anonymous field `AssetContainerSas` in struct `AssetsClientListContainerSasResponse`
+- New anonymous field `Job` in struct `JobsClientCreateResponse`
+- New anonymous field `EntityNameAvailabilityCheckOutput` in struct `LocationsClientCheckNameAvailabilityResponse`
+- New anonymous field `EdgePolicies` in struct `ClientListEdgePoliciesResponse`
+- New anonymous field `ContentKeyPolicy` in struct `ContentKeyPoliciesClientUpdateResponse`
+- New anonymous field `AccountFilter` in struct `AccountFiltersClientGetResponse`
+- New anonymous field `LiveOutput` in struct `LiveOutputsClientGetResponse`
+- New anonymous field `StreamingPolicy` in struct `StreamingPoliciesClientGetResponse`
+- New anonymous field `ContentKeyPolicy` in struct `ContentKeyPoliciesClientCreateOrUpdateResponse`
+- New anonymous field `StreamingPolicy` in struct `StreamingPoliciesClientCreateResponse`
+- New anonymous field `Job` in struct `JobsClientGetResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListResponse`
+- New anonymous field `StreamingEndpoint` in struct `StreamingEndpointsClientUpdateResponse`
+- New anonymous field `AssetCollection` in struct `AssetsClientListResponse`
+- New anonymous field `AssetFilter` in struct `AssetFiltersClientUpdateResponse`
+- New anonymous field `JobCollection` in struct `JobsClientListResponse`
+- New anonymous field `AccountFilterCollection` in struct `AccountFiltersClientListResponse`
+- New anonymous field `LiveOutput` in struct `LiveOutputsClientCreateResponse`
+- New anonymous field `Asset` in struct `AssetsClientGetResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse`
+- New anonymous field `ListPathsResponse` in struct `StreamingLocatorsClientListPathsResponse`
+- New anonymous field `Asset` in struct `AssetsClientCreateOrUpdateResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `AssetFilter` in struct `AssetFiltersClientCreateOrUpdateResponse`
+- New anonymous field `StreamingEndpoint` in struct `StreamingEndpointsClientGetResponse`
+- New anonymous field `Job` in struct `JobsClientUpdateResponse`
+- New anonymous field `StreamingEndpointListResult` in struct `StreamingEndpointsClientListResponse`
+- New anonymous field `StreamingLocatorCollection` in struct `StreamingLocatorsClientListResponse`
+- New anonymous field `LiveOutputListResult` in struct `LiveOutputsClientListResponse`
+- New anonymous field `ContentKeyPolicyProperties` in struct `ContentKeyPoliciesClientGetPolicyPropertiesWithSecretsResponse`
+- New anonymous field `StorageEncryptedAssetDecryptionData` in struct `AssetsClientGetEncryptionKeyResponse`
+- New anonymous field `ListContentKeysResponse` in struct `StreamingLocatorsClientListContentKeysResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `PrivateLinkResourcesClientListResponse`
+- New anonymous field `LiveEvent` in struct `LiveEventsClientGetResponse`
+- New anonymous field `TransformCollection` in struct `TransformsClientListResponse`
+- New anonymous field `PrivateLinkResource` in struct `PrivateLinkResourcesClientGetResponse`
+- New anonymous field `StreamingPolicyCollection` in struct `StreamingPoliciesClientListResponse`
+- New anonymous field `MediaService` in struct `ClientUpdateResponse`
+- New anonymous field `MediaServiceCollection` in struct `ClientListBySubscriptionResponse`
+- New anonymous field `AssetFilter` in struct `AssetFiltersClientGetResponse`
+- New anonymous field `LiveEvent` in struct `LiveEventsClientCreateResponse`
+- New anonymous field `StreamingEndpoint` in struct `StreamingEndpointsClientCreateResponse`
+- New anonymous field `MediaServiceCollection` in struct `ClientListResponse`
+- New anonymous field `Transform` in struct `TransformsClientUpdateResponse`
+- New anonymous field `MediaService` in struct `ClientGetResponse`
+- New anonymous field `StreamingLocator` in struct `StreamingLocatorsClientGetResponse`
+- New anonymous field `StreamingLocator` in struct `StreamingLocatorsClientCreateResponse`
+- New anonymous field `AccountFilter` in struct `AccountFiltersClientUpdateResponse`
+- New anonymous field `LiveEvent` in struct `LiveEventsClientUpdateResponse`
+- New anonymous field `AssetFilterCollection` in struct `AssetFiltersClientListResponse`
+- New anonymous field `LiveEventListResult` in struct `LiveEventsClientListResponse`
+- New anonymous field `ContentKeyPolicyCollection` in struct `ContentKeyPoliciesClientListResponse`
+- New anonymous field `Asset` in struct `AssetsClientUpdateResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

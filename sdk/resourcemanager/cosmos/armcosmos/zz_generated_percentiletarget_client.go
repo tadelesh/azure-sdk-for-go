@@ -34,17 +34,17 @@ type PercentileTargetClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPercentileTargetClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PercentileTargetClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PercentileTargetClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -60,19 +60,13 @@ func NewPercentileTargetClient(subscriptionID string, credential azcore.TokenCre
 // and timeGrain. The supported operator is eq.
 // options - PercentileTargetClientListMetricsOptions contains the optional parameters for the PercentileTargetClient.ListMetrics
 // method.
-func (client *PercentileTargetClient) ListMetrics(ctx context.Context, resourceGroupName string, accountName string, targetRegion string, filter string, options *PercentileTargetClientListMetricsOptions) (PercentileTargetClientListMetricsResponse, error) {
-	req, err := client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, targetRegion, filter, options)
-	if err != nil {
-		return PercentileTargetClientListMetricsResponse{}, err
+func (client *PercentileTargetClient) ListMetrics(resourceGroupName string, accountName string, targetRegion string, filter string, options *PercentileTargetClientListMetricsOptions) *PercentileTargetClientListMetricsPager {
+	return &PercentileTargetClientListMetricsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listMetricsCreateRequest(ctx, resourceGroupName, accountName, targetRegion, filter, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return PercentileTargetClientListMetricsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return PercentileTargetClientListMetricsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listMetricsHandleResponse(resp)
 }
 
 // listMetricsCreateRequest creates the ListMetrics request.
@@ -108,7 +102,7 @@ func (client *PercentileTargetClient) listMetricsCreateRequest(ctx context.Conte
 
 // listMetricsHandleResponse handles the ListMetrics response.
 func (client *PercentileTargetClient) listMetricsHandleResponse(resp *http.Response) (PercentileTargetClientListMetricsResponse, error) {
-	result := PercentileTargetClientListMetricsResponse{RawResponse: resp}
+	result := PercentileTargetClientListMetricsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PercentileMetricListResult); err != nil {
 		return PercentileTargetClientListMetricsResponse{}, err
 	}

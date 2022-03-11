@@ -38,19 +38,19 @@ type ReplicationProtectedItemsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReplicationProtectedItemsClient(resourceName string, resourceGroupName string, subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReplicationProtectedItemsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReplicationProtectedItemsClient{
 		resourceName:      resourceName,
 		resourceGroupName: resourceGroupName,
 		subscriptionID:    subscriptionID,
-		host:              string(cp.Endpoint),
-		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:              string(ep),
+		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -68,9 +68,7 @@ func (client *ReplicationProtectedItemsClient) BeginAddDisks(ctx context.Context
 	if err != nil {
 		return ReplicationProtectedItemsClientAddDisksPollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientAddDisksPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientAddDisksPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.AddDisks", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientAddDisksPollerResponse{}, err
@@ -130,7 +128,7 @@ func (client *ReplicationProtectedItemsClient) addDisksCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, addDisksInput)
@@ -149,9 +147,7 @@ func (client *ReplicationProtectedItemsClient) BeginApplyRecoveryPoint(ctx conte
 	if err != nil {
 		return ReplicationProtectedItemsClientApplyRecoveryPointPollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientApplyRecoveryPointPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientApplyRecoveryPointPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.ApplyRecoveryPoint", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientApplyRecoveryPointPollerResponse{}, err
@@ -211,7 +207,7 @@ func (client *ReplicationProtectedItemsClient) applyRecoveryPointCreateRequest(c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, applyRecoveryPointInput)
@@ -230,9 +226,7 @@ func (client *ReplicationProtectedItemsClient) BeginCreate(ctx context.Context, 
 	if err != nil {
 		return ReplicationProtectedItemsClientCreatePollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientCreatePollerResponse{}, err
@@ -292,7 +286,7 @@ func (client *ReplicationProtectedItemsClient) createCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, input)
@@ -311,9 +305,7 @@ func (client *ReplicationProtectedItemsClient) BeginDelete(ctx context.Context, 
 	if err != nil {
 		return ReplicationProtectedItemsClientDeletePollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientDeletePollerResponse{}, err
@@ -373,7 +365,7 @@ func (client *ReplicationProtectedItemsClient) deleteCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	return req, runtime.MarshalAsJSON(req, disableProtectionInput)
 }
@@ -390,9 +382,7 @@ func (client *ReplicationProtectedItemsClient) BeginFailoverCancel(ctx context.C
 	if err != nil {
 		return ReplicationProtectedItemsClientFailoverCancelPollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientFailoverCancelPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientFailoverCancelPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.FailoverCancel", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientFailoverCancelPollerResponse{}, err
@@ -452,7 +442,7 @@ func (client *ReplicationProtectedItemsClient) failoverCancelCreateRequest(ctx c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -470,9 +460,7 @@ func (client *ReplicationProtectedItemsClient) BeginFailoverCommit(ctx context.C
 	if err != nil {
 		return ReplicationProtectedItemsClientFailoverCommitPollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientFailoverCommitPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientFailoverCommitPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.FailoverCommit", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientFailoverCommitPollerResponse{}, err
@@ -532,7 +520,7 @@ func (client *ReplicationProtectedItemsClient) failoverCommitCreateRequest(ctx c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -592,7 +580,7 @@ func (client *ReplicationProtectedItemsClient) getCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -600,7 +588,7 @@ func (client *ReplicationProtectedItemsClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *ReplicationProtectedItemsClient) getHandleResponse(resp *http.Response) (ReplicationProtectedItemsClientGetResponse, error) {
-	result := ReplicationProtectedItemsClientGetResponse{RawResponse: resp}
+	result := ReplicationProtectedItemsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReplicationProtectedItem); err != nil {
 		return ReplicationProtectedItemsClientGetResponse{}, err
 	}
@@ -643,7 +631,7 @@ func (client *ReplicationProtectedItemsClient) listCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	if options != nil && options.SkipToken != nil {
 		reqQP.Set("skipToken", *options.SkipToken)
 	}
@@ -657,7 +645,7 @@ func (client *ReplicationProtectedItemsClient) listCreateRequest(ctx context.Con
 
 // listHandleResponse handles the List response.
 func (client *ReplicationProtectedItemsClient) listHandleResponse(resp *http.Response) (ReplicationProtectedItemsClientListResponse, error) {
-	result := ReplicationProtectedItemsClientListResponse{RawResponse: resp}
+	result := ReplicationProtectedItemsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReplicationProtectedItemCollection); err != nil {
 		return ReplicationProtectedItemsClientListResponse{}, err
 	}
@@ -710,7 +698,7 @@ func (client *ReplicationProtectedItemsClient) listByReplicationProtectionContai
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -718,7 +706,7 @@ func (client *ReplicationProtectedItemsClient) listByReplicationProtectionContai
 
 // listByReplicationProtectionContainersHandleResponse handles the ListByReplicationProtectionContainers response.
 func (client *ReplicationProtectedItemsClient) listByReplicationProtectionContainersHandleResponse(resp *http.Response) (ReplicationProtectedItemsClientListByReplicationProtectionContainersResponse, error) {
-	result := ReplicationProtectedItemsClientListByReplicationProtectionContainersResponse{RawResponse: resp}
+	result := ReplicationProtectedItemsClientListByReplicationProtectionContainersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReplicationProtectedItemCollection); err != nil {
 		return ReplicationProtectedItemsClientListByReplicationProtectionContainersResponse{}, err
 	}
@@ -738,9 +726,7 @@ func (client *ReplicationProtectedItemsClient) BeginPlannedFailover(ctx context.
 	if err != nil {
 		return ReplicationProtectedItemsClientPlannedFailoverPollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientPlannedFailoverPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientPlannedFailoverPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.PlannedFailover", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientPlannedFailoverPollerResponse{}, err
@@ -800,7 +786,7 @@ func (client *ReplicationProtectedItemsClient) plannedFailoverCreateRequest(ctx 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, failoverInput)
@@ -820,9 +806,7 @@ func (client *ReplicationProtectedItemsClient) BeginPurge(ctx context.Context, f
 	if err != nil {
 		return ReplicationProtectedItemsClientPurgePollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientPurgePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientPurgePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.Purge", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientPurgePollerResponse{}, err
@@ -884,7 +868,7 @@ func (client *ReplicationProtectedItemsClient) purgeCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	return req, nil
 }
@@ -902,9 +886,7 @@ func (client *ReplicationProtectedItemsClient) BeginRemoveDisks(ctx context.Cont
 	if err != nil {
 		return ReplicationProtectedItemsClientRemoveDisksPollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientRemoveDisksPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientRemoveDisksPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.RemoveDisks", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientRemoveDisksPollerResponse{}, err
@@ -964,7 +946,7 @@ func (client *ReplicationProtectedItemsClient) removeDisksCreateRequest(ctx cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, removeDisksInput)
@@ -983,9 +965,7 @@ func (client *ReplicationProtectedItemsClient) BeginRepairReplication(ctx contex
 	if err != nil {
 		return ReplicationProtectedItemsClientRepairReplicationPollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientRepairReplicationPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientRepairReplicationPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.RepairReplication", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientRepairReplicationPollerResponse{}, err
@@ -1046,7 +1026,7 @@ func (client *ReplicationProtectedItemsClient) repairReplicationCreateRequest(ct
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -1065,9 +1045,7 @@ func (client *ReplicationProtectedItemsClient) BeginReprotect(ctx context.Contex
 	if err != nil {
 		return ReplicationProtectedItemsClientReprotectPollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientReprotectPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientReprotectPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.Reprotect", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientReprotectPollerResponse{}, err
@@ -1127,7 +1105,7 @@ func (client *ReplicationProtectedItemsClient) reprotectCreateRequest(ctx contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, reprotectInput)
@@ -1146,9 +1124,7 @@ func (client *ReplicationProtectedItemsClient) BeginResolveHealthErrors(ctx cont
 	if err != nil {
 		return ReplicationProtectedItemsClientResolveHealthErrorsPollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientResolveHealthErrorsPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientResolveHealthErrorsPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.ResolveHealthErrors", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientResolveHealthErrorsPollerResponse{}, err
@@ -1208,7 +1184,7 @@ func (client *ReplicationProtectedItemsClient) resolveHealthErrorsCreateRequest(
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, resolveHealthInput)
@@ -1227,9 +1203,7 @@ func (client *ReplicationProtectedItemsClient) BeginSwitchProvider(ctx context.C
 	if err != nil {
 		return ReplicationProtectedItemsClientSwitchProviderPollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientSwitchProviderPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientSwitchProviderPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.SwitchProvider", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientSwitchProviderPollerResponse{}, err
@@ -1289,7 +1263,7 @@ func (client *ReplicationProtectedItemsClient) switchProviderCreateRequest(ctx c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, switchProviderInput)
@@ -1308,9 +1282,7 @@ func (client *ReplicationProtectedItemsClient) BeginTestFailover(ctx context.Con
 	if err != nil {
 		return ReplicationProtectedItemsClientTestFailoverPollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientTestFailoverPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientTestFailoverPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.TestFailover", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientTestFailoverPollerResponse{}, err
@@ -1370,7 +1342,7 @@ func (client *ReplicationProtectedItemsClient) testFailoverCreateRequest(ctx con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, testfailoverInput)
@@ -1389,9 +1361,7 @@ func (client *ReplicationProtectedItemsClient) BeginTestFailoverCleanup(ctx cont
 	if err != nil {
 		return ReplicationProtectedItemsClientTestFailoverCleanupPollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientTestFailoverCleanupPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientTestFailoverCleanupPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.TestFailoverCleanup", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientTestFailoverCleanupPollerResponse{}, err
@@ -1451,7 +1421,7 @@ func (client *ReplicationProtectedItemsClient) testFailoverCleanupCreateRequest(
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, cleanupInput)
@@ -1470,9 +1440,7 @@ func (client *ReplicationProtectedItemsClient) BeginUnplannedFailover(ctx contex
 	if err != nil {
 		return ReplicationProtectedItemsClientUnplannedFailoverPollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientUnplannedFailoverPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientUnplannedFailoverPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.UnplannedFailover", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientUnplannedFailoverPollerResponse{}, err
@@ -1532,7 +1500,7 @@ func (client *ReplicationProtectedItemsClient) unplannedFailoverCreateRequest(ct
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, failoverInput)
@@ -1551,9 +1519,7 @@ func (client *ReplicationProtectedItemsClient) BeginUpdate(ctx context.Context, 
 	if err != nil {
 		return ReplicationProtectedItemsClientUpdatePollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientUpdatePollerResponse{}, err
@@ -1613,7 +1579,7 @@ func (client *ReplicationProtectedItemsClient) updateCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, updateProtectionInput)
@@ -1632,9 +1598,7 @@ func (client *ReplicationProtectedItemsClient) BeginUpdateAppliance(ctx context.
 	if err != nil {
 		return ReplicationProtectedItemsClientUpdateAppliancePollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientUpdateAppliancePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientUpdateAppliancePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.UpdateAppliance", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientUpdateAppliancePollerResponse{}, err
@@ -1694,7 +1658,7 @@ func (client *ReplicationProtectedItemsClient) updateApplianceCreateRequest(ctx 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, applianceUpdateInput)
@@ -1714,9 +1678,7 @@ func (client *ReplicationProtectedItemsClient) BeginUpdateMobilityService(ctx co
 	if err != nil {
 		return ReplicationProtectedItemsClientUpdateMobilityServicePollerResponse{}, err
 	}
-	result := ReplicationProtectedItemsClientUpdateMobilityServicePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectedItemsClientUpdateMobilityServicePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectedItemsClient.UpdateMobilityService", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectedItemsClientUpdateMobilityServicePollerResponse{}, err
@@ -1777,7 +1739,7 @@ func (client *ReplicationProtectedItemsClient) updateMobilityServiceCreateReques
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, updateMobilityServiceRequest)

@@ -34,17 +34,17 @@ type MarketplaceAgreementsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMarketplaceAgreementsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MarketplaceAgreementsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MarketplaceAgreementsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -91,7 +91,7 @@ func (client *MarketplaceAgreementsClient) createOrUpdateCreateRequest(ctx conte
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *MarketplaceAgreementsClient) createOrUpdateHandleResponse(resp *http.Response) (MarketplaceAgreementsClientCreateOrUpdateResponse, error) {
-	result := MarketplaceAgreementsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := MarketplaceAgreementsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AgreementResource); err != nil {
 		return MarketplaceAgreementsClientCreateOrUpdateResponse{}, err
 	}
@@ -134,7 +134,7 @@ func (client *MarketplaceAgreementsClient) listCreateRequest(ctx context.Context
 
 // listHandleResponse handles the List response.
 func (client *MarketplaceAgreementsClient) listHandleResponse(resp *http.Response) (MarketplaceAgreementsClientListResponse, error) {
-	result := MarketplaceAgreementsClientListResponse{RawResponse: resp}
+	result := MarketplaceAgreementsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AgreementResourceListResponse); err != nil {
 		return MarketplaceAgreementsClientListResponse{}, err
 	}

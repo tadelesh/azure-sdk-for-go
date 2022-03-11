@@ -63,9 +63,7 @@ func (client *AFDOriginGroupsClient) BeginCreate(ctx context.Context, resourceGr
 	if err != nil {
 		return AFDOriginGroupsClientCreatePollerResponse{}, err
 	}
-	result := AFDOriginGroupsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AFDOriginGroupsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("AFDOriginGroupsClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AFDOriginGroupsClientCreatePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *AFDOriginGroupsClient) BeginDelete(ctx context.Context, resourceGr
 	if err != nil {
 		return AFDOriginGroupsClientDeletePollerResponse{}, err
 	}
-	result := AFDOriginGroupsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AFDOriginGroupsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AFDOriginGroupsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AFDOriginGroupsClientDeletePollerResponse{}, err
@@ -250,7 +246,7 @@ func (client *AFDOriginGroupsClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *AFDOriginGroupsClient) getHandleResponse(resp *http.Response) (AFDOriginGroupsClientGetResponse, error) {
-	result := AFDOriginGroupsClientGetResponse{RawResponse: resp}
+	result := AFDOriginGroupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AFDOriginGroup); err != nil {
 		return AFDOriginGroupsClientGetResponse{}, err
 	}
@@ -304,7 +300,7 @@ func (client *AFDOriginGroupsClient) listByProfileCreateRequest(ctx context.Cont
 
 // listByProfileHandleResponse handles the ListByProfile response.
 func (client *AFDOriginGroupsClient) listByProfileHandleResponse(resp *http.Response) (AFDOriginGroupsClientListByProfileResponse, error) {
-	result := AFDOriginGroupsClientListByProfileResponse{RawResponse: resp}
+	result := AFDOriginGroupsClientListByProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AFDOriginGroupListResult); err != nil {
 		return AFDOriginGroupsClientListByProfileResponse{}, err
 	}
@@ -363,7 +359,7 @@ func (client *AFDOriginGroupsClient) listResourceUsageCreateRequest(ctx context.
 
 // listResourceUsageHandleResponse handles the ListResourceUsage response.
 func (client *AFDOriginGroupsClient) listResourceUsageHandleResponse(resp *http.Response) (AFDOriginGroupsClientListResourceUsageResponse, error) {
-	result := AFDOriginGroupsClientListResourceUsageResponse{RawResponse: resp}
+	result := AFDOriginGroupsClientListResourceUsageResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UsagesListResult); err != nil {
 		return AFDOriginGroupsClientListResourceUsageResponse{}, err
 	}
@@ -384,9 +380,7 @@ func (client *AFDOriginGroupsClient) BeginUpdate(ctx context.Context, resourceGr
 	if err != nil {
 		return AFDOriginGroupsClientUpdatePollerResponse{}, err
 	}
-	result := AFDOriginGroupsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AFDOriginGroupsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AFDOriginGroupsClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return AFDOriginGroupsClientUpdatePollerResponse{}, err

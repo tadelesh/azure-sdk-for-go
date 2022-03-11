@@ -34,17 +34,17 @@ type FavoriteProcessesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFavoriteProcessesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FavoriteProcessesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FavoriteProcessesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -111,7 +111,7 @@ func (client *FavoriteProcessesClient) createCreateRequest(ctx context.Context, 
 
 // createHandleResponse handles the Create response.
 func (client *FavoriteProcessesClient) createHandleResponse(resp *http.Response) (FavoriteProcessesClientCreateResponse, error) {
-	result := FavoriteProcessesClientCreateResponse{RawResponse: resp}
+	result := FavoriteProcessesClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FavoriteProcessResource); err != nil {
 		return FavoriteProcessesClientCreateResponse{}, err
 	}
@@ -140,7 +140,7 @@ func (client *FavoriteProcessesClient) Delete(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return FavoriteProcessesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return FavoriteProcessesClientDeleteResponse{RawResponse: resp}, nil
+	return FavoriteProcessesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -237,7 +237,7 @@ func (client *FavoriteProcessesClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *FavoriteProcessesClient) getHandleResponse(resp *http.Response) (FavoriteProcessesClientGetResponse, error) {
-	result := FavoriteProcessesClientGetResponse{RawResponse: resp}
+	result := FavoriteProcessesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FavoriteProcessResource); err != nil {
 		return FavoriteProcessesClientGetResponse{}, err
 	}
@@ -294,7 +294,7 @@ func (client *FavoriteProcessesClient) listCreateRequest(ctx context.Context, re
 
 // listHandleResponse handles the List response.
 func (client *FavoriteProcessesClient) listHandleResponse(resp *http.Response) (FavoriteProcessesClientListResponse, error) {
-	result := FavoriteProcessesClientListResponse{RawResponse: resp}
+	result := FavoriteProcessesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FavoriteProcessListResult); err != nil {
 		return FavoriteProcessesClientListResponse{}, err
 	}

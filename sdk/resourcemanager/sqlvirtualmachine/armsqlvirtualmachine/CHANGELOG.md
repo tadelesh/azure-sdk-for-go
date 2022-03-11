@@ -1,5 +1,121 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*SQLVirtualMachinesClientListBySQLVMGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(SQLVirtualMachinesClientListBySQLVMGroupResponse, error)`
+- Function `*SQLVirtualMachinesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SQLVirtualMachinesClientListResponse, error)`
+- Function `*SQLVirtualMachinesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(SQLVirtualMachinesClientListByResourceGroupResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*AvailabilityGroupListenersClientListByGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(AvailabilityGroupListenersClientListByGroupResponse, error)`
+- Function `*GroupsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(GroupsClientListByResourceGroupResponse, error)`
+- Function `*GroupsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(GroupsClientListResponse, error)`
+- Function `*SQLVirtualMachinesClientListPager.Err` has been removed
+- Function `*SQLVirtualMachinesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*GroupsClientListPager.Err` has been removed
+- Function `*AvailabilityGroupListenersClientListByGroupPager.PageResponse` has been removed
+- Function `*SQLVirtualMachinesClientListBySQLVMGroupPager.Err` has been removed
+- Function `*GroupsClientListPager.PageResponse` has been removed
+- Function `*GroupsClientListByResourceGroupPager.Err` has been removed
+- Function `*SQLVirtualMachinesClientListPager.PageResponse` has been removed
+- Function `*SQLVirtualMachinesClientListBySQLVMGroupPager.PageResponse` has been removed
+- Function `*SQLVirtualMachinesClientListByResourceGroupPager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*GroupsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*AvailabilityGroupListenersClientListByGroupPager.Err` has been removed
+- Struct `AvailabilityGroupListenersClientCreateOrUpdateResult` has been removed
+- Struct `AvailabilityGroupListenersClientGetResult` has been removed
+- Struct `AvailabilityGroupListenersClientListByGroupResult` has been removed
+- Struct `GroupsClientCreateOrUpdateResult` has been removed
+- Struct `GroupsClientGetResult` has been removed
+- Struct `GroupsClientListByResourceGroupResult` has been removed
+- Struct `GroupsClientListResult` has been removed
+- Struct `GroupsClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `SQLVirtualMachinesClientCreateOrUpdateResult` has been removed
+- Struct `SQLVirtualMachinesClientGetResult` has been removed
+- Struct `SQLVirtualMachinesClientListByResourceGroupResult` has been removed
+- Struct `SQLVirtualMachinesClientListBySQLVMGroupResult` has been removed
+- Struct `SQLVirtualMachinesClientListResult` has been removed
+- Struct `SQLVirtualMachinesClientUpdateResult` has been removed
+- Field `SQLVirtualMachinesClientListByResourceGroupResult` of struct `SQLVirtualMachinesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SQLVirtualMachinesClientListByResourceGroupResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `GroupsClientListResult` of struct `GroupsClientListResponse` has been removed
+- Field `RawResponse` of struct `GroupsClientListResponse` has been removed
+- Field `SQLVirtualMachinesClientUpdateResult` of struct `SQLVirtualMachinesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SQLVirtualMachinesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `GroupsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `AvailabilityGroupListenersClientDeleteResponse` has been removed
+- Field `SQLVirtualMachinesClientGetResult` of struct `SQLVirtualMachinesClientGetResponse` has been removed
+- Field `RawResponse` of struct `SQLVirtualMachinesClientGetResponse` has been removed
+- Field `SQLVirtualMachinesClientCreateOrUpdateResult` of struct `SQLVirtualMachinesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SQLVirtualMachinesClientCreateOrUpdateResponse` has been removed
+- Field `AvailabilityGroupListenersClientGetResult` of struct `AvailabilityGroupListenersClientGetResponse` has been removed
+- Field `RawResponse` of struct `AvailabilityGroupListenersClientGetResponse` has been removed
+- Field `RawResponse` of struct `GroupsClientUpdatePollerResponse` has been removed
+- Field `GroupsClientGetResult` of struct `GroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `GroupsClientGetResponse` has been removed
+- Field `SQLVirtualMachinesClientListBySQLVMGroupResult` of struct `SQLVirtualMachinesClientListBySQLVMGroupResponse` has been removed
+- Field `RawResponse` of struct `SQLVirtualMachinesClientListBySQLVMGroupResponse` has been removed
+- Field `RawResponse` of struct `GroupsClientCreateOrUpdatePollerResponse` has been removed
+- Field `AvailabilityGroupListenersClientListByGroupResult` of struct `AvailabilityGroupListenersClientListByGroupResponse` has been removed
+- Field `RawResponse` of struct `AvailabilityGroupListenersClientListByGroupResponse` has been removed
+- Field `RawResponse` of struct `GroupsClientDeleteResponse` has been removed
+- Field `SQLVirtualMachinesClientListResult` of struct `SQLVirtualMachinesClientListResponse` has been removed
+- Field `RawResponse` of struct `SQLVirtualMachinesClientListResponse` has been removed
+- Field `RawResponse` of struct `AvailabilityGroupListenersClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `SQLVirtualMachinesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `SQLVirtualMachinesClientDeleteResponse` has been removed
+- Field `GroupsClientCreateOrUpdateResult` of struct `GroupsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `GroupsClientCreateOrUpdateResponse` has been removed
+- Field `GroupsClientUpdateResult` of struct `GroupsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `GroupsClientUpdateResponse` has been removed
+- Field `AvailabilityGroupListenersClientCreateOrUpdateResult` of struct `AvailabilityGroupListenersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AvailabilityGroupListenersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AvailabilityGroupListenersClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `SQLVirtualMachinesClientCreateOrUpdatePollerResponse` has been removed
+- Field `GroupsClientListByResourceGroupResult` of struct `GroupsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `GroupsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SQLVirtualMachinesClientUpdatePollerResponse` has been removed
+
+### Features Added
+
+- New function `*SQLVirtualMachinesClientListPager.More() bool`
+- New function `*AvailabilityGroupListenersClientListByGroupPager.More() bool`
+- New function `*GroupsClientListPager.More() bool`
+- New function `*GroupsClientListByResourceGroupPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*SQLVirtualMachinesClientListBySQLVMGroupPager.More() bool`
+- New function `*SQLVirtualMachinesClientListByResourceGroupPager.More() bool`
+- New anonymous field `ListResult` in struct `SQLVirtualMachinesClientListBySQLVMGroupResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `AvailabilityGroupListener` in struct `AvailabilityGroupListenersClientGetResponse`
+- New anonymous field `GroupListResult` in struct `GroupsClientListResponse`
+- New anonymous field `ListResult` in struct `SQLVirtualMachinesClientListResponse`
+- New anonymous field `GroupListResult` in struct `GroupsClientListByResourceGroupResponse`
+- New anonymous field `ListResult` in struct `SQLVirtualMachinesClientListByResourceGroupResponse`
+- New anonymous field `SQLVirtualMachine` in struct `SQLVirtualMachinesClientCreateOrUpdateResponse`
+- New anonymous field `Group` in struct `GroupsClientGetResponse`
+- New anonymous field `AvailabilityGroupListenerListResult` in struct `AvailabilityGroupListenersClientListByGroupResponse`
+- New anonymous field `Group` in struct `GroupsClientCreateOrUpdateResponse`
+- New anonymous field `Group` in struct `GroupsClientUpdateResponse`
+- New anonymous field `SQLVirtualMachine` in struct `SQLVirtualMachinesClientUpdateResponse`
+- New anonymous field `AvailabilityGroupListener` in struct `AvailabilityGroupListenersClientCreateOrUpdateResponse`
+- New anonymous field `SQLVirtualMachine` in struct `SQLVirtualMachinesClientGetResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `Operation.Properties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

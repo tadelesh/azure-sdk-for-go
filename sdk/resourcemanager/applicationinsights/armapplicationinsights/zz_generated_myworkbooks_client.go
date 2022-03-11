@@ -35,17 +35,17 @@ type MyWorkbooksClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMyWorkbooksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MyWorkbooksClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MyWorkbooksClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *MyWorkbooksClient) createOrUpdateCreateRequest(ctx context.Context
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *MyWorkbooksClient) createOrUpdateHandleResponse(resp *http.Response) (MyWorkbooksClientCreateOrUpdateResponse, error) {
-	result := MyWorkbooksClientCreateOrUpdateResponse{RawResponse: resp}
+	result := MyWorkbooksClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MyWorkbook); err != nil {
 		return MyWorkbooksClientCreateOrUpdateResponse{}, err
 	}
@@ -127,7 +127,7 @@ func (client *MyWorkbooksClient) Delete(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return MyWorkbooksClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return MyWorkbooksClientDeleteResponse{RawResponse: resp}, nil
+	return MyWorkbooksClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -204,7 +204,7 @@ func (client *MyWorkbooksClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *MyWorkbooksClient) getHandleResponse(resp *http.Response) (MyWorkbooksClientGetResponse, error) {
-	result := MyWorkbooksClientGetResponse{RawResponse: resp}
+	result := MyWorkbooksClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MyWorkbook); err != nil {
 		return MyWorkbooksClientGetResponse{}, err
 	}
@@ -263,7 +263,7 @@ func (client *MyWorkbooksClient) listByResourceGroupCreateRequest(ctx context.Co
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *MyWorkbooksClient) listByResourceGroupHandleResponse(resp *http.Response) (MyWorkbooksClientListByResourceGroupResponse, error) {
-	result := MyWorkbooksClientListByResourceGroupResponse{RawResponse: resp}
+	result := MyWorkbooksClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MyWorkbooksListResult); err != nil {
 		return MyWorkbooksClientListByResourceGroupResponse{}, err
 	}
@@ -314,7 +314,7 @@ func (client *MyWorkbooksClient) listBySubscriptionCreateRequest(ctx context.Con
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *MyWorkbooksClient) listBySubscriptionHandleResponse(resp *http.Response) (MyWorkbooksClientListBySubscriptionResponse, error) {
-	result := MyWorkbooksClientListBySubscriptionResponse{RawResponse: resp}
+	result := MyWorkbooksClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MyWorkbooksListResult); err != nil {
 		return MyWorkbooksClientListBySubscriptionResponse{}, err
 	}
@@ -373,7 +373,7 @@ func (client *MyWorkbooksClient) updateCreateRequest(ctx context.Context, resour
 
 // updateHandleResponse handles the Update response.
 func (client *MyWorkbooksClient) updateHandleResponse(resp *http.Response) (MyWorkbooksClientUpdateResponse, error) {
-	result := MyWorkbooksClientUpdateResponse{RawResponse: resp}
+	result := MyWorkbooksClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MyWorkbook); err != nil {
 		return MyWorkbooksClientUpdateResponse{}, err
 	}

@@ -1,5 +1,121 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*SubscriptionLevelClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(SubscriptionLevelClientListByResourceGroupResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*SubscriptionLevelClientListByAzureSubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(SubscriptionLevelClientListByAzureSubscriptionResponse, error)`
+- Function `*ApplicationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ApplicationsClientListResponse, error)`
+- Function `*ResourcesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ResourcesClientListResponse, error)`
+- Function `*SubscriptionLevelClientListByAzureSubscriptionPager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*ApplicationsClientListPager.Err` has been removed
+- Function `*ApplicationsClientListPager.PageResponse` has been removed
+- Function `*SubscriptionLevelClientListByResourceGroupPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*ResourcesClientListPager.Err` has been removed
+- Function `*SubscriptionLevelClientListByAzureSubscriptionPager.PageResponse` has been removed
+- Function `*SubscriptionLevelClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ResourcesClientListPager.PageResponse` has been removed
+- Struct `ApplicationsClientListResult` has been removed
+- Struct `ClientCreateResourceResult` has been removed
+- Struct `ClientGetResourceResult` has been removed
+- Struct `ClientUpdateResourceResult` has been removed
+- Struct `OperationClientGetResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `ResourcesClientListAccessTokenResult` has been removed
+- Struct `ResourcesClientListResult` has been removed
+- Struct `SubscriptionLevelClientCreateOrUpdateResult` has been removed
+- Struct `SubscriptionLevelClientGetResult` has been removed
+- Struct `SubscriptionLevelClientListAccessTokenResult` has been removed
+- Struct `SubscriptionLevelClientListByAzureSubscriptionResult` has been removed
+- Struct `SubscriptionLevelClientListByResourceGroupResult` has been removed
+- Struct `SubscriptionLevelClientUpdateResult` has been removed
+- Field `RawResponse` of struct `SubscriptionLevelClientDeletePollerResponse` has been removed
+- Field `SubscriptionLevelClientListAccessTokenResult` of struct `SubscriptionLevelClientListAccessTokenResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionLevelClientListAccessTokenResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionLevelClientValidateMoveResourcesResponse` has been removed
+- Field `SubscriptionLevelClientListByAzureSubscriptionResult` of struct `SubscriptionLevelClientListByAzureSubscriptionResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionLevelClientListByAzureSubscriptionResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionLevelClientCreateOrUpdatePollerResponse` has been removed
+- Field `SubscriptionLevelClientListByResourceGroupResult` of struct `SubscriptionLevelClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionLevelClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionLevelClientMoveResourcesPollerResponse` has been removed
+- Field `RawResponse` of struct `ClientUpdateResourcePollerResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionLevelClientUpdatePollerResponse` has been removed
+- Field `SubscriptionLevelClientCreateOrUpdateResult` of struct `SubscriptionLevelClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionLevelClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionLevelClientUpdateToUnsubscribedResponse` has been removed
+- Field `OperationClientGetResult` of struct `OperationClientGetResponse` has been removed
+- Field `RawResponse` of struct `OperationClientGetResponse` has been removed
+- Field `SubscriptionLevelClientGetResult` of struct `SubscriptionLevelClientGetResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionLevelClientGetResponse` has been removed
+- Field `ClientUpdateResourceResult` of struct `ClientUpdateResourceResponse` has been removed
+- Field `RawResponse` of struct `ClientUpdateResourceResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionLevelClientUpdateToUnsubscribedPollerResponse` has been removed
+- Field `ApplicationsClientListResult` of struct `ApplicationsClientListResponse` has been removed
+- Field `RawResponse` of struct `ApplicationsClientListResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionLevelClientDeleteResponse` has been removed
+- Field `ClientGetResourceResult` of struct `ClientGetResourceResponse` has been removed
+- Field `RawResponse` of struct `ClientGetResourceResponse` has been removed
+- Field `RawResponse` of struct `ClientDeleteResponse` has been removed
+- Field `SubscriptionLevelClientUpdateResult` of struct `SubscriptionLevelClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionLevelClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `OperationClientGetPollerResponse` has been removed
+- Field `ClientCreateResourceResult` of struct `ClientCreateResourceResponse` has been removed
+- Field `RawResponse` of struct `ClientCreateResourceResponse` has been removed
+- Field `RawResponse` of struct `ClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `SubscriptionLevelClientMoveResourcesResponse` has been removed
+- Field `ResourcesClientListResult` of struct `ResourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `ResourcesClientListResponse` has been removed
+- Field `ResourcesClientListAccessTokenResult` of struct `ResourcesClientListAccessTokenResponse` has been removed
+- Field `RawResponse` of struct `ResourcesClientListAccessTokenResponse` has been removed
+- Field `RawResponse` of struct `ClientCreateResourcePollerResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New function `*ApplicationsClientListPager.More() bool`
+- New function `*SubscriptionLevelClientListByAzureSubscriptionPager.More() bool`
+- New function `*SubscriptionLevelClientListByResourceGroupPager.More() bool`
+- New function `*ResourcesClientListPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New struct `Result`
+- New anonymous field `ResourceResponseWithContinuation` in struct `ResourcesClientListResponse`
+- New anonymous field `AppOperationsResponseWithContinuation` in struct `OperationsClientListResponse`
+- New anonymous field `AccessTokenResult` in struct `SubscriptionLevelClientListAccessTokenResponse`
+- New anonymous field `ResourceResponseWithContinuation` in struct `SubscriptionLevelClientListByResourceGroupResponse`
+- New anonymous field `Resource` in struct `SubscriptionLevelClientUpdateResponse`
+- New anonymous field `Resource` in struct `ClientCreateResourceResponse`
+- New anonymous field `Resource` in struct `SubscriptionLevelClientCreateOrUpdateResponse`
+- New anonymous field `AppResponseWithContinuation` in struct `ApplicationsClientListResponse`
+- New anonymous field `Resource` in struct `ClientGetResourceResponse`
+- New anonymous field `ResourceResponseWithContinuation` in struct `SubscriptionLevelClientListByAzureSubscriptionResponse`
+- New anonymous field `AccessTokenResult` in struct `ResourcesClientListAccessTokenResponse`
+- New anonymous field `Resource` in struct `ClientUpdateResourceResponse`
+- New anonymous field `Resource` in struct `OperationClientGetResponse`
+- New anonymous field `Resource` in struct `SubscriptionLevelClientGetResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+- Struct `Result` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

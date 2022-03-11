@@ -34,17 +34,17 @@ type AdvisorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAdvisorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AdvisorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AdvisorsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *AdvisorsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *AdvisorsClient) getHandleResponse(resp *http.Response) (AdvisorsClientGetResponse, error) {
-	result := AdvisorsClientGetResponse{RawResponse: resp}
+	result := AdvisorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Advisor); err != nil {
 		return AdvisorsClientGetResponse{}, err
 	}
@@ -154,7 +154,7 @@ func (client *AdvisorsClient) listByServerCreateRequest(ctx context.Context, res
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *AdvisorsClient) listByServerHandleResponse(resp *http.Response) (AdvisorsClientListByServerResponse, error) {
-	result := AdvisorsClientListByServerResponse{RawResponse: resp}
+	result := AdvisorsClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdvisorsResultList); err != nil {
 		return AdvisorsClientListByServerResponse{}, err
 	}

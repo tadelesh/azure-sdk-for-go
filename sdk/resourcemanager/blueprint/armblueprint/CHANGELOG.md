@@ -1,5 +1,157 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*PublishedBlueprintsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PublishedBlueprintsClientListResponse, error)`
+- Function `*ArtifactsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ArtifactsClientListResponse, error)`
+- Function `*AssignmentsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(AssignmentsClientListResponse, error)`
+- Function `*BlueprintsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(BlueprintsClientListResponse, error)`
+- Function `*AssignmentOperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(AssignmentOperationsClientListResponse, error)`
+- Function `*PublishedArtifactsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PublishedArtifactsClientListResponse, error)`
+- Function `*BlueprintsClientListPager.PageResponse` has been removed
+- Function `*PublishedBlueprintsClientListPager.Err` has been removed
+- Function `*ArtifactsClientGetResult.UnmarshalJSON` has been removed
+- Function `*ArtifactsClientCreateOrUpdateResult.UnmarshalJSON` has been removed
+- Function `*ArtifactsClientListPager.PageResponse` has been removed
+- Function `*ArtifactsClientListPager.Err` has been removed
+- Function `*PublishedArtifactsClientListPager.Err` has been removed
+- Function `*ArtifactsClientDeleteResult.UnmarshalJSON` has been removed
+- Function `*AssignmentOperationsClientListPager.PageResponse` has been removed
+- Function `*BlueprintsClientListPager.Err` has been removed
+- Function `*AssignmentOperationsClientListPager.Err` has been removed
+- Function `*AssignmentsClientListPager.Err` has been removed
+- Function `*AssignmentsClientListPager.PageResponse` has been removed
+- Function `*PublishedBlueprintsClientListPager.PageResponse` has been removed
+- Function `*PublishedArtifactsClientGetResult.UnmarshalJSON` has been removed
+- Function `*PublishedArtifactsClientListPager.PageResponse` has been removed
+- Struct `ArtifactsClientCreateOrUpdateResult` has been removed
+- Struct `ArtifactsClientDeleteResult` has been removed
+- Struct `ArtifactsClientGetResult` has been removed
+- Struct `ArtifactsClientListResult` has been removed
+- Struct `AssignmentOperationsClientGetResult` has been removed
+- Struct `AssignmentOperationsClientListResult` has been removed
+- Struct `AssignmentsClientCreateOrUpdateResult` has been removed
+- Struct `AssignmentsClientDeleteResult` has been removed
+- Struct `AssignmentsClientGetResult` has been removed
+- Struct `AssignmentsClientListResult` has been removed
+- Struct `AssignmentsClientWhoIsBlueprintResult` has been removed
+- Struct `BlueprintsClientCreateOrUpdateResult` has been removed
+- Struct `BlueprintsClientDeleteResult` has been removed
+- Struct `BlueprintsClientGetResult` has been removed
+- Struct `BlueprintsClientListResult` has been removed
+- Struct `PublishedArtifactsClientGetResult` has been removed
+- Struct `PublishedArtifactsClientListResult` has been removed
+- Struct `PublishedBlueprintsClientCreateResult` has been removed
+- Struct `PublishedBlueprintsClientDeleteResult` has been removed
+- Struct `PublishedBlueprintsClientGetResult` has been removed
+- Struct `PublishedBlueprintsClientListResult` has been removed
+- Field `AssignmentsClientGetResult` of struct `AssignmentsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AssignmentsClientGetResponse` has been removed
+- Field `ArtifactsClientDeleteResult` of struct `ArtifactsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ArtifactsClientDeleteResponse` has been removed
+- Field `AssignmentsClientCreateOrUpdateResult` of struct `AssignmentsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AssignmentsClientCreateOrUpdateResponse` has been removed
+- Field `AssignmentsClientDeleteResult` of struct `AssignmentsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `AssignmentsClientDeleteResponse` has been removed
+- Field `AssignmentOperationsClientGetResult` of struct `AssignmentOperationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AssignmentOperationsClientGetResponse` has been removed
+- Field `ArtifactsClientCreateOrUpdateResult` of struct `ArtifactsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ArtifactsClientCreateOrUpdateResponse` has been removed
+- Field `BlueprintsClientListResult` of struct `BlueprintsClientListResponse` has been removed
+- Field `RawResponse` of struct `BlueprintsClientListResponse` has been removed
+- Field `BlueprintsClientDeleteResult` of struct `BlueprintsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `BlueprintsClientDeleteResponse` has been removed
+- Field `PublishedArtifactsClientGetResult` of struct `PublishedArtifactsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PublishedArtifactsClientGetResponse` has been removed
+- Field `BlueprintsClientGetResult` of struct `BlueprintsClientGetResponse` has been removed
+- Field `RawResponse` of struct `BlueprintsClientGetResponse` has been removed
+- Field `ArtifactsClientGetResult` of struct `ArtifactsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ArtifactsClientGetResponse` has been removed
+- Field `AssignmentsClientWhoIsBlueprintResult` of struct `AssignmentsClientWhoIsBlueprintResponse` has been removed
+- Field `RawResponse` of struct `AssignmentsClientWhoIsBlueprintResponse` has been removed
+- Field `PublishedArtifactsClientListResult` of struct `PublishedArtifactsClientListResponse` has been removed
+- Field `RawResponse` of struct `PublishedArtifactsClientListResponse` has been removed
+- Field `AssignmentsClientListResult` of struct `AssignmentsClientListResponse` has been removed
+- Field `RawResponse` of struct `AssignmentsClientListResponse` has been removed
+- Field `PublishedBlueprintsClientDeleteResult` of struct `PublishedBlueprintsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `PublishedBlueprintsClientDeleteResponse` has been removed
+- Field `PublishedBlueprintsClientListResult` of struct `PublishedBlueprintsClientListResponse` has been removed
+- Field `RawResponse` of struct `PublishedBlueprintsClientListResponse` has been removed
+- Field `PublishedBlueprintsClientCreateResult` of struct `PublishedBlueprintsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `PublishedBlueprintsClientCreateResponse` has been removed
+- Field `BlueprintsClientCreateOrUpdateResult` of struct `BlueprintsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `BlueprintsClientCreateOrUpdateResponse` has been removed
+- Field `ArtifactsClientListResult` of struct `ArtifactsClientListResponse` has been removed
+- Field `RawResponse` of struct `ArtifactsClientListResponse` has been removed
+- Field `AssignmentOperationsClientListResult` of struct `AssignmentOperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `AssignmentOperationsClientListResponse` has been removed
+- Field `PublishedBlueprintsClientGetResult` of struct `PublishedBlueprintsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PublishedBlueprintsClientGetResponse` has been removed
+
+### Features Added
+
+- New function `*AssignmentOperationsClientListPager.More() bool`
+- New function `*AssignmentsClientListPager.More() bool`
+- New function `*ArtifactsClientCreateOrUpdateResponse.UnmarshalJSON([]byte) error`
+- New function `*PublishedArtifactsClientGetResponse.UnmarshalJSON([]byte) error`
+- New function `*ArtifactsClientDeleteResponse.UnmarshalJSON([]byte) error`
+- New function `ResourceProviderOperationList.MarshalJSON() ([]byte, error)`
+- New function `*BlueprintsClientListPager.More() bool`
+- New function `*PublishedBlueprintsClientListPager.More() bool`
+- New function `*ArtifactsClientGetResponse.UnmarshalJSON([]byte) error`
+- New function `ErrorResponse.MarshalJSON() ([]byte, error)`
+- New function `*PublishedArtifactsClientListPager.More() bool`
+- New function `*ArtifactsClientListPager.More() bool`
+- New struct `CloudError`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorResponse`
+- New struct `ResourceProviderOperation`
+- New struct `ResourceProviderOperationDisplay`
+- New struct `ResourceProviderOperationList`
+- New anonymous field `AssignmentOperationList` in struct `AssignmentOperationsClientListResponse`
+- New anonymous field `ArtifactClassification` in struct `ArtifactsClientCreateOrUpdateResponse`
+- New anonymous field `Blueprint` in struct `BlueprintsClientCreateOrUpdateResponse`
+- New anonymous field `PublishedBlueprintList` in struct `PublishedBlueprintsClientListResponse`
+- New anonymous field `AssignmentList` in struct `AssignmentsClientListResponse`
+- New anonymous field `PublishedBlueprint` in struct `PublishedBlueprintsClientDeleteResponse`
+- New anonymous field `WhoIsBlueprintContract` in struct `AssignmentsClientWhoIsBlueprintResponse`
+- New anonymous field `ArtifactClassification` in struct `PublishedArtifactsClientGetResponse`
+- New anonymous field `PublishedBlueprint` in struct `PublishedBlueprintsClientCreateResponse`
+- New anonymous field `Assignment` in struct `AssignmentsClientGetResponse`
+- New anonymous field `Assignment` in struct `AssignmentsClientCreateOrUpdateResponse`
+- New anonymous field `Assignment` in struct `AssignmentsClientDeleteResponse`
+- New anonymous field `ArtifactClassification` in struct `ArtifactsClientGetResponse`
+- New anonymous field `ArtifactList` in struct `PublishedArtifactsClientListResponse`
+- New anonymous field `PublishedBlueprint` in struct `PublishedBlueprintsClientGetResponse`
+- New anonymous field `List` in struct `BlueprintsClientListResponse`
+- New anonymous field `Blueprint` in struct `BlueprintsClientGetResponse`
+- New anonymous field `Blueprint` in struct `BlueprintsClientDeleteResponse`
+- New anonymous field `AssignmentOperation` in struct `AssignmentOperationsClientGetResponse`
+- New anonymous field `ArtifactClassification` in struct `ArtifactsClientDeleteResponse`
+- New anonymous field `ArtifactList` in struct `ArtifactsClientListResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `TemplateArtifactProperties.Template` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `Properties.Versions` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `Properties.Layout` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `ParameterValue.Value` has been changed from `map[string]interface{}` to `interface{}`
+- Function `ResourceProviderOperationList.MarshalJSON` has been removed
+- Function `ErrorResponse.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorResponse` has been removed
+- Struct `ResourceProviderOperation` has been removed
+- Struct `ResourceProviderOperationDisplay` has been removed
+- Struct `ResourceProviderOperationList` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

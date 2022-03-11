@@ -43,11 +43,10 @@ func (p *MachineExtensionsClientCreateOrUpdatePoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final MachineExtensionsClientCreateOrUpdateResponse will be returned.
 func (p *MachineExtensionsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (MachineExtensionsClientCreateOrUpdateResponse, error) {
 	respType := MachineExtensionsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MachineExtension)
+	_, err := p.pt.FinalResponse(ctx, &respType.MachineExtension)
 	if err != nil {
 		return MachineExtensionsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *MachineExtensionsClientDeletePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final MachineExtensionsClientDeleteResponse will be returned.
 func (p *MachineExtensionsClientDeletePoller) FinalResponse(ctx context.Context) (MachineExtensionsClientDeleteResponse, error) {
 	respType := MachineExtensionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return MachineExtensionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *MachineExtensionsClientUpdatePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final MachineExtensionsClientUpdateResponse will be returned.
 func (p *MachineExtensionsClientUpdatePoller) FinalResponse(ctx context.Context) (MachineExtensionsClientUpdateResponse, error) {
 	respType := MachineExtensionsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MachineExtension)
+	_, err := p.pt.FinalResponse(ctx, &respType.MachineExtension)
 	if err != nil {
 		return MachineExtensionsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *ManagementClientUpgradeExtensionsPoller) Poll(ctx context.Context) (*ht
 // If the final GET succeeded then the final ManagementClientUpgradeExtensionsResponse will be returned.
 func (p *ManagementClientUpgradeExtensionsPoller) FinalResponse(ctx context.Context) (ManagementClientUpgradeExtensionsResponse, error) {
 	respType := ManagementClientUpgradeExtensionsResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ManagementClientUpgradeExtensionsResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *PrivateEndpointConnectionsClientCreateOrUpdatePoller) Poll(ctx context.
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientCreateOrUpdateResponse will be returned.
 func (p *PrivateEndpointConnectionsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientCreateOrUpdateResponse, error) {
 	respType := PrivateEndpointConnectionsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return PrivateEndpointConnectionsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *PrivateEndpointConnectionsClientDeletePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionsClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointConnectionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *PrivateLinkScopesClientDeletePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final PrivateLinkScopesClientDeleteResponse will be returned.
 func (p *PrivateLinkScopesClientDeletePoller) FinalResponse(ctx context.Context) (PrivateLinkScopesClientDeleteResponse, error) {
 	respType := PrivateLinkScopesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateLinkScopesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

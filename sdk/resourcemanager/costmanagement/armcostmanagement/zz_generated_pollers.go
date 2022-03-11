@@ -43,11 +43,10 @@ func (p *GenerateDetailedCostReportClientCreateOperationPoller) Poll(ctx context
 // If the final GET succeeded then the final GenerateDetailedCostReportClientCreateOperationResponse will be returned.
 func (p *GenerateDetailedCostReportClientCreateOperationPoller) FinalResponse(ctx context.Context) (GenerateDetailedCostReportClientCreateOperationResponse, error) {
 	respType := GenerateDetailedCostReportClientCreateOperationResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.GenerateDetailedCostReportOperationResult)
+	_, err := p.pt.FinalResponse(ctx, &respType.GenerateDetailedCostReportOperationResult)
 	if err != nil {
 		return GenerateDetailedCostReportClientCreateOperationResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

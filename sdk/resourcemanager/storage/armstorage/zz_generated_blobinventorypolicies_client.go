@@ -105,7 +105,7 @@ func (client *BlobInventoryPoliciesClient) createOrUpdateCreateRequest(ctx conte
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *BlobInventoryPoliciesClient) createOrUpdateHandleResponse(resp *http.Response) (BlobInventoryPoliciesClientCreateOrUpdateResponse, error) {
-	result := BlobInventoryPoliciesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := BlobInventoryPoliciesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BlobInventoryPolicy); err != nil {
 		return BlobInventoryPoliciesClientCreateOrUpdateResponse{}, err
 	}
@@ -132,7 +132,7 @@ func (client *BlobInventoryPoliciesClient) Delete(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return BlobInventoryPoliciesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return BlobInventoryPoliciesClientDeleteResponse{RawResponse: resp}, nil
+	return BlobInventoryPoliciesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -220,7 +220,7 @@ func (client *BlobInventoryPoliciesClient) getCreateRequest(ctx context.Context,
 
 // getHandleResponse handles the Get response.
 func (client *BlobInventoryPoliciesClient) getHandleResponse(resp *http.Response) (BlobInventoryPoliciesClientGetResponse, error) {
-	result := BlobInventoryPoliciesClientGetResponse{RawResponse: resp}
+	result := BlobInventoryPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BlobInventoryPolicy); err != nil {
 		return BlobInventoryPoliciesClientGetResponse{}, err
 	}
@@ -234,19 +234,13 @@ func (client *BlobInventoryPoliciesClient) getHandleResponse(resp *http.Response
 // 3 and 24 characters in length and use numbers and lower-case letters only.
 // options - BlobInventoryPoliciesClientListOptions contains the optional parameters for the BlobInventoryPoliciesClient.List
 // method.
-func (client *BlobInventoryPoliciesClient) List(ctx context.Context, resourceGroupName string, accountName string, options *BlobInventoryPoliciesClientListOptions) (BlobInventoryPoliciesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return BlobInventoryPoliciesClientListResponse{}, err
+func (client *BlobInventoryPoliciesClient) List(resourceGroupName string, accountName string, options *BlobInventoryPoliciesClientListOptions) *BlobInventoryPoliciesClientListPager {
+	return &BlobInventoryPoliciesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return BlobInventoryPoliciesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return BlobInventoryPoliciesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -277,7 +271,7 @@ func (client *BlobInventoryPoliciesClient) listCreateRequest(ctx context.Context
 
 // listHandleResponse handles the List response.
 func (client *BlobInventoryPoliciesClient) listHandleResponse(resp *http.Response) (BlobInventoryPoliciesClientListResponse, error) {
-	result := BlobInventoryPoliciesClientListResponse{RawResponse: resp}
+	result := BlobInventoryPoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListBlobInventoryPolicy); err != nil {
 		return BlobInventoryPoliciesClientListResponse{}, err
 	}

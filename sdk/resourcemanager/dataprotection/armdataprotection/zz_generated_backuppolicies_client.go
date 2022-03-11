@@ -34,17 +34,17 @@ type BackupPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBackupPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BackupPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BackupPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *BackupPoliciesClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *BackupPoliciesClient) createOrUpdateHandleResponse(resp *http.Response) (BackupPoliciesClientCreateOrUpdateResponse, error) {
-	result := BackupPoliciesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := BackupPoliciesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BaseBackupPolicyResource); err != nil {
 		return BackupPoliciesClientCreateOrUpdateResponse{}, err
 	}
@@ -128,7 +128,7 @@ func (client *BackupPoliciesClient) Delete(ctx context.Context, vaultName string
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return BackupPoliciesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return BackupPoliciesClientDeleteResponse{RawResponse: resp}, nil
+	return BackupPoliciesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -213,7 +213,7 @@ func (client *BackupPoliciesClient) getCreateRequest(ctx context.Context, vaultN
 
 // getHandleResponse handles the Get response.
 func (client *BackupPoliciesClient) getHandleResponse(resp *http.Response) (BackupPoliciesClientGetResponse, error) {
-	result := BackupPoliciesClientGetResponse{RawResponse: resp}
+	result := BackupPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BaseBackupPolicyResource); err != nil {
 		return BackupPoliciesClientGetResponse{}, err
 	}
@@ -265,7 +265,7 @@ func (client *BackupPoliciesClient) listCreateRequest(ctx context.Context, vault
 
 // listHandleResponse handles the List response.
 func (client *BackupPoliciesClient) listHandleResponse(resp *http.Response) (BackupPoliciesClientListResponse, error) {
-	result := BackupPoliciesClientListResponse{RawResponse: resp}
+	result := BackupPoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BaseBackupPolicyResourceList); err != nil {
 		return BackupPoliciesClientListResponse{}, err
 	}

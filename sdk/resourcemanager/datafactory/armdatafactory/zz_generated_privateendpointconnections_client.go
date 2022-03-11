@@ -34,17 +34,17 @@ type PrivateEndPointConnectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateEndPointConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateEndPointConnectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateEndPointConnectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *PrivateEndPointConnectionsClient) listByFactoryCreateRequest(ctx c
 
 // listByFactoryHandleResponse handles the ListByFactory response.
 func (client *PrivateEndPointConnectionsClient) listByFactoryHandleResponse(resp *http.Response) (PrivateEndPointConnectionsClientListByFactoryResponse, error) {
-	result := PrivateEndPointConnectionsClientListByFactoryResponse{RawResponse: resp}
+	result := PrivateEndPointConnectionsClientListByFactoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionListResponse); err != nil {
 		return PrivateEndPointConnectionsClientListByFactoryResponse{}, err
 	}

@@ -1,5 +1,229 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*NetworkFunctionVendorSKUsClientListByVendorPager.NextPage` return value(s) have been changed from `(bool)` to `(NetworkFunctionVendorSKUsClientListByVendorResponse, error)`
+- Function `*NetworkFunctionsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(NetworkFunctionsClientListBySubscriptionResponse, error)`
+- Function `*VendorNetworkFunctionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(VendorNetworkFunctionsClientListResponse, error)`
+- Function `*VendorSKUsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(VendorSKUsClientListResponse, error)`
+- Function `*DevicesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(DevicesClientListByResourceGroupResponse, error)`
+- Function `*VendorsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(VendorsClientListBySubscriptionResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*NetworkFunctionVendorsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(NetworkFunctionVendorsClientListResponse, error)`
+- Function `*NetworkFunctionVendorSKUsClientListBySKUPager.NextPage` return value(s) have been changed from `(bool)` to `(NetworkFunctionVendorSKUsClientListBySKUResponse, error)`
+- Function `*NetworkFunctionsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(NetworkFunctionsClientListByResourceGroupResponse, error)`
+- Function `*RoleInstancesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(RoleInstancesClientListResponse, error)`
+- Function `*DevicesClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(DevicesClientListBySubscriptionResponse, error)`
+- Function `*VendorSKUPreviewClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(VendorSKUPreviewClientListResponse, error)`
+- Function `*DevicesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*VendorSKUPreviewClientListPager.Err` has been removed
+- Function `*NetworkFunctionsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*NetworkFunctionsClientListBySubscriptionPager.Err` has been removed
+- Function `*NetworkFunctionVendorsClientListPager.PageResponse` has been removed
+- Function `*VendorSKUPreviewClientListPager.PageResponse` has been removed
+- Function `*NetworkFunctionsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*VendorNetworkFunctionsClientListPager.Err` has been removed
+- Function `*VendorsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*NetworkFunctionVendorSKUsClientListBySKUPager.PageResponse` has been removed
+- Function `*NetworkFunctionVendorSKUsClientListByVendorPager.PageResponse` has been removed
+- Function `*VendorSKUsClientListPager.PageResponse` has been removed
+- Function `*RoleInstancesClientListPager.Err` has been removed
+- Function `*NetworkFunctionsClientListByResourceGroupPager.Err` has been removed
+- Function `*VendorNetworkFunctionsClientListPager.PageResponse` has been removed
+- Function `*DevicesClientListBySubscriptionPager.Err` has been removed
+- Function `*NetworkFunctionVendorSKUsClientListBySKUPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*VendorsClientListBySubscriptionPager.Err` has been removed
+- Function `*NetworkFunctionVendorsClientListPager.Err` has been removed
+- Function `*DevicesClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*VendorSKUsClientListPager.Err` has been removed
+- Function `*RoleInstancesClientListPager.PageResponse` has been removed
+- Function `*NetworkFunctionVendorSKUsClientListByVendorPager.Err` has been removed
+- Function `*DevicesClientListByResourceGroupPager.Err` has been removed
+- Struct `DevicesClientCreateOrUpdateResult` has been removed
+- Struct `DevicesClientGetResult` has been removed
+- Struct `DevicesClientListByResourceGroupResult` has been removed
+- Struct `DevicesClientListBySubscriptionResult` has been removed
+- Struct `DevicesClientListRegistrationKeyResult` has been removed
+- Struct `DevicesClientUpdateTagsResult` has been removed
+- Struct `NetworkFunctionVendorSKUsClientListBySKUResult` has been removed
+- Struct `NetworkFunctionVendorSKUsClientListByVendorResult` has been removed
+- Struct `NetworkFunctionVendorsClientListResult` has been removed
+- Struct `NetworkFunctionsClientCreateOrUpdateResult` has been removed
+- Struct `NetworkFunctionsClientGetResult` has been removed
+- Struct `NetworkFunctionsClientListByResourceGroupResult` has been removed
+- Struct `NetworkFunctionsClientListBySubscriptionResult` has been removed
+- Struct `NetworkFunctionsClientUpdateTagsResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `RoleInstancesClientGetResult` has been removed
+- Struct `RoleInstancesClientListResult` has been removed
+- Struct `VendorNetworkFunctionsClientCreateOrUpdateResult` has been removed
+- Struct `VendorNetworkFunctionsClientGetResult` has been removed
+- Struct `VendorNetworkFunctionsClientListResult` has been removed
+- Struct `VendorSKUPreviewClientCreateOrUpdateResult` has been removed
+- Struct `VendorSKUPreviewClientGetResult` has been removed
+- Struct `VendorSKUPreviewClientListResult` has been removed
+- Struct `VendorSKUsClientCreateOrUpdateResult` has been removed
+- Struct `VendorSKUsClientGetResult` has been removed
+- Struct `VendorSKUsClientListResult` has been removed
+- Struct `VendorsClientCreateOrUpdateResult` has been removed
+- Struct `VendorsClientGetResult` has been removed
+- Struct `VendorsClientListBySubscriptionResult` has been removed
+- Field `VendorSKUsClientGetResult` of struct `VendorSKUsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VendorSKUsClientGetResponse` has been removed
+- Field `RawResponse` of struct `RoleInstancesClientRestartResponse` has been removed
+- Field `VendorSKUsClientListResult` of struct `VendorSKUsClientListResponse` has been removed
+- Field `RawResponse` of struct `VendorSKUsClientListResponse` has been removed
+- Field `RawResponse` of struct `RoleInstancesClientStopResponse` has been removed
+- Field `NetworkFunctionVendorSKUsClientListBySKUResult` of struct `NetworkFunctionVendorSKUsClientListBySKUResponse` has been removed
+- Field `RawResponse` of struct `NetworkFunctionVendorSKUsClientListBySKUResponse` has been removed
+- Field `NetworkFunctionVendorsClientListResult` of struct `NetworkFunctionVendorsClientListResponse` has been removed
+- Field `RawResponse` of struct `NetworkFunctionVendorsClientListResponse` has been removed
+- Field `VendorSKUsClientCreateOrUpdateResult` of struct `VendorSKUsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VendorSKUsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `NetworkFunctionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VendorNetworkFunctionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientCreateOrUpdatePollerResponse` has been removed
+- Field `RoleInstancesClientGetResult` of struct `RoleInstancesClientGetResponse` has been removed
+- Field `RawResponse` of struct `RoleInstancesClientGetResponse` has been removed
+- Field `RawResponse` of struct `RoleInstancesClientStartPollerResponse` has been removed
+- Field `RawResponse` of struct `VendorSKUsClientCreateOrUpdatePollerResponse` has been removed
+- Field `VendorSKUPreviewClientListResult` of struct `VendorSKUPreviewClientListResponse` has been removed
+- Field `RawResponse` of struct `VendorSKUPreviewClientListResponse` has been removed
+- Field `RawResponse` of struct `VendorSKUPreviewClientDeletePollerResponse` has been removed
+- Field `RoleInstancesClientListResult` of struct `RoleInstancesClientListResponse` has been removed
+- Field `RawResponse` of struct `RoleInstancesClientListResponse` has been removed
+- Field `RawResponse` of struct `RoleInstancesClientStopPollerResponse` has been removed
+- Field `RawResponse` of struct `RoleInstancesClientRestartPollerResponse` has been removed
+- Field `NetworkFunctionsClientListBySubscriptionResult` of struct `NetworkFunctionsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `NetworkFunctionsClientListBySubscriptionResponse` has been removed
+- Field `VendorSKUPreviewClientGetResult` of struct `VendorSKUPreviewClientGetResponse` has been removed
+- Field `RawResponse` of struct `VendorSKUPreviewClientGetResponse` has been removed
+- Field `RawResponse` of struct `VendorsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `NetworkFunctionsClientDeleteResponse` has been removed
+- Field `VendorSKUPreviewClientCreateOrUpdateResult` of struct `VendorSKUPreviewClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VendorSKUPreviewClientCreateOrUpdateResponse` has been removed
+- Field `NetworkFunctionsClientGetResult` of struct `NetworkFunctionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `NetworkFunctionsClientGetResponse` has been removed
+- Field `VendorNetworkFunctionsClientGetResult` of struct `VendorNetworkFunctionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VendorNetworkFunctionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VendorSKUsClientDeletePollerResponse` has been removed
+- Field `VendorNetworkFunctionsClientListResult` of struct `VendorNetworkFunctionsClientListResponse` has been removed
+- Field `RawResponse` of struct `VendorNetworkFunctionsClientListResponse` has been removed
+- Field `DevicesClientCreateOrUpdateResult` of struct `DevicesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientCreateOrUpdateResponse` has been removed
+- Field `DevicesClientListByResourceGroupResult` of struct `DevicesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientListByResourceGroupResponse` has been removed
+- Field `VendorNetworkFunctionsClientCreateOrUpdateResult` of struct `VendorNetworkFunctionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VendorNetworkFunctionsClientCreateOrUpdateResponse` has been removed
+- Field `DevicesClientUpdateTagsResult` of struct `DevicesClientUpdateTagsResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientUpdateTagsResponse` has been removed
+- Field `VendorsClientCreateOrUpdateResult` of struct `VendorsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VendorsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VendorSKUPreviewClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VendorsClientCreateOrUpdatePollerResponse` has been removed
+- Field `DevicesClientListBySubscriptionResult` of struct `DevicesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientListBySubscriptionResponse` has been removed
+- Field `VendorsClientListBySubscriptionResult` of struct `VendorsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `VendorsClientListBySubscriptionResponse` has been removed
+- Field `DevicesClientListRegistrationKeyResult` of struct `DevicesClientListRegistrationKeyResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientListRegistrationKeyResponse` has been removed
+- Field `RawResponse` of struct `VendorSKUsClientDeleteResponse` has been removed
+- Field `DevicesClientGetResult` of struct `DevicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `VendorSKUPreviewClientDeleteResponse` has been removed
+- Field `NetworkFunctionsClientListByResourceGroupResult` of struct `NetworkFunctionsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `NetworkFunctionsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `NetworkFunctionsClientDeletePollerResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `VendorsClientDeleteResponse` has been removed
+- Field `VendorsClientGetResult` of struct `VendorsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VendorsClientGetResponse` has been removed
+- Field `NetworkFunctionsClientUpdateTagsResult` of struct `NetworkFunctionsClientUpdateTagsResponse` has been removed
+- Field `RawResponse` of struct `NetworkFunctionsClientUpdateTagsResponse` has been removed
+- Field `NetworkFunctionVendorSKUsClientListByVendorResult` of struct `NetworkFunctionVendorSKUsClientListByVendorResponse` has been removed
+- Field `RawResponse` of struct `NetworkFunctionVendorSKUsClientListByVendorResponse` has been removed
+- Field `RawResponse` of struct `DevicesClientDeletePollerResponse` has been removed
+- Field `NetworkFunctionsClientCreateOrUpdateResult` of struct `NetworkFunctionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `NetworkFunctionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `RoleInstancesClientStartResponse` has been removed
+
+### Features Added
+
+- New function `*NetworkFunctionVendorSKUsClientListByVendorPager.More() bool`
+- New function `*RoleInstancesClientListPager.More() bool`
+- New function `*VendorsClientListBySubscriptionPager.More() bool`
+- New function `*DevicesClientListByResourceGroupPager.More() bool`
+- New function `*NetworkFunctionsClientListBySubscriptionPager.More() bool`
+- New function `*NetworkFunctionsClientListByResourceGroupPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*VendorNetworkFunctionsClientListPager.More() bool`
+- New function `*NetworkFunctionVendorSKUsClientListBySKUPager.More() bool`
+- New function `*NetworkFunctionVendorsClientListPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*VendorSKUPreviewClientListPager.More() bool`
+- New function `*VendorSKUsClientListPager.More() bool`
+- New function `*DevicesClientListBySubscriptionPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `NetworkFunctionSKUListResult` in struct `NetworkFunctionVendorSKUsClientListByVendorResponse`
+- New anonymous field `NetworkFunctionRoleInstanceListResult` in struct `RoleInstancesClientListResponse`
+- New anonymous field `NetworkFunctionListResult` in struct `NetworkFunctionsClientListByResourceGroupResponse`
+- New anonymous field `PreviewSubscription` in struct `VendorSKUPreviewClientGetResponse`
+- New anonymous field `VendorNetworkFunction` in struct `VendorNetworkFunctionsClientCreateOrUpdateResponse`
+- New anonymous field `OperationList` in struct `OperationsClientListResponse`
+- New anonymous field `Device` in struct `DevicesClientUpdateTagsResponse`
+- New anonymous field `VendorNetworkFunction` in struct `VendorNetworkFunctionsClientGetResponse`
+- New anonymous field `PreviewSubscription` in struct `VendorSKUPreviewClientCreateOrUpdateResponse`
+- New anonymous field `NetworkFunctionSKUDetails` in struct `NetworkFunctionVendorSKUsClientListBySKUResponse`
+- New anonymous field `PreviewSubscriptionsList` in struct `VendorSKUPreviewClientListResponse`
+- New anonymous field `VendorSKUListResult` in struct `VendorSKUsClientListResponse`
+- New anonymous field `Vendor` in struct `VendorsClientGetResponse`
+- New anonymous field `DeviceListResult` in struct `DevicesClientListBySubscriptionResponse`
+- New anonymous field `VendorSKU` in struct `VendorSKUsClientGetResponse`
+- New anonymous field `DeviceRegistrationKey` in struct `DevicesClientListRegistrationKeyResponse`
+- New anonymous field `NetworkFunction` in struct `NetworkFunctionsClientCreateOrUpdateResponse`
+- New anonymous field `VendorSKU` in struct `VendorSKUsClientCreateOrUpdateResponse`
+- New anonymous field `NetworkFunction` in struct `NetworkFunctionsClientUpdateTagsResponse`
+- New anonymous field `Device` in struct `DevicesClientCreateOrUpdateResponse`
+- New anonymous field `DeviceListResult` in struct `DevicesClientListByResourceGroupResponse`
+- New anonymous field `Vendor` in struct `VendorsClientCreateOrUpdateResponse`
+- New anonymous field `NetworkFunctionVendorListResult` in struct `NetworkFunctionVendorsClientListResponse`
+- New anonymous field `VendorListResult` in struct `VendorsClientListBySubscriptionResponse`
+- New anonymous field `NetworkFunction` in struct `NetworkFunctionsClientGetResponse`
+- New anonymous field `NetworkFunctionListResult` in struct `NetworkFunctionsClientListBySubscriptionResponse`
+- New anonymous field `Device` in struct `DevicesClientGetResponse`
+- New anonymous field `RoleInstance` in struct `RoleInstancesClientGetResponse`
+- New anonymous field `VendorNetworkFunctionListResult` in struct `VendorNetworkFunctionsClientListResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `NetworkFunctionRoleConfiguration.UserDataTemplate` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `NetworkFunctionRoleConfiguration.UserDataParameters` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `NetworkFunctionVendorConfiguration.UserDataParameters` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `VendorSKUPropertiesFormat.ManagedApplicationParameters` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `VendorSKUPropertiesFormat.ManagedApplicationTemplate` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `NetworkFunctionPropertiesFormat.NetworkFunctionContainerConfigurations` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `NetworkFunctionPropertiesFormat.ManagedApplicationParameters` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `NetworkFunctionSKURoleDetails.UserDataParameters` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `NetworkFunctionSKURoleDetails.UserDataTemplate` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `NetworkFunctionUserConfiguration.UserDataParameters` has been changed from `map[string]interface{}` to `interface{}`
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

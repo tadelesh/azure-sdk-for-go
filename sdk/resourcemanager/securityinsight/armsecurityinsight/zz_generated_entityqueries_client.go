@@ -34,17 +34,17 @@ type EntityQueriesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewEntityQueriesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *EntityQueriesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &EntityQueriesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *EntityQueriesClient) createOrUpdateCreateRequest(ctx context.Conte
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *EntityQueriesClient) createOrUpdateHandleResponse(resp *http.Response) (EntityQueriesClientCreateOrUpdateResponse, error) {
-	result := EntityQueriesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := EntityQueriesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return EntityQueriesClientCreateOrUpdateResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *EntityQueriesClient) Delete(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return EntityQueriesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return EntityQueriesClientDeleteResponse{RawResponse: resp}, nil
+	return EntityQueriesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *EntityQueriesClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *EntityQueriesClient) getHandleResponse(resp *http.Response) (EntityQueriesClientGetResponse, error) {
-	result := EntityQueriesClientGetResponse{RawResponse: resp}
+	result := EntityQueriesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return EntityQueriesClientGetResponse{}, err
 	}
@@ -270,7 +270,7 @@ func (client *EntityQueriesClient) listCreateRequest(ctx context.Context, resour
 
 // listHandleResponse handles the List response.
 func (client *EntityQueriesClient) listHandleResponse(resp *http.Response) (EntityQueriesClientListResponse, error) {
-	result := EntityQueriesClientListResponse{RawResponse: resp}
+	result := EntityQueriesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EntityQueryList); err != nil {
 		return EntityQueriesClientListResponse{}, err
 	}

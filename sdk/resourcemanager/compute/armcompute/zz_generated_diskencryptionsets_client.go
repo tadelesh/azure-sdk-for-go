@@ -35,17 +35,17 @@ type DiskEncryptionSetsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDiskEncryptionSetsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DiskEncryptionSetsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DiskEncryptionSetsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *DiskEncryptionSetsClient) BeginCreateOrUpdate(ctx context.Context,
 	if err != nil {
 		return DiskEncryptionSetsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DiskEncryptionSetsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DiskEncryptionSetsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DiskEncryptionSetsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DiskEncryptionSetsClientCreateOrUpdatePollerResponse{}, err
@@ -133,9 +131,7 @@ func (client *DiskEncryptionSetsClient) BeginDelete(ctx context.Context, resourc
 	if err != nil {
 		return DiskEncryptionSetsClientDeletePollerResponse{}, err
 	}
-	result := DiskEncryptionSetsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DiskEncryptionSetsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DiskEncryptionSetsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DiskEncryptionSetsClientDeletePollerResponse{}, err
@@ -239,7 +235,7 @@ func (client *DiskEncryptionSetsClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *DiskEncryptionSetsClient) getHandleResponse(resp *http.Response) (DiskEncryptionSetsClientGetResponse, error) {
-	result := DiskEncryptionSetsClientGetResponse{RawResponse: resp}
+	result := DiskEncryptionSetsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiskEncryptionSet); err != nil {
 		return DiskEncryptionSetsClientGetResponse{}, err
 	}
@@ -281,7 +277,7 @@ func (client *DiskEncryptionSetsClient) listCreateRequest(ctx context.Context, o
 
 // listHandleResponse handles the List response.
 func (client *DiskEncryptionSetsClient) listHandleResponse(resp *http.Response) (DiskEncryptionSetsClientListResponse, error) {
-	result := DiskEncryptionSetsClientListResponse{RawResponse: resp}
+	result := DiskEncryptionSetsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiskEncryptionSetList); err != nil {
 		return DiskEncryptionSetsClientListResponse{}, err
 	}
@@ -336,7 +332,7 @@ func (client *DiskEncryptionSetsClient) listAssociatedResourcesCreateRequest(ctx
 
 // listAssociatedResourcesHandleResponse handles the ListAssociatedResources response.
 func (client *DiskEncryptionSetsClient) listAssociatedResourcesHandleResponse(resp *http.Response) (DiskEncryptionSetsClientListAssociatedResourcesResponse, error) {
-	result := DiskEncryptionSetsClientListAssociatedResourcesResponse{RawResponse: resp}
+	result := DiskEncryptionSetsClientListAssociatedResourcesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceURIList); err != nil {
 		return DiskEncryptionSetsClientListAssociatedResourcesResponse{}, err
 	}
@@ -384,7 +380,7 @@ func (client *DiskEncryptionSetsClient) listByResourceGroupCreateRequest(ctx con
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *DiskEncryptionSetsClient) listByResourceGroupHandleResponse(resp *http.Response) (DiskEncryptionSetsClientListByResourceGroupResponse, error) {
-	result := DiskEncryptionSetsClientListByResourceGroupResponse{RawResponse: resp}
+	result := DiskEncryptionSetsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiskEncryptionSetList); err != nil {
 		return DiskEncryptionSetsClientListByResourceGroupResponse{}, err
 	}
@@ -405,9 +401,7 @@ func (client *DiskEncryptionSetsClient) BeginUpdate(ctx context.Context, resourc
 	if err != nil {
 		return DiskEncryptionSetsClientUpdatePollerResponse{}, err
 	}
-	result := DiskEncryptionSetsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DiskEncryptionSetsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DiskEncryptionSetsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return DiskEncryptionSetsClientUpdatePollerResponse{}, err

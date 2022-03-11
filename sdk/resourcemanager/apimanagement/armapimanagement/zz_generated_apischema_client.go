@@ -36,17 +36,17 @@ type APISchemaClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAPISchemaClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *APISchemaClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &APISchemaClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -66,9 +66,7 @@ func (client *APISchemaClient) BeginCreateOrUpdate(ctx context.Context, resource
 	if err != nil {
 		return APISchemaClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := APISchemaClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := APISchemaClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("APISchemaClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return APISchemaClientCreateOrUpdatePollerResponse{}, err
@@ -155,7 +153,7 @@ func (client *APISchemaClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return APISchemaClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return APISchemaClientDeleteResponse{RawResponse: resp}, nil
+	return APISchemaClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -255,7 +253,7 @@ func (client *APISchemaClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *APISchemaClient) getHandleResponse(resp *http.Response) (APISchemaClientGetResponse, error) {
-	result := APISchemaClientGetResponse{RawResponse: resp}
+	result := APISchemaClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -320,7 +318,7 @@ func (client *APISchemaClient) getEntityTagCreateRequest(ctx context.Context, re
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *APISchemaClient) getEntityTagHandleResponse(resp *http.Response) (APISchemaClientGetEntityTagResponse, error) {
-	result := APISchemaClientGetEntityTagResponse{RawResponse: resp}
+	result := APISchemaClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -390,7 +388,7 @@ func (client *APISchemaClient) listByAPICreateRequest(ctx context.Context, resou
 
 // listByAPIHandleResponse handles the ListByAPI response.
 func (client *APISchemaClient) listByAPIHandleResponse(resp *http.Response) (APISchemaClientListByAPIResponse, error) {
-	result := APISchemaClientListByAPIResponse{RawResponse: resp}
+	result := APISchemaClientListByAPIResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SchemaCollection); err != nil {
 		return APISchemaClientListByAPIResponse{}, err
 	}

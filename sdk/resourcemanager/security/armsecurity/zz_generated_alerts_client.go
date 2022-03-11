@@ -105,7 +105,7 @@ func (client *AlertsClient) getResourceGroupLevelCreateRequest(ctx context.Conte
 
 // getResourceGroupLevelHandleResponse handles the GetResourceGroupLevel response.
 func (client *AlertsClient) getResourceGroupLevelHandleResponse(resp *http.Response) (AlertsClientGetResourceGroupLevelResponse, error) {
-	result := AlertsClientGetResourceGroupLevelResponse{RawResponse: resp}
+	result := AlertsClientGetResourceGroupLevelResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Alert); err != nil {
 		return AlertsClientGetResourceGroupLevelResponse{}, err
 	}
@@ -160,7 +160,7 @@ func (client *AlertsClient) getSubscriptionLevelCreateRequest(ctx context.Contex
 
 // getSubscriptionLevelHandleResponse handles the GetSubscriptionLevel response.
 func (client *AlertsClient) getSubscriptionLevelHandleResponse(resp *http.Response) (AlertsClientGetSubscriptionLevelResponse, error) {
-	result := AlertsClientGetSubscriptionLevelResponse{RawResponse: resp}
+	result := AlertsClientGetSubscriptionLevelResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Alert); err != nil {
 		return AlertsClientGetSubscriptionLevelResponse{}, err
 	}
@@ -202,7 +202,7 @@ func (client *AlertsClient) listCreateRequest(ctx context.Context, options *Aler
 
 // listHandleResponse handles the List response.
 func (client *AlertsClient) listHandleResponse(resp *http.Response) (AlertsClientListResponse, error) {
-	result := AlertsClientListResponse{RawResponse: resp}
+	result := AlertsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AlertList); err != nil {
 		return AlertsClientListResponse{}, err
 	}
@@ -250,7 +250,7 @@ func (client *AlertsClient) listByResourceGroupCreateRequest(ctx context.Context
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *AlertsClient) listByResourceGroupHandleResponse(resp *http.Response) (AlertsClientListByResourceGroupResponse, error) {
-	result := AlertsClientListByResourceGroupResponse{RawResponse: resp}
+	result := AlertsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AlertList); err != nil {
 		return AlertsClientListByResourceGroupResponse{}, err
 	}
@@ -303,7 +303,7 @@ func (client *AlertsClient) listResourceGroupLevelByRegionCreateRequest(ctx cont
 
 // listResourceGroupLevelByRegionHandleResponse handles the ListResourceGroupLevelByRegion response.
 func (client *AlertsClient) listResourceGroupLevelByRegionHandleResponse(resp *http.Response) (AlertsClientListResourceGroupLevelByRegionResponse, error) {
-	result := AlertsClientListResourceGroupLevelByRegionResponse{RawResponse: resp}
+	result := AlertsClientListResourceGroupLevelByRegionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AlertList); err != nil {
 		return AlertsClientListResourceGroupLevelByRegionResponse{}, err
 	}
@@ -351,7 +351,7 @@ func (client *AlertsClient) listSubscriptionLevelByRegionCreateRequest(ctx conte
 
 // listSubscriptionLevelByRegionHandleResponse handles the ListSubscriptionLevelByRegion response.
 func (client *AlertsClient) listSubscriptionLevelByRegionHandleResponse(resp *http.Response) (AlertsClientListSubscriptionLevelByRegionResponse, error) {
-	result := AlertsClientListSubscriptionLevelByRegionResponse{RawResponse: resp}
+	result := AlertsClientListSubscriptionLevelByRegionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AlertList); err != nil {
 		return AlertsClientListSubscriptionLevelByRegionResponse{}, err
 	}
@@ -367,9 +367,7 @@ func (client *AlertsClient) BeginSimulate(ctx context.Context, alertSimulatorReq
 	if err != nil {
 		return AlertsClientSimulatePollerResponse{}, err
 	}
-	result := AlertsClientSimulatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AlertsClientSimulatePollerResponse{}
 	pt, err := armruntime.NewPoller("AlertsClient.Simulate", "original-uri", resp, client.pl)
 	if err != nil {
 		return AlertsClientSimulatePollerResponse{}, err
@@ -437,7 +435,7 @@ func (client *AlertsClient) UpdateResourceGroupLevelStateToActivate(ctx context.
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return AlertsClientUpdateResourceGroupLevelStateToActivateResponse{}, runtime.NewResponseError(resp)
 	}
-	return AlertsClientUpdateResourceGroupLevelStateToActivateResponse{RawResponse: resp}, nil
+	return AlertsClientUpdateResourceGroupLevelStateToActivateResponse{}, nil
 }
 
 // updateResourceGroupLevelStateToActivateCreateRequest creates the UpdateResourceGroupLevelStateToActivate request.
@@ -488,7 +486,7 @@ func (client *AlertsClient) UpdateResourceGroupLevelStateToDismiss(ctx context.C
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return AlertsClientUpdateResourceGroupLevelStateToDismissResponse{}, runtime.NewResponseError(resp)
 	}
-	return AlertsClientUpdateResourceGroupLevelStateToDismissResponse{RawResponse: resp}, nil
+	return AlertsClientUpdateResourceGroupLevelStateToDismissResponse{}, nil
 }
 
 // updateResourceGroupLevelStateToDismissCreateRequest creates the UpdateResourceGroupLevelStateToDismiss request.
@@ -539,7 +537,7 @@ func (client *AlertsClient) UpdateResourceGroupLevelStateToResolve(ctx context.C
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return AlertsClientUpdateResourceGroupLevelStateToResolveResponse{}, runtime.NewResponseError(resp)
 	}
-	return AlertsClientUpdateResourceGroupLevelStateToResolveResponse{RawResponse: resp}, nil
+	return AlertsClientUpdateResourceGroupLevelStateToResolveResponse{}, nil
 }
 
 // updateResourceGroupLevelStateToResolveCreateRequest creates the UpdateResourceGroupLevelStateToResolve request.
@@ -589,7 +587,7 @@ func (client *AlertsClient) UpdateSubscriptionLevelStateToActivate(ctx context.C
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return AlertsClientUpdateSubscriptionLevelStateToActivateResponse{}, runtime.NewResponseError(resp)
 	}
-	return AlertsClientUpdateSubscriptionLevelStateToActivateResponse{RawResponse: resp}, nil
+	return AlertsClientUpdateSubscriptionLevelStateToActivateResponse{}, nil
 }
 
 // updateSubscriptionLevelStateToActivateCreateRequest creates the UpdateSubscriptionLevelStateToActivate request.
@@ -635,7 +633,7 @@ func (client *AlertsClient) UpdateSubscriptionLevelStateToDismiss(ctx context.Co
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return AlertsClientUpdateSubscriptionLevelStateToDismissResponse{}, runtime.NewResponseError(resp)
 	}
-	return AlertsClientUpdateSubscriptionLevelStateToDismissResponse{RawResponse: resp}, nil
+	return AlertsClientUpdateSubscriptionLevelStateToDismissResponse{}, nil
 }
 
 // updateSubscriptionLevelStateToDismissCreateRequest creates the UpdateSubscriptionLevelStateToDismiss request.
@@ -681,7 +679,7 @@ func (client *AlertsClient) UpdateSubscriptionLevelStateToResolve(ctx context.Co
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return AlertsClientUpdateSubscriptionLevelStateToResolveResponse{}, runtime.NewResponseError(resp)
 	}
-	return AlertsClientUpdateSubscriptionLevelStateToResolveResponse{RawResponse: resp}, nil
+	return AlertsClientUpdateSubscriptionLevelStateToResolveResponse{}, nil
 }
 
 // updateSubscriptionLevelStateToResolveCreateRequest creates the UpdateSubscriptionLevelStateToResolve request.

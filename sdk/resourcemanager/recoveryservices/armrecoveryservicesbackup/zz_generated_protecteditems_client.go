@@ -34,17 +34,17 @@ type ProtectedItemsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProtectedItemsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ProtectedItemsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProtectedItemsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *ProtectedItemsClient) createOrUpdateCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-10-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -116,7 +116,7 @@ func (client *ProtectedItemsClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ProtectedItemsClient) createOrUpdateHandleResponse(resp *http.Response) (ProtectedItemsClientCreateOrUpdateResponse, error) {
-	result := ProtectedItemsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ProtectedItemsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProtectedItemResource); err != nil {
 		return ProtectedItemsClientCreateOrUpdateResponse{}, err
 	}
@@ -144,7 +144,7 @@ func (client *ProtectedItemsClient) Delete(ctx context.Context, vaultName string
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return ProtectedItemsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ProtectedItemsClientDeleteResponse{RawResponse: resp}, nil
+	return ProtectedItemsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -179,7 +179,7 @@ func (client *ProtectedItemsClient) deleteCreateRequest(ctx context.Context, vau
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-10-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -241,7 +241,7 @@ func (client *ProtectedItemsClient) getCreateRequest(ctx context.Context, vaultN
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-10-01")
+	reqQP.Set("api-version", "2021-12-01")
 	if options != nil && options.Filter != nil {
 		reqQP.Set("$filter", *options.Filter)
 	}
@@ -252,7 +252,7 @@ func (client *ProtectedItemsClient) getCreateRequest(ctx context.Context, vaultN
 
 // getHandleResponse handles the Get response.
 func (client *ProtectedItemsClient) getHandleResponse(resp *http.Response) (ProtectedItemsClientGetResponse, error) {
-	result := ProtectedItemsClientGetResponse{RawResponse: resp}
+	result := ProtectedItemsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProtectedItemResource); err != nil {
 		return ProtectedItemsClientGetResponse{}, err
 	}

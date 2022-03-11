@@ -35,17 +35,17 @@ type DeploymentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDeploymentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DeploymentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DeploymentsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -55,7 +55,7 @@ func NewDeploymentsClient(subscriptionID string, credential azcore.TokenCredenti
 // templateParam - The template provided to calculate hash.
 // options - DeploymentsClientCalculateTemplateHashOptions contains the optional parameters for the DeploymentsClient.CalculateTemplateHash
 // method.
-func (client *DeploymentsClient) CalculateTemplateHash(ctx context.Context, templateParam map[string]interface{}, options *DeploymentsClientCalculateTemplateHashOptions) (DeploymentsClientCalculateTemplateHashResponse, error) {
+func (client *DeploymentsClient) CalculateTemplateHash(ctx context.Context, templateParam interface{}, options *DeploymentsClientCalculateTemplateHashOptions) (DeploymentsClientCalculateTemplateHashResponse, error) {
 	req, err := client.calculateTemplateHashCreateRequest(ctx, templateParam, options)
 	if err != nil {
 		return DeploymentsClientCalculateTemplateHashResponse{}, err
@@ -71,7 +71,7 @@ func (client *DeploymentsClient) CalculateTemplateHash(ctx context.Context, temp
 }
 
 // calculateTemplateHashCreateRequest creates the CalculateTemplateHash request.
-func (client *DeploymentsClient) calculateTemplateHashCreateRequest(ctx context.Context, templateParam map[string]interface{}, options *DeploymentsClientCalculateTemplateHashOptions) (*policy.Request, error) {
+func (client *DeploymentsClient) calculateTemplateHashCreateRequest(ctx context.Context, templateParam interface{}, options *DeploymentsClientCalculateTemplateHashOptions) (*policy.Request, error) {
 	urlPath := "/providers/Microsoft.Resources/calculateTemplateHash"
 	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.host, urlPath))
 	if err != nil {
@@ -86,7 +86,7 @@ func (client *DeploymentsClient) calculateTemplateHashCreateRequest(ctx context.
 
 // calculateTemplateHashHandleResponse handles the CalculateTemplateHash response.
 func (client *DeploymentsClient) calculateTemplateHashHandleResponse(resp *http.Response) (DeploymentsClientCalculateTemplateHashResponse, error) {
-	result := DeploymentsClientCalculateTemplateHashResponse{RawResponse: resp}
+	result := DeploymentsClientCalculateTemplateHashResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TemplateHashResult); err != nil {
 		return DeploymentsClientCalculateTemplateHashResponse{}, err
 	}
@@ -112,7 +112,7 @@ func (client *DeploymentsClient) Cancel(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return DeploymentsClientCancelResponse{}, runtime.NewResponseError(resp)
 	}
-	return DeploymentsClientCancelResponse{RawResponse: resp}, nil
+	return DeploymentsClientCancelResponse{}, nil
 }
 
 // cancelCreateRequest creates the Cancel request.
@@ -161,7 +161,7 @@ func (client *DeploymentsClient) CancelAtManagementGroupScope(ctx context.Contex
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return DeploymentsClientCancelAtManagementGroupScopeResponse{}, runtime.NewResponseError(resp)
 	}
-	return DeploymentsClientCancelAtManagementGroupScopeResponse{RawResponse: resp}, nil
+	return DeploymentsClientCancelAtManagementGroupScopeResponse{}, nil
 }
 
 // cancelAtManagementGroupScopeCreateRequest creates the CancelAtManagementGroupScope request.
@@ -206,7 +206,7 @@ func (client *DeploymentsClient) CancelAtScope(ctx context.Context, scope string
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return DeploymentsClientCancelAtScopeResponse{}, runtime.NewResponseError(resp)
 	}
-	return DeploymentsClientCancelAtScopeResponse{RawResponse: resp}, nil
+	return DeploymentsClientCancelAtScopeResponse{}, nil
 }
 
 // cancelAtScopeCreateRequest creates the CancelAtScope request.
@@ -247,7 +247,7 @@ func (client *DeploymentsClient) CancelAtSubscriptionScope(ctx context.Context, 
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return DeploymentsClientCancelAtSubscriptionScopeResponse{}, runtime.NewResponseError(resp)
 	}
-	return DeploymentsClientCancelAtSubscriptionScopeResponse{RawResponse: resp}, nil
+	return DeploymentsClientCancelAtSubscriptionScopeResponse{}, nil
 }
 
 // cancelAtSubscriptionScopeCreateRequest creates the CancelAtSubscriptionScope request.
@@ -291,7 +291,7 @@ func (client *DeploymentsClient) CancelAtTenantScope(ctx context.Context, deploy
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return DeploymentsClientCancelAtTenantScopeResponse{}, runtime.NewResponseError(resp)
 	}
-	return DeploymentsClientCancelAtTenantScopeResponse{RawResponse: resp}, nil
+	return DeploymentsClientCancelAtTenantScopeResponse{}, nil
 }
 
 // cancelAtTenantScopeCreateRequest creates the CancelAtTenantScope request.
@@ -326,7 +326,7 @@ func (client *DeploymentsClient) CheckExistence(ctx context.Context, resourceGro
 	if err != nil {
 		return DeploymentsClientCheckExistenceResponse{}, err
 	}
-	result := DeploymentsClientCheckExistenceResponse{RawResponse: resp}
+	result := DeploymentsClientCheckExistenceResponse{}
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		result.Success = true
 	}
@@ -373,7 +373,7 @@ func (client *DeploymentsClient) CheckExistenceAtManagementGroupScope(ctx contex
 	if err != nil {
 		return DeploymentsClientCheckExistenceAtManagementGroupScopeResponse{}, err
 	}
-	result := DeploymentsClientCheckExistenceAtManagementGroupScopeResponse{RawResponse: resp}
+	result := DeploymentsClientCheckExistenceAtManagementGroupScopeResponse{}
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		result.Success = true
 	}
@@ -416,7 +416,7 @@ func (client *DeploymentsClient) CheckExistenceAtScope(ctx context.Context, scop
 	if err != nil {
 		return DeploymentsClientCheckExistenceAtScopeResponse{}, err
 	}
-	result := DeploymentsClientCheckExistenceAtScopeResponse{RawResponse: resp}
+	result := DeploymentsClientCheckExistenceAtScopeResponse{}
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		result.Success = true
 	}
@@ -455,7 +455,7 @@ func (client *DeploymentsClient) CheckExistenceAtSubscriptionScope(ctx context.C
 	if err != nil {
 		return DeploymentsClientCheckExistenceAtSubscriptionScopeResponse{}, err
 	}
-	result := DeploymentsClientCheckExistenceAtSubscriptionScopeResponse{RawResponse: resp}
+	result := DeploymentsClientCheckExistenceAtSubscriptionScopeResponse{}
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		result.Success = true
 	}
@@ -497,7 +497,7 @@ func (client *DeploymentsClient) CheckExistenceAtTenantScope(ctx context.Context
 	if err != nil {
 		return DeploymentsClientCheckExistenceAtTenantScopeResponse{}, err
 	}
-	result := DeploymentsClientCheckExistenceAtTenantScopeResponse{RawResponse: resp}
+	result := DeploymentsClientCheckExistenceAtTenantScopeResponse{}
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 		result.Success = true
 	}
@@ -535,9 +535,7 @@ func (client *DeploymentsClient) BeginCreateOrUpdate(ctx context.Context, resour
 	if err != nil {
 		return DeploymentsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DeploymentsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientCreateOrUpdatePollerResponse{}, err
@@ -604,9 +602,7 @@ func (client *DeploymentsClient) BeginCreateOrUpdateAtManagementGroupScope(ctx c
 	if err != nil {
 		return DeploymentsClientCreateOrUpdateAtManagementGroupScopePollerResponse{}, err
 	}
-	result := DeploymentsClientCreateOrUpdateAtManagementGroupScopePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientCreateOrUpdateAtManagementGroupScopePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.CreateOrUpdateAtManagementGroupScope", "", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientCreateOrUpdateAtManagementGroupScopePollerResponse{}, err
@@ -669,9 +665,7 @@ func (client *DeploymentsClient) BeginCreateOrUpdateAtScope(ctx context.Context,
 	if err != nil {
 		return DeploymentsClientCreateOrUpdateAtScopePollerResponse{}, err
 	}
-	result := DeploymentsClientCreateOrUpdateAtScopePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientCreateOrUpdateAtScopePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.CreateOrUpdateAtScope", "", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientCreateOrUpdateAtScopePollerResponse{}, err
@@ -730,9 +724,7 @@ func (client *DeploymentsClient) BeginCreateOrUpdateAtSubscriptionScope(ctx cont
 	if err != nil {
 		return DeploymentsClientCreateOrUpdateAtSubscriptionScopePollerResponse{}, err
 	}
-	result := DeploymentsClientCreateOrUpdateAtSubscriptionScopePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientCreateOrUpdateAtSubscriptionScopePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.CreateOrUpdateAtSubscriptionScope", "", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientCreateOrUpdateAtSubscriptionScopePollerResponse{}, err
@@ -795,9 +787,7 @@ func (client *DeploymentsClient) BeginCreateOrUpdateAtTenantScope(ctx context.Co
 	if err != nil {
 		return DeploymentsClientCreateOrUpdateAtTenantScopePollerResponse{}, err
 	}
-	result := DeploymentsClientCreateOrUpdateAtTenantScopePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientCreateOrUpdateAtTenantScopePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.CreateOrUpdateAtTenantScope", "", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientCreateOrUpdateAtTenantScopePollerResponse{}, err
@@ -860,9 +850,7 @@ func (client *DeploymentsClient) BeginDelete(ctx context.Context, resourceGroupN
 	if err != nil {
 		return DeploymentsClientDeletePollerResponse{}, err
 	}
-	result := DeploymentsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientDeletePollerResponse{}, err
@@ -940,9 +928,7 @@ func (client *DeploymentsClient) BeginDeleteAtManagementGroupScope(ctx context.C
 	if err != nil {
 		return DeploymentsClientDeleteAtManagementGroupScopePollerResponse{}, err
 	}
-	result := DeploymentsClientDeleteAtManagementGroupScopePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientDeleteAtManagementGroupScopePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.DeleteAtManagementGroupScope", "", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientDeleteAtManagementGroupScopePollerResponse{}, err
@@ -1015,9 +1001,7 @@ func (client *DeploymentsClient) BeginDeleteAtScope(ctx context.Context, scope s
 	if err != nil {
 		return DeploymentsClientDeleteAtScopePollerResponse{}, err
 	}
-	result := DeploymentsClientDeleteAtScopePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientDeleteAtScopePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.DeleteAtScope", "", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientDeleteAtScopePollerResponse{}, err
@@ -1086,9 +1070,7 @@ func (client *DeploymentsClient) BeginDeleteAtSubscriptionScope(ctx context.Cont
 	if err != nil {
 		return DeploymentsClientDeleteAtSubscriptionScopePollerResponse{}, err
 	}
-	result := DeploymentsClientDeleteAtSubscriptionScopePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientDeleteAtSubscriptionScopePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.DeleteAtSubscriptionScope", "", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientDeleteAtSubscriptionScopePollerResponse{}, err
@@ -1160,9 +1142,7 @@ func (client *DeploymentsClient) BeginDeleteAtTenantScope(ctx context.Context, d
 	if err != nil {
 		return DeploymentsClientDeleteAtTenantScopePollerResponse{}, err
 	}
-	result := DeploymentsClientDeleteAtTenantScopePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientDeleteAtTenantScopePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.DeleteAtTenantScope", "", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientDeleteAtTenantScopePollerResponse{}, err
@@ -1263,7 +1243,7 @@ func (client *DeploymentsClient) exportTemplateCreateRequest(ctx context.Context
 
 // exportTemplateHandleResponse handles the ExportTemplate response.
 func (client *DeploymentsClient) exportTemplateHandleResponse(resp *http.Response) (DeploymentsClientExportTemplateResponse, error) {
-	result := DeploymentsClientExportTemplateResponse{RawResponse: resp}
+	result := DeploymentsClientExportTemplateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentExportResult); err != nil {
 		return DeploymentsClientExportTemplateResponse{}, err
 	}
@@ -1315,7 +1295,7 @@ func (client *DeploymentsClient) exportTemplateAtManagementGroupScopeCreateReque
 
 // exportTemplateAtManagementGroupScopeHandleResponse handles the ExportTemplateAtManagementGroupScope response.
 func (client *DeploymentsClient) exportTemplateAtManagementGroupScopeHandleResponse(resp *http.Response) (DeploymentsClientExportTemplateAtManagementGroupScopeResponse, error) {
-	result := DeploymentsClientExportTemplateAtManagementGroupScopeResponse{RawResponse: resp}
+	result := DeploymentsClientExportTemplateAtManagementGroupScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentExportResult); err != nil {
 		return DeploymentsClientExportTemplateAtManagementGroupScopeResponse{}, err
 	}
@@ -1364,7 +1344,7 @@ func (client *DeploymentsClient) exportTemplateAtScopeCreateRequest(ctx context.
 
 // exportTemplateAtScopeHandleResponse handles the ExportTemplateAtScope response.
 func (client *DeploymentsClient) exportTemplateAtScopeHandleResponse(resp *http.Response) (DeploymentsClientExportTemplateAtScopeResponse, error) {
-	result := DeploymentsClientExportTemplateAtScopeResponse{RawResponse: resp}
+	result := DeploymentsClientExportTemplateAtScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentExportResult); err != nil {
 		return DeploymentsClientExportTemplateAtScopeResponse{}, err
 	}
@@ -1415,7 +1395,7 @@ func (client *DeploymentsClient) exportTemplateAtSubscriptionScopeCreateRequest(
 
 // exportTemplateAtSubscriptionScopeHandleResponse handles the ExportTemplateAtSubscriptionScope response.
 func (client *DeploymentsClient) exportTemplateAtSubscriptionScopeHandleResponse(resp *http.Response) (DeploymentsClientExportTemplateAtSubscriptionScopeResponse, error) {
-	result := DeploymentsClientExportTemplateAtSubscriptionScopeResponse{RawResponse: resp}
+	result := DeploymentsClientExportTemplateAtSubscriptionScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentExportResult); err != nil {
 		return DeploymentsClientExportTemplateAtSubscriptionScopeResponse{}, err
 	}
@@ -1462,7 +1442,7 @@ func (client *DeploymentsClient) exportTemplateAtTenantScopeCreateRequest(ctx co
 
 // exportTemplateAtTenantScopeHandleResponse handles the ExportTemplateAtTenantScope response.
 func (client *DeploymentsClient) exportTemplateAtTenantScopeHandleResponse(resp *http.Response) (DeploymentsClientExportTemplateAtTenantScopeResponse, error) {
-	result := DeploymentsClientExportTemplateAtTenantScopeResponse{RawResponse: resp}
+	result := DeploymentsClientExportTemplateAtTenantScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentExportResult); err != nil {
 		return DeploymentsClientExportTemplateAtTenantScopeResponse{}, err
 	}
@@ -1517,7 +1497,7 @@ func (client *DeploymentsClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *DeploymentsClient) getHandleResponse(resp *http.Response) (DeploymentsClientGetResponse, error) {
-	result := DeploymentsClientGetResponse{RawResponse: resp}
+	result := DeploymentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentExtended); err != nil {
 		return DeploymentsClientGetResponse{}, err
 	}
@@ -1569,7 +1549,7 @@ func (client *DeploymentsClient) getAtManagementGroupScopeCreateRequest(ctx cont
 
 // getAtManagementGroupScopeHandleResponse handles the GetAtManagementGroupScope response.
 func (client *DeploymentsClient) getAtManagementGroupScopeHandleResponse(resp *http.Response) (DeploymentsClientGetAtManagementGroupScopeResponse, error) {
-	result := DeploymentsClientGetAtManagementGroupScopeResponse{RawResponse: resp}
+	result := DeploymentsClientGetAtManagementGroupScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentExtended); err != nil {
 		return DeploymentsClientGetAtManagementGroupScopeResponse{}, err
 	}
@@ -1617,7 +1597,7 @@ func (client *DeploymentsClient) getAtScopeCreateRequest(ctx context.Context, sc
 
 // getAtScopeHandleResponse handles the GetAtScope response.
 func (client *DeploymentsClient) getAtScopeHandleResponse(resp *http.Response) (DeploymentsClientGetAtScopeResponse, error) {
-	result := DeploymentsClientGetAtScopeResponse{RawResponse: resp}
+	result := DeploymentsClientGetAtScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentExtended); err != nil {
 		return DeploymentsClientGetAtScopeResponse{}, err
 	}
@@ -1668,7 +1648,7 @@ func (client *DeploymentsClient) getAtSubscriptionScopeCreateRequest(ctx context
 
 // getAtSubscriptionScopeHandleResponse handles the GetAtSubscriptionScope response.
 func (client *DeploymentsClient) getAtSubscriptionScopeHandleResponse(resp *http.Response) (DeploymentsClientGetAtSubscriptionScopeResponse, error) {
-	result := DeploymentsClientGetAtSubscriptionScopeResponse{RawResponse: resp}
+	result := DeploymentsClientGetAtSubscriptionScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentExtended); err != nil {
 		return DeploymentsClientGetAtSubscriptionScopeResponse{}, err
 	}
@@ -1715,7 +1695,7 @@ func (client *DeploymentsClient) getAtTenantScopeCreateRequest(ctx context.Conte
 
 // getAtTenantScopeHandleResponse handles the GetAtTenantScope response.
 func (client *DeploymentsClient) getAtTenantScopeHandleResponse(resp *http.Response) (DeploymentsClientGetAtTenantScopeResponse, error) {
-	result := DeploymentsClientGetAtTenantScopeResponse{RawResponse: resp}
+	result := DeploymentsClientGetAtTenantScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentExtended); err != nil {
 		return DeploymentsClientGetAtTenantScopeResponse{}, err
 	}
@@ -1765,7 +1745,7 @@ func (client *DeploymentsClient) listAtManagementGroupScopeCreateRequest(ctx con
 
 // listAtManagementGroupScopeHandleResponse handles the ListAtManagementGroupScope response.
 func (client *DeploymentsClient) listAtManagementGroupScopeHandleResponse(resp *http.Response) (DeploymentsClientListAtManagementGroupScopeResponse, error) {
-	result := DeploymentsClientListAtManagementGroupScopeResponse{RawResponse: resp}
+	result := DeploymentsClientListAtManagementGroupScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentListResult); err != nil {
 		return DeploymentsClientListAtManagementGroupScopeResponse{}, err
 	}
@@ -1811,7 +1791,7 @@ func (client *DeploymentsClient) listAtScopeCreateRequest(ctx context.Context, s
 
 // listAtScopeHandleResponse handles the ListAtScope response.
 func (client *DeploymentsClient) listAtScopeHandleResponse(resp *http.Response) (DeploymentsClientListAtScopeResponse, error) {
-	result := DeploymentsClientListAtScopeResponse{RawResponse: resp}
+	result := DeploymentsClientListAtScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentListResult); err != nil {
 		return DeploymentsClientListAtScopeResponse{}, err
 	}
@@ -1860,7 +1840,7 @@ func (client *DeploymentsClient) listAtSubscriptionScopeCreateRequest(ctx contex
 
 // listAtSubscriptionScopeHandleResponse handles the ListAtSubscriptionScope response.
 func (client *DeploymentsClient) listAtSubscriptionScopeHandleResponse(resp *http.Response) (DeploymentsClientListAtSubscriptionScopeResponse, error) {
-	result := DeploymentsClientListAtSubscriptionScopeResponse{RawResponse: resp}
+	result := DeploymentsClientListAtSubscriptionScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentListResult); err != nil {
 		return DeploymentsClientListAtSubscriptionScopeResponse{}, err
 	}
@@ -1905,7 +1885,7 @@ func (client *DeploymentsClient) listAtTenantScopeCreateRequest(ctx context.Cont
 
 // listAtTenantScopeHandleResponse handles the ListAtTenantScope response.
 func (client *DeploymentsClient) listAtTenantScopeHandleResponse(resp *http.Response) (DeploymentsClientListAtTenantScopeResponse, error) {
-	result := DeploymentsClientListAtTenantScopeResponse{RawResponse: resp}
+	result := DeploymentsClientListAtTenantScopeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentListResult); err != nil {
 		return DeploymentsClientListAtTenantScopeResponse{}, err
 	}
@@ -1959,7 +1939,7 @@ func (client *DeploymentsClient) listByResourceGroupCreateRequest(ctx context.Co
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *DeploymentsClient) listByResourceGroupHandleResponse(resp *http.Response) (DeploymentsClientListByResourceGroupResponse, error) {
-	result := DeploymentsClientListByResourceGroupResponse{RawResponse: resp}
+	result := DeploymentsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentListResult); err != nil {
 		return DeploymentsClientListByResourceGroupResponse{}, err
 	}
@@ -1979,9 +1959,7 @@ func (client *DeploymentsClient) BeginValidate(ctx context.Context, resourceGrou
 	if err != nil {
 		return DeploymentsClientValidatePollerResponse{}, err
 	}
-	result := DeploymentsClientValidatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientValidatePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.Validate", "", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientValidatePollerResponse{}, err
@@ -2048,9 +2026,7 @@ func (client *DeploymentsClient) BeginValidateAtManagementGroupScope(ctx context
 	if err != nil {
 		return DeploymentsClientValidateAtManagementGroupScopePollerResponse{}, err
 	}
-	result := DeploymentsClientValidateAtManagementGroupScopePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientValidateAtManagementGroupScopePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.ValidateAtManagementGroupScope", "", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientValidateAtManagementGroupScopePollerResponse{}, err
@@ -2114,9 +2090,7 @@ func (client *DeploymentsClient) BeginValidateAtScope(ctx context.Context, scope
 	if err != nil {
 		return DeploymentsClientValidateAtScopePollerResponse{}, err
 	}
-	result := DeploymentsClientValidateAtScopePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientValidateAtScopePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.ValidateAtScope", "", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientValidateAtScopePollerResponse{}, err
@@ -2176,9 +2150,7 @@ func (client *DeploymentsClient) BeginValidateAtSubscriptionScope(ctx context.Co
 	if err != nil {
 		return DeploymentsClientValidateAtSubscriptionScopePollerResponse{}, err
 	}
-	result := DeploymentsClientValidateAtSubscriptionScopePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientValidateAtSubscriptionScopePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.ValidateAtSubscriptionScope", "", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientValidateAtSubscriptionScopePollerResponse{}, err
@@ -2241,9 +2213,7 @@ func (client *DeploymentsClient) BeginValidateAtTenantScope(ctx context.Context,
 	if err != nil {
 		return DeploymentsClientValidateAtTenantScopePollerResponse{}, err
 	}
-	result := DeploymentsClientValidateAtTenantScopePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientValidateAtTenantScopePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.ValidateAtTenantScope", "", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientValidateAtTenantScopePollerResponse{}, err
@@ -2301,9 +2271,7 @@ func (client *DeploymentsClient) BeginWhatIf(ctx context.Context, resourceGroupN
 	if err != nil {
 		return DeploymentsClientWhatIfPollerResponse{}, err
 	}
-	result := DeploymentsClientWhatIfPollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientWhatIfPollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.WhatIf", "location", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientWhatIfPollerResponse{}, err
@@ -2370,9 +2338,7 @@ func (client *DeploymentsClient) BeginWhatIfAtManagementGroupScope(ctx context.C
 	if err != nil {
 		return DeploymentsClientWhatIfAtManagementGroupScopePollerResponse{}, err
 	}
-	result := DeploymentsClientWhatIfAtManagementGroupScopePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientWhatIfAtManagementGroupScopePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.WhatIfAtManagementGroupScope", "location", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientWhatIfAtManagementGroupScopePollerResponse{}, err
@@ -2434,9 +2400,7 @@ func (client *DeploymentsClient) BeginWhatIfAtSubscriptionScope(ctx context.Cont
 	if err != nil {
 		return DeploymentsClientWhatIfAtSubscriptionScopePollerResponse{}, err
 	}
-	result := DeploymentsClientWhatIfAtSubscriptionScopePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientWhatIfAtSubscriptionScopePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.WhatIfAtSubscriptionScope", "location", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientWhatIfAtSubscriptionScopePollerResponse{}, err
@@ -2497,9 +2461,7 @@ func (client *DeploymentsClient) BeginWhatIfAtTenantScope(ctx context.Context, d
 	if err != nil {
 		return DeploymentsClientWhatIfAtTenantScopePollerResponse{}, err
 	}
-	result := DeploymentsClientWhatIfAtTenantScopePollerResponse{
-		RawResponse: resp,
-	}
+	result := DeploymentsClientWhatIfAtTenantScopePollerResponse{}
 	pt, err := armruntime.NewPoller("DeploymentsClient.WhatIfAtTenantScope", "location", resp, client.pl)
 	if err != nil {
 		return DeploymentsClientWhatIfAtTenantScopePollerResponse{}, err

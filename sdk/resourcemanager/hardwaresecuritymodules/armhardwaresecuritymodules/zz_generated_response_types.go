@@ -11,7 +11,6 @@ package armhardwaresecuritymodules
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
@@ -19,9 +18,6 @@ import (
 type DedicatedHsmClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *DedicatedHsmClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -29,11 +25,10 @@ type DedicatedHsmClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l DedicatedHsmClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DedicatedHsmClientCreateOrUpdateResponse, error) {
 	respType := DedicatedHsmClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DedicatedHsm)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DedicatedHsm)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -46,24 +41,16 @@ func (l *DedicatedHsmClientCreateOrUpdatePollerResponse) Resume(ctx context.Cont
 	poller := &DedicatedHsmClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // DedicatedHsmClientCreateOrUpdateResponse contains the response from method DedicatedHsmClient.CreateOrUpdate.
 type DedicatedHsmClientCreateOrUpdateResponse struct {
-	DedicatedHsmClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DedicatedHsmClientCreateOrUpdateResult contains the result from method DedicatedHsmClient.CreateOrUpdate.
-type DedicatedHsmClientCreateOrUpdateResult struct {
 	DedicatedHsm
 }
 
@@ -71,9 +58,6 @@ type DedicatedHsmClientCreateOrUpdateResult struct {
 type DedicatedHsmClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *DedicatedHsmClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -81,11 +65,10 @@ type DedicatedHsmClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l DedicatedHsmClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DedicatedHsmClientDeleteResponse, error) {
 	respType := DedicatedHsmClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -98,66 +81,36 @@ func (l *DedicatedHsmClientDeletePollerResponse) Resume(ctx context.Context, cli
 	poller := &DedicatedHsmClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // DedicatedHsmClientDeleteResponse contains the response from method DedicatedHsmClient.Delete.
 type DedicatedHsmClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // DedicatedHsmClientGetResponse contains the response from method DedicatedHsmClient.Get.
 type DedicatedHsmClientGetResponse struct {
-	DedicatedHsmClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DedicatedHsmClientGetResult contains the result from method DedicatedHsmClient.Get.
-type DedicatedHsmClientGetResult struct {
 	DedicatedHsm
 }
 
 // DedicatedHsmClientListByResourceGroupResponse contains the response from method DedicatedHsmClient.ListByResourceGroup.
 type DedicatedHsmClientListByResourceGroupResponse struct {
-	DedicatedHsmClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DedicatedHsmClientListByResourceGroupResult contains the result from method DedicatedHsmClient.ListByResourceGroup.
-type DedicatedHsmClientListByResourceGroupResult struct {
 	DedicatedHsmListResult
 }
 
 // DedicatedHsmClientListBySubscriptionResponse contains the response from method DedicatedHsmClient.ListBySubscription.
 type DedicatedHsmClientListBySubscriptionResponse struct {
-	DedicatedHsmClientListBySubscriptionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DedicatedHsmClientListBySubscriptionResult contains the result from method DedicatedHsmClient.ListBySubscription.
-type DedicatedHsmClientListBySubscriptionResult struct {
 	DedicatedHsmListResult
 }
 
 // DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResponse contains the response from method DedicatedHsmClient.ListOutboundNetworkDependenciesEndpoints.
 type DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResponse struct {
-	DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResult contains the result from method DedicatedHsmClient.ListOutboundNetworkDependenciesEndpoints.
-type DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResult struct {
 	OutboundEnvironmentEndpointCollection
 }
 
@@ -165,9 +118,6 @@ type DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResult struct {
 type DedicatedHsmClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *DedicatedHsmClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -175,11 +125,10 @@ type DedicatedHsmClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l DedicatedHsmClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DedicatedHsmClientUpdateResponse, error) {
 	respType := DedicatedHsmClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DedicatedHsm)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DedicatedHsm)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -192,35 +141,20 @@ func (l *DedicatedHsmClientUpdatePollerResponse) Resume(ctx context.Context, cli
 	poller := &DedicatedHsmClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // DedicatedHsmClientUpdateResponse contains the response from method DedicatedHsmClient.Update.
 type DedicatedHsmClientUpdateResponse struct {
-	DedicatedHsmClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DedicatedHsmClientUpdateResult contains the result from method DedicatedHsmClient.Update.
-type DedicatedHsmClientUpdateResult struct {
 	DedicatedHsm
 }
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	DedicatedHsmOperationListResult
 }

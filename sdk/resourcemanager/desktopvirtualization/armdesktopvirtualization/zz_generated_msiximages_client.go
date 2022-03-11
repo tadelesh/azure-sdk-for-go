@@ -34,17 +34,17 @@ type MsixImagesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMsixImagesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MsixImagesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MsixImagesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -95,7 +95,7 @@ func (client *MsixImagesClient) expandCreateRequest(ctx context.Context, resourc
 
 // expandHandleResponse handles the Expand response.
 func (client *MsixImagesClient) expandHandleResponse(resp *http.Response) (MsixImagesClientExpandResponse, error) {
-	result := MsixImagesClientExpandResponse{RawResponse: resp}
+	result := MsixImagesClientExpandResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExpandMsixImageList); err != nil {
 		return MsixImagesClientExpandResponse{}, err
 	}

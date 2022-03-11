@@ -43,11 +43,10 @@ func (p *RolloutsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final RolloutsClientCreateOrUpdateResponse will be returned.
 func (p *RolloutsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (RolloutsClientCreateOrUpdateResponse, error) {
 	respType := RolloutsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.RolloutRequest)
+	_, err := p.pt.FinalResponse(ctx, &respType.RolloutRequest)
 	if err != nil {
 		return RolloutsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ServiceUnitsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final ServiceUnitsClientCreateOrUpdateResponse will be returned.
 func (p *ServiceUnitsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ServiceUnitsClientCreateOrUpdateResponse, error) {
 	respType := ServiceUnitsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ServiceUnitResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.ServiceUnitResource)
 	if err != nil {
 		return ServiceUnitsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

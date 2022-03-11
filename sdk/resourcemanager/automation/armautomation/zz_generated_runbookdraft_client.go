@@ -36,17 +36,17 @@ type RunbookDraftClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRunbookDraftClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RunbookDraftClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RunbookDraftClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *RunbookDraftClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *RunbookDraftClient) getHandleResponse(resp *http.Response) (RunbookDraftClientGetResponse, error) {
-	result := RunbookDraftClientGetResponse{RawResponse: resp}
+	result := RunbookDraftClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RunbookDraft); err != nil {
 		return RunbookDraftClientGetResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (client *RunbookDraftClient) GetContent(ctx context.Context, resourceGroupN
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated, http.StatusAccepted, http.StatusNoContent) {
 		return RunbookDraftClientGetContentResponse{}, runtime.NewResponseError(resp)
 	}
-	return RunbookDraftClientGetContentResponse{RawResponse: resp}, nil
+	return RunbookDraftClientGetContentResponse{}, nil
 }
 
 // getContentCreateRequest creates the GetContent request.
@@ -175,9 +175,7 @@ func (client *RunbookDraftClient) BeginReplaceContent(ctx context.Context, resou
 	if err != nil {
 		return RunbookDraftClientReplaceContentPollerResponse{}, err
 	}
-	result := RunbookDraftClientReplaceContentPollerResponse{
-		RawResponse: resp,
-	}
+	result := RunbookDraftClientReplaceContentPollerResponse{}
 	pt, err := armruntime.NewPoller("RunbookDraftClient.ReplaceContent", "", resp, client.pl)
 	if err != nil {
 		return RunbookDraftClientReplaceContentPollerResponse{}, err
@@ -290,7 +288,7 @@ func (client *RunbookDraftClient) undoEditCreateRequest(ctx context.Context, res
 
 // undoEditHandleResponse handles the UndoEdit response.
 func (client *RunbookDraftClient) undoEditHandleResponse(resp *http.Response) (RunbookDraftClientUndoEditResponse, error) {
-	result := RunbookDraftClientUndoEditResponse{RawResponse: resp}
+	result := RunbookDraftClientUndoEditResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RunbookDraftUndoEditResult); err != nil {
 		return RunbookDraftClientUndoEditResponse{}, err
 	}

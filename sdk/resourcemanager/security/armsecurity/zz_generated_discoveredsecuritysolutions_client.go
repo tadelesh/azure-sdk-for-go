@@ -105,7 +105,7 @@ func (client *DiscoveredSecuritySolutionsClient) getCreateRequest(ctx context.Co
 
 // getHandleResponse handles the Get response.
 func (client *DiscoveredSecuritySolutionsClient) getHandleResponse(resp *http.Response) (DiscoveredSecuritySolutionsClientGetResponse, error) {
-	result := DiscoveredSecuritySolutionsClientGetResponse{RawResponse: resp}
+	result := DiscoveredSecuritySolutionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiscoveredSecuritySolution); err != nil {
 		return DiscoveredSecuritySolutionsClientGetResponse{}, err
 	}
@@ -148,7 +148,7 @@ func (client *DiscoveredSecuritySolutionsClient) listCreateRequest(ctx context.C
 
 // listHandleResponse handles the List response.
 func (client *DiscoveredSecuritySolutionsClient) listHandleResponse(resp *http.Response) (DiscoveredSecuritySolutionsClientListResponse, error) {
-	result := DiscoveredSecuritySolutionsClientListResponse{RawResponse: resp}
+	result := DiscoveredSecuritySolutionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiscoveredSecuritySolutionList); err != nil {
 		return DiscoveredSecuritySolutionsClientListResponse{}, err
 	}
@@ -195,7 +195,7 @@ func (client *DiscoveredSecuritySolutionsClient) listByHomeRegionCreateRequest(c
 
 // listByHomeRegionHandleResponse handles the ListByHomeRegion response.
 func (client *DiscoveredSecuritySolutionsClient) listByHomeRegionHandleResponse(resp *http.Response) (DiscoveredSecuritySolutionsClientListByHomeRegionResponse, error) {
-	result := DiscoveredSecuritySolutionsClientListByHomeRegionResponse{RawResponse: resp}
+	result := DiscoveredSecuritySolutionsClientListByHomeRegionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiscoveredSecuritySolutionList); err != nil {
 		return DiscoveredSecuritySolutionsClientListByHomeRegionResponse{}, err
 	}

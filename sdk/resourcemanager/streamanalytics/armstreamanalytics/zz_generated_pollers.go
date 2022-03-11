@@ -43,11 +43,10 @@ func (p *ClustersClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final ClustersClientCreateOrUpdateResponse will be returned.
 func (p *ClustersClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ClustersClientCreateOrUpdateResponse, error) {
 	respType := ClustersClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Cluster)
+	_, err := p.pt.FinalResponse(ctx, &respType.Cluster)
 	if err != nil {
 		return ClustersClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ClustersClientDeletePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ClustersClientDeleteResponse will be returned.
 func (p *ClustersClientDeletePoller) FinalResponse(ctx context.Context) (ClustersClientDeleteResponse, error) {
 	respType := ClustersClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClustersClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ClustersClientUpdatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ClustersClientUpdateResponse will be returned.
 func (p *ClustersClientUpdatePoller) FinalResponse(ctx context.Context) (ClustersClientUpdateResponse, error) {
 	respType := ClustersClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Cluster)
+	_, err := p.pt.FinalResponse(ctx, &respType.Cluster)
 	if err != nil {
 		return ClustersClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *FunctionsClientTestPoller) Poll(ctx context.Context) (*http.Response, e
 // If the final GET succeeded then the final FunctionsClientTestResponse will be returned.
 func (p *FunctionsClientTestPoller) FinalResponse(ctx context.Context) (FunctionsClientTestResponse, error) {
 	respType := FunctionsClientTestResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ResourceTestStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.ResourceTestStatus)
 	if err != nil {
 		return FunctionsClientTestResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *InputsClientTestPoller) Poll(ctx context.Context) (*http.Response, erro
 // If the final GET succeeded then the final InputsClientTestResponse will be returned.
 func (p *InputsClientTestPoller) FinalResponse(ctx context.Context) (InputsClientTestResponse, error) {
 	respType := InputsClientTestResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ResourceTestStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.ResourceTestStatus)
 	if err != nil {
 		return InputsClientTestResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *OutputsClientTestPoller) Poll(ctx context.Context) (*http.Response, err
 // If the final GET succeeded then the final OutputsClientTestResponse will be returned.
 func (p *OutputsClientTestPoller) FinalResponse(ctx context.Context) (OutputsClientTestResponse, error) {
 	respType := OutputsClientTestResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ResourceTestStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.ResourceTestStatus)
 	if err != nil {
 		return OutputsClientTestResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *PrivateEndpointsClientDeletePoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final PrivateEndpointsClientDeleteResponse will be returned.
 func (p *PrivateEndpointsClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointsClientDeleteResponse, error) {
 	respType := PrivateEndpointsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *StreamingJobsClientCreateOrReplacePoller) Poll(ctx context.Context) (*h
 // If the final GET succeeded then the final StreamingJobsClientCreateOrReplaceResponse will be returned.
 func (p *StreamingJobsClientCreateOrReplacePoller) FinalResponse(ctx context.Context) (StreamingJobsClientCreateOrReplaceResponse, error) {
 	respType := StreamingJobsClientCreateOrReplaceResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.StreamingJob)
+	_, err := p.pt.FinalResponse(ctx, &respType.StreamingJob)
 	if err != nil {
 		return StreamingJobsClientCreateOrReplaceResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *StreamingJobsClientDeletePoller) Poll(ctx context.Context) (*http.Respo
 // If the final GET succeeded then the final StreamingJobsClientDeleteResponse will be returned.
 func (p *StreamingJobsClientDeletePoller) FinalResponse(ctx context.Context) (StreamingJobsClientDeleteResponse, error) {
 	respType := StreamingJobsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StreamingJobsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -430,11 +421,10 @@ func (p *StreamingJobsClientScalePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final StreamingJobsClientScaleResponse will be returned.
 func (p *StreamingJobsClientScalePoller) FinalResponse(ctx context.Context) (StreamingJobsClientScaleResponse, error) {
 	respType := StreamingJobsClientScaleResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StreamingJobsClientScaleResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -473,11 +463,10 @@ func (p *StreamingJobsClientStartPoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final StreamingJobsClientStartResponse will be returned.
 func (p *StreamingJobsClientStartPoller) FinalResponse(ctx context.Context) (StreamingJobsClientStartResponse, error) {
 	respType := StreamingJobsClientStartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StreamingJobsClientStartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -516,11 +505,10 @@ func (p *StreamingJobsClientStopPoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final StreamingJobsClientStopResponse will be returned.
 func (p *StreamingJobsClientStopPoller) FinalResponse(ctx context.Context) (StreamingJobsClientStopResponse, error) {
 	respType := StreamingJobsClientStopResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return StreamingJobsClientStopResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

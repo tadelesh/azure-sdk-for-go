@@ -34,17 +34,17 @@ type DataMaskingRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataMaskingRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataMaskingRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataMaskingRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -110,7 +110,7 @@ func (client *DataMaskingRulesClient) createOrUpdateCreateRequest(ctx context.Co
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *DataMaskingRulesClient) createOrUpdateHandleResponse(resp *http.Response) (DataMaskingRulesClientCreateOrUpdateResponse, error) {
-	result := DataMaskingRulesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := DataMaskingRulesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataMaskingRule); err != nil {
 		return DataMaskingRulesClientCreateOrUpdateResponse{}, err
 	}
@@ -176,7 +176,7 @@ func (client *DataMaskingRulesClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *DataMaskingRulesClient) getHandleResponse(resp *http.Response) (DataMaskingRulesClientGetResponse, error) {
-	result := DataMaskingRulesClientGetResponse{RawResponse: resp}
+	result := DataMaskingRulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataMaskingRule); err != nil {
 		return DataMaskingRulesClientGetResponse{}, err
 	}
@@ -190,19 +190,13 @@ func (client *DataMaskingRulesClient) getHandleResponse(resp *http.Response) (Da
 // sqlPoolName - SQL pool name
 // options - DataMaskingRulesClientListBySQLPoolOptions contains the optional parameters for the DataMaskingRulesClient.ListBySQLPool
 // method.
-func (client *DataMaskingRulesClient) ListBySQLPool(ctx context.Context, resourceGroupName string, workspaceName string, sqlPoolName string, options *DataMaskingRulesClientListBySQLPoolOptions) (DataMaskingRulesClientListBySQLPoolResponse, error) {
-	req, err := client.listBySQLPoolCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
-	if err != nil {
-		return DataMaskingRulesClientListBySQLPoolResponse{}, err
+func (client *DataMaskingRulesClient) ListBySQLPool(resourceGroupName string, workspaceName string, sqlPoolName string, options *DataMaskingRulesClientListBySQLPoolOptions) *DataMaskingRulesClientListBySQLPoolPager {
+	return &DataMaskingRulesClientListBySQLPoolPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listBySQLPoolCreateRequest(ctx, resourceGroupName, workspaceName, sqlPoolName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DataMaskingRulesClientListBySQLPoolResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DataMaskingRulesClientListBySQLPoolResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listBySQLPoolHandleResponse(resp)
 }
 
 // listBySQLPoolCreateRequest creates the ListBySQLPool request.
@@ -238,7 +232,7 @@ func (client *DataMaskingRulesClient) listBySQLPoolCreateRequest(ctx context.Con
 
 // listBySQLPoolHandleResponse handles the ListBySQLPool response.
 func (client *DataMaskingRulesClient) listBySQLPoolHandleResponse(resp *http.Response) (DataMaskingRulesClientListBySQLPoolResponse, error) {
-	result := DataMaskingRulesClientListBySQLPoolResponse{RawResponse: resp}
+	result := DataMaskingRulesClientListBySQLPoolResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataMaskingRuleListResult); err != nil {
 		return DataMaskingRulesClientListBySQLPoolResponse{}, err
 	}

@@ -34,17 +34,17 @@ type ManagedDatabaseColumnsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedDatabaseColumnsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedDatabaseColumnsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedDatabaseColumnsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -119,7 +119,7 @@ func (client *ManagedDatabaseColumnsClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *ManagedDatabaseColumnsClient) getHandleResponse(resp *http.Response) (ManagedDatabaseColumnsClientGetResponse, error) {
-	result := ManagedDatabaseColumnsClientGetResponse{RawResponse: resp}
+	result := ManagedDatabaseColumnsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseColumn); err != nil {
 		return ManagedDatabaseColumnsClientGetResponse{}, err
 	}
@@ -201,7 +201,7 @@ func (client *ManagedDatabaseColumnsClient) listByDatabaseCreateRequest(ctx cont
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *ManagedDatabaseColumnsClient) listByDatabaseHandleResponse(resp *http.Response) (ManagedDatabaseColumnsClientListByDatabaseResponse, error) {
-	result := ManagedDatabaseColumnsClientListByDatabaseResponse{RawResponse: resp}
+	result := ManagedDatabaseColumnsClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseColumnListResult); err != nil {
 		return ManagedDatabaseColumnsClientListByDatabaseResponse{}, err
 	}
@@ -273,7 +273,7 @@ func (client *ManagedDatabaseColumnsClient) listByTableCreateRequest(ctx context
 
 // listByTableHandleResponse handles the ListByTable response.
 func (client *ManagedDatabaseColumnsClient) listByTableHandleResponse(resp *http.Response) (ManagedDatabaseColumnsClientListByTableResponse, error) {
-	result := ManagedDatabaseColumnsClientListByTableResponse{RawResponse: resp}
+	result := ManagedDatabaseColumnsClientListByTableResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseColumnListResult); err != nil {
 		return ManagedDatabaseColumnsClientListByTableResponse{}, err
 	}

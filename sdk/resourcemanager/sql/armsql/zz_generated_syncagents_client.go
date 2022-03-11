@@ -34,17 +34,17 @@ type SyncAgentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSyncAgentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SyncAgentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SyncAgentsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *SyncAgentsClient) BeginCreateOrUpdate(ctx context.Context, resourc
 	if err != nil {
 		return SyncAgentsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := SyncAgentsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SyncAgentsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SyncAgentsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return SyncAgentsClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *SyncAgentsClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return SyncAgentsClientDeletePollerResponse{}, err
 	}
-	result := SyncAgentsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SyncAgentsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SyncAgentsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return SyncAgentsClientDeletePollerResponse{}, err
@@ -248,7 +244,7 @@ func (client *SyncAgentsClient) generateKeyCreateRequest(ctx context.Context, re
 
 // generateKeyHandleResponse handles the GenerateKey response.
 func (client *SyncAgentsClient) generateKeyHandleResponse(resp *http.Response) (SyncAgentsClientGenerateKeyResponse, error) {
-	result := SyncAgentsClientGenerateKeyResponse{RawResponse: resp}
+	result := SyncAgentsClientGenerateKeyResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SyncAgentKeyProperties); err != nil {
 		return SyncAgentsClientGenerateKeyResponse{}, err
 	}
@@ -309,7 +305,7 @@ func (client *SyncAgentsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *SyncAgentsClient) getHandleResponse(resp *http.Response) (SyncAgentsClientGetResponse, error) {
-	result := SyncAgentsClientGetResponse{RawResponse: resp}
+	result := SyncAgentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SyncAgent); err != nil {
 		return SyncAgentsClientGetResponse{}, err
 	}
@@ -362,7 +358,7 @@ func (client *SyncAgentsClient) listByServerCreateRequest(ctx context.Context, r
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *SyncAgentsClient) listByServerHandleResponse(resp *http.Response) (SyncAgentsClientListByServerResponse, error) {
-	result := SyncAgentsClientListByServerResponse{RawResponse: resp}
+	result := SyncAgentsClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SyncAgentListResult); err != nil {
 		return SyncAgentsClientListByServerResponse{}, err
 	}
@@ -421,7 +417,7 @@ func (client *SyncAgentsClient) listLinkedDatabasesCreateRequest(ctx context.Con
 
 // listLinkedDatabasesHandleResponse handles the ListLinkedDatabases response.
 func (client *SyncAgentsClient) listLinkedDatabasesHandleResponse(resp *http.Response) (SyncAgentsClientListLinkedDatabasesResponse, error) {
-	result := SyncAgentsClientListLinkedDatabasesResponse{RawResponse: resp}
+	result := SyncAgentsClientListLinkedDatabasesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SyncAgentLinkedDatabaseListResult); err != nil {
 		return SyncAgentsClientListLinkedDatabasesResponse{}, err
 	}

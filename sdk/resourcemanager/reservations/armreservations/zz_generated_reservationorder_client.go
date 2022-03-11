@@ -32,16 +32,16 @@ type ReservationOrderClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReservationOrderClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ReservationOrderClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReservationOrderClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -82,7 +82,7 @@ func (client *ReservationOrderClient) calculateCreateRequest(ctx context.Context
 
 // calculateHandleResponse handles the Calculate response.
 func (client *ReservationOrderClient) calculateHandleResponse(resp *http.Response) (ReservationOrderClientCalculateResponse, error) {
-	result := ReservationOrderClientCalculateResponse{RawResponse: resp}
+	result := ReservationOrderClientCalculateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CalculatePriceResponse); err != nil {
 		return ReservationOrderClientCalculateResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *ReservationOrderClient) changeDirectoryCreateRequest(ctx context.C
 
 // changeDirectoryHandleResponse handles the ChangeDirectory response.
 func (client *ReservationOrderClient) changeDirectoryHandleResponse(resp *http.Response) (ReservationOrderClientChangeDirectoryResponse, error) {
-	result := ReservationOrderClientChangeDirectoryResponse{RawResponse: resp}
+	result := ReservationOrderClientChangeDirectoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ChangeDirectoryResponse); err != nil {
 		return ReservationOrderClientChangeDirectoryResponse{}, err
 	}
@@ -179,7 +179,7 @@ func (client *ReservationOrderClient) getCreateRequest(ctx context.Context, rese
 
 // getHandleResponse handles the Get response.
 func (client *ReservationOrderClient) getHandleResponse(resp *http.Response) (ReservationOrderClientGetResponse, error) {
-	result := ReservationOrderClientGetResponse{RawResponse: resp}
+	result := ReservationOrderClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReservationOrderResponse); err != nil {
 		return ReservationOrderClientGetResponse{}, err
 	}
@@ -217,7 +217,7 @@ func (client *ReservationOrderClient) listCreateRequest(ctx context.Context, opt
 
 // listHandleResponse handles the List response.
 func (client *ReservationOrderClient) listHandleResponse(resp *http.Response) (ReservationOrderClientListResponse, error) {
-	result := ReservationOrderClientListResponse{RawResponse: resp}
+	result := ReservationOrderClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReservationOrderList); err != nil {
 		return ReservationOrderClientListResponse{}, err
 	}
@@ -235,9 +235,7 @@ func (client *ReservationOrderClient) BeginPurchase(ctx context.Context, reserva
 	if err != nil {
 		return ReservationOrderClientPurchasePollerResponse{}, err
 	}
-	result := ReservationOrderClientPurchasePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReservationOrderClientPurchasePollerResponse{}
 	pt, err := armruntime.NewPoller("ReservationOrderClient.Purchase", "location", resp, client.pl)
 	if err != nil {
 		return ReservationOrderClientPurchasePollerResponse{}, err

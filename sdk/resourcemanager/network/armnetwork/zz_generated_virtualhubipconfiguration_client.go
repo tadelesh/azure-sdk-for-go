@@ -35,17 +35,17 @@ type VirtualHubIPConfigurationClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualHubIPConfigurationClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualHubIPConfigurationClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualHubIPConfigurationClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *VirtualHubIPConfigurationClient) BeginCreateOrUpdate(ctx context.C
 	if err != nil {
 		return VirtualHubIPConfigurationClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VirtualHubIPConfigurationClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualHubIPConfigurationClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualHubIPConfigurationClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VirtualHubIPConfigurationClientCreateOrUpdatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *VirtualHubIPConfigurationClient) BeginDelete(ctx context.Context, 
 	if err != nil {
 		return VirtualHubIPConfigurationClientDeletePollerResponse{}, err
 	}
-	result := VirtualHubIPConfigurationClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualHubIPConfigurationClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualHubIPConfigurationClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return VirtualHubIPConfigurationClientDeletePollerResponse{}, err
@@ -249,7 +245,7 @@ func (client *VirtualHubIPConfigurationClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *VirtualHubIPConfigurationClient) getHandleResponse(resp *http.Response) (VirtualHubIPConfigurationClientGetResponse, error) {
-	result := VirtualHubIPConfigurationClientGetResponse{RawResponse: resp}
+	result := VirtualHubIPConfigurationClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HubIPConfiguration); err != nil {
 		return VirtualHubIPConfigurationClientGetResponse{}, err
 	}
@@ -302,7 +298,7 @@ func (client *VirtualHubIPConfigurationClient) listCreateRequest(ctx context.Con
 
 // listHandleResponse handles the List response.
 func (client *VirtualHubIPConfigurationClient) listHandleResponse(resp *http.Response) (VirtualHubIPConfigurationClientListResponse, error) {
-	result := VirtualHubIPConfigurationClientListResponse{RawResponse: resp}
+	result := VirtualHubIPConfigurationClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListVirtualHubIPConfigurationResults); err != nil {
 		return VirtualHubIPConfigurationClientListResponse{}, err
 	}

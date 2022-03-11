@@ -37,18 +37,18 @@ type JobsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewJobsClient(subscriptionID string, acceptLanguage *string, credential azcore.TokenCredential, options *arm.ClientOptions) *JobsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &JobsClient{
 		subscriptionID: subscriptionID,
 		acceptLanguage: acceptLanguage,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *JobsClient) createCreateRequest(ctx context.Context, jobName strin
 
 // createHandleResponse handles the Create response.
 func (client *JobsClient) createHandleResponse(resp *http.Response) (JobsClientCreateResponse, error) {
-	result := JobsClientCreateResponse{RawResponse: resp}
+	result := JobsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobResponse); err != nil {
 		return JobsClientCreateResponse{}, err
 	}
@@ -132,7 +132,7 @@ func (client *JobsClient) Delete(ctx context.Context, jobName string, resourceGr
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return JobsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return JobsClientDeleteResponse{RawResponse: resp}, nil
+	return JobsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -215,7 +215,7 @@ func (client *JobsClient) getCreateRequest(ctx context.Context, jobName string, 
 
 // getHandleResponse handles the Get response.
 func (client *JobsClient) getHandleResponse(resp *http.Response) (JobsClientGetResponse, error) {
-	result := JobsClientGetResponse{RawResponse: resp}
+	result := JobsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobResponse); err != nil {
 		return JobsClientGetResponse{}, err
 	}
@@ -272,7 +272,7 @@ func (client *JobsClient) listByResourceGroupCreateRequest(ctx context.Context, 
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *JobsClient) listByResourceGroupHandleResponse(resp *http.Response) (JobsClientListByResourceGroupResponse, error) {
-	result := JobsClientListByResourceGroupResponse{RawResponse: resp}
+	result := JobsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListJobsResponse); err != nil {
 		return JobsClientListByResourceGroupResponse{}, err
 	}
@@ -323,7 +323,7 @@ func (client *JobsClient) listBySubscriptionCreateRequest(ctx context.Context, o
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *JobsClient) listBySubscriptionHandleResponse(resp *http.Response) (JobsClientListBySubscriptionResponse, error) {
-	result := JobsClientListBySubscriptionResponse{RawResponse: resp}
+	result := JobsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListJobsResponse); err != nil {
 		return JobsClientListBySubscriptionResponse{}, err
 	}
@@ -384,7 +384,7 @@ func (client *JobsClient) updateCreateRequest(ctx context.Context, jobName strin
 
 // updateHandleResponse handles the Update response.
 func (client *JobsClient) updateHandleResponse(resp *http.Response) (JobsClientUpdateResponse, error) {
-	result := JobsClientUpdateResponse{RawResponse: resp}
+	result := JobsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobResponse); err != nil {
 		return JobsClientUpdateResponse{}, err
 	}

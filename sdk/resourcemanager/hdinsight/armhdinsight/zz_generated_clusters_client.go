@@ -35,17 +35,17 @@ type ClustersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewClustersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ClustersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ClustersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *ClustersClient) BeginCreate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ClustersClientCreatePollerResponse{}, err
 	}
-	result := ClustersClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClustersClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ClustersClient.Create", "location", resp, client.pl)
 	if err != nil {
 		return ClustersClientCreatePollerResponse{}, err
@@ -127,9 +125,7 @@ func (client *ClustersClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ClustersClientDeletePollerResponse{}, err
 	}
-	result := ClustersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClustersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ClustersClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return ClustersClientDeletePollerResponse{}, err
@@ -195,9 +191,7 @@ func (client *ClustersClient) BeginExecuteScriptActions(ctx context.Context, res
 	if err != nil {
 		return ClustersClientExecuteScriptActionsPollerResponse{}, err
 	}
-	result := ClustersClientExecuteScriptActionsPollerResponse{
-		RawResponse: resp,
-	}
+	result := ClustersClientExecuteScriptActionsPollerResponse{}
 	pt, err := armruntime.NewPoller("ClustersClient.ExecuteScriptActions", "location", resp, client.pl)
 	if err != nil {
 		return ClustersClientExecuteScriptActionsPollerResponse{}, err
@@ -299,7 +293,7 @@ func (client *ClustersClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *ClustersClient) getHandleResponse(resp *http.Response) (ClustersClientGetResponse, error) {
-	result := ClustersClientGetResponse{RawResponse: resp}
+	result := ClustersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Cluster); err != nil {
 		return ClustersClientGetResponse{}, err
 	}
@@ -360,7 +354,7 @@ func (client *ClustersClient) getAzureAsyncOperationStatusCreateRequest(ctx cont
 
 // getAzureAsyncOperationStatusHandleResponse handles the GetAzureAsyncOperationStatus response.
 func (client *ClustersClient) getAzureAsyncOperationStatusHandleResponse(resp *http.Response) (ClustersClientGetAzureAsyncOperationStatusResponse, error) {
-	result := ClustersClientGetAzureAsyncOperationStatusResponse{RawResponse: resp}
+	result := ClustersClientGetAzureAsyncOperationStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AsyncOperationResult); err != nil {
 		return ClustersClientGetAzureAsyncOperationStatusResponse{}, err
 	}
@@ -416,7 +410,7 @@ func (client *ClustersClient) getGatewaySettingsCreateRequest(ctx context.Contex
 
 // getGatewaySettingsHandleResponse handles the GetGatewaySettings response.
 func (client *ClustersClient) getGatewaySettingsHandleResponse(resp *http.Response) (ClustersClientGetGatewaySettingsResponse, error) {
-	result := ClustersClientGetGatewaySettingsResponse{RawResponse: resp}
+	result := ClustersClientGetGatewaySettingsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GatewaySettings); err != nil {
 		return ClustersClientGetGatewaySettingsResponse{}, err
 	}
@@ -458,7 +452,7 @@ func (client *ClustersClient) listCreateRequest(ctx context.Context, options *Cl
 
 // listHandleResponse handles the List response.
 func (client *ClustersClient) listHandleResponse(resp *http.Response) (ClustersClientListResponse, error) {
-	result := ClustersClientListResponse{RawResponse: resp}
+	result := ClustersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ClusterListResult); err != nil {
 		return ClustersClientListResponse{}, err
 	}
@@ -506,7 +500,7 @@ func (client *ClustersClient) listByResourceGroupCreateRequest(ctx context.Conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ClustersClient) listByResourceGroupHandleResponse(resp *http.Response) (ClustersClientListByResourceGroupResponse, error) {
-	result := ClustersClientListByResourceGroupResponse{RawResponse: resp}
+	result := ClustersClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ClusterListResult); err != nil {
 		return ClustersClientListByResourceGroupResponse{}, err
 	}
@@ -525,9 +519,7 @@ func (client *ClustersClient) BeginResize(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ClustersClientResizePollerResponse{}, err
 	}
-	result := ClustersClientResizePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClustersClientResizePollerResponse{}
 	pt, err := armruntime.NewPoller("ClustersClient.Resize", "location", resp, client.pl)
 	if err != nil {
 		return ClustersClientResizePollerResponse{}, err
@@ -597,9 +589,7 @@ func (client *ClustersClient) BeginRotateDiskEncryptionKey(ctx context.Context, 
 	if err != nil {
 		return ClustersClientRotateDiskEncryptionKeyPollerResponse{}, err
 	}
-	result := ClustersClientRotateDiskEncryptionKeyPollerResponse{
-		RawResponse: resp,
-	}
+	result := ClustersClientRotateDiskEncryptionKeyPollerResponse{}
 	pt, err := armruntime.NewPoller("ClustersClient.RotateDiskEncryptionKey", "location", resp, client.pl)
 	if err != nil {
 		return ClustersClientRotateDiskEncryptionKeyPollerResponse{}, err
@@ -702,7 +692,7 @@ func (client *ClustersClient) updateCreateRequest(ctx context.Context, resourceG
 
 // updateHandleResponse handles the Update response.
 func (client *ClustersClient) updateHandleResponse(resp *http.Response) (ClustersClientUpdateResponse, error) {
-	result := ClustersClientUpdateResponse{RawResponse: resp}
+	result := ClustersClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Cluster); err != nil {
 		return ClustersClientUpdateResponse{}, err
 	}
@@ -722,9 +712,7 @@ func (client *ClustersClient) BeginUpdateAutoScaleConfiguration(ctx context.Cont
 	if err != nil {
 		return ClustersClientUpdateAutoScaleConfigurationPollerResponse{}, err
 	}
-	result := ClustersClientUpdateAutoScaleConfigurationPollerResponse{
-		RawResponse: resp,
-	}
+	result := ClustersClientUpdateAutoScaleConfigurationPollerResponse{}
 	pt, err := armruntime.NewPoller("ClustersClient.UpdateAutoScaleConfiguration", "location", resp, client.pl)
 	if err != nil {
 		return ClustersClientUpdateAutoScaleConfigurationPollerResponse{}, err
@@ -794,9 +782,7 @@ func (client *ClustersClient) BeginUpdateGatewaySettings(ctx context.Context, re
 	if err != nil {
 		return ClustersClientUpdateGatewaySettingsPollerResponse{}, err
 	}
-	result := ClustersClientUpdateGatewaySettingsPollerResponse{
-		RawResponse: resp,
-	}
+	result := ClustersClientUpdateGatewaySettingsPollerResponse{}
 	pt, err := armruntime.NewPoller("ClustersClient.UpdateGatewaySettings", "location", resp, client.pl)
 	if err != nil {
 		return ClustersClientUpdateGatewaySettingsPollerResponse{}, err
@@ -862,9 +848,7 @@ func (client *ClustersClient) BeginUpdateIdentityCertificate(ctx context.Context
 	if err != nil {
 		return ClustersClientUpdateIdentityCertificatePollerResponse{}, err
 	}
-	result := ClustersClientUpdateIdentityCertificatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClustersClientUpdateIdentityCertificatePollerResponse{}
 	pt, err := armruntime.NewPoller("ClustersClient.UpdateIdentityCertificate", "location", resp, client.pl)
 	if err != nil {
 		return ClustersClientUpdateIdentityCertificatePollerResponse{}, err

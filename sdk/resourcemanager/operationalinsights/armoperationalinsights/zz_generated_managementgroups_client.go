@@ -34,17 +34,17 @@ type ManagementGroupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagementGroupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagementGroupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagementGroupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -54,19 +54,13 @@ func NewManagementGroupsClient(subscriptionID string, credential azcore.TokenCre
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // workspaceName - The name of the workspace.
 // options - ManagementGroupsClientListOptions contains the optional parameters for the ManagementGroupsClient.List method.
-func (client *ManagementGroupsClient) List(ctx context.Context, resourceGroupName string, workspaceName string, options *ManagementGroupsClientListOptions) (ManagementGroupsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, workspaceName, options)
-	if err != nil {
-		return ManagementGroupsClientListResponse{}, err
+func (client *ManagementGroupsClient) List(resourceGroupName string, workspaceName string, options *ManagementGroupsClientListOptions) *ManagementGroupsClientListPager {
+	return &ManagementGroupsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, workspaceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ManagementGroupsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ManagementGroupsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -97,7 +91,7 @@ func (client *ManagementGroupsClient) listCreateRequest(ctx context.Context, res
 
 // listHandleResponse handles the List response.
 func (client *ManagementGroupsClient) listHandleResponse(resp *http.Response) (ManagementGroupsClientListResponse, error) {
-	result := ManagementGroupsClientListResponse{RawResponse: resp}
+	result := ManagementGroupsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceListManagementGroupsResult); err != nil {
 		return ManagementGroupsClientListResponse{}, err
 	}

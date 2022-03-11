@@ -35,17 +35,17 @@ type AccountBackupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAccountBackupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AccountBackupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AccountBackupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *AccountBackupsClient) BeginDelete(ctx context.Context, resourceGro
 	if err != nil {
 		return AccountBackupsClientDeletePollerResponse{}, err
 	}
-	result := AccountBackupsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AccountBackupsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AccountBackupsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return AccountBackupsClientDeletePollerResponse{}, err
@@ -174,7 +172,7 @@ func (client *AccountBackupsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *AccountBackupsClient) getHandleResponse(resp *http.Response) (AccountBackupsClientGetResponse, error) {
-	result := AccountBackupsClientGetResponse{RawResponse: resp}
+	result := AccountBackupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Backup); err != nil {
 		return AccountBackupsClientGetResponse{}, err
 	}
@@ -186,19 +184,13 @@ func (client *AccountBackupsClient) getHandleResponse(resp *http.Response) (Acco
 // resourceGroupName - The name of the resource group.
 // accountName - The name of the NetApp account
 // options - AccountBackupsClientListOptions contains the optional parameters for the AccountBackupsClient.List method.
-func (client *AccountBackupsClient) List(ctx context.Context, resourceGroupName string, accountName string, options *AccountBackupsClientListOptions) (AccountBackupsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return AccountBackupsClientListResponse{}, err
+func (client *AccountBackupsClient) List(resourceGroupName string, accountName string, options *AccountBackupsClientListOptions) *AccountBackupsClientListPager {
+	return &AccountBackupsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return AccountBackupsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return AccountBackupsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -229,7 +221,7 @@ func (client *AccountBackupsClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *AccountBackupsClient) listHandleResponse(resp *http.Response) (AccountBackupsClientListResponse, error) {
-	result := AccountBackupsClientListResponse{RawResponse: resp}
+	result := AccountBackupsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupsList); err != nil {
 		return AccountBackupsClientListResponse{}, err
 	}

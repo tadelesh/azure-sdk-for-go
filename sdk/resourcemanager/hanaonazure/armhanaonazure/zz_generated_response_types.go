@@ -11,19 +11,11 @@ package armhanaonazure
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	OperationList
 }
 
@@ -31,9 +23,6 @@ type OperationsClientListResult struct {
 type ProviderInstancesClientCreatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ProviderInstancesClientCreatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -41,11 +30,10 @@ type ProviderInstancesClientCreatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ProviderInstancesClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ProviderInstancesClientCreateResponse, error) {
 	respType := ProviderInstancesClientCreateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ProviderInstance)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.ProviderInstance)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -58,24 +46,16 @@ func (l *ProviderInstancesClientCreatePollerResponse) Resume(ctx context.Context
 	poller := &ProviderInstancesClientCreatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ProviderInstancesClientCreateResponse contains the response from method ProviderInstancesClient.Create.
 type ProviderInstancesClientCreateResponse struct {
-	ProviderInstancesClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ProviderInstancesClientCreateResult contains the result from method ProviderInstancesClient.Create.
-type ProviderInstancesClientCreateResult struct {
 	ProviderInstance
 }
 
@@ -83,9 +63,6 @@ type ProviderInstancesClientCreateResult struct {
 type ProviderInstancesClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *ProviderInstancesClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -93,11 +70,10 @@ type ProviderInstancesClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l ProviderInstancesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (ProviderInstancesClientDeleteResponse, error) {
 	respType := ProviderInstancesClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -110,42 +86,26 @@ func (l *ProviderInstancesClientDeletePollerResponse) Resume(ctx context.Context
 	poller := &ProviderInstancesClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // ProviderInstancesClientDeleteResponse contains the response from method ProviderInstancesClient.Delete.
 type ProviderInstancesClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // ProviderInstancesClientGetResponse contains the response from method ProviderInstancesClient.Get.
 type ProviderInstancesClientGetResponse struct {
-	ProviderInstancesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ProviderInstancesClientGetResult contains the result from method ProviderInstancesClient.Get.
-type ProviderInstancesClientGetResult struct {
 	ProviderInstance
 }
 
 // ProviderInstancesClientListResponse contains the response from method ProviderInstancesClient.List.
 type ProviderInstancesClientListResponse struct {
-	ProviderInstancesClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ProviderInstancesClientListResult contains the result from method ProviderInstancesClient.List.
-type ProviderInstancesClientListResult struct {
 	ProviderInstanceListResult
 }
 
@@ -153,9 +113,6 @@ type ProviderInstancesClientListResult struct {
 type SapMonitorsClientCreatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *SapMonitorsClientCreatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -163,11 +120,10 @@ type SapMonitorsClientCreatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l SapMonitorsClientCreatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SapMonitorsClientCreateResponse, error) {
 	respType := SapMonitorsClientCreateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.SapMonitor)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.SapMonitor)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -180,24 +136,16 @@ func (l *SapMonitorsClientCreatePollerResponse) Resume(ctx context.Context, clie
 	poller := &SapMonitorsClientCreatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // SapMonitorsClientCreateResponse contains the response from method SapMonitorsClient.Create.
 type SapMonitorsClientCreateResponse struct {
-	SapMonitorsClientCreateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// SapMonitorsClientCreateResult contains the result from method SapMonitorsClient.Create.
-type SapMonitorsClientCreateResult struct {
 	SapMonitor
 }
 
@@ -205,9 +153,6 @@ type SapMonitorsClientCreateResult struct {
 type SapMonitorsClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *SapMonitorsClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -215,11 +160,10 @@ type SapMonitorsClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l SapMonitorsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (SapMonitorsClientDeleteResponse, error) {
 	respType := SapMonitorsClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -232,53 +176,30 @@ func (l *SapMonitorsClientDeletePollerResponse) Resume(ctx context.Context, clie
 	poller := &SapMonitorsClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // SapMonitorsClientDeleteResponse contains the response from method SapMonitorsClient.Delete.
 type SapMonitorsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // SapMonitorsClientGetResponse contains the response from method SapMonitorsClient.Get.
 type SapMonitorsClientGetResponse struct {
-	SapMonitorsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// SapMonitorsClientGetResult contains the result from method SapMonitorsClient.Get.
-type SapMonitorsClientGetResult struct {
 	SapMonitor
 }
 
 // SapMonitorsClientListResponse contains the response from method SapMonitorsClient.List.
 type SapMonitorsClientListResponse struct {
-	SapMonitorsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// SapMonitorsClientListResult contains the result from method SapMonitorsClient.List.
-type SapMonitorsClientListResult struct {
 	SapMonitorListResult
 }
 
 // SapMonitorsClientUpdateResponse contains the response from method SapMonitorsClient.Update.
 type SapMonitorsClientUpdateResponse struct {
-	SapMonitorsClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// SapMonitorsClientUpdateResult contains the result from method SapMonitorsClient.Update.
-type SapMonitorsClientUpdateResult struct {
 	SapMonitor
 }

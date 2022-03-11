@@ -32,16 +32,16 @@ type BalancesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBalancesClient(credential azcore.TokenCredential, options *arm.ClientOptions) *BalancesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BalancesClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -87,7 +87,7 @@ func (client *BalancesClient) getByBillingAccountCreateRequest(ctx context.Conte
 
 // getByBillingAccountHandleResponse handles the GetByBillingAccount response.
 func (client *BalancesClient) getByBillingAccountHandleResponse(resp *http.Response) (BalancesClientGetByBillingAccountResponse, error) {
-	result := BalancesClientGetByBillingAccountResponse{RawResponse: resp}
+	result := BalancesClientGetByBillingAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Balance); err != nil {
 		return BalancesClientGetByBillingAccountResponse{}, err
 	}
@@ -140,7 +140,7 @@ func (client *BalancesClient) getForBillingPeriodByBillingAccountCreateRequest(c
 
 // getForBillingPeriodByBillingAccountHandleResponse handles the GetForBillingPeriodByBillingAccount response.
 func (client *BalancesClient) getForBillingPeriodByBillingAccountHandleResponse(resp *http.Response) (BalancesClientGetForBillingPeriodByBillingAccountResponse, error) {
-	result := BalancesClientGetForBillingPeriodByBillingAccountResponse{RawResponse: resp}
+	result := BalancesClientGetForBillingPeriodByBillingAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Balance); err != nil {
 		return BalancesClientGetForBillingPeriodByBillingAccountResponse{}, err
 	}

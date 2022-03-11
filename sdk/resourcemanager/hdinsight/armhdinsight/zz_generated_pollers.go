@@ -43,11 +43,10 @@ func (p *ApplicationsClientCreatePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final ApplicationsClientCreateResponse will be returned.
 func (p *ApplicationsClientCreatePoller) FinalResponse(ctx context.Context) (ApplicationsClientCreateResponse, error) {
 	respType := ApplicationsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Application)
+	_, err := p.pt.FinalResponse(ctx, &respType.Application)
 	if err != nil {
 		return ApplicationsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ApplicationsClientDeletePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final ApplicationsClientDeleteResponse will be returned.
 func (p *ApplicationsClientDeletePoller) FinalResponse(ctx context.Context) (ApplicationsClientDeleteResponse, error) {
 	respType := ApplicationsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ApplicationsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ClustersClientCreatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ClustersClientCreateResponse will be returned.
 func (p *ClustersClientCreatePoller) FinalResponse(ctx context.Context) (ClustersClientCreateResponse, error) {
 	respType := ClustersClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Cluster)
+	_, err := p.pt.FinalResponse(ctx, &respType.Cluster)
 	if err != nil {
 		return ClustersClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *ClustersClientDeletePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ClustersClientDeleteResponse will be returned.
 func (p *ClustersClientDeletePoller) FinalResponse(ctx context.Context) (ClustersClientDeleteResponse, error) {
 	respType := ClustersClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClustersClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *ClustersClientExecuteScriptActionsPoller) Poll(ctx context.Context) (*h
 // If the final GET succeeded then the final ClustersClientExecuteScriptActionsResponse will be returned.
 func (p *ClustersClientExecuteScriptActionsPoller) FinalResponse(ctx context.Context) (ClustersClientExecuteScriptActionsResponse, error) {
 	respType := ClustersClientExecuteScriptActionsResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClustersClientExecuteScriptActionsResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *ClustersClientResizePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ClustersClientResizeResponse will be returned.
 func (p *ClustersClientResizePoller) FinalResponse(ctx context.Context) (ClustersClientResizeResponse, error) {
 	respType := ClustersClientResizeResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClustersClientResizeResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *ClustersClientRotateDiskEncryptionKeyPoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final ClustersClientRotateDiskEncryptionKeyResponse will be returned.
 func (p *ClustersClientRotateDiskEncryptionKeyPoller) FinalResponse(ctx context.Context) (ClustersClientRotateDiskEncryptionKeyResponse, error) {
 	respType := ClustersClientRotateDiskEncryptionKeyResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClustersClientRotateDiskEncryptionKeyResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *ClustersClientUpdateAutoScaleConfigurationPoller) Poll(ctx context.Cont
 // If the final GET succeeded then the final ClustersClientUpdateAutoScaleConfigurationResponse will be returned.
 func (p *ClustersClientUpdateAutoScaleConfigurationPoller) FinalResponse(ctx context.Context) (ClustersClientUpdateAutoScaleConfigurationResponse, error) {
 	respType := ClustersClientUpdateAutoScaleConfigurationResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClustersClientUpdateAutoScaleConfigurationResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *ClustersClientUpdateGatewaySettingsPoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final ClustersClientUpdateGatewaySettingsResponse will be returned.
 func (p *ClustersClientUpdateGatewaySettingsPoller) FinalResponse(ctx context.Context) (ClustersClientUpdateGatewaySettingsResponse, error) {
 	respType := ClustersClientUpdateGatewaySettingsResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClustersClientUpdateGatewaySettingsResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -430,11 +421,10 @@ func (p *ClustersClientUpdateIdentityCertificatePoller) Poll(ctx context.Context
 // If the final GET succeeded then the final ClustersClientUpdateIdentityCertificateResponse will be returned.
 func (p *ClustersClientUpdateIdentityCertificatePoller) FinalResponse(ctx context.Context) (ClustersClientUpdateIdentityCertificateResponse, error) {
 	respType := ClustersClientUpdateIdentityCertificateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ClustersClientUpdateIdentityCertificateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -473,11 +463,10 @@ func (p *ConfigurationsClientUpdatePoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final ConfigurationsClientUpdateResponse will be returned.
 func (p *ConfigurationsClientUpdatePoller) FinalResponse(ctx context.Context) (ConfigurationsClientUpdateResponse, error) {
 	respType := ConfigurationsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ConfigurationsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -516,11 +505,10 @@ func (p *ExtensionsClientCreatePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final ExtensionsClientCreateResponse will be returned.
 func (p *ExtensionsClientCreatePoller) FinalResponse(ctx context.Context) (ExtensionsClientCreateResponse, error) {
 	respType := ExtensionsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ExtensionsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -559,11 +547,10 @@ func (p *ExtensionsClientDeletePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final ExtensionsClientDeleteResponse will be returned.
 func (p *ExtensionsClientDeletePoller) FinalResponse(ctx context.Context) (ExtensionsClientDeleteResponse, error) {
 	respType := ExtensionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ExtensionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -602,11 +589,10 @@ func (p *ExtensionsClientDisableAzureMonitorPoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final ExtensionsClientDisableAzureMonitorResponse will be returned.
 func (p *ExtensionsClientDisableAzureMonitorPoller) FinalResponse(ctx context.Context) (ExtensionsClientDisableAzureMonitorResponse, error) {
 	respType := ExtensionsClientDisableAzureMonitorResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ExtensionsClientDisableAzureMonitorResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -645,11 +631,10 @@ func (p *ExtensionsClientDisableMonitoringPoller) Poll(ctx context.Context) (*ht
 // If the final GET succeeded then the final ExtensionsClientDisableMonitoringResponse will be returned.
 func (p *ExtensionsClientDisableMonitoringPoller) FinalResponse(ctx context.Context) (ExtensionsClientDisableMonitoringResponse, error) {
 	respType := ExtensionsClientDisableMonitoringResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ExtensionsClientDisableMonitoringResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -688,11 +673,10 @@ func (p *ExtensionsClientEnableAzureMonitorPoller) Poll(ctx context.Context) (*h
 // If the final GET succeeded then the final ExtensionsClientEnableAzureMonitorResponse will be returned.
 func (p *ExtensionsClientEnableAzureMonitorPoller) FinalResponse(ctx context.Context) (ExtensionsClientEnableAzureMonitorResponse, error) {
 	respType := ExtensionsClientEnableAzureMonitorResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ExtensionsClientEnableAzureMonitorResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -731,11 +715,10 @@ func (p *ExtensionsClientEnableMonitoringPoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final ExtensionsClientEnableMonitoringResponse will be returned.
 func (p *ExtensionsClientEnableMonitoringPoller) FinalResponse(ctx context.Context) (ExtensionsClientEnableMonitoringResponse, error) {
 	respType := ExtensionsClientEnableMonitoringResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ExtensionsClientEnableMonitoringResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -774,11 +757,10 @@ func (p *PrivateEndpointConnectionsClientCreateOrUpdatePoller) Poll(ctx context.
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientCreateOrUpdateResponse will be returned.
 func (p *PrivateEndpointConnectionsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientCreateOrUpdateResponse, error) {
 	respType := PrivateEndpointConnectionsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return PrivateEndpointConnectionsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -817,11 +799,10 @@ func (p *PrivateEndpointConnectionsClientDeletePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionsClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointConnectionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -860,11 +841,10 @@ func (p *VirtualMachinesClientRestartHostsPoller) Poll(ctx context.Context) (*ht
 // If the final GET succeeded then the final VirtualMachinesClientRestartHostsResponse will be returned.
 func (p *VirtualMachinesClientRestartHostsPoller) FinalResponse(ctx context.Context) (VirtualMachinesClientRestartHostsResponse, error) {
 	respType := VirtualMachinesClientRestartHostsResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return VirtualMachinesClientRestartHostsResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

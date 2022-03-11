@@ -8,12 +8,7 @@
 
 package armeventgrid
 
-import (
-	"encoding/json"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
-	"reflect"
-	"time"
-)
+import "time"
 
 // AdvancedFilterClassification provides polymorphic access to related types.
 // Call the interface's GetAdvancedFilter() method to access the common type.
@@ -40,9 +35,6 @@ type AdvancedFilter struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type AdvancedFilter.
-func (a *AdvancedFilter) GetAdvancedFilter() *AdvancedFilter { return a }
-
 // AzureFunctionEventSubscriptionDestination - Information about the azure function destination for an event subscription.
 type AzureFunctionEventSubscriptionDestination struct {
 	// REQUIRED; Type of the endpoint for the event subscription destination.
@@ -50,44 +42,6 @@ type AzureFunctionEventSubscriptionDestination struct {
 
 	// Azure Function Properties of the event subscription destination.
 	Properties *AzureFunctionEventSubscriptionDestinationProperties `json:"properties,omitempty"`
-}
-
-// GetEventSubscriptionDestination implements the EventSubscriptionDestinationClassification interface for type AzureFunctionEventSubscriptionDestination.
-func (a *AzureFunctionEventSubscriptionDestination) GetEventSubscriptionDestination() *EventSubscriptionDestination {
-	return &EventSubscriptionDestination{
-		EndpointType: a.EndpointType,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type AzureFunctionEventSubscriptionDestination.
-func (a AzureFunctionEventSubscriptionDestination) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	objectMap["endpointType"] = EndpointTypeAzureFunction
-	populate(objectMap, "properties", a.Properties)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type AzureFunctionEventSubscriptionDestination.
-func (a *AzureFunctionEventSubscriptionDestination) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "endpointType":
-			err = unpopulate(val, &a.EndpointType)
-			delete(rawMsg, key)
-		case "properties":
-			err = unpopulate(val, &a.Properties)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // AzureFunctionEventSubscriptionDestinationProperties - The properties that represent the Azure Function destination of an
@@ -106,45 +60,6 @@ type AzureFunctionEventSubscriptionDestinationProperties struct {
 	ResourceID *string `json:"resourceId,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type AzureFunctionEventSubscriptionDestinationProperties.
-func (a AzureFunctionEventSubscriptionDestinationProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "deliveryAttributeMappings", a.DeliveryAttributeMappings)
-	populate(objectMap, "maxEventsPerBatch", a.MaxEventsPerBatch)
-	populate(objectMap, "preferredBatchSizeInKilobytes", a.PreferredBatchSizeInKilobytes)
-	populate(objectMap, "resourceId", a.ResourceID)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type AzureFunctionEventSubscriptionDestinationProperties.
-func (a *AzureFunctionEventSubscriptionDestinationProperties) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "deliveryAttributeMappings":
-			a.DeliveryAttributeMappings, err = unmarshalDeliveryAttributeMappingClassificationArray(val)
-			delete(rawMsg, key)
-		case "maxEventsPerBatch":
-			err = unpopulate(val, &a.MaxEventsPerBatch)
-			delete(rawMsg, key)
-		case "preferredBatchSizeInKilobytes":
-			err = unpopulate(val, &a.PreferredBatchSizeInKilobytes)
-			delete(rawMsg, key)
-		case "resourceId":
-			err = unpopulate(val, &a.ResourceID)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // BoolEqualsAdvancedFilter - BoolEquals Advanced Filter.
 type BoolEqualsAdvancedFilter struct {
 	// REQUIRED; The operator type used for filtering, e.g., NumberIn, StringContains, BoolEquals and others.
@@ -155,49 +70,6 @@ type BoolEqualsAdvancedFilter struct {
 
 	// The boolean filter value.
 	Value *bool `json:"value,omitempty"`
-}
-
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type BoolEqualsAdvancedFilter.
-func (b *BoolEqualsAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: b.OperatorType,
-		Key:          b.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type BoolEqualsAdvancedFilter.
-func (b BoolEqualsAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", b.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeBoolEquals
-	populate(objectMap, "value", b.Value)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type BoolEqualsAdvancedFilter.
-func (b *BoolEqualsAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &b.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &b.OperatorType)
-			delete(rawMsg, key)
-		case "value":
-			err = unpopulate(val, &b.Value)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // ConnectionState information.
@@ -229,9 +101,6 @@ type DeadLetterDestination struct {
 	EndpointType *DeadLetterEndPointType `json:"endpointType,omitempty"`
 }
 
-// GetDeadLetterDestination implements the DeadLetterDestinationClassification interface for type DeadLetterDestination.
-func (d *DeadLetterDestination) GetDeadLetterDestination() *DeadLetterDestination { return d }
-
 // DeadLetterWithResourceIdentity - Information about the deadletter destination with resource identity.
 type DeadLetterWithResourceIdentity struct {
 	// Information about the destination where events have to be delivered for the event subscription. Uses the managed identity
@@ -243,68 +112,10 @@ type DeadLetterWithResourceIdentity struct {
 	Identity *EventSubscriptionIdentity `json:"identity,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type DeadLetterWithResourceIdentity.
-func (d DeadLetterWithResourceIdentity) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "deadLetterDestination", d.DeadLetterDestination)
-	populate(objectMap, "identity", d.Identity)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type DeadLetterWithResourceIdentity.
-func (d *DeadLetterWithResourceIdentity) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "deadLetterDestination":
-			d.DeadLetterDestination, err = unmarshalDeadLetterDestinationClassification(val)
-			delete(rawMsg, key)
-		case "identity":
-			err = unpopulate(val, &d.Identity)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // DeliveryAttributeListResult - Result of the Get delivery attributes operation.
 type DeliveryAttributeListResult struct {
 	// A collection of DeliveryAttributeMapping
 	Value []DeliveryAttributeMappingClassification `json:"value,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type DeliveryAttributeListResult.
-func (d DeliveryAttributeListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "value", d.Value)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type DeliveryAttributeListResult.
-func (d *DeliveryAttributeListResult) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "value":
-			d.Value, err = unmarshalDeliveryAttributeMappingClassificationArray(val)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // DeliveryAttributeMappingClassification provides polymorphic access to related types.
@@ -325,9 +136,6 @@ type DeliveryAttributeMapping struct {
 	Name *string `json:"name,omitempty"`
 }
 
-// GetDeliveryAttributeMapping implements the DeliveryAttributeMappingClassification interface for type DeliveryAttributeMapping.
-func (d *DeliveryAttributeMapping) GetDeliveryAttributeMapping() *DeliveryAttributeMapping { return d }
-
 // DeliveryWithResourceIdentity - Information about the delivery for an event subscription with resource identity.
 type DeliveryWithResourceIdentity struct {
 	// Information about the destination where events have to be delivered for the event subscription. Uses Azure Event Grid's
@@ -337,37 +145,6 @@ type DeliveryWithResourceIdentity struct {
 
 	// The identity to use when delivering events.
 	Identity *EventSubscriptionIdentity `json:"identity,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type DeliveryWithResourceIdentity.
-func (d DeliveryWithResourceIdentity) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "destination", d.Destination)
-	populate(objectMap, "identity", d.Identity)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type DeliveryWithResourceIdentity.
-func (d *DeliveryWithResourceIdentity) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "destination":
-			d.Destination, err = unmarshalEventSubscriptionDestinationClassification(val)
-			delete(rawMsg, key)
-		case "identity":
-			err = unpopulate(val, &d.Identity)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // Domain - EventGrid Domain.
@@ -395,20 +172,6 @@ type Domain struct {
 
 	// READ-ONLY; Type of the resource.
 	Type *string `json:"type,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type Domain.
-func (d Domain) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", d.ID)
-	populate(objectMap, "identity", d.Identity)
-	populate(objectMap, "location", d.Location)
-	populate(objectMap, "name", d.Name)
-	populate(objectMap, "properties", d.Properties)
-	populate(objectMap, "systemData", d.SystemData)
-	populate(objectMap, "tags", d.Tags)
-	populate(objectMap, "type", d.Type)
-	return json.Marshal(objectMap)
 }
 
 // DomainProperties - Properties of the Event Grid Domain Resource.
@@ -466,73 +229,6 @@ type DomainProperties struct {
 
 	// READ-ONLY; Provisioning state of the Event Grid Domain Resource.
 	ProvisioningState *DomainProvisioningState `json:"provisioningState,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type DomainProperties.
-func (d DomainProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "autoCreateTopicWithFirstSubscription", d.AutoCreateTopicWithFirstSubscription)
-	populate(objectMap, "autoDeleteTopicWithLastSubscription", d.AutoDeleteTopicWithLastSubscription)
-	populate(objectMap, "disableLocalAuth", d.DisableLocalAuth)
-	populate(objectMap, "endpoint", d.Endpoint)
-	populate(objectMap, "inboundIpRules", d.InboundIPRules)
-	populate(objectMap, "inputSchema", d.InputSchema)
-	populate(objectMap, "inputSchemaMapping", d.InputSchemaMapping)
-	populate(objectMap, "metricResourceId", d.MetricResourceID)
-	populate(objectMap, "privateEndpointConnections", d.PrivateEndpointConnections)
-	populate(objectMap, "provisioningState", d.ProvisioningState)
-	populate(objectMap, "publicNetworkAccess", d.PublicNetworkAccess)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type DomainProperties.
-func (d *DomainProperties) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "autoCreateTopicWithFirstSubscription":
-			err = unpopulate(val, &d.AutoCreateTopicWithFirstSubscription)
-			delete(rawMsg, key)
-		case "autoDeleteTopicWithLastSubscription":
-			err = unpopulate(val, &d.AutoDeleteTopicWithLastSubscription)
-			delete(rawMsg, key)
-		case "disableLocalAuth":
-			err = unpopulate(val, &d.DisableLocalAuth)
-			delete(rawMsg, key)
-		case "endpoint":
-			err = unpopulate(val, &d.Endpoint)
-			delete(rawMsg, key)
-		case "inboundIpRules":
-			err = unpopulate(val, &d.InboundIPRules)
-			delete(rawMsg, key)
-		case "inputSchema":
-			err = unpopulate(val, &d.InputSchema)
-			delete(rawMsg, key)
-		case "inputSchemaMapping":
-			d.InputSchemaMapping, err = unmarshalInputSchemaMappingClassification(val)
-			delete(rawMsg, key)
-		case "metricResourceId":
-			err = unpopulate(val, &d.MetricResourceID)
-			delete(rawMsg, key)
-		case "privateEndpointConnections":
-			err = unpopulate(val, &d.PrivateEndpointConnections)
-			delete(rawMsg, key)
-		case "provisioningState":
-			err = unpopulate(val, &d.ProvisioningState)
-			delete(rawMsg, key)
-		case "publicNetworkAccess":
-			err = unpopulate(val, &d.PublicNetworkAccess)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // DomainRegenerateKeyRequest - Domain regenerate share access key request.
@@ -613,14 +309,6 @@ type DomainTopicsListResult struct {
 	Value []*DomainTopic `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type DomainTopicsListResult.
-func (d DomainTopicsListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", d.NextLink)
-	populate(objectMap, "value", d.Value)
-	return json.Marshal(objectMap)
-}
-
 // DomainUpdateParameterProperties - Information of domain update parameter properties.
 type DomainUpdateParameterProperties struct {
 	// This Boolean is used to specify the creation mechanism for 'all' the Event Grid Domain Topics associated with this Event
@@ -660,17 +348,6 @@ type DomainUpdateParameterProperties struct {
 	PublicNetworkAccess *PublicNetworkAccess `json:"publicNetworkAccess,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type DomainUpdateParameterProperties.
-func (d DomainUpdateParameterProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "autoCreateTopicWithFirstSubscription", d.AutoCreateTopicWithFirstSubscription)
-	populate(objectMap, "autoDeleteTopicWithLastSubscription", d.AutoDeleteTopicWithLastSubscription)
-	populate(objectMap, "disableLocalAuth", d.DisableLocalAuth)
-	populate(objectMap, "inboundIpRules", d.InboundIPRules)
-	populate(objectMap, "publicNetworkAccess", d.PublicNetworkAccess)
-	return json.Marshal(objectMap)
-}
-
 // DomainUpdateParameters - Properties of the Domain update.
 type DomainUpdateParameters struct {
 	// Identity information for the resource.
@@ -681,15 +358,6 @@ type DomainUpdateParameters struct {
 
 	// Tags of the domains resource.
 	Tags map[string]*string `json:"tags,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type DomainUpdateParameters.
-func (d DomainUpdateParameters) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "identity", d.Identity)
-	populate(objectMap, "properties", d.Properties)
-	populate(objectMap, "tags", d.Tags)
-	return json.Marshal(objectMap)
 }
 
 // DomainsClientBeginCreateOrUpdateOptions contains the optional parameters for the DomainsClient.BeginCreateOrUpdate method.
@@ -759,14 +427,6 @@ type DomainsListResult struct {
 	Value []*Domain `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type DomainsListResult.
-func (d DomainsListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", d.NextLink)
-	populate(objectMap, "value", d.Value)
-	return json.Marshal(objectMap)
-}
-
 // DynamicDeliveryAttributeMapping - Dynamic delivery attribute mapping details.
 type DynamicDeliveryAttributeMapping struct {
 	// REQUIRED; Type of the delivery attribute or header name.
@@ -777,49 +437,6 @@ type DynamicDeliveryAttributeMapping struct {
 
 	// Properties of dynamic delivery attribute mapping.
 	Properties *DynamicDeliveryAttributeMappingProperties `json:"properties,omitempty"`
-}
-
-// GetDeliveryAttributeMapping implements the DeliveryAttributeMappingClassification interface for type DynamicDeliveryAttributeMapping.
-func (d *DynamicDeliveryAttributeMapping) GetDeliveryAttributeMapping() *DeliveryAttributeMapping {
-	return &DeliveryAttributeMapping{
-		Name: d.Name,
-		Type: d.Type,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type DynamicDeliveryAttributeMapping.
-func (d DynamicDeliveryAttributeMapping) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "name", d.Name)
-	populate(objectMap, "properties", d.Properties)
-	objectMap["type"] = DeliveryAttributeMappingTypeDynamic
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type DynamicDeliveryAttributeMapping.
-func (d *DynamicDeliveryAttributeMapping) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "name":
-			err = unpopulate(val, &d.Name)
-			delete(rawMsg, key)
-		case "properties":
-			err = unpopulate(val, &d.Properties)
-			delete(rawMsg, key)
-		case "type":
-			err = unpopulate(val, &d.Type)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // DynamicDeliveryAttributeMappingProperties - Properties of dynamic delivery attribute mapping.
@@ -837,44 +454,6 @@ type EventHubEventSubscriptionDestination struct {
 	Properties *EventHubEventSubscriptionDestinationProperties `json:"properties,omitempty"`
 }
 
-// GetEventSubscriptionDestination implements the EventSubscriptionDestinationClassification interface for type EventHubEventSubscriptionDestination.
-func (e *EventHubEventSubscriptionDestination) GetEventSubscriptionDestination() *EventSubscriptionDestination {
-	return &EventSubscriptionDestination{
-		EndpointType: e.EndpointType,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type EventHubEventSubscriptionDestination.
-func (e EventHubEventSubscriptionDestination) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	objectMap["endpointType"] = EndpointTypeEventHub
-	populate(objectMap, "properties", e.Properties)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type EventHubEventSubscriptionDestination.
-func (e *EventHubEventSubscriptionDestination) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "endpointType":
-			err = unpopulate(val, &e.EndpointType)
-			delete(rawMsg, key)
-		case "properties":
-			err = unpopulate(val, &e.Properties)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // EventHubEventSubscriptionDestinationProperties - The properties for a event hub destination.
 type EventHubEventSubscriptionDestinationProperties struct {
 	// Delivery attribute details.
@@ -882,37 +461,6 @@ type EventHubEventSubscriptionDestinationProperties struct {
 
 	// The Azure Resource Id that represents the endpoint of an Event Hub destination of an event subscription.
 	ResourceID *string `json:"resourceId,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type EventHubEventSubscriptionDestinationProperties.
-func (e EventHubEventSubscriptionDestinationProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "deliveryAttributeMappings", e.DeliveryAttributeMappings)
-	populate(objectMap, "resourceId", e.ResourceID)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type EventHubEventSubscriptionDestinationProperties.
-func (e *EventHubEventSubscriptionDestinationProperties) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "deliveryAttributeMappings":
-			e.DeliveryAttributeMappings, err = unmarshalDeliveryAttributeMappingClassificationArray(val)
-			delete(rawMsg, key)
-		case "resourceId":
-			err = unpopulate(val, &e.ResourceID)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // EventSubscription - Event Subscription
@@ -950,11 +498,6 @@ type EventSubscriptionDestination struct {
 	EndpointType *EndpointType `json:"endpointType,omitempty"`
 }
 
-// GetEventSubscriptionDestination implements the EventSubscriptionDestinationClassification interface for type EventSubscriptionDestination.
-func (e *EventSubscriptionDestination) GetEventSubscriptionDestination() *EventSubscriptionDestination {
-	return e
-}
-
 // EventSubscriptionFilter - Filter for the Event Subscription.
 type EventSubscriptionFilter struct {
 	// An array of advanced filters that are used for filtering event subscriptions.
@@ -979,53 +522,6 @@ type EventSubscriptionFilter struct {
 	// An optional string to filter events for an event subscription based on a resource path suffix. Wildcard characters are
 	// not supported in this path.
 	SubjectEndsWith *string `json:"subjectEndsWith,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type EventSubscriptionFilter.
-func (e EventSubscriptionFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "advancedFilters", e.AdvancedFilters)
-	populate(objectMap, "enableAdvancedFilteringOnArrays", e.EnableAdvancedFilteringOnArrays)
-	populate(objectMap, "includedEventTypes", e.IncludedEventTypes)
-	populate(objectMap, "isSubjectCaseSensitive", e.IsSubjectCaseSensitive)
-	populate(objectMap, "subjectBeginsWith", e.SubjectBeginsWith)
-	populate(objectMap, "subjectEndsWith", e.SubjectEndsWith)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type EventSubscriptionFilter.
-func (e *EventSubscriptionFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "advancedFilters":
-			e.AdvancedFilters, err = unmarshalAdvancedFilterClassificationArray(val)
-			delete(rawMsg, key)
-		case "enableAdvancedFilteringOnArrays":
-			err = unpopulate(val, &e.EnableAdvancedFilteringOnArrays)
-			delete(rawMsg, key)
-		case "includedEventTypes":
-			err = unpopulate(val, &e.IncludedEventTypes)
-			delete(rawMsg, key)
-		case "isSubjectCaseSensitive":
-			err = unpopulate(val, &e.IsSubjectCaseSensitive)
-			delete(rawMsg, key)
-		case "subjectBeginsWith":
-			err = unpopulate(val, &e.SubjectBeginsWith)
-			delete(rawMsg, key)
-		case "subjectEndsWith":
-			err = unpopulate(val, &e.SubjectEndsWith)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // EventSubscriptionFullURL - Full endpoint url of an event subscription
@@ -1084,73 +580,6 @@ type EventSubscriptionProperties struct {
 	Topic *string `json:"topic,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type EventSubscriptionProperties.
-func (e EventSubscriptionProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "deadLetterDestination", e.DeadLetterDestination)
-	populate(objectMap, "deadLetterWithResourceIdentity", e.DeadLetterWithResourceIdentity)
-	populate(objectMap, "deliveryWithResourceIdentity", e.DeliveryWithResourceIdentity)
-	populate(objectMap, "destination", e.Destination)
-	populate(objectMap, "eventDeliverySchema", e.EventDeliverySchema)
-	populateTimeRFC3339(objectMap, "expirationTimeUtc", e.ExpirationTimeUTC)
-	populate(objectMap, "filter", e.Filter)
-	populate(objectMap, "labels", e.Labels)
-	populate(objectMap, "provisioningState", e.ProvisioningState)
-	populate(objectMap, "retryPolicy", e.RetryPolicy)
-	populate(objectMap, "topic", e.Topic)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type EventSubscriptionProperties.
-func (e *EventSubscriptionProperties) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "deadLetterDestination":
-			e.DeadLetterDestination, err = unmarshalDeadLetterDestinationClassification(val)
-			delete(rawMsg, key)
-		case "deadLetterWithResourceIdentity":
-			err = unpopulate(val, &e.DeadLetterWithResourceIdentity)
-			delete(rawMsg, key)
-		case "deliveryWithResourceIdentity":
-			err = unpopulate(val, &e.DeliveryWithResourceIdentity)
-			delete(rawMsg, key)
-		case "destination":
-			e.Destination, err = unmarshalEventSubscriptionDestinationClassification(val)
-			delete(rawMsg, key)
-		case "eventDeliverySchema":
-			err = unpopulate(val, &e.EventDeliverySchema)
-			delete(rawMsg, key)
-		case "expirationTimeUtc":
-			err = unpopulateTimeRFC3339(val, &e.ExpirationTimeUTC)
-			delete(rawMsg, key)
-		case "filter":
-			err = unpopulate(val, &e.Filter)
-			delete(rawMsg, key)
-		case "labels":
-			err = unpopulate(val, &e.Labels)
-			delete(rawMsg, key)
-		case "provisioningState":
-			err = unpopulate(val, &e.ProvisioningState)
-			delete(rawMsg, key)
-		case "retryPolicy":
-			err = unpopulate(val, &e.RetryPolicy)
-			delete(rawMsg, key)
-		case "topic":
-			err = unpopulate(val, &e.Topic)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // EventSubscriptionUpdateParameters - Properties of the Event Subscription update.
 type EventSubscriptionUpdateParameters struct {
 	// The DeadLetter destination of the event subscription.
@@ -1183,65 +612,6 @@ type EventSubscriptionUpdateParameters struct {
 
 	// The retry policy for events. This can be used to configure maximum number of delivery attempts and time to live for events.
 	RetryPolicy *RetryPolicy `json:"retryPolicy,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type EventSubscriptionUpdateParameters.
-func (e EventSubscriptionUpdateParameters) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "deadLetterDestination", e.DeadLetterDestination)
-	populate(objectMap, "deadLetterWithResourceIdentity", e.DeadLetterWithResourceIdentity)
-	populate(objectMap, "deliveryWithResourceIdentity", e.DeliveryWithResourceIdentity)
-	populate(objectMap, "destination", e.Destination)
-	populate(objectMap, "eventDeliverySchema", e.EventDeliverySchema)
-	populateTimeRFC3339(objectMap, "expirationTimeUtc", e.ExpirationTimeUTC)
-	populate(objectMap, "filter", e.Filter)
-	populate(objectMap, "labels", e.Labels)
-	populate(objectMap, "retryPolicy", e.RetryPolicy)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type EventSubscriptionUpdateParameters.
-func (e *EventSubscriptionUpdateParameters) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "deadLetterDestination":
-			e.DeadLetterDestination, err = unmarshalDeadLetterDestinationClassification(val)
-			delete(rawMsg, key)
-		case "deadLetterWithResourceIdentity":
-			err = unpopulate(val, &e.DeadLetterWithResourceIdentity)
-			delete(rawMsg, key)
-		case "deliveryWithResourceIdentity":
-			err = unpopulate(val, &e.DeliveryWithResourceIdentity)
-			delete(rawMsg, key)
-		case "destination":
-			e.Destination, err = unmarshalEventSubscriptionDestinationClassification(val)
-			delete(rawMsg, key)
-		case "eventDeliverySchema":
-			err = unpopulate(val, &e.EventDeliverySchema)
-			delete(rawMsg, key)
-		case "expirationTimeUtc":
-			err = unpopulateTimeRFC3339(val, &e.ExpirationTimeUTC)
-			delete(rawMsg, key)
-		case "filter":
-			err = unpopulate(val, &e.Filter)
-			delete(rawMsg, key)
-		case "labels":
-			err = unpopulate(val, &e.Labels)
-			delete(rawMsg, key)
-		case "retryPolicy":
-			err = unpopulate(val, &e.RetryPolicy)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // EventSubscriptionsClientBeginCreateOrUpdateOptions contains the optional parameters for the EventSubscriptionsClient.BeginCreateOrUpdate
@@ -1438,14 +808,6 @@ type EventSubscriptionsListResult struct {
 	Value []*EventSubscription `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type EventSubscriptionsListResult.
-func (e EventSubscriptionsListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", e.NextLink)
-	populate(objectMap, "value", e.Value)
-	return json.Marshal(objectMap)
-}
-
 // EventType - Event Type for a subject under a topic
 type EventType struct {
 	// Properties of the event type.
@@ -1480,13 +842,6 @@ type EventTypeProperties struct {
 type EventTypesListResult struct {
 	// A collection of event types
 	Value []*EventType `json:"value,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type EventTypesListResult.
-func (e EventTypesListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "value", e.Value)
-	return json.Marshal(objectMap)
 }
 
 // ExtensionTopic - Event grid Extension Topic. This is used for getting Event Grid related metrics for Azure resources.
@@ -1530,44 +885,6 @@ type HybridConnectionEventSubscriptionDestination struct {
 	Properties *HybridConnectionEventSubscriptionDestinationProperties `json:"properties,omitempty"`
 }
 
-// GetEventSubscriptionDestination implements the EventSubscriptionDestinationClassification interface for type HybridConnectionEventSubscriptionDestination.
-func (h *HybridConnectionEventSubscriptionDestination) GetEventSubscriptionDestination() *EventSubscriptionDestination {
-	return &EventSubscriptionDestination{
-		EndpointType: h.EndpointType,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type HybridConnectionEventSubscriptionDestination.
-func (h HybridConnectionEventSubscriptionDestination) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	objectMap["endpointType"] = EndpointTypeHybridConnection
-	populate(objectMap, "properties", h.Properties)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type HybridConnectionEventSubscriptionDestination.
-func (h *HybridConnectionEventSubscriptionDestination) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "endpointType":
-			err = unpopulate(val, &h.EndpointType)
-			delete(rawMsg, key)
-		case "properties":
-			err = unpopulate(val, &h.Properties)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // HybridConnectionEventSubscriptionDestinationProperties - The properties for a hybrid connection destination.
 type HybridConnectionEventSubscriptionDestinationProperties struct {
 	// Delivery attribute details.
@@ -1575,37 +892,6 @@ type HybridConnectionEventSubscriptionDestinationProperties struct {
 
 	// The Azure Resource ID of an hybrid connection that is the destination of an event subscription.
 	ResourceID *string `json:"resourceId,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type HybridConnectionEventSubscriptionDestinationProperties.
-func (h HybridConnectionEventSubscriptionDestinationProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "deliveryAttributeMappings", h.DeliveryAttributeMappings)
-	populate(objectMap, "resourceId", h.ResourceID)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type HybridConnectionEventSubscriptionDestinationProperties.
-func (h *HybridConnectionEventSubscriptionDestinationProperties) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "deliveryAttributeMappings":
-			h.DeliveryAttributeMappings, err = unmarshalDeliveryAttributeMappingClassificationArray(val)
-			delete(rawMsg, key)
-		case "resourceId":
-			err = unpopulate(val, &h.ResourceID)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // IdentityInfo - The identity information for the resource.
@@ -1626,16 +912,6 @@ type IdentityInfo struct {
 	// This property is currently not used and reserved for
 	// future usage.
 	UserAssignedIdentities map[string]*UserIdentityProperties `json:"userAssignedIdentities,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type IdentityInfo.
-func (i IdentityInfo) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "principalId", i.PrincipalID)
-	populate(objectMap, "tenantId", i.TenantID)
-	populate(objectMap, "type", i.Type)
-	populate(objectMap, "userAssignedIdentities", i.UserAssignedIdentities)
-	return json.Marshal(objectMap)
 }
 
 type InboundIPRule struct {
@@ -1663,9 +939,6 @@ type InputSchemaMapping struct {
 	InputSchemaMappingType *InputSchemaMappingType `json:"inputSchemaMappingType,omitempty"`
 }
 
-// GetInputSchemaMapping implements the InputSchemaMappingClassification interface for type InputSchemaMapping.
-func (i *InputSchemaMapping) GetInputSchemaMapping() *InputSchemaMapping { return i }
-
 // IsNotNullAdvancedFilter - IsNotNull Advanced Filter.
 type IsNotNullAdvancedFilter struct {
 	// REQUIRED; The operator type used for filtering, e.g., NumberIn, StringContains, BoolEquals and others.
@@ -1675,45 +948,6 @@ type IsNotNullAdvancedFilter struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type IsNotNullAdvancedFilter.
-func (i *IsNotNullAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: i.OperatorType,
-		Key:          i.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type IsNotNullAdvancedFilter.
-func (i IsNotNullAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", i.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeIsNotNull
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type IsNotNullAdvancedFilter.
-func (i *IsNotNullAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &i.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &i.OperatorType)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // IsNullOrUndefinedAdvancedFilter - IsNullOrUndefined Advanced Filter.
 type IsNullOrUndefinedAdvancedFilter struct {
 	// REQUIRED; The operator type used for filtering, e.g., NumberIn, StringContains, BoolEquals and others.
@@ -1721,45 +955,6 @@ type IsNullOrUndefinedAdvancedFilter struct {
 
 	// The field/property in the event based on which you want to filter.
 	Key *string `json:"key,omitempty"`
-}
-
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type IsNullOrUndefinedAdvancedFilter.
-func (i *IsNullOrUndefinedAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: i.OperatorType,
-		Key:          i.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type IsNullOrUndefinedAdvancedFilter.
-func (i IsNullOrUndefinedAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", i.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeIsNullOrUndefined
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type IsNullOrUndefinedAdvancedFilter.
-func (i *IsNullOrUndefinedAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &i.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &i.OperatorType)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // JSONField - This is used to express the source of an input schema mapping for a single target field in the Event Grid Event
@@ -1791,44 +986,6 @@ type JSONInputSchemaMapping struct {
 
 	// JSON Properties of the input schema mapping
 	Properties *JSONInputSchemaMappingProperties `json:"properties,omitempty"`
-}
-
-// GetInputSchemaMapping implements the InputSchemaMappingClassification interface for type JSONInputSchemaMapping.
-func (j *JSONInputSchemaMapping) GetInputSchemaMapping() *InputSchemaMapping {
-	return &InputSchemaMapping{
-		InputSchemaMappingType: j.InputSchemaMappingType,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type JSONInputSchemaMapping.
-func (j JSONInputSchemaMapping) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	objectMap["inputSchemaMappingType"] = InputSchemaMappingTypeJSON
-	populate(objectMap, "properties", j.Properties)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type JSONInputSchemaMapping.
-func (j *JSONInputSchemaMapping) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "inputSchemaMappingType":
-			err = unpopulate(val, &j.InputSchemaMappingType)
-			delete(rawMsg, key)
-		case "properties":
-			err = unpopulate(val, &j.Properties)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // JSONInputSchemaMappingProperties - This can be used to map properties of a source schema (or default values, for certain
@@ -1865,49 +1022,6 @@ type NumberGreaterThanAdvancedFilter struct {
 	Value *float64 `json:"value,omitempty"`
 }
 
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type NumberGreaterThanAdvancedFilter.
-func (n *NumberGreaterThanAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: n.OperatorType,
-		Key:          n.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type NumberGreaterThanAdvancedFilter.
-func (n NumberGreaterThanAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", n.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeNumberGreaterThan
-	populate(objectMap, "value", n.Value)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type NumberGreaterThanAdvancedFilter.
-func (n *NumberGreaterThanAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &n.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &n.OperatorType)
-			delete(rawMsg, key)
-		case "value":
-			err = unpopulate(val, &n.Value)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // NumberGreaterThanOrEqualsAdvancedFilter - NumberGreaterThanOrEquals Advanced Filter.
 type NumberGreaterThanOrEqualsAdvancedFilter struct {
 	// REQUIRED; The operator type used for filtering, e.g., NumberIn, StringContains, BoolEquals and others.
@@ -1918,49 +1032,6 @@ type NumberGreaterThanOrEqualsAdvancedFilter struct {
 
 	// The filter value.
 	Value *float64 `json:"value,omitempty"`
-}
-
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type NumberGreaterThanOrEqualsAdvancedFilter.
-func (n *NumberGreaterThanOrEqualsAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: n.OperatorType,
-		Key:          n.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type NumberGreaterThanOrEqualsAdvancedFilter.
-func (n NumberGreaterThanOrEqualsAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", n.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeNumberGreaterThanOrEquals
-	populate(objectMap, "value", n.Value)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type NumberGreaterThanOrEqualsAdvancedFilter.
-func (n *NumberGreaterThanOrEqualsAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &n.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &n.OperatorType)
-			delete(rawMsg, key)
-		case "value":
-			err = unpopulate(val, &n.Value)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // NumberInAdvancedFilter - NumberIn Advanced Filter.
@@ -1975,49 +1046,6 @@ type NumberInAdvancedFilter struct {
 	Values []*float64 `json:"values,omitempty"`
 }
 
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type NumberInAdvancedFilter.
-func (n *NumberInAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: n.OperatorType,
-		Key:          n.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type NumberInAdvancedFilter.
-func (n NumberInAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", n.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeNumberIn
-	populate(objectMap, "values", n.Values)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type NumberInAdvancedFilter.
-func (n *NumberInAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &n.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &n.OperatorType)
-			delete(rawMsg, key)
-		case "values":
-			err = unpopulate(val, &n.Values)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // NumberInRangeAdvancedFilter - NumberInRange Advanced Filter.
 type NumberInRangeAdvancedFilter struct {
 	// REQUIRED; The operator type used for filtering, e.g., NumberIn, StringContains, BoolEquals and others.
@@ -2028,49 +1056,6 @@ type NumberInRangeAdvancedFilter struct {
 
 	// The set of filter values.
 	Values [][]*float64 `json:"values,omitempty"`
-}
-
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type NumberInRangeAdvancedFilter.
-func (n *NumberInRangeAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: n.OperatorType,
-		Key:          n.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type NumberInRangeAdvancedFilter.
-func (n NumberInRangeAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", n.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeNumberInRange
-	populate(objectMap, "values", n.Values)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type NumberInRangeAdvancedFilter.
-func (n *NumberInRangeAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &n.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &n.OperatorType)
-			delete(rawMsg, key)
-		case "values":
-			err = unpopulate(val, &n.Values)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // NumberLessThanAdvancedFilter - NumberLessThan Advanced Filter.
@@ -2085,49 +1070,6 @@ type NumberLessThanAdvancedFilter struct {
 	Value *float64 `json:"value,omitempty"`
 }
 
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type NumberLessThanAdvancedFilter.
-func (n *NumberLessThanAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: n.OperatorType,
-		Key:          n.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type NumberLessThanAdvancedFilter.
-func (n NumberLessThanAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", n.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeNumberLessThan
-	populate(objectMap, "value", n.Value)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type NumberLessThanAdvancedFilter.
-func (n *NumberLessThanAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &n.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &n.OperatorType)
-			delete(rawMsg, key)
-		case "value":
-			err = unpopulate(val, &n.Value)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // NumberLessThanOrEqualsAdvancedFilter - NumberLessThanOrEquals Advanced Filter.
 type NumberLessThanOrEqualsAdvancedFilter struct {
 	// REQUIRED; The operator type used for filtering, e.g., NumberIn, StringContains, BoolEquals and others.
@@ -2138,49 +1080,6 @@ type NumberLessThanOrEqualsAdvancedFilter struct {
 
 	// The filter value.
 	Value *float64 `json:"value,omitempty"`
-}
-
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type NumberLessThanOrEqualsAdvancedFilter.
-func (n *NumberLessThanOrEqualsAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: n.OperatorType,
-		Key:          n.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type NumberLessThanOrEqualsAdvancedFilter.
-func (n NumberLessThanOrEqualsAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", n.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeNumberLessThanOrEquals
-	populate(objectMap, "value", n.Value)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type NumberLessThanOrEqualsAdvancedFilter.
-func (n *NumberLessThanOrEqualsAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &n.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &n.OperatorType)
-			delete(rawMsg, key)
-		case "value":
-			err = unpopulate(val, &n.Value)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // NumberNotInAdvancedFilter - NumberNotIn Advanced Filter.
@@ -2195,49 +1094,6 @@ type NumberNotInAdvancedFilter struct {
 	Values []*float64 `json:"values,omitempty"`
 }
 
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type NumberNotInAdvancedFilter.
-func (n *NumberNotInAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: n.OperatorType,
-		Key:          n.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type NumberNotInAdvancedFilter.
-func (n NumberNotInAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", n.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeNumberNotIn
-	populate(objectMap, "values", n.Values)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type NumberNotInAdvancedFilter.
-func (n *NumberNotInAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &n.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &n.OperatorType)
-			delete(rawMsg, key)
-		case "values":
-			err = unpopulate(val, &n.Values)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // NumberNotInRangeAdvancedFilter - NumberNotInRange Advanced Filter.
 type NumberNotInRangeAdvancedFilter struct {
 	// REQUIRED; The operator type used for filtering, e.g., NumberIn, StringContains, BoolEquals and others.
@@ -2248,49 +1104,6 @@ type NumberNotInRangeAdvancedFilter struct {
 
 	// The set of filter values.
 	Values [][]*float64 `json:"values,omitempty"`
-}
-
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type NumberNotInRangeAdvancedFilter.
-func (n *NumberNotInRangeAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: n.OperatorType,
-		Key:          n.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type NumberNotInRangeAdvancedFilter.
-func (n NumberNotInRangeAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", n.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeNumberNotInRange
-	populate(objectMap, "values", n.Values)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type NumberNotInRangeAdvancedFilter.
-func (n *NumberNotInRangeAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &n.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &n.OperatorType)
-			delete(rawMsg, key)
-		case "values":
-			err = unpopulate(val, &n.Values)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // Operation - Represents an operation returned by the GetOperations request
@@ -2305,7 +1118,7 @@ type Operation struct {
 	Origin *string `json:"origin,omitempty"`
 
 	// Properties of the operation
-	Properties map[string]interface{} `json:"properties,omitempty"`
+	Properties interface{} `json:"properties,omitempty"`
 }
 
 // OperationInfo - Information about an operation
@@ -2332,13 +1145,6 @@ type OperationsClientListOptions struct {
 type OperationsListResult struct {
 	// A collection of operations
 	Value []*Operation `json:"value,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type OperationsListResult.
-func (o OperationsListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "value", o.Value)
-	return json.Marshal(objectMap)
 }
 
 // PrivateEndpoint information.
@@ -2370,14 +1176,6 @@ type PrivateEndpointConnectionListResult struct {
 	Value []*PrivateEndpointConnection `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type PrivateEndpointConnectionListResult.
-func (p PrivateEndpointConnectionListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", p.NextLink)
-	populate(objectMap, "value", p.Value)
-	return json.Marshal(objectMap)
-}
-
 // PrivateEndpointConnectionProperties - Properties of the private endpoint connection resource.
 type PrivateEndpointConnectionProperties struct {
 	// GroupIds from the private link service resource.
@@ -2391,16 +1189,6 @@ type PrivateEndpointConnectionProperties struct {
 
 	// Provisioning state of the Private Endpoint Connection.
 	ProvisioningState *ResourceProvisioningState `json:"provisioningState,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type PrivateEndpointConnectionProperties.
-func (p PrivateEndpointConnectionProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "groupIds", p.GroupIDs)
-	populate(objectMap, "privateEndpoint", p.PrivateEndpoint)
-	populate(objectMap, "privateLinkServiceConnectionState", p.PrivateLinkServiceConnectionState)
-	populate(objectMap, "provisioningState", p.ProvisioningState)
-	return json.Marshal(objectMap)
 }
 
 // PrivateEndpointConnectionsClientBeginDeleteOptions contains the optional parameters for the PrivateEndpointConnectionsClient.BeginDelete
@@ -2458,16 +1246,6 @@ type PrivateLinkResourceProperties struct {
 	RequiredZoneNames []*string `json:"requiredZoneNames,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type PrivateLinkResourceProperties.
-func (p PrivateLinkResourceProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "displayName", p.DisplayName)
-	populate(objectMap, "groupId", p.GroupID)
-	populate(objectMap, "requiredMembers", p.RequiredMembers)
-	populate(objectMap, "requiredZoneNames", p.RequiredZoneNames)
-	return json.Marshal(objectMap)
-}
-
 // PrivateLinkResourcesClientGetOptions contains the optional parameters for the PrivateLinkResourcesClient.Get method.
 type PrivateLinkResourcesClientGetOptions struct {
 	// placeholder for future optional parameters
@@ -2495,14 +1273,6 @@ type PrivateLinkResourcesListResult struct {
 
 	// A collection of private link resources
 	Value []*PrivateLinkResource `json:"value,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type PrivateLinkResourcesListResult.
-func (p PrivateLinkResourcesListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", p.NextLink)
-	populate(objectMap, "value", p.Value)
-	return json.Marshal(objectMap)
 }
 
 // Resource - Definition of a Resource.
@@ -2535,44 +1305,6 @@ type ServiceBusQueueEventSubscriptionDestination struct {
 	Properties *ServiceBusQueueEventSubscriptionDestinationProperties `json:"properties,omitempty"`
 }
 
-// GetEventSubscriptionDestination implements the EventSubscriptionDestinationClassification interface for type ServiceBusQueueEventSubscriptionDestination.
-func (s *ServiceBusQueueEventSubscriptionDestination) GetEventSubscriptionDestination() *EventSubscriptionDestination {
-	return &EventSubscriptionDestination{
-		EndpointType: s.EndpointType,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type ServiceBusQueueEventSubscriptionDestination.
-func (s ServiceBusQueueEventSubscriptionDestination) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	objectMap["endpointType"] = EndpointTypeServiceBusQueue
-	populate(objectMap, "properties", s.Properties)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type ServiceBusQueueEventSubscriptionDestination.
-func (s *ServiceBusQueueEventSubscriptionDestination) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "endpointType":
-			err = unpopulate(val, &s.EndpointType)
-			delete(rawMsg, key)
-		case "properties":
-			err = unpopulate(val, &s.Properties)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // ServiceBusQueueEventSubscriptionDestinationProperties - The properties that represent the Service Bus destination of an
 // event subscription.
 type ServiceBusQueueEventSubscriptionDestinationProperties struct {
@@ -2583,37 +1315,6 @@ type ServiceBusQueueEventSubscriptionDestinationProperties struct {
 	ResourceID *string `json:"resourceId,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type ServiceBusQueueEventSubscriptionDestinationProperties.
-func (s ServiceBusQueueEventSubscriptionDestinationProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "deliveryAttributeMappings", s.DeliveryAttributeMappings)
-	populate(objectMap, "resourceId", s.ResourceID)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type ServiceBusQueueEventSubscriptionDestinationProperties.
-func (s *ServiceBusQueueEventSubscriptionDestinationProperties) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "deliveryAttributeMappings":
-			s.DeliveryAttributeMappings, err = unmarshalDeliveryAttributeMappingClassificationArray(val)
-			delete(rawMsg, key)
-		case "resourceId":
-			err = unpopulate(val, &s.ResourceID)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // ServiceBusTopicEventSubscriptionDestination - Information about the service bus topic destination for an event subscription.
 type ServiceBusTopicEventSubscriptionDestination struct {
 	// REQUIRED; Type of the endpoint for the event subscription destination.
@@ -2621,44 +1322,6 @@ type ServiceBusTopicEventSubscriptionDestination struct {
 
 	// Service Bus Topic Properties of the event subscription destination.
 	Properties *ServiceBusTopicEventSubscriptionDestinationProperties `json:"properties,omitempty"`
-}
-
-// GetEventSubscriptionDestination implements the EventSubscriptionDestinationClassification interface for type ServiceBusTopicEventSubscriptionDestination.
-func (s *ServiceBusTopicEventSubscriptionDestination) GetEventSubscriptionDestination() *EventSubscriptionDestination {
-	return &EventSubscriptionDestination{
-		EndpointType: s.EndpointType,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type ServiceBusTopicEventSubscriptionDestination.
-func (s ServiceBusTopicEventSubscriptionDestination) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	objectMap["endpointType"] = EndpointTypeServiceBusTopic
-	populate(objectMap, "properties", s.Properties)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type ServiceBusTopicEventSubscriptionDestination.
-func (s *ServiceBusTopicEventSubscriptionDestination) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "endpointType":
-			err = unpopulate(val, &s.EndpointType)
-			delete(rawMsg, key)
-		case "properties":
-			err = unpopulate(val, &s.Properties)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // ServiceBusTopicEventSubscriptionDestinationProperties - The properties that represent the Service Bus Topic destination
@@ -2671,37 +1334,6 @@ type ServiceBusTopicEventSubscriptionDestinationProperties struct {
 	ResourceID *string `json:"resourceId,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type ServiceBusTopicEventSubscriptionDestinationProperties.
-func (s ServiceBusTopicEventSubscriptionDestinationProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "deliveryAttributeMappings", s.DeliveryAttributeMappings)
-	populate(objectMap, "resourceId", s.ResourceID)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type ServiceBusTopicEventSubscriptionDestinationProperties.
-func (s *ServiceBusTopicEventSubscriptionDestinationProperties) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "deliveryAttributeMappings":
-			s.DeliveryAttributeMappings, err = unmarshalDeliveryAttributeMappingClassificationArray(val)
-			delete(rawMsg, key)
-		case "resourceId":
-			err = unpopulate(val, &s.ResourceID)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // StaticDeliveryAttributeMapping - Static delivery attribute mapping details.
 type StaticDeliveryAttributeMapping struct {
 	// REQUIRED; Type of the delivery attribute or header name.
@@ -2712,49 +1344,6 @@ type StaticDeliveryAttributeMapping struct {
 
 	// Properties of static delivery attribute mapping.
 	Properties *StaticDeliveryAttributeMappingProperties `json:"properties,omitempty"`
-}
-
-// GetDeliveryAttributeMapping implements the DeliveryAttributeMappingClassification interface for type StaticDeliveryAttributeMapping.
-func (s *StaticDeliveryAttributeMapping) GetDeliveryAttributeMapping() *DeliveryAttributeMapping {
-	return &DeliveryAttributeMapping{
-		Name: s.Name,
-		Type: s.Type,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type StaticDeliveryAttributeMapping.
-func (s StaticDeliveryAttributeMapping) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "name", s.Name)
-	populate(objectMap, "properties", s.Properties)
-	objectMap["type"] = DeliveryAttributeMappingTypeStatic
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type StaticDeliveryAttributeMapping.
-func (s *StaticDeliveryAttributeMapping) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "name":
-			err = unpopulate(val, &s.Name)
-			delete(rawMsg, key)
-		case "properties":
-			err = unpopulate(val, &s.Properties)
-			delete(rawMsg, key)
-		case "type":
-			err = unpopulate(val, &s.Type)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // StaticDeliveryAttributeMappingProperties - Properties of static delivery attribute mapping.
@@ -2775,44 +1364,6 @@ type StorageBlobDeadLetterDestination struct {
 	Properties *StorageBlobDeadLetterDestinationProperties `json:"properties,omitempty"`
 }
 
-// GetDeadLetterDestination implements the DeadLetterDestinationClassification interface for type StorageBlobDeadLetterDestination.
-func (s *StorageBlobDeadLetterDestination) GetDeadLetterDestination() *DeadLetterDestination {
-	return &DeadLetterDestination{
-		EndpointType: s.EndpointType,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type StorageBlobDeadLetterDestination.
-func (s StorageBlobDeadLetterDestination) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	objectMap["endpointType"] = DeadLetterEndPointTypeStorageBlob
-	populate(objectMap, "properties", s.Properties)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type StorageBlobDeadLetterDestination.
-func (s *StorageBlobDeadLetterDestination) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "endpointType":
-			err = unpopulate(val, &s.EndpointType)
-			delete(rawMsg, key)
-		case "properties":
-			err = unpopulate(val, &s.Properties)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // StorageBlobDeadLetterDestinationProperties - Properties of the storage blob based dead letter destination.
 type StorageBlobDeadLetterDestinationProperties struct {
 	// The name of the Storage blob container that is the destination of the deadletter events
@@ -2829,44 +1380,6 @@ type StorageQueueEventSubscriptionDestination struct {
 
 	// Storage Queue Properties of the event subscription destination.
 	Properties *StorageQueueEventSubscriptionDestinationProperties `json:"properties,omitempty"`
-}
-
-// GetEventSubscriptionDestination implements the EventSubscriptionDestinationClassification interface for type StorageQueueEventSubscriptionDestination.
-func (s *StorageQueueEventSubscriptionDestination) GetEventSubscriptionDestination() *EventSubscriptionDestination {
-	return &EventSubscriptionDestination{
-		EndpointType: s.EndpointType,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type StorageQueueEventSubscriptionDestination.
-func (s StorageQueueEventSubscriptionDestination) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	objectMap["endpointType"] = EndpointTypeStorageQueue
-	populate(objectMap, "properties", s.Properties)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type StorageQueueEventSubscriptionDestination.
-func (s *StorageQueueEventSubscriptionDestination) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "endpointType":
-			err = unpopulate(val, &s.EndpointType)
-			delete(rawMsg, key)
-		case "properties":
-			err = unpopulate(val, &s.Properties)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // StorageQueueEventSubscriptionDestinationProperties - The properties for a storage queue destination.
@@ -2893,49 +1406,6 @@ type StringBeginsWithAdvancedFilter struct {
 	Values []*string `json:"values,omitempty"`
 }
 
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type StringBeginsWithAdvancedFilter.
-func (s *StringBeginsWithAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: s.OperatorType,
-		Key:          s.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type StringBeginsWithAdvancedFilter.
-func (s StringBeginsWithAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", s.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeStringBeginsWith
-	populate(objectMap, "values", s.Values)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type StringBeginsWithAdvancedFilter.
-func (s *StringBeginsWithAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &s.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &s.OperatorType)
-			delete(rawMsg, key)
-		case "values":
-			err = unpopulate(val, &s.Values)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // StringContainsAdvancedFilter - StringContains Advanced Filter.
 type StringContainsAdvancedFilter struct {
 	// REQUIRED; The operator type used for filtering, e.g., NumberIn, StringContains, BoolEquals and others.
@@ -2946,49 +1416,6 @@ type StringContainsAdvancedFilter struct {
 
 	// The set of filter values.
 	Values []*string `json:"values,omitempty"`
-}
-
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type StringContainsAdvancedFilter.
-func (s *StringContainsAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: s.OperatorType,
-		Key:          s.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type StringContainsAdvancedFilter.
-func (s StringContainsAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", s.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeStringContains
-	populate(objectMap, "values", s.Values)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type StringContainsAdvancedFilter.
-func (s *StringContainsAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &s.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &s.OperatorType)
-			delete(rawMsg, key)
-		case "values":
-			err = unpopulate(val, &s.Values)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // StringEndsWithAdvancedFilter - StringEndsWith Advanced Filter.
@@ -3003,49 +1430,6 @@ type StringEndsWithAdvancedFilter struct {
 	Values []*string `json:"values,omitempty"`
 }
 
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type StringEndsWithAdvancedFilter.
-func (s *StringEndsWithAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: s.OperatorType,
-		Key:          s.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type StringEndsWithAdvancedFilter.
-func (s StringEndsWithAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", s.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeStringEndsWith
-	populate(objectMap, "values", s.Values)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type StringEndsWithAdvancedFilter.
-func (s *StringEndsWithAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &s.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &s.OperatorType)
-			delete(rawMsg, key)
-		case "values":
-			err = unpopulate(val, &s.Values)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // StringInAdvancedFilter - StringIn Advanced Filter.
 type StringInAdvancedFilter struct {
 	// REQUIRED; The operator type used for filtering, e.g., NumberIn, StringContains, BoolEquals and others.
@@ -3056,49 +1440,6 @@ type StringInAdvancedFilter struct {
 
 	// The set of filter values.
 	Values []*string `json:"values,omitempty"`
-}
-
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type StringInAdvancedFilter.
-func (s *StringInAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: s.OperatorType,
-		Key:          s.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type StringInAdvancedFilter.
-func (s StringInAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", s.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeStringIn
-	populate(objectMap, "values", s.Values)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type StringInAdvancedFilter.
-func (s *StringInAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &s.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &s.OperatorType)
-			delete(rawMsg, key)
-		case "values":
-			err = unpopulate(val, &s.Values)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // StringNotBeginsWithAdvancedFilter - StringNotBeginsWith Advanced Filter.
@@ -3113,49 +1454,6 @@ type StringNotBeginsWithAdvancedFilter struct {
 	Values []*string `json:"values,omitempty"`
 }
 
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type StringNotBeginsWithAdvancedFilter.
-func (s *StringNotBeginsWithAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: s.OperatorType,
-		Key:          s.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type StringNotBeginsWithAdvancedFilter.
-func (s StringNotBeginsWithAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", s.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeStringNotBeginsWith
-	populate(objectMap, "values", s.Values)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type StringNotBeginsWithAdvancedFilter.
-func (s *StringNotBeginsWithAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &s.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &s.OperatorType)
-			delete(rawMsg, key)
-		case "values":
-			err = unpopulate(val, &s.Values)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // StringNotContainsAdvancedFilter - StringNotContains Advanced Filter.
 type StringNotContainsAdvancedFilter struct {
 	// REQUIRED; The operator type used for filtering, e.g., NumberIn, StringContains, BoolEquals and others.
@@ -3166,49 +1464,6 @@ type StringNotContainsAdvancedFilter struct {
 
 	// The set of filter values.
 	Values []*string `json:"values,omitempty"`
-}
-
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type StringNotContainsAdvancedFilter.
-func (s *StringNotContainsAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: s.OperatorType,
-		Key:          s.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type StringNotContainsAdvancedFilter.
-func (s StringNotContainsAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", s.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeStringNotContains
-	populate(objectMap, "values", s.Values)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type StringNotContainsAdvancedFilter.
-func (s *StringNotContainsAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &s.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &s.OperatorType)
-			delete(rawMsg, key)
-		case "values":
-			err = unpopulate(val, &s.Values)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // StringNotEndsWithAdvancedFilter - StringNotEndsWith Advanced Filter.
@@ -3223,49 +1478,6 @@ type StringNotEndsWithAdvancedFilter struct {
 	Values []*string `json:"values,omitempty"`
 }
 
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type StringNotEndsWithAdvancedFilter.
-func (s *StringNotEndsWithAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: s.OperatorType,
-		Key:          s.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type StringNotEndsWithAdvancedFilter.
-func (s StringNotEndsWithAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", s.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeStringNotEndsWith
-	populate(objectMap, "values", s.Values)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type StringNotEndsWithAdvancedFilter.
-func (s *StringNotEndsWithAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &s.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &s.OperatorType)
-			delete(rawMsg, key)
-		case "values":
-			err = unpopulate(val, &s.Values)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // StringNotInAdvancedFilter - StringNotIn Advanced Filter.
 type StringNotInAdvancedFilter struct {
 	// REQUIRED; The operator type used for filtering, e.g., NumberIn, StringContains, BoolEquals and others.
@@ -3276,49 +1488,6 @@ type StringNotInAdvancedFilter struct {
 
 	// The set of filter values.
 	Values []*string `json:"values,omitempty"`
-}
-
-// GetAdvancedFilter implements the AdvancedFilterClassification interface for type StringNotInAdvancedFilter.
-func (s *StringNotInAdvancedFilter) GetAdvancedFilter() *AdvancedFilter {
-	return &AdvancedFilter{
-		OperatorType: s.OperatorType,
-		Key:          s.Key,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type StringNotInAdvancedFilter.
-func (s StringNotInAdvancedFilter) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "key", s.Key)
-	objectMap["operatorType"] = AdvancedFilterOperatorTypeStringNotIn
-	populate(objectMap, "values", s.Values)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type StringNotInAdvancedFilter.
-func (s *StringNotInAdvancedFilter) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "key":
-			err = unpopulate(val, &s.Key)
-			delete(rawMsg, key)
-		case "operatorType":
-			err = unpopulate(val, &s.OperatorType)
-			delete(rawMsg, key)
-		case "values":
-			err = unpopulate(val, &s.Values)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // SystemData - Metadata pertaining to creation and last modification of the resource.
@@ -3340,53 +1509,6 @@ type SystemData struct {
 
 	// The type of identity that last modified the resource.
 	LastModifiedByType *CreatedByType `json:"lastModifiedByType,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type SystemData.
-func (s SystemData) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populateTimeRFC3339(objectMap, "createdAt", s.CreatedAt)
-	populate(objectMap, "createdBy", s.CreatedBy)
-	populate(objectMap, "createdByType", s.CreatedByType)
-	populateTimeRFC3339(objectMap, "lastModifiedAt", s.LastModifiedAt)
-	populate(objectMap, "lastModifiedBy", s.LastModifiedBy)
-	populate(objectMap, "lastModifiedByType", s.LastModifiedByType)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type SystemData.
-func (s *SystemData) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "createdAt":
-			err = unpopulateTimeRFC3339(val, &s.CreatedAt)
-			delete(rawMsg, key)
-		case "createdBy":
-			err = unpopulate(val, &s.CreatedBy)
-			delete(rawMsg, key)
-		case "createdByType":
-			err = unpopulate(val, &s.CreatedByType)
-			delete(rawMsg, key)
-		case "lastModifiedAt":
-			err = unpopulateTimeRFC3339(val, &s.LastModifiedAt)
-			delete(rawMsg, key)
-		case "lastModifiedBy":
-			err = unpopulate(val, &s.LastModifiedBy)
-			delete(rawMsg, key)
-		case "lastModifiedByType":
-			err = unpopulate(val, &s.LastModifiedByType)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // SystemTopic - EventGrid System Topic.
@@ -3414,20 +1536,6 @@ type SystemTopic struct {
 
 	// READ-ONLY; Type of the resource.
 	Type *string `json:"type,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type SystemTopic.
-func (s SystemTopic) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", s.ID)
-	populate(objectMap, "identity", s.Identity)
-	populate(objectMap, "location", s.Location)
-	populate(objectMap, "name", s.Name)
-	populate(objectMap, "properties", s.Properties)
-	populate(objectMap, "systemData", s.SystemData)
-	populate(objectMap, "tags", s.Tags)
-	populate(objectMap, "type", s.Type)
-	return json.Marshal(objectMap)
 }
 
 // SystemTopicEventSubscriptionsClientBeginCreateOrUpdateOptions contains the optional parameters for the SystemTopicEventSubscriptionsClient.BeginCreateOrUpdate
@@ -3505,14 +1613,6 @@ type SystemTopicUpdateParameters struct {
 	Tags map[string]*string `json:"tags,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type SystemTopicUpdateParameters.
-func (s SystemTopicUpdateParameters) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "identity", s.Identity)
-	populate(objectMap, "tags", s.Tags)
-	return json.Marshal(objectMap)
-}
-
 // SystemTopicsClientBeginCreateOrUpdateOptions contains the optional parameters for the SystemTopicsClient.BeginCreateOrUpdate
 // method.
 type SystemTopicsClientBeginCreateOrUpdateOptions struct {
@@ -3573,14 +1673,6 @@ type SystemTopicsListResult struct {
 	Value []*SystemTopic `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type SystemTopicsListResult.
-func (s SystemTopicsListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", s.NextLink)
-	populate(objectMap, "value", s.Value)
-	return json.Marshal(objectMap)
-}
-
 // Topic - EventGrid Topic
 type Topic struct {
 	// REQUIRED; Location of the resource.
@@ -3606,20 +1698,6 @@ type Topic struct {
 
 	// READ-ONLY; Type of the resource.
 	Type *string `json:"type,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type Topic.
-func (t Topic) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", t.ID)
-	populate(objectMap, "identity", t.Identity)
-	populate(objectMap, "location", t.Location)
-	populate(objectMap, "name", t.Name)
-	populate(objectMap, "properties", t.Properties)
-	populate(objectMap, "systemData", t.SystemData)
-	populate(objectMap, "tags", t.Tags)
-	populate(objectMap, "type", t.Type)
-	return json.Marshal(objectMap)
 }
 
 // TopicProperties - Properties of the Topic
@@ -3654,65 +1732,6 @@ type TopicProperties struct {
 
 	// READ-ONLY; Provisioning state of the topic.
 	ProvisioningState *TopicProvisioningState `json:"provisioningState,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type TopicProperties.
-func (t TopicProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "disableLocalAuth", t.DisableLocalAuth)
-	populate(objectMap, "endpoint", t.Endpoint)
-	populate(objectMap, "inboundIpRules", t.InboundIPRules)
-	populate(objectMap, "inputSchema", t.InputSchema)
-	populate(objectMap, "inputSchemaMapping", t.InputSchemaMapping)
-	populate(objectMap, "metricResourceId", t.MetricResourceID)
-	populate(objectMap, "privateEndpointConnections", t.PrivateEndpointConnections)
-	populate(objectMap, "provisioningState", t.ProvisioningState)
-	populate(objectMap, "publicNetworkAccess", t.PublicNetworkAccess)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type TopicProperties.
-func (t *TopicProperties) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "disableLocalAuth":
-			err = unpopulate(val, &t.DisableLocalAuth)
-			delete(rawMsg, key)
-		case "endpoint":
-			err = unpopulate(val, &t.Endpoint)
-			delete(rawMsg, key)
-		case "inboundIpRules":
-			err = unpopulate(val, &t.InboundIPRules)
-			delete(rawMsg, key)
-		case "inputSchema":
-			err = unpopulate(val, &t.InputSchema)
-			delete(rawMsg, key)
-		case "inputSchemaMapping":
-			t.InputSchemaMapping, err = unmarshalInputSchemaMappingClassification(val)
-			delete(rawMsg, key)
-		case "metricResourceId":
-			err = unpopulate(val, &t.MetricResourceID)
-			delete(rawMsg, key)
-		case "privateEndpointConnections":
-			err = unpopulate(val, &t.PrivateEndpointConnections)
-			delete(rawMsg, key)
-		case "provisioningState":
-			err = unpopulate(val, &t.ProvisioningState)
-			delete(rawMsg, key)
-		case "publicNetworkAccess":
-			err = unpopulate(val, &t.PublicNetworkAccess)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // TopicRegenerateKeyRequest - Topic regenerate share access key request
@@ -3772,20 +1791,6 @@ type TopicTypeProperties struct {
 	SupportedScopesForSource []*TopicTypePropertiesSupportedScopesForSourceItem `json:"supportedScopesForSource,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type TopicTypeProperties.
-func (t TopicTypeProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "description", t.Description)
-	populate(objectMap, "displayName", t.DisplayName)
-	populate(objectMap, "provider", t.Provider)
-	populate(objectMap, "provisioningState", t.ProvisioningState)
-	populate(objectMap, "resourceRegionType", t.ResourceRegionType)
-	populate(objectMap, "sourceResourceFormat", t.SourceResourceFormat)
-	populate(objectMap, "supportedLocations", t.SupportedLocations)
-	populate(objectMap, "supportedScopesForSource", t.SupportedScopesForSource)
-	return json.Marshal(objectMap)
-}
-
 // TopicTypesClientGetOptions contains the optional parameters for the TopicTypesClient.Get method.
 type TopicTypesClientGetOptions struct {
 	// placeholder for future optional parameters
@@ -3807,13 +1812,6 @@ type TopicTypesListResult struct {
 	Value []*TopicTypeInfo `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type TopicTypesListResult.
-func (t TopicTypesListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "value", t.Value)
-	return json.Marshal(objectMap)
-}
-
 // TopicUpdateParameterProperties - Information of topic update parameter properties.
 type TopicUpdateParameterProperties struct {
 	// This boolean is used to enable or disable local auth. Default value is false. When the property is set to true, only AAD
@@ -3829,15 +1827,6 @@ type TopicUpdateParameterProperties struct {
 	PublicNetworkAccess *PublicNetworkAccess `json:"publicNetworkAccess,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type TopicUpdateParameterProperties.
-func (t TopicUpdateParameterProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "disableLocalAuth", t.DisableLocalAuth)
-	populate(objectMap, "inboundIpRules", t.InboundIPRules)
-	populate(objectMap, "publicNetworkAccess", t.PublicNetworkAccess)
-	return json.Marshal(objectMap)
-}
-
 // TopicUpdateParameters - Properties of the Topic update
 type TopicUpdateParameters struct {
 	// Topic resource identity information.
@@ -3848,15 +1837,6 @@ type TopicUpdateParameters struct {
 
 	// Tags of the resource.
 	Tags map[string]*string `json:"tags,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type TopicUpdateParameters.
-func (t TopicUpdateParameters) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "identity", t.Identity)
-	populate(objectMap, "properties", t.Properties)
-	populate(objectMap, "tags", t.Tags)
-	return json.Marshal(objectMap)
 }
 
 // TopicsClientBeginCreateOrUpdateOptions contains the optional parameters for the TopicsClient.BeginCreateOrUpdate method.
@@ -3931,14 +1911,6 @@ type TopicsListResult struct {
 	Value []*Topic `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type TopicsListResult.
-func (t TopicsListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", t.NextLink)
-	populate(objectMap, "value", t.Value)
-	return json.Marshal(objectMap)
-}
-
 // TrackedResource - Definition of a Tracked Resource.
 type TrackedResource struct {
 	// REQUIRED; Location of the resource.
@@ -3957,17 +1929,6 @@ type TrackedResource struct {
 	Type *string `json:"type,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type TrackedResource.
-func (t TrackedResource) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", t.ID)
-	populate(objectMap, "location", t.Location)
-	populate(objectMap, "name", t.Name)
-	populate(objectMap, "tags", t.Tags)
-	populate(objectMap, "type", t.Type)
-	return json.Marshal(objectMap)
-}
-
 // UserIdentityProperties - The information about the user identity.
 type UserIdentityProperties struct {
 	// The client id of user assigned identity.
@@ -3984,44 +1945,6 @@ type WebHookEventSubscriptionDestination struct {
 
 	// WebHook Properties of the event subscription destination.
 	Properties *WebHookEventSubscriptionDestinationProperties `json:"properties,omitempty"`
-}
-
-// GetEventSubscriptionDestination implements the EventSubscriptionDestinationClassification interface for type WebHookEventSubscriptionDestination.
-func (w *WebHookEventSubscriptionDestination) GetEventSubscriptionDestination() *EventSubscriptionDestination {
-	return &EventSubscriptionDestination{
-		EndpointType: w.EndpointType,
-	}
-}
-
-// MarshalJSON implements the json.Marshaller interface for type WebHookEventSubscriptionDestination.
-func (w WebHookEventSubscriptionDestination) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	objectMap["endpointType"] = EndpointTypeWebHook
-	populate(objectMap, "properties", w.Properties)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type WebHookEventSubscriptionDestination.
-func (w *WebHookEventSubscriptionDestination) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "endpointType":
-			err = unpopulate(val, &w.EndpointType)
-			delete(rawMsg, key)
-		case "properties":
-			err = unpopulate(val, &w.Properties)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // WebHookEventSubscriptionDestinationProperties - Information about the webhook destination properties for an event subscription.
@@ -4047,72 +1970,4 @@ type WebHookEventSubscriptionDestinationProperties struct {
 
 	// READ-ONLY; The base URL that represents the endpoint of the destination of an event subscription.
 	EndpointBaseURL *string `json:"endpointBaseUrl,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type WebHookEventSubscriptionDestinationProperties.
-func (w WebHookEventSubscriptionDestinationProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "azureActiveDirectoryApplicationIdOrUri", w.AzureActiveDirectoryApplicationIDOrURI)
-	populate(objectMap, "azureActiveDirectoryTenantId", w.AzureActiveDirectoryTenantID)
-	populate(objectMap, "deliveryAttributeMappings", w.DeliveryAttributeMappings)
-	populate(objectMap, "endpointBaseUrl", w.EndpointBaseURL)
-	populate(objectMap, "endpointUrl", w.EndpointURL)
-	populate(objectMap, "maxEventsPerBatch", w.MaxEventsPerBatch)
-	populate(objectMap, "preferredBatchSizeInKilobytes", w.PreferredBatchSizeInKilobytes)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type WebHookEventSubscriptionDestinationProperties.
-func (w *WebHookEventSubscriptionDestinationProperties) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "azureActiveDirectoryApplicationIdOrUri":
-			err = unpopulate(val, &w.AzureActiveDirectoryApplicationIDOrURI)
-			delete(rawMsg, key)
-		case "azureActiveDirectoryTenantId":
-			err = unpopulate(val, &w.AzureActiveDirectoryTenantID)
-			delete(rawMsg, key)
-		case "deliveryAttributeMappings":
-			w.DeliveryAttributeMappings, err = unmarshalDeliveryAttributeMappingClassificationArray(val)
-			delete(rawMsg, key)
-		case "endpointBaseUrl":
-			err = unpopulate(val, &w.EndpointBaseURL)
-			delete(rawMsg, key)
-		case "endpointUrl":
-			err = unpopulate(val, &w.EndpointURL)
-			delete(rawMsg, key)
-		case "maxEventsPerBatch":
-			err = unpopulate(val, &w.MaxEventsPerBatch)
-			delete(rawMsg, key)
-		case "preferredBatchSizeInKilobytes":
-			err = unpopulate(val, &w.PreferredBatchSizeInKilobytes)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func populate(m map[string]interface{}, k string, v interface{}) {
-	if v == nil {
-		return
-	} else if azcore.IsNullValue(v) {
-		m[k] = nil
-	} else if !reflect.ValueOf(v).IsNil() {
-		m[k] = v
-	}
-}
-
-func unpopulate(data json.RawMessage, v interface{}) error {
-	if data == nil {
-		return nil
-	}
-	return json.Unmarshal(data, v)
 }

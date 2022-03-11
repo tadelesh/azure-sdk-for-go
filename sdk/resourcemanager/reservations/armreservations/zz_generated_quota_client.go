@@ -32,16 +32,16 @@ type QuotaClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewQuotaClient(credential azcore.TokenCredential, options *arm.ClientOptions) *QuotaClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &QuotaClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -69,9 +69,7 @@ func (client *QuotaClient) BeginCreateOrUpdate(ctx context.Context, subscription
 	if err != nil {
 		return QuotaClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := QuotaClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := QuotaClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("QuotaClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return QuotaClientCreateOrUpdatePollerResponse{}, err
@@ -193,7 +191,7 @@ func (client *QuotaClient) getCreateRequest(ctx context.Context, subscriptionID 
 
 // getHandleResponse handles the Get response.
 func (client *QuotaClient) getHandleResponse(resp *http.Response) (QuotaClientGetResponse, error) {
-	result := QuotaClientGetResponse{RawResponse: resp}
+	result := QuotaClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -250,7 +248,7 @@ func (client *QuotaClient) listCreateRequest(ctx context.Context, subscriptionID
 
 // listHandleResponse handles the List response.
 func (client *QuotaClient) listHandleResponse(resp *http.Response) (QuotaClientListResponse, error) {
-	result := QuotaClientListResponse{RawResponse: resp}
+	result := QuotaClientListResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -278,9 +276,7 @@ func (client *QuotaClient) BeginUpdate(ctx context.Context, subscriptionID strin
 	if err != nil {
 		return QuotaClientUpdatePollerResponse{}, err
 	}
-	result := QuotaClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := QuotaClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("QuotaClient.Update", "location", resp, client.pl)
 	if err != nil {
 		return QuotaClientUpdatePollerResponse{}, err

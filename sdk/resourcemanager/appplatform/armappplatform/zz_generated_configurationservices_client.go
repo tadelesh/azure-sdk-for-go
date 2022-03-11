@@ -35,17 +35,17 @@ type ConfigurationServicesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewConfigurationServicesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ConfigurationServicesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ConfigurationServicesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -65,9 +65,7 @@ func (client *ConfigurationServicesClient) BeginCreateOrUpdate(ctx context.Conte
 	if err != nil {
 		return ConfigurationServicesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ConfigurationServicesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ConfigurationServicesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ConfigurationServicesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ConfigurationServicesClientCreateOrUpdatePollerResponse{}, err
@@ -139,9 +137,7 @@ func (client *ConfigurationServicesClient) BeginDelete(ctx context.Context, reso
 	if err != nil {
 		return ConfigurationServicesClientDeletePollerResponse{}, err
 	}
-	result := ConfigurationServicesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ConfigurationServicesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ConfigurationServicesClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ConfigurationServicesClientDeletePollerResponse{}, err
@@ -254,7 +250,7 @@ func (client *ConfigurationServicesClient) getCreateRequest(ctx context.Context,
 
 // getHandleResponse handles the Get response.
 func (client *ConfigurationServicesClient) getHandleResponse(resp *http.Response) (ConfigurationServicesClientGetResponse, error) {
-	result := ConfigurationServicesClientGetResponse{RawResponse: resp}
+	result := ConfigurationServicesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigurationServiceResource); err != nil {
 		return ConfigurationServicesClientGetResponse{}, err
 	}
@@ -308,7 +304,7 @@ func (client *ConfigurationServicesClient) listCreateRequest(ctx context.Context
 
 // listHandleResponse handles the List response.
 func (client *ConfigurationServicesClient) listHandleResponse(resp *http.Response) (ConfigurationServicesClientListResponse, error) {
-	result := ConfigurationServicesClientListResponse{RawResponse: resp}
+	result := ConfigurationServicesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigurationServiceResourceCollection); err != nil {
 		return ConfigurationServicesClientListResponse{}, err
 	}
@@ -329,9 +325,7 @@ func (client *ConfigurationServicesClient) BeginValidate(ctx context.Context, re
 	if err != nil {
 		return ConfigurationServicesClientValidatePollerResponse{}, err
 	}
-	result := ConfigurationServicesClientValidatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ConfigurationServicesClientValidatePollerResponse{}
 	pt, err := armruntime.NewPoller("ConfigurationServicesClient.Validate", "location", resp, client.pl)
 	if err != nil {
 		return ConfigurationServicesClientValidatePollerResponse{}, err

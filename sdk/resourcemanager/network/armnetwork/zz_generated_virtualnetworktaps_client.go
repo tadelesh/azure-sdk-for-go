@@ -35,17 +35,17 @@ type VirtualNetworkTapsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualNetworkTapsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualNetworkTapsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualNetworkTapsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *VirtualNetworkTapsClient) BeginCreateOrUpdate(ctx context.Context,
 	if err != nil {
 		return VirtualNetworkTapsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VirtualNetworkTapsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualNetworkTapsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualNetworkTapsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VirtualNetworkTapsClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *VirtualNetworkTapsClient) BeginDelete(ctx context.Context, resourc
 	if err != nil {
 		return VirtualNetworkTapsClientDeletePollerResponse{}, err
 	}
-	result := VirtualNetworkTapsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualNetworkTapsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualNetworkTapsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return VirtualNetworkTapsClientDeletePollerResponse{}, err
@@ -233,7 +229,7 @@ func (client *VirtualNetworkTapsClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *VirtualNetworkTapsClient) getHandleResponse(resp *http.Response) (VirtualNetworkTapsClientGetResponse, error) {
-	result := VirtualNetworkTapsClientGetResponse{RawResponse: resp}
+	result := VirtualNetworkTapsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkTap); err != nil {
 		return VirtualNetworkTapsClientGetResponse{}, err
 	}
@@ -276,7 +272,7 @@ func (client *VirtualNetworkTapsClient) listAllCreateRequest(ctx context.Context
 
 // listAllHandleResponse handles the ListAll response.
 func (client *VirtualNetworkTapsClient) listAllHandleResponse(resp *http.Response) (VirtualNetworkTapsClientListAllResponse, error) {
-	result := VirtualNetworkTapsClientListAllResponse{RawResponse: resp}
+	result := VirtualNetworkTapsClientListAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkTapListResult); err != nil {
 		return VirtualNetworkTapsClientListAllResponse{}, err
 	}
@@ -324,7 +320,7 @@ func (client *VirtualNetworkTapsClient) listByResourceGroupCreateRequest(ctx con
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *VirtualNetworkTapsClient) listByResourceGroupHandleResponse(resp *http.Response) (VirtualNetworkTapsClientListByResourceGroupResponse, error) {
-	result := VirtualNetworkTapsClientListByResourceGroupResponse{RawResponse: resp}
+	result := VirtualNetworkTapsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkTapListResult); err != nil {
 		return VirtualNetworkTapsClientListByResourceGroupResponse{}, err
 	}
@@ -381,7 +377,7 @@ func (client *VirtualNetworkTapsClient) updateTagsCreateRequest(ctx context.Cont
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *VirtualNetworkTapsClient) updateTagsHandleResponse(resp *http.Response) (VirtualNetworkTapsClientUpdateTagsResponse, error) {
-	result := VirtualNetworkTapsClientUpdateTagsResponse{RawResponse: resp}
+	result := VirtualNetworkTapsClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkTap); err != nil {
 		return VirtualNetworkTapsClientUpdateTagsResponse{}, err
 	}

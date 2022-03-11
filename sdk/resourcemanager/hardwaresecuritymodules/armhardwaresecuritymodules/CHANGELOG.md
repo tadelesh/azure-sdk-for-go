@@ -1,5 +1,78 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*DedicatedHsmClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(DedicatedHsmClientListByResourceGroupResponse, error)`
+- Function `*DedicatedHsmClientListOutboundNetworkDependenciesEndpointsPager.NextPage` return value(s) have been changed from `(bool)` to `(DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResponse, error)`
+- Function `*OperationsClient.List` parameter(s) have been changed from `(context.Context, *OperationsClientListOptions)` to `(*OperationsClientListOptions)`
+- Function `*OperationsClient.List` return value(s) have been changed from `(OperationsClientListResponse, error)` to `(*OperationsClientListPager)`
+- Function `*DedicatedHsmClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(DedicatedHsmClientListBySubscriptionResponse, error)`
+- Function `*DedicatedHsmClientListOutboundNetworkDependenciesEndpointsPager.PageResponse` has been removed
+- Function `*DedicatedHsmClientListByResourceGroupPager.Err` has been removed
+- Function `*DedicatedHsmClientListOutboundNetworkDependenciesEndpointsPager.Err` has been removed
+- Function `*DedicatedHsmClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*DedicatedHsmClientListBySubscriptionPager.Err` has been removed
+- Function `*DedicatedHsmClientListBySubscriptionPager.PageResponse` has been removed
+- Struct `DedicatedHsmClientCreateOrUpdateResult` has been removed
+- Struct `DedicatedHsmClientGetResult` has been removed
+- Struct `DedicatedHsmClientListByResourceGroupResult` has been removed
+- Struct `DedicatedHsmClientListBySubscriptionResult` has been removed
+- Struct `DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResult` has been removed
+- Struct `DedicatedHsmClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `DedicatedHsmClientListBySubscriptionResult` of struct `DedicatedHsmClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHsmClientListBySubscriptionResponse` has been removed
+- Field `DedicatedHsmClientListByResourceGroupResult` of struct `DedicatedHsmClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHsmClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHsmClientDeletePollerResponse` has been removed
+- Field `DedicatedHsmClientUpdateResult` of struct `DedicatedHsmClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHsmClientUpdateResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHsmClientCreateOrUpdatePollerResponse` has been removed
+- Field `DedicatedHsmClientCreateOrUpdateResult` of struct `DedicatedHsmClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHsmClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHsmClientUpdatePollerResponse` has been removed
+- Field `DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResult` of struct `DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResponse` has been removed
+- Field `DedicatedHsmClientGetResult` of struct `DedicatedHsmClientGetResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHsmClientGetResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHsmClientDeleteResponse` has been removed
+
+### Features Added
+
+- New function `*DedicatedHsmClientListByResourceGroupPager.More() bool`
+- New function `ResourceListResult.MarshalJSON() ([]byte, error)`
+- New function `*DedicatedHsmClientListOutboundNetworkDependenciesEndpointsPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*OperationsClientListPager.NextPage(context.Context) (OperationsClientListResponse, error)`
+- New function `*DedicatedHsmClientListBySubscriptionPager.More() bool`
+- New struct `DedicatedHsmError`
+- New struct `Error`
+- New struct `OperationsClientListPager`
+- New struct `ResourceListResult`
+- New anonymous field `DedicatedHsm` in struct `DedicatedHsmClientCreateOrUpdateResponse`
+- New anonymous field `DedicatedHsmOperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `DedicatedHsm` in struct `DedicatedHsmClientUpdateResponse`
+- New anonymous field `DedicatedHsmListResult` in struct `DedicatedHsmClientListByResourceGroupResponse`
+- New anonymous field `OutboundEnvironmentEndpointCollection` in struct `DedicatedHsmClientListOutboundNetworkDependenciesEndpointsResponse`
+- New anonymous field `DedicatedHsm` in struct `DedicatedHsmClientGetResponse`
+- New anonymous field `DedicatedHsmListResult` in struct `DedicatedHsmClientListBySubscriptionResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ResourceListResult.MarshalJSON` has been removed
+- Struct `DedicatedHsmError` has been removed
+- Struct `Error` has been removed
+- Struct `ResourceListResult` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

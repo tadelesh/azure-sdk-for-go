@@ -43,11 +43,10 @@ func (p *ComputeClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final ComputeClientCreateOrUpdateResponse will be returned.
 func (p *ComputeClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (ComputeClientCreateOrUpdateResponse, error) {
 	respType := ComputeClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ComputeResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.ComputeResource)
 	if err != nil {
 		return ComputeClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ComputeClientDeletePoller) Poll(ctx context.Context) (*http.Response, e
 // If the final GET succeeded then the final ComputeClientDeleteResponse will be returned.
 func (p *ComputeClientDeletePoller) FinalResponse(ctx context.Context) (ComputeClientDeleteResponse, error) {
 	respType := ComputeClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ComputeClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ComputeClientRestartPoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ComputeClientRestartResponse will be returned.
 func (p *ComputeClientRestartPoller) FinalResponse(ctx context.Context) (ComputeClientRestartResponse, error) {
 	respType := ComputeClientRestartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ComputeClientRestartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *ComputeClientStartPoller) Poll(ctx context.Context) (*http.Response, er
 // If the final GET succeeded then the final ComputeClientStartResponse will be returned.
 func (p *ComputeClientStartPoller) FinalResponse(ctx context.Context) (ComputeClientStartResponse, error) {
 	respType := ComputeClientStartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ComputeClientStartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *ComputeClientStopPoller) Poll(ctx context.Context) (*http.Response, err
 // If the final GET succeeded then the final ComputeClientStopResponse will be returned.
 func (p *ComputeClientStopPoller) FinalResponse(ctx context.Context) (ComputeClientStopResponse, error) {
 	respType := ComputeClientStopResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ComputeClientStopResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *ComputeClientUpdatePoller) Poll(ctx context.Context) (*http.Response, e
 // If the final GET succeeded then the final ComputeClientUpdateResponse will be returned.
 func (p *ComputeClientUpdatePoller) FinalResponse(ctx context.Context) (ComputeClientUpdateResponse, error) {
 	respType := ComputeClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ComputeResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.ComputeResource)
 	if err != nil {
 		return ComputeClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *WorkspacesClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.
 // If the final GET succeeded then the final WorkspacesClientCreateOrUpdateResponse will be returned.
 func (p *WorkspacesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (WorkspacesClientCreateOrUpdateResponse, error) {
 	respType := WorkspacesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Workspace)
+	_, err := p.pt.FinalResponse(ctx, &respType.Workspace)
 	if err != nil {
 		return WorkspacesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *WorkspacesClientDeletePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final WorkspacesClientDeleteResponse will be returned.
 func (p *WorkspacesClientDeletePoller) FinalResponse(ctx context.Context) (WorkspacesClientDeleteResponse, error) {
 	respType := WorkspacesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return WorkspacesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *WorkspacesClientDiagnosePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final WorkspacesClientDiagnoseResponse will be returned.
 func (p *WorkspacesClientDiagnosePoller) FinalResponse(ctx context.Context) (WorkspacesClientDiagnoseResponse, error) {
 	respType := WorkspacesClientDiagnoseResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DiagnoseResponseResult)
+	_, err := p.pt.FinalResponse(ctx, &respType.DiagnoseResponseResult)
 	if err != nil {
 		return WorkspacesClientDiagnoseResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -430,11 +421,10 @@ func (p *WorkspacesClientPrepareNotebookPoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final WorkspacesClientPrepareNotebookResponse will be returned.
 func (p *WorkspacesClientPrepareNotebookPoller) FinalResponse(ctx context.Context) (WorkspacesClientPrepareNotebookResponse, error) {
 	respType := WorkspacesClientPrepareNotebookResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.NotebookResourceInfo)
+	_, err := p.pt.FinalResponse(ctx, &respType.NotebookResourceInfo)
 	if err != nil {
 		return WorkspacesClientPrepareNotebookResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -473,11 +463,10 @@ func (p *WorkspacesClientResyncKeysPoller) Poll(ctx context.Context) (*http.Resp
 // If the final GET succeeded then the final WorkspacesClientResyncKeysResponse will be returned.
 func (p *WorkspacesClientResyncKeysPoller) FinalResponse(ctx context.Context) (WorkspacesClientResyncKeysResponse, error) {
 	respType := WorkspacesClientResyncKeysResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return WorkspacesClientResyncKeysResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

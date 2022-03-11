@@ -34,17 +34,17 @@ type SQLPoolOperationResultsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLPoolOperationResultsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLPoolOperationResultsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLPoolOperationResultsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,8 +108,8 @@ func (client *SQLPoolOperationResultsClient) getLocationHeaderResultCreateReques
 
 // getLocationHeaderResultHandleResponse handles the GetLocationHeaderResult response.
 func (client *SQLPoolOperationResultsClient) getLocationHeaderResultHandleResponse(resp *http.Response) (SQLPoolOperationResultsClientGetLocationHeaderResultResponse, error) {
-	result := SQLPoolOperationResultsClientGetLocationHeaderResultResponse{RawResponse: resp}
-	if err := runtime.UnmarshalAsJSON(resp, &result.Object); err != nil {
+	result := SQLPoolOperationResultsClientGetLocationHeaderResultResponse{}
+	if err := runtime.UnmarshalAsJSON(resp, &result.Interface); err != nil {
 		return SQLPoolOperationResultsClientGetLocationHeaderResultResponse{}, err
 	}
 	return result, nil

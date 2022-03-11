@@ -35,17 +35,17 @@ type ArtifactsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewArtifactsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ArtifactsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ArtifactsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -111,7 +111,7 @@ func (client *ArtifactsClient) generateArmTemplateCreateRequest(ctx context.Cont
 
 // generateArmTemplateHandleResponse handles the GenerateArmTemplate response.
 func (client *ArtifactsClient) generateArmTemplateHandleResponse(resp *http.Response) (ArtifactsClientGenerateArmTemplateResponse, error) {
-	result := ArtifactsClientGenerateArmTemplateResponse{RawResponse: resp}
+	result := ArtifactsClientGenerateArmTemplateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ArmTemplateInfo); err != nil {
 		return ArtifactsClientGenerateArmTemplateResponse{}, err
 	}
@@ -179,7 +179,7 @@ func (client *ArtifactsClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *ArtifactsClient) getHandleResponse(resp *http.Response) (ArtifactsClientGetResponse, error) {
-	result := ArtifactsClientGetResponse{RawResponse: resp}
+	result := ArtifactsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Artifact); err != nil {
 		return ArtifactsClientGetResponse{}, err
 	}
@@ -248,7 +248,7 @@ func (client *ArtifactsClient) listCreateRequest(ctx context.Context, resourceGr
 
 // listHandleResponse handles the List response.
 func (client *ArtifactsClient) listHandleResponse(resp *http.Response) (ArtifactsClientListResponse, error) {
-	result := ArtifactsClientListResponse{RawResponse: resp}
+	result := ArtifactsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ArtifactList); err != nil {
 		return ArtifactsClientListResponse{}, err
 	}

@@ -94,7 +94,7 @@ func (client *LocationsClient) getCreateRequest(ctx context.Context, options *Lo
 
 // getHandleResponse handles the Get response.
 func (client *LocationsClient) getHandleResponse(resp *http.Response) (LocationsClientGetResponse, error) {
-	result := LocationsClientGetResponse{RawResponse: resp}
+	result := LocationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AscLocation); err != nil {
 		return LocationsClientGetResponse{}, err
 	}
@@ -138,7 +138,7 @@ func (client *LocationsClient) listCreateRequest(ctx context.Context, options *L
 
 // listHandleResponse handles the List response.
 func (client *LocationsClient) listHandleResponse(resp *http.Response) (LocationsClientListResponse, error) {
-	result := LocationsClientListResponse{RawResponse: resp}
+	result := LocationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AscLocationList); err != nil {
 		return LocationsClientListResponse{}, err
 	}

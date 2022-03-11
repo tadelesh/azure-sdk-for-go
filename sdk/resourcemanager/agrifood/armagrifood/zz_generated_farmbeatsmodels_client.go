@@ -35,17 +35,17 @@ type FarmBeatsModelsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFarmBeatsModelsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FarmBeatsModelsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FarmBeatsModelsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *FarmBeatsModelsClient) createOrUpdateCreateRequest(ctx context.Con
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *FarmBeatsModelsClient) createOrUpdateHandleResponse(resp *http.Response) (FarmBeatsModelsClientCreateOrUpdateResponse, error) {
-	result := FarmBeatsModelsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := FarmBeatsModelsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FarmBeats); err != nil {
 		return FarmBeatsModelsClientCreateOrUpdateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *FarmBeatsModelsClient) Delete(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return FarmBeatsModelsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return FarmBeatsModelsClientDeleteResponse{RawResponse: resp}, nil
+	return FarmBeatsModelsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -201,7 +201,7 @@ func (client *FarmBeatsModelsClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *FarmBeatsModelsClient) getHandleResponse(resp *http.Response) (FarmBeatsModelsClientGetResponse, error) {
-	result := FarmBeatsModelsClientGetResponse{RawResponse: resp}
+	result := FarmBeatsModelsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FarmBeats); err != nil {
 		return FarmBeatsModelsClientGetResponse{}, err
 	}
@@ -255,7 +255,7 @@ func (client *FarmBeatsModelsClient) listByResourceGroupCreateRequest(ctx contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *FarmBeatsModelsClient) listByResourceGroupHandleResponse(resp *http.Response) (FarmBeatsModelsClientListByResourceGroupResponse, error) {
-	result := FarmBeatsModelsClientListByResourceGroupResponse{RawResponse: resp}
+	result := FarmBeatsModelsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FarmBeatsListResponse); err != nil {
 		return FarmBeatsModelsClientListByResourceGroupResponse{}, err
 	}
@@ -304,7 +304,7 @@ func (client *FarmBeatsModelsClient) listBySubscriptionCreateRequest(ctx context
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *FarmBeatsModelsClient) listBySubscriptionHandleResponse(resp *http.Response) (FarmBeatsModelsClientListBySubscriptionResponse, error) {
-	result := FarmBeatsModelsClientListBySubscriptionResponse{RawResponse: resp}
+	result := FarmBeatsModelsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FarmBeatsListResponse); err != nil {
 		return FarmBeatsModelsClientListBySubscriptionResponse{}, err
 	}
@@ -360,7 +360,7 @@ func (client *FarmBeatsModelsClient) updateCreateRequest(ctx context.Context, fa
 
 // updateHandleResponse handles the Update response.
 func (client *FarmBeatsModelsClient) updateHandleResponse(resp *http.Response) (FarmBeatsModelsClientUpdateResponse, error) {
-	result := FarmBeatsModelsClientUpdateResponse{RawResponse: resp}
+	result := FarmBeatsModelsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FarmBeats); err != nil {
 		return FarmBeatsModelsClientUpdateResponse{}, err
 	}

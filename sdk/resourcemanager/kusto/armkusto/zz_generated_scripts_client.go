@@ -35,17 +35,17 @@ type ScriptsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewScriptsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ScriptsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ScriptsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *ScriptsClient) checkNameAvailabilityCreateRequest(ctx context.Cont
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *ScriptsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (ScriptsClientCheckNameAvailabilityResponse, error) {
-	result := ScriptsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := ScriptsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameResult); err != nil {
 		return ScriptsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -126,9 +126,7 @@ func (client *ScriptsClient) BeginCreateOrUpdate(ctx context.Context, resourceGr
 	if err != nil {
 		return ScriptsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ScriptsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ScriptsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ScriptsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ScriptsClientCreateOrUpdatePollerResponse{}, err
@@ -202,9 +200,7 @@ func (client *ScriptsClient) BeginDelete(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return ScriptsClientDeletePollerResponse{}, err
 	}
-	result := ScriptsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ScriptsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ScriptsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ScriptsClientDeletePollerResponse{}, err
@@ -324,7 +320,7 @@ func (client *ScriptsClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *ScriptsClient) getHandleResponse(resp *http.Response) (ScriptsClientGetResponse, error) {
-	result := ScriptsClientGetResponse{RawResponse: resp}
+	result := ScriptsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Script); err != nil {
 		return ScriptsClientGetResponse{}, err
 	}
@@ -337,19 +333,13 @@ func (client *ScriptsClient) getHandleResponse(resp *http.Response) (ScriptsClie
 // clusterName - The name of the Kusto cluster.
 // databaseName - The name of the database in the Kusto cluster.
 // options - ScriptsClientListByDatabaseOptions contains the optional parameters for the ScriptsClient.ListByDatabase method.
-func (client *ScriptsClient) ListByDatabase(ctx context.Context, resourceGroupName string, clusterName string, databaseName string, options *ScriptsClientListByDatabaseOptions) (ScriptsClientListByDatabaseResponse, error) {
-	req, err := client.listByDatabaseCreateRequest(ctx, resourceGroupName, clusterName, databaseName, options)
-	if err != nil {
-		return ScriptsClientListByDatabaseResponse{}, err
+func (client *ScriptsClient) ListByDatabase(resourceGroupName string, clusterName string, databaseName string, options *ScriptsClientListByDatabaseOptions) *ScriptsClientListByDatabasePager {
+	return &ScriptsClientListByDatabasePager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, clusterName, databaseName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ScriptsClientListByDatabaseResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ScriptsClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByDatabaseHandleResponse(resp)
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.
@@ -384,7 +374,7 @@ func (client *ScriptsClient) listByDatabaseCreateRequest(ctx context.Context, re
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *ScriptsClient) listByDatabaseHandleResponse(resp *http.Response) (ScriptsClientListByDatabaseResponse, error) {
-	result := ScriptsClientListByDatabaseResponse{RawResponse: resp}
+	result := ScriptsClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScriptListResult); err != nil {
 		return ScriptsClientListByDatabaseResponse{}, err
 	}
@@ -404,9 +394,7 @@ func (client *ScriptsClient) BeginUpdate(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return ScriptsClientUpdatePollerResponse{}, err
 	}
-	result := ScriptsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ScriptsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ScriptsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ScriptsClientUpdatePollerResponse{}, err

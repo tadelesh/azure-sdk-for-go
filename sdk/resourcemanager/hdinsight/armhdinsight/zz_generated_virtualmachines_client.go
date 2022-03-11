@@ -35,17 +35,17 @@ type VirtualMachinesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualMachinesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualMachinesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualMachinesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *VirtualMachinesClient) getAsyncOperationStatusCreateRequest(ctx co
 
 // getAsyncOperationStatusHandleResponse handles the GetAsyncOperationStatus response.
 func (client *VirtualMachinesClient) getAsyncOperationStatusHandleResponse(resp *http.Response) (VirtualMachinesClientGetAsyncOperationStatusResponse, error) {
-	result := VirtualMachinesClientGetAsyncOperationStatusResponse{RawResponse: resp}
+	result := VirtualMachinesClientGetAsyncOperationStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AsyncOperationResult); err != nil {
 		return VirtualMachinesClientGetAsyncOperationStatusResponse{}, err
 	}
@@ -160,7 +160,7 @@ func (client *VirtualMachinesClient) listHostsCreateRequest(ctx context.Context,
 
 // listHostsHandleResponse handles the ListHosts response.
 func (client *VirtualMachinesClient) listHostsHandleResponse(resp *http.Response) (VirtualMachinesClientListHostsResponse, error) {
-	result := VirtualMachinesClientListHostsResponse{RawResponse: resp}
+	result := VirtualMachinesClientListHostsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostInfoArray); err != nil {
 		return VirtualMachinesClientListHostsResponse{}, err
 	}
@@ -179,9 +179,7 @@ func (client *VirtualMachinesClient) BeginRestartHosts(ctx context.Context, reso
 	if err != nil {
 		return VirtualMachinesClientRestartHostsPollerResponse{}, err
 	}
-	result := VirtualMachinesClientRestartHostsPollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualMachinesClientRestartHostsPollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualMachinesClient.RestartHosts", "location", resp, client.pl)
 	if err != nil {
 		return VirtualMachinesClientRestartHostsPollerResponse{}, err

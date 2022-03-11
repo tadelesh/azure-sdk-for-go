@@ -43,11 +43,10 @@ func (p *ServersClientCreatePoller) Poll(ctx context.Context) (*http.Response, e
 // If the final GET succeeded then the final ServersClientCreateResponse will be returned.
 func (p *ServersClientCreatePoller) FinalResponse(ctx context.Context) (ServersClientCreateResponse, error) {
 	respType := ServersClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Server)
+	_, err := p.pt.FinalResponse(ctx, &respType.Server)
 	if err != nil {
 		return ServersClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ServersClientDeletePoller) Poll(ctx context.Context) (*http.Response, e
 // If the final GET succeeded then the final ServersClientDeleteResponse will be returned.
 func (p *ServersClientDeletePoller) FinalResponse(ctx context.Context) (ServersClientDeleteResponse, error) {
 	respType := ServersClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ServersClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *ServersClientResumePoller) Poll(ctx context.Context) (*http.Response, e
 // If the final GET succeeded then the final ServersClientResumeResponse will be returned.
 func (p *ServersClientResumePoller) FinalResponse(ctx context.Context) (ServersClientResumeResponse, error) {
 	respType := ServersClientResumeResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ServersClientResumeResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *ServersClientSuspendPoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final ServersClientSuspendResponse will be returned.
 func (p *ServersClientSuspendPoller) FinalResponse(ctx context.Context) (ServersClientSuspendResponse, error) {
 	respType := ServersClientSuspendResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ServersClientSuspendResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *ServersClientUpdatePoller) Poll(ctx context.Context) (*http.Response, e
 // If the final GET succeeded then the final ServersClientUpdateResponse will be returned.
 func (p *ServersClientUpdatePoller) FinalResponse(ctx context.Context) (ServersClientUpdateResponse, error) {
 	respType := ServersClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Server)
+	_, err := p.pt.FinalResponse(ctx, &respType.Server)
 	if err != nil {
 		return ServersClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

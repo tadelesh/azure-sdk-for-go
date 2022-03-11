@@ -108,7 +108,7 @@ func (client *PrivateEndpointConnectionsOperationResultsClient) getCreateRequest
 
 // getHandleResponse handles the Get response.
 func (client *PrivateEndpointConnectionsOperationResultsClient) getHandleResponse(resp *http.Response) (PrivateEndpointConnectionsOperationResultsClientGetResponse, error) {
-	result := PrivateEndpointConnectionsOperationResultsClientGetResponse{RawResponse: resp}
+	result := PrivateEndpointConnectionsOperationResultsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnection); err != nil {
 		return PrivateEndpointConnectionsOperationResultsClientGetResponse{}, err
 	}

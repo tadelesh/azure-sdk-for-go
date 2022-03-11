@@ -34,17 +34,17 @@ type ResourceClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewResourceClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ResourceClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ResourceClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -81,7 +81,7 @@ func (client *ResourceClient) checkNameAvailabilityCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, operationInputs)
@@ -89,7 +89,7 @@ func (client *ResourceClient) checkNameAvailabilityCreateRequest(ctx context.Con
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *ResourceClient) checkNameAvailabilityHandleResponse(resp *http.Response) (ResourceClientCheckNameAvailabilityResponse, error) {
-	result := ResourceClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := ResourceClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NameAvailabilityInfo); err != nil {
 		return ResourceClientCheckNameAvailabilityResponse{}, err
 	}
@@ -148,7 +148,7 @@ func (client *ResourceClient) createEventHubConsumerGroupCreateRequest(ctx conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, consumerGroupBody)
@@ -156,7 +156,7 @@ func (client *ResourceClient) createEventHubConsumerGroupCreateRequest(ctx conte
 
 // createEventHubConsumerGroupHandleResponse handles the CreateEventHubConsumerGroup response.
 func (client *ResourceClient) createEventHubConsumerGroupHandleResponse(resp *http.Response) (ResourceClientCreateEventHubConsumerGroupResponse, error) {
-	result := ResourceClientCreateEventHubConsumerGroupResponse{RawResponse: resp}
+	result := ResourceClientCreateEventHubConsumerGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventHubConsumerGroupInfo); err != nil {
 		return ResourceClientCreateEventHubConsumerGroupResponse{}, err
 	}
@@ -165,7 +165,8 @@ func (client *ResourceClient) createEventHubConsumerGroupHandleResponse(resp *ht
 
 // BeginCreateOrUpdate - Create or update the metadata of an Iot hub. The usual pattern to modify a property is to retrieve
 // the IoT hub metadata and security metadata, and then combine them with the modified values in a new
-// body to update the IoT hub.
+// body to update the IoT hub. If certain properties are missing in the JSON, updating IoT Hub may cause these values to fallback
+// to default, which may lead to unexpected behavior.
 // If the operation fails it returns an *azcore.ResponseError type.
 // resourceGroupName - The name of the resource group that contains the IoT hub.
 // resourceName - The name of the IoT hub.
@@ -177,9 +178,7 @@ func (client *ResourceClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return ResourceClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ResourceClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ResourceClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ResourceClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ResourceClientCreateOrUpdatePollerResponse{}, err
@@ -192,7 +191,8 @@ func (client *ResourceClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 
 // CreateOrUpdate - Create or update the metadata of an Iot hub. The usual pattern to modify a property is to retrieve the
 // IoT hub metadata and security metadata, and then combine them with the modified values in a new
-// body to update the IoT hub.
+// body to update the IoT hub. If certain properties are missing in the JSON, updating IoT Hub may cause these values to fallback
+// to default, which may lead to unexpected behavior.
 // If the operation fails it returns an *azcore.ResponseError type.
 func (client *ResourceClient) createOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, iotHubDescription Description, options *ResourceClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	req, err := client.createOrUpdateCreateRequest(ctx, resourceGroupName, resourceName, iotHubDescription, options)
@@ -229,7 +229,7 @@ func (client *ResourceClient) createOrUpdateCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header.Set("If-Match", *options.IfMatch)
@@ -248,9 +248,7 @@ func (client *ResourceClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ResourceClientDeletePollerResponse{}, err
 	}
-	result := ResourceClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ResourceClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ResourceClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ResourceClientDeletePollerResponse{}, err
@@ -298,7 +296,7 @@ func (client *ResourceClient) deleteCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -324,7 +322,7 @@ func (client *ResourceClient) DeleteEventHubConsumerGroup(ctx context.Context, r
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ResourceClientDeleteEventHubConsumerGroupResponse{}, runtime.NewResponseError(resp)
 	}
-	return ResourceClientDeleteEventHubConsumerGroupResponse{RawResponse: resp}, nil
+	return ResourceClientDeleteEventHubConsumerGroupResponse{}, nil
 }
 
 // deleteEventHubConsumerGroupCreateRequest creates the DeleteEventHubConsumerGroup request.
@@ -355,7 +353,7 @@ func (client *ResourceClient) deleteEventHubConsumerGroupCreateRequest(ctx conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -404,7 +402,7 @@ func (client *ResourceClient) exportDevicesCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, exportDevicesParameters)
@@ -412,7 +410,7 @@ func (client *ResourceClient) exportDevicesCreateRequest(ctx context.Context, re
 
 // exportDevicesHandleResponse handles the ExportDevices response.
 func (client *ResourceClient) exportDevicesHandleResponse(resp *http.Response) (ResourceClientExportDevicesResponse, error) {
-	result := ResourceClientExportDevicesResponse{RawResponse: resp}
+	result := ResourceClientExportDevicesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobResponse); err != nil {
 		return ResourceClientExportDevicesResponse{}, err
 	}
@@ -459,7 +457,7 @@ func (client *ResourceClient) getCreateRequest(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -467,7 +465,7 @@ func (client *ResourceClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *ResourceClient) getHandleResponse(resp *http.Response) (ResourceClientGetResponse, error) {
-	result := ResourceClientGetResponse{RawResponse: resp}
+	result := ResourceClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Description); err != nil {
 		return ResourceClientGetResponse{}, err
 	}
@@ -510,7 +508,7 @@ func (client *ResourceClient) getEndpointHealthCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -518,7 +516,7 @@ func (client *ResourceClient) getEndpointHealthCreateRequest(ctx context.Context
 
 // getEndpointHealthHandleResponse handles the GetEndpointHealth response.
 func (client *ResourceClient) getEndpointHealthHandleResponse(resp *http.Response) (ResourceClientGetEndpointHealthResponse, error) {
-	result := ResourceClientGetEndpointHealthResponse{RawResponse: resp}
+	result := ResourceClientGetEndpointHealthResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EndpointHealthDataListResult); err != nil {
 		return ResourceClientGetEndpointHealthResponse{}, err
 	}
@@ -576,7 +574,7 @@ func (client *ResourceClient) getEventHubConsumerGroupCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -584,7 +582,7 @@ func (client *ResourceClient) getEventHubConsumerGroupCreateRequest(ctx context.
 
 // getEventHubConsumerGroupHandleResponse handles the GetEventHubConsumerGroup response.
 func (client *ResourceClient) getEventHubConsumerGroupHandleResponse(resp *http.Response) (ResourceClientGetEventHubConsumerGroupResponse, error) {
-	result := ResourceClientGetEventHubConsumerGroupResponse{RawResponse: resp}
+	result := ResourceClientGetEventHubConsumerGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventHubConsumerGroupInfo); err != nil {
 		return ResourceClientGetEventHubConsumerGroupResponse{}, err
 	}
@@ -636,7 +634,7 @@ func (client *ResourceClient) getJobCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -644,7 +642,7 @@ func (client *ResourceClient) getJobCreateRequest(ctx context.Context, resourceG
 
 // getJobHandleResponse handles the GetJob response.
 func (client *ResourceClient) getJobHandleResponse(resp *http.Response) (ResourceClientGetJobResponse, error) {
-	result := ResourceClientGetJobResponse{RawResponse: resp}
+	result := ResourceClientGetJobResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobResponse); err != nil {
 		return ResourceClientGetJobResponse{}, err
 	}
@@ -697,7 +695,7 @@ func (client *ResourceClient) getKeysForKeyNameCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -705,7 +703,7 @@ func (client *ResourceClient) getKeysForKeyNameCreateRequest(ctx context.Context
 
 // getKeysForKeyNameHandleResponse handles the GetKeysForKeyName response.
 func (client *ResourceClient) getKeysForKeyNameHandleResponse(resp *http.Response) (ResourceClientGetKeysForKeyNameResponse, error) {
-	result := ResourceClientGetKeysForKeyNameResponse{RawResponse: resp}
+	result := ResourceClientGetKeysForKeyNameResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedAccessSignatureAuthorizationRule); err != nil {
 		return ResourceClientGetKeysForKeyNameResponse{}, err
 	}
@@ -750,7 +748,7 @@ func (client *ResourceClient) getQuotaMetricsCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -758,7 +756,7 @@ func (client *ResourceClient) getQuotaMetricsCreateRequest(ctx context.Context, 
 
 // getQuotaMetricsHandleResponse handles the GetQuotaMetrics response.
 func (client *ResourceClient) getQuotaMetricsHandleResponse(resp *http.Response) (ResourceClientGetQuotaMetricsResponse, error) {
-	result := ResourceClientGetQuotaMetricsResponse{RawResponse: resp}
+	result := ResourceClientGetQuotaMetricsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QuotaMetricInfoListResult); err != nil {
 		return ResourceClientGetQuotaMetricsResponse{}, err
 	}
@@ -805,7 +803,7 @@ func (client *ResourceClient) getStatsCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -813,7 +811,7 @@ func (client *ResourceClient) getStatsCreateRequest(ctx context.Context, resourc
 
 // getStatsHandleResponse handles the GetStats response.
 func (client *ResourceClient) getStatsHandleResponse(resp *http.Response) (ResourceClientGetStatsResponse, error) {
-	result := ResourceClientGetStatsResponse{RawResponse: resp}
+	result := ResourceClientGetStatsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegistryStatistics); err != nil {
 		return ResourceClientGetStatsResponse{}, err
 	}
@@ -857,7 +855,7 @@ func (client *ResourceClient) getValidSKUsCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -865,7 +863,7 @@ func (client *ResourceClient) getValidSKUsCreateRequest(ctx context.Context, res
 
 // getValidSKUsHandleResponse handles the GetValidSKUs response.
 func (client *ResourceClient) getValidSKUsHandleResponse(resp *http.Response) (ResourceClientGetValidSKUsResponse, error) {
-	result := ResourceClientGetValidSKUsResponse{RawResponse: resp}
+	result := ResourceClientGetValidSKUsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SKUDescriptionListResult); err != nil {
 		return ResourceClientGetValidSKUsResponse{}, err
 	}
@@ -915,7 +913,7 @@ func (client *ResourceClient) importDevicesCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, importDevicesParameters)
@@ -923,7 +921,7 @@ func (client *ResourceClient) importDevicesCreateRequest(ctx context.Context, re
 
 // importDevicesHandleResponse handles the ImportDevices response.
 func (client *ResourceClient) importDevicesHandleResponse(resp *http.Response) (ResourceClientImportDevicesResponse, error) {
-	result := ResourceClientImportDevicesResponse{RawResponse: resp}
+	result := ResourceClientImportDevicesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobResponse); err != nil {
 		return ResourceClientImportDevicesResponse{}, err
 	}
@@ -963,7 +961,7 @@ func (client *ResourceClient) listByResourceGroupCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -971,7 +969,7 @@ func (client *ResourceClient) listByResourceGroupCreateRequest(ctx context.Conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ResourceClient) listByResourceGroupHandleResponse(resp *http.Response) (ResourceClientListByResourceGroupResponse, error) {
-	result := ResourceClientListByResourceGroupResponse{RawResponse: resp}
+	result := ResourceClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DescriptionListResult); err != nil {
 		return ResourceClientListByResourceGroupResponse{}, err
 	}
@@ -1006,7 +1004,7 @@ func (client *ResourceClient) listBySubscriptionCreateRequest(ctx context.Contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -1014,7 +1012,7 @@ func (client *ResourceClient) listBySubscriptionCreateRequest(ctx context.Contex
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *ResourceClient) listBySubscriptionHandleResponse(resp *http.Response) (ResourceClientListBySubscriptionResponse, error) {
-	result := ResourceClientListBySubscriptionResponse{RawResponse: resp}
+	result := ResourceClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DescriptionListResult); err != nil {
 		return ResourceClientListBySubscriptionResponse{}, err
 	}
@@ -1065,7 +1063,7 @@ func (client *ResourceClient) listEventHubConsumerGroupsCreateRequest(ctx contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -1073,7 +1071,7 @@ func (client *ResourceClient) listEventHubConsumerGroupsCreateRequest(ctx contex
 
 // listEventHubConsumerGroupsHandleResponse handles the ListEventHubConsumerGroups response.
 func (client *ResourceClient) listEventHubConsumerGroupsHandleResponse(resp *http.Response) (ResourceClientListEventHubConsumerGroupsResponse, error) {
-	result := ResourceClientListEventHubConsumerGroupsResponse{RawResponse: resp}
+	result := ResourceClientListEventHubConsumerGroupsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventHubConsumerGroupsListResult); err != nil {
 		return ResourceClientListEventHubConsumerGroupsResponse{}, err
 	}
@@ -1117,7 +1115,7 @@ func (client *ResourceClient) listJobsCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -1125,7 +1123,7 @@ func (client *ResourceClient) listJobsCreateRequest(ctx context.Context, resourc
 
 // listJobsHandleResponse handles the ListJobs response.
 func (client *ResourceClient) listJobsHandleResponse(resp *http.Response) (ResourceClientListJobsResponse, error) {
-	result := ResourceClientListJobsResponse{RawResponse: resp}
+	result := ResourceClientListJobsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobResponseListResult); err != nil {
 		return ResourceClientListJobsResponse{}, err
 	}
@@ -1169,7 +1167,7 @@ func (client *ResourceClient) listKeysCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -1177,7 +1175,7 @@ func (client *ResourceClient) listKeysCreateRequest(ctx context.Context, resourc
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *ResourceClient) listKeysHandleResponse(resp *http.Response) (ResourceClientListKeysResponse, error) {
-	result := ResourceClientListKeysResponse{RawResponse: resp}
+	result := ResourceClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedAccessSignatureAuthorizationRuleListResult); err != nil {
 		return ResourceClientListKeysResponse{}, err
 	}
@@ -1225,7 +1223,7 @@ func (client *ResourceClient) testAllRoutesCreateRequest(ctx context.Context, io
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, input)
@@ -1233,7 +1231,7 @@ func (client *ResourceClient) testAllRoutesCreateRequest(ctx context.Context, io
 
 // testAllRoutesHandleResponse handles the TestAllRoutes response.
 func (client *ResourceClient) testAllRoutesHandleResponse(resp *http.Response) (ResourceClientTestAllRoutesResponse, error) {
-	result := ResourceClientTestAllRoutesResponse{RawResponse: resp}
+	result := ResourceClientTestAllRoutesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TestAllRoutesResult); err != nil {
 		return ResourceClientTestAllRoutesResponse{}, err
 	}
@@ -1281,7 +1279,7 @@ func (client *ResourceClient) testRouteCreateRequest(ctx context.Context, iotHub
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, input)
@@ -1289,7 +1287,7 @@ func (client *ResourceClient) testRouteCreateRequest(ctx context.Context, iotHub
 
 // testRouteHandleResponse handles the TestRoute response.
 func (client *ResourceClient) testRouteHandleResponse(resp *http.Response) (ResourceClientTestRouteResponse, error) {
-	result := ResourceClientTestRouteResponse{RawResponse: resp}
+	result := ResourceClientTestRouteResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TestRouteResult); err != nil {
 		return ResourceClientTestRouteResponse{}, err
 	}
@@ -1307,9 +1305,7 @@ func (client *ResourceClient) BeginUpdate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ResourceClientUpdatePollerResponse{}, err
 	}
-	result := ResourceClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ResourceClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ResourceClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ResourceClientUpdatePollerResponse{}, err
@@ -1357,7 +1353,7 @@ func (client *ResourceClient) updateCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-07-01-preview")
+	reqQP.Set("api-version", "2021-07-02")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, iotHubTags)

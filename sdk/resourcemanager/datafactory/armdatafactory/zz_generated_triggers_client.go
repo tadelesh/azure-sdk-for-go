@@ -34,17 +34,17 @@ type TriggersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTriggersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TriggersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TriggersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -106,7 +106,7 @@ func (client *TriggersClient) createOrUpdateCreateRequest(ctx context.Context, r
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *TriggersClient) createOrUpdateHandleResponse(resp *http.Response) (TriggersClientCreateOrUpdateResponse, error) {
-	result := TriggersClientCreateOrUpdateResponse{RawResponse: resp}
+	result := TriggersClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggerResource); err != nil {
 		return TriggersClientCreateOrUpdateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *TriggersClient) Delete(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return TriggersClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return TriggersClientDeleteResponse{RawResponse: resp}, nil
+	return TriggersClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -220,7 +220,7 @@ func (client *TriggersClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *TriggersClient) getHandleResponse(resp *http.Response) (TriggersClientGetResponse, error) {
-	result := TriggersClientGetResponse{RawResponse: resp}
+	result := TriggersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggerResource); err != nil {
 		return TriggersClientGetResponse{}, err
 	}
@@ -281,7 +281,7 @@ func (client *TriggersClient) getEventSubscriptionStatusCreateRequest(ctx contex
 
 // getEventSubscriptionStatusHandleResponse handles the GetEventSubscriptionStatus response.
 func (client *TriggersClient) getEventSubscriptionStatusHandleResponse(resp *http.Response) (TriggersClientGetEventSubscriptionStatusResponse, error) {
-	result := TriggersClientGetEventSubscriptionStatusResponse{RawResponse: resp}
+	result := TriggersClientGetEventSubscriptionStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggerSubscriptionOperationStatus); err != nil {
 		return TriggersClientGetEventSubscriptionStatusResponse{}, err
 	}
@@ -333,7 +333,7 @@ func (client *TriggersClient) listByFactoryCreateRequest(ctx context.Context, re
 
 // listByFactoryHandleResponse handles the ListByFactory response.
 func (client *TriggersClient) listByFactoryHandleResponse(resp *http.Response) (TriggersClientListByFactoryResponse, error) {
-	result := TriggersClientListByFactoryResponse{RawResponse: resp}
+	result := TriggersClientListByFactoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggerListResponse); err != nil {
 		return TriggersClientListByFactoryResponse{}, err
 	}
@@ -389,7 +389,7 @@ func (client *TriggersClient) queryByFactoryCreateRequest(ctx context.Context, r
 
 // queryByFactoryHandleResponse handles the QueryByFactory response.
 func (client *TriggersClient) queryByFactoryHandleResponse(resp *http.Response) (TriggersClientQueryByFactoryResponse, error) {
-	result := TriggersClientQueryByFactoryResponse{RawResponse: resp}
+	result := TriggersClientQueryByFactoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggerQueryResponse); err != nil {
 		return TriggersClientQueryByFactoryResponse{}, err
 	}
@@ -407,9 +407,7 @@ func (client *TriggersClient) BeginStart(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return TriggersClientStartPollerResponse{}, err
 	}
-	result := TriggersClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := TriggersClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("TriggersClient.Start", "", resp, client.pl)
 	if err != nil {
 		return TriggersClientStartPollerResponse{}, err
@@ -478,9 +476,7 @@ func (client *TriggersClient) BeginStop(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return TriggersClientStopPollerResponse{}, err
 	}
-	result := TriggersClientStopPollerResponse{
-		RawResponse: resp,
-	}
+	result := TriggersClientStopPollerResponse{}
 	pt, err := armruntime.NewPoller("TriggersClient.Stop", "", resp, client.pl)
 	if err != nil {
 		return TriggersClientStopPollerResponse{}, err
@@ -550,9 +546,7 @@ func (client *TriggersClient) BeginSubscribeToEvents(ctx context.Context, resour
 	if err != nil {
 		return TriggersClientSubscribeToEventsPollerResponse{}, err
 	}
-	result := TriggersClientSubscribeToEventsPollerResponse{
-		RawResponse: resp,
-	}
+	result := TriggersClientSubscribeToEventsPollerResponse{}
 	pt, err := armruntime.NewPoller("TriggersClient.SubscribeToEvents", "", resp, client.pl)
 	if err != nil {
 		return TriggersClientSubscribeToEventsPollerResponse{}, err
@@ -622,9 +616,7 @@ func (client *TriggersClient) BeginUnsubscribeFromEvents(ctx context.Context, re
 	if err != nil {
 		return TriggersClientUnsubscribeFromEventsPollerResponse{}, err
 	}
-	result := TriggersClientUnsubscribeFromEventsPollerResponse{
-		RawResponse: resp,
-	}
+	result := TriggersClientUnsubscribeFromEventsPollerResponse{}
 	pt, err := armruntime.NewPoller("TriggersClient.UnsubscribeFromEvents", "", resp, client.pl)
 	if err != nil {
 		return TriggersClientUnsubscribeFromEventsPollerResponse{}, err

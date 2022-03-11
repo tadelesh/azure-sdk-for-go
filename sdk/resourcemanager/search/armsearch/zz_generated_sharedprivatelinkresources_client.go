@@ -35,17 +35,17 @@ type SharedPrivateLinkResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSharedPrivateLinkResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SharedPrivateLinkResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SharedPrivateLinkResourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -65,9 +65,7 @@ func (client *SharedPrivateLinkResourcesClient) BeginCreateOrUpdate(ctx context.
 	if err != nil {
 		return SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SharedPrivateLinkResourcesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return SharedPrivateLinkResourcesClientCreateOrUpdatePollerResponse{}, err
@@ -142,9 +140,7 @@ func (client *SharedPrivateLinkResourcesClient) BeginDelete(ctx context.Context,
 	if err != nil {
 		return SharedPrivateLinkResourcesClientDeletePollerResponse{}, err
 	}
-	result := SharedPrivateLinkResourcesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := SharedPrivateLinkResourcesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("SharedPrivateLinkResourcesClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return SharedPrivateLinkResourcesClientDeletePollerResponse{}, err
@@ -263,7 +259,7 @@ func (client *SharedPrivateLinkResourcesClient) getCreateRequest(ctx context.Con
 
 // getHandleResponse handles the Get response.
 func (client *SharedPrivateLinkResourcesClient) getHandleResponse(resp *http.Response) (SharedPrivateLinkResourcesClientGetResponse, error) {
-	result := SharedPrivateLinkResourcesClientGetResponse{RawResponse: resp}
+	result := SharedPrivateLinkResourcesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedPrivateLinkResource); err != nil {
 		return SharedPrivateLinkResourcesClientGetResponse{}, err
 	}
@@ -319,7 +315,7 @@ func (client *SharedPrivateLinkResourcesClient) listByServiceCreateRequest(ctx c
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *SharedPrivateLinkResourcesClient) listByServiceHandleResponse(resp *http.Response) (SharedPrivateLinkResourcesClientListByServiceResponse, error) {
-	result := SharedPrivateLinkResourcesClientListByServiceResponse{RawResponse: resp}
+	result := SharedPrivateLinkResourcesClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedPrivateLinkResourceListResult); err != nil {
 		return SharedPrivateLinkResourcesClientListByServiceResponse{}, err
 	}

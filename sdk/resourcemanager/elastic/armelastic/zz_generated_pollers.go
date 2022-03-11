@@ -51,11 +51,10 @@ func (p *MonitorsClientCreatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final MonitorsClientCreateResponse will be returned.
 func (p *MonitorsClientCreatePoller) FinalResponse(ctx context.Context) (MonitorsClientCreateResponse, error) {
 	respType := MonitorsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.MonitorResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.MonitorResource)
 	if err != nil {
 		return MonitorsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -94,11 +93,10 @@ func (p *MonitorsClientDeletePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final MonitorsClientDeleteResponse will be returned.
 func (p *MonitorsClientDeletePoller) FinalResponse(ctx context.Context) (MonitorsClientDeleteResponse, error) {
 	respType := MonitorsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return MonitorsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -137,11 +135,10 @@ func (p *TagRulesClientDeletePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final TagRulesClientDeleteResponse will be returned.
 func (p *TagRulesClientDeletePoller) FinalResponse(ctx context.Context) (TagRulesClientDeleteResponse, error) {
 	respType := TagRulesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return TagRulesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

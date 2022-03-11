@@ -62,9 +62,7 @@ func (client *LivePipelinesClient) BeginActivate(ctx context.Context, resourceGr
 	if err != nil {
 		return LivePipelinesClientActivatePollerResponse{}, err
 	}
-	result := LivePipelinesClientActivatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LivePipelinesClientActivatePollerResponse{}
 	pt, err := armruntime.NewPoller("LivePipelinesClient.Activate", "", resp, client.pl)
 	if err != nil {
 		return LivePipelinesClientActivatePollerResponse{}, err
@@ -177,7 +175,7 @@ func (client *LivePipelinesClient) createOrUpdateCreateRequest(ctx context.Conte
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *LivePipelinesClient) createOrUpdateHandleResponse(resp *http.Response) (LivePipelinesClientCreateOrUpdateResponse, error) {
-	result := LivePipelinesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := LivePipelinesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LivePipeline); err != nil {
 		return LivePipelinesClientCreateOrUpdateResponse{}, err
 	}
@@ -196,9 +194,7 @@ func (client *LivePipelinesClient) BeginDeactivate(ctx context.Context, resource
 	if err != nil {
 		return LivePipelinesClientDeactivatePollerResponse{}, err
 	}
-	result := LivePipelinesClientDeactivatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LivePipelinesClientDeactivatePollerResponse{}
 	pt, err := armruntime.NewPoller("LivePipelinesClient.Deactivate", "", resp, client.pl)
 	if err != nil {
 		return LivePipelinesClientDeactivatePollerResponse{}, err
@@ -274,7 +270,7 @@ func (client *LivePipelinesClient) Delete(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return LivePipelinesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return LivePipelinesClientDeleteResponse{RawResponse: resp}, nil
+	return LivePipelinesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -361,7 +357,7 @@ func (client *LivePipelinesClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *LivePipelinesClient) getHandleResponse(resp *http.Response) (LivePipelinesClientGetResponse, error) {
-	result := LivePipelinesClientGetResponse{RawResponse: resp}
+	result := LivePipelinesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LivePipeline); err != nil {
 		return LivePipelinesClientGetResponse{}, err
 	}
@@ -419,7 +415,7 @@ func (client *LivePipelinesClient) listCreateRequest(ctx context.Context, resour
 
 // listHandleResponse handles the List response.
 func (client *LivePipelinesClient) listHandleResponse(resp *http.Response) (LivePipelinesClientListResponse, error) {
-	result := LivePipelinesClientListResponse{RawResponse: resp}
+	result := LivePipelinesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LivePipelineCollection); err != nil {
 		return LivePipelinesClientListResponse{}, err
 	}
@@ -482,7 +478,7 @@ func (client *LivePipelinesClient) updateCreateRequest(ctx context.Context, reso
 
 // updateHandleResponse handles the Update response.
 func (client *LivePipelinesClient) updateHandleResponse(resp *http.Response) (LivePipelinesClientUpdateResponse, error) {
-	result := LivePipelinesClientUpdateResponse{RawResponse: resp}
+	result := LivePipelinesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LivePipeline); err != nil {
 		return LivePipelinesClientUpdateResponse{}, err
 	}

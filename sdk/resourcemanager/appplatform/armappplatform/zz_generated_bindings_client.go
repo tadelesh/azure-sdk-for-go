@@ -35,17 +35,17 @@ type BindingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBindingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BindingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BindingsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -65,9 +65,7 @@ func (client *BindingsClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return BindingsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := BindingsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := BindingsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("BindingsClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return BindingsClientCreateOrUpdatePollerResponse{}, err
@@ -142,9 +140,7 @@ func (client *BindingsClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return BindingsClientDeletePollerResponse{}, err
 	}
-	result := BindingsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := BindingsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("BindingsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return BindingsClientDeletePollerResponse{}, err
@@ -265,7 +261,7 @@ func (client *BindingsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *BindingsClient) getHandleResponse(resp *http.Response) (BindingsClientGetResponse, error) {
-	result := BindingsClientGetResponse{RawResponse: resp}
+	result := BindingsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BindingResource); err != nil {
 		return BindingsClientGetResponse{}, err
 	}
@@ -323,7 +319,7 @@ func (client *BindingsClient) listCreateRequest(ctx context.Context, resourceGro
 
 // listHandleResponse handles the List response.
 func (client *BindingsClient) listHandleResponse(resp *http.Response) (BindingsClientListResponse, error) {
-	result := BindingsClientListResponse{RawResponse: resp}
+	result := BindingsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BindingResourceCollection); err != nil {
 		return BindingsClientListResponse{}, err
 	}
@@ -344,9 +340,7 @@ func (client *BindingsClient) BeginUpdate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return BindingsClientUpdatePollerResponse{}, err
 	}
-	result := BindingsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := BindingsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("BindingsClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return BindingsClientUpdatePollerResponse{}, err

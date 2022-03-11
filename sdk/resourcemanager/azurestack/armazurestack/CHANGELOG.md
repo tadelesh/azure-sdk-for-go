@@ -1,0 +1,139 @@
+# Release History
+
+## 0.2.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*LinkedSubscriptionsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(LinkedSubscriptionsClientListByResourceGroupResponse, error)`
+- Function `*CustomerSubscriptionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(CustomerSubscriptionsClientListResponse, error)`
+- Function `*RegistrationsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(RegistrationsClientListBySubscriptionResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*RegistrationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(RegistrationsClientListResponse, error)`
+- Function `*ProductsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ProductsClientListResponse, error)`
+- Function `*LinkedSubscriptionsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(LinkedSubscriptionsClientListBySubscriptionResponse, error)`
+- Function `*LinkedSubscriptionsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ProductsClientListPager.PageResponse` has been removed
+- Function `*RegistrationsClientListPager.Err` has been removed
+- Function `*LinkedSubscriptionsClientListBySubscriptionPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*LinkedSubscriptionsClientListByResourceGroupPager.Err` has been removed
+- Function `*RegistrationsClientListPager.PageResponse` has been removed
+- Function `*ProductsClientListPager.Err` has been removed
+- Function `*RegistrationsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*RegistrationsClientListBySubscriptionPager.Err` has been removed
+- Function `*CustomerSubscriptionsClientListPager.PageResponse` has been removed
+- Function `*CustomerSubscriptionsClientListPager.Err` has been removed
+- Function `*LinkedSubscriptionsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Struct `CloudManifestFileClientGetResult` has been removed
+- Struct `CloudManifestFileClientListResult` has been removed
+- Struct `CustomerSubscriptionsClientCreateResult` has been removed
+- Struct `CustomerSubscriptionsClientGetResult` has been removed
+- Struct `CustomerSubscriptionsClientListResult` has been removed
+- Struct `LinkedSubscriptionsClientCreateOrUpdateResult` has been removed
+- Struct `LinkedSubscriptionsClientGetResult` has been removed
+- Struct `LinkedSubscriptionsClientListByResourceGroupResult` has been removed
+- Struct `LinkedSubscriptionsClientListBySubscriptionResult` has been removed
+- Struct `LinkedSubscriptionsClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `ProductsClientGetProductResult` has been removed
+- Struct `ProductsClientGetProductsResult` has been removed
+- Struct `ProductsClientGetResult` has been removed
+- Struct `ProductsClientListDetailsResult` has been removed
+- Struct `ProductsClientListResult` has been removed
+- Struct `ProductsClientUploadLogResult` has been removed
+- Struct `RegistrationsClientCreateOrUpdateResult` has been removed
+- Struct `RegistrationsClientGetActivationKeyResult` has been removed
+- Struct `RegistrationsClientGetResult` has been removed
+- Struct `RegistrationsClientListBySubscriptionResult` has been removed
+- Struct `RegistrationsClientListResult` has been removed
+- Struct `RegistrationsClientUpdateResult` has been removed
+- Field `LinkedSubscriptionsClientUpdateResult` of struct `LinkedSubscriptionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `LinkedSubscriptionsClientUpdateResponse` has been removed
+- Field `RegistrationsClientUpdateResult` of struct `RegistrationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `RegistrationsClientUpdateResponse` has been removed
+- Field `RegistrationsClientCreateOrUpdateResult` of struct `RegistrationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `RegistrationsClientCreateOrUpdateResponse` has been removed
+- Field `LinkedSubscriptionsClientGetResult` of struct `LinkedSubscriptionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `LinkedSubscriptionsClientGetResponse` has been removed
+- Field `ProductsClientGetProductsResult` of struct `ProductsClientGetProductsResponse` has been removed
+- Field `RawResponse` of struct `ProductsClientGetProductsResponse` has been removed
+- Field `RegistrationsClientGetResult` of struct `RegistrationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `RegistrationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `RegistrationsClientDeleteResponse` has been removed
+- Field `LinkedSubscriptionsClientListByResourceGroupResult` of struct `LinkedSubscriptionsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `LinkedSubscriptionsClientListByResourceGroupResponse` has been removed
+- Field `LinkedSubscriptionsClientCreateOrUpdateResult` of struct `LinkedSubscriptionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `LinkedSubscriptionsClientCreateOrUpdateResponse` has been removed
+- Field `ProductsClientListResult` of struct `ProductsClientListResponse` has been removed
+- Field `RawResponse` of struct `ProductsClientListResponse` has been removed
+- Field `LinkedSubscriptionsClientListBySubscriptionResult` of struct `LinkedSubscriptionsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `LinkedSubscriptionsClientListBySubscriptionResponse` has been removed
+- Field `CustomerSubscriptionsClientCreateResult` of struct `CustomerSubscriptionsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `CustomerSubscriptionsClientCreateResponse` has been removed
+- Field `CustomerSubscriptionsClientListResult` of struct `CustomerSubscriptionsClientListResponse` has been removed
+- Field `RawResponse` of struct `CustomerSubscriptionsClientListResponse` has been removed
+- Field `CloudManifestFileClientGetResult` of struct `CloudManifestFileClientGetResponse` has been removed
+- Field `RawResponse` of struct `CloudManifestFileClientGetResponse` has been removed
+- Field `RawResponse` of struct `CustomerSubscriptionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `LinkedSubscriptionsClientDeleteResponse` has been removed
+- Field `RegistrationsClientListResult` of struct `RegistrationsClientListResponse` has been removed
+- Field `RawResponse` of struct `RegistrationsClientListResponse` has been removed
+- Field `RegistrationsClientGetActivationKeyResult` of struct `RegistrationsClientGetActivationKeyResponse` has been removed
+- Field `RawResponse` of struct `RegistrationsClientGetActivationKeyResponse` has been removed
+- Field `ProductsClientGetProductResult` of struct `ProductsClientGetProductResponse` has been removed
+- Field `RawResponse` of struct `ProductsClientGetProductResponse` has been removed
+- Field `RegistrationsClientListBySubscriptionResult` of struct `RegistrationsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `RegistrationsClientListBySubscriptionResponse` has been removed
+- Field `CustomerSubscriptionsClientGetResult` of struct `CustomerSubscriptionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `CustomerSubscriptionsClientGetResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `RegistrationsClientEnableRemoteManagementResponse` has been removed
+- Field `ProductsClientUploadLogResult` of struct `ProductsClientUploadLogResponse` has been removed
+- Field `RawResponse` of struct `ProductsClientUploadLogResponse` has been removed
+- Field `CloudManifestFileClientListResult` of struct `CloudManifestFileClientListResponse` has been removed
+- Field `RawResponse` of struct `CloudManifestFileClientListResponse` has been removed
+- Field `ProductsClientListDetailsResult` of struct `ProductsClientListDetailsResponse` has been removed
+- Field `RawResponse` of struct `ProductsClientListDetailsResponse` has been removed
+- Field `ProductsClientGetResult` of struct `ProductsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProductsClientGetResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New function `*CustomerSubscriptionsClientListPager.More() bool`
+- New function `*LinkedSubscriptionsClientListByResourceGroupPager.More() bool`
+- New function `*LinkedSubscriptionsClientListBySubscriptionPager.More() bool`
+- New function `*ProductsClientListPager.More() bool`
+- New function `*RegistrationsClientListPager.More() bool`
+- New function `*RegistrationsClientListBySubscriptionPager.More() bool`
+- New struct `ErrorDetails`
+- New struct `ErrorResponse`
+- New anonymous field `CloudManifestFileResponse` in struct `CloudManifestFileClientGetResponse`
+- New anonymous field `ProductLog` in struct `ProductsClientUploadLogResponse`
+- New anonymous field `Product` in struct `ProductsClientGetProductResponse`
+- New anonymous field `ExtendedProduct` in struct `ProductsClientListDetailsResponse`
+- New anonymous field `Registration` in struct `RegistrationsClientCreateOrUpdateResponse`
+- New anonymous field `LinkedSubscription` in struct `LinkedSubscriptionsClientGetResponse`
+- New anonymous field `LinkedSubscription` in struct `LinkedSubscriptionsClientCreateOrUpdateResponse`
+- New anonymous field `Registration` in struct `RegistrationsClientUpdateResponse`
+- New anonymous field `OperationList` in struct `OperationsClientListResponse`
+- New anonymous field `CustomerSubscription` in struct `CustomerSubscriptionsClientCreateResponse`
+- New anonymous field `CustomerSubscriptionList` in struct `CustomerSubscriptionsClientListResponse`
+- New anonymous field `LinkedSubscription` in struct `LinkedSubscriptionsClientUpdateResponse`
+- New anonymous field `Registration` in struct `RegistrationsClientGetResponse`
+- New anonymous field `ActivationKeyResult` in struct `RegistrationsClientGetActivationKeyResponse`
+- New anonymous field `LinkedSubscriptionsList` in struct `LinkedSubscriptionsClientListByResourceGroupResponse`
+- New anonymous field `LinkedSubscriptionsList` in struct `LinkedSubscriptionsClientListBySubscriptionResponse`
+- New anonymous field `RegistrationList` in struct `RegistrationsClientListBySubscriptionResponse`
+- New anonymous field `Product` in struct `ProductsClientGetResponse`
+- New anonymous field `ProductList` in struct `ProductsClientGetProductsResponse`
+- New anonymous field `CloudManifestFileResponse` in struct `CloudManifestFileClientListResponse`
+- New anonymous field `RegistrationList` in struct `RegistrationsClientListResponse`
+- New anonymous field `CustomerSubscription` in struct `CustomerSubscriptionsClientGetResponse`
+- New anonymous field `ProductList` in struct `ProductsClientListResponse`
+
+
+## 0.1.0 (2022-03-10)
+
+- Init release.

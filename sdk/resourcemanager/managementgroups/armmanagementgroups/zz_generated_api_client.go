@@ -29,16 +29,16 @@ type APIClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAPIClient(credential azcore.TokenCredential, options *arm.ClientOptions) *APIClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &APIClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -79,7 +79,7 @@ func (client *APIClient) checkNameAvailabilityCreateRequest(ctx context.Context,
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *APIClient) checkNameAvailabilityHandleResponse(resp *http.Response) (APIClientCheckNameAvailabilityResponse, error) {
-	result := APIClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := APIClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameAvailabilityResult); err != nil {
 		return APIClientCheckNameAvailabilityResponse{}, err
 	}
@@ -120,7 +120,7 @@ func (client *APIClient) startTenantBackfillCreateRequest(ctx context.Context, o
 
 // startTenantBackfillHandleResponse handles the StartTenantBackfill response.
 func (client *APIClient) startTenantBackfillHandleResponse(resp *http.Response) (APIClientStartTenantBackfillResponse, error) {
-	result := APIClientStartTenantBackfillResponse{RawResponse: resp}
+	result := APIClientStartTenantBackfillResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TenantBackfillStatusResult); err != nil {
 		return APIClientStartTenantBackfillResponse{}, err
 	}
@@ -162,7 +162,7 @@ func (client *APIClient) tenantBackfillStatusCreateRequest(ctx context.Context, 
 
 // tenantBackfillStatusHandleResponse handles the TenantBackfillStatus response.
 func (client *APIClient) tenantBackfillStatusHandleResponse(resp *http.Response) (APIClientTenantBackfillStatusResponse, error) {
-	result := APIClientTenantBackfillStatusResponse{RawResponse: resp}
+	result := APIClientTenantBackfillStatusResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TenantBackfillStatusResult); err != nil {
 		return APIClientTenantBackfillStatusResponse{}, err
 	}

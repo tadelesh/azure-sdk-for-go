@@ -34,17 +34,17 @@ type ManagedInstancePrivateLinkResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedInstancePrivateLinkResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedInstancePrivateLinkResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedInstancePrivateLinkResourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *ManagedInstancePrivateLinkResourcesClient) getCreateRequest(ctx co
 
 // getHandleResponse handles the Get response.
 func (client *ManagedInstancePrivateLinkResourcesClient) getHandleResponse(resp *http.Response) (ManagedInstancePrivateLinkResourcesClientGetResponse, error) {
-	result := ManagedInstancePrivateLinkResourcesClientGetResponse{RawResponse: resp}
+	result := ManagedInstancePrivateLinkResourcesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstancePrivateLink); err != nil {
 		return ManagedInstancePrivateLinkResourcesClientGetResponse{}, err
 	}
@@ -158,7 +158,7 @@ func (client *ManagedInstancePrivateLinkResourcesClient) listByManagedInstanceCr
 
 // listByManagedInstanceHandleResponse handles the ListByManagedInstance response.
 func (client *ManagedInstancePrivateLinkResourcesClient) listByManagedInstanceHandleResponse(resp *http.Response) (ManagedInstancePrivateLinkResourcesClientListByManagedInstanceResponse, error) {
-	result := ManagedInstancePrivateLinkResourcesClientListByManagedInstanceResponse{RawResponse: resp}
+	result := ManagedInstancePrivateLinkResourcesClientListByManagedInstanceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstancePrivateLinkListResult); err != nil {
 		return ManagedInstancePrivateLinkResourcesClientListByManagedInstanceResponse{}, err
 	}

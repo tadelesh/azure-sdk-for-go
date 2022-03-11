@@ -32,16 +32,16 @@ type ReservationsDetailsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReservationsDetailsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ReservationsDetailsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReservationsDetailsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *ReservationsDetailsClient) listCreateRequest(ctx context.Context, 
 
 // listHandleResponse handles the List response.
 func (client *ReservationsDetailsClient) listHandleResponse(resp *http.Response) (ReservationsDetailsClientListResponse, error) {
-	result := ReservationsDetailsClientListResponse{RawResponse: resp}
+	result := ReservationsDetailsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReservationDetailsListResult); err != nil {
 		return ReservationsDetailsClientListResponse{}, err
 	}
@@ -145,7 +145,7 @@ func (client *ReservationsDetailsClient) listByReservationOrderCreateRequest(ctx
 
 // listByReservationOrderHandleResponse handles the ListByReservationOrder response.
 func (client *ReservationsDetailsClient) listByReservationOrderHandleResponse(resp *http.Response) (ReservationsDetailsClientListByReservationOrderResponse, error) {
-	result := ReservationsDetailsClientListByReservationOrderResponse{RawResponse: resp}
+	result := ReservationsDetailsClientListByReservationOrderResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReservationDetailsListResult); err != nil {
 		return ReservationsDetailsClientListByReservationOrderResponse{}, err
 	}
@@ -197,7 +197,7 @@ func (client *ReservationsDetailsClient) listByReservationOrderAndReservationCre
 
 // listByReservationOrderAndReservationHandleResponse handles the ListByReservationOrderAndReservation response.
 func (client *ReservationsDetailsClient) listByReservationOrderAndReservationHandleResponse(resp *http.Response) (ReservationsDetailsClientListByReservationOrderAndReservationResponse, error) {
-	result := ReservationsDetailsClientListByReservationOrderAndReservationResponse{RawResponse: resp}
+	result := ReservationsDetailsClientListByReservationOrderAndReservationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReservationDetailsListResult); err != nil {
 		return ReservationsDetailsClientListByReservationOrderAndReservationResponse{}, err
 	}

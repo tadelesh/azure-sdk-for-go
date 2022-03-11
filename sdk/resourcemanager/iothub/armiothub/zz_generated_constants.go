@@ -10,7 +10,7 @@ package armiothub
 
 const (
 	moduleName    = "armiothub"
-	moduleVersion = "v0.3.0"
+	moduleVersion = "v0.4.0"
 )
 
 // AccessRights - The permissions assigned to the shared access policy.
@@ -99,6 +99,31 @@ func PossibleCapabilitiesValues() []Capabilities {
 
 // ToPtr returns a *Capabilities pointing to the current value.
 func (c Capabilities) ToPtr() *Capabilities {
+	return &c
+}
+
+// CreatedByType - The type of identity that created the resource.
+type CreatedByType string
+
+const (
+	CreatedByTypeApplication     CreatedByType = "Application"
+	CreatedByTypeKey             CreatedByType = "Key"
+	CreatedByTypeManagedIdentity CreatedByType = "ManagedIdentity"
+	CreatedByTypeUser            CreatedByType = "User"
+)
+
+// PossibleCreatedByTypeValues returns the possible values for the CreatedByType const type.
+func PossibleCreatedByTypeValues() []CreatedByType {
+	return []CreatedByType{
+		CreatedByTypeApplication,
+		CreatedByTypeKey,
+		CreatedByTypeManagedIdentity,
+		CreatedByTypeUser,
+	}
+}
+
+// ToPtr returns a *CreatedByType pointing to the current value.
+func (c CreatedByType) ToPtr() *CreatedByType {
 	return &c
 }
 
@@ -430,7 +455,7 @@ func (c PublicNetworkAccess) ToPtr() *PublicNetworkAccess {
 	return &c
 }
 
-// ResourceIdentityType - The type of identity used for the resource. The type 'SystemAssigned,UserAssigned' includes both
+// ResourceIdentityType - The type of identity used for the resource. The type 'SystemAssigned, UserAssigned' includes both
 // an implicitly created identity and a set of user assigned identities. The type 'None' will remove any
 // identities from the service.
 type ResourceIdentityType string
@@ -486,9 +511,7 @@ const (
 	RoutingSourceDeviceJobLifecycleEvents    RoutingSource = "DeviceJobLifecycleEvents"
 	RoutingSourceDeviceLifecycleEvents       RoutingSource = "DeviceLifecycleEvents"
 	RoutingSourceDeviceMessages              RoutingSource = "DeviceMessages"
-	RoutingSourceDigitalTwinChangeEvents     RoutingSource = "DigitalTwinChangeEvents"
 	RoutingSourceInvalid                     RoutingSource = "Invalid"
-	RoutingSourceMqttBrokerMessages          RoutingSource = "MqttBrokerMessages"
 	RoutingSourceTwinChangeEvents            RoutingSource = "TwinChangeEvents"
 )
 
@@ -499,9 +522,7 @@ func PossibleRoutingSourceValues() []RoutingSource {
 		RoutingSourceDeviceJobLifecycleEvents,
 		RoutingSourceDeviceLifecycleEvents,
 		RoutingSourceDeviceMessages,
-		RoutingSourceDigitalTwinChangeEvents,
 		RoutingSourceInvalid,
-		RoutingSourceMqttBrokerMessages,
 		RoutingSourceTwinChangeEvents,
 	}
 }

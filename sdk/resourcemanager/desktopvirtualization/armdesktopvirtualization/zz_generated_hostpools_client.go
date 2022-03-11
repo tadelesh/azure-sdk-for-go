@@ -35,17 +35,17 @@ type HostPoolsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewHostPoolsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *HostPoolsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &HostPoolsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *HostPoolsClient) createOrUpdateCreateRequest(ctx context.Context, 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *HostPoolsClient) createOrUpdateHandleResponse(resp *http.Response) (HostPoolsClientCreateOrUpdateResponse, error) {
-	result := HostPoolsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := HostPoolsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostPool); err != nil {
 		return HostPoolsClientCreateOrUpdateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *HostPoolsClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return HostPoolsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return HostPoolsClientDeleteResponse{RawResponse: resp}, nil
+	return HostPoolsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -204,7 +204,7 @@ func (client *HostPoolsClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *HostPoolsClient) getHandleResponse(resp *http.Response) (HostPoolsClientGetResponse, error) {
-	result := HostPoolsClientGetResponse{RawResponse: resp}
+	result := HostPoolsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostPool); err != nil {
 		return HostPoolsClientGetResponse{}, err
 	}
@@ -246,7 +246,7 @@ func (client *HostPoolsClient) listCreateRequest(ctx context.Context, options *H
 
 // listHandleResponse handles the List response.
 func (client *HostPoolsClient) listHandleResponse(resp *http.Response) (HostPoolsClientListResponse, error) {
-	result := HostPoolsClientListResponse{RawResponse: resp}
+	result := HostPoolsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostPoolList); err != nil {
 		return HostPoolsClientListResponse{}, err
 	}
@@ -294,7 +294,7 @@ func (client *HostPoolsClient) listByResourceGroupCreateRequest(ctx context.Cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *HostPoolsClient) listByResourceGroupHandleResponse(resp *http.Response) (HostPoolsClientListByResourceGroupResponse, error) {
-	result := HostPoolsClientListByResourceGroupResponse{RawResponse: resp}
+	result := HostPoolsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostPoolList); err != nil {
 		return HostPoolsClientListByResourceGroupResponse{}, err
 	}
@@ -350,7 +350,7 @@ func (client *HostPoolsClient) retrieveRegistrationTokenCreateRequest(ctx contex
 
 // retrieveRegistrationTokenHandleResponse handles the RetrieveRegistrationToken response.
 func (client *HostPoolsClient) retrieveRegistrationTokenHandleResponse(resp *http.Response) (HostPoolsClientRetrieveRegistrationTokenResponse, error) {
-	result := HostPoolsClientRetrieveRegistrationTokenResponse{RawResponse: resp}
+	result := HostPoolsClientRetrieveRegistrationTokenResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RegistrationInfo); err != nil {
 		return HostPoolsClientRetrieveRegistrationTokenResponse{}, err
 	}
@@ -408,7 +408,7 @@ func (client *HostPoolsClient) updateCreateRequest(ctx context.Context, resource
 
 // updateHandleResponse handles the Update response.
 func (client *HostPoolsClient) updateHandleResponse(resp *http.Response) (HostPoolsClientUpdateResponse, error) {
-	result := HostPoolsClientUpdateResponse{RawResponse: resp}
+	result := HostPoolsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HostPool); err != nil {
 		return HostPoolsClientUpdateResponse{}, err
 	}

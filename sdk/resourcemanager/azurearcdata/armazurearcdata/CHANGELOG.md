@@ -1,5 +1,135 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*DataControllersClientListInGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(DataControllersClientListInGroupResponse, error)`
+- Function `*DataControllersClientListInSubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(DataControllersClientListInSubscriptionResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*SQLManagedInstancesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SQLManagedInstancesClientListResponse, error)`
+- Function `*SQLServerInstancesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SQLServerInstancesClientListResponse, error)`
+- Function `*SQLServerInstancesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(SQLServerInstancesClientListByResourceGroupResponse, error)`
+- Function `*SQLManagedInstancesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(SQLManagedInstancesClientListByResourceGroupResponse, error)`
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*DataControllersClientListInGroupPager.PageResponse` has been removed
+- Function `*SQLServerInstancesClientListByResourceGroupPager.Err` has been removed
+- Function `*SQLServerInstancesClientListPager.PageResponse` has been removed
+- Function `*DataControllersClientListInSubscriptionPager.PageResponse` has been removed
+- Function `*DataControllersClientListInSubscriptionPager.Err` has been removed
+- Function `*SQLManagedInstancesClientListByResourceGroupPager.Err` has been removed
+- Function `*SQLServerInstancesClientListPager.Err` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*SQLServerInstancesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*SQLManagedInstancesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*SQLManagedInstancesClientListPager.PageResponse` has been removed
+- Function `*DataControllersClientListInGroupPager.Err` has been removed
+- Function `*SQLManagedInstancesClientListPager.Err` has been removed
+- Struct `DataControllersClientGetDataControllerResult` has been removed
+- Struct `DataControllersClientListInGroupResult` has been removed
+- Struct `DataControllersClientListInSubscriptionResult` has been removed
+- Struct `DataControllersClientPatchDataControllerResult` has been removed
+- Struct `DataControllersClientPutDataControllerResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `SQLManagedInstancesClientCreateResult` has been removed
+- Struct `SQLManagedInstancesClientGetResult` has been removed
+- Struct `SQLManagedInstancesClientListByResourceGroupResult` has been removed
+- Struct `SQLManagedInstancesClientListResult` has been removed
+- Struct `SQLManagedInstancesClientUpdateResult` has been removed
+- Struct `SQLServerInstancesClientCreateResult` has been removed
+- Struct `SQLServerInstancesClientGetResult` has been removed
+- Struct `SQLServerInstancesClientListByResourceGroupResult` has been removed
+- Struct `SQLServerInstancesClientListResult` has been removed
+- Struct `SQLServerInstancesClientUpdateResult` has been removed
+- Field `SQLManagedInstancesClientListByResourceGroupResult` of struct `SQLManagedInstancesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SQLManagedInstancesClientListByResourceGroupResponse` has been removed
+- Field `DataControllersClientPatchDataControllerResult` of struct `DataControllersClientPatchDataControllerResponse` has been removed
+- Field `RawResponse` of struct `DataControllersClientPatchDataControllerResponse` has been removed
+- Field `RawResponse` of struct `DataControllersClientPutDataControllerPollerResponse` has been removed
+- Field `SQLManagedInstancesClientCreateResult` of struct `SQLManagedInstancesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `SQLManagedInstancesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `SQLManagedInstancesClientDeletePollerResponse` has been removed
+- Field `DataControllersClientListInSubscriptionResult` of struct `DataControllersClientListInSubscriptionResponse` has been removed
+- Field `RawResponse` of struct `DataControllersClientListInSubscriptionResponse` has been removed
+- Field `SQLServerInstancesClientListByResourceGroupResult` of struct `SQLServerInstancesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SQLServerInstancesClientListByResourceGroupResponse` has been removed
+- Field `DataControllersClientGetDataControllerResult` of struct `DataControllersClientGetDataControllerResponse` has been removed
+- Field `RawResponse` of struct `DataControllersClientGetDataControllerResponse` has been removed
+- Field `RawResponse` of struct `SQLServerInstancesClientCreatePollerResponse` has been removed
+- Field `DataControllersClientPutDataControllerResult` of struct `DataControllersClientPutDataControllerResponse` has been removed
+- Field `RawResponse` of struct `DataControllersClientPutDataControllerResponse` has been removed
+- Field `RawResponse` of struct `DataControllersClientDeleteDataControllerResponse` has been removed
+- Field `SQLManagedInstancesClientGetResult` of struct `SQLManagedInstancesClientGetResponse` has been removed
+- Field `RawResponse` of struct `SQLManagedInstancesClientGetResponse` has been removed
+- Field `DataControllersClientListInGroupResult` of struct `DataControllersClientListInGroupResponse` has been removed
+- Field `RawResponse` of struct `DataControllersClientListInGroupResponse` has been removed
+- Field `SQLServerInstancesClientUpdateResult` of struct `SQLServerInstancesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SQLServerInstancesClientUpdateResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `SQLManagedInstancesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `SQLManagedInstancesClientCreatePollerResponse` has been removed
+- Field `SQLManagedInstancesClientUpdateResult` of struct `SQLManagedInstancesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SQLManagedInstancesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SQLServerInstancesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `SQLServerInstancesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `DataControllersClientDeleteDataControllerPollerResponse` has been removed
+- Field `SQLServerInstancesClientListResult` of struct `SQLServerInstancesClientListResponse` has been removed
+- Field `RawResponse` of struct `SQLServerInstancesClientListResponse` has been removed
+- Field `SQLServerInstancesClientCreateResult` of struct `SQLServerInstancesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `SQLServerInstancesClientCreateResponse` has been removed
+- Field `SQLManagedInstancesClientListResult` of struct `SQLManagedInstancesClientListResponse` has been removed
+- Field `RawResponse` of struct `SQLManagedInstancesClientListResponse` has been removed
+- Field `SQLServerInstancesClientGetResult` of struct `SQLServerInstancesClientGetResponse` has been removed
+- Field `RawResponse` of struct `SQLServerInstancesClientGetResponse` has been removed
+
+### Features Added
+
+- New function `ErrorResponseBody.MarshalJSON() ([]byte, error)`
+- New function `*DataControllersClientListInGroupPager.More() bool`
+- New function `*SQLManagedInstancesClientListByResourceGroupPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*SQLServerInstancesClientListPager.More() bool`
+- New function `*DataControllersClientListInSubscriptionPager.More() bool`
+- New function `*SQLServerInstancesClientListByResourceGroupPager.More() bool`
+- New function `*SQLManagedInstancesClientListPager.More() bool`
+- New struct `ErrorResponse`
+- New struct `ErrorResponseBody`
+- New anonymous field `SQLManagedInstanceListResult` in struct `SQLManagedInstancesClientListResponse`
+- New anonymous field `SQLManagedInstance` in struct `SQLManagedInstancesClientUpdateResponse`
+- New anonymous field `SQLServerInstance` in struct `SQLServerInstancesClientCreateResponse`
+- New anonymous field `DataControllerResource` in struct `DataControllersClientGetDataControllerResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `PageOfDataControllerResource` in struct `DataControllersClientListInSubscriptionResponse`
+- New anonymous field `DataControllerResource` in struct `DataControllersClientPatchDataControllerResponse`
+- New anonymous field `SQLServerInstance` in struct `SQLServerInstancesClientUpdateResponse`
+- New anonymous field `SQLServerInstance` in struct `SQLServerInstancesClientGetResponse`
+- New anonymous field `SQLServerInstanceListResult` in struct `SQLServerInstancesClientListByResourceGroupResponse`
+- New anonymous field `DataControllerResource` in struct `DataControllersClientPutDataControllerResponse`
+- New anonymous field `PageOfDataControllerResource` in struct `DataControllersClientListInGroupResponse`
+- New anonymous field `SQLManagedInstanceListResult` in struct `SQLManagedInstancesClientListByResourceGroupResponse`
+- New anonymous field `SQLManagedInstance` in struct `SQLManagedInstancesClientGetResponse`
+- New anonymous field `SQLServerInstanceListResult` in struct `SQLServerInstancesClientListResponse`
+- New anonymous field `SQLManagedInstance` in struct `SQLManagedInstancesClientCreateResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `Operation.Properties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `K8SResourceRequirements.AdditionalProperties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `DataControllerProperties.K8SRaw` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `K8SScheduling.AdditionalProperties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `K8SSchedulingOptions.AdditionalProperties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `SQLManagedInstanceK8SRaw.AdditionalProperties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Type of `SQLManagedInstanceK8SSpec.AdditionalProperties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Function `ErrorResponseBody.MarshalJSON` has been removed
+- Struct `ErrorResponse` has been removed
+- Struct `ErrorResponseBody` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

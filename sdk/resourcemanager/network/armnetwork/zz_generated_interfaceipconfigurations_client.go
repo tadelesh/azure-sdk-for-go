@@ -35,17 +35,17 @@ type InterfaceIPConfigurationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewInterfaceIPConfigurationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *InterfaceIPConfigurationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &InterfaceIPConfigurationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -104,7 +104,7 @@ func (client *InterfaceIPConfigurationsClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *InterfaceIPConfigurationsClient) getHandleResponse(resp *http.Response) (InterfaceIPConfigurationsClientGetResponse, error) {
-	result := InterfaceIPConfigurationsClientGetResponse{RawResponse: resp}
+	result := InterfaceIPConfigurationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InterfaceIPConfiguration); err != nil {
 		return InterfaceIPConfigurationsClientGetResponse{}, err
 	}
@@ -157,7 +157,7 @@ func (client *InterfaceIPConfigurationsClient) listCreateRequest(ctx context.Con
 
 // listHandleResponse handles the List response.
 func (client *InterfaceIPConfigurationsClient) listHandleResponse(resp *http.Response) (InterfaceIPConfigurationsClientListResponse, error) {
-	result := InterfaceIPConfigurationsClientListResponse{RawResponse: resp}
+	result := InterfaceIPConfigurationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InterfaceIPConfigurationListResult); err != nil {
 		return InterfaceIPConfigurationsClientListResponse{}, err
 	}

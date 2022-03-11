@@ -35,17 +35,17 @@ type BookmarkRelationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBookmarkRelationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BookmarkRelationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BookmarkRelationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -110,7 +110,7 @@ func (client *BookmarkRelationsClient) createOrUpdateCreateRequest(ctx context.C
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *BookmarkRelationsClient) createOrUpdateHandleResponse(resp *http.Response) (BookmarkRelationsClientCreateOrUpdateResponse, error) {
-	result := BookmarkRelationsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := BookmarkRelationsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Relation); err != nil {
 		return BookmarkRelationsClientCreateOrUpdateResponse{}, err
 	}
@@ -137,7 +137,7 @@ func (client *BookmarkRelationsClient) Delete(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return BookmarkRelationsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return BookmarkRelationsClientDeleteResponse{RawResponse: resp}, nil
+	return BookmarkRelationsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -232,7 +232,7 @@ func (client *BookmarkRelationsClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *BookmarkRelationsClient) getHandleResponse(resp *http.Response) (BookmarkRelationsClientGetResponse, error) {
-	result := BookmarkRelationsClientGetResponse{RawResponse: resp}
+	result := BookmarkRelationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Relation); err != nil {
 		return BookmarkRelationsClientGetResponse{}, err
 	}
@@ -301,7 +301,7 @@ func (client *BookmarkRelationsClient) listCreateRequest(ctx context.Context, re
 
 // listHandleResponse handles the List response.
 func (client *BookmarkRelationsClient) listHandleResponse(resp *http.Response) (BookmarkRelationsClientListResponse, error) {
-	result := BookmarkRelationsClientListResponse{RawResponse: resp}
+	result := BookmarkRelationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RelationList); err != nil {
 		return BookmarkRelationsClientListResponse{}, err
 	}

@@ -1,5 +1,120 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*PrivateEndpointConnectionsClientListByAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateEndpointConnectionsClientListByAccountResponse, error)`
+- Function `*AccountsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(AccountsClientListByResourceGroupResponse, error)`
+- Function `*AccountsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(AccountsClientListBySubscriptionResponse, error)`
+- Function `*PrivateLinkResourcesClientListByAccountPager.NextPage` return value(s) have been changed from `(bool)` to `(PrivateLinkResourcesClientListByAccountResponse, error)`
+- Function `*PrivateEndpointConnectionsClientListByAccountPager.Err` has been removed
+- Function `*AccountsClientListByResourceGroupPager.Err` has been removed
+- Function `*PrivateEndpointConnectionsClientListByAccountPager.PageResponse` has been removed
+- Function `*AccountsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*PrivateLinkResourcesClientListByAccountPager.Err` has been removed
+- Function `*AccountsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*PrivateLinkResourcesClientListByAccountPager.PageResponse` has been removed
+- Function `*AccountsClientListBySubscriptionPager.Err` has been removed
+- Struct `AccountsClientCheckNameAvailabilityResult` has been removed
+- Struct `AccountsClientCreateOrUpdateResult` has been removed
+- Struct `AccountsClientGetResult` has been removed
+- Struct `AccountsClientListByResourceGroupResult` has been removed
+- Struct `AccountsClientListBySubscriptionResult` has been removed
+- Struct `AccountsClientListKeysResult` has been removed
+- Struct `AccountsClientUpdateResult` has been removed
+- Struct `DefaultAccountsClientGetResult` has been removed
+- Struct `DefaultAccountsClientSetResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientCreateOrUpdateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListByAccountResult` has been removed
+- Struct `PrivateLinkResourcesClientGetByGroupIDResult` has been removed
+- Struct `PrivateLinkResourcesClientListByAccountResult` has been removed
+- Field `PrivateLinkResourcesClientGetByGroupIDResult` of struct `PrivateLinkResourcesClientGetByGroupIDResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientGetByGroupIDResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientDeletePollerResponse` has been removed
+- Field `PrivateLinkResourcesClientListByAccountResult` of struct `PrivateLinkResourcesClientListByAccountResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListByAccountResponse` has been removed
+- Field `AccountsClientGetResult` of struct `AccountsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientAddRootCollectionAdminResponse` has been removed
+- Field `AccountsClientListByResourceGroupResult` of struct `AccountsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientListByResourceGroupResponse` has been removed
+- Field `PrivateEndpointConnectionsClientCreateOrUpdateResult` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `DefaultAccountsClientSetResult` of struct `DefaultAccountsClientSetResponse` has been removed
+- Field `RawResponse` of struct `DefaultAccountsClientSetResponse` has been removed
+- Field `AccountsClientCreateOrUpdateResult` of struct `AccountsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientCreateOrUpdateResponse` has been removed
+- Field `DefaultAccountsClientGetResult` of struct `DefaultAccountsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DefaultAccountsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientUpdatePollerResponse` has been removed
+- Field `AccountsClientListKeysResult` of struct `AccountsClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientCreateOrUpdatePollerResponse` has been removed
+- Field `AccountsClientListBySubscriptionResult` of struct `AccountsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `DefaultAccountsClientRemoveResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientDeleteResponse` has been removed
+- Field `AccountsClientUpdateResult` of struct `AccountsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientUpdateResponse` has been removed
+- Field `AccountsClientCheckNameAvailabilityResult` of struct `AccountsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientCheckNameAvailabilityResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListByAccountResult` of struct `PrivateEndpointConnectionsClientListByAccountResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListByAccountResponse` has been removed
+
+### Features Added
+
+- New function `*PrivateEndpointConnectionsClientListByAccountPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `ErrorResponseModelError.MarshalJSON() ([]byte, error)`
+- New function `*AccountsClientListBySubscriptionPager.More() bool`
+- New function `*PrivateLinkResourcesClientListByAccountPager.More() bool`
+- New function `ErrorModel.MarshalJSON() ([]byte, error)`
+- New function `*AccountsClientListByResourceGroupPager.More() bool`
+- New struct `ErrorModel`
+- New struct `ErrorResponseModel`
+- New struct `ErrorResponseModelError`
+- New anonymous field `AccessKeys` in struct `AccountsClientListKeysResponse`
+- New anonymous field `PrivateLinkResource` in struct `PrivateLinkResourcesClientGetByGroupIDResponse`
+- New anonymous field `PrivateEndpointConnectionList` in struct `PrivateEndpointConnectionsClientListByAccountResponse`
+- New anonymous field `PrivateLinkResourceList` in struct `PrivateLinkResourcesClientListByAccountResponse`
+- New anonymous field `OperationList` in struct `OperationsClientListResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `AccountList` in struct `AccountsClientListBySubscriptionResponse`
+- New anonymous field `DefaultAccountPayload` in struct `DefaultAccountsClientSetResponse`
+- New anonymous field `DefaultAccountPayload` in struct `DefaultAccountsClientGetResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse`
+- New anonymous field `Account` in struct `AccountsClientUpdateResponse`
+- New anonymous field `AccountList` in struct `AccountsClientListByResourceGroupResponse`
+- New anonymous field `CheckNameAvailabilityResult` in struct `AccountsClientCheckNameAvailabilityResponse`
+- New anonymous field `Account` in struct `AccountsClientCreateOrUpdateResponse`
+- New anonymous field `Account` in struct `AccountsClientGetResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ErrorModel.MarshalJSON` has been removed
+- Function `ErrorResponseModelError.MarshalJSON` has been removed
+- Struct `ErrorModel` has been removed
+- Struct `ErrorResponseModel` has been removed
+- Struct `ErrorResponseModelError` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

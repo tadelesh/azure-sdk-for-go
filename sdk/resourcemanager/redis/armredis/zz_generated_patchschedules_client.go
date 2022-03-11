@@ -105,7 +105,7 @@ func (client *PatchSchedulesClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *PatchSchedulesClient) createOrUpdateHandleResponse(resp *http.Response) (PatchSchedulesClientCreateOrUpdateResponse, error) {
-	result := PatchSchedulesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := PatchSchedulesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PatchSchedule); err != nil {
 		return PatchSchedulesClientCreateOrUpdateResponse{}, err
 	}
@@ -130,7 +130,7 @@ func (client *PatchSchedulesClient) Delete(ctx context.Context, resourceGroupNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return PatchSchedulesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return PatchSchedulesClientDeleteResponse{RawResponse: resp}, nil
+	return PatchSchedulesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -216,7 +216,7 @@ func (client *PatchSchedulesClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *PatchSchedulesClient) getHandleResponse(resp *http.Response) (PatchSchedulesClientGetResponse, error) {
-	result := PatchSchedulesClientGetResponse{RawResponse: resp}
+	result := PatchSchedulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PatchSchedule); err != nil {
 		return PatchSchedulesClientGetResponse{}, err
 	}
@@ -269,7 +269,7 @@ func (client *PatchSchedulesClient) listByRedisResourceCreateRequest(ctx context
 
 // listByRedisResourceHandleResponse handles the ListByRedisResource response.
 func (client *PatchSchedulesClient) listByRedisResourceHandleResponse(resp *http.Response) (PatchSchedulesClientListByRedisResourceResponse, error) {
-	result := PatchSchedulesClientListByRedisResourceResponse{RawResponse: resp}
+	result := PatchSchedulesClientListByRedisResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PatchScheduleListResult); err != nil {
 		return PatchSchedulesClientListByRedisResourceResponse{}, err
 	}

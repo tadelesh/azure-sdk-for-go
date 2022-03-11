@@ -35,17 +35,17 @@ type NetworkStatusClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewNetworkStatusClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *NetworkStatusClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &NetworkStatusClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -106,7 +106,7 @@ func (client *NetworkStatusClient) listByLocationCreateRequest(ctx context.Conte
 
 // listByLocationHandleResponse handles the ListByLocation response.
 func (client *NetworkStatusClient) listByLocationHandleResponse(resp *http.Response) (NetworkStatusClientListByLocationResponse, error) {
-	result := NetworkStatusClientListByLocationResponse{RawResponse: resp}
+	result := NetworkStatusClientListByLocationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkStatusContract); err != nil {
 		return NetworkStatusClientListByLocationResponse{}, err
 	}
@@ -163,7 +163,7 @@ func (client *NetworkStatusClient) listByServiceCreateRequest(ctx context.Contex
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *NetworkStatusClient) listByServiceHandleResponse(resp *http.Response) (NetworkStatusClientListByServiceResponse, error) {
-	result := NetworkStatusClientListByServiceResponse{RawResponse: resp}
+	result := NetworkStatusClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NetworkStatusContractByLocationArray); err != nil {
 		return NetworkStatusClientListByServiceResponse{}, err
 	}

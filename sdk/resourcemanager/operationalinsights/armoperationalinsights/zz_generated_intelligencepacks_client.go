@@ -34,17 +34,17 @@ type IntelligencePacksClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIntelligencePacksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IntelligencePacksClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IntelligencePacksClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -68,7 +68,7 @@ func (client *IntelligencePacksClient) Disable(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return IntelligencePacksClientDisableResponse{}, runtime.NewResponseError(resp)
 	}
-	return IntelligencePacksClientDisableResponse{RawResponse: resp}, nil
+	return IntelligencePacksClientDisableResponse{}, nil
 }
 
 // disableCreateRequest creates the Disable request.
@@ -119,7 +119,7 @@ func (client *IntelligencePacksClient) Enable(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return IntelligencePacksClientEnableResponse{}, runtime.NewResponseError(resp)
 	}
-	return IntelligencePacksClientEnableResponse{RawResponse: resp}, nil
+	return IntelligencePacksClientEnableResponse{}, nil
 }
 
 // enableCreateRequest creates the Enable request.
@@ -199,7 +199,7 @@ func (client *IntelligencePacksClient) listCreateRequest(ctx context.Context, re
 
 // listHandleResponse handles the List response.
 func (client *IntelligencePacksClient) listHandleResponse(resp *http.Response) (IntelligencePacksClientListResponse, error) {
-	result := IntelligencePacksClientListResponse{RawResponse: resp}
+	result := IntelligencePacksClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntelligencePackArray); err != nil {
 		return IntelligencePacksClientListResponse{}, err
 	}

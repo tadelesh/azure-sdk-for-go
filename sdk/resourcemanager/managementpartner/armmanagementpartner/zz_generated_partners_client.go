@@ -29,16 +29,16 @@ type PartnersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPartnersClient(credential azcore.TokenCredential, options *arm.ClientOptions) *PartnersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PartnersClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -77,7 +77,7 @@ func (client *PartnersClient) getCreateRequest(ctx context.Context, options *Par
 
 // getHandleResponse handles the Get response.
 func (client *PartnersClient) getHandleResponse(resp *http.Response) (PartnersClientGetResponse, error) {
-	result := PartnersClientGetResponse{RawResponse: resp}
+	result := PartnersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PartnerResponse); err != nil {
 		return PartnersClientGetResponse{}, err
 	}

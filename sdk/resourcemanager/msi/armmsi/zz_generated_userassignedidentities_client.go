@@ -34,17 +34,17 @@ type UserAssignedIdentitiesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewUserAssignedIdentitiesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *UserAssignedIdentitiesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &UserAssignedIdentitiesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *UserAssignedIdentitiesClient) createOrUpdateCreateRequest(ctx cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *UserAssignedIdentitiesClient) createOrUpdateHandleResponse(resp *http.Response) (UserAssignedIdentitiesClientCreateOrUpdateResponse, error) {
-	result := UserAssignedIdentitiesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := UserAssignedIdentitiesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Identity); err != nil {
 		return UserAssignedIdentitiesClientCreateOrUpdateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *UserAssignedIdentitiesClient) Delete(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return UserAssignedIdentitiesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return UserAssignedIdentitiesClientDeleteResponse{RawResponse: resp}, nil
+	return UserAssignedIdentitiesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -202,7 +202,7 @@ func (client *UserAssignedIdentitiesClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *UserAssignedIdentitiesClient) getHandleResponse(resp *http.Response) (UserAssignedIdentitiesClientGetResponse, error) {
-	result := UserAssignedIdentitiesClientGetResponse{RawResponse: resp}
+	result := UserAssignedIdentitiesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Identity); err != nil {
 		return UserAssignedIdentitiesClientGetResponse{}, err
 	}
@@ -250,7 +250,7 @@ func (client *UserAssignedIdentitiesClient) listByResourceGroupCreateRequest(ctx
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *UserAssignedIdentitiesClient) listByResourceGroupHandleResponse(resp *http.Response) (UserAssignedIdentitiesClientListByResourceGroupResponse, error) {
-	result := UserAssignedIdentitiesClientListByResourceGroupResponse{RawResponse: resp}
+	result := UserAssignedIdentitiesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UserAssignedIdentitiesListResult); err != nil {
 		return UserAssignedIdentitiesClientListByResourceGroupResponse{}, err
 	}
@@ -293,7 +293,7 @@ func (client *UserAssignedIdentitiesClient) listBySubscriptionCreateRequest(ctx 
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *UserAssignedIdentitiesClient) listBySubscriptionHandleResponse(resp *http.Response) (UserAssignedIdentitiesClientListBySubscriptionResponse, error) {
-	result := UserAssignedIdentitiesClientListBySubscriptionResponse{RawResponse: resp}
+	result := UserAssignedIdentitiesClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UserAssignedIdentitiesListResult); err != nil {
 		return UserAssignedIdentitiesClientListBySubscriptionResponse{}, err
 	}
@@ -350,7 +350,7 @@ func (client *UserAssignedIdentitiesClient) updateCreateRequest(ctx context.Cont
 
 // updateHandleResponse handles the Update response.
 func (client *UserAssignedIdentitiesClient) updateHandleResponse(resp *http.Response) (UserAssignedIdentitiesClientUpdateResponse, error) {
-	result := UserAssignedIdentitiesClientUpdateResponse{RawResponse: resp}
+	result := UserAssignedIdentitiesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Identity); err != nil {
 		return UserAssignedIdentitiesClientUpdateResponse{}, err
 	}

@@ -34,17 +34,17 @@ type OutputsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewOutputsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *OutputsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &OutputsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -110,7 +110,7 @@ func (client *OutputsClient) createOrReplaceCreateRequest(ctx context.Context, r
 
 // createOrReplaceHandleResponse handles the CreateOrReplace response.
 func (client *OutputsClient) createOrReplaceHandleResponse(resp *http.Response) (OutputsClientCreateOrReplaceResponse, error) {
-	result := OutputsClientCreateOrReplaceResponse{RawResponse: resp}
+	result := OutputsClientCreateOrReplaceResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -138,7 +138,7 @@ func (client *OutputsClient) Delete(ctx context.Context, resourceGroupName strin
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return OutputsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return OutputsClientDeleteResponse{RawResponse: resp}, nil
+	return OutputsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -224,7 +224,7 @@ func (client *OutputsClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *OutputsClient) getHandleResponse(resp *http.Response) (OutputsClientGetResponse, error) {
-	result := OutputsClientGetResponse{RawResponse: resp}
+	result := OutputsClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -283,7 +283,7 @@ func (client *OutputsClient) listByStreamingJobCreateRequest(ctx context.Context
 
 // listByStreamingJobHandleResponse handles the ListByStreamingJob response.
 func (client *OutputsClient) listByStreamingJobHandleResponse(resp *http.Response) (OutputsClientListByStreamingJobResponse, error) {
-	result := OutputsClientListByStreamingJobResponse{RawResponse: resp}
+	result := OutputsClientListByStreamingJobResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OutputListResult); err != nil {
 		return OutputsClientListByStreamingJobResponse{}, err
 	}
@@ -301,9 +301,7 @@ func (client *OutputsClient) BeginTest(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return OutputsClientTestPollerResponse{}, err
 	}
-	result := OutputsClientTestPollerResponse{
-		RawResponse: resp,
-	}
+	result := OutputsClientTestPollerResponse{}
 	pt, err := armruntime.NewPoller("OutputsClient.Test", "", resp, client.pl)
 	if err != nil {
 		return OutputsClientTestPollerResponse{}, err
@@ -425,7 +423,7 @@ func (client *OutputsClient) updateCreateRequest(ctx context.Context, resourceGr
 
 // updateHandleResponse handles the Update response.
 func (client *OutputsClient) updateHandleResponse(resp *http.Response) (OutputsClientUpdateResponse, error) {
-	result := OutputsClientUpdateResponse{RawResponse: resp}
+	result := OutputsClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

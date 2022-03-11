@@ -43,11 +43,10 @@ func (p *AccountsClientAbortHierarchicalNamespaceMigrationPoller) Poll(ctx conte
 // If the final GET succeeded then the final AccountsClientAbortHierarchicalNamespaceMigrationResponse will be returned.
 func (p *AccountsClientAbortHierarchicalNamespaceMigrationPoller) FinalResponse(ctx context.Context) (AccountsClientAbortHierarchicalNamespaceMigrationResponse, error) {
 	respType := AccountsClientAbortHierarchicalNamespaceMigrationResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return AccountsClientAbortHierarchicalNamespaceMigrationResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *AccountsClientCreatePoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final AccountsClientCreateResponse will be returned.
 func (p *AccountsClientCreatePoller) FinalResponse(ctx context.Context) (AccountsClientCreateResponse, error) {
 	respType := AccountsClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.Account)
+	_, err := p.pt.FinalResponse(ctx, &respType.Account)
 	if err != nil {
 		return AccountsClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *AccountsClientFailoverPoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final AccountsClientFailoverResponse will be returned.
 func (p *AccountsClientFailoverPoller) FinalResponse(ctx context.Context) (AccountsClientFailoverResponse, error) {
 	respType := AccountsClientFailoverResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return AccountsClientFailoverResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *AccountsClientHierarchicalNamespaceMigrationPoller) Poll(ctx context.Co
 // If the final GET succeeded then the final AccountsClientHierarchicalNamespaceMigrationResponse will be returned.
 func (p *AccountsClientHierarchicalNamespaceMigrationPoller) FinalResponse(ctx context.Context) (AccountsClientHierarchicalNamespaceMigrationResponse, error) {
 	respType := AccountsClientHierarchicalNamespaceMigrationResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return AccountsClientHierarchicalNamespaceMigrationResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *AccountsClientRestoreBlobRangesPoller) Poll(ctx context.Context) (*http
 // If the final GET succeeded then the final AccountsClientRestoreBlobRangesResponse will be returned.
 func (p *AccountsClientRestoreBlobRangesPoller) FinalResponse(ctx context.Context) (AccountsClientRestoreBlobRangesResponse, error) {
 	respType := AccountsClientRestoreBlobRangesResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.BlobRestoreStatus)
+	_, err := p.pt.FinalResponse(ctx, &respType.BlobRestoreStatus)
 	if err != nil {
 		return AccountsClientRestoreBlobRangesResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *BlobContainersClientObjectLevelWormPoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final BlobContainersClientObjectLevelWormResponse will be returned.
 func (p *BlobContainersClientObjectLevelWormPoller) FinalResponse(ctx context.Context) (BlobContainersClientObjectLevelWormResponse, error) {
 	respType := BlobContainersClientObjectLevelWormResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return BlobContainersClientObjectLevelWormResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

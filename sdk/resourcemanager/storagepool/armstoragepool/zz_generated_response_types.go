@@ -11,19 +11,11 @@ package armstoragepool
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // DiskPoolZonesClientListResponse contains the response from method DiskPoolZonesClient.List.
 type DiskPoolZonesClientListResponse struct {
-	DiskPoolZonesClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DiskPoolZonesClientListResult contains the result from method DiskPoolZonesClient.List.
-type DiskPoolZonesClientListResult struct {
 	DiskPoolZoneListResult
 }
 
@@ -31,9 +23,6 @@ type DiskPoolZonesClientListResult struct {
 type DiskPoolsClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *DiskPoolsClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -41,11 +30,10 @@ type DiskPoolsClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l DiskPoolsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DiskPoolsClientCreateOrUpdateResponse, error) {
 	respType := DiskPoolsClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DiskPool)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DiskPool)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -58,24 +46,16 @@ func (l *DiskPoolsClientCreateOrUpdatePollerResponse) Resume(ctx context.Context
 	poller := &DiskPoolsClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // DiskPoolsClientCreateOrUpdateResponse contains the response from method DiskPoolsClient.CreateOrUpdate.
 type DiskPoolsClientCreateOrUpdateResponse struct {
-	DiskPoolsClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DiskPoolsClientCreateOrUpdateResult contains the result from method DiskPoolsClient.CreateOrUpdate.
-type DiskPoolsClientCreateOrUpdateResult struct {
 	DiskPool
 }
 
@@ -83,9 +63,6 @@ type DiskPoolsClientCreateOrUpdateResult struct {
 type DiskPoolsClientDeallocatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *DiskPoolsClientDeallocatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -93,11 +70,10 @@ type DiskPoolsClientDeallocatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l DiskPoolsClientDeallocatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DiskPoolsClientDeallocateResponse, error) {
 	respType := DiskPoolsClientDeallocateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -110,28 +86,23 @@ func (l *DiskPoolsClientDeallocatePollerResponse) Resume(ctx context.Context, cl
 	poller := &DiskPoolsClientDeallocatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // DiskPoolsClientDeallocateResponse contains the response from method DiskPoolsClient.Deallocate.
 type DiskPoolsClientDeallocateResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // DiskPoolsClientDeletePollerResponse contains the response from method DiskPoolsClient.Delete.
 type DiskPoolsClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *DiskPoolsClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -139,11 +110,10 @@ type DiskPoolsClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l DiskPoolsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DiskPoolsClientDeleteResponse, error) {
 	respType := DiskPoolsClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -156,66 +126,36 @@ func (l *DiskPoolsClientDeletePollerResponse) Resume(ctx context.Context, client
 	poller := &DiskPoolsClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // DiskPoolsClientDeleteResponse contains the response from method DiskPoolsClient.Delete.
 type DiskPoolsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // DiskPoolsClientGetResponse contains the response from method DiskPoolsClient.Get.
 type DiskPoolsClientGetResponse struct {
-	DiskPoolsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DiskPoolsClientGetResult contains the result from method DiskPoolsClient.Get.
-type DiskPoolsClientGetResult struct {
 	DiskPool
 }
 
 // DiskPoolsClientListByResourceGroupResponse contains the response from method DiskPoolsClient.ListByResourceGroup.
 type DiskPoolsClientListByResourceGroupResponse struct {
-	DiskPoolsClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DiskPoolsClientListByResourceGroupResult contains the result from method DiskPoolsClient.ListByResourceGroup.
-type DiskPoolsClientListByResourceGroupResult struct {
 	DiskPoolListResult
 }
 
 // DiskPoolsClientListBySubscriptionResponse contains the response from method DiskPoolsClient.ListBySubscription.
 type DiskPoolsClientListBySubscriptionResponse struct {
-	DiskPoolsClientListBySubscriptionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DiskPoolsClientListBySubscriptionResult contains the result from method DiskPoolsClient.ListBySubscription.
-type DiskPoolsClientListBySubscriptionResult struct {
 	DiskPoolListResult
 }
 
 // DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse contains the response from method DiskPoolsClient.ListOutboundNetworkDependenciesEndpoints.
 type DiskPoolsClientListOutboundNetworkDependenciesEndpointsResponse struct {
-	DiskPoolsClientListOutboundNetworkDependenciesEndpointsResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DiskPoolsClientListOutboundNetworkDependenciesEndpointsResult contains the result from method DiskPoolsClient.ListOutboundNetworkDependenciesEndpoints.
-type DiskPoolsClientListOutboundNetworkDependenciesEndpointsResult struct {
 	OutboundEnvironmentEndpointList
 }
 
@@ -223,9 +163,6 @@ type DiskPoolsClientListOutboundNetworkDependenciesEndpointsResult struct {
 type DiskPoolsClientStartPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *DiskPoolsClientStartPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -233,11 +170,10 @@ type DiskPoolsClientStartPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l DiskPoolsClientStartPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DiskPoolsClientStartResponse, error) {
 	respType := DiskPoolsClientStartResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -250,28 +186,23 @@ func (l *DiskPoolsClientStartPollerResponse) Resume(ctx context.Context, client 
 	poller := &DiskPoolsClientStartPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // DiskPoolsClientStartResponse contains the response from method DiskPoolsClient.Start.
 type DiskPoolsClientStartResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // DiskPoolsClientUpdatePollerResponse contains the response from method DiskPoolsClient.Update.
 type DiskPoolsClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *DiskPoolsClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -279,11 +210,10 @@ type DiskPoolsClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l DiskPoolsClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DiskPoolsClientUpdateResponse, error) {
 	respType := DiskPoolsClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DiskPool)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DiskPool)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -296,24 +226,16 @@ func (l *DiskPoolsClientUpdatePollerResponse) Resume(ctx context.Context, client
 	poller := &DiskPoolsClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // DiskPoolsClientUpdateResponse contains the response from method DiskPoolsClient.Update.
 type DiskPoolsClientUpdateResponse struct {
-	DiskPoolsClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DiskPoolsClientUpdateResult contains the result from method DiskPoolsClient.Update.
-type DiskPoolsClientUpdateResult struct {
 	DiskPool
 }
 
@@ -321,9 +243,6 @@ type DiskPoolsClientUpdateResult struct {
 type DiskPoolsClientUpgradePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *DiskPoolsClientUpgradePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -331,11 +250,10 @@ type DiskPoolsClientUpgradePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l DiskPoolsClientUpgradePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DiskPoolsClientUpgradeResponse, error) {
 	respType := DiskPoolsClientUpgradeResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -348,28 +266,23 @@ func (l *DiskPoolsClientUpgradePollerResponse) Resume(ctx context.Context, clien
 	poller := &DiskPoolsClientUpgradePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // DiskPoolsClientUpgradeResponse contains the response from method DiskPoolsClient.Upgrade.
 type DiskPoolsClientUpgradeResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // IscsiTargetsClientCreateOrUpdatePollerResponse contains the response from method IscsiTargetsClient.CreateOrUpdate.
 type IscsiTargetsClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *IscsiTargetsClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -377,11 +290,10 @@ type IscsiTargetsClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l IscsiTargetsClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (IscsiTargetsClientCreateOrUpdateResponse, error) {
 	respType := IscsiTargetsClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.IscsiTarget)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.IscsiTarget)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -394,24 +306,16 @@ func (l *IscsiTargetsClientCreateOrUpdatePollerResponse) Resume(ctx context.Cont
 	poller := &IscsiTargetsClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // IscsiTargetsClientCreateOrUpdateResponse contains the response from method IscsiTargetsClient.CreateOrUpdate.
 type IscsiTargetsClientCreateOrUpdateResponse struct {
-	IscsiTargetsClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// IscsiTargetsClientCreateOrUpdateResult contains the result from method IscsiTargetsClient.CreateOrUpdate.
-type IscsiTargetsClientCreateOrUpdateResult struct {
 	IscsiTarget
 }
 
@@ -419,9 +323,6 @@ type IscsiTargetsClientCreateOrUpdateResult struct {
 type IscsiTargetsClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *IscsiTargetsClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -429,11 +330,10 @@ type IscsiTargetsClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l IscsiTargetsClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (IscsiTargetsClientDeleteResponse, error) {
 	respType := IscsiTargetsClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -446,42 +346,26 @@ func (l *IscsiTargetsClientDeletePollerResponse) Resume(ctx context.Context, cli
 	poller := &IscsiTargetsClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // IscsiTargetsClientDeleteResponse contains the response from method IscsiTargetsClient.Delete.
 type IscsiTargetsClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // IscsiTargetsClientGetResponse contains the response from method IscsiTargetsClient.Get.
 type IscsiTargetsClientGetResponse struct {
-	IscsiTargetsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// IscsiTargetsClientGetResult contains the result from method IscsiTargetsClient.Get.
-type IscsiTargetsClientGetResult struct {
 	IscsiTarget
 }
 
 // IscsiTargetsClientListByDiskPoolResponse contains the response from method IscsiTargetsClient.ListByDiskPool.
 type IscsiTargetsClientListByDiskPoolResponse struct {
-	IscsiTargetsClientListByDiskPoolResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// IscsiTargetsClientListByDiskPoolResult contains the result from method IscsiTargetsClient.ListByDiskPool.
-type IscsiTargetsClientListByDiskPoolResult struct {
 	IscsiTargetList
 }
 
@@ -489,9 +373,6 @@ type IscsiTargetsClientListByDiskPoolResult struct {
 type IscsiTargetsClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *IscsiTargetsClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -499,11 +380,10 @@ type IscsiTargetsClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l IscsiTargetsClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (IscsiTargetsClientUpdateResponse, error) {
 	respType := IscsiTargetsClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.IscsiTarget)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.IscsiTarget)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -516,47 +396,25 @@ func (l *IscsiTargetsClientUpdatePollerResponse) Resume(ctx context.Context, cli
 	poller := &IscsiTargetsClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // IscsiTargetsClientUpdateResponse contains the response from method IscsiTargetsClient.Update.
 type IscsiTargetsClientUpdateResponse struct {
-	IscsiTargetsClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// IscsiTargetsClientUpdateResult contains the result from method IscsiTargetsClient.Update.
-type IscsiTargetsClientUpdateResult struct {
 	IscsiTarget
 }
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	OperationListResult
 }
 
 // ResourceSKUsClientListResponse contains the response from method ResourceSKUsClient.List.
 type ResourceSKUsClientListResponse struct {
-	ResourceSKUsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ResourceSKUsClientListResult contains the result from method ResourceSKUsClient.List.
-type ResourceSKUsClientListResult struct {
 	ResourceSKUListResult
 }

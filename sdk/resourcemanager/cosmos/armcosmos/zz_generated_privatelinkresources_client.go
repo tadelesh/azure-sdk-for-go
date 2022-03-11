@@ -34,17 +34,17 @@ type PrivateLinkResourcesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateLinkResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateLinkResourcesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateLinkResourcesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *PrivateLinkResourcesClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *PrivateLinkResourcesClient) getHandleResponse(resp *http.Response) (PrivateLinkResourcesClientGetResponse, error) {
-	result := PrivateLinkResourcesClientGetResponse{RawResponse: resp}
+	result := PrivateLinkResourcesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResource); err != nil {
 		return PrivateLinkResourcesClientGetResponse{}, err
 	}
@@ -116,19 +116,13 @@ func (client *PrivateLinkResourcesClient) getHandleResponse(resp *http.Response)
 // accountName - Cosmos DB database account name.
 // options - PrivateLinkResourcesClientListByDatabaseAccountOptions contains the optional parameters for the PrivateLinkResourcesClient.ListByDatabaseAccount
 // method.
-func (client *PrivateLinkResourcesClient) ListByDatabaseAccount(ctx context.Context, resourceGroupName string, accountName string, options *PrivateLinkResourcesClientListByDatabaseAccountOptions) (PrivateLinkResourcesClientListByDatabaseAccountResponse, error) {
-	req, err := client.listByDatabaseAccountCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return PrivateLinkResourcesClientListByDatabaseAccountResponse{}, err
+func (client *PrivateLinkResourcesClient) ListByDatabaseAccount(resourceGroupName string, accountName string, options *PrivateLinkResourcesClientListByDatabaseAccountOptions) *PrivateLinkResourcesClientListByDatabaseAccountPager {
+	return &PrivateLinkResourcesClientListByDatabaseAccountPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByDatabaseAccountCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return PrivateLinkResourcesClientListByDatabaseAccountResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return PrivateLinkResourcesClientListByDatabaseAccountResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByDatabaseAccountHandleResponse(resp)
 }
 
 // listByDatabaseAccountCreateRequest creates the ListByDatabaseAccount request.
@@ -159,7 +153,7 @@ func (client *PrivateLinkResourcesClient) listByDatabaseAccountCreateRequest(ctx
 
 // listByDatabaseAccountHandleResponse handles the ListByDatabaseAccount response.
 func (client *PrivateLinkResourcesClient) listByDatabaseAccountHandleResponse(resp *http.Response) (PrivateLinkResourcesClientListByDatabaseAccountResponse, error) {
-	result := PrivateLinkResourcesClientListByDatabaseAccountResponse{RawResponse: resp}
+	result := PrivateLinkResourcesClientListByDatabaseAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourceListResult); err != nil {
 		return PrivateLinkResourcesClientListByDatabaseAccountResponse{}, err
 	}

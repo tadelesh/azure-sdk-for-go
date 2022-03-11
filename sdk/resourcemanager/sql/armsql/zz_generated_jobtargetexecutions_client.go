@@ -36,17 +36,17 @@ type JobTargetExecutionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewJobTargetExecutionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *JobTargetExecutionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &JobTargetExecutionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -119,7 +119,7 @@ func (client *JobTargetExecutionsClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *JobTargetExecutionsClient) getHandleResponse(resp *http.Response) (JobTargetExecutionsClientGetResponse, error) {
-	result := JobTargetExecutionsClientGetResponse{RawResponse: resp}
+	result := JobTargetExecutionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobExecution); err != nil {
 		return JobTargetExecutionsClientGetResponse{}, err
 	}
@@ -206,7 +206,7 @@ func (client *JobTargetExecutionsClient) listByJobExecutionCreateRequest(ctx con
 
 // listByJobExecutionHandleResponse handles the ListByJobExecution response.
 func (client *JobTargetExecutionsClient) listByJobExecutionHandleResponse(resp *http.Response) (JobTargetExecutionsClientListByJobExecutionResponse, error) {
-	result := JobTargetExecutionsClientListByJobExecutionResponse{RawResponse: resp}
+	result := JobTargetExecutionsClientListByJobExecutionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobExecutionListResult); err != nil {
 		return JobTargetExecutionsClientListByJobExecutionResponse{}, err
 	}
@@ -298,7 +298,7 @@ func (client *JobTargetExecutionsClient) listByStepCreateRequest(ctx context.Con
 
 // listByStepHandleResponse handles the ListByStep response.
 func (client *JobTargetExecutionsClient) listByStepHandleResponse(resp *http.Response) (JobTargetExecutionsClientListByStepResponse, error) {
-	result := JobTargetExecutionsClientListByStepResponse{RawResponse: resp}
+	result := JobTargetExecutionsClientListByStepResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobExecutionListResult); err != nil {
 		return JobTargetExecutionsClientListByStepResponse{}, err
 	}

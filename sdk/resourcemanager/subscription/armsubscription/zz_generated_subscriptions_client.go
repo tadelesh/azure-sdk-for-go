@@ -32,16 +32,16 @@ type SubscriptionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSubscriptionsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *SubscriptionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SubscriptionsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -85,7 +85,7 @@ func (client *SubscriptionsClient) getCreateRequest(ctx context.Context, subscri
 
 // getHandleResponse handles the Get response.
 func (client *SubscriptionsClient) getHandleResponse(resp *http.Response) (SubscriptionsClientGetResponse, error) {
-	result := SubscriptionsClientGetResponse{RawResponse: resp}
+	result := SubscriptionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Subscription); err != nil {
 		return SubscriptionsClientGetResponse{}, err
 	}
@@ -123,7 +123,7 @@ func (client *SubscriptionsClient) listCreateRequest(ctx context.Context, option
 
 // listHandleResponse handles the List response.
 func (client *SubscriptionsClient) listHandleResponse(resp *http.Response) (SubscriptionsClientListResponse, error) {
-	result := SubscriptionsClientListResponse{RawResponse: resp}
+	result := SubscriptionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListResult); err != nil {
 		return SubscriptionsClientListResponse{}, err
 	}
@@ -136,19 +136,13 @@ func (client *SubscriptionsClient) listHandleResponse(resp *http.Response) (Subs
 // subscriptionID - The ID of the target subscription.
 // options - SubscriptionsClientListLocationsOptions contains the optional parameters for the SubscriptionsClient.ListLocations
 // method.
-func (client *SubscriptionsClient) ListLocations(ctx context.Context, subscriptionID string, options *SubscriptionsClientListLocationsOptions) (SubscriptionsClientListLocationsResponse, error) {
-	req, err := client.listLocationsCreateRequest(ctx, subscriptionID, options)
-	if err != nil {
-		return SubscriptionsClientListLocationsResponse{}, err
+func (client *SubscriptionsClient) ListLocations(subscriptionID string, options *SubscriptionsClientListLocationsOptions) *SubscriptionsClientListLocationsPager {
+	return &SubscriptionsClientListLocationsPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listLocationsCreateRequest(ctx, subscriptionID, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return SubscriptionsClientListLocationsResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return SubscriptionsClientListLocationsResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listLocationsHandleResponse(resp)
 }
 
 // listLocationsCreateRequest creates the ListLocations request.
@@ -171,7 +165,7 @@ func (client *SubscriptionsClient) listLocationsCreateRequest(ctx context.Contex
 
 // listLocationsHandleResponse handles the ListLocations response.
 func (client *SubscriptionsClient) listLocationsHandleResponse(resp *http.Response) (SubscriptionsClientListLocationsResponse, error) {
-	result := SubscriptionsClientListLocationsResponse{RawResponse: resp}
+	result := SubscriptionsClientListLocationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LocationListResult); err != nil {
 		return SubscriptionsClientListLocationsResponse{}, err
 	}

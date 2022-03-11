@@ -34,17 +34,17 @@ type EntityQueryTemplatesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewEntityQueryTemplatesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *EntityQueryTemplatesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &EntityQueryTemplatesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *EntityQueryTemplatesClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *EntityQueryTemplatesClient) getHandleResponse(resp *http.Response) (EntityQueryTemplatesClientGetResponse, error) {
-	result := EntityQueryTemplatesClientGetResponse{RawResponse: resp}
+	result := EntityQueryTemplatesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return EntityQueryTemplatesClientGetResponse{}, err
 	}
@@ -159,7 +159,7 @@ func (client *EntityQueryTemplatesClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *EntityQueryTemplatesClient) listHandleResponse(resp *http.Response) (EntityQueryTemplatesClientListResponse, error) {
-	result := EntityQueryTemplatesClientListResponse{RawResponse: resp}
+	result := EntityQueryTemplatesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EntityQueryTemplateList); err != nil {
 		return EntityQueryTemplatesClientListResponse{}, err
 	}

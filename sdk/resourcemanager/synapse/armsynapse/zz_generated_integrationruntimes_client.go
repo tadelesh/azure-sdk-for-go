@@ -34,17 +34,17 @@ type IntegrationRuntimesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIntegrationRuntimesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IntegrationRuntimesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IntegrationRuntimesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *IntegrationRuntimesClient) BeginCreate(ctx context.Context, resour
 	if err != nil {
 		return IntegrationRuntimesClientCreatePollerResponse{}, err
 	}
-	result := IntegrationRuntimesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := IntegrationRuntimesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("IntegrationRuntimesClient.Create", "", resp, client.pl)
 	if err != nil {
 		return IntegrationRuntimesClientCreatePollerResponse{}, err
@@ -137,9 +135,7 @@ func (client *IntegrationRuntimesClient) BeginDelete(ctx context.Context, resour
 	if err != nil {
 		return IntegrationRuntimesClientDeletePollerResponse{}, err
 	}
-	result := IntegrationRuntimesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := IntegrationRuntimesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("IntegrationRuntimesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return IntegrationRuntimesClientDeletePollerResponse{}, err
@@ -209,9 +205,7 @@ func (client *IntegrationRuntimesClient) BeginDisableInteractiveQuery(ctx contex
 	if err != nil {
 		return IntegrationRuntimesClientDisableInteractiveQueryPollerResponse{}, err
 	}
-	result := IntegrationRuntimesClientDisableInteractiveQueryPollerResponse{
-		RawResponse: resp,
-	}
+	result := IntegrationRuntimesClientDisableInteractiveQueryPollerResponse{}
 	pt, err := armruntime.NewPoller("IntegrationRuntimesClient.DisableInteractiveQuery", "", resp, client.pl)
 	if err != nil {
 		return IntegrationRuntimesClientDisableInteractiveQueryPollerResponse{}, err
@@ -281,9 +275,7 @@ func (client *IntegrationRuntimesClient) BeginEnableInteractiveQuery(ctx context
 	if err != nil {
 		return IntegrationRuntimesClientEnableInteractiveQueryPollerResponse{}, err
 	}
-	result := IntegrationRuntimesClientEnableInteractiveQueryPollerResponse{
-		RawResponse: resp,
-	}
+	result := IntegrationRuntimesClientEnableInteractiveQueryPollerResponse{}
 	pt, err := armruntime.NewPoller("IntegrationRuntimesClient.EnableInteractiveQuery", "", resp, client.pl)
 	if err != nil {
 		return IntegrationRuntimesClientEnableInteractiveQueryPollerResponse{}, err
@@ -397,7 +389,7 @@ func (client *IntegrationRuntimesClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *IntegrationRuntimesClient) getHandleResponse(resp *http.Response) (IntegrationRuntimesClientGetResponse, error) {
-	result := IntegrationRuntimesClientGetResponse{RawResponse: resp}
+	result := IntegrationRuntimesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationRuntimeResource); err != nil {
 		return IntegrationRuntimesClientGetResponse{}, err
 	}
@@ -450,7 +442,7 @@ func (client *IntegrationRuntimesClient) listByWorkspaceCreateRequest(ctx contex
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *IntegrationRuntimesClient) listByWorkspaceHandleResponse(resp *http.Response) (IntegrationRuntimesClientListByWorkspaceResponse, error) {
-	result := IntegrationRuntimesClientListByWorkspaceResponse{RawResponse: resp}
+	result := IntegrationRuntimesClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationRuntimeListResponse); err != nil {
 		return IntegrationRuntimesClientListByWorkspaceResponse{}, err
 	}
@@ -512,7 +504,7 @@ func (client *IntegrationRuntimesClient) listOutboundNetworkDependenciesEndpoint
 
 // listOutboundNetworkDependenciesEndpointsHandleResponse handles the ListOutboundNetworkDependenciesEndpoints response.
 func (client *IntegrationRuntimesClient) listOutboundNetworkDependenciesEndpointsHandleResponse(resp *http.Response) (IntegrationRuntimesClientListOutboundNetworkDependenciesEndpointsResponse, error) {
-	result := IntegrationRuntimesClientListOutboundNetworkDependenciesEndpointsResponse{RawResponse: resp}
+	result := IntegrationRuntimesClientListOutboundNetworkDependenciesEndpointsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationRuntimeOutboundNetworkDependenciesEndpointsResponse); err != nil {
 		return IntegrationRuntimesClientListOutboundNetworkDependenciesEndpointsResponse{}, err
 	}
@@ -531,9 +523,7 @@ func (client *IntegrationRuntimesClient) BeginStart(ctx context.Context, resourc
 	if err != nil {
 		return IntegrationRuntimesClientStartPollerResponse{}, err
 	}
-	result := IntegrationRuntimesClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := IntegrationRuntimesClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("IntegrationRuntimesClient.Start", "", resp, client.pl)
 	if err != nil {
 		return IntegrationRuntimesClientStartPollerResponse{}, err
@@ -603,9 +593,7 @@ func (client *IntegrationRuntimesClient) BeginStop(ctx context.Context, resource
 	if err != nil {
 		return IntegrationRuntimesClientStopPollerResponse{}, err
 	}
-	result := IntegrationRuntimesClientStopPollerResponse{
-		RawResponse: resp,
-	}
+	result := IntegrationRuntimesClientStopPollerResponse{}
 	pt, err := armruntime.NewPoller("IntegrationRuntimesClient.Stop", "", resp, client.pl)
 	if err != nil {
 		return IntegrationRuntimesClientStopPollerResponse{}, err
@@ -718,7 +706,7 @@ func (client *IntegrationRuntimesClient) updateCreateRequest(ctx context.Context
 
 // updateHandleResponse handles the Update response.
 func (client *IntegrationRuntimesClient) updateHandleResponse(resp *http.Response) (IntegrationRuntimesClientUpdateResponse, error) {
-	result := IntegrationRuntimesClientUpdateResponse{RawResponse: resp}
+	result := IntegrationRuntimesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationRuntimeResource); err != nil {
 		return IntegrationRuntimesClientUpdateResponse{}, err
 	}
@@ -744,7 +732,7 @@ func (client *IntegrationRuntimesClient) Upgrade(ctx context.Context, resourceGr
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return IntegrationRuntimesClientUpgradeResponse{}, runtime.NewResponseError(resp)
 	}
-	return IntegrationRuntimesClientUpgradeResponse{RawResponse: resp}, nil
+	return IntegrationRuntimesClientUpgradeResponse{}, nil
 }
 
 // upgradeCreateRequest creates the Upgrade request.

@@ -34,17 +34,17 @@ type DataCollectionRuleAssociationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataCollectionRuleAssociationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataCollectionRuleAssociationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataCollectionRuleAssociationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -94,7 +94,7 @@ func (client *DataCollectionRuleAssociationsClient) createCreateRequest(ctx cont
 
 // createHandleResponse handles the Create response.
 func (client *DataCollectionRuleAssociationsClient) createHandleResponse(resp *http.Response) (DataCollectionRuleAssociationsClientCreateResponse, error) {
-	result := DataCollectionRuleAssociationsClientCreateResponse{RawResponse: resp}
+	result := DataCollectionRuleAssociationsClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataCollectionRuleAssociationProxyOnlyResource); err != nil {
 		return DataCollectionRuleAssociationsClientCreateResponse{}, err
 	}
@@ -119,7 +119,7 @@ func (client *DataCollectionRuleAssociationsClient) Delete(ctx context.Context, 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return DataCollectionRuleAssociationsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return DataCollectionRuleAssociationsClientDeleteResponse{RawResponse: resp}, nil
+	return DataCollectionRuleAssociationsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -183,7 +183,7 @@ func (client *DataCollectionRuleAssociationsClient) getCreateRequest(ctx context
 
 // getHandleResponse handles the Get response.
 func (client *DataCollectionRuleAssociationsClient) getHandleResponse(resp *http.Response) (DataCollectionRuleAssociationsClientGetResponse, error) {
-	result := DataCollectionRuleAssociationsClientGetResponse{RawResponse: resp}
+	result := DataCollectionRuleAssociationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataCollectionRuleAssociationProxyOnlyResource); err != nil {
 		return DataCollectionRuleAssociationsClientGetResponse{}, err
 	}
@@ -224,7 +224,7 @@ func (client *DataCollectionRuleAssociationsClient) listByResourceCreateRequest(
 
 // listByResourceHandleResponse handles the ListByResource response.
 func (client *DataCollectionRuleAssociationsClient) listByResourceHandleResponse(resp *http.Response) (DataCollectionRuleAssociationsClientListByResourceResponse, error) {
-	result := DataCollectionRuleAssociationsClientListByResourceResponse{RawResponse: resp}
+	result := DataCollectionRuleAssociationsClientListByResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataCollectionRuleAssociationProxyOnlyResourceListResult); err != nil {
 		return DataCollectionRuleAssociationsClientListByResourceResponse{}, err
 	}
@@ -277,7 +277,7 @@ func (client *DataCollectionRuleAssociationsClient) listByRuleCreateRequest(ctx 
 
 // listByRuleHandleResponse handles the ListByRule response.
 func (client *DataCollectionRuleAssociationsClient) listByRuleHandleResponse(resp *http.Response) (DataCollectionRuleAssociationsClientListByRuleResponse, error) {
-	result := DataCollectionRuleAssociationsClientListByRuleResponse{RawResponse: resp}
+	result := DataCollectionRuleAssociationsClientListByRuleResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataCollectionRuleAssociationProxyOnlyResourceListResult); err != nil {
 		return DataCollectionRuleAssociationsClientListByRuleResponse{}, err
 	}

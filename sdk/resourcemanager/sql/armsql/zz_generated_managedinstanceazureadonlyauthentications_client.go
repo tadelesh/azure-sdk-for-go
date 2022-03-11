@@ -34,17 +34,17 @@ type ManagedInstanceAzureADOnlyAuthenticationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedInstanceAzureADOnlyAuthenticationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedInstanceAzureADOnlyAuthenticationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedInstanceAzureADOnlyAuthenticationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *ManagedInstanceAzureADOnlyAuthenticationsClient) BeginCreateOrUpda
 	if err != nil {
 		return ManagedInstanceAzureADOnlyAuthenticationsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ManagedInstanceAzureADOnlyAuthenticationsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedInstanceAzureADOnlyAuthenticationsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedInstanceAzureADOnlyAuthenticationsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ManagedInstanceAzureADOnlyAuthenticationsClientCreateOrUpdatePollerResponse{}, err
@@ -138,9 +136,7 @@ func (client *ManagedInstanceAzureADOnlyAuthenticationsClient) BeginDelete(ctx c
 	if err != nil {
 		return ManagedInstanceAzureADOnlyAuthenticationsClientDeletePollerResponse{}, err
 	}
-	result := ManagedInstanceAzureADOnlyAuthenticationsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedInstanceAzureADOnlyAuthenticationsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedInstanceAzureADOnlyAuthenticationsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ManagedInstanceAzureADOnlyAuthenticationsClientDeletePollerResponse{}, err
@@ -252,7 +248,7 @@ func (client *ManagedInstanceAzureADOnlyAuthenticationsClient) getCreateRequest(
 
 // getHandleResponse handles the Get response.
 func (client *ManagedInstanceAzureADOnlyAuthenticationsClient) getHandleResponse(resp *http.Response) (ManagedInstanceAzureADOnlyAuthenticationsClientGetResponse, error) {
-	result := ManagedInstanceAzureADOnlyAuthenticationsClientGetResponse{RawResponse: resp}
+	result := ManagedInstanceAzureADOnlyAuthenticationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceAzureADOnlyAuthentication); err != nil {
 		return ManagedInstanceAzureADOnlyAuthenticationsClientGetResponse{}, err
 	}
@@ -306,7 +302,7 @@ func (client *ManagedInstanceAzureADOnlyAuthenticationsClient) listByInstanceCre
 
 // listByInstanceHandleResponse handles the ListByInstance response.
 func (client *ManagedInstanceAzureADOnlyAuthenticationsClient) listByInstanceHandleResponse(resp *http.Response) (ManagedInstanceAzureADOnlyAuthenticationsClientListByInstanceResponse, error) {
-	result := ManagedInstanceAzureADOnlyAuthenticationsClientListByInstanceResponse{RawResponse: resp}
+	result := ManagedInstanceAzureADOnlyAuthenticationsClientListByInstanceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceAzureADOnlyAuthListResult); err != nil {
 		return ManagedInstanceAzureADOnlyAuthenticationsClientListByInstanceResponse{}, err
 	}

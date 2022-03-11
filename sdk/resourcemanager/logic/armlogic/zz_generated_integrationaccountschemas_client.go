@@ -35,17 +35,17 @@ type IntegrationAccountSchemasClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIntegrationAccountSchemasClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IntegrationAccountSchemasClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IntegrationAccountSchemasClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *IntegrationAccountSchemasClient) createOrUpdateCreateRequest(ctx c
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *IntegrationAccountSchemasClient) createOrUpdateHandleResponse(resp *http.Response) (IntegrationAccountSchemasClientCreateOrUpdateResponse, error) {
-	result := IntegrationAccountSchemasClientCreateOrUpdateResponse{RawResponse: resp}
+	result := IntegrationAccountSchemasClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountSchema); err != nil {
 		return IntegrationAccountSchemasClientCreateOrUpdateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *IntegrationAccountSchemasClient) Delete(ctx context.Context, resou
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return IntegrationAccountSchemasClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return IntegrationAccountSchemasClientDeleteResponse{RawResponse: resp}, nil
+	return IntegrationAccountSchemasClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -218,7 +218,7 @@ func (client *IntegrationAccountSchemasClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *IntegrationAccountSchemasClient) getHandleResponse(resp *http.Response) (IntegrationAccountSchemasClientGetResponse, error) {
-	result := IntegrationAccountSchemasClientGetResponse{RawResponse: resp}
+	result := IntegrationAccountSchemasClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountSchema); err != nil {
 		return IntegrationAccountSchemasClientGetResponse{}, err
 	}
@@ -277,7 +277,7 @@ func (client *IntegrationAccountSchemasClient) listCreateRequest(ctx context.Con
 
 // listHandleResponse handles the List response.
 func (client *IntegrationAccountSchemasClient) listHandleResponse(resp *http.Response) (IntegrationAccountSchemasClientListResponse, error) {
-	result := IntegrationAccountSchemasClientListResponse{RawResponse: resp}
+	result := IntegrationAccountSchemasClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountSchemaListResult); err != nil {
 		return IntegrationAccountSchemasClientListResponse{}, err
 	}
@@ -338,7 +338,7 @@ func (client *IntegrationAccountSchemasClient) listContentCallbackURLCreateReque
 
 // listContentCallbackURLHandleResponse handles the ListContentCallbackURL response.
 func (client *IntegrationAccountSchemasClient) listContentCallbackURLHandleResponse(resp *http.Response) (IntegrationAccountSchemasClientListContentCallbackURLResponse, error) {
-	result := IntegrationAccountSchemasClientListContentCallbackURLResponse{RawResponse: resp}
+	result := IntegrationAccountSchemasClientListContentCallbackURLResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkflowTriggerCallbackURL); err != nil {
 		return IntegrationAccountSchemasClientListContentCallbackURLResponse{}, err
 	}

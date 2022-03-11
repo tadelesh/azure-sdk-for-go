@@ -35,17 +35,17 @@ type LongTermRetentionManagedInstanceBackupsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLongTermRetentionManagedInstanceBackupsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LongTermRetentionManagedInstanceBackupsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LongTermRetentionManagedInstanceBackupsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *LongTermRetentionManagedInstanceBackupsClient) BeginDelete(ctx con
 	if err != nil {
 		return LongTermRetentionManagedInstanceBackupsClientDeletePollerResponse{}, err
 	}
-	result := LongTermRetentionManagedInstanceBackupsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := LongTermRetentionManagedInstanceBackupsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("LongTermRetentionManagedInstanceBackupsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return LongTermRetentionManagedInstanceBackupsClientDeletePollerResponse{}, err
@@ -141,9 +139,7 @@ func (client *LongTermRetentionManagedInstanceBackupsClient) BeginDeleteByResour
 	if err != nil {
 		return LongTermRetentionManagedInstanceBackupsClientDeleteByResourceGroupPollerResponse{}, err
 	}
-	result := LongTermRetentionManagedInstanceBackupsClientDeleteByResourceGroupPollerResponse{
-		RawResponse: resp,
-	}
+	result := LongTermRetentionManagedInstanceBackupsClientDeleteByResourceGroupPollerResponse{}
 	pt, err := armruntime.NewPoller("LongTermRetentionManagedInstanceBackupsClient.DeleteByResourceGroup", "", resp, client.pl)
 	if err != nil {
 		return LongTermRetentionManagedInstanceBackupsClientDeleteByResourceGroupPollerResponse{}, err
@@ -267,7 +263,7 @@ func (client *LongTermRetentionManagedInstanceBackupsClient) getCreateRequest(ct
 
 // getHandleResponse handles the Get response.
 func (client *LongTermRetentionManagedInstanceBackupsClient) getHandleResponse(resp *http.Response) (LongTermRetentionManagedInstanceBackupsClientGetResponse, error) {
-	result := LongTermRetentionManagedInstanceBackupsClientGetResponse{RawResponse: resp}
+	result := LongTermRetentionManagedInstanceBackupsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceLongTermRetentionBackup); err != nil {
 		return LongTermRetentionManagedInstanceBackupsClientGetResponse{}, err
 	}
@@ -339,7 +335,7 @@ func (client *LongTermRetentionManagedInstanceBackupsClient) getByResourceGroupC
 
 // getByResourceGroupHandleResponse handles the GetByResourceGroup response.
 func (client *LongTermRetentionManagedInstanceBackupsClient) getByResourceGroupHandleResponse(resp *http.Response) (LongTermRetentionManagedInstanceBackupsClientGetByResourceGroupResponse, error) {
-	result := LongTermRetentionManagedInstanceBackupsClientGetByResourceGroupResponse{RawResponse: resp}
+	result := LongTermRetentionManagedInstanceBackupsClientGetByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceLongTermRetentionBackup); err != nil {
 		return LongTermRetentionManagedInstanceBackupsClientGetByResourceGroupResponse{}, err
 	}
@@ -403,7 +399,7 @@ func (client *LongTermRetentionManagedInstanceBackupsClient) listByDatabaseCreat
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *LongTermRetentionManagedInstanceBackupsClient) listByDatabaseHandleResponse(resp *http.Response) (LongTermRetentionManagedInstanceBackupsClientListByDatabaseResponse, error) {
-	result := LongTermRetentionManagedInstanceBackupsClientListByDatabaseResponse{RawResponse: resp}
+	result := LongTermRetentionManagedInstanceBackupsClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceLongTermRetentionBackupListResult); err != nil {
 		return LongTermRetentionManagedInstanceBackupsClientListByDatabaseResponse{}, err
 	}
@@ -462,7 +458,7 @@ func (client *LongTermRetentionManagedInstanceBackupsClient) listByInstanceCreat
 
 // listByInstanceHandleResponse handles the ListByInstance response.
 func (client *LongTermRetentionManagedInstanceBackupsClient) listByInstanceHandleResponse(resp *http.Response) (LongTermRetentionManagedInstanceBackupsClientListByInstanceResponse, error) {
-	result := LongTermRetentionManagedInstanceBackupsClientListByInstanceResponse{RawResponse: resp}
+	result := LongTermRetentionManagedInstanceBackupsClientListByInstanceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceLongTermRetentionBackupListResult); err != nil {
 		return LongTermRetentionManagedInstanceBackupsClientListByInstanceResponse{}, err
 	}
@@ -516,7 +512,7 @@ func (client *LongTermRetentionManagedInstanceBackupsClient) listByLocationCreat
 
 // listByLocationHandleResponse handles the ListByLocation response.
 func (client *LongTermRetentionManagedInstanceBackupsClient) listByLocationHandleResponse(resp *http.Response) (LongTermRetentionManagedInstanceBackupsClientListByLocationResponse, error) {
-	result := LongTermRetentionManagedInstanceBackupsClientListByLocationResponse{RawResponse: resp}
+	result := LongTermRetentionManagedInstanceBackupsClientListByLocationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceLongTermRetentionBackupListResult); err != nil {
 		return LongTermRetentionManagedInstanceBackupsClientListByLocationResponse{}, err
 	}
@@ -586,7 +582,7 @@ func (client *LongTermRetentionManagedInstanceBackupsClient) listByResourceGroup
 
 // listByResourceGroupDatabaseHandleResponse handles the ListByResourceGroupDatabase response.
 func (client *LongTermRetentionManagedInstanceBackupsClient) listByResourceGroupDatabaseHandleResponse(resp *http.Response) (LongTermRetentionManagedInstanceBackupsClientListByResourceGroupDatabaseResponse, error) {
-	result := LongTermRetentionManagedInstanceBackupsClientListByResourceGroupDatabaseResponse{RawResponse: resp}
+	result := LongTermRetentionManagedInstanceBackupsClientListByResourceGroupDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceLongTermRetentionBackupListResult); err != nil {
 		return LongTermRetentionManagedInstanceBackupsClientListByResourceGroupDatabaseResponse{}, err
 	}
@@ -651,7 +647,7 @@ func (client *LongTermRetentionManagedInstanceBackupsClient) listByResourceGroup
 
 // listByResourceGroupInstanceHandleResponse handles the ListByResourceGroupInstance response.
 func (client *LongTermRetentionManagedInstanceBackupsClient) listByResourceGroupInstanceHandleResponse(resp *http.Response) (LongTermRetentionManagedInstanceBackupsClientListByResourceGroupInstanceResponse, error) {
-	result := LongTermRetentionManagedInstanceBackupsClientListByResourceGroupInstanceResponse{RawResponse: resp}
+	result := LongTermRetentionManagedInstanceBackupsClientListByResourceGroupInstanceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceLongTermRetentionBackupListResult); err != nil {
 		return LongTermRetentionManagedInstanceBackupsClientListByResourceGroupInstanceResponse{}, err
 	}
@@ -711,7 +707,7 @@ func (client *LongTermRetentionManagedInstanceBackupsClient) listByResourceGroup
 
 // listByResourceGroupLocationHandleResponse handles the ListByResourceGroupLocation response.
 func (client *LongTermRetentionManagedInstanceBackupsClient) listByResourceGroupLocationHandleResponse(resp *http.Response) (LongTermRetentionManagedInstanceBackupsClientListByResourceGroupLocationResponse, error) {
-	result := LongTermRetentionManagedInstanceBackupsClientListByResourceGroupLocationResponse{RawResponse: resp}
+	result := LongTermRetentionManagedInstanceBackupsClientListByResourceGroupLocationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceLongTermRetentionBackupListResult); err != nil {
 		return LongTermRetentionManagedInstanceBackupsClientListByResourceGroupLocationResponse{}, err
 	}

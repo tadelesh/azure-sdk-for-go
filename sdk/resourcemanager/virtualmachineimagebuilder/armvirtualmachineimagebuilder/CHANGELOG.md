@@ -1,5 +1,84 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*VirtualMachineImageTemplatesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualMachineImageTemplatesClientListResponse, error)`
+- Function `*VirtualMachineImageTemplatesClientListRunOutputsPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualMachineImageTemplatesClientListRunOutputsResponse, error)`
+- Function `*VirtualMachineImageTemplatesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualMachineImageTemplatesClientListByResourceGroupResponse, error)`
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*VirtualMachineImageTemplatesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*VirtualMachineImageTemplatesClientListByResourceGroupPager.Err` has been removed
+- Function `*VirtualMachineImageTemplatesClientListPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*VirtualMachineImageTemplatesClientListPager.Err` has been removed
+- Function `*VirtualMachineImageTemplatesClientListRunOutputsPager.Err` has been removed
+- Function `*VirtualMachineImageTemplatesClientListRunOutputsPager.PageResponse` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `VirtualMachineImageTemplatesClientCreateOrUpdateResult` has been removed
+- Struct `VirtualMachineImageTemplatesClientGetResult` has been removed
+- Struct `VirtualMachineImageTemplatesClientGetRunOutputResult` has been removed
+- Struct `VirtualMachineImageTemplatesClientListByResourceGroupResult` has been removed
+- Struct `VirtualMachineImageTemplatesClientListResult` has been removed
+- Struct `VirtualMachineImageTemplatesClientListRunOutputsResult` has been removed
+- Struct `VirtualMachineImageTemplatesClientUpdateResult` has been removed
+- Field `RawResponse` of struct `VirtualMachineImageTemplatesClientDeletePollerResponse` has been removed
+- Field `VirtualMachineImageTemplatesClientGetResult` of struct `VirtualMachineImageTemplatesClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImageTemplatesClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImageTemplatesClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImageTemplatesClientDeleteResponse` has been removed
+- Field `VirtualMachineImageTemplatesClientGetRunOutputResult` of struct `VirtualMachineImageTemplatesClientGetRunOutputResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImageTemplatesClientGetRunOutputResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImageTemplatesClientCancelResponse` has been removed
+- Field `VirtualMachineImageTemplatesClientUpdateResult` of struct `VirtualMachineImageTemplatesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImageTemplatesClientUpdateResponse` has been removed
+- Field `VirtualMachineImageTemplatesClientListResult` of struct `VirtualMachineImageTemplatesClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImageTemplatesClientListResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImageTemplatesClientCancelPollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImageTemplatesClientRunResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImageTemplatesClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImageTemplatesClientRunPollerResponse` has been removed
+- Field `VirtualMachineImageTemplatesClientListRunOutputsResult` of struct `VirtualMachineImageTemplatesClientListRunOutputsResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImageTemplatesClientListRunOutputsResponse` has been removed
+- Field `VirtualMachineImageTemplatesClientListByResourceGroupResult` of struct `VirtualMachineImageTemplatesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImageTemplatesClientListByResourceGroupResponse` has been removed
+- Field `VirtualMachineImageTemplatesClientCreateOrUpdateResult` of struct `VirtualMachineImageTemplatesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImageTemplatesClientCreateOrUpdateResponse` has been removed
+
+### Features Added
+
+- New function `*VirtualMachineImageTemplatesClientListRunOutputsPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*VirtualMachineImageTemplatesClientListByResourceGroupPager.More() bool`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*VirtualMachineImageTemplatesClientListPager.More() bool`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `ImageTemplate` in struct `VirtualMachineImageTemplatesClientCreateOrUpdateResponse`
+- New anonymous field `RunOutput` in struct `VirtualMachineImageTemplatesClientGetRunOutputResponse`
+- New anonymous field `RunOutputCollection` in struct `VirtualMachineImageTemplatesClientListRunOutputsResponse`
+- New anonymous field `ImageTemplateListResult` in struct `VirtualMachineImageTemplatesClientListByResourceGroupResponse`
+- New anonymous field `ImageTemplate` in struct `VirtualMachineImageTemplatesClientUpdateResponse`
+- New anonymous field `ImageTemplate` in struct `VirtualMachineImageTemplatesClientGetResponse`
+- New anonymous field `ImageTemplateListResult` in struct `VirtualMachineImageTemplatesClientListResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `Operation.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

@@ -34,17 +34,17 @@ type WatchlistsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWatchlistsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WatchlistsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WatchlistsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -106,7 +106,7 @@ func (client *WatchlistsClient) createOrUpdateCreateRequest(ctx context.Context,
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *WatchlistsClient) createOrUpdateHandleResponse(resp *http.Response) (WatchlistsClientCreateOrUpdateResponse, error) {
-	result := WatchlistsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := WatchlistsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Watchlist); err != nil {
 		return WatchlistsClientCreateOrUpdateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *WatchlistsClient) Delete(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return WatchlistsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return WatchlistsClientDeleteResponse{RawResponse: resp}, nil
+	return WatchlistsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -217,7 +217,7 @@ func (client *WatchlistsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *WatchlistsClient) getHandleResponse(resp *http.Response) (WatchlistsClientGetResponse, error) {
-	result := WatchlistsClientGetResponse{RawResponse: resp}
+	result := WatchlistsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Watchlist); err != nil {
 		return WatchlistsClientGetResponse{}, err
 	}
@@ -269,7 +269,7 @@ func (client *WatchlistsClient) listCreateRequest(ctx context.Context, resourceG
 
 // listHandleResponse handles the List response.
 func (client *WatchlistsClient) listHandleResponse(resp *http.Response) (WatchlistsClientListResponse, error) {
-	result := WatchlistsClientListResponse{RawResponse: resp}
+	result := WatchlistsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WatchlistList); err != nil {
 		return WatchlistsClientListResponse{}, err
 	}

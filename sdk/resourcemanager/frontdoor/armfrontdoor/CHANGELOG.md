@@ -1,5 +1,226 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*FrontDoorsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(FrontDoorsClientListResponse, error)`
+- Function `*PreconfiguredEndpointsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PreconfiguredEndpointsClientListResponse, error)`
+- Function `*ExperimentsClientListByProfilePager.NextPage` return value(s) have been changed from `(bool)` to `(ExperimentsClientListByProfileResponse, error)`
+- Function `*FrontDoorsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(FrontDoorsClientListByResourceGroupResponse, error)`
+- Function `*PoliciesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PoliciesClientListResponse, error)`
+- Function `*NetworkExperimentProfilesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(NetworkExperimentProfilesClientListResponse, error)`
+- Function `*RulesEnginesClientListByFrontDoorPager.NextPage` return value(s) have been changed from `(bool)` to `(RulesEnginesClientListByFrontDoorResponse, error)`
+- Function `*ManagedRuleSetsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ManagedRuleSetsClientListResponse, error)`
+- Function `*FrontendEndpointsClientListByFrontDoorPager.NextPage` return value(s) have been changed from `(bool)` to `(FrontendEndpointsClientListByFrontDoorResponse, error)`
+- Function `*NetworkExperimentProfilesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(NetworkExperimentProfilesClientListByResourceGroupResponse, error)`
+- Function `*FrontendEndpointsClientListByFrontDoorPager.PageResponse` has been removed
+- Function `*ExperimentsClientListByProfilePager.Err` has been removed
+- Function `*PreconfiguredEndpointsClientListPager.PageResponse` has been removed
+- Function `*RulesEnginesClientListByFrontDoorPager.Err` has been removed
+- Function `*PreconfiguredEndpointsClientListPager.Err` has been removed
+- Function `*FrontDoorsClientListPager.PageResponse` has been removed
+- Function `*PoliciesClientListPager.PageResponse` has been removed
+- Function `*NetworkExperimentProfilesClientListPager.PageResponse` has been removed
+- Function `*NetworkExperimentProfilesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*FrontDoorsClientListPager.Err` has been removed
+- Function `*FrontDoorsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ManagedRuleSetsClientListPager.Err` has been removed
+- Function `*RulesEnginesClientListByFrontDoorPager.PageResponse` has been removed
+- Function `*PoliciesClientListPager.Err` has been removed
+- Function `*FrontDoorsClientListByResourceGroupPager.Err` has been removed
+- Function `*FrontendEndpointsClientListByFrontDoorPager.Err` has been removed
+- Function `*NetworkExperimentProfilesClientListByResourceGroupPager.Err` has been removed
+- Function `*ExperimentsClientListByProfilePager.PageResponse` has been removed
+- Function `*NetworkExperimentProfilesClientListPager.Err` has been removed
+- Function `*ManagedRuleSetsClientListPager.PageResponse` has been removed
+- Struct `ExperimentsClientCreateOrUpdateResult` has been removed
+- Struct `ExperimentsClientGetResult` has been removed
+- Struct `ExperimentsClientListByProfileResult` has been removed
+- Struct `ExperimentsClientUpdateResult` has been removed
+- Struct `FrontDoorsClientCreateOrUpdateResult` has been removed
+- Struct `FrontDoorsClientGetResult` has been removed
+- Struct `FrontDoorsClientListByResourceGroupResult` has been removed
+- Struct `FrontDoorsClientListResult` has been removed
+- Struct `FrontDoorsClientValidateCustomDomainResult` has been removed
+- Struct `FrontendEndpointsClientGetResult` has been removed
+- Struct `FrontendEndpointsClientListByFrontDoorResult` has been removed
+- Struct `ManagedRuleSetsClientListResult` has been removed
+- Struct `NameAvailabilityClientCheckResult` has been removed
+- Struct `NameAvailabilityWithSubscriptionClientCheckResult` has been removed
+- Struct `NetworkExperimentProfilesClientCreateOrUpdateResult` has been removed
+- Struct `NetworkExperimentProfilesClientGetResult` has been removed
+- Struct `NetworkExperimentProfilesClientListByResourceGroupResult` has been removed
+- Struct `NetworkExperimentProfilesClientListResult` has been removed
+- Struct `NetworkExperimentProfilesClientUpdateResult` has been removed
+- Struct `PoliciesClientCreateOrUpdateResult` has been removed
+- Struct `PoliciesClientGetResult` has been removed
+- Struct `PoliciesClientListResult` has been removed
+- Struct `PreconfiguredEndpointsClientListResult` has been removed
+- Struct `ReportsClientGetLatencyScorecardsResult` has been removed
+- Struct `ReportsClientGetTimeseriesResult` has been removed
+- Struct `RulesEnginesClientCreateOrUpdateResult` has been removed
+- Struct `RulesEnginesClientGetResult` has been removed
+- Struct `RulesEnginesClientListByFrontDoorResult` has been removed
+- Field `RawResponse` of struct `ExperimentsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `EndpointsClientPurgeContentResponse` has been removed
+- Field `NetworkExperimentProfilesClientListResult` of struct `NetworkExperimentProfilesClientListResponse` has been removed
+- Field `RawResponse` of struct `NetworkExperimentProfilesClientListResponse` has been removed
+- Field `NameAvailabilityClientCheckResult` of struct `NameAvailabilityClientCheckResponse` has been removed
+- Field `RawResponse` of struct `NameAvailabilityClientCheckResponse` has been removed
+- Field `RawResponse` of struct `EndpointsClientPurgeContentPollerResponse` has been removed
+- Field `ExperimentsClientListByProfileResult` of struct `ExperimentsClientListByProfileResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientListByProfileResponse` has been removed
+- Field `RulesEnginesClientListByFrontDoorResult` of struct `RulesEnginesClientListByFrontDoorResponse` has been removed
+- Field `RawResponse` of struct `RulesEnginesClientListByFrontDoorResponse` has been removed
+- Field `PoliciesClientGetResult` of struct `PoliciesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PoliciesClientGetResponse` has been removed
+- Field `FrontDoorsClientCreateOrUpdateResult` of struct `FrontDoorsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `FrontDoorsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `RulesEnginesClientCreateOrUpdatePollerResponse` has been removed
+- Field `ExperimentsClientUpdateResult` of struct `ExperimentsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientUpdateResponse` has been removed
+- Field `PoliciesClientCreateOrUpdateResult` of struct `PoliciesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PoliciesClientCreateOrUpdateResponse` has been removed
+- Field `ReportsClientGetLatencyScorecardsResult` of struct `ReportsClientGetLatencyScorecardsResponse` has been removed
+- Field `RawResponse` of struct `ReportsClientGetLatencyScorecardsResponse` has been removed
+- Field `FrontDoorsClientListByResourceGroupResult` of struct `FrontDoorsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `FrontDoorsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `PoliciesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `NetworkExperimentProfilesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `NetworkExperimentProfilesClientCreateOrUpdatePollerResponse` has been removed
+- Field `NameAvailabilityWithSubscriptionClientCheckResult` of struct `NameAvailabilityWithSubscriptionClientCheckResponse` has been removed
+- Field `RawResponse` of struct `NameAvailabilityWithSubscriptionClientCheckResponse` has been removed
+- Field `RawResponse` of struct `FrontDoorsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `RulesEnginesClientDeleteResponse` has been removed
+- Field `FrontendEndpointsClientGetResult` of struct `FrontendEndpointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `FrontendEndpointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PoliciesClientDeletePollerResponse` has been removed
+- Field `RulesEnginesClientCreateOrUpdateResult` of struct `RulesEnginesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `RulesEnginesClientCreateOrUpdateResponse` has been removed
+- Field `FrontDoorsClientListResult` of struct `FrontDoorsClientListResponse` has been removed
+- Field `RawResponse` of struct `FrontDoorsClientListResponse` has been removed
+- Field `ExperimentsClientGetResult` of struct `ExperimentsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientGetResponse` has been removed
+- Field `RawResponse` of struct `FrontDoorsClientDeletePollerResponse` has been removed
+- Field `PoliciesClientListResult` of struct `PoliciesClientListResponse` has been removed
+- Field `RawResponse` of struct `PoliciesClientListResponse` has been removed
+- Field `ManagedRuleSetsClientListResult` of struct `ManagedRuleSetsClientListResponse` has been removed
+- Field `RawResponse` of struct `ManagedRuleSetsClientListResponse` has been removed
+- Field `RawResponse` of struct `FrontDoorsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `PoliciesClientCreateOrUpdatePollerResponse` has been removed
+- Field `ExperimentsClientCreateOrUpdateResult` of struct `ExperimentsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientCreateOrUpdateResponse` has been removed
+- Field `NetworkExperimentProfilesClientCreateOrUpdateResult` of struct `NetworkExperimentProfilesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `NetworkExperimentProfilesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `FrontendEndpointsClientDisableHTTPSResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientDeletePollerResponse` has been removed
+- Field `FrontDoorsClientValidateCustomDomainResult` of struct `FrontDoorsClientValidateCustomDomainResponse` has been removed
+- Field `RawResponse` of struct `FrontDoorsClientValidateCustomDomainResponse` has been removed
+- Field `ReportsClientGetTimeseriesResult` of struct `ReportsClientGetTimeseriesResponse` has been removed
+- Field `RawResponse` of struct `ReportsClientGetTimeseriesResponse` has been removed
+- Field `RawResponse` of struct `FrontendEndpointsClientDisableHTTPSPollerResponse` has been removed
+- Field `RawResponse` of struct `RulesEnginesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `NetworkExperimentProfilesClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ExperimentsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `NetworkExperimentProfilesClientDeleteResponse` has been removed
+- Field `FrontDoorsClientGetResult` of struct `FrontDoorsClientGetResponse` has been removed
+- Field `RawResponse` of struct `FrontDoorsClientGetResponse` has been removed
+- Field `FrontendEndpointsClientListByFrontDoorResult` of struct `FrontendEndpointsClientListByFrontDoorResponse` has been removed
+- Field `RawResponse` of struct `FrontendEndpointsClientListByFrontDoorResponse` has been removed
+- Field `RawResponse` of struct `FrontendEndpointsClientEnableHTTPSPollerResponse` has been removed
+- Field `NetworkExperimentProfilesClientListByResourceGroupResult` of struct `NetworkExperimentProfilesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `NetworkExperimentProfilesClientListByResourceGroupResponse` has been removed
+- Field `NetworkExperimentProfilesClientGetResult` of struct `NetworkExperimentProfilesClientGetResponse` has been removed
+- Field `RawResponse` of struct `NetworkExperimentProfilesClientGetResponse` has been removed
+- Field `RawResponse` of struct `FrontendEndpointsClientEnableHTTPSResponse` has been removed
+- Field `RulesEnginesClientGetResult` of struct `RulesEnginesClientGetResponse` has been removed
+- Field `RawResponse` of struct `RulesEnginesClientGetResponse` has been removed
+- Field `NetworkExperimentProfilesClientUpdateResult` of struct `NetworkExperimentProfilesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `NetworkExperimentProfilesClientUpdateResponse` has been removed
+- Field `PreconfiguredEndpointsClientListResult` of struct `PreconfiguredEndpointsClientListResponse` has been removed
+- Field `RawResponse` of struct `PreconfiguredEndpointsClientListResponse` has been removed
+
+### Features Added
+
+- New function `*ExperimentsClientListByProfilePager.More() bool`
+- New function `LoadBalancingSettingsListResult.MarshalJSON() ([]byte, error)`
+- New function `Error.MarshalJSON() ([]byte, error)`
+- New function `*FrontDoorsClientListPager.More() bool`
+- New function `RoutingRuleListResult.MarshalJSON() ([]byte, error)`
+- New function `*NetworkExperimentProfilesClientListPager.More() bool`
+- New function `*NetworkExperimentProfilesClientListByResourceGroupPager.More() bool`
+- New function `TagsObject.MarshalJSON() ([]byte, error)`
+- New function `BackendPoolListResult.MarshalJSON() ([]byte, error)`
+- New function `HealthProbeSettingsListResult.MarshalJSON() ([]byte, error)`
+- New function `*RulesEnginesClientListByFrontDoorPager.More() bool`
+- New function `*PreconfiguredEndpointsClientListPager.More() bool`
+- New function `*PoliciesClientListPager.More() bool`
+- New function `*FrontDoorsClientListByResourceGroupPager.More() bool`
+- New function `*FrontendEndpointsClientListByFrontDoorPager.More() bool`
+- New function `*ManagedRuleSetsClientListPager.More() bool`
+- New struct `AzureAsyncOperationResult`
+- New struct `BackendPoolListResult`
+- New struct `Error`
+- New struct `ErrorDetails`
+- New struct `ErrorResponse`
+- New struct `HealthProbeSettingsListResult`
+- New struct `LoadBalancingSettingsListResult`
+- New struct `RoutingRuleListResult`
+- New struct `TagsObject`
+- New anonymous field `Timeseries` in struct `ReportsClientGetTimeseriesResponse`
+- New anonymous field `RulesEngine` in struct `RulesEnginesClientGetResponse`
+- New anonymous field `ProfileList` in struct `NetworkExperimentProfilesClientListByResourceGroupResponse`
+- New anonymous field `ProfileList` in struct `NetworkExperimentProfilesClientListResponse`
+- New anonymous field `Experiment` in struct `ExperimentsClientCreateOrUpdateResponse`
+- New anonymous field `WebApplicationFirewallPolicy` in struct `PoliciesClientGetResponse`
+- New anonymous field `CheckNameAvailabilityOutput` in struct `NameAvailabilityWithSubscriptionClientCheckResponse`
+- New anonymous field `ValidateCustomDomainOutput` in struct `FrontDoorsClientValidateCustomDomainResponse`
+- New anonymous field `FrontDoor` in struct `FrontDoorsClientCreateOrUpdateResponse`
+- New anonymous field `WebApplicationFirewallPolicyList` in struct `PoliciesClientListResponse`
+- New anonymous field `FrontendEndpoint` in struct `FrontendEndpointsClientGetResponse`
+- New anonymous field `ListResult` in struct `FrontDoorsClientListByResourceGroupResponse`
+- New anonymous field `ExperimentList` in struct `ExperimentsClientListByProfileResponse`
+- New anonymous field `Profile` in struct `NetworkExperimentProfilesClientUpdateResponse`
+- New anonymous field `Profile` in struct `NetworkExperimentProfilesClientGetResponse`
+- New anonymous field `PreconfiguredEndpointList` in struct `PreconfiguredEndpointsClientListResponse`
+- New anonymous field `FrontDoor` in struct `FrontDoorsClientGetResponse`
+- New anonymous field `ManagedRuleSetDefinitionList` in struct `ManagedRuleSetsClientListResponse`
+- New anonymous field `CheckNameAvailabilityOutput` in struct `NameAvailabilityClientCheckResponse`
+- New anonymous field `WebApplicationFirewallPolicy` in struct `PoliciesClientCreateOrUpdateResponse`
+- New anonymous field `LatencyScorecard` in struct `ReportsClientGetLatencyScorecardsResponse`
+- New anonymous field `RulesEngineListResult` in struct `RulesEnginesClientListByFrontDoorResponse`
+- New anonymous field `RulesEngine` in struct `RulesEnginesClientCreateOrUpdateResponse`
+- New anonymous field `Profile` in struct `NetworkExperimentProfilesClientCreateOrUpdateResponse`
+- New anonymous field `FrontendEndpointsListResult` in struct `FrontendEndpointsClientListByFrontDoorResponse`
+- New anonymous field `Experiment` in struct `ExperimentsClientGetResponse`
+- New anonymous field `Experiment` in struct `ExperimentsClientUpdateResponse`
+- New anonymous field `ListResult` in struct `FrontDoorsClientListResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `LoadBalancingSettingsListResult.MarshalJSON` has been removed
+- Function `RoutingRuleListResult.MarshalJSON` has been removed
+- Function `TagsObject.MarshalJSON` has been removed
+- Function `HealthProbeSettingsListResult.MarshalJSON` has been removed
+- Function `Error.MarshalJSON` has been removed
+- Function `BackendPoolListResult.MarshalJSON` has been removed
+- Struct `AzureAsyncOperationResult` has been removed
+- Struct `BackendPoolListResult` has been removed
+- Struct `Error` has been removed
+- Struct `ErrorDetails` has been removed
+- Struct `ErrorResponse` has been removed
+- Struct `HealthProbeSettingsListResult` has been removed
+- Struct `LoadBalancingSettingsListResult` has been removed
+- Struct `RoutingRuleListResult` has been removed
+- Struct `TagsObject` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

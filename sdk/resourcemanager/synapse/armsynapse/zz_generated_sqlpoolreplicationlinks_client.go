@@ -34,17 +34,17 @@ type SQLPoolReplicationLinksClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLPoolReplicationLinksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLPoolReplicationLinksClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLPoolReplicationLinksClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -108,7 +108,7 @@ func (client *SQLPoolReplicationLinksClient) getByNameCreateRequest(ctx context.
 
 // getByNameHandleResponse handles the GetByName response.
 func (client *SQLPoolReplicationLinksClient) getByNameHandleResponse(resp *http.Response) (SQLPoolReplicationLinksClientGetByNameResponse, error) {
-	result := SQLPoolReplicationLinksClientGetByNameResponse{RawResponse: resp}
+	result := SQLPoolReplicationLinksClientGetByNameResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReplicationLink); err != nil {
 		return SQLPoolReplicationLinksClientGetByNameResponse{}, err
 	}
@@ -166,7 +166,7 @@ func (client *SQLPoolReplicationLinksClient) listCreateRequest(ctx context.Conte
 
 // listHandleResponse handles the List response.
 func (client *SQLPoolReplicationLinksClient) listHandleResponse(resp *http.Response) (SQLPoolReplicationLinksClientListResponse, error) {
-	result := SQLPoolReplicationLinksClientListResponse{RawResponse: resp}
+	result := SQLPoolReplicationLinksClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReplicationLinkListResult); err != nil {
 		return SQLPoolReplicationLinksClientListResponse{}, err
 	}

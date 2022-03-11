@@ -35,17 +35,17 @@ type FirewallPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFirewallPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FirewallPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FirewallPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *FirewallPoliciesClient) BeginCreateOrUpdate(ctx context.Context, r
 	if err != nil {
 		return FirewallPoliciesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := FirewallPoliciesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := FirewallPoliciesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("FirewallPoliciesClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return FirewallPoliciesClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *FirewallPoliciesClient) BeginDelete(ctx context.Context, resourceG
 	if err != nil {
 		return FirewallPoliciesClientDeletePollerResponse{}, err
 	}
-	result := FirewallPoliciesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := FirewallPoliciesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("FirewallPoliciesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return FirewallPoliciesClientDeletePollerResponse{}, err
@@ -236,7 +232,7 @@ func (client *FirewallPoliciesClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *FirewallPoliciesClient) getHandleResponse(resp *http.Response) (FirewallPoliciesClientGetResponse, error) {
-	result := FirewallPoliciesClientGetResponse{RawResponse: resp}
+	result := FirewallPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FirewallPolicy); err != nil {
 		return FirewallPoliciesClientGetResponse{}, err
 	}
@@ -283,7 +279,7 @@ func (client *FirewallPoliciesClient) listCreateRequest(ctx context.Context, res
 
 // listHandleResponse handles the List response.
 func (client *FirewallPoliciesClient) listHandleResponse(resp *http.Response) (FirewallPoliciesClientListResponse, error) {
-	result := FirewallPoliciesClientListResponse{RawResponse: resp}
+	result := FirewallPoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FirewallPolicyListResult); err != nil {
 		return FirewallPoliciesClientListResponse{}, err
 	}
@@ -326,7 +322,7 @@ func (client *FirewallPoliciesClient) listAllCreateRequest(ctx context.Context, 
 
 // listAllHandleResponse handles the ListAll response.
 func (client *FirewallPoliciesClient) listAllHandleResponse(resp *http.Response) (FirewallPoliciesClientListAllResponse, error) {
-	result := FirewallPoliciesClientListAllResponse{RawResponse: resp}
+	result := FirewallPoliciesClientListAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FirewallPolicyListResult); err != nil {
 		return FirewallPoliciesClientListAllResponse{}, err
 	}

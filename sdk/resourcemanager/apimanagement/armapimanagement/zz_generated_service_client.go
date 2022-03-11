@@ -35,17 +35,17 @@ type ServiceClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServiceClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServiceClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServiceClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *ServiceClient) BeginApplyNetworkConfigurationUpdates(ctx context.C
 	if err != nil {
 		return ServiceClientApplyNetworkConfigurationUpdatesPollerResponse{}, err
 	}
-	result := ServiceClientApplyNetworkConfigurationUpdatesPollerResponse{
-		RawResponse: resp,
-	}
+	result := ServiceClientApplyNetworkConfigurationUpdatesPollerResponse{}
 	pt, err := armruntime.NewPoller("ServiceClient.ApplyNetworkConfigurationUpdates", "location", resp, client.pl)
 	if err != nil {
 		return ServiceClientApplyNetworkConfigurationUpdatesPollerResponse{}, err
@@ -134,9 +132,7 @@ func (client *ServiceClient) BeginBackup(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return ServiceClientBackupPollerResponse{}, err
 	}
-	result := ServiceClientBackupPollerResponse{
-		RawResponse: resp,
-	}
+	result := ServiceClientBackupPollerResponse{}
 	pt, err := armruntime.NewPoller("ServiceClient.Backup", "location", resp, client.pl)
 	if err != nil {
 		return ServiceClientBackupPollerResponse{}, err
@@ -231,7 +227,7 @@ func (client *ServiceClient) checkNameAvailabilityCreateRequest(ctx context.Cont
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *ServiceClient) checkNameAvailabilityHandleResponse(resp *http.Response) (ServiceClientCheckNameAvailabilityResponse, error) {
-	result := ServiceClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := ServiceClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceNameAvailabilityResult); err != nil {
 		return ServiceClientCheckNameAvailabilityResponse{}, err
 	}
@@ -251,9 +247,7 @@ func (client *ServiceClient) BeginCreateOrUpdate(ctx context.Context, resourceGr
 	if err != nil {
 		return ServiceClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ServiceClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServiceClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServiceClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ServiceClientCreateOrUpdatePollerResponse{}, err
@@ -318,9 +312,7 @@ func (client *ServiceClient) BeginDelete(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return ServiceClientDeletePollerResponse{}, err
 	}
-	result := ServiceClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServiceClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ServiceClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ServiceClientDeletePollerResponse{}, err
@@ -422,7 +414,7 @@ func (client *ServiceClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *ServiceClient) getHandleResponse(resp *http.Response) (ServiceClientGetResponse, error) {
-	result := ServiceClientGetResponse{RawResponse: resp}
+	result := ServiceClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceResource); err != nil {
 		return ServiceClientGetResponse{}, err
 	}
@@ -468,7 +460,7 @@ func (client *ServiceClient) getDomainOwnershipIdentifierCreateRequest(ctx conte
 
 // getDomainOwnershipIdentifierHandleResponse handles the GetDomainOwnershipIdentifier response.
 func (client *ServiceClient) getDomainOwnershipIdentifierHandleResponse(resp *http.Response) (ServiceClientGetDomainOwnershipIdentifierResponse, error) {
-	result := ServiceClientGetDomainOwnershipIdentifierResponse{RawResponse: resp}
+	result := ServiceClientGetDomainOwnershipIdentifierResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceGetDomainOwnershipIdentifierResult); err != nil {
 		return ServiceClientGetDomainOwnershipIdentifierResponse{}, err
 	}
@@ -523,7 +515,7 @@ func (client *ServiceClient) getSsoTokenCreateRequest(ctx context.Context, resou
 
 // getSsoTokenHandleResponse handles the GetSsoToken response.
 func (client *ServiceClient) getSsoTokenHandleResponse(resp *http.Response) (ServiceClientGetSsoTokenResponse, error) {
-	result := ServiceClientGetSsoTokenResponse{RawResponse: resp}
+	result := ServiceClientGetSsoTokenResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceGetSsoTokenResult); err != nil {
 		return ServiceClientGetSsoTokenResponse{}, err
 	}
@@ -565,7 +557,7 @@ func (client *ServiceClient) listCreateRequest(ctx context.Context, options *Ser
 
 // listHandleResponse handles the List response.
 func (client *ServiceClient) listHandleResponse(resp *http.Response) (ServiceClientListResponse, error) {
-	result := ServiceClientListResponse{RawResponse: resp}
+	result := ServiceClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceListResult); err != nil {
 		return ServiceClientListResponse{}, err
 	}
@@ -613,7 +605,7 @@ func (client *ServiceClient) listByResourceGroupCreateRequest(ctx context.Contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ServiceClient) listByResourceGroupHandleResponse(resp *http.Response) (ServiceClientListByResourceGroupResponse, error) {
-	result := ServiceClientListByResourceGroupResponse{RawResponse: resp}
+	result := ServiceClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceListResult); err != nil {
 		return ServiceClientListByResourceGroupResponse{}, err
 	}
@@ -633,9 +625,7 @@ func (client *ServiceClient) BeginRestore(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ServiceClientRestorePollerResponse{}, err
 	}
-	result := ServiceClientRestorePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServiceClientRestorePollerResponse{}
 	pt, err := armruntime.NewPoller("ServiceClient.Restore", "location", resp, client.pl)
 	if err != nil {
 		return ServiceClientRestorePollerResponse{}, err
@@ -702,9 +692,7 @@ func (client *ServiceClient) BeginUpdate(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return ServiceClientUpdatePollerResponse{}, err
 	}
-	result := ServiceClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServiceClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServiceClient.Update", "", resp, client.pl)
 	if err != nil {
 		return ServiceClientUpdatePollerResponse{}, err

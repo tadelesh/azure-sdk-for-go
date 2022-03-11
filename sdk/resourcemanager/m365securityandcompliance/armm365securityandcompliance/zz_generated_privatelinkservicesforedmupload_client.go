@@ -34,17 +34,17 @@ type PrivateLinkServicesForEDMUploadClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateLinkServicesForEDMUploadClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateLinkServicesForEDMUploadClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateLinkServicesForEDMUploadClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *PrivateLinkServicesForEDMUploadClient) BeginCreateOrUpdate(ctx con
 	if err != nil {
 		return PrivateLinkServicesForEDMUploadClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PrivateLinkServicesForEDMUploadClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateLinkServicesForEDMUploadClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateLinkServicesForEDMUploadClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return PrivateLinkServicesForEDMUploadClientCreateOrUpdatePollerResponse{}, err
@@ -166,7 +164,7 @@ func (client *PrivateLinkServicesForEDMUploadClient) getCreateRequest(ctx contex
 
 // getHandleResponse handles the Get response.
 func (client *PrivateLinkServicesForEDMUploadClient) getHandleResponse(resp *http.Response) (PrivateLinkServicesForEDMUploadClientGetResponse, error) {
-	result := PrivateLinkServicesForEDMUploadClientGetResponse{RawResponse: resp}
+	result := PrivateLinkServicesForEDMUploadClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkServicesForEDMUploadDescription); err != nil {
 		return PrivateLinkServicesForEDMUploadClientGetResponse{}, err
 	}
@@ -209,7 +207,7 @@ func (client *PrivateLinkServicesForEDMUploadClient) listCreateRequest(ctx conte
 
 // listHandleResponse handles the List response.
 func (client *PrivateLinkServicesForEDMUploadClient) listHandleResponse(resp *http.Response) (PrivateLinkServicesForEDMUploadClientListResponse, error) {
-	result := PrivateLinkServicesForEDMUploadClientListResponse{RawResponse: resp}
+	result := PrivateLinkServicesForEDMUploadClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkServicesForEDMUploadDescriptionListResult); err != nil {
 		return PrivateLinkServicesForEDMUploadClientListResponse{}, err
 	}
@@ -257,7 +255,7 @@ func (client *PrivateLinkServicesForEDMUploadClient) listByResourceGroupCreateRe
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *PrivateLinkServicesForEDMUploadClient) listByResourceGroupHandleResponse(resp *http.Response) (PrivateLinkServicesForEDMUploadClientListByResourceGroupResponse, error) {
-	result := PrivateLinkServicesForEDMUploadClientListByResourceGroupResponse{RawResponse: resp}
+	result := PrivateLinkServicesForEDMUploadClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkServicesForEDMUploadDescriptionListResult); err != nil {
 		return PrivateLinkServicesForEDMUploadClientListByResourceGroupResponse{}, err
 	}
@@ -276,9 +274,7 @@ func (client *PrivateLinkServicesForEDMUploadClient) BeginUpdate(ctx context.Con
 	if err != nil {
 		return PrivateLinkServicesForEDMUploadClientUpdatePollerResponse{}, err
 	}
-	result := PrivateLinkServicesForEDMUploadClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PrivateLinkServicesForEDMUploadClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PrivateLinkServicesForEDMUploadClient.Update", "location", resp, client.pl)
 	if err != nil {
 		return PrivateLinkServicesForEDMUploadClientUpdatePollerResponse{}, err

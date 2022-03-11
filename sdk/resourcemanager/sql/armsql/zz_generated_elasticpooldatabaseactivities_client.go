@@ -34,17 +34,17 @@ type ElasticPoolDatabaseActivitiesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewElasticPoolDatabaseActivitiesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ElasticPoolDatabaseActivitiesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ElasticPoolDatabaseActivitiesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -57,19 +57,13 @@ func NewElasticPoolDatabaseActivitiesClient(subscriptionID string, credential az
 // elasticPoolName - The name of the elastic pool.
 // options - ElasticPoolDatabaseActivitiesClientListByElasticPoolOptions contains the optional parameters for the ElasticPoolDatabaseActivitiesClient.ListByElasticPool
 // method.
-func (client *ElasticPoolDatabaseActivitiesClient) ListByElasticPool(ctx context.Context, resourceGroupName string, serverName string, elasticPoolName string, options *ElasticPoolDatabaseActivitiesClientListByElasticPoolOptions) (ElasticPoolDatabaseActivitiesClientListByElasticPoolResponse, error) {
-	req, err := client.listByElasticPoolCreateRequest(ctx, resourceGroupName, serverName, elasticPoolName, options)
-	if err != nil {
-		return ElasticPoolDatabaseActivitiesClientListByElasticPoolResponse{}, err
+func (client *ElasticPoolDatabaseActivitiesClient) ListByElasticPool(resourceGroupName string, serverName string, elasticPoolName string, options *ElasticPoolDatabaseActivitiesClientListByElasticPoolOptions) *ElasticPoolDatabaseActivitiesClientListByElasticPoolPager {
+	return &ElasticPoolDatabaseActivitiesClientListByElasticPoolPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByElasticPoolCreateRequest(ctx, resourceGroupName, serverName, elasticPoolName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ElasticPoolDatabaseActivitiesClientListByElasticPoolResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ElasticPoolDatabaseActivitiesClientListByElasticPoolResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByElasticPoolHandleResponse(resp)
 }
 
 // listByElasticPoolCreateRequest creates the ListByElasticPool request.
@@ -104,7 +98,7 @@ func (client *ElasticPoolDatabaseActivitiesClient) listByElasticPoolCreateReques
 
 // listByElasticPoolHandleResponse handles the ListByElasticPool response.
 func (client *ElasticPoolDatabaseActivitiesClient) listByElasticPoolHandleResponse(resp *http.Response) (ElasticPoolDatabaseActivitiesClientListByElasticPoolResponse, error) {
-	result := ElasticPoolDatabaseActivitiesClientListByElasticPoolResponse{RawResponse: resp}
+	result := ElasticPoolDatabaseActivitiesClientListByElasticPoolResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ElasticPoolDatabaseActivityListResult); err != nil {
 		return ElasticPoolDatabaseActivitiesClientListByElasticPoolResponse{}, err
 	}

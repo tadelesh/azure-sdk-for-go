@@ -1,5 +1,50 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationClientListResponse, error)`
+- Function `*OperationClientListPager.Err` has been removed
+- Function `*OperationClientListPager.PageResponse` has been removed
+- Struct `OperationClientListResult` has been removed
+- Struct `PartnerClientCreateResult` has been removed
+- Struct `PartnerClientGetResult` has been removed
+- Struct `PartnerClientUpdateResult` has been removed
+- Struct `PartnersClientGetResult` has been removed
+- Field `OperationClientListResult` of struct `OperationClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationClientListResponse` has been removed
+- Field `PartnerClientUpdateResult` of struct `PartnerClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PartnerClientUpdateResponse` has been removed
+- Field `PartnersClientGetResult` of struct `PartnersClientGetResponse` has been removed
+- Field `RawResponse` of struct `PartnersClientGetResponse` has been removed
+- Field `PartnerClientGetResult` of struct `PartnerClientGetResponse` has been removed
+- Field `RawResponse` of struct `PartnerClientGetResponse` has been removed
+- Field `RawResponse` of struct `PartnerClientDeleteResponse` has been removed
+- Field `PartnerClientCreateResult` of struct `PartnerClientCreateResponse` has been removed
+- Field `RawResponse` of struct `PartnerClientCreateResponse` has been removed
+
+### Features Added
+
+- New function `*OperationClientListPager.More() bool`
+- New struct `Error`
+- New struct `ExtendedErrorInfo`
+- New anonymous field `PartnerResponse` in struct `PartnerClientCreateResponse`
+- New anonymous field `OperationList` in struct `OperationClientListResponse`
+- New anonymous field `PartnerResponse` in struct `PartnerClientGetResponse`
+- New anonymous field `PartnerResponse` in struct `PartnerClientUpdateResponse`
+- New anonymous field `PartnerResponse` in struct `PartnersClientGetResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Struct `Error` has been removed
+- Struct `ExtendedErrorInfo` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-17)
 ### Breaking Changes
 

@@ -35,17 +35,17 @@ type DelegationSettingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDelegationSettingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DelegationSettingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DelegationSettingsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -103,7 +103,7 @@ func (client *DelegationSettingsClient) createOrUpdateCreateRequest(ctx context.
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *DelegationSettingsClient) createOrUpdateHandleResponse(resp *http.Response) (DelegationSettingsClientCreateOrUpdateResponse, error) {
-	result := DelegationSettingsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := DelegationSettingsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PortalDelegationSettings); err != nil {
 		return DelegationSettingsClientCreateOrUpdateResponse{}, err
 	}
@@ -158,7 +158,7 @@ func (client *DelegationSettingsClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *DelegationSettingsClient) getHandleResponse(resp *http.Response) (DelegationSettingsClientGetResponse, error) {
-	result := DelegationSettingsClientGetResponse{RawResponse: resp}
+	result := DelegationSettingsClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -213,7 +213,7 @@ func (client *DelegationSettingsClient) getEntityTagCreateRequest(ctx context.Co
 
 // getEntityTagHandleResponse handles the GetEntityTag response.
 func (client *DelegationSettingsClient) getEntityTagHandleResponse(resp *http.Response) (DelegationSettingsClientGetEntityTagResponse, error) {
-	result := DelegationSettingsClientGetEntityTagResponse{RawResponse: resp}
+	result := DelegationSettingsClientGetEntityTagResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -272,7 +272,7 @@ func (client *DelegationSettingsClient) listSecretsCreateRequest(ctx context.Con
 
 // listSecretsHandleResponse handles the ListSecrets response.
 func (client *DelegationSettingsClient) listSecretsHandleResponse(resp *http.Response) (DelegationSettingsClientListSecretsResponse, error) {
-	result := DelegationSettingsClientListSecretsResponse{RawResponse: resp}
+	result := DelegationSettingsClientListSecretsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PortalSettingValidationKeyContract); err != nil {
 		return DelegationSettingsClientListSecretsResponse{}, err
 	}
@@ -300,7 +300,7 @@ func (client *DelegationSettingsClient) Update(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return DelegationSettingsClientUpdateResponse{}, runtime.NewResponseError(resp)
 	}
-	return DelegationSettingsClientUpdateResponse{RawResponse: resp}, nil
+	return DelegationSettingsClientUpdateResponse{}, nil
 }
 
 // updateCreateRequest creates the Update request.

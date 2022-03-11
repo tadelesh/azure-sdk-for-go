@@ -34,17 +34,17 @@ type DatabaseRecommendedActionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDatabaseRecommendedActionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DatabaseRecommendedActionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DatabaseRecommendedActionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -114,7 +114,7 @@ func (client *DatabaseRecommendedActionsClient) getCreateRequest(ctx context.Con
 
 // getHandleResponse handles the Get response.
 func (client *DatabaseRecommendedActionsClient) getHandleResponse(resp *http.Response) (DatabaseRecommendedActionsClientGetResponse, error) {
-	result := DatabaseRecommendedActionsClientGetResponse{RawResponse: resp}
+	result := DatabaseRecommendedActionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecommendedAction); err != nil {
 		return DatabaseRecommendedActionsClientGetResponse{}, err
 	}
@@ -181,7 +181,7 @@ func (client *DatabaseRecommendedActionsClient) listByDatabaseAdvisorCreateReque
 
 // listByDatabaseAdvisorHandleResponse handles the ListByDatabaseAdvisor response.
 func (client *DatabaseRecommendedActionsClient) listByDatabaseAdvisorHandleResponse(resp *http.Response) (DatabaseRecommendedActionsClientListByDatabaseAdvisorResponse, error) {
-	result := DatabaseRecommendedActionsClientListByDatabaseAdvisorResponse{RawResponse: resp}
+	result := DatabaseRecommendedActionsClientListByDatabaseAdvisorResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecommendedActionArray); err != nil {
 		return DatabaseRecommendedActionsClientListByDatabaseAdvisorResponse{}, err
 	}
@@ -254,7 +254,7 @@ func (client *DatabaseRecommendedActionsClient) updateCreateRequest(ctx context.
 
 // updateHandleResponse handles the Update response.
 func (client *DatabaseRecommendedActionsClient) updateHandleResponse(resp *http.Response) (DatabaseRecommendedActionsClientUpdateResponse, error) {
-	result := DatabaseRecommendedActionsClientUpdateResponse{RawResponse: resp}
+	result := DatabaseRecommendedActionsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecommendedAction); err != nil {
 		return DatabaseRecommendedActionsClientUpdateResponse{}, err
 	}

@@ -32,16 +32,16 @@ type SensorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSensorsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *SensorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SensorsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -88,7 +88,7 @@ func (client *SensorsClient) createOrUpdateCreateRequest(ctx context.Context, sc
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *SensorsClient) createOrUpdateHandleResponse(resp *http.Response) (SensorsClientCreateOrUpdateResponse, error) {
-	result := SensorsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := SensorsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SensorModel); err != nil {
 		return SensorsClientCreateOrUpdateResponse{}, err
 	}
@@ -112,7 +112,7 @@ func (client *SensorsClient) Delete(ctx context.Context, scope string, sensorNam
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return SensorsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return SensorsClientDeleteResponse{RawResponse: resp}, nil
+	return SensorsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -152,7 +152,7 @@ func (client *SensorsClient) DownloadActivation(ctx context.Context, scope strin
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return SensorsClientDownloadActivationResponse{}, runtime.NewResponseError(resp)
 	}
-	return SensorsClientDownloadActivationResponse{RawResponse: resp}, nil
+	return SensorsClientDownloadActivationResponse{Body: resp.Body}, nil
 }
 
 // downloadActivationCreateRequest creates the DownloadActivation request.
@@ -194,7 +194,7 @@ func (client *SensorsClient) DownloadResetPassword(ctx context.Context, scope st
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return SensorsClientDownloadResetPasswordResponse{}, runtime.NewResponseError(resp)
 	}
-	return SensorsClientDownloadResetPasswordResponse{RawResponse: resp}, nil
+	return SensorsClientDownloadResetPasswordResponse{Body: resp.Body}, nil
 }
 
 // downloadResetPasswordCreateRequest creates the DownloadResetPassword request.
@@ -258,7 +258,7 @@ func (client *SensorsClient) getCreateRequest(ctx context.Context, scope string,
 
 // getHandleResponse handles the Get response.
 func (client *SensorsClient) getHandleResponse(resp *http.Response) (SensorsClientGetResponse, error) {
-	result := SensorsClientGetResponse{RawResponse: resp}
+	result := SensorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SensorModel); err != nil {
 		return SensorsClientGetResponse{}, err
 	}
@@ -301,7 +301,7 @@ func (client *SensorsClient) listCreateRequest(ctx context.Context, scope string
 
 // listHandleResponse handles the List response.
 func (client *SensorsClient) listHandleResponse(resp *http.Response) (SensorsClientListResponse, error) {
-	result := SensorsClientListResponse{RawResponse: resp}
+	result := SensorsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SensorsList); err != nil {
 		return SensorsClientListResponse{}, err
 	}
@@ -326,7 +326,7 @@ func (client *SensorsClient) TriggerTiPackageUpdate(ctx context.Context, scope s
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return SensorsClientTriggerTiPackageUpdateResponse{}, runtime.NewResponseError(resp)
 	}
-	return SensorsClientTriggerTiPackageUpdateResponse{RawResponse: resp}, nil
+	return SensorsClientTriggerTiPackageUpdateResponse{}, nil
 }
 
 // triggerTiPackageUpdateCreateRequest creates the TriggerTiPackageUpdate request.

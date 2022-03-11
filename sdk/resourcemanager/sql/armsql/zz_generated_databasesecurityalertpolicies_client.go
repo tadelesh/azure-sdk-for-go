@@ -34,17 +34,17 @@ type DatabaseSecurityAlertPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDatabaseSecurityAlertPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DatabaseSecurityAlertPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DatabaseSecurityAlertPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -110,7 +110,7 @@ func (client *DatabaseSecurityAlertPoliciesClient) createOrUpdateCreateRequest(c
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *DatabaseSecurityAlertPoliciesClient) createOrUpdateHandleResponse(resp *http.Response) (DatabaseSecurityAlertPoliciesClientCreateOrUpdateResponse, error) {
-	result := DatabaseSecurityAlertPoliciesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := DatabaseSecurityAlertPoliciesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseSecurityAlertPolicy); err != nil {
 		return DatabaseSecurityAlertPoliciesClientCreateOrUpdateResponse{}, err
 	}
@@ -177,7 +177,7 @@ func (client *DatabaseSecurityAlertPoliciesClient) getCreateRequest(ctx context.
 
 // getHandleResponse handles the Get response.
 func (client *DatabaseSecurityAlertPoliciesClient) getHandleResponse(resp *http.Response) (DatabaseSecurityAlertPoliciesClientGetResponse, error) {
-	result := DatabaseSecurityAlertPoliciesClientGetResponse{RawResponse: resp}
+	result := DatabaseSecurityAlertPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseSecurityAlertPolicy); err != nil {
 		return DatabaseSecurityAlertPoliciesClientGetResponse{}, err
 	}
@@ -236,7 +236,7 @@ func (client *DatabaseSecurityAlertPoliciesClient) listByDatabaseCreateRequest(c
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *DatabaseSecurityAlertPoliciesClient) listByDatabaseHandleResponse(resp *http.Response) (DatabaseSecurityAlertPoliciesClientListByDatabaseResponse, error) {
-	result := DatabaseSecurityAlertPoliciesClientListByDatabaseResponse{RawResponse: resp}
+	result := DatabaseSecurityAlertPoliciesClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseSecurityAlertListResult); err != nil {
 		return DatabaseSecurityAlertPoliciesClientListByDatabaseResponse{}, err
 	}

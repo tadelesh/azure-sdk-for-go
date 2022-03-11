@@ -34,17 +34,17 @@ type LoadTestsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLoadTestsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LoadTestsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LoadTestsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *LoadTestsClient) createOrUpdateCreateRequest(ctx context.Context, 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *LoadTestsClient) createOrUpdateHandleResponse(resp *http.Response) (LoadTestsClientCreateOrUpdateResponse, error) {
-	result := LoadTestsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := LoadTestsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LoadTestResource); err != nil {
 		return LoadTestsClientCreateOrUpdateResponse{}, err
 	}
@@ -116,9 +116,7 @@ func (client *LoadTestsClient) BeginDelete(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return LoadTestsClientDeletePollerResponse{}, err
 	}
-	result := LoadTestsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := LoadTestsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("LoadTestsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return LoadTestsClientDeletePollerResponse{}, err
@@ -220,7 +218,7 @@ func (client *LoadTestsClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *LoadTestsClient) getHandleResponse(resp *http.Response) (LoadTestsClientGetResponse, error) {
-	result := LoadTestsClientGetResponse{RawResponse: resp}
+	result := LoadTestsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LoadTestResource); err != nil {
 		return LoadTestsClientGetResponse{}, err
 	}
@@ -268,7 +266,7 @@ func (client *LoadTestsClient) listByResourceGroupCreateRequest(ctx context.Cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *LoadTestsClient) listByResourceGroupHandleResponse(resp *http.Response) (LoadTestsClientListByResourceGroupResponse, error) {
-	result := LoadTestsClientListByResourceGroupResponse{RawResponse: resp}
+	result := LoadTestsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LoadTestResourcePageList); err != nil {
 		return LoadTestsClientListByResourceGroupResponse{}, err
 	}
@@ -311,7 +309,7 @@ func (client *LoadTestsClient) listBySubscriptionCreateRequest(ctx context.Conte
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *LoadTestsClient) listBySubscriptionHandleResponse(resp *http.Response) (LoadTestsClientListBySubscriptionResponse, error) {
-	result := LoadTestsClientListBySubscriptionResponse{RawResponse: resp}
+	result := LoadTestsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LoadTestResourcePageList); err != nil {
 		return LoadTestsClientListBySubscriptionResponse{}, err
 	}
@@ -367,7 +365,7 @@ func (client *LoadTestsClient) updateCreateRequest(ctx context.Context, resource
 
 // updateHandleResponse handles the Update response.
 func (client *LoadTestsClient) updateHandleResponse(resp *http.Response) (LoadTestsClientUpdateResponse, error) {
-	result := LoadTestsClientUpdateResponse{RawResponse: resp}
+	result := LoadTestsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LoadTestResource); err != nil {
 		return LoadTestsClientUpdateResponse{}, err
 	}

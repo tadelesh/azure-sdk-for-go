@@ -35,17 +35,17 @@ type ServiceFabricsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServiceFabricsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServiceFabricsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServiceFabricsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *ServiceFabricsClient) BeginCreateOrUpdate(ctx context.Context, res
 	if err != nil {
 		return ServiceFabricsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ServiceFabricsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServiceFabricsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServiceFabricsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ServiceFabricsClientCreateOrUpdatePollerResponse{}, err
@@ -141,9 +139,7 @@ func (client *ServiceFabricsClient) BeginDelete(ctx context.Context, resourceGro
 	if err != nil {
 		return ServiceFabricsClientDeletePollerResponse{}, err
 	}
-	result := ServiceFabricsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServiceFabricsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ServiceFabricsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ServiceFabricsClientDeletePollerResponse{}, err
@@ -266,7 +262,7 @@ func (client *ServiceFabricsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *ServiceFabricsClient) getHandleResponse(resp *http.Response) (ServiceFabricsClientGetResponse, error) {
-	result := ServiceFabricsClientGetResponse{RawResponse: resp}
+	result := ServiceFabricsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceFabric); err != nil {
 		return ServiceFabricsClientGetResponse{}, err
 	}
@@ -335,7 +331,7 @@ func (client *ServiceFabricsClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *ServiceFabricsClient) listHandleResponse(resp *http.Response) (ServiceFabricsClientListResponse, error) {
-	result := ServiceFabricsClientListResponse{RawResponse: resp}
+	result := ServiceFabricsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceFabricList); err != nil {
 		return ServiceFabricsClientListResponse{}, err
 	}
@@ -401,7 +397,7 @@ func (client *ServiceFabricsClient) listApplicableSchedulesCreateRequest(ctx con
 
 // listApplicableSchedulesHandleResponse handles the ListApplicableSchedules response.
 func (client *ServiceFabricsClient) listApplicableSchedulesHandleResponse(resp *http.Response) (ServiceFabricsClientListApplicableSchedulesResponse, error) {
-	result := ServiceFabricsClientListApplicableSchedulesResponse{RawResponse: resp}
+	result := ServiceFabricsClientListApplicableSchedulesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicableSchedule); err != nil {
 		return ServiceFabricsClientListApplicableSchedulesResponse{}, err
 	}
@@ -421,9 +417,7 @@ func (client *ServiceFabricsClient) BeginStart(ctx context.Context, resourceGrou
 	if err != nil {
 		return ServiceFabricsClientStartPollerResponse{}, err
 	}
-	result := ServiceFabricsClientStartPollerResponse{
-		RawResponse: resp,
-	}
+	result := ServiceFabricsClientStartPollerResponse{}
 	pt, err := armruntime.NewPoller("ServiceFabricsClient.Start", "", resp, client.pl)
 	if err != nil {
 		return ServiceFabricsClientStartPollerResponse{}, err
@@ -498,9 +492,7 @@ func (client *ServiceFabricsClient) BeginStop(ctx context.Context, resourceGroup
 	if err != nil {
 		return ServiceFabricsClientStopPollerResponse{}, err
 	}
-	result := ServiceFabricsClientStopPollerResponse{
-		RawResponse: resp,
-	}
+	result := ServiceFabricsClientStopPollerResponse{}
 	pt, err := armruntime.NewPoller("ServiceFabricsClient.Stop", "", resp, client.pl)
 	if err != nil {
 		return ServiceFabricsClientStopPollerResponse{}, err
@@ -621,7 +613,7 @@ func (client *ServiceFabricsClient) updateCreateRequest(ctx context.Context, res
 
 // updateHandleResponse handles the Update response.
 func (client *ServiceFabricsClient) updateHandleResponse(resp *http.Response) (ServiceFabricsClientUpdateResponse, error) {
-	result := ServiceFabricsClientUpdateResponse{RawResponse: resp}
+	result := ServiceFabricsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceFabric); err != nil {
 		return ServiceFabricsClientUpdateResponse{}, err
 	}

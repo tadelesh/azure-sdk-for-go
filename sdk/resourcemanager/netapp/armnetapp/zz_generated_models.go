@@ -8,12 +8,7 @@
 
 package armnetapp
 
-import (
-	"encoding/json"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
-	"reflect"
-	"time"
-)
+import "time"
 
 // Account - NetApp account resource
 type Account struct {
@@ -40,20 +35,6 @@ type Account struct {
 
 	// READ-ONLY; Resource type
 	Type *string `json:"type,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type Account.
-func (a Account) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "etag", a.Etag)
-	populate(objectMap, "id", a.ID)
-	populate(objectMap, "location", a.Location)
-	populate(objectMap, "name", a.Name)
-	populate(objectMap, "properties", a.Properties)
-	populate(objectMap, "systemData", a.SystemData)
-	populate(objectMap, "tags", a.Tags)
-	populate(objectMap, "type", a.Type)
-	return json.Marshal(objectMap)
 }
 
 // AccountBackupsClientBeginDeleteOptions contains the optional parameters for the AccountBackupsClient.BeginDelete method.
@@ -86,14 +67,6 @@ type AccountList struct {
 	Value []*Account `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type AccountList.
-func (a AccountList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", a.NextLink)
-	populate(objectMap, "value", a.Value)
-	return json.Marshal(objectMap)
-}
-
 // AccountPatch - NetApp account patch resource
 type AccountPatch struct {
 	// Resource location
@@ -115,18 +88,6 @@ type AccountPatch struct {
 	Type *string `json:"type,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type AccountPatch.
-func (a AccountPatch) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", a.ID)
-	populate(objectMap, "location", a.Location)
-	populate(objectMap, "name", a.Name)
-	populate(objectMap, "properties", a.Properties)
-	populate(objectMap, "tags", a.Tags)
-	populate(objectMap, "type", a.Type)
-	return json.Marshal(objectMap)
-}
-
 // AccountProperties - NetApp account properties
 type AccountProperties struct {
 	// Active Directories
@@ -137,15 +98,6 @@ type AccountProperties struct {
 
 	// READ-ONLY; Azure lifecycle management
 	ProvisioningState *string `json:"provisioningState,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type AccountProperties.
-func (a AccountProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "activeDirectories", a.ActiveDirectories)
-	populate(objectMap, "encryption", a.Encryption)
-	populate(objectMap, "provisioningState", a.ProvisioningState)
-	return json.Marshal(objectMap)
 }
 
 // AccountsClientBeginCreateOrUpdateOptions contains the optional parameters for the AccountsClient.BeginCreateOrUpdate method.
@@ -248,33 +200,6 @@ type ActiveDirectory struct {
 	StatusDetails *string `json:"statusDetails,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type ActiveDirectory.
-func (a ActiveDirectory) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "activeDirectoryId", a.ActiveDirectoryID)
-	populate(objectMap, "adName", a.AdName)
-	populate(objectMap, "administrators", a.Administrators)
-	populate(objectMap, "aesEncryption", a.AesEncryption)
-	populate(objectMap, "allowLocalNfsUsersWithLdap", a.AllowLocalNfsUsersWithLdap)
-	populate(objectMap, "backupOperators", a.BackupOperators)
-	populate(objectMap, "dns", a.DNS)
-	populate(objectMap, "domain", a.Domain)
-	populate(objectMap, "encryptDCConnections", a.EncryptDCConnections)
-	populate(objectMap, "kdcIP", a.KdcIP)
-	populate(objectMap, "ldapOverTLS", a.LdapOverTLS)
-	populate(objectMap, "ldapSigning", a.LdapSigning)
-	populate(objectMap, "organizationalUnit", a.OrganizationalUnit)
-	populate(objectMap, "password", a.Password)
-	populate(objectMap, "securityOperators", a.SecurityOperators)
-	populate(objectMap, "serverRootCACertificate", a.ServerRootCACertificate)
-	populate(objectMap, "site", a.Site)
-	populate(objectMap, "smbServerName", a.SmbServerName)
-	populate(objectMap, "status", a.Status)
-	populate(objectMap, "statusDetails", a.StatusDetails)
-	populate(objectMap, "username", a.Username)
-	return json.Marshal(objectMap)
-}
-
 // AuthorizeRequest - Authorize request
 type AuthorizeRequest struct {
 	// Resource id of the remote volume
@@ -308,14 +233,6 @@ type BackupPatch struct {
 	Tags map[string]*string `json:"tags,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type BackupPatch.
-func (b BackupPatch) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "properties", b.Properties)
-	populate(objectMap, "tags", b.Tags)
-	return json.Marshal(objectMap)
-}
-
 // BackupPoliciesClientBeginCreateOptions contains the optional parameters for the BackupPoliciesClient.BeginCreate method.
 type BackupPoliciesClientBeginCreateOptions struct {
 	// placeholder for future optional parameters
@@ -347,13 +264,6 @@ type BackupPoliciesList struct {
 	Value []*BackupPolicy `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type BackupPoliciesList.
-func (b BackupPoliciesList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "value", b.Value)
-	return json.Marshal(objectMap)
-}
-
 // BackupPolicy - Backup policy information
 type BackupPolicy struct {
 	// REQUIRED; Resource location
@@ -378,19 +288,6 @@ type BackupPolicy struct {
 	Type *string `json:"type,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type BackupPolicy.
-func (b BackupPolicy) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "etag", b.Etag)
-	populate(objectMap, "id", b.ID)
-	populate(objectMap, "location", b.Location)
-	populate(objectMap, "name", b.Name)
-	populate(objectMap, "properties", b.Properties)
-	populate(objectMap, "tags", b.Tags)
-	populate(objectMap, "type", b.Type)
-	return json.Marshal(objectMap)
-}
-
 // BackupPolicyDetails - Backup policy properties
 type BackupPolicyDetails struct {
 	// Resource location
@@ -412,18 +309,6 @@ type BackupPolicyDetails struct {
 	Type *string `json:"type,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type BackupPolicyDetails.
-func (b BackupPolicyDetails) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", b.ID)
-	populate(objectMap, "location", b.Location)
-	populate(objectMap, "name", b.Name)
-	populate(objectMap, "properties", b.Properties)
-	populate(objectMap, "tags", b.Tags)
-	populate(objectMap, "type", b.Type)
-	return json.Marshal(objectMap)
-}
-
 // BackupPolicyPatch - Backup policy Details for create and update
 type BackupPolicyPatch struct {
 	// Resource location
@@ -443,18 +328,6 @@ type BackupPolicyPatch struct {
 
 	// READ-ONLY; Resource type
 	Type *string `json:"type,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type BackupPolicyPatch.
-func (b BackupPolicyPatch) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", b.ID)
-	populate(objectMap, "location", b.Location)
-	populate(objectMap, "name", b.Name)
-	populate(objectMap, "properties", b.Properties)
-	populate(objectMap, "tags", b.Tags)
-	populate(objectMap, "type", b.Type)
-	return json.Marshal(objectMap)
 }
 
 // BackupPolicyProperties - Backup policy properties
@@ -482,20 +355,6 @@ type BackupPolicyProperties struct {
 
 	// READ-ONLY; Volumes using current backup policy
 	VolumesAssigned *int32 `json:"volumesAssigned,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type BackupPolicyProperties.
-func (b BackupPolicyProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "backupPolicyId", b.BackupPolicyID)
-	populate(objectMap, "dailyBackupsToKeep", b.DailyBackupsToKeep)
-	populate(objectMap, "enabled", b.Enabled)
-	populate(objectMap, "monthlyBackupsToKeep", b.MonthlyBackupsToKeep)
-	populate(objectMap, "provisioningState", b.ProvisioningState)
-	populate(objectMap, "volumeBackups", b.VolumeBackups)
-	populate(objectMap, "volumesAssigned", b.VolumesAssigned)
-	populate(objectMap, "weeklyBackupsToKeep", b.WeeklyBackupsToKeep)
-	return json.Marshal(objectMap)
 }
 
 // BackupProperties - Backup properties
@@ -526,65 +385,6 @@ type BackupProperties struct {
 
 	// READ-ONLY; Volume name
 	VolumeName *string `json:"volumeName,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type BackupProperties.
-func (b BackupProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "backupId", b.BackupID)
-	populate(objectMap, "backupType", b.BackupType)
-	populateTimeRFC3339(objectMap, "creationDate", b.CreationDate)
-	populate(objectMap, "failureReason", b.FailureReason)
-	populate(objectMap, "label", b.Label)
-	populate(objectMap, "provisioningState", b.ProvisioningState)
-	populate(objectMap, "size", b.Size)
-	populate(objectMap, "useExistingSnapshot", b.UseExistingSnapshot)
-	populate(objectMap, "volumeName", b.VolumeName)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type BackupProperties.
-func (b *BackupProperties) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "backupId":
-			err = unpopulate(val, &b.BackupID)
-			delete(rawMsg, key)
-		case "backupType":
-			err = unpopulate(val, &b.BackupType)
-			delete(rawMsg, key)
-		case "creationDate":
-			err = unpopulateTimeRFC3339(val, &b.CreationDate)
-			delete(rawMsg, key)
-		case "failureReason":
-			err = unpopulate(val, &b.FailureReason)
-			delete(rawMsg, key)
-		case "label":
-			err = unpopulate(val, &b.Label)
-			delete(rawMsg, key)
-		case "provisioningState":
-			err = unpopulate(val, &b.ProvisioningState)
-			delete(rawMsg, key)
-		case "size":
-			err = unpopulate(val, &b.Size)
-			delete(rawMsg, key)
-		case "useExistingSnapshot":
-			err = unpopulate(val, &b.UseExistingSnapshot)
-			delete(rawMsg, key)
-		case "volumeName":
-			err = unpopulate(val, &b.VolumeName)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // BackupStatus - Backup status
@@ -657,13 +457,6 @@ type BackupsList struct {
 	Value []*Backup `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type BackupsList.
-func (b BackupsList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "value", b.Value)
-	return json.Marshal(objectMap)
-}
-
 // BreakReplicationRequest - Break replication request
 type BreakReplicationRequest struct {
 	// If replication is in status transferring and you want to force break the replication, set to true
@@ -694,19 +487,6 @@ type CapacityPool struct {
 	Type *string `json:"type,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type CapacityPool.
-func (c CapacityPool) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "etag", c.Etag)
-	populate(objectMap, "id", c.ID)
-	populate(objectMap, "location", c.Location)
-	populate(objectMap, "name", c.Name)
-	populate(objectMap, "properties", c.Properties)
-	populate(objectMap, "tags", c.Tags)
-	populate(objectMap, "type", c.Type)
-	return json.Marshal(objectMap)
-}
-
 // CapacityPoolList - List of capacity pool resources
 type CapacityPoolList struct {
 	// URL to get the next set of results.
@@ -714,14 +494,6 @@ type CapacityPoolList struct {
 
 	// List of Capacity pools
 	Value []*CapacityPool `json:"value,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type CapacityPoolList.
-func (c CapacityPoolList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", c.NextLink)
-	populate(objectMap, "value", c.Value)
-	return json.Marshal(objectMap)
 }
 
 // CapacityPoolPatch - Capacity pool patch resource
@@ -743,18 +515,6 @@ type CapacityPoolPatch struct {
 
 	// READ-ONLY; Resource type
 	Type *string `json:"type,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type CapacityPoolPatch.
-func (c CapacityPoolPatch) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", c.ID)
-	populate(objectMap, "location", c.Location)
-	populate(objectMap, "name", c.Name)
-	populate(objectMap, "properties", c.Properties)
-	populate(objectMap, "tags", c.Tags)
-	populate(objectMap, "type", c.Type)
-	return json.Marshal(objectMap)
 }
 
 // CheckAvailabilityResponse - Information regarding availability of a resource.
@@ -942,28 +702,6 @@ type MetricSpecification struct {
 	Unit *string `json:"unit,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type MetricSpecification.
-func (m MetricSpecification) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "aggregationType", m.AggregationType)
-	populate(objectMap, "category", m.Category)
-	populate(objectMap, "dimensions", m.Dimensions)
-	populate(objectMap, "displayDescription", m.DisplayDescription)
-	populate(objectMap, "displayName", m.DisplayName)
-	populate(objectMap, "enableRegionalMdmAccount", m.EnableRegionalMdmAccount)
-	populate(objectMap, "fillGapWithZero", m.FillGapWithZero)
-	populate(objectMap, "internalMetricName", m.InternalMetricName)
-	populate(objectMap, "isInternal", m.IsInternal)
-	populate(objectMap, "name", m.Name)
-	populate(objectMap, "resourceIdDimensionNameOverride", m.ResourceIDDimensionNameOverride)
-	populate(objectMap, "sourceMdmAccount", m.SourceMdmAccount)
-	populate(objectMap, "sourceMdmNamespace", m.SourceMdmNamespace)
-	populate(objectMap, "supportedAggregationTypes", m.SupportedAggregationTypes)
-	populate(objectMap, "supportedTimeGrainTypes", m.SupportedTimeGrainTypes)
-	populate(objectMap, "unit", m.Unit)
-	return json.Marshal(objectMap)
-}
-
 // MonthlySchedule - Monthly Schedule properties
 type MonthlySchedule struct {
 	// Indicates which days of the month snapshot should be taken. A comma delimited string.
@@ -1001,18 +739,6 @@ type MountTarget struct {
 
 	// READ-ONLY; Resource type
 	Type *string `json:"type,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type MountTarget.
-func (m MountTarget) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", m.ID)
-	populate(objectMap, "location", m.Location)
-	populate(objectMap, "name", m.Name)
-	populate(objectMap, "properties", m.Properties)
-	populate(objectMap, "tags", m.Tags)
-	populate(objectMap, "type", m.Type)
-	return json.Marshal(objectMap)
 }
 
 // MountTargetProperties - Mount target properties
@@ -1065,13 +791,6 @@ type OperationDisplay struct {
 type OperationListResult struct {
 	// List of Storage operations supported by the Storage resource provider.
 	Value []*Operation `json:"value,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type OperationListResult.
-func (o OperationListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "value", o.Value)
-	return json.Marshal(objectMap)
 }
 
 // OperationProperties - Properties of operation, include metric specifications.
@@ -1320,14 +1039,6 @@ type ServiceSpecification struct {
 	MetricSpecifications []*MetricSpecification `json:"metricSpecifications,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type ServiceSpecification.
-func (s ServiceSpecification) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "logSpecifications", s.LogSpecifications)
-	populate(objectMap, "metricSpecifications", s.MetricSpecifications)
-	return json.Marshal(objectMap)
-}
-
 // Snapshot of a Volume
 type Snapshot struct {
 	// REQUIRED; Resource location
@@ -1382,13 +1093,6 @@ type SnapshotPoliciesList struct {
 	Value []*SnapshotPolicy `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type SnapshotPoliciesList.
-func (s SnapshotPoliciesList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "value", s.Value)
-	return json.Marshal(objectMap)
-}
-
 // SnapshotPolicy - Snapshot policy information
 type SnapshotPolicy struct {
 	// REQUIRED; Resource location
@@ -1413,19 +1117,6 @@ type SnapshotPolicy struct {
 	Type *string `json:"type,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type SnapshotPolicy.
-func (s SnapshotPolicy) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "etag", s.Etag)
-	populate(objectMap, "id", s.ID)
-	populate(objectMap, "location", s.Location)
-	populate(objectMap, "name", s.Name)
-	populate(objectMap, "properties", s.Properties)
-	populate(objectMap, "tags", s.Tags)
-	populate(objectMap, "type", s.Type)
-	return json.Marshal(objectMap)
-}
-
 // SnapshotPolicyDetails - Snapshot policy properties
 type SnapshotPolicyDetails struct {
 	// Resource location
@@ -1447,18 +1138,6 @@ type SnapshotPolicyDetails struct {
 	Type *string `json:"type,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type SnapshotPolicyDetails.
-func (s SnapshotPolicyDetails) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", s.ID)
-	populate(objectMap, "location", s.Location)
-	populate(objectMap, "name", s.Name)
-	populate(objectMap, "properties", s.Properties)
-	populate(objectMap, "tags", s.Tags)
-	populate(objectMap, "type", s.Type)
-	return json.Marshal(objectMap)
-}
-
 // SnapshotPolicyPatch - Snapshot policy Details for create and update
 type SnapshotPolicyPatch struct {
 	// Resource location
@@ -1478,18 +1157,6 @@ type SnapshotPolicyPatch struct {
 
 	// READ-ONLY; Resource type
 	Type *string `json:"type,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type SnapshotPolicyPatch.
-func (s SnapshotPolicyPatch) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", s.ID)
-	populate(objectMap, "location", s.Location)
-	populate(objectMap, "name", s.Name)
-	populate(objectMap, "properties", s.Properties)
-	populate(objectMap, "tags", s.Tags)
-	populate(objectMap, "type", s.Type)
-	return json.Marshal(objectMap)
 }
 
 // SnapshotPolicyProperties - Snapshot policy properties
@@ -1519,13 +1186,6 @@ type SnapshotPolicyVolumeList struct {
 	Value []*Volume `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type SnapshotPolicyVolumeList.
-func (s SnapshotPolicyVolumeList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "value", s.Value)
-	return json.Marshal(objectMap)
-}
-
 // SnapshotProperties - Snapshot properties
 type SnapshotProperties struct {
 	// READ-ONLY; The creation date of the snapshot
@@ -1536,41 +1196,6 @@ type SnapshotProperties struct {
 
 	// READ-ONLY; UUID v4 used to identify the Snapshot
 	SnapshotID *string `json:"snapshotId,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type SnapshotProperties.
-func (s SnapshotProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populateTimeRFC3339(objectMap, "created", s.Created)
-	populate(objectMap, "provisioningState", s.ProvisioningState)
-	populate(objectMap, "snapshotId", s.SnapshotID)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type SnapshotProperties.
-func (s *SnapshotProperties) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "created":
-			err = unpopulateTimeRFC3339(val, &s.Created)
-			delete(rawMsg, key)
-		case "provisioningState":
-			err = unpopulate(val, &s.ProvisioningState)
-			delete(rawMsg, key)
-		case "snapshotId":
-			err = unpopulate(val, &s.SnapshotID)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // SnapshotsClientBeginCreateOptions contains the optional parameters for the SnapshotsClient.BeginCreate method.
@@ -1604,13 +1229,6 @@ type SnapshotsList struct {
 	Value []*Snapshot `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type SnapshotsList.
-func (s SnapshotsList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "value", s.Value)
-	return json.Marshal(objectMap)
-}
-
 // SubscriptionQuotaItem - Information regarding Subscription Quota Item.
 type SubscriptionQuotaItem struct {
 	// SubscriptionQuotaItem properties
@@ -1633,13 +1251,6 @@ type SubscriptionQuotaItem struct {
 type SubscriptionQuotaItemList struct {
 	// A list of SubscriptionQuotaItems
 	Value []*SubscriptionQuotaItem `json:"value,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type SubscriptionQuotaItemList.
-func (s SubscriptionQuotaItemList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "value", s.Value)
-	return json.Marshal(objectMap)
 }
 
 // SubscriptionQuotaItemProperties - SubscriptionQuotaItem Properties
@@ -1672,53 +1283,6 @@ type SystemData struct {
 	LastModifiedByType *CreatedByType `json:"lastModifiedByType,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type SystemData.
-func (s SystemData) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populateTimeRFC3339(objectMap, "createdAt", s.CreatedAt)
-	populate(objectMap, "createdBy", s.CreatedBy)
-	populate(objectMap, "createdByType", s.CreatedByType)
-	populateTimeRFC3339(objectMap, "lastModifiedAt", s.LastModifiedAt)
-	populate(objectMap, "lastModifiedBy", s.LastModifiedBy)
-	populate(objectMap, "lastModifiedByType", s.LastModifiedByType)
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON implements the json.Unmarshaller interface for type SystemData.
-func (s *SystemData) UnmarshalJSON(data []byte) error {
-	var rawMsg map[string]json.RawMessage
-	if err := json.Unmarshal(data, &rawMsg); err != nil {
-		return err
-	}
-	for key, val := range rawMsg {
-		var err error
-		switch key {
-		case "createdAt":
-			err = unpopulateTimeRFC3339(val, &s.CreatedAt)
-			delete(rawMsg, key)
-		case "createdBy":
-			err = unpopulate(val, &s.CreatedBy)
-			delete(rawMsg, key)
-		case "createdByType":
-			err = unpopulate(val, &s.CreatedByType)
-			delete(rawMsg, key)
-		case "lastModifiedAt":
-			err = unpopulateTimeRFC3339(val, &s.LastModifiedAt)
-			delete(rawMsg, key)
-		case "lastModifiedBy":
-			err = unpopulate(val, &s.LastModifiedBy)
-			delete(rawMsg, key)
-		case "lastModifiedByType":
-			err = unpopulate(val, &s.LastModifiedByType)
-			delete(rawMsg, key)
-		}
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // Vault information
 type Vault struct {
 	// REQUIRED; Resource location
@@ -1741,13 +1305,6 @@ type Vault struct {
 type VaultList struct {
 	// A list of vaults
 	Value []*Vault `json:"value,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type VaultList.
-func (v VaultList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "value", v.Value)
-	return json.Marshal(objectMap)
 }
 
 // VaultProperties - Vault properties
@@ -1783,19 +1340,6 @@ type Volume struct {
 
 	// READ-ONLY; Resource type
 	Type *string `json:"type,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type Volume.
-func (v Volume) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "etag", v.Etag)
-	populate(objectMap, "id", v.ID)
-	populate(objectMap, "location", v.Location)
-	populate(objectMap, "name", v.Name)
-	populate(objectMap, "properties", v.Properties)
-	populate(objectMap, "tags", v.Tags)
-	populate(objectMap, "type", v.Type)
-	return json.Marshal(objectMap)
 }
 
 // VolumeBackupProperties - Volume Backup Properties
@@ -1846,18 +1390,6 @@ type VolumeGroup struct {
 	Type *string `json:"type,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type VolumeGroup.
-func (v VolumeGroup) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", v.ID)
-	populate(objectMap, "location", v.Location)
-	populate(objectMap, "name", v.Name)
-	populate(objectMap, "properties", v.Properties)
-	populate(objectMap, "tags", v.Tags)
-	populate(objectMap, "type", v.Type)
-	return json.Marshal(objectMap)
-}
-
 // VolumeGroupDetails - Volume group resource for create
 type VolumeGroupDetails struct {
 	// Resource location
@@ -1879,29 +1411,10 @@ type VolumeGroupDetails struct {
 	Type *string `json:"type,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type VolumeGroupDetails.
-func (v VolumeGroupDetails) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", v.ID)
-	populate(objectMap, "location", v.Location)
-	populate(objectMap, "name", v.Name)
-	populate(objectMap, "properties", v.Properties)
-	populate(objectMap, "tags", v.Tags)
-	populate(objectMap, "type", v.Type)
-	return json.Marshal(objectMap)
-}
-
 // VolumeGroupList - List of volume group resources
 type VolumeGroupList struct {
 	// List of volume Groups
 	Value []*VolumeGroup `json:"value,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type VolumeGroupList.
-func (v VolumeGroupList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "value", v.Value)
-	return json.Marshal(objectMap)
 }
 
 // VolumeGroupListProperties - Volume group properties
@@ -1934,18 +1447,6 @@ type VolumeGroupMetaData struct {
 	VolumesCount *int64 `json:"volumesCount,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type VolumeGroupMetaData.
-func (v VolumeGroupMetaData) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "applicationIdentifier", v.ApplicationIdentifier)
-	populate(objectMap, "applicationType", v.ApplicationType)
-	populate(objectMap, "deploymentSpecId", v.DeploymentSpecID)
-	populate(objectMap, "globalPlacementRules", v.GlobalPlacementRules)
-	populate(objectMap, "groupDescription", v.GroupDescription)
-	populate(objectMap, "volumesCount", v.VolumesCount)
-	return json.Marshal(objectMap)
-}
-
 // VolumeGroupProperties - Volume group properties
 type VolumeGroupProperties struct {
 	// Volume group details
@@ -1956,15 +1457,6 @@ type VolumeGroupProperties struct {
 
 	// READ-ONLY; Azure lifecycle management
 	ProvisioningState *string `json:"provisioningState,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type VolumeGroupProperties.
-func (v VolumeGroupProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "groupMetaData", v.GroupMetaData)
-	populate(objectMap, "provisioningState", v.ProvisioningState)
-	populate(objectMap, "volumes", v.Volumes)
-	return json.Marshal(objectMap)
 }
 
 // VolumeGroupVolumeProperties - Volume resource
@@ -1983,17 +1475,6 @@ type VolumeGroupVolumeProperties struct {
 
 	// READ-ONLY; Resource type
 	Type *string `json:"type,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type VolumeGroupVolumeProperties.
-func (v VolumeGroupVolumeProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", v.ID)
-	populate(objectMap, "name", v.Name)
-	populate(objectMap, "properties", v.Properties)
-	populate(objectMap, "tags", v.Tags)
-	populate(objectMap, "type", v.Type)
-	return json.Marshal(objectMap)
 }
 
 // VolumeGroupsClientBeginCreateOptions contains the optional parameters for the VolumeGroupsClient.BeginCreate method.
@@ -2026,14 +1507,6 @@ type VolumeList struct {
 	Value []*Volume `json:"value,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type VolumeList.
-func (v VolumeList) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", v.NextLink)
-	populate(objectMap, "value", v.Value)
-	return json.Marshal(objectMap)
-}
-
 // VolumePatch - Volume patch resource
 type VolumePatch struct {
 	// Resource location
@@ -2053,18 +1526,6 @@ type VolumePatch struct {
 
 	// READ-ONLY; Resource type
 	Type *string `json:"type,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type VolumePatch.
-func (v VolumePatch) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", v.ID)
-	populate(objectMap, "location", v.Location)
-	populate(objectMap, "name", v.Name)
-	populate(objectMap, "properties", v.Properties)
-	populate(objectMap, "tags", v.Tags)
-	populate(objectMap, "type", v.Type)
-	return json.Marshal(objectMap)
 }
 
 // VolumePatchProperties - Patchable volume properties
@@ -2109,13 +1570,6 @@ type VolumePatchPropertiesDataProtection struct {
 type VolumePatchPropertiesExportPolicy struct {
 	// Export policy rule
 	Rules []*ExportPolicyRule `json:"rules,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type VolumePatchPropertiesExportPolicy.
-func (v VolumePatchPropertiesExportPolicy) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "rules", v.Rules)
-	return json.Marshal(objectMap)
 }
 
 // VolumeProperties - Volume properties
@@ -2252,52 +1706,6 @@ type VolumeProperties struct {
 	VolumeGroupName *string `json:"volumeGroupName,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type VolumeProperties.
-func (v VolumeProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "avsDataStore", v.AvsDataStore)
-	populate(objectMap, "backupId", v.BackupID)
-	populate(objectMap, "baremetalTenantId", v.BaremetalTenantID)
-	populate(objectMap, "capacityPoolResourceId", v.CapacityPoolResourceID)
-	populate(objectMap, "cloneProgress", v.CloneProgress)
-	populate(objectMap, "coolAccess", v.CoolAccess)
-	populate(objectMap, "coolnessPeriod", v.CoolnessPeriod)
-	populate(objectMap, "creationToken", v.CreationToken)
-	populate(objectMap, "dataProtection", v.DataProtection)
-	populate(objectMap, "defaultGroupQuotaInKiBs", v.DefaultGroupQuotaInKiBs)
-	populate(objectMap, "defaultUserQuotaInKiBs", v.DefaultUserQuotaInKiBs)
-	populate(objectMap, "encryptionKeySource", v.EncryptionKeySource)
-	populate(objectMap, "exportPolicy", v.ExportPolicy)
-	populate(objectMap, "fileSystemId", v.FileSystemID)
-	populate(objectMap, "isDefaultQuotaEnabled", v.IsDefaultQuotaEnabled)
-	populate(objectMap, "isRestoring", v.IsRestoring)
-	populate(objectMap, "kerberosEnabled", v.KerberosEnabled)
-	populate(objectMap, "ldapEnabled", v.LdapEnabled)
-	populate(objectMap, "mountTargets", v.MountTargets)
-	populate(objectMap, "networkFeatures", v.NetworkFeatures)
-	populate(objectMap, "networkSiblingSetId", v.NetworkSiblingSetID)
-	populate(objectMap, "placementRules", v.PlacementRules)
-	populate(objectMap, "protocolTypes", v.ProtocolTypes)
-	populate(objectMap, "provisioningState", v.ProvisioningState)
-	populate(objectMap, "proximityPlacementGroup", v.ProximityPlacementGroup)
-	populate(objectMap, "securityStyle", v.SecurityStyle)
-	populate(objectMap, "serviceLevel", v.ServiceLevel)
-	populate(objectMap, "smbContinuouslyAvailable", v.SmbContinuouslyAvailable)
-	populate(objectMap, "smbEncryption", v.SmbEncryption)
-	populate(objectMap, "snapshotDirectoryVisible", v.SnapshotDirectoryVisible)
-	populate(objectMap, "snapshotId", v.SnapshotID)
-	populate(objectMap, "storageToNetworkProximity", v.StorageToNetworkProximity)
-	populate(objectMap, "subnetId", v.SubnetID)
-	populate(objectMap, "t2Network", v.T2Network)
-	populate(objectMap, "throughputMibps", v.ThroughputMibps)
-	populate(objectMap, "unixPermissions", v.UnixPermissions)
-	populate(objectMap, "usageThreshold", v.UsageThreshold)
-	populate(objectMap, "volumeGroupName", v.VolumeGroupName)
-	populate(objectMap, "volumeSpecName", v.VolumeSpecName)
-	populate(objectMap, "volumeType", v.VolumeType)
-	return json.Marshal(objectMap)
-}
-
 // VolumePropertiesDataProtection - DataProtection type volumes include an object containing details of the replication
 type VolumePropertiesDataProtection struct {
 	// Backup Properties
@@ -2314,13 +1722,6 @@ type VolumePropertiesDataProtection struct {
 type VolumePropertiesExportPolicy struct {
 	// Export policy rule
 	Rules []*ExportPolicyRule `json:"rules,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type VolumePropertiesExportPolicy.
-func (v VolumePropertiesExportPolicy) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "rules", v.Rules)
-	return json.Marshal(objectMap)
 }
 
 // VolumeRevert - revert a volume to the snapshot
@@ -2422,21 +1823,4 @@ type WeeklySchedule struct {
 
 	// Resource size in bytes, current storage usage for the volume in bytes
 	UsedBytes *int64 `json:"usedBytes,omitempty"`
-}
-
-func populate(m map[string]interface{}, k string, v interface{}) {
-	if v == nil {
-		return
-	} else if azcore.IsNullValue(v) {
-		m[k] = nil
-	} else if !reflect.ValueOf(v).IsNil() {
-		m[k] = v
-	}
-}
-
-func unpopulate(data json.RawMessage, v interface{}) error {
-	if data == nil {
-		return nil
-	}
-	return json.Unmarshal(data, v)
 }

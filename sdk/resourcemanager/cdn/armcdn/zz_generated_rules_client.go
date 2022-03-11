@@ -63,9 +63,7 @@ func (client *RulesClient) BeginCreate(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return RulesClientCreatePollerResponse{}, err
 	}
-	result := RulesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := RulesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("RulesClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return RulesClientCreatePollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *RulesClient) BeginDelete(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return RulesClientDeletePollerResponse{}, err
 	}
-	result := RulesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := RulesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("RulesClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return RulesClientDeletePollerResponse{}, err
@@ -263,7 +259,7 @@ func (client *RulesClient) getCreateRequest(ctx context.Context, resourceGroupNa
 
 // getHandleResponse handles the Get response.
 func (client *RulesClient) getHandleResponse(resp *http.Response) (RulesClientGetResponse, error) {
-	result := RulesClientGetResponse{RawResponse: resp}
+	result := RulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Rule); err != nil {
 		return RulesClientGetResponse{}, err
 	}
@@ -321,7 +317,7 @@ func (client *RulesClient) listByRuleSetCreateRequest(ctx context.Context, resou
 
 // listByRuleSetHandleResponse handles the ListByRuleSet response.
 func (client *RulesClient) listByRuleSetHandleResponse(resp *http.Response) (RulesClientListByRuleSetResponse, error) {
-	result := RulesClientListByRuleSetResponse{RawResponse: resp}
+	result := RulesClientListByRuleSetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RuleListResult); err != nil {
 		return RulesClientListByRuleSetResponse{}, err
 	}
@@ -342,9 +338,7 @@ func (client *RulesClient) BeginUpdate(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return RulesClientUpdatePollerResponse{}, err
 	}
-	result := RulesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := RulesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("RulesClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return RulesClientUpdatePollerResponse{}, err

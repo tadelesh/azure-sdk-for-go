@@ -34,17 +34,17 @@ type ExtensionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewExtensionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ExtensionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ExtensionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *ExtensionsClient) BeginCreate(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return ExtensionsClientCreatePollerResponse{}, err
 	}
-	result := ExtensionsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ExtensionsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ExtensionsClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ExtensionsClientCreatePollerResponse{}, err
@@ -120,7 +118,7 @@ func (client *ExtensionsClient) createCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, extension)
@@ -138,9 +136,7 @@ func (client *ExtensionsClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return ExtensionsClientDeletePollerResponse{}, err
 	}
-	result := ExtensionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ExtensionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ExtensionsClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ExtensionsClientDeletePollerResponse{}, err
@@ -196,7 +192,7 @@ func (client *ExtensionsClient) deleteCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -252,7 +248,7 @@ func (client *ExtensionsClient) getCreateRequest(ctx context.Context, resourceGr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -260,7 +256,7 @@ func (client *ExtensionsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *ExtensionsClient) getHandleResponse(resp *http.Response) (ExtensionsClientGetResponse, error) {
-	result := ExtensionsClientGetResponse{RawResponse: resp}
+	result := ExtensionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Extension); err != nil {
 		return ExtensionsClientGetResponse{}, err
 	}
@@ -310,7 +306,7 @@ func (client *ExtensionsClient) listByArcSettingCreateRequest(ctx context.Contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -318,7 +314,7 @@ func (client *ExtensionsClient) listByArcSettingCreateRequest(ctx context.Contex
 
 // listByArcSettingHandleResponse handles the ListByArcSetting response.
 func (client *ExtensionsClient) listByArcSettingHandleResponse(resp *http.Response) (ExtensionsClientListByArcSettingResponse, error) {
-	result := ExtensionsClientListByArcSettingResponse{RawResponse: resp}
+	result := ExtensionsClientListByArcSettingResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExtensionList); err != nil {
 		return ExtensionsClientListByArcSettingResponse{}, err
 	}
@@ -338,9 +334,7 @@ func (client *ExtensionsClient) BeginUpdate(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return ExtensionsClientUpdatePollerResponse{}, err
 	}
-	result := ExtensionsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ExtensionsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ExtensionsClient.Update", "original-uri", resp, client.pl)
 	if err != nil {
 		return ExtensionsClientUpdatePollerResponse{}, err
@@ -396,7 +390,7 @@ func (client *ExtensionsClient) updateCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-09-01")
+	reqQP.Set("api-version", "2022-01-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, extension)

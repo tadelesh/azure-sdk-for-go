@@ -1,5 +1,145 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ContactProfilesClient.ListBySubscription` parameter(s) have been changed from `(context.Context, *ContactProfilesClientListBySubscriptionOptions)` to `(*ContactProfilesClientListBySubscriptionOptions)`
+- Function `*ContactProfilesClient.ListBySubscription` return value(s) have been changed from `(ContactProfilesClientListBySubscriptionResponse, error)` to `(*ContactProfilesClientListBySubscriptionPager)`
+- Function `*OperationsClient.List` parameter(s) have been changed from `(context.Context, *OperationsClientListOptions)` to `(*OperationsClientListOptions)`
+- Function `*OperationsClient.List` return value(s) have been changed from `(OperationsClientListResponse, error)` to `(*OperationsClientListPager)`
+- Function `*ContactProfilesClient.List` parameter(s) have been changed from `(context.Context, string, *ContactProfilesClientListOptions)` to `(string, *ContactProfilesClientListOptions)`
+- Function `*ContactProfilesClient.List` return value(s) have been changed from `(ContactProfilesClientListResponse, error)` to `(*ContactProfilesClientListPager)`
+- Function `*AvailableGroundStationsClientListByCapabilityPager.NextPage` return value(s) have been changed from `(bool)` to `(AvailableGroundStationsClientListByCapabilityResponse, error)`
+- Function `*SpacecraftsClient.ListBySubscription` parameter(s) have been changed from `(context.Context, *SpacecraftsClientListBySubscriptionOptions)` to `(*SpacecraftsClientListBySubscriptionOptions)`
+- Function `*SpacecraftsClient.ListBySubscription` return value(s) have been changed from `(SpacecraftsClientListBySubscriptionResponse, error)` to `(*SpacecraftsClientListBySubscriptionPager)`
+- Function `*ContactsClient.List` parameter(s) have been changed from `(context.Context, string, string, *ContactsClientListOptions)` to `(string, string, *ContactsClientListOptions)`
+- Function `*ContactsClient.List` return value(s) have been changed from `(ContactsClientListResponse, error)` to `(*ContactsClientListPager)`
+- Function `*SpacecraftsClient.List` parameter(s) have been changed from `(context.Context, string, *SpacecraftsClientListOptions)` to `(string, *SpacecraftsClientListOptions)`
+- Function `*SpacecraftsClient.List` return value(s) have been changed from `(SpacecraftsClientListResponse, error)` to `(*SpacecraftsClientListPager)`
+- Function `*AvailableGroundStationsClientListByCapabilityPager.Err` has been removed
+- Function `*AvailableGroundStationsClientListByCapabilityPager.PageResponse` has been removed
+- Struct `AvailableGroundStationsClientGetResult` has been removed
+- Struct `AvailableGroundStationsClientListByCapabilityResult` has been removed
+- Struct `ContactProfilesClientCreateOrUpdateResult` has been removed
+- Struct `ContactProfilesClientGetResult` has been removed
+- Struct `ContactProfilesClientListBySubscriptionResult` has been removed
+- Struct `ContactProfilesClientListResult` has been removed
+- Struct `ContactProfilesClientUpdateTagsResult` has been removed
+- Struct `ContactsClientCreateResult` has been removed
+- Struct `ContactsClientGetResult` has been removed
+- Struct `ContactsClientListResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `SpacecraftsClientCreateOrUpdateResult` has been removed
+- Struct `SpacecraftsClientGetResult` has been removed
+- Struct `SpacecraftsClientListAvailableContactsResult` has been removed
+- Struct `SpacecraftsClientListBySubscriptionResult` has been removed
+- Struct `SpacecraftsClientListResult` has been removed
+- Struct `SpacecraftsClientUpdateTagsResult` has been removed
+- Field `ContactProfilesClientListResult` of struct `ContactProfilesClientListResponse` has been removed
+- Field `RawResponse` of struct `ContactProfilesClientListResponse` has been removed
+- Field `RawResponse` of struct `ContactProfilesClientDeletePollerResponse` has been removed
+- Field `ContactProfilesClientGetResult` of struct `ContactProfilesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ContactProfilesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ContactProfilesClientCreateOrUpdatePollerResponse` has been removed
+- Field `ContactsClientGetResult` of struct `ContactsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ContactsClientGetResponse` has been removed
+- Field `ContactProfilesClientCreateOrUpdateResult` of struct `ContactProfilesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ContactProfilesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SpacecraftsClientCreateOrUpdatePollerResponse` has been removed
+- Field `SpacecraftsClientUpdateTagsResult` of struct `SpacecraftsClientUpdateTagsResponse` has been removed
+- Field `RawResponse` of struct `SpacecraftsClientUpdateTagsResponse` has been removed
+- Field `RawResponse` of struct `ContactsClientDeleteResponse` has been removed
+- Field `ContactsClientCreateResult` of struct `ContactsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ContactsClientCreateResponse` has been removed
+- Field `SpacecraftsClientCreateOrUpdateResult` of struct `SpacecraftsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SpacecraftsClientCreateOrUpdateResponse` has been removed
+- Field `ContactProfilesClientUpdateTagsResult` of struct `ContactProfilesClientUpdateTagsResponse` has been removed
+- Field `RawResponse` of struct `ContactProfilesClientUpdateTagsResponse` has been removed
+- Field `RawResponse` of struct `ContactsClientCreatePollerResponse` has been removed
+- Field `SpacecraftsClientListAvailableContactsResult` of struct `SpacecraftsClientListAvailableContactsResponse` has been removed
+- Field `RawResponse` of struct `SpacecraftsClientListAvailableContactsResponse` has been removed
+- Field `ContactProfilesClientListBySubscriptionResult` of struct `ContactProfilesClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ContactProfilesClientListBySubscriptionResponse` has been removed
+- Field `SpacecraftsClientListResult` of struct `SpacecraftsClientListResponse` has been removed
+- Field `RawResponse` of struct `SpacecraftsClientListResponse` has been removed
+- Field `RawResponse` of struct `ContactProfilesClientDeleteResponse` has been removed
+- Field `AvailableGroundStationsClientGetResult` of struct `AvailableGroundStationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AvailableGroundStationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ContactsClientDeletePollerResponse` has been removed
+- Field `AvailableGroundStationsClientListByCapabilityResult` of struct `AvailableGroundStationsClientListByCapabilityResponse` has been removed
+- Field `RawResponse` of struct `AvailableGroundStationsClientListByCapabilityResponse` has been removed
+- Field `RawResponse` of struct `SpacecraftsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `SpacecraftsClientDeleteResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `SpacecraftsClientGetResult` of struct `SpacecraftsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SpacecraftsClientGetResponse` has been removed
+- Field `SpacecraftsClientListBySubscriptionResult` of struct `SpacecraftsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `SpacecraftsClientListBySubscriptionResponse` has been removed
+- Field `ContactsClientListResult` of struct `ContactsClientListResponse` has been removed
+- Field `RawResponse` of struct `ContactsClientListResponse` has been removed
+- Field `RawResponse` of struct `SpacecraftsClientListAvailableContactsPollerResponse` has been removed
+
+### Features Added
+
+- New function `*ContactProfilesClientListPager.NextPage(context.Context) (ContactProfilesClientListResponse, error)`
+- New function `ResourceIDListResult.MarshalJSON() ([]byte, error)`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*ContactProfilesClientListBySubscriptionPager.NextPage(context.Context) (ContactProfilesClientListBySubscriptionResponse, error)`
+- New function `*ContactsClientListPager.NextPage(context.Context) (ContactsClientListResponse, error)`
+- New function `*SpacecraftsClientListPager.More() bool`
+- New function `*AvailableGroundStationsClientListByCapabilityPager.More() bool`
+- New function `*SpacecraftsClientListBySubscriptionPager.More() bool`
+- New function `*SpacecraftsClientListBySubscriptionPager.NextPage(context.Context) (SpacecraftsClientListBySubscriptionResponse, error)`
+- New function `*ContactsClientListPager.More() bool`
+- New function `*ContactProfilesClientListPager.More() bool`
+- New function `*ContactProfilesClientListBySubscriptionPager.More() bool`
+- New function `*OperationsClientListPager.NextPage(context.Context) (OperationsClientListResponse, error)`
+- New function `*SpacecraftsClientListPager.NextPage(context.Context) (SpacecraftsClientListResponse, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New struct `ContactProfilesClientListBySubscriptionPager`
+- New struct `ContactProfilesClientListPager`
+- New struct `ContactsClientListPager`
+- New struct `OperationsClientListPager`
+- New struct `ResourceIDListResult`
+- New struct `ResourceIDListResultValueItem`
+- New struct `SpacecraftsClientListBySubscriptionPager`
+- New struct `SpacecraftsClientListPager`
+- New anonymous field `ContactProfile` in struct `ContactProfilesClientCreateOrUpdateResponse`
+- New anonymous field `ContactProfile` in struct `ContactProfilesClientGetResponse`
+- New anonymous field `ContactListResult` in struct `ContactsClientListResponse`
+- New anonymous field `Contact` in struct `ContactsClientGetResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `SpacecraftListResult` in struct `SpacecraftsClientListResponse`
+- New anonymous field `AvailableContactsListResult` in struct `SpacecraftsClientListAvailableContactsResponse`
+- New anonymous field `ContactProfileListResult` in struct `ContactProfilesClientListBySubscriptionResponse`
+- New anonymous field `Spacecraft` in struct `SpacecraftsClientGetResponse`
+- New anonymous field `Spacecraft` in struct `SpacecraftsClientCreateOrUpdateResponse`
+- New anonymous field `Spacecraft` in struct `SpacecraftsClientUpdateTagsResponse`
+- New anonymous field `AvailableGroundStation` in struct `AvailableGroundStationsClientGetResponse`
+- New anonymous field `SpacecraftListResult` in struct `SpacecraftsClientListBySubscriptionResponse`
+- New anonymous field `Contact` in struct `ContactsClientCreateResponse`
+- New anonymous field `ContactProfileListResult` in struct `ContactProfilesClientListResponse`
+- New anonymous field `AvailableGroundStationListResult` in struct `AvailableGroundStationsClientListByCapabilityResponse`
+- New anonymous field `ContactProfile` in struct `ContactProfilesClientUpdateTagsResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `ResourceIDListResult.MarshalJSON` has been removed
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+- Struct `ResourceIDListResult` has been removed
+- Struct `ResourceIDListResultValueItem` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

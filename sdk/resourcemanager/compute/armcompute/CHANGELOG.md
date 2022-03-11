@@ -1,5 +1,1331 @@
 # Release History
 
+## 0.5.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*CapacityReservationGroupsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(CapacityReservationGroupsClientListBySubscriptionResponse, error)`
+- Function `*CloudServiceOperatingSystemsClientListOSFamiliesPager.NextPage` return value(s) have been changed from `(bool)` to `(CloudServiceOperatingSystemsClientListOSFamiliesResponse, error)`
+- Function `*DedicatedHostGroupsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(DedicatedHostGroupsClientListBySubscriptionResponse, error)`
+- Function `*RestorePointCollectionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(RestorePointCollectionsClientListResponse, error)`
+- Function `*CloudServicesUpdateDomainClientListUpdateDomainsPager.NextPage` return value(s) have been changed from `(bool)` to `(CloudServicesUpdateDomainClientListUpdateDomainsResponse, error)`
+- Function `*VirtualMachineScaleSetsClientGetOSUpgradeHistoryPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualMachineScaleSetsClientGetOSUpgradeHistoryResponse, error)`
+- Function `*GalleryImagesClientListByGalleryPager.NextPage` return value(s) have been changed from `(bool)` to `(GalleryImagesClientListByGalleryResponse, error)`
+- Function `*CloudServiceOperatingSystemsClientListOSVersionsPager.NextPage` return value(s) have been changed from `(bool)` to `(CloudServiceOperatingSystemsClientListOSVersionsResponse, error)`
+- Function `*VirtualMachinesClientListAllPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualMachinesClientListAllResponse, error)`
+- Function `*VirtualMachineScaleSetsClientListAllPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualMachineScaleSetsClientListAllResponse, error)`
+- Function `*DedicatedHostGroupsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(DedicatedHostGroupsClientListByResourceGroupResponse, error)`
+- Function `*CapacityReservationGroupsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(CapacityReservationGroupsClientListByResourceGroupResponse, error)`
+- Function `*VirtualMachineSizesClient.List` parameter(s) have been changed from `(context.Context, string, *VirtualMachineSizesClientListOptions)` to `(string, *VirtualMachineSizesClientListOptions)`
+- Function `*VirtualMachineSizesClient.List` return value(s) have been changed from `(VirtualMachineSizesClientListResponse, error)` to `(*VirtualMachineSizesClientListPager)`
+- Function `*DiskAccessesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(DiskAccessesClientListByResourceGroupResponse, error)`
+- Function `*SSHPublicKeysClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(SSHPublicKeysClientListBySubscriptionResponse, error)`
+- Function `*VirtualMachineScaleSetVMsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualMachineScaleSetVMsClientListResponse, error)`
+- Function `*DiskAccessesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(DiskAccessesClientListResponse, error)`
+- Function `*AvailabilitySetsClient.ListAvailableSizes` parameter(s) have been changed from `(context.Context, string, string, *AvailabilitySetsClientListAvailableSizesOptions)` to `(string, string, *AvailabilitySetsClientListAvailableSizesOptions)`
+- Function `*AvailabilitySetsClient.ListAvailableSizes` return value(s) have been changed from `(AvailabilitySetsClientListAvailableSizesResponse, error)` to `(*AvailabilitySetsClientListAvailableSizesPager)`
+- Function `*SnapshotsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(SnapshotsClientListByResourceGroupResponse, error)`
+- Function `*DiskRestorePointClientListByRestorePointPager.NextPage` return value(s) have been changed from `(bool)` to `(DiskRestorePointClientListByRestorePointResponse, error)`
+- Function `*AvailabilitySetsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(AvailabilitySetsClientListResponse, error)`
+- Function `*GalleriesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(GalleriesClientListByResourceGroupResponse, error)`
+- Function `*AvailabilitySetsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(AvailabilitySetsClientListBySubscriptionResponse, error)`
+- Function `*SharedGalleryImagesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SharedGalleryImagesClientListResponse, error)`
+- Function `*VirtualMachineScaleSetsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualMachineScaleSetsClientListResponse, error)`
+- Function `*VirtualMachineScaleSetVMRunCommandsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualMachineScaleSetVMRunCommandsClientListResponse, error)`
+- Function `*DiskEncryptionSetsClientListAssociatedResourcesPager.NextPage` return value(s) have been changed from `(bool)` to `(DiskEncryptionSetsClientListAssociatedResourcesResponse, error)`
+- Function `*VirtualMachinesClientListByLocationPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualMachinesClientListByLocationResponse, error)`
+- Function `*OperationsClient.List` parameter(s) have been changed from `(context.Context, *OperationsClientListOptions)` to `(*OperationsClientListOptions)`
+- Function `*OperationsClient.List` return value(s) have been changed from `(OperationsClientListResponse, error)` to `(*OperationsClientListPager)`
+- Function `*RestorePointCollectionsClientListAllPager.NextPage` return value(s) have been changed from `(bool)` to `(RestorePointCollectionsClientListAllResponse, error)`
+- Function `*SharedGalleriesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SharedGalleriesClientListResponse, error)`
+- Function `*DedicatedHostsClientListByHostGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(DedicatedHostsClientListByHostGroupResponse, error)`
+- Function `*UsageClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(UsageClientListResponse, error)`
+- Function `*GalleryApplicationsClientListByGalleryPager.NextPage` return value(s) have been changed from `(bool)` to `(GalleryApplicationsClientListByGalleryResponse, error)`
+- Function `*CloudServicesClientListAllPager.NextPage` return value(s) have been changed from `(bool)` to `(CloudServicesClientListAllResponse, error)`
+- Function `*DisksClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(DisksClientListResponse, error)`
+- Function `*ResourceSKUsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ResourceSKUsClientListResponse, error)`
+- Function `*DiskEncryptionSetsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(DiskEncryptionSetsClientListByResourceGroupResponse, error)`
+- Function `*ProximityPlacementGroupsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ProximityPlacementGroupsClientListBySubscriptionResponse, error)`
+- Function `*VirtualMachineRunCommandsClientListByVirtualMachinePager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualMachineRunCommandsClientListByVirtualMachineResponse, error)`
+- Function `*CloudServicesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(CloudServicesClientListResponse, error)`
+- Function `*ImagesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ImagesClientListResponse, error)`
+- Function `*CloudServiceRolesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(CloudServiceRolesClientListResponse, error)`
+- Function `*VirtualMachineScaleSetExtensionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualMachineScaleSetExtensionsClientListResponse, error)`
+- Function `*VirtualMachineRunCommandsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualMachineRunCommandsClientListResponse, error)`
+- Function `*CapacityReservationsClientListByCapacityReservationGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(CapacityReservationsClientListByCapacityReservationGroupResponse, error)`
+- Function `*VirtualMachinesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualMachinesClientListResponse, error)`
+- Function `*GalleryApplicationVersionsClientListByGalleryApplicationPager.NextPage` return value(s) have been changed from `(bool)` to `(GalleryApplicationVersionsClientListByGalleryApplicationResponse, error)`
+- Function `*SSHPublicKeysClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(SSHPublicKeysClientListByResourceGroupResponse, error)`
+- Function `*ProximityPlacementGroupsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ProximityPlacementGroupsClientListByResourceGroupResponse, error)`
+- Function `*VirtualMachineScaleSetsClientListSKUsPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualMachineScaleSetsClientListSKUsResponse, error)`
+- Function `*DiskAccessesClientListPrivateEndpointConnectionsPager.NextPage` return value(s) have been changed from `(bool)` to `(DiskAccessesClientListPrivateEndpointConnectionsResponse, error)`
+- Function `*DiskEncryptionSetsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(DiskEncryptionSetsClientListResponse, error)`
+- Function `*CloudServiceRoleInstancesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(CloudServiceRoleInstancesClientListResponse, error)`
+- Function `*GalleryImageVersionsClientListByGalleryImagePager.NextPage` return value(s) have been changed from `(bool)` to `(GalleryImageVersionsClientListByGalleryImageResponse, error)`
+- Function `*SharedGalleryImageVersionsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SharedGalleryImageVersionsClientListResponse, error)`
+- Function `*VirtualMachineScaleSetsClientListByLocationPager.NextPage` return value(s) have been changed from `(bool)` to `(VirtualMachineScaleSetsClientListByLocationResponse, error)`
+- Function `*GalleriesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(GalleriesClientListResponse, error)`
+- Function `*SnapshotsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(SnapshotsClientListResponse, error)`
+- Function `*ImagesClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ImagesClientListByResourceGroupResponse, error)`
+- Function `*VirtualMachinesClient.ListAvailableSizes` parameter(s) have been changed from `(context.Context, string, string, *VirtualMachinesClientListAvailableSizesOptions)` to `(string, string, *VirtualMachinesClientListAvailableSizesOptions)`
+- Function `*VirtualMachinesClient.ListAvailableSizes` return value(s) have been changed from `(VirtualMachinesClientListAvailableSizesResponse, error)` to `(*VirtualMachinesClientListAvailableSizesPager)`
+- Function `*DisksClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(DisksClientListByResourceGroupResponse, error)`
+- Function `*RestorePointCollectionsClientListAllPager.PageResponse` has been removed
+- Function `*GalleryImageVersionsClientListByGalleryImagePager.PageResponse` has been removed
+- Function `*CloudServicesClientListAllPager.PageResponse` has been removed
+- Function `*UsageClientListPager.PageResponse` has been removed
+- Function `*VirtualMachineScaleSetsClientListByLocationPager.PageResponse` has been removed
+- Function `*DedicatedHostsClientListByHostGroupPager.PageResponse` has been removed
+- Function `*CapacityReservationGroupsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*ProximityPlacementGroupsClientListByResourceGroupPager.Err` has been removed
+- Function `*ProximityPlacementGroupsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*VirtualMachineScaleSetExtensionsClientListPager.Err` has been removed
+- Function `*DiskAccessesClientListPager.Err` has been removed
+- Function `*VirtualMachineScaleSetsClientGetOSUpgradeHistoryPager.PageResponse` has been removed
+- Function `*DiskAccessesClientListPrivateEndpointConnectionsPager.PageResponse` has been removed
+- Function `*AvailabilitySetsClientListPager.Err` has been removed
+- Function `*CapacityReservationGroupsClientListByResourceGroupPager.Err` has been removed
+- Function `*VirtualMachineScaleSetsClientGetOSUpgradeHistoryPager.Err` has been removed
+- Function `*ResourceSKUsClientListPager.Err` has been removed
+- Function `*CapacityReservationGroupsClientListBySubscriptionPager.Err` has been removed
+- Function `*SharedGalleriesClientListPager.PageResponse` has been removed
+- Function `*CloudServiceOperatingSystemsClientListOSVersionsPager.Err` has been removed
+- Function `*CloudServiceOperatingSystemsClientListOSFamiliesPager.Err` has been removed
+- Function `*DiskAccessesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*VirtualMachineScaleSetsClientListPager.Err` has been removed
+- Function `*GalleryImageVersionsClientListByGalleryImagePager.Err` has been removed
+- Function `*GalleriesClientListPager.PageResponse` has been removed
+- Function `*DisksClientListPager.Err` has been removed
+- Function `*DisksClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*VirtualMachineScaleSetVMRunCommandsClientListPager.PageResponse` has been removed
+- Function `*CapacityReservationsClientListByCapacityReservationGroupPager.Err` has been removed
+- Function `*VirtualMachineScaleSetsClientListAllPager.Err` has been removed
+- Function `*SSHPublicKeysClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*VirtualMachineRunCommandsClientListByVirtualMachinePager.Err` has been removed
+- Function `*ImagesClientListPager.Err` has been removed
+- Function `*DedicatedHostGroupsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*DiskEncryptionSetsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*DiskRestorePointClientListByRestorePointPager.PageResponse` has been removed
+- Function `*SnapshotsClientListByResourceGroupPager.Err` has been removed
+- Function `*CloudServiceRolesClientListPager.Err` has been removed
+- Function `*VirtualMachinesClientListPager.PageResponse` has been removed
+- Function `*GalleryApplicationsClientListByGalleryPager.PageResponse` has been removed
+- Function `*SSHPublicKeysClientListBySubscriptionPager.Err` has been removed
+- Function `*VirtualMachineScaleSetsClientListPager.PageResponse` has been removed
+- Function `*DiskEncryptionSetsClientListPager.Err` has been removed
+- Function `*ProximityPlacementGroupsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*SnapshotsClientListPager.PageResponse` has been removed
+- Function `*VirtualMachineScaleSetsClientListAllPager.PageResponse` has been removed
+- Function `*VirtualMachinesClientListByLocationPager.PageResponse` has been removed
+- Function `*GalleryImagesClientListByGalleryPager.PageResponse` has been removed
+- Function `*AvailabilitySetsClientListPager.PageResponse` has been removed
+- Function `*SharedGalleryImagesClientListPager.PageResponse` has been removed
+- Function `*VirtualMachineRunCommandsClientListByVirtualMachinePager.PageResponse` has been removed
+- Function `*GalleryApplicationsClientListByGalleryPager.Err` has been removed
+- Function `*SSHPublicKeysClientListByResourceGroupPager.Err` has been removed
+- Function `*RestorePointCollectionsClientListPager.PageResponse` has been removed
+- Function `*AvailabilitySetsClientListBySubscriptionPager.Err` has been removed
+- Function `*DiskAccessesClientListPager.PageResponse` has been removed
+- Function `*VirtualMachinesClientListPager.Err` has been removed
+- Function `*SnapshotsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*DiskEncryptionSetsClientListAssociatedResourcesPager.PageResponse` has been removed
+- Function `*GalleryImagesClientListByGalleryPager.Err` has been removed
+- Function `*CloudServiceRolesClientListPager.PageResponse` has been removed
+- Function `*VirtualMachinesClientListByLocationPager.Err` has been removed
+- Function `*DedicatedHostGroupsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*VirtualMachineScaleSetsClientListSKUsPager.Err` has been removed
+- Function `*VirtualMachinesClientListAllPager.PageResponse` has been removed
+- Function `*CloudServicesClientListAllPager.Err` has been removed
+- Function `*GalleriesClientListPager.Err` has been removed
+- Function `*GalleryApplicationVersionsClientListByGalleryApplicationPager.Err` has been removed
+- Function `*CloudServicesUpdateDomainClientListUpdateDomainsPager.PageResponse` has been removed
+- Function `*DiskAccessesClientListByResourceGroupPager.Err` has been removed
+- Function `*CloudServicesClientListPager.Err` has been removed
+- Function `*DedicatedHostGroupsClientListByResourceGroupPager.Err` has been removed
+- Function `*RestorePointCollectionsClientListPager.Err` has been removed
+- Function `*GalleriesClientListByResourceGroupPager.Err` has been removed
+- Function `*GalleryApplicationVersionsClientListByGalleryApplicationPager.PageResponse` has been removed
+- Function `*AvailabilitySetsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*DisksClientListByResourceGroupPager.Err` has been removed
+- Function `*SSHPublicKeysClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*DiskAccessesClientListPrivateEndpointConnectionsPager.Err` has been removed
+- Function `*VirtualMachineScaleSetVMsClientListPager.PageResponse` has been removed
+- Function `*SharedGalleryImagesClientListPager.Err` has been removed
+- Function `*CloudServicesClientListPager.PageResponse` has been removed
+- Function `*DiskRestorePointClientListByRestorePointPager.Err` has been removed
+- Function `*DiskEncryptionSetsClientListAssociatedResourcesPager.Err` has been removed
+- Function `*RestorePointCollectionsClientListAllPager.Err` has been removed
+- Function `*SnapshotsClientListPager.Err` has been removed
+- Function `*GalleriesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*DedicatedHostsClientListByHostGroupPager.Err` has been removed
+- Function `*CloudServicesUpdateDomainClientListUpdateDomainsPager.Err` has been removed
+- Function `*SharedGalleriesClientListPager.Err` has been removed
+- Function `*VirtualMachineScaleSetExtensionsClientListPager.PageResponse` has been removed
+- Function `*VirtualMachineScaleSetVMRunCommandsClientListPager.Err` has been removed
+- Function `*SharedGalleryImageVersionsClientListPager.PageResponse` has been removed
+- Function `*ResourceSKUsClientListPager.PageResponse` has been removed
+- Function `*ProximityPlacementGroupsClientListBySubscriptionPager.Err` has been removed
+- Function `*DisksClientListPager.PageResponse` has been removed
+- Function `*UsageClientListPager.Err` has been removed
+- Function `*VirtualMachineScaleSetsClientListByLocationPager.Err` has been removed
+- Function `*CloudServiceOperatingSystemsClientListOSVersionsPager.PageResponse` has been removed
+- Function `*DiskEncryptionSetsClientListPager.PageResponse` has been removed
+- Function `*DiskEncryptionSetsClientListByResourceGroupPager.Err` has been removed
+- Function `*VirtualMachineRunCommandsClientListPager.Err` has been removed
+- Function `*VirtualMachineScaleSetsClientListSKUsPager.PageResponse` has been removed
+- Function `*VirtualMachineScaleSetVMsClientListPager.Err` has been removed
+- Function `*ImagesClientListPager.PageResponse` has been removed
+- Function `*VirtualMachinesClientListAllPager.Err` has been removed
+- Function `*DedicatedHostGroupsClientListBySubscriptionPager.Err` has been removed
+- Function `*ImagesClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*VirtualMachineRunCommandsClientListPager.PageResponse` has been removed
+- Function `*CapacityReservationsClientListByCapacityReservationGroupPager.PageResponse` has been removed
+- Function `*CloudServiceRoleInstancesClientListPager.PageResponse` has been removed
+- Function `*SharedGalleryImageVersionsClientListPager.Err` has been removed
+- Function `*CapacityReservationGroupsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*CloudServiceOperatingSystemsClientListOSFamiliesPager.PageResponse` has been removed
+- Function `*CloudServiceRoleInstancesClientListPager.Err` has been removed
+- Function `*ImagesClientListByResourceGroupPager.Err` has been removed
+- Struct `AvailabilitySetsClientCreateOrUpdateResult` has been removed
+- Struct `AvailabilitySetsClientGetResult` has been removed
+- Struct `AvailabilitySetsClientListAvailableSizesResult` has been removed
+- Struct `AvailabilitySetsClientListBySubscriptionResult` has been removed
+- Struct `AvailabilitySetsClientListResult` has been removed
+- Struct `AvailabilitySetsClientUpdateResult` has been removed
+- Struct `CapacityReservationGroupsClientCreateOrUpdateResult` has been removed
+- Struct `CapacityReservationGroupsClientGetResult` has been removed
+- Struct `CapacityReservationGroupsClientListByResourceGroupResult` has been removed
+- Struct `CapacityReservationGroupsClientListBySubscriptionResult` has been removed
+- Struct `CapacityReservationGroupsClientUpdateResult` has been removed
+- Struct `CapacityReservationsClientCreateOrUpdateResult` has been removed
+- Struct `CapacityReservationsClientGetResult` has been removed
+- Struct `CapacityReservationsClientListByCapacityReservationGroupResult` has been removed
+- Struct `CapacityReservationsClientUpdateResult` has been removed
+- Struct `CloudServiceOperatingSystemsClientGetOSFamilyResult` has been removed
+- Struct `CloudServiceOperatingSystemsClientGetOSVersionResult` has been removed
+- Struct `CloudServiceOperatingSystemsClientListOSFamiliesResult` has been removed
+- Struct `CloudServiceOperatingSystemsClientListOSVersionsResult` has been removed
+- Struct `CloudServiceRoleInstancesClientGetInstanceViewResult` has been removed
+- Struct `CloudServiceRoleInstancesClientGetResult` has been removed
+- Struct `CloudServiceRoleInstancesClientListResult` has been removed
+- Struct `CloudServiceRolesClientGetResult` has been removed
+- Struct `CloudServiceRolesClientListResult` has been removed
+- Struct `CloudServicesClientCreateOrUpdateResult` has been removed
+- Struct `CloudServicesClientGetInstanceViewResult` has been removed
+- Struct `CloudServicesClientGetResult` has been removed
+- Struct `CloudServicesClientListAllResult` has been removed
+- Struct `CloudServicesClientListResult` has been removed
+- Struct `CloudServicesClientUpdateResult` has been removed
+- Struct `CloudServicesUpdateDomainClientGetUpdateDomainResult` has been removed
+- Struct `CloudServicesUpdateDomainClientListUpdateDomainsResult` has been removed
+- Struct `CommunityGalleriesClientGetResult` has been removed
+- Struct `CommunityGalleryImageVersionsClientGetResult` has been removed
+- Struct `CommunityGalleryImagesClientGetResult` has been removed
+- Struct `DedicatedHostGroupsClientCreateOrUpdateResult` has been removed
+- Struct `DedicatedHostGroupsClientGetResult` has been removed
+- Struct `DedicatedHostGroupsClientListByResourceGroupResult` has been removed
+- Struct `DedicatedHostGroupsClientListBySubscriptionResult` has been removed
+- Struct `DedicatedHostGroupsClientUpdateResult` has been removed
+- Struct `DedicatedHostsClientCreateOrUpdateResult` has been removed
+- Struct `DedicatedHostsClientGetResult` has been removed
+- Struct `DedicatedHostsClientListByHostGroupResult` has been removed
+- Struct `DedicatedHostsClientUpdateResult` has been removed
+- Struct `DiskAccessesClientCreateOrUpdateResult` has been removed
+- Struct `DiskAccessesClientGetAPrivateEndpointConnectionResult` has been removed
+- Struct `DiskAccessesClientGetPrivateLinkResourcesResult` has been removed
+- Struct `DiskAccessesClientGetResult` has been removed
+- Struct `DiskAccessesClientListByResourceGroupResult` has been removed
+- Struct `DiskAccessesClientListPrivateEndpointConnectionsResult` has been removed
+- Struct `DiskAccessesClientListResult` has been removed
+- Struct `DiskAccessesClientUpdateAPrivateEndpointConnectionResult` has been removed
+- Struct `DiskAccessesClientUpdateResult` has been removed
+- Struct `DiskEncryptionSetsClientCreateOrUpdateResult` has been removed
+- Struct `DiskEncryptionSetsClientGetResult` has been removed
+- Struct `DiskEncryptionSetsClientListAssociatedResourcesResult` has been removed
+- Struct `DiskEncryptionSetsClientListByResourceGroupResult` has been removed
+- Struct `DiskEncryptionSetsClientListResult` has been removed
+- Struct `DiskEncryptionSetsClientUpdateResult` has been removed
+- Struct `DiskRestorePointClientGetResult` has been removed
+- Struct `DiskRestorePointClientGrantAccessResult` has been removed
+- Struct `DiskRestorePointClientListByRestorePointResult` has been removed
+- Struct `DisksClientCreateOrUpdateResult` has been removed
+- Struct `DisksClientGetResult` has been removed
+- Struct `DisksClientGrantAccessResult` has been removed
+- Struct `DisksClientListByResourceGroupResult` has been removed
+- Struct `DisksClientListResult` has been removed
+- Struct `DisksClientUpdateResult` has been removed
+- Struct `GalleriesClientCreateOrUpdateResult` has been removed
+- Struct `GalleriesClientGetResult` has been removed
+- Struct `GalleriesClientListByResourceGroupResult` has been removed
+- Struct `GalleriesClientListResult` has been removed
+- Struct `GalleriesClientUpdateResult` has been removed
+- Struct `GalleryApplicationVersionsClientCreateOrUpdateResult` has been removed
+- Struct `GalleryApplicationVersionsClientGetResult` has been removed
+- Struct `GalleryApplicationVersionsClientListByGalleryApplicationResult` has been removed
+- Struct `GalleryApplicationVersionsClientUpdateResult` has been removed
+- Struct `GalleryApplicationsClientCreateOrUpdateResult` has been removed
+- Struct `GalleryApplicationsClientGetResult` has been removed
+- Struct `GalleryApplicationsClientListByGalleryResult` has been removed
+- Struct `GalleryApplicationsClientUpdateResult` has been removed
+- Struct `GalleryImageVersionsClientCreateOrUpdateResult` has been removed
+- Struct `GalleryImageVersionsClientGetResult` has been removed
+- Struct `GalleryImageVersionsClientListByGalleryImageResult` has been removed
+- Struct `GalleryImageVersionsClientUpdateResult` has been removed
+- Struct `GalleryImagesClientCreateOrUpdateResult` has been removed
+- Struct `GalleryImagesClientGetResult` has been removed
+- Struct `GalleryImagesClientListByGalleryResult` has been removed
+- Struct `GalleryImagesClientUpdateResult` has been removed
+- Struct `GallerySharingProfileClientUpdateResult` has been removed
+- Struct `ImagesClientCreateOrUpdateResult` has been removed
+- Struct `ImagesClientGetResult` has been removed
+- Struct `ImagesClientListByResourceGroupResult` has been removed
+- Struct `ImagesClientListResult` has been removed
+- Struct `ImagesClientUpdateResult` has been removed
+- Struct `LogAnalyticsClientExportRequestRateByIntervalResult` has been removed
+- Struct `LogAnalyticsClientExportThrottledRequestsResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `ProximityPlacementGroupsClientCreateOrUpdateResult` has been removed
+- Struct `ProximityPlacementGroupsClientGetResult` has been removed
+- Struct `ProximityPlacementGroupsClientListByResourceGroupResult` has been removed
+- Struct `ProximityPlacementGroupsClientListBySubscriptionResult` has been removed
+- Struct `ProximityPlacementGroupsClientUpdateResult` has been removed
+- Struct `ResourceSKUsClientListResult` has been removed
+- Struct `RestorePointCollectionsClientCreateOrUpdateResult` has been removed
+- Struct `RestorePointCollectionsClientGetResult` has been removed
+- Struct `RestorePointCollectionsClientListAllResult` has been removed
+- Struct `RestorePointCollectionsClientListResult` has been removed
+- Struct `RestorePointCollectionsClientUpdateResult` has been removed
+- Struct `RestorePointsClientCreateResult` has been removed
+- Struct `RestorePointsClientGetResult` has been removed
+- Struct `SSHPublicKeysClientCreateResult` has been removed
+- Struct `SSHPublicKeysClientGenerateKeyPairResult` has been removed
+- Struct `SSHPublicKeysClientGetResult` has been removed
+- Struct `SSHPublicKeysClientListByResourceGroupResult` has been removed
+- Struct `SSHPublicKeysClientListBySubscriptionResult` has been removed
+- Struct `SSHPublicKeysClientUpdateResult` has been removed
+- Struct `SharedGalleriesClientGetResult` has been removed
+- Struct `SharedGalleriesClientListResult` has been removed
+- Struct `SharedGalleryImageVersionsClientGetResult` has been removed
+- Struct `SharedGalleryImageVersionsClientListResult` has been removed
+- Struct `SharedGalleryImagesClientGetResult` has been removed
+- Struct `SharedGalleryImagesClientListResult` has been removed
+- Struct `SnapshotsClientCreateOrUpdateResult` has been removed
+- Struct `SnapshotsClientGetResult` has been removed
+- Struct `SnapshotsClientGrantAccessResult` has been removed
+- Struct `SnapshotsClientListByResourceGroupResult` has been removed
+- Struct `SnapshotsClientListResult` has been removed
+- Struct `SnapshotsClientUpdateResult` has been removed
+- Struct `UsageClientListResult` has been removed
+- Struct `VirtualMachineExtensionImagesClientGetResult` has been removed
+- Struct `VirtualMachineExtensionImagesClientListTypesResult` has been removed
+- Struct `VirtualMachineExtensionImagesClientListVersionsResult` has been removed
+- Struct `VirtualMachineExtensionsClientCreateOrUpdateResult` has been removed
+- Struct `VirtualMachineExtensionsClientGetResult` has been removed
+- Struct `VirtualMachineExtensionsClientListResult` has been removed
+- Struct `VirtualMachineExtensionsClientUpdateResult` has been removed
+- Struct `VirtualMachineImagesClientGetResult` has been removed
+- Struct `VirtualMachineImagesClientListOffersResult` has been removed
+- Struct `VirtualMachineImagesClientListPublishersResult` has been removed
+- Struct `VirtualMachineImagesClientListResult` has been removed
+- Struct `VirtualMachineImagesClientListSKUsResult` has been removed
+- Struct `VirtualMachineImagesEdgeZoneClientGetResult` has been removed
+- Struct `VirtualMachineImagesEdgeZoneClientListOffersResult` has been removed
+- Struct `VirtualMachineImagesEdgeZoneClientListPublishersResult` has been removed
+- Struct `VirtualMachineImagesEdgeZoneClientListResult` has been removed
+- Struct `VirtualMachineImagesEdgeZoneClientListSKUsResult` has been removed
+- Struct `VirtualMachineRunCommandsClientCreateOrUpdateResult` has been removed
+- Struct `VirtualMachineRunCommandsClientGetByVirtualMachineResult` has been removed
+- Struct `VirtualMachineRunCommandsClientGetResult` has been removed
+- Struct `VirtualMachineRunCommandsClientListByVirtualMachineResult` has been removed
+- Struct `VirtualMachineRunCommandsClientListResult` has been removed
+- Struct `VirtualMachineRunCommandsClientUpdateResult` has been removed
+- Struct `VirtualMachineScaleSetExtensionsClientCreateOrUpdateResult` has been removed
+- Struct `VirtualMachineScaleSetExtensionsClientGetResult` has been removed
+- Struct `VirtualMachineScaleSetExtensionsClientListResult` has been removed
+- Struct `VirtualMachineScaleSetExtensionsClientUpdateResult` has been removed
+- Struct `VirtualMachineScaleSetRollingUpgradesClientGetLatestResult` has been removed
+- Struct `VirtualMachineScaleSetVMExtensionsClientCreateOrUpdateResult` has been removed
+- Struct `VirtualMachineScaleSetVMExtensionsClientGetResult` has been removed
+- Struct `VirtualMachineScaleSetVMExtensionsClientListResult` has been removed
+- Struct `VirtualMachineScaleSetVMExtensionsClientUpdateResult` has been removed
+- Struct `VirtualMachineScaleSetVMRunCommandsClientCreateOrUpdateResult` has been removed
+- Struct `VirtualMachineScaleSetVMRunCommandsClientGetResult` has been removed
+- Struct `VirtualMachineScaleSetVMRunCommandsClientListResult` has been removed
+- Struct `VirtualMachineScaleSetVMRunCommandsClientUpdateResult` has been removed
+- Struct `VirtualMachineScaleSetVMsClientGetInstanceViewResult` has been removed
+- Struct `VirtualMachineScaleSetVMsClientGetResult` has been removed
+- Struct `VirtualMachineScaleSetVMsClientListResult` has been removed
+- Struct `VirtualMachineScaleSetVMsClientRetrieveBootDiagnosticsDataResult` has been removed
+- Struct `VirtualMachineScaleSetVMsClientRunCommandResult` has been removed
+- Struct `VirtualMachineScaleSetVMsClientUpdateResult` has been removed
+- Struct `VirtualMachineScaleSetsClientCreateOrUpdateResult` has been removed
+- Struct `VirtualMachineScaleSetsClientForceRecoveryServiceFabricPlatformUpdateDomainWalkResult` has been removed
+- Struct `VirtualMachineScaleSetsClientGetInstanceViewResult` has been removed
+- Struct `VirtualMachineScaleSetsClientGetOSUpgradeHistoryResult` has been removed
+- Struct `VirtualMachineScaleSetsClientGetResult` has been removed
+- Struct `VirtualMachineScaleSetsClientListAllResult` has been removed
+- Struct `VirtualMachineScaleSetsClientListByLocationResult` has been removed
+- Struct `VirtualMachineScaleSetsClientListResult` has been removed
+- Struct `VirtualMachineScaleSetsClientListSKUsResult` has been removed
+- Struct `VirtualMachineScaleSetsClientUpdateResult` has been removed
+- Struct `VirtualMachineSizesClientListResult` has been removed
+- Struct `VirtualMachinesClientAssessPatchesResult` has been removed
+- Struct `VirtualMachinesClientCaptureResult` has been removed
+- Struct `VirtualMachinesClientCreateOrUpdateResult` has been removed
+- Struct `VirtualMachinesClientGetResult` has been removed
+- Struct `VirtualMachinesClientInstallPatchesResult` has been removed
+- Struct `VirtualMachinesClientInstanceViewResult` has been removed
+- Struct `VirtualMachinesClientListAllResult` has been removed
+- Struct `VirtualMachinesClientListAvailableSizesResult` has been removed
+- Struct `VirtualMachinesClientListByLocationResult` has been removed
+- Struct `VirtualMachinesClientListResult` has been removed
+- Struct `VirtualMachinesClientRetrieveBootDiagnosticsDataResult` has been removed
+- Struct `VirtualMachinesClientRunCommandResult` has been removed
+- Struct `VirtualMachinesClientUpdateResult` has been removed
+- Field `CloudServiceOperatingSystemsClientListOSVersionsResult` of struct `CloudServiceOperatingSystemsClientListOSVersionsResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceOperatingSystemsClientListOSVersionsResponse` has been removed
+- Field `RawResponse` of struct `GalleryImagesClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `CapacityReservationsClientDeletePollerResponse` has been removed
+- Field `CloudServiceOperatingSystemsClientGetOSFamilyResult` of struct `CloudServiceOperatingSystemsClientGetOSFamilyResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceOperatingSystemsClientGetOSFamilyResponse` has been removed
+- Field `DedicatedHostGroupsClientUpdateResult` of struct `DedicatedHostGroupsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHostGroupsClientUpdateResponse` has been removed
+- Field `SSHPublicKeysClientGenerateKeyPairResult` of struct `SSHPublicKeysClientGenerateKeyPairResponse` has been removed
+- Field `RawResponse` of struct `SSHPublicKeysClientGenerateKeyPairResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientUpdatePollerResponse` has been removed
+- Field `DiskEncryptionSetsClientUpdateResult` of struct `DiskEncryptionSetsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DiskEncryptionSetsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DiskEncryptionSetsClientCreateOrUpdatePollerResponse` has been removed
+- Field `CloudServiceRoleInstancesClientGetInstanceViewResult` of struct `CloudServiceRoleInstancesClientGetInstanceViewResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceRoleInstancesClientGetInstanceViewResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetExtensionsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientGrantAccessPollerResponse` has been removed
+- Field `RawResponse` of struct `DisksClientDeleteResponse` has been removed
+- Field `VirtualMachineScaleSetVMRunCommandsClientCreateOrUpdateResult` of struct `VirtualMachineScaleSetVMRunCommandsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMRunCommandsClientCreateOrUpdateResponse` has been removed
+- Field `ImagesClientListByResourceGroupResult` of struct `ImagesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ImagesClientListByResourceGroupResponse` has been removed
+- Field `LogAnalyticsClientExportRequestRateByIntervalResult` of struct `LogAnalyticsClientExportRequestRateByIntervalResponse` has been removed
+- Field `RawResponse` of struct `LogAnalyticsClientExportRequestRateByIntervalResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineExtensionsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `RestorePointCollectionsClientDeletePollerResponse` has been removed
+- Field `GalleryImageVersionsClientCreateOrUpdateResult` of struct `GalleryImageVersionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `GalleryImageVersionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientReimagePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineExtensionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetRollingUpgradesClientStartOSUpgradeResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientPerformMaintenancePollerResponse` has been removed
+- Field `GalleryImagesClientCreateOrUpdateResult` of struct `GalleryImagesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `GalleryImagesClientCreateOrUpdateResponse` has been removed
+- Field `CloudServicesClientUpdateResult` of struct `CloudServicesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientUpdateResponse` has been removed
+- Field `DiskAccessesClientUpdateAPrivateEndpointConnectionResult` of struct `DiskAccessesClientUpdateAPrivateEndpointConnectionResponse` has been removed
+- Field `RawResponse` of struct `DiskAccessesClientUpdateAPrivateEndpointConnectionResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHostsClientDeletePollerResponse` has been removed
+- Field `SnapshotsClientListResult` of struct `SnapshotsClientListResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientListResponse` has been removed
+- Field `CommunityGalleryImageVersionsClientGetResult` of struct `CommunityGalleryImageVersionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `CommunityGalleryImageVersionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientDeleteInstancesPollerResponse` has been removed
+- Field `VirtualMachinesClientInstallPatchesResult` of struct `VirtualMachinesClientInstallPatchesResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientInstallPatchesResponse` has been removed
+- Field `RestorePointCollectionsClientUpdateResult` of struct `RestorePointCollectionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `RestorePointCollectionsClientUpdateResponse` has been removed
+- Field `DiskEncryptionSetsClientListAssociatedResourcesResult` of struct `DiskEncryptionSetsClientListAssociatedResourcesResponse` has been removed
+- Field `RawResponse` of struct `DiskEncryptionSetsClientListAssociatedResourcesResponse` has been removed
+- Field `RawResponse` of struct `DisksClientDeletePollerResponse` has been removed
+- Field `GalleryApplicationsClientGetResult` of struct `GalleryApplicationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `GalleryApplicationsClientGetResponse` has been removed
+- Field `DiskAccessesClientCreateOrUpdateResult` of struct `DiskAccessesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DiskAccessesClientCreateOrUpdateResponse` has been removed
+- Field `GalleryImageVersionsClientUpdateResult` of struct `GalleryImageVersionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `GalleryImageVersionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHostsClientRestartPollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientRestartResponse` has been removed
+- Field `DedicatedHostGroupsClientGetResult` of struct `DedicatedHostGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHostGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientStartResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientDeallocateResponse` has been removed
+- Field `CloudServicesClientListResult` of struct `CloudServicesClientListResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientStartPollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientRestartPollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientReapplyPollerResponse` has been removed
+- Field `CloudServicesUpdateDomainClientGetUpdateDomainResult` of struct `CloudServicesUpdateDomainClientGetUpdateDomainResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesUpdateDomainClientGetUpdateDomainResponse` has been removed
+- Field `VirtualMachineRunCommandsClientGetResult` of struct `VirtualMachineRunCommandsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineRunCommandsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientUpdateInstancesResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMExtensionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceRoleInstancesClientRestartResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHostsClientRestartResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceRoleInstancesClientRestartPollerResponse` has been removed
+- Field `SnapshotsClientGetResult` of struct `SnapshotsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientGetResponse` has been removed
+- Field `VirtualMachinesClientRunCommandResult` of struct `VirtualMachinesClientRunCommandResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientRunCommandResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientRunCommandPollerResponse` has been removed
+- Field `RawResponse` of struct `GalleryApplicationsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientStartPollerResponse` has been removed
+- Field `RawResponse` of struct `GalleryImageVersionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `ProximityPlacementGroupsClientListBySubscriptionResult` of struct `ProximityPlacementGroupsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ProximityPlacementGroupsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientReapplyResponse` has been removed
+- Field `GalleriesClientUpdateResult` of struct `GalleriesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `GalleriesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `GalleryImageVersionsClientUpdatePollerResponse` has been removed
+- Field `GalleryImagesClientListByGalleryResult` of struct `GalleryImagesClientListByGalleryResponse` has been removed
+- Field `RawResponse` of struct `GalleryImagesClientListByGalleryResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientReimagePollerResponse` has been removed
+- Field `VirtualMachineScaleSetRollingUpgradesClientGetLatestResult` of struct `VirtualMachineScaleSetRollingUpgradesClientGetLatestResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetRollingUpgradesClientGetLatestResponse` has been removed
+- Field `DiskAccessesClientUpdateResult` of struct `DiskAccessesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DiskAccessesClientUpdateResponse` has been removed
+- Field `DiskEncryptionSetsClientListByResourceGroupResult` of struct `DiskEncryptionSetsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `DiskEncryptionSetsClientListByResourceGroupResponse` has been removed
+- Field `VirtualMachineExtensionImagesClientGetResult` of struct `VirtualMachineExtensionImagesClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineExtensionImagesClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientPowerOffPollerResponse` has been removed
+- Field `CapacityReservationsClientGetResult` of struct `CapacityReservationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `CapacityReservationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DiskAccessesClientDeletePollerResponse` has been removed
+- Field `VirtualMachineExtensionsClientCreateOrUpdateResult` of struct `VirtualMachineExtensionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineExtensionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMRunCommandsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `CapacityReservationGroupsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientRebuildPollerResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientPowerOffPollerResponse` has been removed
+- Field `VirtualMachinesClientCaptureResult` of struct `VirtualMachinesClientCaptureResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientCaptureResponse` has been removed
+- Field `ProximityPlacementGroupsClientGetResult` of struct `ProximityPlacementGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ProximityPlacementGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientRestartResponse` has been removed
+- Field `CapacityReservationGroupsClientListBySubscriptionResult` of struct `CapacityReservationGroupsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `CapacityReservationGroupsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientRedeployPollerResponse` has been removed
+- Field `VirtualMachineImagesEdgeZoneClientListOffersResult` of struct `VirtualMachineImagesEdgeZoneClientListOffersResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImagesEdgeZoneClientListOffersResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientDeleteInstancesPollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientSimulateEvictionResponse` has been removed
+- Field `ProximityPlacementGroupsClientListByResourceGroupResult` of struct `ProximityPlacementGroupsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ProximityPlacementGroupsClientListByResourceGroupResponse` has been removed
+- Field `SnapshotsClientCreateOrUpdateResult` of struct `SnapshotsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientAssessPatchesPollerResponse` has been removed
+- Field `AvailabilitySetsClientGetResult` of struct `AvailabilitySetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AvailabilitySetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `GalleryApplicationsClientDeletePollerResponse` has been removed
+- Field `RestorePointsClientGetResult` of struct `RestorePointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `RestorePointsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientStartResponse` has been removed
+- Field `VirtualMachineRunCommandsClientUpdateResult` of struct `VirtualMachineRunCommandsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineRunCommandsClientUpdateResponse` has been removed
+- Field `VirtualMachineScaleSetsClientUpdateResult` of struct `VirtualMachineScaleSetsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `RestorePointsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientDeleteResponse` has been removed
+- Field `DiskAccessesClientListPrivateEndpointConnectionsResult` of struct `DiskAccessesClientListPrivateEndpointConnectionsResponse` has been removed
+- Field `RawResponse` of struct `DiskAccessesClientListPrivateEndpointConnectionsResponse` has been removed
+- Field `RawResponse` of struct `GalleriesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineExtensionsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientPowerOffPollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetExtensionsClientDeleteResponse` has been removed
+- Field `DedicatedHostGroupsClientCreateOrUpdateResult` of struct `DedicatedHostGroupsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHostGroupsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `LogAnalyticsClientExportRequestRateByIntervalPollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientDeallocateResponse` has been removed
+- Field `RawResponse` of struct `DisksClientGrantAccessPollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientUpdateInstancesPollerResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceRoleInstancesClientRebuildPollerResponse` has been removed
+- Field `VirtualMachineScaleSetVMExtensionsClientGetResult` of struct `VirtualMachineScaleSetVMExtensionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMExtensionsClientGetResponse` has been removed
+- Field `VirtualMachineScaleSetsClientListResult` of struct `VirtualMachineScaleSetsClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientListResponse` has been removed
+- Field `DisksClientGetResult` of struct `DisksClientGetResponse` has been removed
+- Field `RawResponse` of struct `DisksClientGetResponse` has been removed
+- Field `UsageClientListResult` of struct `UsageClientListResponse` has been removed
+- Field `RawResponse` of struct `UsageClientListResponse` has been removed
+- Field `VirtualMachineScaleSetVMsClientGetResult` of struct `VirtualMachineScaleSetVMsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientStartPollerResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceRoleInstancesClientRebuildResponse` has been removed
+- Field `VirtualMachineScaleSetsClientListSKUsResult` of struct `VirtualMachineScaleSetsClientListSKUsResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientListSKUsResponse` has been removed
+- Field `DiskAccessesClientGetResult` of struct `DiskAccessesClientGetResponse` has been removed
+- Field `RawResponse` of struct `DiskAccessesClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineExtensionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `GalleriesClientListByResourceGroupResult` of struct `GalleriesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `GalleriesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientPerformMaintenancePollerResponse` has been removed
+- Field `SnapshotsClientGrantAccessResult` of struct `SnapshotsClientGrantAccessResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientGrantAccessResponse` has been removed
+- Field `RawResponse` of struct `DisksClientRevokeAccessPollerResponse` has been removed
+- Field `CapacityReservationsClientUpdateResult` of struct `CapacityReservationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `CapacityReservationsClientUpdateResponse` has been removed
+- Field `SSHPublicKeysClientUpdateResult` of struct `SSHPublicKeysClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SSHPublicKeysClientUpdateResponse` has been removed
+- Field `CapacityReservationsClientCreateOrUpdateResult` of struct `CapacityReservationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `CapacityReservationsClientCreateOrUpdateResponse` has been removed
+- Field `SharedGalleryImagesClientGetResult` of struct `SharedGalleryImagesClientGetResponse` has been removed
+- Field `RawResponse` of struct `SharedGalleryImagesClientGetResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientUpdatePollerResponse` has been removed
+- Field `VirtualMachineImagesEdgeZoneClientListResult` of struct `VirtualMachineImagesEdgeZoneClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImagesEdgeZoneClientListResponse` has been removed
+- Field `VirtualMachinesClientAssessPatchesResult` of struct `VirtualMachinesClientAssessPatchesResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientAssessPatchesResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientRestartResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientConvertToManagedDisksPollerResponse` has been removed
+- Field `VirtualMachineScaleSetVMRunCommandsClientListResult` of struct `VirtualMachineScaleSetVMRunCommandsClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMRunCommandsClientListResponse` has been removed
+- Field `VirtualMachinesClientListByLocationResult` of struct `VirtualMachinesClientListByLocationResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientListByLocationResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientDeallocateResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHostsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientRestartPollerResponse` has been removed
+- Field `CloudServiceRoleInstancesClientListResult` of struct `CloudServiceRoleInstancesClientListResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceRoleInstancesClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientRedeployPollerResponse` has been removed
+- Field `CommunityGalleryImagesClientGetResult` of struct `CommunityGalleryImagesClientGetResponse` has been removed
+- Field `RawResponse` of struct `CommunityGalleryImagesClientGetResponse` has been removed
+- Field `DiskEncryptionSetsClientCreateOrUpdateResult` of struct `DiskEncryptionSetsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DiskEncryptionSetsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `RestorePointsClientCreatePollerResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientPowerOffResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientInstallPatchesPollerResponse` has been removed
+- Field `VirtualMachineImagesClientListPublishersResult` of struct `VirtualMachineImagesClientListPublishersResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImagesClientListPublishersResponse` has been removed
+- Field `VirtualMachinesClientInstanceViewResult` of struct `VirtualMachinesClientInstanceViewResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientInstanceViewResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientDeallocatePollerResponse` has been removed
+- Field `DisksClientListResult` of struct `DisksClientListResponse` has been removed
+- Field `RawResponse` of struct `DisksClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientConvertToSinglePlacementGroupResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientPowerOffResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientReimagePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetRollingUpgradesClientStartOSUpgradePollerResponse` has been removed
+- Field `RawResponse` of struct `GalleryImageVersionsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `DiskRestorePointClientRevokeAccessPollerResponse` has been removed
+- Field `GalleryApplicationVersionsClientUpdateResult` of struct `GalleryApplicationVersionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `GalleryApplicationVersionsClientUpdateResponse` has been removed
+- Field `VirtualMachineImagesClientListResult` of struct `VirtualMachineImagesClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImagesClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientReimagePollerResponse` has been removed
+- Field `GalleryImageVersionsClientGetResult` of struct `GalleryImageVersionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `GalleryImageVersionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientConvertToManagedDisksResponse` has been removed
+- Field `DiskRestorePointClientGetResult` of struct `DiskRestorePointClientGetResponse` has been removed
+- Field `RawResponse` of struct `DiskRestorePointClientGetResponse` has been removed
+- Field `ImagesClientListResult` of struct `ImagesClientListResponse` has been removed
+- Field `RawResponse` of struct `ImagesClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientRedeployResponse` has been removed
+- Field `RawResponse` of struct `ProximityPlacementGroupsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DiskAccessesClientDeleteResponse` has been removed
+- Field `AvailabilitySetsClientListAvailableSizesResult` of struct `AvailabilitySetsClientListAvailableSizesResponse` has been removed
+- Field `RawResponse` of struct `AvailabilitySetsClientListAvailableSizesResponse` has been removed
+- Field `RawResponse` of struct `GalleryImagesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `GalleryApplicationVersionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DisksClientCreateOrUpdatePollerResponse` has been removed
+- Field `SharedGalleriesClientGetResult` of struct `SharedGalleriesClientGetResponse` has been removed
+- Field `RawResponse` of struct `SharedGalleriesClientGetResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientRevokeAccessPollerResponse` has been removed
+- Field `DisksClientGrantAccessResult` of struct `DisksClientGrantAccessResponse` has been removed
+- Field `RawResponse` of struct `DisksClientGrantAccessResponse` has been removed
+- Field `RawResponse` of struct `GalleryApplicationsClientUpdatePollerResponse` has been removed
+- Field `RestorePointCollectionsClientListAllResult` of struct `RestorePointCollectionsClientListAllResponse` has been removed
+- Field `RawResponse` of struct `RestorePointCollectionsClientListAllResponse` has been removed
+- Field `GalleriesClientCreateOrUpdateResult` of struct `GalleriesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `GalleriesClientCreateOrUpdateResponse` has been removed
+- Field `DedicatedHostsClientCreateOrUpdateResult` of struct `DedicatedHostsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHostsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `CapacityReservationsClientDeleteResponse` has been removed
+- Field `CloudServicesClientListAllResult` of struct `CloudServicesClientListAllResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientListAllResponse` has been removed
+- Field `GallerySharingProfileClientUpdateResult` of struct `GallerySharingProfileClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `GallerySharingProfileClientUpdateResponse` has been removed
+- Field `RestorePointCollectionsClientCreateOrUpdateResult` of struct `RestorePointCollectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `RestorePointCollectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientReimageAllResponse` has been removed
+- Field `GalleryImagesClientGetResult` of struct `GalleryImagesClientGetResponse` has been removed
+- Field `RawResponse` of struct `GalleryImagesClientGetResponse` has been removed
+- Field `SnapshotsClientUpdateResult` of struct `SnapshotsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientUpdateResponse` has been removed
+- Field `VirtualMachinesClientGetResult` of struct `VirtualMachinesClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientGetResponse` has been removed
+- Field `VirtualMachineScaleSetsClientGetOSUpgradeHistoryResult` of struct `VirtualMachineScaleSetsClientGetOSUpgradeHistoryResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientGetOSUpgradeHistoryResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceRoleInstancesClientDeletePollerResponse` has been removed
+- Field `VirtualMachineScaleSetVMExtensionsClientCreateOrUpdateResult` of struct `VirtualMachineScaleSetVMExtensionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMExtensionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMExtensionsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineRunCommandsClientCreateOrUpdatePollerResponse` has been removed
+- Field `VirtualMachineScaleSetVMExtensionsClientListResult` of struct `VirtualMachineScaleSetVMExtensionsClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMExtensionsClientListResponse` has been removed
+- Field `RawResponse` of struct `RestorePointCollectionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DiskAccessesClientDeleteAPrivateEndpointConnectionResponse` has been removed
+- Field `RawResponse` of struct `GalleriesClientUpdatePollerResponse` has been removed
+- Field `GalleriesClientListResult` of struct `GalleriesClientListResponse` has been removed
+- Field `RawResponse` of struct `GalleriesClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientDeallocatePollerResponse` has been removed
+- Field `VirtualMachineRunCommandsClientGetByVirtualMachineResult` of struct `VirtualMachineRunCommandsClientGetByVirtualMachineResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineRunCommandsClientGetByVirtualMachineResponse` has been removed
+- Field `VirtualMachineScaleSetVMRunCommandsClientGetResult` of struct `VirtualMachineScaleSetVMRunCommandsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMRunCommandsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ImagesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientReimageAllPollerResponse` has been removed
+- Field `RawResponse` of struct `CapacityReservationsClientUpdatePollerResponse` has been removed
+- Field `RestorePointCollectionsClientListResult` of struct `RestorePointCollectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `RestorePointCollectionsClientListResponse` has been removed
+- Field `GalleriesClientGetResult` of struct `GalleriesClientGetResponse` has been removed
+- Field `RawResponse` of struct `GalleriesClientGetResponse` has been removed
+- Field `CapacityReservationGroupsClientGetResult` of struct `CapacityReservationGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `CapacityReservationGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientReimageResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineRunCommandsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DiskEncryptionSetsClientUpdatePollerResponse` has been removed
+- Field `VirtualMachineImagesClientListSKUsResult` of struct `VirtualMachineImagesClientListSKUsResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImagesClientListSKUsResponse` has been removed
+- Field `DiskRestorePointClientListByRestorePointResult` of struct `DiskRestorePointClientListByRestorePointResponse` has been removed
+- Field `RawResponse` of struct `DiskRestorePointClientListByRestorePointResponse` has been removed
+- Field `DiskAccessesClientGetPrivateLinkResourcesResult` of struct `DiskAccessesClientGetPrivateLinkResourcesResponse` has been removed
+- Field `RawResponse` of struct `DiskAccessesClientGetPrivateLinkResourcesResponse` has been removed
+- Field `GalleryImagesClientUpdateResult` of struct `GalleryImagesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `GalleryImagesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientCreateOrUpdatePollerResponse` has been removed
+- Field `CloudServiceRoleInstancesClientGetResult` of struct `CloudServiceRoleInstancesClientGetResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceRoleInstancesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ImagesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `GalleryApplicationVersionsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientReimageResponse` has been removed
+- Field `RestorePointsClientCreateResult` of struct `RestorePointsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `RestorePointsClientCreateResponse` has been removed
+- Field `VirtualMachineImagesEdgeZoneClientListSKUsResult` of struct `VirtualMachineImagesEdgeZoneClientListSKUsResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImagesEdgeZoneClientListSKUsResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientReimageResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientReimageAllResponse` has been removed
+- Field `VirtualMachineScaleSetVMsClientGetInstanceViewResult` of struct `VirtualMachineScaleSetVMsClientGetInstanceViewResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientGetInstanceViewResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientSimulateEvictionResponse` has been removed
+- Field `ProximityPlacementGroupsClientCreateOrUpdateResult` of struct `ProximityPlacementGroupsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProximityPlacementGroupsClientCreateOrUpdateResponse` has been removed
+- Field `GalleryApplicationsClientListByGalleryResult` of struct `GalleryApplicationsClientListByGalleryResponse` has been removed
+- Field `RawResponse` of struct `GalleryApplicationsClientListByGalleryResponse` has been removed
+- Field `VirtualMachineScaleSetsClientCreateOrUpdateResult` of struct `VirtualMachineScaleSetsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientCreateOrUpdateResponse` has been removed
+- Field `DisksClientListByResourceGroupResult` of struct `DisksClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `DisksClientListByResourceGroupResponse` has been removed
+- Field `SharedGalleryImagesClientListResult` of struct `SharedGalleryImagesClientListResponse` has been removed
+- Field `RawResponse` of struct `SharedGalleryImagesClientListResponse` has been removed
+- Field `ImagesClientCreateOrUpdateResult` of struct `ImagesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ImagesClientCreateOrUpdateResponse` has been removed
+- Field `RestorePointCollectionsClientGetResult` of struct `RestorePointCollectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `RestorePointCollectionsClientGetResponse` has been removed
+- Field `GalleryApplicationVersionsClientListByGalleryApplicationResult` of struct `GalleryApplicationVersionsClientListByGalleryApplicationResponse` has been removed
+- Field `RawResponse` of struct `GalleryApplicationVersionsClientListByGalleryApplicationResponse` has been removed
+- Field `ResourceSKUsClientListResult` of struct `ResourceSKUsClientListResponse` has been removed
+- Field `RawResponse` of struct `ResourceSKUsClientListResponse` has been removed
+- Field `CloudServiceRolesClientGetResult` of struct `CloudServiceRolesClientGetResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceRolesClientGetResponse` has been removed
+- Field `VirtualMachineImagesClientGetResult` of struct `VirtualMachineImagesClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImagesClientGetResponse` has been removed
+- Field `RawResponse` of struct `AvailabilitySetsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `DiskRestorePointClientGrantAccessPollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientPowerOffResponse` has been removed
+- Field `CapacityReservationGroupsClientUpdateResult` of struct `CapacityReservationGroupsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `CapacityReservationGroupsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientDeletePollerResponse` has been removed
+- Field `VirtualMachineScaleSetExtensionsClientUpdateResult` of struct `VirtualMachineScaleSetExtensionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetExtensionsClientUpdateResponse` has been removed
+- Field `VirtualMachineRunCommandsClientListResult` of struct `VirtualMachineRunCommandsClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineRunCommandsClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetRollingUpgradesClientStartExtensionUpgradePollerResponse` has been removed
+- Field `ProximityPlacementGroupsClientUpdateResult` of struct `ProximityPlacementGroupsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ProximityPlacementGroupsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `CapacityReservationsClientCreateOrUpdatePollerResponse` has been removed
+- Field `VirtualMachinesClientUpdateResult` of struct `VirtualMachinesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientUpdateResponse` has been removed
+- Field `VirtualMachineImagesEdgeZoneClientGetResult` of struct `VirtualMachineImagesEdgeZoneClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImagesEdgeZoneClientGetResponse` has been removed
+- Field `VirtualMachineExtensionsClientUpdateResult` of struct `VirtualMachineExtensionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineExtensionsClientUpdateResponse` has been removed
+- Field `DisksClientCreateOrUpdateResult` of struct `DisksClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DisksClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientRestartPollerResponse` has been removed
+- Field `VirtualMachineScaleSetsClientGetResult` of struct `VirtualMachineScaleSetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `DiskEncryptionSetsClientDeleteResponse` has been removed
+- Field `DiskAccessesClientGetAPrivateEndpointConnectionResult` of struct `DiskAccessesClientGetAPrivateEndpointConnectionResponse` has been removed
+- Field `RawResponse` of struct `DiskAccessesClientGetAPrivateEndpointConnectionResponse` has been removed
+- Field `RawResponse` of struct `SSHPublicKeysClientDeleteResponse` has been removed
+- Field `SharedGalleryImageVersionsClientGetResult` of struct `SharedGalleryImageVersionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SharedGalleryImageVersionsClientGetResponse` has been removed
+- Field `VirtualMachineScaleSetExtensionsClientCreateOrUpdateResult` of struct `VirtualMachineScaleSetExtensionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetExtensionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `GalleriesClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientReimageAllPollerResponse` has been removed
+- Field `RawResponse` of struct `GalleryApplicationsClientDeleteResponse` has been removed
+- Field `GalleryApplicationsClientUpdateResult` of struct `GalleryApplicationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `GalleryApplicationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHostsClientDeleteResponse` has been removed
+- Field `DiskAccessesClientListByResourceGroupResult` of struct `DiskAccessesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `DiskAccessesClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesUpdateDomainClientWalkUpdateDomainPollerResponse` has been removed
+- Field `VirtualMachineSizesClientListResult` of struct `VirtualMachineSizesClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineSizesClientListResponse` has been removed
+- Field `RawResponse` of struct `GalleryApplicationVersionsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientPerformMaintenanceResponse` has been removed
+- Field `VirtualMachineScaleSetVMsClientRunCommandResult` of struct `VirtualMachineScaleSetVMsClientRunCommandResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientRunCommandResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientPowerOffPollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetRollingUpgradesClientCancelPollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientSetOrchestrationServiceStatePollerResponse` has been removed
+- Field `ImagesClientGetResult` of struct `ImagesClientGetResponse` has been removed
+- Field `RawResponse` of struct `ImagesClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientSetOrchestrationServiceStateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientDeallocatePollerResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientRebuildResponse` has been removed
+- Field `CloudServiceRolesClientListResult` of struct `CloudServiceRolesClientListResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceRolesClientListResponse` has been removed
+- Field `VirtualMachineScaleSetVMExtensionsClientUpdateResult` of struct `VirtualMachineScaleSetVMExtensionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMExtensionsClientUpdateResponse` has been removed
+- Field `VirtualMachinesClientRetrieveBootDiagnosticsDataResult` of struct `VirtualMachinesClientRetrieveBootDiagnosticsDataResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientRetrieveBootDiagnosticsDataResponse` has been removed
+- Field `CapacityReservationGroupsClientListByResourceGroupResult` of struct `CapacityReservationGroupsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `CapacityReservationGroupsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetExtensionsClientUpdatePollerResponse` has been removed
+- Field `VirtualMachineScaleSetsClientListByLocationResult` of struct `VirtualMachineScaleSetsClientListByLocationResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientListByLocationResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientPerformMaintenanceResponse` has been removed
+- Field `SnapshotsClientListByResourceGroupResult` of struct `SnapshotsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `DisksClientRevokeAccessResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientGeneralizeResponse` has been removed
+- Field `GalleryImageVersionsClientListByGalleryImageResult` of struct `GalleryImageVersionsClientListByGalleryImageResponse` has been removed
+- Field `RawResponse` of struct `GalleryImageVersionsClientListByGalleryImageResponse` has been removed
+- Field `ImagesClientUpdateResult` of struct `ImagesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ImagesClientUpdateResponse` has been removed
+- Field `SSHPublicKeysClientCreateResult` of struct `SSHPublicKeysClientCreateResponse` has been removed
+- Field `RawResponse` of struct `SSHPublicKeysClientCreateResponse` has been removed
+- Field `DedicatedHostGroupsClientListBySubscriptionResult` of struct `DedicatedHostGroupsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHostGroupsClientListBySubscriptionResponse` has been removed
+- Field `VirtualMachineScaleSetVMsClientListResult` of struct `VirtualMachineScaleSetVMsClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientListResponse` has been removed
+- Field `AvailabilitySetsClientListBySubscriptionResult` of struct `AvailabilitySetsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `AvailabilitySetsClientListBySubscriptionResponse` has been removed
+- Field `VirtualMachineRunCommandsClientListByVirtualMachineResult` of struct `VirtualMachineRunCommandsClientListByVirtualMachineResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineRunCommandsClientListByVirtualMachineResponse` has been removed
+- Field `SSHPublicKeysClientListByResourceGroupResult` of struct `SSHPublicKeysClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `SSHPublicKeysClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMExtensionsClientUpdatePollerResponse` has been removed
+- Field `AvailabilitySetsClientListResult` of struct `AvailabilitySetsClientListResponse` has been removed
+- Field `RawResponse` of struct `AvailabilitySetsClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetRollingUpgradesClientCancelResponse` has been removed
+- Field `CloudServicesClientGetResult` of struct `CloudServicesClientGetResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientGetResponse` has been removed
+- Field `VirtualMachinesClientListAvailableSizesResult` of struct `VirtualMachinesClientListAvailableSizesResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientListAvailableSizesResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientRestartResponse` has been removed
+- Field `GalleryApplicationVersionsClientGetResult` of struct `GalleryApplicationVersionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `GalleryApplicationVersionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMRunCommandsClientDeletePollerResponse` has been removed
+- Field `DedicatedHostGroupsClientListByResourceGroupResult` of struct `DedicatedHostGroupsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHostGroupsClientListByResourceGroupResponse` has been removed
+- Field `VirtualMachineImagesEdgeZoneClientListPublishersResult` of struct `VirtualMachineImagesEdgeZoneClientListPublishersResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImagesEdgeZoneClientListPublishersResponse` has been removed
+- Field `DiskRestorePointClientGrantAccessResult` of struct `DiskRestorePointClientGrantAccessResponse` has been removed
+- Field `RawResponse` of struct `DiskRestorePointClientGrantAccessResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMExtensionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `SharedGalleryImageVersionsClientListResult` of struct `SharedGalleryImageVersionsClientListResponse` has been removed
+- Field `RawResponse` of struct `SharedGalleryImageVersionsClientListResponse` has been removed
+- Field `RawResponse` of struct `DiskAccessesClientUpdateAPrivateEndpointConnectionPollerResponse` has been removed
+- Field `VirtualMachineExtensionsClientGetResult` of struct `VirtualMachineExtensionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineExtensionsClientGetResponse` has been removed
+- Field `DedicatedHostsClientGetResult` of struct `DedicatedHostsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHostsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DiskAccessesClientUpdatePollerResponse` has been removed
+- Field `CloudServiceOperatingSystemsClientGetOSVersionResult` of struct `CloudServiceOperatingSystemsClientGetOSVersionResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceOperatingSystemsClientGetOSVersionResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientCreateOrUpdatePollerResponse` has been removed
+- Field `VirtualMachineExtensionImagesClientListVersionsResult` of struct `VirtualMachineExtensionImagesClientListVersionsResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineExtensionImagesClientListVersionsResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineRunCommandsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `DiskEncryptionSetsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ImagesClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `GalleriesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesUpdateDomainClientWalkUpdateDomainResponse` has been removed
+- Field `DiskAccessesClientListResult` of struct `DiskAccessesClientListResponse` has been removed
+- Field `RawResponse` of struct `DiskAccessesClientListResponse` has been removed
+- Field `VirtualMachinesClientCreateOrUpdateResult` of struct `VirtualMachinesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMRunCommandsClientCreateOrUpdatePollerResponse` has been removed
+- Field `SSHPublicKeysClientListBySubscriptionResult` of struct `SSHPublicKeysClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `SSHPublicKeysClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientCapturePollerResponse` has been removed
+- Field `VirtualMachineScaleSetVMRunCommandsClientUpdateResult` of struct `VirtualMachineScaleSetVMRunCommandsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMRunCommandsClientUpdateResponse` has been removed
+- Field `VirtualMachineRunCommandsClientCreateOrUpdateResult` of struct `VirtualMachineRunCommandsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineRunCommandsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMRunCommandsClientDeleteResponse` has been removed
+- Field `VirtualMachineScaleSetsClientGetInstanceViewResult` of struct `VirtualMachineScaleSetsClientGetInstanceViewResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientGetInstanceViewResponse` has been removed
+- Field `CloudServicesClientGetInstanceViewResult` of struct `CloudServicesClientGetInstanceViewResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientGetInstanceViewResponse` has been removed
+- Field `RawResponse` of struct `GalleryImagesClientUpdatePollerResponse` has been removed
+- Field `GalleryApplicationVersionsClientCreateOrUpdateResult` of struct `GalleryApplicationVersionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `GalleryApplicationVersionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHostsClientUpdatePollerResponse` has been removed
+- Field `GalleryApplicationsClientCreateOrUpdateResult` of struct `GalleryApplicationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `GalleryApplicationsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DiskAccessesClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientDeleteInstancesResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientRevokeAccessResponse` has been removed
+- Field `AvailabilitySetsClientUpdateResult` of struct `AvailabilitySetsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AvailabilitySetsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `GallerySharingProfileClientUpdatePollerResponse` has been removed
+- Field `CloudServicesUpdateDomainClientListUpdateDomainsResult` of struct `CloudServicesUpdateDomainClientListUpdateDomainsResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesUpdateDomainClientListUpdateDomainsResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientRestartPollerResponse` has been removed
+- Field `AvailabilitySetsClientCreateOrUpdateResult` of struct `AvailabilitySetsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AvailabilitySetsClientCreateOrUpdateResponse` has been removed
+- Field `VirtualMachineScaleSetExtensionsClientGetResult` of struct `VirtualMachineScaleSetExtensionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetExtensionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `LogAnalyticsClientExportThrottledRequestsPollerResponse` has been removed
+- Field `VirtualMachinesClientListAllResult` of struct `VirtualMachinesClientListAllResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientListAllResponse` has been removed
+- Field `CapacityReservationsClientListByCapacityReservationGroupResult` of struct `CapacityReservationsClientListByCapacityReservationGroupResponse` has been removed
+- Field `RawResponse` of struct `CapacityReservationsClientListByCapacityReservationGroupResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientDeletePollerResponse` has been removed
+- Field `CloudServicesClientCreateOrUpdateResult` of struct `CloudServicesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientCreateOrUpdateResponse` has been removed
+- Field `DedicatedHostsClientUpdateResult` of struct `DedicatedHostsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHostsClientUpdateResponse` has been removed
+- Field `VirtualMachineScaleSetVMsClientRetrieveBootDiagnosticsDataResult` of struct `VirtualMachineScaleSetVMsClientRetrieveBootDiagnosticsDataResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientRetrieveBootDiagnosticsDataResponse` has been removed
+- Field `RawResponse` of struct `RestorePointsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientStartResponse` has been removed
+- Field `VirtualMachineExtensionsClientListResult` of struct `VirtualMachineExtensionsClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineExtensionsClientListResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientDeleteInstancesResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientReimageResponse` has been removed
+- Field `DedicatedHostsClientListByHostGroupResult` of struct `DedicatedHostsClientListByHostGroupResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHostsClientListByHostGroupResponse` has been removed
+- Field `DisksClientUpdateResult` of struct `DisksClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DisksClientUpdateResponse` has been removed
+- Field `VirtualMachineScaleSetsClientListAllResult` of struct `VirtualMachineScaleSetsClientListAllResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientListAllResponse` has been removed
+- Field `RawResponse` of struct `DiskRestorePointClientRevokeAccessResponse` has been removed
+- Field `CloudServiceOperatingSystemsClientListOSFamiliesResult` of struct `CloudServiceOperatingSystemsClientListOSFamiliesResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceOperatingSystemsClientListOSFamiliesResponse` has been removed
+- Field `RawResponse` of struct `DisksClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientRedeployResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceRoleInstancesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientRedeployPollerResponse` has been removed
+- Field `SharedGalleriesClientListResult` of struct `SharedGalleriesClientListResponse` has been removed
+- Field `RawResponse` of struct `SharedGalleriesClientListResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceRoleInstancesClientReimagePollerResponse` has been removed
+- Field `RawResponse` of struct `CloudServicesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientPowerOffResponse` has been removed
+- Field `RawResponse` of struct `GalleryApplicationVersionsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceRoleInstancesClientReimageResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientRunCommandPollerResponse` has been removed
+- Field `RawResponse` of struct `DiskAccessesClientDeleteAPrivateEndpointConnectionPollerResponse` has been removed
+- Field `VirtualMachineImagesClientListOffersResult` of struct `VirtualMachineImagesClientListOffersResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineImagesClientListOffersResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientPerformMaintenanceResponse` has been removed
+- Field `CommunityGalleriesClientGetResult` of struct `CommunityGalleriesClientGetResponse` has been removed
+- Field `RawResponse` of struct `CommunityGalleriesClientGetResponse` has been removed
+- Field `RawResponse` of struct `GalleryImageVersionsClientDeleteResponse` has been removed
+- Field `VirtualMachinesClientListResult` of struct `VirtualMachinesClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `DedicatedHostGroupsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineRunCommandsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientStartResponse` has been removed
+- Field `VirtualMachineExtensionImagesClientListTypesResult` of struct `VirtualMachineExtensionImagesClientListTypesResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineExtensionImagesClientListTypesResponse` has been removed
+- Field `RawResponse` of struct `GalleryImagesClientDeletePollerResponse` has been removed
+- Field `VirtualMachineScaleSetsClientForceRecoveryServiceFabricPlatformUpdateDomainWalkResult` of struct `VirtualMachineScaleSetsClientForceRecoveryServiceFabricPlatformUpdateDomainWalkResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetsClientForceRecoveryServiceFabricPlatformUpdateDomainWalkResponse` has been removed
+- Field `CapacityReservationGroupsClientCreateOrUpdateResult` of struct `CapacityReservationGroupsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `CapacityReservationGroupsClientCreateOrUpdateResponse` has been removed
+- Field `DiskEncryptionSetsClientGetResult` of struct `DiskEncryptionSetsClientGetResponse` has been removed
+- Field `RawResponse` of struct `DiskEncryptionSetsClientGetResponse` has been removed
+- Field `VirtualMachineScaleSetExtensionsClientListResult` of struct `VirtualMachineScaleSetExtensionsClientListResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetExtensionsClientListResponse` has been removed
+- Field `VirtualMachineScaleSetVMsClientUpdateResult` of struct `VirtualMachineScaleSetVMsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetRollingUpgradesClientStartExtensionUpgradeResponse` has been removed
+- Field `LogAnalyticsClientExportThrottledRequestsResult` of struct `LogAnalyticsClientExportThrottledRequestsResponse` has been removed
+- Field `RawResponse` of struct `LogAnalyticsClientExportThrottledRequestsResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachinesClientStartPollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetExtensionsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientRedeployResponse` has been removed
+- Field `RawResponse` of struct `VirtualMachineScaleSetVMsClientPerformMaintenancePollerResponse` has been removed
+- Field `RawResponse` of struct `CloudServiceRoleInstancesClientGetRemoteDesktopFileResponse` has been removed
+- Field `DiskEncryptionSetsClientListResult` of struct `DiskEncryptionSetsClientListResponse` has been removed
+- Field `RawResponse` of struct `DiskEncryptionSetsClientListResponse` has been removed
+- Field `SSHPublicKeysClientGetResult` of struct `SSHPublicKeysClientGetResponse` has been removed
+- Field `RawResponse` of struct `SSHPublicKeysClientGetResponse` has been removed
+- Field `RawResponse` of struct `ImagesClientCreateOrUpdatePollerResponse` has been removed
+
+### Features Added
+
+- New function `*GalleriesClientListPager.More() bool`
+- New function `*VirtualMachinesClientListByLocationPager.More() bool`
+- New function `*RestorePointCollectionsClientListPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*CapacityReservationGroupsClientListBySubscriptionPager.More() bool`
+- New function `*ProximityPlacementGroupsClientListBySubscriptionPager.More() bool`
+- New function `*DisksClientListPager.More() bool`
+- New function `*AvailabilitySetsClientListAvailableSizesPager.NextPage(context.Context) (AvailabilitySetsClientListAvailableSizesResponse, error)`
+- New function `*UsageClientListPager.More() bool`
+- New function `*ImagesClientListByResourceGroupPager.More() bool`
+- New function `*VirtualMachineRunCommandsClientListByVirtualMachinePager.More() bool`
+- New function `*GalleryApplicationVersionsClientListByGalleryApplicationPager.More() bool`
+- New function `*ProximityPlacementGroupsClientListByResourceGroupPager.More() bool`
+- New function `*SSHPublicKeysClientListBySubscriptionPager.More() bool`
+- New function `*SharedGalleryImageVersionsClientListPager.More() bool`
+- New function `*VirtualMachineScaleSetsClientListSKUsPager.More() bool`
+- New function `*DiskAccessesClientListByResourceGroupPager.More() bool`
+- New function `*VirtualMachineScaleSetsClientListAllPager.More() bool`
+- New function `*VirtualMachineScaleSetVMsClientListPager.More() bool`
+- New function `*CloudServicesClientListAllPager.More() bool`
+- New function `*ResourceSKUsClientListPager.More() bool`
+- New function `*DiskEncryptionSetsClientListByResourceGroupPager.More() bool`
+- New function `*SSHPublicKeysClientListByResourceGroupPager.More() bool`
+- New function `*DiskRestorePointClientListByRestorePointPager.More() bool`
+- New function `*CloudServiceRolesClientListPager.More() bool`
+- New function `*DisksClientListByResourceGroupPager.More() bool`
+- New function `*DiskEncryptionSetsClientListPager.More() bool`
+- New function `*AvailabilitySetsClientListAvailableSizesPager.More() bool`
+- New function `*CloudServicesClientListPager.More() bool`
+- New function `*OperationsClientListPager.NextPage(context.Context) (OperationsClientListResponse, error)`
+- New function `*RestorePointCollectionsClientListAllPager.More() bool`
+- New function `*VirtualMachineSizesClientListPager.NextPage(context.Context) (VirtualMachineSizesClientListResponse, error)`
+- New function `*GalleryImagesClientListByGalleryPager.More() bool`
+- New function `*VirtualMachineScaleSetVMRunCommandsClientListPager.More() bool`
+- New function `*SharedGalleriesClientListPager.More() bool`
+- New function `*VirtualMachineScaleSetsClientGetOSUpgradeHistoryPager.More() bool`
+- New function `*CloudServiceOperatingSystemsClientListOSFamiliesPager.More() bool`
+- New function `*CloudServiceOperatingSystemsClientListOSVersionsPager.More() bool`
+- New function `*DiskAccessesClientListPrivateEndpointConnectionsPager.More() bool`
+- New function `*DedicatedHostGroupsClientListBySubscriptionPager.More() bool`
+- New function `*CapacityReservationGroupsClientListByResourceGroupPager.More() bool`
+- New function `*GalleryImageVersionsClientListByGalleryImagePager.More() bool`
+- New function `*VirtualMachineScaleSetExtensionsClientListPager.More() bool`
+- New function `*VirtualMachineRunCommandsClientListPager.More() bool`
+- New function `*VirtualMachinesClientListAvailableSizesPager.More() bool`
+- New function `*CloudServicesUpdateDomainClientListUpdateDomainsPager.More() bool`
+- New function `*AvailabilitySetsClientListPager.More() bool`
+- New function `*DedicatedHostsClientListByHostGroupPager.More() bool`
+- New function `*VirtualMachineScaleSetsClientListByLocationPager.More() bool`
+- New function `*VirtualMachinesClientListAllPager.More() bool`
+- New function `*ImagesClientListPager.More() bool`
+- New function `*GalleryApplicationsClientListByGalleryPager.More() bool`
+- New function `*DiskAccessesClientListPager.More() bool`
+- New function `*CapacityReservationsClientListByCapacityReservationGroupPager.More() bool`
+- New function `*VirtualMachineScaleSetsClientListPager.More() bool`
+- New function `*VirtualMachinesClientListPager.More() bool`
+- New function `*DedicatedHostGroupsClientListByResourceGroupPager.More() bool`
+- New function `*SharedGalleryImagesClientListPager.More() bool`
+- New function `*SnapshotsClientListPager.More() bool`
+- New function `*DiskEncryptionSetsClientListAssociatedResourcesPager.More() bool`
+- New function `*VirtualMachineSizesClientListPager.More() bool`
+- New function `*GalleriesClientListByResourceGroupPager.More() bool`
+- New function `*SnapshotsClientListByResourceGroupPager.More() bool`
+- New function `*AvailabilitySetsClientListBySubscriptionPager.More() bool`
+- New function `*VirtualMachinesClientListAvailableSizesPager.NextPage(context.Context) (VirtualMachinesClientListAvailableSizesResponse, error)`
+- New function `*CloudServiceRoleInstancesClientListPager.More() bool`
+- New struct `AvailabilitySetsClientListAvailableSizesPager`
+- New struct `CloudError`
+- New struct `DiskRestorePointReplicationStatus`
+- New struct `GalleryArtifactSource`
+- New struct `ManagedArtifact`
+- New struct `OperationsClientListPager`
+- New struct `VirtualMachineSizesClientListPager`
+- New struct `VirtualMachinesClientListAvailableSizesPager`
+- New anonymous field `RestorePoint` in struct `RestorePointsClientGetResponse`
+- New anonymous field `GalleryImageVersion` in struct `GalleryImageVersionsClientGetResponse`
+- New anonymous field `GalleryApplicationVersion` in struct `GalleryApplicationVersionsClientCreateOrUpdateResponse`
+- New anonymous field `SSHPublicKeysGroupListResult` in struct `SSHPublicKeysClientListBySubscriptionResponse`
+- New anonymous field `VirtualMachineScaleSetExtension` in struct `VirtualMachineScaleSetExtensionsClientCreateOrUpdateResponse`
+- New anonymous field `VirtualMachineSizeListResult` in struct `VirtualMachineSizesClientListResponse`
+- New anonymous field `SSHPublicKeysGroupListResult` in struct `SSHPublicKeysClientListByResourceGroupResponse`
+- New field `VirtualMachineImageResourceArray` in struct `VirtualMachineImagesClientListSKUsResponse`
+- New anonymous field `ProximityPlacementGroupListResult` in struct `ProximityPlacementGroupsClientListBySubscriptionResponse`
+- New anonymous field `ProximityPlacementGroup` in struct `ProximityPlacementGroupsClientGetResponse`
+- New anonymous field `VirtualMachineScaleSetExtension` in struct `VirtualMachineScaleSetExtensionsClientGetResponse`
+- New anonymous field `CapacityReservationGroupListResult` in struct `CapacityReservationGroupsClientListByResourceGroupResponse`
+- New anonymous field `GalleryApplicationVersionList` in struct `GalleryApplicationVersionsClientListByGalleryApplicationResponse`
+- New anonymous field `Disk` in struct `DisksClientCreateOrUpdateResponse`
+- New anonymous field `ListUsagesResult` in struct `UsageClientListResponse`
+- New anonymous field `GalleryApplication` in struct `GalleryApplicationsClientCreateOrUpdateResponse`
+- New anonymous field `RoleInstance` in struct `CloudServiceRoleInstancesClientGetResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `DiskAccessList` in struct `DiskAccessesClientListResponse`
+- New anonymous field `VirtualMachineSizeListResult` in struct `VirtualMachinesClientListAvailableSizesResponse`
+- New anonymous field `DiskEncryptionSet` in struct `DiskEncryptionSetsClientGetResponse`
+- New anonymous field `CapacityReservationGroupListResult` in struct `CapacityReservationGroupsClientListBySubscriptionResponse`
+- New field `VirtualMachineImageResourceArray` in struct `VirtualMachineImagesClientListOffersResponse`
+- New anonymous field `DedicatedHostGroup` in struct `DedicatedHostGroupsClientCreateOrUpdateResponse`
+- New anonymous field `VirtualMachineRunCommand` in struct `VirtualMachineRunCommandsClientCreateOrUpdateResponse`
+- New anonymous field `Disk` in struct `DisksClientGetResponse`
+- New anonymous field `VirtualMachineScaleSetVMExtensionsListResult` in struct `VirtualMachineScaleSetVMExtensionsClientListResponse`
+- New anonymous field `RunCommandResult` in struct `VirtualMachineScaleSetVMsClientRunCommandResponse`
+- New anonymous field `CloudServiceListResult` in struct `CloudServicesClientListAllResponse`
+- New anonymous field `SharedGalleryImageList` in struct `SharedGalleryImagesClientListResponse`
+- New anonymous field `Gallery` in struct `GalleriesClientGetResponse`
+- New anonymous field `AvailabilitySetListResult` in struct `AvailabilitySetsClientListResponse`
+- New anonymous field `VirtualMachineScaleSetVMExtension` in struct `VirtualMachineScaleSetVMExtensionsClientCreateOrUpdateResponse`
+- New anonymous field `ProximityPlacementGroupListResult` in struct `ProximityPlacementGroupsClientListByResourceGroupResponse`
+- New anonymous field `GalleryImageList` in struct `GalleryImagesClientListByGalleryResponse`
+- New anonymous field `AvailabilitySet` in struct `AvailabilitySetsClientUpdateResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `DiskAccessesClientListPrivateEndpointConnectionsResponse`
+- New anonymous field `CloudServiceRoleListResult` in struct `CloudServiceRolesClientListResponse`
+- New anonymous field `UpdateDomain` in struct `CloudServicesUpdateDomainClientGetUpdateDomainResponse`
+- New anonymous field `GalleryImageVersion` in struct `GalleryImageVersionsClientUpdateResponse`
+- New anonymous field `RecoveryWalkResponse` in struct `VirtualMachineScaleSetsClientForceRecoveryServiceFabricPlatformUpdateDomainWalkResponse`
+- New anonymous field `ResourceSKUsResult` in struct `ResourceSKUsClientListResponse`
+- New anonymous field `CloudService` in struct `CloudServicesClientGetResponse`
+- New anonymous field `SharedGalleryImageVersion` in struct `SharedGalleryImageVersionsClientGetResponse`
+- New anonymous field `DiskEncryptionSet` in struct `DiskEncryptionSetsClientCreateOrUpdateResponse`
+- New anonymous field `ProximityPlacementGroup` in struct `ProximityPlacementGroupsClientUpdateResponse`
+- New anonymous field `VirtualMachineScaleSetListOSUpgradeHistory` in struct `VirtualMachineScaleSetsClientGetOSUpgradeHistoryResponse`
+- New anonymous field `Snapshot` in struct `SnapshotsClientCreateOrUpdateResponse`
+- New anonymous field `VirtualMachineExtension` in struct `VirtualMachineExtensionsClientGetResponse`
+- New anonymous field `DedicatedHost` in struct `DedicatedHostsClientUpdateResponse`
+- New anonymous field `VirtualMachineScaleSetVMInstanceView` in struct `VirtualMachineScaleSetVMsClientGetInstanceViewResponse`
+- New anonymous field `ImageListResult` in struct `ImagesClientListResponse`
+- New anonymous field `VirtualMachineScaleSetVM` in struct `VirtualMachineScaleSetVMsClientUpdateResponse`
+- New anonymous field `GalleryImage` in struct `GalleryImagesClientUpdateResponse`
+- New anonymous field `Snapshot` in struct `SnapshotsClientGetResponse`
+- New anonymous field `RetrieveBootDiagnosticsDataResult` in struct `VirtualMachineScaleSetVMsClientRetrieveBootDiagnosticsDataResponse`
+- New anonymous field `CapacityReservation` in struct `CapacityReservationsClientCreateOrUpdateResponse`
+- New anonymous field `AvailabilitySet` in struct `AvailabilitySetsClientCreateOrUpdateResponse`
+- New anonymous field `CloudService` in struct `CloudServicesClientUpdateResponse`
+- New anonymous field `VirtualMachineScaleSetVM` in struct `VirtualMachineScaleSetVMsClientGetResponse`
+- New anonymous field `Gallery` in struct `GalleriesClientCreateOrUpdateResponse`
+- New anonymous field `CommunityGallery` in struct `CommunityGalleriesClientGetResponse`
+- New anonymous field `CommunityGalleryImage` in struct `CommunityGalleryImagesClientGetResponse`
+- New anonymous field `SharedGalleryList` in struct `SharedGalleriesClientListResponse`
+- New anonymous field `Image` in struct `ImagesClientCreateOrUpdateResponse`
+- New anonymous field `VirtualMachineListResult` in struct `VirtualMachinesClientListResponse`
+- New anonymous field `DiskAccess` in struct `DiskAccessesClientCreateOrUpdateResponse`
+- New anonymous field `RestorePointCollection` in struct `RestorePointCollectionsClientGetResponse`
+- New field `Body` in struct `CloudServiceRoleInstancesClientGetRemoteDesktopFileResponse`
+- New anonymous field `RestorePointCollection` in struct `RestorePointCollectionsClientCreateOrUpdateResponse`
+- New anonymous field `CapacityReservation` in struct `CapacityReservationsClientUpdateResponse`
+- New anonymous field `RunCommandListResult` in struct `VirtualMachineRunCommandsClientListResponse`
+- New anonymous field `VirtualMachineScaleSet` in struct `VirtualMachineScaleSetsClientCreateOrUpdateResponse`
+- New anonymous field `VirtualMachineImage` in struct `VirtualMachineImagesClientGetResponse`
+- New anonymous field `AccessURI` in struct `SnapshotsClientGrantAccessResponse`
+- New anonymous field `VirtualMachineRunCommandsListResult` in struct `VirtualMachineRunCommandsClientListByVirtualMachineResponse`
+- New anonymous field `CloudServiceRole` in struct `CloudServiceRolesClientGetResponse`
+- New anonymous field `GalleryImageVersion` in struct `GalleryImageVersionsClientCreateOrUpdateResponse`
+- New anonymous field `VirtualMachineListResult` in struct `VirtualMachinesClientListByLocationResponse`
+- New anonymous field `Gallery` in struct `GalleriesClientUpdateResponse`
+- New anonymous field `VirtualMachine` in struct `VirtualMachinesClientCreateOrUpdateResponse`
+- New anonymous field `DiskAccess` in struct `DiskAccessesClientUpdateResponse`
+- New anonymous field `CloudService` in struct `CloudServicesClientCreateOrUpdateResponse`
+- New anonymous field `VirtualMachineExtensionImage` in struct `VirtualMachineExtensionImagesClientGetResponse`
+- New anonymous field `CapacityReservationGroup` in struct `CapacityReservationGroupsClientGetResponse`
+- New anonymous field `VirtualMachine` in struct `VirtualMachinesClientUpdateResponse`
+- New anonymous field `ResourceURIList` in struct `DiskEncryptionSetsClientListAssociatedResourcesResponse`
+- New anonymous field `CommunityGalleryImageVersion` in struct `CommunityGalleryImageVersionsClientGetResponse`
+- New anonymous field `VirtualMachineRunCommand` in struct `VirtualMachineScaleSetVMRunCommandsClientCreateOrUpdateResponse`
+- New anonymous field `VirtualMachineScaleSetListWithLinkResult` in struct `VirtualMachineScaleSetsClientListAllResponse`
+- New field `VirtualMachineExtensionImageArray` in struct `VirtualMachineExtensionImagesClientListTypesResponse`
+- New anonymous field `RollingUpgradeStatusInfo` in struct `VirtualMachineScaleSetRollingUpgradesClientGetLatestResponse`
+- New anonymous field `Snapshot` in struct `SnapshotsClientUpdateResponse`
+- New anonymous field `RoleInstanceListResult` in struct `CloudServiceRoleInstancesClientListResponse`
+- New anonymous field `VirtualMachineScaleSetVMExtension` in struct `VirtualMachineScaleSetVMExtensionsClientGetResponse`
+- New anonymous field `DedicatedHost` in struct `DedicatedHostsClientCreateOrUpdateResponse`
+- New anonymous field `SSHPublicKeyGenerateKeyPairResult` in struct `SSHPublicKeysClientGenerateKeyPairResponse`
+- New anonymous field `DedicatedHostGroup` in struct `DedicatedHostGroupsClientGetResponse`
+- New anonymous field `SnapshotList` in struct `SnapshotsClientListResponse`
+- New anonymous field `GalleryImage` in struct `GalleryImagesClientGetResponse`
+- New anonymous field `VirtualMachineScaleSetExtensionListResult` in struct `VirtualMachineScaleSetExtensionsClientListResponse`
+- New anonymous field `GalleryApplicationVersion` in struct `GalleryApplicationVersionsClientGetResponse`
+- New anonymous field `DiskList` in struct `DisksClientListByResourceGroupResponse`
+- New anonymous field `ImageListResult` in struct `ImagesClientListByResourceGroupResponse`
+- New anonymous field `GalleryApplicationVersion` in struct `GalleryApplicationVersionsClientUpdateResponse`
+- New anonymous field `OSFamilyListResult` in struct `CloudServiceOperatingSystemsClientListOSFamiliesResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `DiskAccessesClientGetPrivateLinkResourcesResponse`
+- New anonymous field `VirtualMachine` in struct `VirtualMachinesClientGetResponse`
+- New anonymous field `VirtualMachineScaleSetExtension` in struct `VirtualMachineScaleSetExtensionsClientUpdateResponse`
+- New anonymous field `LogAnalyticsOperationResult` in struct `LogAnalyticsClientExportRequestRateByIntervalResponse`
+- New anonymous field `AvailabilitySetListResult` in struct `AvailabilitySetsClientListBySubscriptionResponse`
+- New anonymous field `DedicatedHost` in struct `DedicatedHostsClientGetResponse`
+- New anonymous field `UpdateDomainListResult` in struct `CloudServicesUpdateDomainClientListUpdateDomainsResponse`
+- New anonymous field `RunCommandResult` in struct `VirtualMachinesClientRunCommandResponse`
+- New anonymous field `SSHPublicKeyResource` in struct `SSHPublicKeysClientUpdateResponse`
+- New anonymous field `DedicatedHostGroupListResult` in struct `DedicatedHostGroupsClientListByResourceGroupResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `DiskAccessesClientGetAPrivateEndpointConnectionResponse`
+- New anonymous field `VirtualMachineScaleSetListSKUsResult` in struct `VirtualMachineScaleSetsClientListSKUsResponse`
+- New anonymous field `DedicatedHostGroup` in struct `DedicatedHostGroupsClientUpdateResponse`
+- New anonymous field `CapacityReservationGroup` in struct `CapacityReservationGroupsClientCreateOrUpdateResponse`
+- New anonymous field `AccessURI` in struct `DiskRestorePointClientGrantAccessResponse`
+- New anonymous field `RestorePointCollectionListResult` in struct `RestorePointCollectionsClientListAllResponse`
+- New anonymous field `SharedGalleryImage` in struct `SharedGalleryImagesClientGetResponse`
+- New anonymous field `VirtualMachineScaleSetVMListResult` in struct `VirtualMachineScaleSetVMsClientListResponse`
+- New anonymous field `OSFamily` in struct `CloudServiceOperatingSystemsClientGetOSFamilyResponse`
+- New anonymous field `VirtualMachineScaleSetListResult` in struct `VirtualMachineScaleSetsClientListResponse`
+- New anonymous field `CloudServiceListResult` in struct `CloudServicesClientListResponse`
+- New anonymous field `VirtualMachineRunCommand` in struct `VirtualMachineRunCommandsClientGetByVirtualMachineResponse`
+- New anonymous field `SharedGalleryImageVersionList` in struct `SharedGalleryImageVersionsClientListResponse`
+- New field `VirtualMachineImageResourceArray` in struct `VirtualMachineImagesEdgeZoneClientListOffersResponse`
+- New anonymous field `VirtualMachineRunCommand` in struct `VirtualMachineRunCommandsClientUpdateResponse`
+- New anonymous field `VirtualMachineSizeListResult` in struct `AvailabilitySetsClientListAvailableSizesResponse`
+- New anonymous field `RunCommandDocument` in struct `VirtualMachineRunCommandsClientGetResponse`
+- New anonymous field `DiskRestorePointList` in struct `DiskRestorePointClientListByRestorePointResponse`
+- New anonymous field `VirtualMachineCaptureResult` in struct `VirtualMachinesClientCaptureResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `DiskAccessesClientUpdateAPrivateEndpointConnectionResponse`
+- New anonymous field `Image` in struct `ImagesClientUpdateResponse`
+- New anonymous field `DiskRestorePoint` in struct `DiskRestorePointClientGetResponse`
+- New anonymous field `CloudServiceInstanceView` in struct `CloudServicesClientGetInstanceViewResponse`
+- New anonymous field `RetrieveBootDiagnosticsDataResult` in struct `VirtualMachinesClientRetrieveBootDiagnosticsDataResponse`
+- New anonymous field `VirtualMachineInstanceView` in struct `VirtualMachinesClientInstanceViewResponse`
+- New anonymous field `VirtualMachineScaleSetInstanceView` in struct `VirtualMachineScaleSetsClientGetInstanceViewResponse`
+- New anonymous field `RoleInstanceView` in struct `CloudServiceRoleInstancesClientGetInstanceViewResponse`
+- New anonymous field `OSVersionListResult` in struct `CloudServiceOperatingSystemsClientListOSVersionsResponse`
+- New anonymous field `OSVersion` in struct `CloudServiceOperatingSystemsClientGetOSVersionResponse`
+- New anonymous field `GalleryList` in struct `GalleriesClientListResponse`
+- New anonymous field `AvailabilitySet` in struct `AvailabilitySetsClientGetResponse`
+- New anonymous field `VirtualMachineScaleSetVMExtension` in struct `VirtualMachineScaleSetVMExtensionsClientUpdateResponse`
+- New anonymous field `RestorePointCollection` in struct `RestorePointCollectionsClientUpdateResponse`
+- New anonymous field `DedicatedHostGroupListResult` in struct `DedicatedHostGroupsClientListBySubscriptionResponse`
+- New anonymous field `CapacityReservation` in struct `CapacityReservationsClientGetResponse`
+- New anonymous field `VirtualMachineScaleSet` in struct `VirtualMachineScaleSetsClientGetResponse`
+- New anonymous field `CapacityReservationGroup` in struct `CapacityReservationGroupsClientUpdateResponse`
+- New anonymous field `VirtualMachineExtension` in struct `VirtualMachineExtensionsClientCreateOrUpdateResponse`
+- New anonymous field `VirtualMachineInstallPatchesResult` in struct `VirtualMachinesClientInstallPatchesResponse`
+- New anonymous field `SnapshotList` in struct `SnapshotsClientListByResourceGroupResponse`
+- New anonymous field `RestorePointCollectionListResult` in struct `RestorePointCollectionsClientListResponse`
+- New field `VirtualMachineExtensionImageArray` in struct `VirtualMachineExtensionImagesClientListVersionsResponse`
+- New anonymous field `DedicatedHostListResult` in struct `DedicatedHostsClientListByHostGroupResponse`
+- New anonymous field `GalleryApplication` in struct `GalleryApplicationsClientGetResponse`
+- New anonymous field `SharingUpdate` in struct `GallerySharingProfileClientUpdateResponse`
+- New anonymous field `ProximityPlacementGroup` in struct `ProximityPlacementGroupsClientCreateOrUpdateResponse`
+- New anonymous field `DiskAccess` in struct `DiskAccessesClientGetResponse`
+- New anonymous field `DiskList` in struct `DisksClientListResponse`
+- New anonymous field `VirtualMachineScaleSetListResult` in struct `VirtualMachineScaleSetsClientListByLocationResponse`
+- New anonymous field `DiskEncryptionSetList` in struct `DiskEncryptionSetsClientListResponse`
+- New anonymous field `DiskEncryptionSetList` in struct `DiskEncryptionSetsClientListByResourceGroupResponse`
+- New field `VirtualMachineImageResourceArray` in struct `VirtualMachineImagesClientListResponse`
+- New anonymous field `DiskAccessList` in struct `DiskAccessesClientListByResourceGroupResponse`
+- New anonymous field `VirtualMachineAssessPatchesResult` in struct `VirtualMachinesClientAssessPatchesResponse`
+- New field `VirtualMachineImageResourceArray` in struct `VirtualMachineImagesEdgeZoneClientListPublishersResponse`
+- New field `VirtualMachineImageResourceArray` in struct `VirtualMachineImagesEdgeZoneClientListSKUsResponse`
+- New anonymous field `AccessURI` in struct `DisksClientGrantAccessResponse`
+- New anonymous field `VirtualMachineImage` in struct `VirtualMachineImagesEdgeZoneClientGetResponse`
+- New field `VirtualMachineImageResourceArray` in struct `VirtualMachineImagesClientListPublishersResponse`
+- New anonymous field `VirtualMachineRunCommandsListResult` in struct `VirtualMachineScaleSetVMRunCommandsClientListResponse`
+- New anonymous field `GalleryApplicationList` in struct `GalleryApplicationsClientListByGalleryResponse`
+- New anonymous field `GalleryApplication` in struct `GalleryApplicationsClientUpdateResponse`
+- New anonymous field `VirtualMachineExtension` in struct `VirtualMachineExtensionsClientUpdateResponse`
+- New anonymous field `VirtualMachineRunCommand` in struct `VirtualMachineScaleSetVMRunCommandsClientUpdateResponse`
+- New anonymous field `DiskEncryptionSet` in struct `DiskEncryptionSetsClientUpdateResponse`
+- New anonymous field `GalleryImage` in struct `GalleryImagesClientCreateOrUpdateResponse`
+- New anonymous field `VirtualMachineRunCommand` in struct `VirtualMachineScaleSetVMRunCommandsClientGetResponse`
+- New anonymous field `LogAnalyticsOperationResult` in struct `LogAnalyticsClientExportThrottledRequestsResponse`
+- New anonymous field `GalleryImageVersionList` in struct `GalleryImageVersionsClientListByGalleryImageResponse`
+- New anonymous field `Image` in struct `ImagesClientGetResponse`
+- New anonymous field `GalleryList` in struct `GalleriesClientListByResourceGroupResponse`
+- New anonymous field `VirtualMachineScaleSet` in struct `VirtualMachineScaleSetsClientUpdateResponse`
+- New anonymous field `SSHPublicKeyResource` in struct `SSHPublicKeysClientGetResponse`
+- New anonymous field `SSHPublicKeyResource` in struct `SSHPublicKeysClientCreateResponse`
+- New anonymous field `Disk` in struct `DisksClientUpdateResponse`
+- New anonymous field `RestorePoint` in struct `RestorePointsClientCreateResponse`
+- New anonymous field `SharedGallery` in struct `SharedGalleriesClientGetResponse`
+- New anonymous field `VirtualMachineListResult` in struct `VirtualMachinesClientListAllResponse`
+- New anonymous field `VirtualMachineExtensionsListResult` in struct `VirtualMachineExtensionsClientListResponse`
+- New field `VirtualMachineImageResourceArray` in struct `VirtualMachineImagesEdgeZoneClientListResponse`
+- New anonymous field `CapacityReservationListResult` in struct `CapacityReservationsClientListByCapacityReservationGroupResponse`
+
+
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `VirtualMachineExtensionProperties.Settings` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `VirtualMachineExtensionProperties.ProtectedSettings` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `VirtualMachineScaleSetExtensionProperties.ProtectedSettings` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `VirtualMachineScaleSetExtensionProperties.Settings` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `VirtualMachineCaptureResult.Parameters` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `VirtualMachineCaptureResult.Resources` has been changed from `[]map[string]interface{}` to `[]interface{}`
+- Type of `VirtualMachineExtensionUpdateProperties.ProtectedSettings` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `VirtualMachineExtensionUpdateProperties.Settings` has been changed from `map[string]interface{}` to `interface{}`
+- Struct `CloudError` has been removed
+- Struct `GalleryArtifactSource` has been removed
+- Struct `ManagedArtifact` has been removed
+
+### Features Added
+
+- New const `RepairActionReplace`
+- New const `RestorePointExpandOptionsInstanceView`
+- New const `SecurityTypesConfidentialVM`
+- New const `SecurityEncryptionTypesDiskWithVMGuestState`
+- New const `SecurityEncryptionTypesVMGuestStateOnly`
+- New const `RepairActionRestart`
+- New const `RepairActionReimage`
+- New function `SecurityEncryptionTypes.ToPtr() *SecurityEncryptionTypes`
+- New function `RestorePointInstanceView.MarshalJSON() ([]byte, error)`
+- New function `*VirtualMachineScaleSetProperties.UnmarshalJSON([]byte) error`
+- New function `PossibleSecurityEncryptionTypesValues() []SecurityEncryptionTypes`
+- New function `DedicatedHostsClientRestartPollerResponse.PollUntilDone(context.Context, time.Duration) (DedicatedHostsClientRestartResponse, error)`
+- New function `*DedicatedHostsClientRestartPoller.FinalResponse(context.Context) (DedicatedHostsClientRestartResponse, error)`
+- New function `RestorePointExpandOptions.ToPtr() *RestorePointExpandOptions`
+- New function `*DedicatedHostsClientRestartPoller.ResumeToken() (string, error)`
+- New function `*DedicatedHostsClientRestartPollerResponse.Resume(context.Context, *DedicatedHostsClient, string) error`
+- New function `*VirtualMachineProperties.UnmarshalJSON([]byte) error`
+- New function `RepairAction.ToPtr() *RepairAction`
+- New function `*DedicatedHostsClientRestartPoller.Poll(context.Context) (*http.Response, error)`
+- New function `PossibleRepairActionValues() []RepairAction`
+- New function `VirtualMachineProperties.MarshalJSON() ([]byte, error)`
+- New function `VirtualMachineScaleSetProperties.MarshalJSON() ([]byte, error)`
+- New function `*DedicatedHostsClientRestartPoller.Done() bool`
+- New function `*DedicatedHostsClient.BeginRestart(context.Context, string, string, string, *DedicatedHostsClientBeginRestartOptions) (DedicatedHostsClientRestartPollerResponse, error)`
+- New function `PossibleRestorePointExpandOptionsValues() []RestorePointExpandOptions`
+- New struct `DedicatedHostsClientBeginRestartOptions`
+- New struct `DedicatedHostsClientRestartPoller`
+- New struct `DedicatedHostsClientRestartPollerResponse`
+- New struct `DedicatedHostsClientRestartResponse`
+- New struct `DiskRestorePointInstanceView`
+- New struct `RestorePointInstanceView`
+- New struct `VMDiskSecurityProfile`
+- New struct `VirtualMachineScaleSetHardwareProfile`
+- New field `ProtectedSettingsFromKeyVault` in struct `VirtualMachineScaleSetExtensionProperties`
+- New field `SecurityProfile` in struct `ManagedDiskParameters`
+- New field `ProtectedSettingsFromKeyVault` in struct `VirtualMachineExtensionProperties`
+- New field `Filter` in struct `VirtualMachinesClientListAllOptions`
+- New field `TimeCreated` in struct `DedicatedHostProperties`
+- New field `PlacementGroupID` in struct `VirtualMachineScaleSetsClientForceRecoveryServiceFabricPlatformUpdateDomainWalkOptions`
+- New field `Zone` in struct `VirtualMachineScaleSetsClientForceRecoveryServiceFabricPlatformUpdateDomainWalkOptions`
+- New field `HardwareProfile` in struct `VirtualMachineScaleSetVMProfile`
+- New field `TimeCreated` in struct `VirtualMachineScaleSetProperties`
+- New field `Expand` in struct `RestorePointsClientGetOptions`
+- New field `TimeCreated` in struct `VirtualMachineProperties`
+- New field `Filter` in struct `VirtualMachinesClientListOptions`
+- New field `ProtectedSettingsFromKeyVault` in struct `VirtualMachineExtensionUpdateProperties`
+- New field `PublicIPPrefix` in struct `VirtualMachineScaleSetUpdatePublicIPAddressConfigurationProperties`
+- New field `CommunityGalleryImageID` in struct `ImageReference`
+- New field `AllowExtensionOperations` in struct `VirtualMachineScaleSetOSProfile`
+- New field `SecurityProfile` in struct `VirtualMachineScaleSetManagedDiskParameters`
+- New field `TimeCreated` in struct `CapacityReservationProperties`
+- New field `InstanceView` in struct `RestorePointProperties`
+- New field `SourceRestorePoint` in struct `RestorePointProperties`
+- New field `RepairAction` in struct `AutomaticRepairsPolicy`
+
+
 ## 0.3.0 (2022-01-13)
 ### Breaking Changes
 

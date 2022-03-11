@@ -68,7 +68,7 @@ func (client *ContainerAppsRevisionsClient) ActivateRevision(ctx context.Context
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ContainerAppsRevisionsClientActivateRevisionResponse{}, runtime.NewResponseError(resp)
 	}
-	return ContainerAppsRevisionsClientActivateRevisionResponse{RawResponse: resp}, nil
+	return ContainerAppsRevisionsClientActivateRevisionResponse{}, nil
 }
 
 // activateRevisionCreateRequest creates the ActivateRevision request.
@@ -120,7 +120,7 @@ func (client *ContainerAppsRevisionsClient) DeactivateRevision(ctx context.Conte
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ContainerAppsRevisionsClientDeactivateRevisionResponse{}, runtime.NewResponseError(resp)
 	}
-	return ContainerAppsRevisionsClientDeactivateRevisionResponse{RawResponse: resp}, nil
+	return ContainerAppsRevisionsClientDeactivateRevisionResponse{}, nil
 }
 
 // deactivateRevisionCreateRequest creates the DeactivateRevision request.
@@ -207,7 +207,7 @@ func (client *ContainerAppsRevisionsClient) getRevisionCreateRequest(ctx context
 
 // getRevisionHandleResponse handles the GetRevision response.
 func (client *ContainerAppsRevisionsClient) getRevisionHandleResponse(resp *http.Response) (ContainerAppsRevisionsClientGetRevisionResponse, error) {
-	result := ContainerAppsRevisionsClientGetRevisionResponse{RawResponse: resp}
+	result := ContainerAppsRevisionsClientGetRevisionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Revision); err != nil {
 		return ContainerAppsRevisionsClientGetRevisionResponse{}, err
 	}
@@ -260,7 +260,7 @@ func (client *ContainerAppsRevisionsClient) listRevisionsCreateRequest(ctx conte
 
 // listRevisionsHandleResponse handles the ListRevisions response.
 func (client *ContainerAppsRevisionsClient) listRevisionsHandleResponse(resp *http.Response) (ContainerAppsRevisionsClientListRevisionsResponse, error) {
-	result := ContainerAppsRevisionsClientListRevisionsResponse{RawResponse: resp}
+	result := ContainerAppsRevisionsClientListRevisionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RevisionCollection); err != nil {
 		return ContainerAppsRevisionsClientListRevisionsResponse{}, err
 	}
@@ -286,7 +286,7 @@ func (client *ContainerAppsRevisionsClient) RestartRevision(ctx context.Context,
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return ContainerAppsRevisionsClientRestartRevisionResponse{}, runtime.NewResponseError(resp)
 	}
-	return ContainerAppsRevisionsClientRestartRevisionResponse{RawResponse: resp}, nil
+	return ContainerAppsRevisionsClientRestartRevisionResponse{}, nil
 }
 
 // restartRevisionCreateRequest creates the RestartRevision request.

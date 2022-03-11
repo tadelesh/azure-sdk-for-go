@@ -35,17 +35,17 @@ type NetworkExperimentProfilesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewNetworkExperimentProfilesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *NetworkExperimentProfilesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &NetworkExperimentProfilesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *NetworkExperimentProfilesClient) BeginCreateOrUpdate(ctx context.C
 	if err != nil {
 		return NetworkExperimentProfilesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := NetworkExperimentProfilesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := NetworkExperimentProfilesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("NetworkExperimentProfilesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return NetworkExperimentProfilesClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *NetworkExperimentProfilesClient) BeginDelete(ctx context.Context, 
 	if err != nil {
 		return NetworkExperimentProfilesClientDeletePollerResponse{}, err
 	}
-	result := NetworkExperimentProfilesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := NetworkExperimentProfilesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("NetworkExperimentProfilesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return NetworkExperimentProfilesClientDeletePollerResponse{}, err
@@ -234,7 +230,7 @@ func (client *NetworkExperimentProfilesClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *NetworkExperimentProfilesClient) getHandleResponse(resp *http.Response) (NetworkExperimentProfilesClientGetResponse, error) {
-	result := NetworkExperimentProfilesClientGetResponse{RawResponse: resp}
+	result := NetworkExperimentProfilesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Profile); err != nil {
 		return NetworkExperimentProfilesClientGetResponse{}, err
 	}
@@ -277,7 +273,7 @@ func (client *NetworkExperimentProfilesClient) listCreateRequest(ctx context.Con
 
 // listHandleResponse handles the List response.
 func (client *NetworkExperimentProfilesClient) listHandleResponse(resp *http.Response) (NetworkExperimentProfilesClientListResponse, error) {
-	result := NetworkExperimentProfilesClientListResponse{RawResponse: resp}
+	result := NetworkExperimentProfilesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProfileList); err != nil {
 		return NetworkExperimentProfilesClientListResponse{}, err
 	}
@@ -325,7 +321,7 @@ func (client *NetworkExperimentProfilesClient) listByResourceGroupCreateRequest(
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *NetworkExperimentProfilesClient) listByResourceGroupHandleResponse(resp *http.Response) (NetworkExperimentProfilesClientListByResourceGroupResponse, error) {
-	result := NetworkExperimentProfilesClientListByResourceGroupResponse{RawResponse: resp}
+	result := NetworkExperimentProfilesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProfileList); err != nil {
 		return NetworkExperimentProfilesClientListByResourceGroupResponse{}, err
 	}
@@ -344,9 +340,7 @@ func (client *NetworkExperimentProfilesClient) BeginUpdate(ctx context.Context, 
 	if err != nil {
 		return NetworkExperimentProfilesClientUpdatePollerResponse{}, err
 	}
-	result := NetworkExperimentProfilesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := NetworkExperimentProfilesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("NetworkExperimentProfilesClient.Update", "", resp, client.pl)
 	if err != nil {
 		return NetworkExperimentProfilesClientUpdatePollerResponse{}, err

@@ -105,7 +105,7 @@ func (client *ExternalSecuritySolutionsClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *ExternalSecuritySolutionsClient) getHandleResponse(resp *http.Response) (ExternalSecuritySolutionsClientGetResponse, error) {
-	result := ExternalSecuritySolutionsClientGetResponse{RawResponse: resp}
+	result := ExternalSecuritySolutionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExternalSecuritySolution); err != nil {
 		return ExternalSecuritySolutionsClientGetResponse{}, err
 	}
@@ -148,7 +148,7 @@ func (client *ExternalSecuritySolutionsClient) listCreateRequest(ctx context.Con
 
 // listHandleResponse handles the List response.
 func (client *ExternalSecuritySolutionsClient) listHandleResponse(resp *http.Response) (ExternalSecuritySolutionsClientListResponse, error) {
-	result := ExternalSecuritySolutionsClientListResponse{RawResponse: resp}
+	result := ExternalSecuritySolutionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExternalSecuritySolutionList); err != nil {
 		return ExternalSecuritySolutionsClientListResponse{}, err
 	}
@@ -195,7 +195,7 @@ func (client *ExternalSecuritySolutionsClient) listByHomeRegionCreateRequest(ctx
 
 // listByHomeRegionHandleResponse handles the ListByHomeRegion response.
 func (client *ExternalSecuritySolutionsClient) listByHomeRegionHandleResponse(resp *http.Response) (ExternalSecuritySolutionsClientListByHomeRegionResponse, error) {
-	result := ExternalSecuritySolutionsClientListByHomeRegionResponse{RawResponse: resp}
+	result := ExternalSecuritySolutionsClientListByHomeRegionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExternalSecuritySolutionList); err != nil {
 		return ExternalSecuritySolutionsClientListByHomeRegionResponse{}, err
 	}

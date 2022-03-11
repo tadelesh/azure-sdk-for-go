@@ -1,5 +1,233 @@
 # Release History
 
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*AccessPoliciesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(AccessPoliciesClientListResponse, error)`
+- Function `*PipelineTopologiesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PipelineTopologiesClientListResponse, error)`
+- Function `*LivePipelinesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(LivePipelinesClientListResponse, error)`
+- Function `*EdgeModulesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(EdgeModulesClientListResponse, error)`
+- Function `*VideosClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(VideosClientListResponse, error)`
+- Function `*PipelineJobsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PipelineJobsClientListResponse, error)`
+- Function `*PipelineJobsClientListPager.Err` has been removed
+- Function `*VideosClientListPager.PageResponse` has been removed
+- Function `*PipelineTopologiesClientListPager.Err` has been removed
+- Function `*EdgeModulesClientListPager.Err` has been removed
+- Function `*LivePipelinesClientListPager.Err` has been removed
+- Function `*AccessPoliciesClientListPager.Err` has been removed
+- Function `*AccessPoliciesClientListPager.PageResponse` has been removed
+- Function `*LivePipelinesClientListPager.PageResponse` has been removed
+- Function `*VideosClientListPager.Err` has been removed
+- Function `*PipelineTopologiesClientListPager.PageResponse` has been removed
+- Function `*PipelineJobsClientListPager.PageResponse` has been removed
+- Function `*EdgeModulesClientListPager.PageResponse` has been removed
+- Struct `AccessPoliciesClientCreateOrUpdateResult` has been removed
+- Struct `AccessPoliciesClientGetResult` has been removed
+- Struct `AccessPoliciesClientListResult` has been removed
+- Struct `AccessPoliciesClientUpdateResult` has been removed
+- Struct `EdgeModulesClientCreateOrUpdateResult` has been removed
+- Struct `EdgeModulesClientGetResult` has been removed
+- Struct `EdgeModulesClientListProvisioningTokenResult` has been removed
+- Struct `EdgeModulesClientListResult` has been removed
+- Struct `LivePipelineOperationStatusesClientGetResult` has been removed
+- Struct `LivePipelinesClientCreateOrUpdateResult` has been removed
+- Struct `LivePipelinesClientGetResult` has been removed
+- Struct `LivePipelinesClientListResult` has been removed
+- Struct `LivePipelinesClientUpdateResult` has been removed
+- Struct `LocationsClientCheckNameAvailabilityResult` has been removed
+- Struct `OperationResultsClientGetResult` has been removed
+- Struct `OperationStatusesClientGetResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PipelineJobOperationStatusesClientGetResult` has been removed
+- Struct `PipelineJobsClientCreateOrUpdateResult` has been removed
+- Struct `PipelineJobsClientGetResult` has been removed
+- Struct `PipelineJobsClientListResult` has been removed
+- Struct `PipelineJobsClientUpdateResult` has been removed
+- Struct `PipelineTopologiesClientCreateOrUpdateResult` has been removed
+- Struct `PipelineTopologiesClientGetResult` has been removed
+- Struct `PipelineTopologiesClientListResult` has been removed
+- Struct `PipelineTopologiesClientUpdateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientCreateOrUpdateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsOperationResultsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsOperationStatusesClientGetResult` has been removed
+- Struct `PrivateLinkResourcesClientGetResult` has been removed
+- Struct `PrivateLinkResourcesClientListResult` has been removed
+- Struct `VideoAnalyzersClientCreateOrUpdateResult` has been removed
+- Struct `VideoAnalyzersClientGetResult` has been removed
+- Struct `VideoAnalyzersClientListBySubscriptionResult` has been removed
+- Struct `VideoAnalyzersClientListResult` has been removed
+- Struct `VideoAnalyzersClientUpdateResult` has been removed
+- Struct `VideosClientCreateOrUpdateResult` has been removed
+- Struct `VideosClientGetResult` has been removed
+- Struct `VideosClientListContentTokenResult` has been removed
+- Struct `VideosClientListResult` has been removed
+- Struct `VideosClientUpdateResult` has been removed
+- Field `AccessPoliciesClientUpdateResult` of struct `AccessPoliciesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccessPoliciesClientUpdateResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `LivePipelinesClientActivatePollerResponse` has been removed
+- Field `LivePipelineOperationStatusesClientGetResult` of struct `LivePipelineOperationStatusesClientGetResponse` has been removed
+- Field `RawResponse` of struct `LivePipelineOperationStatusesClientGetResponse` has been removed
+- Field `PrivateEndpointConnectionsOperationStatusesClientGetResult` of struct `PrivateEndpointConnectionsOperationStatusesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsOperationStatusesClientGetResponse` has been removed
+- Field `VideoAnalyzersClientListResult` of struct `VideoAnalyzersClientListResponse` has been removed
+- Field `RawResponse` of struct `VideoAnalyzersClientListResponse` has been removed
+- Field `PrivateLinkResourcesClientGetResult` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientGetResponse` has been removed
+- Field `PipelineTopologiesClientUpdateResult` of struct `PipelineTopologiesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PipelineTopologiesClientUpdateResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListResult` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `LivePipelinesClientUpdateResult` of struct `LivePipelinesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `LivePipelinesClientUpdateResponse` has been removed
+- Field `EdgeModulesClientGetResult` of struct `EdgeModulesClientGetResponse` has been removed
+- Field `RawResponse` of struct `EdgeModulesClientGetResponse` has been removed
+- Field `RawResponse` of struct `EdgeModulesClientDeleteResponse` has been removed
+- Field `VideosClientListResult` of struct `VideosClientListResponse` has been removed
+- Field `RawResponse` of struct `VideosClientListResponse` has been removed
+- Field `LivePipelinesClientCreateOrUpdateResult` of struct `LivePipelinesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `LivePipelinesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `LivePipelinesClientDeactivateResponse` has been removed
+- Field `PipelineJobsClientGetResult` of struct `PipelineJobsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PipelineJobsClientGetResponse` has been removed
+- Field `LivePipelinesClientListResult` of struct `LivePipelinesClientListResponse` has been removed
+- Field `RawResponse` of struct `LivePipelinesClientListResponse` has been removed
+- Field `VideosClientUpdateResult` of struct `VideosClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VideosClientUpdateResponse` has been removed
+- Field `PipelineJobsClientUpdateResult` of struct `PipelineJobsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PipelineJobsClientUpdateResponse` has been removed
+- Field `OperationStatusesClientGetResult` of struct `OperationStatusesClientGetResponse` has been removed
+- Field `RawResponse` of struct `OperationStatusesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PipelineJobsClientCancelPollerResponse` has been removed
+- Field `RawResponse` of struct `PipelineJobsClientDeleteResponse` has been removed
+- Field `PipelineTopologiesClientGetResult` of struct `PipelineTopologiesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PipelineTopologiesClientGetResponse` has been removed
+- Field `RawResponse` of struct `LivePipelinesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VideosClientDeleteResponse` has been removed
+- Field `VideosClientGetResult` of struct `VideosClientGetResponse` has been removed
+- Field `RawResponse` of struct `VideosClientGetResponse` has been removed
+- Field `PrivateLinkResourcesClientListResult` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListResponse` has been removed
+- Field `PipelineJobOperationStatusesClientGetResult` of struct `PipelineJobOperationStatusesClientGetResponse` has been removed
+- Field `RawResponse` of struct `PipelineJobOperationStatusesClientGetResponse` has been removed
+- Field `LivePipelinesClientGetResult` of struct `LivePipelinesClientGetResponse` has been removed
+- Field `RawResponse` of struct `LivePipelinesClientGetResponse` has been removed
+- Field `VideosClientListContentTokenResult` of struct `VideosClientListContentTokenResponse` has been removed
+- Field `RawResponse` of struct `VideosClientListContentTokenResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `PrivateEndpointConnectionsClientCreateOrUpdateResult` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse` has been removed
+- Field `OperationResultsClientGetResult` of struct `OperationResultsClientGetResponse` has been removed
+- Field `RawResponse` of struct `OperationResultsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PipelineTopologiesClientDeleteResponse` has been removed
+- Field `PipelineJobsClientListResult` of struct `PipelineJobsClientListResponse` has been removed
+- Field `RawResponse` of struct `PipelineJobsClientListResponse` has been removed
+- Field `VideoAnalyzersClientGetResult` of struct `VideoAnalyzersClientGetResponse` has been removed
+- Field `RawResponse` of struct `VideoAnalyzersClientGetResponse` has been removed
+- Field `VideoAnalyzersClientCreateOrUpdateResult` of struct `VideoAnalyzersClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VideoAnalyzersClientCreateOrUpdateResponse` has been removed
+- Field `VideosClientCreateOrUpdateResult` of struct `VideosClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VideosClientCreateOrUpdateResponse` has been removed
+- Field `EdgeModulesClientListResult` of struct `EdgeModulesClientListResponse` has been removed
+- Field `RawResponse` of struct `EdgeModulesClientListResponse` has been removed
+- Field `RawResponse` of struct `LivePipelinesClientDeactivatePollerResponse` has been removed
+- Field `VideoAnalyzersClientUpdateResult` of struct `VideoAnalyzersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VideoAnalyzersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PipelineJobsClientCancelResponse` has been removed
+- Field `RawResponse` of struct `VideoAnalyzersClientDeleteResponse` has been removed
+- Field `AccessPoliciesClientGetResult` of struct `AccessPoliciesClientGetResponse` has been removed
+- Field `RawResponse` of struct `AccessPoliciesClientGetResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VideoAnalyzersClientUpdatePollerResponse` has been removed
+- Field `EdgeModulesClientCreateOrUpdateResult` of struct `EdgeModulesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `EdgeModulesClientCreateOrUpdateResponse` has been removed
+- Field `PipelineTopologiesClientListResult` of struct `PipelineTopologiesClientListResponse` has been removed
+- Field `RawResponse` of struct `PipelineTopologiesClientListResponse` has been removed
+- Field `PipelineTopologiesClientCreateOrUpdateResult` of struct `PipelineTopologiesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PipelineTopologiesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `LivePipelinesClientActivateResponse` has been removed
+- Field `VideoAnalyzersClientListBySubscriptionResult` of struct `VideoAnalyzersClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `VideoAnalyzersClientListBySubscriptionResponse` has been removed
+- Field `AccessPoliciesClientListResult` of struct `AccessPoliciesClientListResponse` has been removed
+- Field `RawResponse` of struct `AccessPoliciesClientListResponse` has been removed
+- Field `AccessPoliciesClientCreateOrUpdateResult` of struct `AccessPoliciesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccessPoliciesClientCreateOrUpdateResponse` has been removed
+- Field `EdgeModulesClientListProvisioningTokenResult` of struct `EdgeModulesClientListProvisioningTokenResponse` has been removed
+- Field `RawResponse` of struct `EdgeModulesClientListProvisioningTokenResponse` has been removed
+- Field `RawResponse` of struct `AccessPoliciesClientDeleteResponse` has been removed
+- Field `LocationsClientCheckNameAvailabilityResult` of struct `LocationsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `LocationsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `VideoAnalyzersClientCreateOrUpdatePollerResponse` has been removed
+- Field `PrivateEndpointConnectionsOperationResultsClientGetResult` of struct `PrivateEndpointConnectionsOperationResultsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsOperationResultsClientGetResponse` has been removed
+- Field `PipelineJobsClientCreateOrUpdateResult` of struct `PipelineJobsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PipelineJobsClientCreateOrUpdateResponse` has been removed
+
+### Features Added
+
+- New function `*LivePipelinesClientListPager.More() bool`
+- New function `*AccessPoliciesClientListPager.More() bool`
+- New function `*PipelineJobsClientListPager.More() bool`
+- New function `*PipelineTopologiesClientListPager.More() bool`
+- New function `*VideosClientListPager.More() bool`
+- New function `*EdgeModulesClientListPager.More() bool`
+- New struct `ErrorResponse`
+- New anonymous field `PipelineJob` in struct `PipelineJobsClientCreateOrUpdateResponse`
+- New anonymous field `PipelineJobCollection` in struct `PipelineJobsClientListResponse`
+- New anonymous field `OperationCollection` in struct `OperationsClientListResponse`
+- New anonymous field `EdgeModuleEntityCollection` in struct `EdgeModulesClientListResponse`
+- New anonymous field `AccessPolicyEntity` in struct `AccessPoliciesClientUpdateResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsOperationResultsClientGetResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse`
+- New field `Location` in struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse`
+- New field `RetryAfter` in struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse`
+- New field `AzureAsyncOperation` in struct `PrivateEndpointConnectionsClientCreateOrUpdateResponse`
+- New anonymous field `VideoEntityCollection` in struct `VideosClientListResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `PrivateLinkResourcesClientListResponse`
+- New anonymous field `OperationStatus` in struct `OperationStatusesClientGetResponse`
+- New anonymous field `LivePipelineCollection` in struct `LivePipelinesClientListResponse`
+- New anonymous field `EdgeModuleEntity` in struct `EdgeModulesClientCreateOrUpdateResponse`
+- New anonymous field `AccessPolicyEntity` in struct `AccessPoliciesClientGetResponse`
+- New anonymous field `VideoAnalyzer` in struct `VideoAnalyzersClientCreateOrUpdateResponse`
+- New anonymous field `Collection` in struct `VideoAnalyzersClientListBySubscriptionResponse`
+- New anonymous field `PipelineJob` in struct `PipelineJobsClientUpdateResponse`
+- New anonymous field `PipelineTopologyCollection` in struct `PipelineTopologiesClientListResponse`
+- New anonymous field `LivePipeline` in struct `LivePipelinesClientUpdateResponse`
+- New anonymous field `VideoAnalyzer` in struct `VideoAnalyzersClientUpdateResponse`
+- New anonymous field `AccessPolicyEntityCollection` in struct `AccessPoliciesClientListResponse`
+- New anonymous field `EdgeModuleEntity` in struct `EdgeModulesClientGetResponse`
+- New anonymous field `PipelineJob` in struct `PipelineJobsClientGetResponse`
+- New anonymous field `CheckNameAvailabilityResponse` in struct `LocationsClientCheckNameAvailabilityResponse`
+- New anonymous field `PipelineJobOperationStatus` in struct `PipelineJobOperationStatusesClientGetResponse`
+- New anonymous field `PipelineTopology` in struct `PipelineTopologiesClientUpdateResponse`
+- New anonymous field `VideoAnalyzer` in struct `OperationResultsClientGetResponse`
+- New anonymous field `VideoContentToken` in struct `VideosClientListContentTokenResponse`
+- New anonymous field `VideoEntity` in struct `VideosClientUpdateResponse`
+- New anonymous field `LivePipeline` in struct `LivePipelinesClientCreateOrUpdateResponse`
+- New anonymous field `PrivateLinkResource` in struct `PrivateLinkResourcesClientGetResponse`
+- New anonymous field `PrivateEndpointConnectionOperationStatus` in struct `PrivateEndpointConnectionsOperationStatusesClientGetResponse`
+- New anonymous field `EdgeModuleProvisioningToken` in struct `EdgeModulesClientListProvisioningTokenResponse`
+- New anonymous field `Collection` in struct `VideoAnalyzersClientListResponse`
+- New anonymous field `PipelineTopology` in struct `PipelineTopologiesClientGetResponse`
+- New anonymous field `PipelineTopology` in struct `PipelineTopologiesClientCreateOrUpdateResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListResponse`
+- New anonymous field `VideoEntity` in struct `VideosClientCreateOrUpdateResponse`
+- New anonymous field `AccessPolicyEntity` in struct `AccessPoliciesClientCreateOrUpdateResponse`
+- New anonymous field `VideoEntity` in struct `VideosClientGetResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `VideoAnalyzer` in struct `VideoAnalyzersClientGetResponse`
+- New anonymous field `LivePipelineOperationStatus` in struct `LivePipelineOperationStatusesClientGetResponse`
+- New anonymous field `LivePipeline` in struct `LivePipelinesClientGetResponse`
+
+
+## 0.2.1 (2022-03-10)
+### Other Changes
+
+
 ## 0.2.0 (2022-01-21)
 ### Breaking Changes
 

@@ -34,17 +34,17 @@ type ServerAzureADOnlyAuthenticationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServerAzureADOnlyAuthenticationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServerAzureADOnlyAuthenticationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServerAzureADOnlyAuthenticationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *ServerAzureADOnlyAuthenticationsClient) BeginCreateOrUpdate(ctx co
 	if err != nil {
 		return ServerAzureADOnlyAuthenticationsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ServerAzureADOnlyAuthenticationsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerAzureADOnlyAuthenticationsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerAzureADOnlyAuthenticationsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ServerAzureADOnlyAuthenticationsClientCreateOrUpdatePollerResponse{}, err
@@ -138,9 +136,7 @@ func (client *ServerAzureADOnlyAuthenticationsClient) BeginDelete(ctx context.Co
 	if err != nil {
 		return ServerAzureADOnlyAuthenticationsClientDeletePollerResponse{}, err
 	}
-	result := ServerAzureADOnlyAuthenticationsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerAzureADOnlyAuthenticationsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerAzureADOnlyAuthenticationsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ServerAzureADOnlyAuthenticationsClientDeletePollerResponse{}, err
@@ -252,7 +248,7 @@ func (client *ServerAzureADOnlyAuthenticationsClient) getCreateRequest(ctx conte
 
 // getHandleResponse handles the Get response.
 func (client *ServerAzureADOnlyAuthenticationsClient) getHandleResponse(resp *http.Response) (ServerAzureADOnlyAuthenticationsClientGetResponse, error) {
-	result := ServerAzureADOnlyAuthenticationsClientGetResponse{RawResponse: resp}
+	result := ServerAzureADOnlyAuthenticationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerAzureADOnlyAuthentication); err != nil {
 		return ServerAzureADOnlyAuthenticationsClientGetResponse{}, err
 	}
@@ -306,7 +302,7 @@ func (client *ServerAzureADOnlyAuthenticationsClient) listByServerCreateRequest(
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *ServerAzureADOnlyAuthenticationsClient) listByServerHandleResponse(resp *http.Response) (ServerAzureADOnlyAuthenticationsClientListByServerResponse, error) {
-	result := ServerAzureADOnlyAuthenticationsClientListByServerResponse{RawResponse: resp}
+	result := ServerAzureADOnlyAuthenticationsClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureADOnlyAuthListResult); err != nil {
 		return ServerAzureADOnlyAuthenticationsClientListByServerResponse{}, err
 	}

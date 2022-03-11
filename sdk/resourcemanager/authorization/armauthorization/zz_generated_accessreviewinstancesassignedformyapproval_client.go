@@ -32,16 +32,16 @@ type AccessReviewInstancesAssignedForMyApprovalClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAccessReviewInstancesAssignedForMyApprovalClient(credential azcore.TokenCredential, options *arm.ClientOptions) *AccessReviewInstancesAssignedForMyApprovalClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AccessReviewInstancesAssignedForMyApprovalClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -83,7 +83,7 @@ func (client *AccessReviewInstancesAssignedForMyApprovalClient) getByIDCreateReq
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-05-01-preview")
+	reqQP.Set("api-version", "2021-11-16-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -91,7 +91,7 @@ func (client *AccessReviewInstancesAssignedForMyApprovalClient) getByIDCreateReq
 
 // getByIDHandleResponse handles the GetByID response.
 func (client *AccessReviewInstancesAssignedForMyApprovalClient) getByIDHandleResponse(resp *http.Response) (AccessReviewInstancesAssignedForMyApprovalClientGetByIDResponse, error) {
-	result := AccessReviewInstancesAssignedForMyApprovalClientGetByIDResponse{RawResponse: resp}
+	result := AccessReviewInstancesAssignedForMyApprovalClientGetByIDResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessReviewInstance); err != nil {
 		return AccessReviewInstancesAssignedForMyApprovalClientGetByIDResponse{}, err
 	}
@@ -127,15 +127,20 @@ func (client *AccessReviewInstancesAssignedForMyApprovalClient) listCreateReques
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-05-01-preview")
+	reqQP.Set("api-version", "2021-11-16-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
+	unencodedParams := []string{req.Raw().URL.RawQuery}
+	if options != nil && options.Filter != nil {
+		unencodedParams = append(unencodedParams, "$filter="+*options.Filter)
+	}
+	req.Raw().URL.RawQuery = strings.Join(unencodedParams, "&")
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
 func (client *AccessReviewInstancesAssignedForMyApprovalClient) listHandleResponse(resp *http.Response) (AccessReviewInstancesAssignedForMyApprovalClientListResponse, error) {
-	result := AccessReviewInstancesAssignedForMyApprovalClientListResponse{RawResponse: resp}
+	result := AccessReviewInstancesAssignedForMyApprovalClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessReviewInstanceListResult); err != nil {
 		return AccessReviewInstancesAssignedForMyApprovalClientListResponse{}, err
 	}

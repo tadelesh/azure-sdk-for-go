@@ -35,17 +35,17 @@ type PoolClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPoolClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PoolClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PoolClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -110,7 +110,7 @@ func (client *PoolClient) createCreateRequest(ctx context.Context, resourceGroup
 
 // createHandleResponse handles the Create response.
 func (client *PoolClient) createHandleResponse(resp *http.Response) (PoolClientCreateResponse, error) {
-	result := PoolClientCreateResponse{RawResponse: resp}
+	result := PoolClientCreateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -131,9 +131,7 @@ func (client *PoolClient) BeginDelete(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return PoolClientDeletePollerResponse{}, err
 	}
-	result := PoolClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PoolClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PoolClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return PoolClientDeletePollerResponse{}, err
@@ -244,7 +242,7 @@ func (client *PoolClient) disableAutoScaleCreateRequest(ctx context.Context, res
 
 // disableAutoScaleHandleResponse handles the DisableAutoScale response.
 func (client *PoolClient) disableAutoScaleHandleResponse(resp *http.Response) (PoolClientDisableAutoScaleResponse, error) {
-	result := PoolClientDisableAutoScaleResponse{RawResponse: resp}
+	result := PoolClientDisableAutoScaleResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -307,7 +305,7 @@ func (client *PoolClient) getCreateRequest(ctx context.Context, resourceGroupNam
 
 // getHandleResponse handles the Get response.
 func (client *PoolClient) getHandleResponse(resp *http.Response) (PoolClientGetResponse, error) {
-	result := PoolClientGetResponse{RawResponse: resp}
+	result := PoolClientGetResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -371,7 +369,7 @@ func (client *PoolClient) listByBatchAccountCreateRequest(ctx context.Context, r
 
 // listByBatchAccountHandleResponse handles the ListByBatchAccount response.
 func (client *PoolClient) listByBatchAccountHandleResponse(resp *http.Response) (PoolClientListByBatchAccountResponse, error) {
-	result := PoolClientListByBatchAccountResponse{RawResponse: resp}
+	result := PoolClientListByBatchAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListPoolsResult); err != nil {
 		return PoolClientListByBatchAccountResponse{}, err
 	}
@@ -435,7 +433,7 @@ func (client *PoolClient) stopResizeCreateRequest(ctx context.Context, resourceG
 
 // stopResizeHandleResponse handles the StopResize response.
 func (client *PoolClient) stopResizeHandleResponse(resp *http.Response) (PoolClientStopResizeResponse, error) {
-	result := PoolClientStopResizeResponse{RawResponse: resp}
+	result := PoolClientStopResizeResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}
@@ -503,7 +501,7 @@ func (client *PoolClient) updateCreateRequest(ctx context.Context, resourceGroup
 
 // updateHandleResponse handles the Update response.
 func (client *PoolClient) updateHandleResponse(resp *http.Response) (PoolClientUpdateResponse, error) {
-	result := PoolClientUpdateResponse{RawResponse: resp}
+	result := PoolClientUpdateResponse{}
 	if val := resp.Header.Get("ETag"); val != "" {
 		result.ETag = &val
 	}

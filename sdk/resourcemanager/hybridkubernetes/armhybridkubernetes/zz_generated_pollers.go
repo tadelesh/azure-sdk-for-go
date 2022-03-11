@@ -43,11 +43,10 @@ func (p *ConnectedClusterClientCreatePoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final ConnectedClusterClientCreateResponse will be returned.
 func (p *ConnectedClusterClientCreatePoller) FinalResponse(ctx context.Context) (ConnectedClusterClientCreateResponse, error) {
 	respType := ConnectedClusterClientCreateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ConnectedCluster)
+	_, err := p.pt.FinalResponse(ctx, &respType.ConnectedCluster)
 	if err != nil {
 		return ConnectedClusterClientCreateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *ConnectedClusterClientDeletePoller) Poll(ctx context.Context) (*http.Re
 // If the final GET succeeded then the final ConnectedClusterClientDeleteResponse will be returned.
 func (p *ConnectedClusterClientDeletePoller) FinalResponse(ctx context.Context) (ConnectedClusterClientDeleteResponse, error) {
 	respType := ConnectedClusterClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ConnectedClusterClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

@@ -34,17 +34,17 @@ type FactoriesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFactoriesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FactoriesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FactoriesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -94,7 +94,7 @@ func (client *FactoriesClient) configureFactoryRepoCreateRequest(ctx context.Con
 
 // configureFactoryRepoHandleResponse handles the ConfigureFactoryRepo response.
 func (client *FactoriesClient) configureFactoryRepoHandleResponse(resp *http.Response) (FactoriesClientConfigureFactoryRepoResponse, error) {
-	result := FactoriesClientConfigureFactoryRepoResponse{RawResponse: resp}
+	result := FactoriesClientConfigureFactoryRepoResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Factory); err != nil {
 		return FactoriesClientConfigureFactoryRepoResponse{}, err
 	}
@@ -154,7 +154,7 @@ func (client *FactoriesClient) createOrUpdateCreateRequest(ctx context.Context, 
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *FactoriesClient) createOrUpdateHandleResponse(resp *http.Response) (FactoriesClientCreateOrUpdateResponse, error) {
-	result := FactoriesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := FactoriesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Factory); err != nil {
 		return FactoriesClientCreateOrUpdateResponse{}, err
 	}
@@ -178,7 +178,7 @@ func (client *FactoriesClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return FactoriesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return FactoriesClientDeleteResponse{RawResponse: resp}, nil
+	return FactoriesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -258,7 +258,7 @@ func (client *FactoriesClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *FactoriesClient) getHandleResponse(resp *http.Response) (FactoriesClientGetResponse, error) {
-	result := FactoriesClientGetResponse{RawResponse: resp}
+	result := FactoriesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Factory); err != nil {
 		return FactoriesClientGetResponse{}, err
 	}
@@ -315,7 +315,7 @@ func (client *FactoriesClient) getDataPlaneAccessCreateRequest(ctx context.Conte
 
 // getDataPlaneAccessHandleResponse handles the GetDataPlaneAccess response.
 func (client *FactoriesClient) getDataPlaneAccessHandleResponse(resp *http.Response) (FactoriesClientGetDataPlaneAccessResponse, error) {
-	result := FactoriesClientGetDataPlaneAccessResponse{RawResponse: resp}
+	result := FactoriesClientGetDataPlaneAccessResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessPolicyResponse); err != nil {
 		return FactoriesClientGetDataPlaneAccessResponse{}, err
 	}
@@ -372,7 +372,7 @@ func (client *FactoriesClient) getGitHubAccessTokenCreateRequest(ctx context.Con
 
 // getGitHubAccessTokenHandleResponse handles the GetGitHubAccessToken response.
 func (client *FactoriesClient) getGitHubAccessTokenHandleResponse(resp *http.Response) (FactoriesClientGetGitHubAccessTokenResponse, error) {
-	result := FactoriesClientGetGitHubAccessTokenResponse{RawResponse: resp}
+	result := FactoriesClientGetGitHubAccessTokenResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GitHubAccessTokenResponse); err != nil {
 		return FactoriesClientGetGitHubAccessTokenResponse{}, err
 	}
@@ -414,7 +414,7 @@ func (client *FactoriesClient) listCreateRequest(ctx context.Context, options *F
 
 // listHandleResponse handles the List response.
 func (client *FactoriesClient) listHandleResponse(resp *http.Response) (FactoriesClientListResponse, error) {
-	result := FactoriesClientListResponse{RawResponse: resp}
+	result := FactoriesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FactoryListResponse); err != nil {
 		return FactoriesClientListResponse{}, err
 	}
@@ -462,7 +462,7 @@ func (client *FactoriesClient) listByResourceGroupCreateRequest(ctx context.Cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *FactoriesClient) listByResourceGroupHandleResponse(resp *http.Response) (FactoriesClientListByResourceGroupResponse, error) {
-	result := FactoriesClientListByResourceGroupResponse{RawResponse: resp}
+	result := FactoriesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FactoryListResponse); err != nil {
 		return FactoriesClientListByResourceGroupResponse{}, err
 	}
@@ -518,7 +518,7 @@ func (client *FactoriesClient) updateCreateRequest(ctx context.Context, resource
 
 // updateHandleResponse handles the Update response.
 func (client *FactoriesClient) updateHandleResponse(resp *http.Response) (FactoriesClientUpdateResponse, error) {
-	result := FactoriesClientUpdateResponse{RawResponse: resp}
+	result := FactoriesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Factory); err != nil {
 		return FactoriesClientUpdateResponse{}, err
 	}

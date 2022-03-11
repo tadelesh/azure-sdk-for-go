@@ -34,17 +34,17 @@ type IntegrationServiceEnvironmentManagedApisClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIntegrationServiceEnvironmentManagedApisClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IntegrationServiceEnvironmentManagedApisClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IntegrationServiceEnvironmentManagedApisClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *IntegrationServiceEnvironmentManagedApisClient) BeginDelete(ctx co
 	if err != nil {
 		return IntegrationServiceEnvironmentManagedApisClientDeletePollerResponse{}, err
 	}
-	result := IntegrationServiceEnvironmentManagedApisClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := IntegrationServiceEnvironmentManagedApisClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("IntegrationServiceEnvironmentManagedApisClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return IntegrationServiceEnvironmentManagedApisClientDeletePollerResponse{}, err
@@ -175,7 +173,7 @@ func (client *IntegrationServiceEnvironmentManagedApisClient) getCreateRequest(c
 
 // getHandleResponse handles the Get response.
 func (client *IntegrationServiceEnvironmentManagedApisClient) getHandleResponse(resp *http.Response) (IntegrationServiceEnvironmentManagedApisClientGetResponse, error) {
-	result := IntegrationServiceEnvironmentManagedApisClientGetResponse{RawResponse: resp}
+	result := IntegrationServiceEnvironmentManagedApisClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationServiceEnvironmentManagedAPI); err != nil {
 		return IntegrationServiceEnvironmentManagedApisClientGetResponse{}, err
 	}
@@ -228,7 +226,7 @@ func (client *IntegrationServiceEnvironmentManagedApisClient) listCreateRequest(
 
 // listHandleResponse handles the List response.
 func (client *IntegrationServiceEnvironmentManagedApisClient) listHandleResponse(resp *http.Response) (IntegrationServiceEnvironmentManagedApisClientListResponse, error) {
-	result := IntegrationServiceEnvironmentManagedApisClientListResponse{RawResponse: resp}
+	result := IntegrationServiceEnvironmentManagedApisClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationServiceEnvironmentManagedAPIListResult); err != nil {
 		return IntegrationServiceEnvironmentManagedApisClientListResponse{}, err
 	}
@@ -248,9 +246,7 @@ func (client *IntegrationServiceEnvironmentManagedApisClient) BeginPut(ctx conte
 	if err != nil {
 		return IntegrationServiceEnvironmentManagedApisClientPutPollerResponse{}, err
 	}
-	result := IntegrationServiceEnvironmentManagedApisClientPutPollerResponse{
-		RawResponse: resp,
-	}
+	result := IntegrationServiceEnvironmentManagedApisClientPutPollerResponse{}
 	pt, err := armruntime.NewPoller("IntegrationServiceEnvironmentManagedApisClient.Put", "", resp, client.pl)
 	if err != nil {
 		return IntegrationServiceEnvironmentManagedApisClientPutPollerResponse{}, err

@@ -61,9 +61,7 @@ func (client *CertificateOrdersClient) BeginCreateOrUpdate(ctx context.Context, 
 	if err != nil {
 		return CertificateOrdersClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := CertificateOrdersClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CertificateOrdersClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("CertificateOrdersClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return CertificateOrdersClientCreateOrUpdatePollerResponse{}, err
@@ -130,9 +128,7 @@ func (client *CertificateOrdersClient) BeginCreateOrUpdateCertificate(ctx contex
 	if err != nil {
 		return CertificateOrdersClientCreateOrUpdateCertificatePollerResponse{}, err
 	}
-	result := CertificateOrdersClientCreateOrUpdateCertificatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CertificateOrdersClientCreateOrUpdateCertificatePollerResponse{}
 	pt, err := armruntime.NewPoller("CertificateOrdersClient.CreateOrUpdateCertificate", "", resp, client.pl)
 	if err != nil {
 		return CertificateOrdersClientCreateOrUpdateCertificatePollerResponse{}, err
@@ -208,7 +204,7 @@ func (client *CertificateOrdersClient) Delete(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return CertificateOrdersClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return CertificateOrdersClientDeleteResponse{RawResponse: resp}, nil
+	return CertificateOrdersClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -256,7 +252,7 @@ func (client *CertificateOrdersClient) DeleteCertificate(ctx context.Context, re
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return CertificateOrdersClientDeleteCertificateResponse{}, runtime.NewResponseError(resp)
 	}
-	return CertificateOrdersClientDeleteCertificateResponse{RawResponse: resp}, nil
+	return CertificateOrdersClientDeleteCertificateResponse{}, nil
 }
 
 // deleteCertificateCreateRequest creates the DeleteCertificate request.
@@ -337,7 +333,7 @@ func (client *CertificateOrdersClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *CertificateOrdersClient) getHandleResponse(resp *http.Response) (CertificateOrdersClientGetResponse, error) {
-	result := CertificateOrdersClientGetResponse{RawResponse: resp}
+	result := CertificateOrdersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateOrder); err != nil {
 		return CertificateOrdersClientGetResponse{}, err
 	}
@@ -398,7 +394,7 @@ func (client *CertificateOrdersClient) getCertificateCreateRequest(ctx context.C
 
 // getCertificateHandleResponse handles the GetCertificate response.
 func (client *CertificateOrdersClient) getCertificateHandleResponse(resp *http.Response) (CertificateOrdersClientGetCertificateResponse, error) {
-	result := CertificateOrdersClientGetCertificateResponse{RawResponse: resp}
+	result := CertificateOrdersClientGetCertificateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateResource); err != nil {
 		return CertificateOrdersClientGetCertificateResponse{}, err
 	}
@@ -440,7 +436,7 @@ func (client *CertificateOrdersClient) listCreateRequest(ctx context.Context, op
 
 // listHandleResponse handles the List response.
 func (client *CertificateOrdersClient) listHandleResponse(resp *http.Response) (CertificateOrdersClientListResponse, error) {
-	result := CertificateOrdersClientListResponse{RawResponse: resp}
+	result := CertificateOrdersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateOrderCollection); err != nil {
 		return CertificateOrdersClientListResponse{}, err
 	}
@@ -488,7 +484,7 @@ func (client *CertificateOrdersClient) listByResourceGroupCreateRequest(ctx cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *CertificateOrdersClient) listByResourceGroupHandleResponse(resp *http.Response) (CertificateOrdersClientListByResourceGroupResponse, error) {
-	result := CertificateOrdersClientListByResourceGroupResponse{RawResponse: resp}
+	result := CertificateOrdersClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateOrderCollection); err != nil {
 		return CertificateOrdersClientListByResourceGroupResponse{}, err
 	}
@@ -541,7 +537,7 @@ func (client *CertificateOrdersClient) listCertificatesCreateRequest(ctx context
 
 // listCertificatesHandleResponse handles the ListCertificates response.
 func (client *CertificateOrdersClient) listCertificatesHandleResponse(resp *http.Response) (CertificateOrdersClientListCertificatesResponse, error) {
-	result := CertificateOrdersClientListCertificatesResponse{RawResponse: resp}
+	result := CertificateOrdersClientListCertificatesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateCollection); err != nil {
 		return CertificateOrdersClientListCertificatesResponse{}, err
 	}
@@ -567,7 +563,7 @@ func (client *CertificateOrdersClient) Reissue(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return CertificateOrdersClientReissueResponse{}, runtime.NewResponseError(resp)
 	}
-	return CertificateOrdersClientReissueResponse{RawResponse: resp}, nil
+	return CertificateOrdersClientReissueResponse{}, nil
 }
 
 // reissueCreateRequest creates the Reissue request.
@@ -614,7 +610,7 @@ func (client *CertificateOrdersClient) Renew(ctx context.Context, resourceGroupN
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return CertificateOrdersClientRenewResponse{}, runtime.NewResponseError(resp)
 	}
-	return CertificateOrdersClientRenewResponse{RawResponse: resp}, nil
+	return CertificateOrdersClientRenewResponse{}, nil
 }
 
 // renewCreateRequest creates the Renew request.
@@ -661,7 +657,7 @@ func (client *CertificateOrdersClient) ResendEmail(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return CertificateOrdersClientResendEmailResponse{}, runtime.NewResponseError(resp)
 	}
-	return CertificateOrdersClientResendEmailResponse{RawResponse: resp}, nil
+	return CertificateOrdersClientResendEmailResponse{}, nil
 }
 
 // resendEmailCreateRequest creates the ResendEmail request.
@@ -710,7 +706,7 @@ func (client *CertificateOrdersClient) ResendRequestEmails(ctx context.Context, 
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return CertificateOrdersClientResendRequestEmailsResponse{}, runtime.NewResponseError(resp)
 	}
-	return CertificateOrdersClientResendRequestEmailsResponse{RawResponse: resp}, nil
+	return CertificateOrdersClientResendRequestEmailsResponse{}, nil
 }
 
 // resendRequestEmailsCreateRequest creates the ResendRequestEmails request.
@@ -788,7 +784,7 @@ func (client *CertificateOrdersClient) retrieveCertificateActionsCreateRequest(c
 
 // retrieveCertificateActionsHandleResponse handles the RetrieveCertificateActions response.
 func (client *CertificateOrdersClient) retrieveCertificateActionsHandleResponse(resp *http.Response) (CertificateOrdersClientRetrieveCertificateActionsResponse, error) {
-	result := CertificateOrdersClientRetrieveCertificateActionsResponse{RawResponse: resp}
+	result := CertificateOrdersClientRetrieveCertificateActionsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateOrderActionArray); err != nil {
 		return CertificateOrdersClientRetrieveCertificateActionsResponse{}, err
 	}
@@ -844,7 +840,7 @@ func (client *CertificateOrdersClient) retrieveCertificateEmailHistoryCreateRequ
 
 // retrieveCertificateEmailHistoryHandleResponse handles the RetrieveCertificateEmailHistory response.
 func (client *CertificateOrdersClient) retrieveCertificateEmailHistoryHandleResponse(resp *http.Response) (CertificateOrdersClientRetrieveCertificateEmailHistoryResponse, error) {
-	result := CertificateOrdersClientRetrieveCertificateEmailHistoryResponse{RawResponse: resp}
+	result := CertificateOrdersClientRetrieveCertificateEmailHistoryResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateEmailArray); err != nil {
 		return CertificateOrdersClientRetrieveCertificateEmailHistoryResponse{}, err
 	}
@@ -907,7 +903,7 @@ func (client *CertificateOrdersClient) retrieveSiteSealCreateRequest(ctx context
 
 // retrieveSiteSealHandleResponse handles the RetrieveSiteSeal response.
 func (client *CertificateOrdersClient) retrieveSiteSealHandleResponse(resp *http.Response) (CertificateOrdersClientRetrieveSiteSealResponse, error) {
-	result := CertificateOrdersClientRetrieveSiteSealResponse{RawResponse: resp}
+	result := CertificateOrdersClientRetrieveSiteSealResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteSeal); err != nil {
 		return CertificateOrdersClientRetrieveSiteSealResponse{}, err
 	}
@@ -964,7 +960,7 @@ func (client *CertificateOrdersClient) updateCreateRequest(ctx context.Context, 
 
 // updateHandleResponse handles the Update response.
 func (client *CertificateOrdersClient) updateHandleResponse(resp *http.Response) (CertificateOrdersClientUpdateResponse, error) {
-	result := CertificateOrdersClientUpdateResponse{RawResponse: resp}
+	result := CertificateOrdersClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateOrder); err != nil {
 		return CertificateOrdersClientUpdateResponse{}, err
 	}
@@ -1026,7 +1022,7 @@ func (client *CertificateOrdersClient) updateCertificateCreateRequest(ctx contex
 
 // updateCertificateHandleResponse handles the UpdateCertificate response.
 func (client *CertificateOrdersClient) updateCertificateHandleResponse(resp *http.Response) (CertificateOrdersClientUpdateCertificateResponse, error) {
-	result := CertificateOrdersClientUpdateCertificateResponse{RawResponse: resp}
+	result := CertificateOrdersClientUpdateCertificateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateResource); err != nil {
 		return CertificateOrdersClientUpdateCertificateResponse{}, err
 	}
@@ -1050,7 +1046,7 @@ func (client *CertificateOrdersClient) ValidatePurchaseInformation(ctx context.C
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return CertificateOrdersClientValidatePurchaseInformationResponse{}, runtime.NewResponseError(resp)
 	}
-	return CertificateOrdersClientValidatePurchaseInformationResponse{RawResponse: resp}, nil
+	return CertificateOrdersClientValidatePurchaseInformationResponse{}, nil
 }
 
 // validatePurchaseInformationCreateRequest creates the ValidatePurchaseInformation request.
@@ -1089,7 +1085,7 @@ func (client *CertificateOrdersClient) VerifyDomainOwnership(ctx context.Context
 	if !runtime.HasStatusCode(resp, http.StatusNoContent) {
 		return CertificateOrdersClientVerifyDomainOwnershipResponse{}, runtime.NewResponseError(resp)
 	}
-	return CertificateOrdersClientVerifyDomainOwnershipResponse{RawResponse: resp}, nil
+	return CertificateOrdersClientVerifyDomainOwnershipResponse{}, nil
 }
 
 // verifyDomainOwnershipCreateRequest creates the VerifyDomainOwnership request.

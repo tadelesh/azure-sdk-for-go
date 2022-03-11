@@ -1,5 +1,73 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientGetPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientGetResponse, error)`
+- Function `*ConnectedClusterClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ConnectedClusterClientListBySubscriptionResponse, error)`
+- Function `*ConnectedClusterClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ConnectedClusterClientListByResourceGroupResponse, error)`
+- Function `*ConnectedClusterClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*ConnectedClusterClientListBySubscriptionPager.Err` has been removed
+- Function `*OperationsClientGetPager.PageResponse` has been removed
+- Function `*OperationsClientGetPager.Err` has been removed
+- Function `*ConnectedClusterClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ConnectedClusterClientListByResourceGroupPager.Err` has been removed
+- Struct `ConnectedClusterClientCreateResult` has been removed
+- Struct `ConnectedClusterClientGetResult` has been removed
+- Struct `ConnectedClusterClientListByResourceGroupResult` has been removed
+- Struct `ConnectedClusterClientListBySubscriptionResult` has been removed
+- Struct `ConnectedClusterClientListClusterUserCredentialResult` has been removed
+- Struct `ConnectedClusterClientUpdateResult` has been removed
+- Struct `OperationsClientGetResult` has been removed
+- Field `ConnectedClusterClientListBySubscriptionResult` of struct `ConnectedClusterClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ConnectedClusterClientListBySubscriptionResponse` has been removed
+- Field `ConnectedClusterClientListClusterUserCredentialResult` of struct `ConnectedClusterClientListClusterUserCredentialResponse` has been removed
+- Field `RawResponse` of struct `ConnectedClusterClientListClusterUserCredentialResponse` has been removed
+- Field `ConnectedClusterClientGetResult` of struct `ConnectedClusterClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConnectedClusterClientGetResponse` has been removed
+- Field `OperationsClientGetResult` of struct `OperationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConnectedClusterClientCreatePollerResponse` has been removed
+- Field `ConnectedClusterClientListByResourceGroupResult` of struct `ConnectedClusterClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ConnectedClusterClientListByResourceGroupResponse` has been removed
+- Field `ConnectedClusterClientUpdateResult` of struct `ConnectedClusterClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ConnectedClusterClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ConnectedClusterClientDeletePollerResponse` has been removed
+- Field `ConnectedClusterClientCreateResult` of struct `ConnectedClusterClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ConnectedClusterClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ConnectedClusterClientDeleteResponse` has been removed
+
+### Features Added
+
+- New function `*ConnectedClusterClientListBySubscriptionPager.More() bool`
+- New function `*ConnectedClusterClientListByResourceGroupPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*OperationsClientGetPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `ConnectedCluster` in struct `ConnectedClusterClientGetResponse`
+- New anonymous field `ConnectedCluster` in struct `ConnectedClusterClientCreateResponse`
+- New anonymous field `ConnectedCluster` in struct `ConnectedClusterClientUpdateResponse`
+- New anonymous field `OperationList` in struct `OperationsClientGetResponse`
+- New anonymous field `ConnectedClusterList` in struct `ConnectedClusterClientListByResourceGroupResponse`
+- New anonymous field `ConnectedClusterList` in struct `ConnectedClusterClientListBySubscriptionResponse`
+- New anonymous field `CredentialResults` in struct `ConnectedClusterClientListClusterUserCredentialResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `ConnectedClusterPatch.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

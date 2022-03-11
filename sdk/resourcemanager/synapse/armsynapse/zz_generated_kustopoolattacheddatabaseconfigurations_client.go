@@ -34,17 +34,17 @@ type KustoPoolAttachedDatabaseConfigurationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewKustoPoolAttachedDatabaseConfigurationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *KustoPoolAttachedDatabaseConfigurationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &KustoPoolAttachedDatabaseConfigurationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *KustoPoolAttachedDatabaseConfigurationsClient) BeginCreateOrUpdate
 	if err != nil {
 		return KustoPoolAttachedDatabaseConfigurationsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := KustoPoolAttachedDatabaseConfigurationsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := KustoPoolAttachedDatabaseConfigurationsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("KustoPoolAttachedDatabaseConfigurationsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return KustoPoolAttachedDatabaseConfigurationsClientCreateOrUpdatePollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *KustoPoolAttachedDatabaseConfigurationsClient) BeginDelete(ctx con
 	if err != nil {
 		return KustoPoolAttachedDatabaseConfigurationsClientDeletePollerResponse{}, err
 	}
-	result := KustoPoolAttachedDatabaseConfigurationsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := KustoPoolAttachedDatabaseConfigurationsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("KustoPoolAttachedDatabaseConfigurationsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return KustoPoolAttachedDatabaseConfigurationsClientDeletePollerResponse{}, err
@@ -263,7 +259,7 @@ func (client *KustoPoolAttachedDatabaseConfigurationsClient) getCreateRequest(ct
 
 // getHandleResponse handles the Get response.
 func (client *KustoPoolAttachedDatabaseConfigurationsClient) getHandleResponse(resp *http.Response) (KustoPoolAttachedDatabaseConfigurationsClientGetResponse, error) {
-	result := KustoPoolAttachedDatabaseConfigurationsClientGetResponse{RawResponse: resp}
+	result := KustoPoolAttachedDatabaseConfigurationsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AttachedDatabaseConfiguration); err != nil {
 		return KustoPoolAttachedDatabaseConfigurationsClientGetResponse{}, err
 	}
@@ -277,19 +273,13 @@ func (client *KustoPoolAttachedDatabaseConfigurationsClient) getHandleResponse(r
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - KustoPoolAttachedDatabaseConfigurationsClientListByKustoPoolOptions contains the optional parameters for the
 // KustoPoolAttachedDatabaseConfigurationsClient.ListByKustoPool method.
-func (client *KustoPoolAttachedDatabaseConfigurationsClient) ListByKustoPool(ctx context.Context, workspaceName string, kustoPoolName string, resourceGroupName string, options *KustoPoolAttachedDatabaseConfigurationsClientListByKustoPoolOptions) (KustoPoolAttachedDatabaseConfigurationsClientListByKustoPoolResponse, error) {
-	req, err := client.listByKustoPoolCreateRequest(ctx, workspaceName, kustoPoolName, resourceGroupName, options)
-	if err != nil {
-		return KustoPoolAttachedDatabaseConfigurationsClientListByKustoPoolResponse{}, err
+func (client *KustoPoolAttachedDatabaseConfigurationsClient) ListByKustoPool(workspaceName string, kustoPoolName string, resourceGroupName string, options *KustoPoolAttachedDatabaseConfigurationsClientListByKustoPoolOptions) *KustoPoolAttachedDatabaseConfigurationsClientListByKustoPoolPager {
+	return &KustoPoolAttachedDatabaseConfigurationsClientListByKustoPoolPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByKustoPoolCreateRequest(ctx, workspaceName, kustoPoolName, resourceGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return KustoPoolAttachedDatabaseConfigurationsClientListByKustoPoolResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return KustoPoolAttachedDatabaseConfigurationsClientListByKustoPoolResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByKustoPoolHandleResponse(resp)
 }
 
 // listByKustoPoolCreateRequest creates the ListByKustoPool request.
@@ -324,7 +314,7 @@ func (client *KustoPoolAttachedDatabaseConfigurationsClient) listByKustoPoolCrea
 
 // listByKustoPoolHandleResponse handles the ListByKustoPool response.
 func (client *KustoPoolAttachedDatabaseConfigurationsClient) listByKustoPoolHandleResponse(resp *http.Response) (KustoPoolAttachedDatabaseConfigurationsClientListByKustoPoolResponse, error) {
-	result := KustoPoolAttachedDatabaseConfigurationsClientListByKustoPoolResponse{RawResponse: resp}
+	result := KustoPoolAttachedDatabaseConfigurationsClientListByKustoPoolResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AttachedDatabaseConfigurationListResult); err != nil {
 		return KustoPoolAttachedDatabaseConfigurationsClientListByKustoPoolResponse{}, err
 	}

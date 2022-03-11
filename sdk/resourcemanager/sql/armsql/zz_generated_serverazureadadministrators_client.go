@@ -34,17 +34,17 @@ type ServerAzureADAdministratorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServerAzureADAdministratorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServerAzureADAdministratorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServerAzureADAdministratorsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ServerAzureADAdministratorsClient) BeginCreateOrUpdate(ctx context
 	if err != nil {
 		return ServerAzureADAdministratorsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ServerAzureADAdministratorsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerAzureADAdministratorsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerAzureADAdministratorsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ServerAzureADAdministratorsClientCreateOrUpdatePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *ServerAzureADAdministratorsClient) BeginDelete(ctx context.Context
 	if err != nil {
 		return ServerAzureADAdministratorsClientDeletePollerResponse{}, err
 	}
-	result := ServerAzureADAdministratorsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerAzureADAdministratorsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerAzureADAdministratorsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ServerAzureADAdministratorsClientDeletePollerResponse{}, err
@@ -250,7 +246,7 @@ func (client *ServerAzureADAdministratorsClient) getCreateRequest(ctx context.Co
 
 // getHandleResponse handles the Get response.
 func (client *ServerAzureADAdministratorsClient) getHandleResponse(resp *http.Response) (ServerAzureADAdministratorsClientGetResponse, error) {
-	result := ServerAzureADAdministratorsClientGetResponse{RawResponse: resp}
+	result := ServerAzureADAdministratorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerAzureADAdministrator); err != nil {
 		return ServerAzureADAdministratorsClientGetResponse{}, err
 	}
@@ -304,7 +300,7 @@ func (client *ServerAzureADAdministratorsClient) listByServerCreateRequest(ctx c
 
 // listByServerHandleResponse handles the ListByServer response.
 func (client *ServerAzureADAdministratorsClient) listByServerHandleResponse(resp *http.Response) (ServerAzureADAdministratorsClientListByServerResponse, error) {
-	result := ServerAzureADAdministratorsClientListByServerResponse{RawResponse: resp}
+	result := ServerAzureADAdministratorsClientListByServerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdministratorListResult); err != nil {
 		return ServerAzureADAdministratorsClientListByServerResponse{}, err
 	}

@@ -29,16 +29,16 @@ type PostClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPostClient(credential azcore.TokenCredential, options *arm.ClientOptions) *PostClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PostClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -58,7 +58,7 @@ func (client *PostClient) DisableLockbox(ctx context.Context, options *PostClien
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return PostClientDisableLockboxResponse{}, runtime.NewResponseError(resp)
 	}
-	return PostClientDisableLockboxResponse{RawResponse: resp}, nil
+	return PostClientDisableLockboxResponse{}, nil
 }
 
 // disableLockboxCreateRequest creates the DisableLockbox request.
@@ -90,7 +90,7 @@ func (client *PostClient) EnableLockbox(ctx context.Context, options *PostClient
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return PostClientEnableLockboxResponse{}, runtime.NewResponseError(resp)
 	}
-	return PostClientEnableLockboxResponse{RawResponse: resp}, nil
+	return PostClientEnableLockboxResponse{}, nil
 }
 
 // enableLockboxCreateRequest creates the EnableLockbox request.

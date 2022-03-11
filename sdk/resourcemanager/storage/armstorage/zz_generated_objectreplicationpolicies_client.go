@@ -107,7 +107,7 @@ func (client *ObjectReplicationPoliciesClient) createOrUpdateCreateRequest(ctx c
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ObjectReplicationPoliciesClient) createOrUpdateHandleResponse(resp *http.Response) (ObjectReplicationPoliciesClientCreateOrUpdateResponse, error) {
-	result := ObjectReplicationPoliciesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ObjectReplicationPoliciesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ObjectReplicationPolicy); err != nil {
 		return ObjectReplicationPoliciesClientCreateOrUpdateResponse{}, err
 	}
@@ -136,7 +136,7 @@ func (client *ObjectReplicationPoliciesClient) Delete(ctx context.Context, resou
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ObjectReplicationPoliciesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ObjectReplicationPoliciesClientDeleteResponse{RawResponse: resp}, nil
+	return ObjectReplicationPoliciesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -226,7 +226,7 @@ func (client *ObjectReplicationPoliciesClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *ObjectReplicationPoliciesClient) getHandleResponse(resp *http.Response) (ObjectReplicationPoliciesClientGetResponse, error) {
-	result := ObjectReplicationPoliciesClientGetResponse{RawResponse: resp}
+	result := ObjectReplicationPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ObjectReplicationPolicy); err != nil {
 		return ObjectReplicationPoliciesClientGetResponse{}, err
 	}
@@ -240,19 +240,13 @@ func (client *ObjectReplicationPoliciesClient) getHandleResponse(resp *http.Resp
 // 3 and 24 characters in length and use numbers and lower-case letters only.
 // options - ObjectReplicationPoliciesClientListOptions contains the optional parameters for the ObjectReplicationPoliciesClient.List
 // method.
-func (client *ObjectReplicationPoliciesClient) List(ctx context.Context, resourceGroupName string, accountName string, options *ObjectReplicationPoliciesClientListOptions) (ObjectReplicationPoliciesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return ObjectReplicationPoliciesClientListResponse{}, err
+func (client *ObjectReplicationPoliciesClient) List(resourceGroupName string, accountName string, options *ObjectReplicationPoliciesClientListOptions) *ObjectReplicationPoliciesClientListPager {
+	return &ObjectReplicationPoliciesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ObjectReplicationPoliciesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ObjectReplicationPoliciesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -283,7 +277,7 @@ func (client *ObjectReplicationPoliciesClient) listCreateRequest(ctx context.Con
 
 // listHandleResponse handles the List response.
 func (client *ObjectReplicationPoliciesClient) listHandleResponse(resp *http.Response) (ObjectReplicationPoliciesClientListResponse, error) {
-	result := ObjectReplicationPoliciesClientListResponse{RawResponse: resp}
+	result := ObjectReplicationPoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ObjectReplicationPolicies); err != nil {
 		return ObjectReplicationPoliciesClientListResponse{}, err
 	}

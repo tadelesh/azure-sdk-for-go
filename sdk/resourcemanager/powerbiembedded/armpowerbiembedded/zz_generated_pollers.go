@@ -43,11 +43,10 @@ func (p *WorkspaceCollectionsClientDeletePoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final WorkspaceCollectionsClientDeleteResponse will be returned.
 func (p *WorkspaceCollectionsClientDeletePoller) FinalResponse(ctx context.Context) (WorkspaceCollectionsClientDeleteResponse, error) {
 	respType := WorkspaceCollectionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return WorkspaceCollectionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

@@ -1,5 +1,156 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*IotDpsResourceClientListValidSKUsPager.NextPage` return value(s) have been changed from `(bool)` to `(IotDpsResourceClientListValidSKUsResponse, error)`
+- Function `*IotDpsResourceClientListKeysPager.NextPage` return value(s) have been changed from `(bool)` to `(IotDpsResourceClientListKeysResponse, error)`
+- Function `*IotDpsResourceClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(IotDpsResourceClientListBySubscriptionResponse, error)`
+- Function `*IotDpsResourceClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(IotDpsResourceClientListByResourceGroupResponse, error)`
+- Function `*IotDpsResourceClientListValidSKUsPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*IotDpsResourceClientListValidSKUsPager.Err` has been removed
+- Function `*IotDpsResourceClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*IotDpsResourceClientListBySubscriptionPager.Err` has been removed
+- Function `*IotDpsResourceClientListKeysPager.Err` has been removed
+- Function `*IotDpsResourceClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*IotDpsResourceClientListKeysPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*IotDpsResourceClientListByResourceGroupPager.Err` has been removed
+- Struct `DpsCertificateClientCreateOrUpdateResult` has been removed
+- Struct `DpsCertificateClientGenerateVerificationCodeResult` has been removed
+- Struct `DpsCertificateClientGetResult` has been removed
+- Struct `DpsCertificateClientListResult` has been removed
+- Struct `DpsCertificateClientVerifyCertificateResult` has been removed
+- Struct `IotDpsResourceClientCheckProvisioningServiceNameAvailabilityResult` has been removed
+- Struct `IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionResult` has been removed
+- Struct `IotDpsResourceClientCreateOrUpdateResult` has been removed
+- Struct `IotDpsResourceClientDeletePrivateEndpointConnectionResult` has been removed
+- Struct `IotDpsResourceClientGetOperationResultResult` has been removed
+- Struct `IotDpsResourceClientGetPrivateEndpointConnectionResult` has been removed
+- Struct `IotDpsResourceClientGetPrivateLinkResourcesResult` has been removed
+- Struct `IotDpsResourceClientGetResult` has been removed
+- Struct `IotDpsResourceClientListByResourceGroupResult` has been removed
+- Struct `IotDpsResourceClientListBySubscriptionResult` has been removed
+- Struct `IotDpsResourceClientListKeysForKeyNameResult` has been removed
+- Struct `IotDpsResourceClientListKeysResult` has been removed
+- Struct `IotDpsResourceClientListPrivateEndpointConnectionsResult` has been removed
+- Struct `IotDpsResourceClientListPrivateLinkResourcesResult` has been removed
+- Struct `IotDpsResourceClientListValidSKUsResult` has been removed
+- Struct `IotDpsResourceClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `IotDpsResourceClientGetOperationResultResult` of struct `IotDpsResourceClientGetOperationResultResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientGetOperationResultResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientDeleteResponse` has been removed
+- Field `IotDpsResourceClientListByResourceGroupResult` of struct `IotDpsResourceClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientListByResourceGroupResponse` has been removed
+- Field `IotDpsResourceClientGetPrivateLinkResourcesResult` of struct `IotDpsResourceClientGetPrivateLinkResourcesResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientGetPrivateLinkResourcesResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientDeletePollerResponse` has been removed
+- Field `DpsCertificateClientGetResult` of struct `DpsCertificateClientGetResponse` has been removed
+- Field `RawResponse` of struct `DpsCertificateClientGetResponse` has been removed
+- Field `IotDpsResourceClientDeletePrivateEndpointConnectionResult` of struct `IotDpsResourceClientDeletePrivateEndpointConnectionResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientDeletePrivateEndpointConnectionResponse` has been removed
+- Field `IotDpsResourceClientListKeysForKeyNameResult` of struct `IotDpsResourceClientListKeysForKeyNameResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientListKeysForKeyNameResponse` has been removed
+- Field `IotDpsResourceClientCreateOrUpdateResult` of struct `IotDpsResourceClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionPollerResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientCreateOrUpdatePollerResponse` has been removed
+- Field `IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionResult` of struct `IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionResponse` has been removed
+- Field `IotDpsResourceClientListPrivateEndpointConnectionsResult` of struct `IotDpsResourceClientListPrivateEndpointConnectionsResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientListPrivateEndpointConnectionsResponse` has been removed
+- Field `IotDpsResourceClientListPrivateLinkResourcesResult` of struct `IotDpsResourceClientListPrivateLinkResourcesResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientListPrivateLinkResourcesResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientDeletePrivateEndpointConnectionPollerResponse` has been removed
+- Field `DpsCertificateClientGenerateVerificationCodeResult` of struct `DpsCertificateClientGenerateVerificationCodeResponse` has been removed
+- Field `RawResponse` of struct `DpsCertificateClientGenerateVerificationCodeResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientUpdatePollerResponse` has been removed
+- Field `IotDpsResourceClientListBySubscriptionResult` of struct `IotDpsResourceClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientListBySubscriptionResponse` has been removed
+- Field `IotDpsResourceClientGetResult` of struct `IotDpsResourceClientGetResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientGetResponse` has been removed
+- Field `IotDpsResourceClientCheckProvisioningServiceNameAvailabilityResult` of struct `IotDpsResourceClientCheckProvisioningServiceNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientCheckProvisioningServiceNameAvailabilityResponse` has been removed
+- Field `DpsCertificateClientVerifyCertificateResult` of struct `DpsCertificateClientVerifyCertificateResponse` has been removed
+- Field `RawResponse` of struct `DpsCertificateClientVerifyCertificateResponse` has been removed
+- Field `IotDpsResourceClientGetPrivateEndpointConnectionResult` of struct `IotDpsResourceClientGetPrivateEndpointConnectionResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientGetPrivateEndpointConnectionResponse` has been removed
+- Field `DpsCertificateClientCreateOrUpdateResult` of struct `DpsCertificateClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `DpsCertificateClientCreateOrUpdateResponse` has been removed
+- Field `IotDpsResourceClientListValidSKUsResult` of struct `IotDpsResourceClientListValidSKUsResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientListValidSKUsResponse` has been removed
+- Field `IotDpsResourceClientUpdateResult` of struct `IotDpsResourceClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `DpsCertificateClientDeleteResponse` has been removed
+- Field `DpsCertificateClientListResult` of struct `DpsCertificateClientListResponse` has been removed
+- Field `RawResponse` of struct `DpsCertificateClientListResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `IotDpsResourceClientListKeysResult` of struct `IotDpsResourceClientListKeysResponse` has been removed
+- Field `RawResponse` of struct `IotDpsResourceClientListKeysResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New function `*IotDpsResourceClientListBySubscriptionPager.More() bool`
+- New function `*IotDpsResourceClientListKeysPager.More() bool`
+- New function `*IotDpsResourceClientListByResourceGroupPager.More() bool`
+- New function `*IotDpsResourceClientListValidSKUsPager.More() bool`
+- New struct `ErrorDetails`
+- New anonymous field `IotDpsSKUDefinitionListResult` in struct `IotDpsResourceClientListValidSKUsResponse`
+- New anonymous field `PrivateLinkResources` in struct `IotDpsResourceClientListPrivateLinkResourcesResponse`
+- New anonymous field `CertificateResponse` in struct `DpsCertificateClientCreateOrUpdateResponse`
+- New anonymous field `CertificateListDescription` in struct `DpsCertificateClientListResponse`
+- New anonymous field `ProvisioningServiceDescription` in struct `IotDpsResourceClientCreateOrUpdateResponse`
+- New anonymous field `GroupIDInformation` in struct `IotDpsResourceClientGetPrivateLinkResourcesResponse`
+- New anonymous field `AsyncOperationResult` in struct `IotDpsResourceClientGetOperationResultResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `ProvisioningServiceDescriptionListResult` in struct `IotDpsResourceClientListBySubscriptionResponse`
+- New anonymous field `ProvisioningServiceDescriptionListResult` in struct `IotDpsResourceClientListByResourceGroupResponse`
+- New field `PrivateEndpointConnectionArray` in struct `IotDpsResourceClientListPrivateEndpointConnectionsResponse`
+- New anonymous field `SharedAccessSignatureAuthorizationRuleAccessRightsDescription` in struct `IotDpsResourceClientListKeysForKeyNameResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `IotDpsResourceClientCreateOrUpdatePrivateEndpointConnectionResponse`
+- New anonymous field `ProvisioningServiceDescription` in struct `IotDpsResourceClientUpdateResponse`
+- New anonymous field `CertificateResponse` in struct `DpsCertificateClientVerifyCertificateResponse`
+- New anonymous field `SharedAccessSignatureAuthorizationRuleListResult` in struct `IotDpsResourceClientListKeysResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `IotDpsResourceClientDeletePrivateEndpointConnectionResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `IotDpsResourceClientGetPrivateEndpointConnectionResponse`
+- New anonymous field `ProvisioningServiceDescription` in struct `IotDpsResourceClientGetResponse`
+- New anonymous field `CertificateResponse` in struct `DpsCertificateClientGetResponse`
+- New anonymous field `NameAvailabilityInfo` in struct `IotDpsResourceClientCheckProvisioningServiceNameAvailabilityResponse`
+- New anonymous field `VerificationCodeResponse` in struct `DpsCertificateClientGenerateVerificationCodeResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Struct `ErrorDetails` has been removed
+
+### Features Added
+
+- New const `CreatedByTypeKey`
+- New const `CreatedByTypeUser`
+- New const `CreatedByTypeApplication`
+- New const `CreatedByTypeManagedIdentity`
+- New function `*timeRFC3339.UnmarshalText([]byte) error`
+- New function `*SystemData.UnmarshalJSON([]byte) error`
+- New function `CreatedByType.ToPtr() *CreatedByType`
+- New function `PossibleCreatedByTypeValues() []CreatedByType`
+- New function `SystemData.MarshalJSON() ([]byte, error)`
+- New function `timeRFC3339.MarshalJSON() ([]byte, error)`
+- New function `*timeRFC3339.UnmarshalJSON([]byte) error`
+- New function `timeRFC3339.MarshalText() ([]byte, error)`
+- New function `*timeRFC3339.Parse(string) error`
+- New struct `SystemData`
+- New field `SystemData` in struct `ProvisioningServiceDescription`
+- New field `SystemData` in struct `PrivateEndpointConnection`
+- New field `EnableDataResidency` in struct `IotDpsPropertiesDescription`
+- New field `SystemData` in struct `CertificateResponse`
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

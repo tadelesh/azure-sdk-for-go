@@ -35,17 +35,17 @@ type DscpConfigurationClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDscpConfigurationClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DscpConfigurationClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DscpConfigurationClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *DscpConfigurationClient) BeginCreateOrUpdate(ctx context.Context, 
 	if err != nil {
 		return DscpConfigurationClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DscpConfigurationClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DscpConfigurationClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DscpConfigurationClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return DscpConfigurationClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *DscpConfigurationClient) BeginDelete(ctx context.Context, resource
 	if err != nil {
 		return DscpConfigurationClientDeletePollerResponse{}, err
 	}
-	result := DscpConfigurationClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DscpConfigurationClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DscpConfigurationClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return DscpConfigurationClientDeletePollerResponse{}, err
@@ -233,7 +229,7 @@ func (client *DscpConfigurationClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *DscpConfigurationClient) getHandleResponse(resp *http.Response) (DscpConfigurationClientGetResponse, error) {
-	result := DscpConfigurationClientGetResponse{RawResponse: resp}
+	result := DscpConfigurationClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DscpConfiguration); err != nil {
 		return DscpConfigurationClientGetResponse{}, err
 	}
@@ -280,7 +276,7 @@ func (client *DscpConfigurationClient) listCreateRequest(ctx context.Context, re
 
 // listHandleResponse handles the List response.
 func (client *DscpConfigurationClient) listHandleResponse(resp *http.Response) (DscpConfigurationClientListResponse, error) {
-	result := DscpConfigurationClientListResponse{RawResponse: resp}
+	result := DscpConfigurationClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DscpConfigurationListResult); err != nil {
 		return DscpConfigurationClientListResponse{}, err
 	}
@@ -323,7 +319,7 @@ func (client *DscpConfigurationClient) listAllCreateRequest(ctx context.Context,
 
 // listAllHandleResponse handles the ListAll response.
 func (client *DscpConfigurationClient) listAllHandleResponse(resp *http.Response) (DscpConfigurationClientListAllResponse, error) {
-	result := DscpConfigurationClientListAllResponse{RawResponse: resp}
+	result := DscpConfigurationClientListAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DscpConfigurationListResult); err != nil {
 		return DscpConfigurationClientListAllResponse{}, err
 	}

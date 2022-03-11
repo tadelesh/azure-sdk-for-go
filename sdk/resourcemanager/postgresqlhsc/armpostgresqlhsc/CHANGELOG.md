@@ -1,5 +1,153 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*OperationsClient.List` parameter(s) have been changed from `(context.Context, *OperationsClientListOptions)` to `(*OperationsClientListOptions)`
+- Function `*OperationsClient.List` return value(s) have been changed from `(OperationsClientListResponse, error)` to `(*OperationsClientListPager)`
+- Function `*ConfigurationsClientListByServerPager.NextPage` return value(s) have been changed from `(bool)` to `(ConfigurationsClientListByServerResponse, error)`
+- Function `*RolesClient.ListByServerGroup` parameter(s) have been changed from `(context.Context, string, string, *RolesClientListByServerGroupOptions)` to `(string, string, *RolesClientListByServerGroupOptions)`
+- Function `*RolesClient.ListByServerGroup` return value(s) have been changed from `(RolesClientListByServerGroupResponse, error)` to `(*RolesClientListByServerGroupPager)`
+- Function `*FirewallRulesClient.ListByServerGroup` parameter(s) have been changed from `(context.Context, string, string, *FirewallRulesClientListByServerGroupOptions)` to `(string, string, *FirewallRulesClientListByServerGroupOptions)`
+- Function `*FirewallRulesClient.ListByServerGroup` return value(s) have been changed from `(FirewallRulesClientListByServerGroupResponse, error)` to `(*FirewallRulesClientListByServerGroupPager)`
+- Function `*ServerGroupsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ServerGroupsClientListByResourceGroupResponse, error)`
+- Function `*ConfigurationsClientListByServerGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ConfigurationsClientListByServerGroupResponse, error)`
+- Function `*ServersClient.ListByServerGroup` parameter(s) have been changed from `(context.Context, string, string, *ServersClientListByServerGroupOptions)` to `(string, string, *ServersClientListByServerGroupOptions)`
+- Function `*ServersClient.ListByServerGroup` return value(s) have been changed from `(ServersClientListByServerGroupResponse, error)` to `(*ServersClientListByServerGroupPager)`
+- Function `*ServerGroupsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(ServerGroupsClientListResponse, error)`
+- Function `*ServerGroupsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ServerGroupsClientListByResourceGroupPager.Err` has been removed
+- Function `*ConfigurationsClientListByServerPager.PageResponse` has been removed
+- Function `*ServerGroupsClientListPager.PageResponse` has been removed
+- Function `*ConfigurationsClientListByServerPager.Err` has been removed
+- Function `*ServerGroupsClientListPager.Err` has been removed
+- Function `*ConfigurationsClientListByServerGroupPager.Err` has been removed
+- Function `*ConfigurationsClientListByServerGroupPager.PageResponse` has been removed
+- Struct `ConfigurationsClientGetResult` has been removed
+- Struct `ConfigurationsClientListByServerGroupResult` has been removed
+- Struct `ConfigurationsClientListByServerResult` has been removed
+- Struct `ConfigurationsClientUpdateResult` has been removed
+- Struct `FirewallRulesClientCreateOrUpdateResult` has been removed
+- Struct `FirewallRulesClientGetResult` has been removed
+- Struct `FirewallRulesClientListByServerGroupResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `RolesClientCreateResult` has been removed
+- Struct `RolesClientListByServerGroupResult` has been removed
+- Struct `ServerGroupsClientCheckNameAvailabilityResult` has been removed
+- Struct `ServerGroupsClientCreateOrUpdateResult` has been removed
+- Struct `ServerGroupsClientGetResult` has been removed
+- Struct `ServerGroupsClientListByResourceGroupResult` has been removed
+- Struct `ServerGroupsClientListResult` has been removed
+- Struct `ServerGroupsClientUpdateResult` has been removed
+- Struct `ServersClientGetResult` has been removed
+- Struct `ServersClientListByServerGroupResult` has been removed
+- Field `RawResponse` of struct `ServerGroupsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `RolesClientCreatePollerResponse` has been removed
+- Field `RawResponse` of struct `ServerGroupsClientStartResponse` has been removed
+- Field `ServerGroupsClientCreateOrUpdateResult` of struct `ServerGroupsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServerGroupsClientCreateOrUpdateResponse` has been removed
+- Field `ConfigurationsClientListByServerResult` of struct `ConfigurationsClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientListByServerResponse` has been removed
+- Field `RawResponse` of struct `FirewallRulesClientDeletePollerResponse` has been removed
+- Field `ServerGroupsClientListResult` of struct `ServerGroupsClientListResponse` has been removed
+- Field `RawResponse` of struct `ServerGroupsClientListResponse` has been removed
+- Field `ServerGroupsClientGetResult` of struct `ServerGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServerGroupsClientGetResponse` has been removed
+- Field `ServerGroupsClientListByResourceGroupResult` of struct `ServerGroupsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ServerGroupsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ServerGroupsClientStopPollerResponse` has been removed
+- Field `ServerGroupsClientUpdateResult` of struct `ServerGroupsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ServerGroupsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `RolesClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `FirewallRulesClientCreateOrUpdatePollerResponse` has been removed
+- Field `ServerGroupsClientCheckNameAvailabilityResult` of struct `ServerGroupsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ServerGroupsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `FirewallRulesClientDeleteResponse` has been removed
+- Field `ConfigurationsClientUpdateResult` of struct `ConfigurationsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientUpdateResponse` has been removed
+- Field `ServersClientListByServerGroupResult` of struct `ServersClientListByServerGroupResponse` has been removed
+- Field `RawResponse` of struct `ServersClientListByServerGroupResponse` has been removed
+- Field `FirewallRulesClientListByServerGroupResult` of struct `FirewallRulesClientListByServerGroupResponse` has been removed
+- Field `RawResponse` of struct `FirewallRulesClientListByServerGroupResponse` has been removed
+- Field `RawResponse` of struct `ServerGroupsClientCreateOrUpdatePollerResponse` has been removed
+- Field `FirewallRulesClientGetResult` of struct `FirewallRulesClientGetResponse` has been removed
+- Field `RawResponse` of struct `FirewallRulesClientGetResponse` has been removed
+- Field `ConfigurationsClientGetResult` of struct `ConfigurationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServerGroupsClientStartPollerResponse` has been removed
+- Field `RawResponse` of struct `ServerGroupsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `ServerGroupsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientUpdatePollerResponse` has been removed
+- Field `FirewallRulesClientCreateOrUpdateResult` of struct `FirewallRulesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `FirewallRulesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `RolesClientDeletePollerResponse` has been removed
+- Field `RolesClientCreateResult` of struct `RolesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `RolesClientCreateResponse` has been removed
+- Field `ConfigurationsClientListByServerGroupResult` of struct `ConfigurationsClientListByServerGroupResponse` has been removed
+- Field `RawResponse` of struct `ConfigurationsClientListByServerGroupResponse` has been removed
+- Field `RawResponse` of struct `ServerGroupsClientRestartResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `ServersClientGetResult` of struct `ServersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ServersClientGetResponse` has been removed
+- Field `RolesClientListByServerGroupResult` of struct `RolesClientListByServerGroupResponse` has been removed
+- Field `RawResponse` of struct `RolesClientListByServerGroupResponse` has been removed
+- Field `RawResponse` of struct `ServerGroupsClientRestartPollerResponse` has been removed
+- Field `RawResponse` of struct `ServerGroupsClientStopResponse` has been removed
+
+### Features Added
+
+- New function `*FirewallRulesClientListByServerGroupPager.More() bool`
+- New function `*OperationsClientListPager.NextPage(context.Context) (OperationsClientListResponse, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*ServersClientListByServerGroupPager.More() bool`
+- New function `*ServerGroupsClientListByResourceGroupPager.More() bool`
+- New function `*FirewallRulesClientListByServerGroupPager.NextPage(context.Context) (FirewallRulesClientListByServerGroupResponse, error)`
+- New function `*ServersClientListByServerGroupPager.NextPage(context.Context) (ServersClientListByServerGroupResponse, error)`
+- New function `*ConfigurationsClientListByServerGroupPager.More() bool`
+- New function `*RolesClientListByServerGroupPager.NextPage(context.Context) (RolesClientListByServerGroupResponse, error)`
+- New function `*ServerGroupsClientListPager.More() bool`
+- New function `*RolesClientListByServerGroupPager.More() bool`
+- New function `*ConfigurationsClientListByServerPager.More() bool`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New struct `FirewallRulesClientListByServerGroupPager`
+- New struct `OperationsClientListPager`
+- New struct `RolesClientListByServerGroupPager`
+- New struct `ServersClientListByServerGroupPager`
+- New anonymous field `ServerGroupListResult` in struct `ServerGroupsClientListResponse`
+- New anonymous field `ServerConfigurationListResult` in struct `ConfigurationsClientListByServerResponse`
+- New anonymous field `ServerGroupListResult` in struct `ServerGroupsClientListByResourceGroupResponse`
+- New anonymous field `ServerGroupServerListResult` in struct `ServersClientListByServerGroupResponse`
+- New anonymous field `RoleListResult` in struct `RolesClientListByServerGroupResponse`
+- New anonymous field `FirewallRuleListResult` in struct `FirewallRulesClientListByServerGroupResponse`
+- New anonymous field `ServerGroup` in struct `ServerGroupsClientUpdateResponse`
+- New anonymous field `ServerGroup` in struct `ServerGroupsClientGetResponse`
+- New anonymous field `FirewallRule` in struct `FirewallRulesClientCreateOrUpdateResponse`
+- New anonymous field `NameAvailability` in struct `ServerGroupsClientCheckNameAvailabilityResponse`
+- New anonymous field `ServerGroup` in struct `ServerGroupsClientCreateOrUpdateResponse`
+- New anonymous field `ServerGroupServer` in struct `ServersClientGetResponse`
+- New anonymous field `ServerGroupConfiguration` in struct `ConfigurationsClientGetResponse`
+- New anonymous field `ServerGroupConfiguration` in struct `ConfigurationsClientUpdateResponse`
+- New anonymous field `FirewallRule` in struct `FirewallRulesClientGetResponse`
+- New anonymous field `ServerGroupConfigurationListResult` in struct `ConfigurationsClientListByServerGroupResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `Role` in struct `RolesClientCreateResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `Operation.Properties` has been changed from `map[string]map[string]interface{}` to `map[string]interface{}`
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

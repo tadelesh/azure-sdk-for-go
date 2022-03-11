@@ -1,5 +1,327 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*VaultsClient.List` parameter(s) have been changed from `(context.Context, string, string, *VaultsClientListOptions)` to `(string, string, *VaultsClientListOptions)`
+- Function `*VaultsClient.List` return value(s) have been changed from `(VaultsClientListResponse, error)` to `(*VaultsClientListPager)`
+- Function `*OperationsClient.List` parameter(s) have been changed from `(context.Context, *OperationsClientListOptions)` to `(*OperationsClientListOptions)`
+- Function `*OperationsClient.List` return value(s) have been changed from `(OperationsClientListResponse, error)` to `(*OperationsClientListPager)`
+- Function `*ResourceQuotaLimitsClient.List` parameter(s) have been changed from `(context.Context, string, *ResourceQuotaLimitsClientListOptions)` to `(string, *ResourceQuotaLimitsClientListOptions)`
+- Function `*ResourceQuotaLimitsClient.List` return value(s) have been changed from `(ResourceQuotaLimitsClientListResponse, error)` to `(*ResourceQuotaLimitsClientListPager)`
+- Function `*BackupsClient.List` parameter(s) have been changed from `(context.Context, string, string, string, string, *BackupsClientListOptions)` to `(string, string, string, string, *BackupsClientListOptions)`
+- Function `*BackupsClient.List` return value(s) have been changed from `(BackupsClientListResponse, error)` to `(*BackupsClientListPager)`
+- Function `*PoolsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(PoolsClientListResponse, error)`
+- Function `*SnapshotsClient.List` parameter(s) have been changed from `(context.Context, string, string, string, string, *SnapshotsClientListOptions)` to `(string, string, string, string, *SnapshotsClientListOptions)`
+- Function `*SnapshotsClient.List` return value(s) have been changed from `(SnapshotsClientListResponse, error)` to `(*SnapshotsClientListPager)`
+- Function `*AccountsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(AccountsClientListBySubscriptionResponse, error)`
+- Function `*BackupPoliciesClient.List` parameter(s) have been changed from `(context.Context, string, string, *BackupPoliciesClientListOptions)` to `(string, string, *BackupPoliciesClientListOptions)`
+- Function `*BackupPoliciesClient.List` return value(s) have been changed from `(BackupPoliciesClientListResponse, error)` to `(*BackupPoliciesClientListPager)`
+- Function `*SnapshotPoliciesClient.List` parameter(s) have been changed from `(context.Context, string, string, *SnapshotPoliciesClientListOptions)` to `(string, string, *SnapshotPoliciesClientListOptions)`
+- Function `*SnapshotPoliciesClient.List` return value(s) have been changed from `(SnapshotPoliciesClientListResponse, error)` to `(*SnapshotPoliciesClientListPager)`
+- Function `*VolumeGroupsClient.ListByNetAppAccount` parameter(s) have been changed from `(context.Context, string, string, *VolumeGroupsClientListByNetAppAccountOptions)` to `(string, string, *VolumeGroupsClientListByNetAppAccountOptions)`
+- Function `*VolumeGroupsClient.ListByNetAppAccount` return value(s) have been changed from `(VolumeGroupsClientListByNetAppAccountResponse, error)` to `(*VolumeGroupsClientListByNetAppAccountPager)`
+- Function `*AccountsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(AccountsClientListResponse, error)`
+- Function `*VolumesClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(VolumesClientListResponse, error)`
+- Function `*AccountBackupsClient.List` parameter(s) have been changed from `(context.Context, string, string, *AccountBackupsClientListOptions)` to `(string, string, *AccountBackupsClientListOptions)`
+- Function `*AccountBackupsClient.List` return value(s) have been changed from `(AccountBackupsClientListResponse, error)` to `(*AccountBackupsClientListPager)`
+- Function `*PoolsClientListPager.PageResponse` has been removed
+- Function `*PoolsClientListPager.Err` has been removed
+- Function `*AccountsClientListBySubscriptionPager.Err` has been removed
+- Function `*AccountsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*AccountsClientListPager.Err` has been removed
+- Function `*VolumesClientListPager.Err` has been removed
+- Function `*VolumesClientListPager.PageResponse` has been removed
+- Function `*AccountsClientListPager.PageResponse` has been removed
+- Struct `AccountBackupsClientGetResult` has been removed
+- Struct `AccountBackupsClientListResult` has been removed
+- Struct `AccountsClientCreateOrUpdateResult` has been removed
+- Struct `AccountsClientGetResult` has been removed
+- Struct `AccountsClientListBySubscriptionResult` has been removed
+- Struct `AccountsClientListResult` has been removed
+- Struct `AccountsClientUpdateResult` has been removed
+- Struct `BackupPoliciesClientCreateResult` has been removed
+- Struct `BackupPoliciesClientGetResult` has been removed
+- Struct `BackupPoliciesClientListResult` has been removed
+- Struct `BackupPoliciesClientUpdateResult` has been removed
+- Struct `BackupsClientCreateResult` has been removed
+- Struct `BackupsClientGetResult` has been removed
+- Struct `BackupsClientGetStatusResult` has been removed
+- Struct `BackupsClientGetVolumeRestoreStatusResult` has been removed
+- Struct `BackupsClientListResult` has been removed
+- Struct `BackupsClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PoolsClientCreateOrUpdateResult` has been removed
+- Struct `PoolsClientGetResult` has been removed
+- Struct `PoolsClientListResult` has been removed
+- Struct `PoolsClientUpdateResult` has been removed
+- Struct `ResourceClientCheckFilePathAvailabilityResult` has been removed
+- Struct `ResourceClientCheckNameAvailabilityResult` has been removed
+- Struct `ResourceClientCheckQuotaAvailabilityResult` has been removed
+- Struct `ResourceQuotaLimitsClientGetResult` has been removed
+- Struct `ResourceQuotaLimitsClientListResult` has been removed
+- Struct `SnapshotPoliciesClientCreateResult` has been removed
+- Struct `SnapshotPoliciesClientGetResult` has been removed
+- Struct `SnapshotPoliciesClientListResult` has been removed
+- Struct `SnapshotPoliciesClientListVolumesResult` has been removed
+- Struct `SnapshotPoliciesClientUpdateResult` has been removed
+- Struct `SnapshotsClientCreateResult` has been removed
+- Struct `SnapshotsClientGetResult` has been removed
+- Struct `SnapshotsClientListResult` has been removed
+- Struct `SnapshotsClientUpdateResult` has been removed
+- Struct `VaultsClientListResult` has been removed
+- Struct `VolumeGroupsClientCreateResult` has been removed
+- Struct `VolumeGroupsClientGetResult` has been removed
+- Struct `VolumeGroupsClientListByNetAppAccountResult` has been removed
+- Struct `VolumesClientCreateOrUpdateResult` has been removed
+- Struct `VolumesClientGetResult` has been removed
+- Struct `VolumesClientListResult` has been removed
+- Struct `VolumesClientReplicationStatusResult` has been removed
+- Struct `VolumesClientUpdateResult` has been removed
+- Field `RawResponse` of struct `VolumesClientBreakReplicationPollerResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientResyncReplicationPollerResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientPoolChangePollerResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `PoolsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `PoolsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `SnapshotPoliciesClientUpdatePollerResponse` has been removed
+- Field `PoolsClientListResult` of struct `PoolsClientListResponse` has been removed
+- Field `RawResponse` of struct `PoolsClientListResponse` has been removed
+- Field `AccountsClientUpdateResult` of struct `AccountsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SnapshotPoliciesClientDeleteResponse` has been removed
+- Field `ResourceQuotaLimitsClientListResult` of struct `ResourceQuotaLimitsClientListResponse` has been removed
+- Field `RawResponse` of struct `ResourceQuotaLimitsClientListResponse` has been removed
+- Field `RawResponse` of struct `BackupPoliciesClientCreatePollerResponse` has been removed
+- Field `BackupPoliciesClientUpdateResult` of struct `BackupPoliciesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `BackupPoliciesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `AccountBackupsClientDeletePollerResponse` has been removed
+- Field `VolumeGroupsClientListByNetAppAccountResult` of struct `VolumeGroupsClientListByNetAppAccountResponse` has been removed
+- Field `RawResponse` of struct `VolumeGroupsClientListByNetAppAccountResponse` has been removed
+- Field `RawResponse` of struct `BackupPoliciesClientDeleteResponse` has been removed
+- Field `SnapshotPoliciesClientListResult` of struct `SnapshotPoliciesClientListResponse` has been removed
+- Field `RawResponse` of struct `SnapshotPoliciesClientListResponse` has been removed
+- Field `AccountsClientGetResult` of struct `AccountsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientGetResponse` has been removed
+- Field `SnapshotsClientListResult` of struct `SnapshotsClientListResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientListResponse` has been removed
+- Field `VolumesClientGetResult` of struct `VolumesClientGetResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientGetResponse` has been removed
+- Field `SnapshotsClientGetResult` of struct `SnapshotsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientGetResponse` has been removed
+- Field `SnapshotPoliciesClientListVolumesResult` of struct `SnapshotPoliciesClientListVolumesResponse` has been removed
+- Field `RawResponse` of struct `SnapshotPoliciesClientListVolumesResponse` has been removed
+- Field `PoolsClientGetResult` of struct `PoolsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PoolsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `BackupPoliciesClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientCreatePollerResponse` has been removed
+- Field `BackupsClientCreateResult` of struct `BackupsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `PoolsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientPoolChangeResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientUpdatePollerResponse` has been removed
+- Field `ResourceClientCheckFilePathAvailabilityResult` of struct `ResourceClientCheckFilePathAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ResourceClientCheckFilePathAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientDeleteReplicationResponse` has been removed
+- Field `BackupPoliciesClientCreateResult` of struct `BackupPoliciesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `BackupPoliciesClientCreateResponse` has been removed
+- Field `SnapshotsClientUpdateResult` of struct `SnapshotsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientUpdateResponse` has been removed
+- Field `VolumesClientCreateOrUpdateResult` of struct `VolumesClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientCreateOrUpdateResponse` has been removed
+- Field `VaultsClientListResult` of struct `VaultsClientListResponse` has been removed
+- Field `RawResponse` of struct `VaultsClientListResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientAuthorizeReplicationPollerResponse` has been removed
+- Field `AccountsClientListBySubscriptionResult` of struct `AccountsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientDeletePollerResponse` has been removed
+- Field `SnapshotPoliciesClientGetResult` of struct `SnapshotPoliciesClientGetResponse` has been removed
+- Field `RawResponse` of struct `SnapshotPoliciesClientGetResponse` has been removed
+- Field `AccountsClientListResult` of struct `AccountsClientListResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientListResponse` has been removed
+- Field `RawResponse` of struct `VolumeGroupsClientCreatePollerResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientResyncReplicationResponse` has been removed
+- Field `ResourceQuotaLimitsClientGetResult` of struct `ResourceQuotaLimitsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ResourceQuotaLimitsClientGetResponse` has been removed
+- Field `AccountBackupsClientGetResult` of struct `AccountBackupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AccountBackupsClientGetResponse` has been removed
+- Field `AccountBackupsClientListResult` of struct `AccountBackupsClientListResponse` has been removed
+- Field `RawResponse` of struct `AccountBackupsClientListResponse` has been removed
+- Field `RawResponse` of struct `AccountBackupsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientRevertResponse` has been removed
+- Field `PoolsClientCreateOrUpdateResult` of struct `PoolsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `PoolsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientAuthorizeReplicationResponse` has been removed
+- Field `VolumeGroupsClientCreateResult` of struct `VolumeGroupsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `VolumeGroupsClientCreateResponse` has been removed
+- Field `VolumeGroupsClientGetResult` of struct `VolumeGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VolumeGroupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientReInitializeReplicationResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientBreakReplicationResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientUpdatePollerResponse` has been removed
+- Field `SnapshotPoliciesClientCreateResult` of struct `SnapshotPoliciesClientCreateResponse` has been removed
+- Field `RawResponse` of struct `SnapshotPoliciesClientCreateResponse` has been removed
+- Field `BackupPoliciesClientListResult` of struct `BackupPoliciesClientListResponse` has been removed
+- Field `RawResponse` of struct `BackupPoliciesClientListResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientDeleteReplicationPollerResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientDeleteResponse` has been removed
+- Field `VolumesClientUpdateResult` of struct `VolumesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientDeleteResponse` has been removed
+- Field `BackupsClientGetStatusResult` of struct `BackupsClientGetStatusResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientGetStatusResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientDeletePollerResponse` has been removed
+- Field `SnapshotsClientCreateResult` of struct `SnapshotsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `SnapshotsClientCreateResponse` has been removed
+- Field `PoolsClientUpdateResult` of struct `PoolsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `PoolsClientUpdateResponse` has been removed
+- Field `AccountsClientCreateOrUpdateResult` of struct `AccountsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientCreateOrUpdateResponse` has been removed
+- Field `BackupPoliciesClientGetResult` of struct `BackupPoliciesClientGetResponse` has been removed
+- Field `RawResponse` of struct `BackupPoliciesClientGetResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientRevertPollerResponse` has been removed
+- Field `VolumesClientListResult` of struct `VolumesClientListResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientListResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientCreatePollerResponse` has been removed
+- Field `ResourceClientCheckNameAvailabilityResult` of struct `ResourceClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ResourceClientCheckNameAvailabilityResponse` has been removed
+- Field `BackupsClientGetResult` of struct `BackupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SnapshotPoliciesClientDeletePollerResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientReInitializeReplicationPollerResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientDeletePollerResponse` has been removed
+- Field `SnapshotPoliciesClientUpdateResult` of struct `SnapshotPoliciesClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `SnapshotPoliciesClientUpdateResponse` has been removed
+- Field `ResourceClientCheckQuotaAvailabilityResult` of struct `ResourceClientCheckQuotaAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `ResourceClientCheckQuotaAvailabilityResponse` has been removed
+- Field `VolumesClientReplicationStatusResult` of struct `VolumesClientReplicationStatusResponse` has been removed
+- Field `RawResponse` of struct `VolumesClientReplicationStatusResponse` has been removed
+- Field `BackupsClientUpdateResult` of struct `BackupsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `VolumeGroupsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `VolumeGroupsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `PoolsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `AccountsClientCreateOrUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `BackupPoliciesClientUpdatePollerResponse` has been removed
+- Field `BackupsClientListResult` of struct `BackupsClientListResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientListResponse` has been removed
+- Field `BackupsClientGetVolumeRestoreStatusResult` of struct `BackupsClientGetVolumeRestoreStatusResponse` has been removed
+- Field `RawResponse` of struct `BackupsClientGetVolumeRestoreStatusResponse` has been removed
+
+### Features Added
+
+- New function `BackupPolicyDetails.MarshalJSON() ([]byte, error)`
+- New function `*BackupsClientListPager.More() bool`
+- New function `*SnapshotsClientListPager.NextPage(context.Context) (SnapshotsClientListResponse, error)`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*VaultsClientListPager.NextPage(context.Context) (VaultsClientListResponse, error)`
+- New function `*ResourceQuotaLimitsClientListPager.More() bool`
+- New function `SnapshotPolicyDetails.MarshalJSON() ([]byte, error)`
+- New function `*AccountsClientListBySubscriptionPager.More() bool`
+- New function `*PoolsClientListPager.More() bool`
+- New function `*SnapshotsClientListPager.More() bool`
+- New function `*VaultsClientListPager.More() bool`
+- New function `*BackupsClientListPager.NextPage(context.Context) (BackupsClientListResponse, error)`
+- New function `*OperationsClientListPager.NextPage(context.Context) (OperationsClientListResponse, error)`
+- New function `*AccountsClientListPager.More() bool`
+- New function `*AccountBackupsClientListPager.More() bool`
+- New function `MountTarget.MarshalJSON() ([]byte, error)`
+- New function `*VolumesClientListPager.More() bool`
+- New function `*BackupPoliciesClientListPager.More() bool`
+- New function `*SnapshotPoliciesClientListPager.More() bool`
+- New function `*ResourceQuotaLimitsClientListPager.NextPage(context.Context) (ResourceQuotaLimitsClientListResponse, error)`
+- New function `*BackupPoliciesClientListPager.NextPage(context.Context) (BackupPoliciesClientListResponse, error)`
+- New function `*VolumeGroupsClientListByNetAppAccountPager.NextPage(context.Context) (VolumeGroupsClientListByNetAppAccountResponse, error)`
+- New function `*VolumeGroupsClientListByNetAppAccountPager.More() bool`
+- New function `*AccountBackupsClientListPager.NextPage(context.Context) (AccountBackupsClientListResponse, error)`
+- New function `*SnapshotPoliciesClientListPager.NextPage(context.Context) (SnapshotPoliciesClientListResponse, error)`
+- New struct `AccountBackupsClientListPager`
+- New struct `BackupPoliciesClientListPager`
+- New struct `BackupPolicyDetails`
+- New struct `BackupsClientListPager`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New struct `MountTarget`
+- New struct `OperationsClientListPager`
+- New struct `ResourceIdentity`
+- New struct `ResourceQuotaLimitsClientListPager`
+- New struct `SnapshotPoliciesClientListPager`
+- New struct `SnapshotPolicyDetails`
+- New struct `SnapshotsClientListPager`
+- New struct `VaultsClientListPager`
+- New struct `VolumeGroupsClientListByNetAppAccountPager`
+- New anonymous field `CheckAvailabilityResponse` in struct `ResourceClientCheckFilePathAvailabilityResponse`
+- New anonymous field `AccountList` in struct `AccountsClientListResponse`
+- New anonymous field `VolumeGroupList` in struct `VolumeGroupsClientListByNetAppAccountResponse`
+- New anonymous field `VolumeList` in struct `VolumesClientListResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `BackupStatus` in struct `BackupsClientGetStatusResponse`
+- New anonymous field `AccountList` in struct `AccountsClientListBySubscriptionResponse`
+- New anonymous field `Account` in struct `AccountsClientGetResponse`
+- New anonymous field `SnapshotsList` in struct `SnapshotsClientListResponse`
+- New anonymous field `Volume` in struct `VolumesClientCreateOrUpdateResponse`
+- New anonymous field `Volume` in struct `VolumesClientGetResponse`
+- New anonymous field `Account` in struct `AccountsClientUpdateResponse`
+- New anonymous field `BackupPolicy` in struct `BackupPoliciesClientCreateResponse`
+- New anonymous field `BackupPolicy` in struct `BackupPoliciesClientGetResponse`
+- New anonymous field `ReplicationStatus` in struct `VolumesClientReplicationStatusResponse`
+- New anonymous field `Snapshot` in struct `SnapshotsClientUpdateResponse`
+- New anonymous field `Backup` in struct `BackupsClientUpdateResponse`
+- New anonymous field `BackupPolicy` in struct `BackupPoliciesClientUpdateResponse`
+- New anonymous field `Backup` in struct `BackupsClientGetResponse`
+- New anonymous field `CapacityPool` in struct `PoolsClientUpdateResponse`
+- New anonymous field `SubscriptionQuotaItemList` in struct `ResourceQuotaLimitsClientListResponse`
+- New anonymous field `SnapshotPoliciesList` in struct `SnapshotPoliciesClientListResponse`
+- New anonymous field `SnapshotPolicyVolumeList` in struct `SnapshotPoliciesClientListVolumesResponse`
+- New anonymous field `SubscriptionQuotaItem` in struct `ResourceQuotaLimitsClientGetResponse`
+- New anonymous field `VolumeGroupDetails` in struct `VolumeGroupsClientGetResponse`
+- New anonymous field `CapacityPoolList` in struct `PoolsClientListResponse`
+- New anonymous field `SnapshotPolicy` in struct `SnapshotPoliciesClientUpdateResponse`
+- New anonymous field `Account` in struct `AccountsClientCreateOrUpdateResponse`
+- New anonymous field `CheckAvailabilityResponse` in struct `ResourceClientCheckQuotaAvailabilityResponse`
+- New anonymous field `Backup` in struct `AccountBackupsClientGetResponse`
+- New anonymous field `VolumeGroupDetails` in struct `VolumeGroupsClientCreateResponse`
+- New anonymous field `Snapshot` in struct `SnapshotsClientGetResponse`
+- New anonymous field `VaultList` in struct `VaultsClientListResponse`
+- New anonymous field `BackupPoliciesList` in struct `BackupPoliciesClientListResponse`
+- New anonymous field `Snapshot` in struct `SnapshotsClientCreateResponse`
+- New anonymous field `BackupsList` in struct `BackupsClientListResponse`
+- New anonymous field `SnapshotPolicy` in struct `SnapshotPoliciesClientCreateResponse`
+- New anonymous field `CapacityPool` in struct `PoolsClientGetResponse`
+- New anonymous field `Volume` in struct `VolumesClientUpdateResponse`
+- New anonymous field `RestoreStatus` in struct `BackupsClientGetVolumeRestoreStatusResponse`
+- New anonymous field `CheckAvailabilityResponse` in struct `ResourceClientCheckNameAvailabilityResponse`
+- New anonymous field `CapacityPool` in struct `PoolsClientCreateOrUpdateResponse`
+- New anonymous field `Backup` in struct `BackupsClientCreateResponse`
+- New anonymous field `SnapshotPolicy` in struct `SnapshotPoliciesClientGetResponse`
+- New anonymous field `BackupsList` in struct `AccountBackupsClientListResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*SnapshotsClient.BeginUpdate` parameter(s) have been changed from `(context.Context, string, string, string, string, string, map[string]interface{}, *SnapshotsClientBeginUpdateOptions)` to `(context.Context, string, string, string, string, string, interface{}, *SnapshotsClientBeginUpdateOptions)`
+- Function `BackupPolicyDetails.MarshalJSON` has been removed
+- Function `SnapshotPolicyDetails.MarshalJSON` has been removed
+- Function `MountTarget.MarshalJSON` has been removed
+- Struct `BackupPolicyDetails` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+- Struct `MountTarget` has been removed
+- Struct `ResourceIdentity` has been removed
+- Struct `SnapshotPolicyDetails` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

@@ -24,9 +24,9 @@ import (
 // Client contains the methods for the SignalR group.
 // Don't use this type directly, use NewClient() instead.
 type Client struct {
-	host string
+	host           string
 	subscriptionID string
-	pl runtime.Pipeline
+	pl             runtime.Pipeline
 }
 
 // NewClient creates a new instance of Client with the specified values.
@@ -44,8 +44,8 @@ func NewClient(subscriptionID string, credential azcore.TokenCredential, options
 	}
 	client := &Client{
 		subscriptionID: subscriptionID,
-		host: string(ep),
-		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -86,7 +86,7 @@ func (client *Client) checkNameAvailabilityCreateRequest(ctx context.Context, lo
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-01-preview")
+	reqQP.Set("api-version", "2021-10-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -94,7 +94,7 @@ func (client *Client) checkNameAvailabilityCreateRequest(ctx context.Context, lo
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *Client) checkNameAvailabilityHandleResponse(resp *http.Response) (ClientCheckNameAvailabilityResponse, error) {
-	result := ClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := ClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NameAvailability); err != nil {
 		return ClientCheckNameAvailabilityResponse{}, err
 	}
@@ -113,14 +113,12 @@ func (client *Client) BeginCreateOrUpdate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("Client.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ClientCreateOrUpdatePollerResponse{}, err
 	}
-	result.Poller = &ClientCreateOrUpdatePoller {
+	result.Poller = &ClientCreateOrUpdatePoller{
 		pt: pt,
 	}
 	return result, nil
@@ -140,7 +138,7 @@ func (client *Client) createOrUpdate(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	 return resp, nil
+	return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -163,7 +161,7 @@ func (client *Client) createOrUpdateCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-01-preview")
+	reqQP.Set("api-version", "2021-10-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -180,14 +178,12 @@ func (client *Client) BeginDelete(ctx context.Context, resourceGroupName string,
 	if err != nil {
 		return ClientDeletePollerResponse{}, err
 	}
-	result := ClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("Client.Delete", "", resp, client.pl)
 	if err != nil {
 		return ClientDeletePollerResponse{}, err
 	}
-	result.Poller = &ClientDeletePoller {
+	result.Poller = &ClientDeletePoller{
 		pt: pt,
 	}
 	return result, nil
@@ -207,7 +203,7 @@ func (client *Client) deleteOperation(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	 return resp, nil
+	return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -230,7 +226,7 @@ func (client *Client) deleteCreateRequest(ctx context.Context, resourceGroupName
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-01-preview")
+	reqQP.Set("api-version", "2021-10-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -277,7 +273,7 @@ func (client *Client) getCreateRequest(ctx context.Context, resourceGroupName st
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-01-preview")
+	reqQP.Set("api-version", "2021-10-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -285,7 +281,7 @@ func (client *Client) getCreateRequest(ctx context.Context, resourceGroupName st
 
 // getHandleResponse handles the Get response.
 func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse, error) {
-	result := ClientGetResponse{RawResponse: resp}
+	result := ClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceInfo); err != nil {
 		return ClientGetResponse{}, err
 	}
@@ -297,7 +293,7 @@ func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse,
 // resourceGroupName - The name of the resource group that contains the resource. You can obtain this value from the Azure
 // Resource Manager API or the portal.
 // options - ClientListByResourceGroupOptions contains the optional parameters for the Client.ListByResourceGroup method.
-func (client *Client) ListByResourceGroup(resourceGroupName string, options *ClientListByResourceGroupOptions) (*ClientListByResourceGroupPager) {
+func (client *Client) ListByResourceGroup(resourceGroupName string, options *ClientListByResourceGroupOptions) *ClientListByResourceGroupPager {
 	return &ClientListByResourceGroupPager{
 		client: client,
 		requester: func(ctx context.Context) (*policy.Request, error) {
@@ -325,7 +321,7 @@ func (client *Client) listByResourceGroupCreateRequest(ctx context.Context, reso
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-01-preview")
+	reqQP.Set("api-version", "2021-10-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -333,7 +329,7 @@ func (client *Client) listByResourceGroupCreateRequest(ctx context.Context, reso
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *Client) listByResourceGroupHandleResponse(resp *http.Response) (ClientListByResourceGroupResponse, error) {
-	result := ClientListByResourceGroupResponse{RawResponse: resp}
+	result := ClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceInfoList); err != nil {
 		return ClientListByResourceGroupResponse{}, err
 	}
@@ -343,7 +339,7 @@ func (client *Client) listByResourceGroupHandleResponse(resp *http.Response) (Cl
 // ListBySubscription - Handles requests to list all resources in a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - ClientListBySubscriptionOptions contains the optional parameters for the Client.ListBySubscription method.
-func (client *Client) ListBySubscription(options *ClientListBySubscriptionOptions) (*ClientListBySubscriptionPager) {
+func (client *Client) ListBySubscription(options *ClientListBySubscriptionOptions) *ClientListBySubscriptionPager {
 	return &ClientListBySubscriptionPager{
 		client: client,
 		requester: func(ctx context.Context) (*policy.Request, error) {
@@ -367,7 +363,7 @@ func (client *Client) listBySubscriptionCreateRequest(ctx context.Context, optio
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-01-preview")
+	reqQP.Set("api-version", "2021-10-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -375,7 +371,7 @@ func (client *Client) listBySubscriptionCreateRequest(ctx context.Context, optio
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *Client) listBySubscriptionHandleResponse(resp *http.Response) (ClientListBySubscriptionResponse, error) {
-	result := ClientListBySubscriptionResponse{RawResponse: resp}
+	result := ClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceInfoList); err != nil {
 		return ClientListBySubscriptionResponse{}, err
 	}
@@ -423,7 +419,7 @@ func (client *Client) listKeysCreateRequest(ctx context.Context, resourceGroupNa
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-01-preview")
+	reqQP.Set("api-version", "2021-10-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -431,9 +427,65 @@ func (client *Client) listKeysCreateRequest(ctx context.Context, resourceGroupNa
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *Client) listKeysHandleResponse(resp *http.Response) (ClientListKeysResponse, error) {
-	result := ClientListKeysResponse{RawResponse: resp}
+	result := ClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Keys); err != nil {
 		return ClientListKeysResponse{}, err
+	}
+	return result, nil
+}
+
+// ListSKUs - List all available skus of the resource.
+// If the operation fails it returns an *azcore.ResponseError type.
+// resourceGroupName - The name of the resource group that contains the resource. You can obtain this value from the Azure
+// Resource Manager API or the portal.
+// resourceName - The name of the resource.
+// options - ClientListSKUsOptions contains the optional parameters for the Client.ListSKUs method.
+func (client *Client) ListSKUs(ctx context.Context, resourceGroupName string, resourceName string, options *ClientListSKUsOptions) (ClientListSKUsResponse, error) {
+	req, err := client.listSKUsCreateRequest(ctx, resourceGroupName, resourceName, options)
+	if err != nil {
+		return ClientListSKUsResponse{}, err
+	}
+	resp, err := client.pl.Do(req)
+	if err != nil {
+		return ClientListSKUsResponse{}, err
+	}
+	if !runtime.HasStatusCode(resp, http.StatusOK) {
+		return ClientListSKUsResponse{}, runtime.NewResponseError(resp)
+	}
+	return client.listSKUsHandleResponse(resp)
+}
+
+// listSKUsCreateRequest creates the ListSKUs request.
+func (client *Client) listSKUsCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, options *ClientListSKUsOptions) (*policy.Request, error) {
+	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.SignalRService/signalR/{resourceName}/skus"
+	if client.subscriptionID == "" {
+		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+	if resourceGroupName == "" {
+		return nil, errors.New("parameter resourceGroupName cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+	if resourceName == "" {
+		return nil, errors.New("parameter resourceName cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{resourceName}", url.PathEscape(resourceName))
+	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.host, urlPath))
+	if err != nil {
+		return nil, err
+	}
+	reqQP := req.Raw().URL.Query()
+	reqQP.Set("api-version", "2021-10-01")
+	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().Header.Set("Accept", "application/json")
+	return req, nil
+}
+
+// listSKUsHandleResponse handles the ListSKUs response.
+func (client *Client) listSKUsHandleResponse(resp *http.Response) (ClientListSKUsResponse, error) {
+	result := ClientListSKUsResponse{}
+	if err := runtime.UnmarshalAsJSON(resp, &result.SKUList); err != nil {
+		return ClientListSKUsResponse{}, err
 	}
 	return result, nil
 }
@@ -451,14 +503,12 @@ func (client *Client) BeginRegenerateKey(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return ClientRegenerateKeyPollerResponse{}, err
 	}
-	result := ClientRegenerateKeyPollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientRegenerateKeyPollerResponse{}
 	pt, err := armruntime.NewPoller("Client.RegenerateKey", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ClientRegenerateKeyPollerResponse{}, err
 	}
-	result.Poller = &ClientRegenerateKeyPoller {
+	result.Poller = &ClientRegenerateKeyPoller{
 		pt: pt,
 	}
 	return result, nil
@@ -479,7 +529,7 @@ func (client *Client) regenerateKey(ctx context.Context, resourceGroupName strin
 	if !runtime.HasStatusCode(resp, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	 return resp, nil
+	return resp, nil
 }
 
 // regenerateKeyCreateRequest creates the RegenerateKey request.
@@ -502,7 +552,7 @@ func (client *Client) regenerateKeyCreateRequest(ctx context.Context, resourceGr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-01-preview")
+	reqQP.Set("api-version", "2021-10-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
@@ -519,14 +569,12 @@ func (client *Client) BeginRestart(ctx context.Context, resourceGroupName string
 	if err != nil {
 		return ClientRestartPollerResponse{}, err
 	}
-	result := ClientRestartPollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientRestartPollerResponse{}
 	pt, err := armruntime.NewPoller("Client.Restart", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ClientRestartPollerResponse{}, err
 	}
-	result.Poller = &ClientRestartPoller {
+	result.Poller = &ClientRestartPoller{
 		pt: pt,
 	}
 	return result, nil
@@ -546,7 +594,7 @@ func (client *Client) restart(ctx context.Context, resourceGroupName string, res
 	if !runtime.HasStatusCode(resp, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	 return resp, nil
+	return resp, nil
 }
 
 // restartCreateRequest creates the Restart request.
@@ -569,7 +617,7 @@ func (client *Client) restartCreateRequest(ctx context.Context, resourceGroupNam
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-01-preview")
+	reqQP.Set("api-version", "2021-10-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -587,14 +635,12 @@ func (client *Client) BeginUpdate(ctx context.Context, resourceGroupName string,
 	if err != nil {
 		return ClientUpdatePollerResponse{}, err
 	}
-	result := ClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("Client.Update", "", resp, client.pl)
 	if err != nil {
 		return ClientUpdatePollerResponse{}, err
 	}
-	result.Poller = &ClientUpdatePoller {
+	result.Poller = &ClientUpdatePoller{
 		pt: pt,
 	}
 	return result, nil
@@ -614,7 +660,7 @@ func (client *Client) update(ctx context.Context, resourceGroupName string, reso
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	 return resp, nil
+	return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -637,9 +683,8 @@ func (client *Client) updateCreateRequest(ctx context.Context, resourceGroupName
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-06-01-preview")
+	reqQP.Set("api-version", "2021-10-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, parameters)
 }
-

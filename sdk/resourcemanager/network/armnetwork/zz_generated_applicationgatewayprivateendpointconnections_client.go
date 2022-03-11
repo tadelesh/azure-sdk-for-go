@@ -35,17 +35,17 @@ type ApplicationGatewayPrivateEndpointConnectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewApplicationGatewayPrivateEndpointConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ApplicationGatewayPrivateEndpointConnectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ApplicationGatewayPrivateEndpointConnectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *ApplicationGatewayPrivateEndpointConnectionsClient) BeginDelete(ct
 	if err != nil {
 		return ApplicationGatewayPrivateEndpointConnectionsClientDeletePollerResponse{}, err
 	}
-	result := ApplicationGatewayPrivateEndpointConnectionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ApplicationGatewayPrivateEndpointConnectionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ApplicationGatewayPrivateEndpointConnectionsClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return ApplicationGatewayPrivateEndpointConnectionsClientDeletePollerResponse{}, err
@@ -176,7 +174,7 @@ func (client *ApplicationGatewayPrivateEndpointConnectionsClient) getCreateReque
 
 // getHandleResponse handles the Get response.
 func (client *ApplicationGatewayPrivateEndpointConnectionsClient) getHandleResponse(resp *http.Response) (ApplicationGatewayPrivateEndpointConnectionsClientGetResponse, error) {
-	result := ApplicationGatewayPrivateEndpointConnectionsClientGetResponse{RawResponse: resp}
+	result := ApplicationGatewayPrivateEndpointConnectionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationGatewayPrivateEndpointConnection); err != nil {
 		return ApplicationGatewayPrivateEndpointConnectionsClientGetResponse{}, err
 	}
@@ -229,7 +227,7 @@ func (client *ApplicationGatewayPrivateEndpointConnectionsClient) listCreateRequ
 
 // listHandleResponse handles the List response.
 func (client *ApplicationGatewayPrivateEndpointConnectionsClient) listHandleResponse(resp *http.Response) (ApplicationGatewayPrivateEndpointConnectionsClientListResponse, error) {
-	result := ApplicationGatewayPrivateEndpointConnectionsClientListResponse{RawResponse: resp}
+	result := ApplicationGatewayPrivateEndpointConnectionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ApplicationGatewayPrivateEndpointConnectionListResult); err != nil {
 		return ApplicationGatewayPrivateEndpointConnectionsClientListResponse{}, err
 	}
@@ -249,9 +247,7 @@ func (client *ApplicationGatewayPrivateEndpointConnectionsClient) BeginUpdate(ct
 	if err != nil {
 		return ApplicationGatewayPrivateEndpointConnectionsClientUpdatePollerResponse{}, err
 	}
-	result := ApplicationGatewayPrivateEndpointConnectionsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ApplicationGatewayPrivateEndpointConnectionsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ApplicationGatewayPrivateEndpointConnectionsClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ApplicationGatewayPrivateEndpointConnectionsClientUpdatePollerResponse{}, err

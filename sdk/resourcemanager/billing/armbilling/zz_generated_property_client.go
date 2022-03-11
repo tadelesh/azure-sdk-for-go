@@ -34,17 +34,17 @@ type PropertyClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPropertyClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PropertyClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PropertyClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -88,7 +88,7 @@ func (client *PropertyClient) getCreateRequest(ctx context.Context, options *Pro
 
 // getHandleResponse handles the Get response.
 func (client *PropertyClient) getHandleResponse(resp *http.Response) (PropertyClientGetResponse, error) {
-	result := PropertyClientGetResponse{RawResponse: resp}
+	result := PropertyClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Property); err != nil {
 		return PropertyClientGetResponse{}, err
 	}
@@ -135,7 +135,7 @@ func (client *PropertyClient) updateCreateRequest(ctx context.Context, parameter
 
 // updateHandleResponse handles the Update response.
 func (client *PropertyClient) updateHandleResponse(resp *http.Response) (PropertyClientUpdateResponse, error) {
-	result := PropertyClientUpdateResponse{RawResponse: resp}
+	result := PropertyClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Property); err != nil {
 		return PropertyClientUpdateResponse{}, err
 	}

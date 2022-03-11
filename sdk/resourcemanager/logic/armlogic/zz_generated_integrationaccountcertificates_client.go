@@ -35,17 +35,17 @@ type IntegrationAccountCertificatesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIntegrationAccountCertificatesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IntegrationAccountCertificatesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IntegrationAccountCertificatesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *IntegrationAccountCertificatesClient) createOrUpdateCreateRequest(
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *IntegrationAccountCertificatesClient) createOrUpdateHandleResponse(resp *http.Response) (IntegrationAccountCertificatesClientCreateOrUpdateResponse, error) {
-	result := IntegrationAccountCertificatesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := IntegrationAccountCertificatesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountCertificate); err != nil {
 		return IntegrationAccountCertificatesClientCreateOrUpdateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *IntegrationAccountCertificatesClient) Delete(ctx context.Context, 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return IntegrationAccountCertificatesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return IntegrationAccountCertificatesClientDeleteResponse{RawResponse: resp}, nil
+	return IntegrationAccountCertificatesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -218,7 +218,7 @@ func (client *IntegrationAccountCertificatesClient) getCreateRequest(ctx context
 
 // getHandleResponse handles the Get response.
 func (client *IntegrationAccountCertificatesClient) getHandleResponse(resp *http.Response) (IntegrationAccountCertificatesClientGetResponse, error) {
-	result := IntegrationAccountCertificatesClientGetResponse{RawResponse: resp}
+	result := IntegrationAccountCertificatesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountCertificate); err != nil {
 		return IntegrationAccountCertificatesClientGetResponse{}, err
 	}
@@ -274,7 +274,7 @@ func (client *IntegrationAccountCertificatesClient) listCreateRequest(ctx contex
 
 // listHandleResponse handles the List response.
 func (client *IntegrationAccountCertificatesClient) listHandleResponse(resp *http.Response) (IntegrationAccountCertificatesClientListResponse, error) {
-	result := IntegrationAccountCertificatesClientListResponse{RawResponse: resp}
+	result := IntegrationAccountCertificatesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationAccountCertificateListResult); err != nil {
 		return IntegrationAccountCertificatesClientListResponse{}, err
 	}

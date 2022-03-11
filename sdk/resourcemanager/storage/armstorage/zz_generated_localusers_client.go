@@ -106,7 +106,7 @@ func (client *LocalUsersClient) createOrUpdateCreateRequest(ctx context.Context,
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *LocalUsersClient) createOrUpdateHandleResponse(resp *http.Response) (LocalUsersClientCreateOrUpdateResponse, error) {
-	result := LocalUsersClientCreateOrUpdateResponse{RawResponse: resp}
+	result := LocalUsersClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LocalUser); err != nil {
 		return LocalUsersClientCreateOrUpdateResponse{}, err
 	}
@@ -133,7 +133,7 @@ func (client *LocalUsersClient) Delete(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return LocalUsersClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return LocalUsersClientDeleteResponse{RawResponse: resp}, nil
+	return LocalUsersClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -221,7 +221,7 @@ func (client *LocalUsersClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *LocalUsersClient) getHandleResponse(resp *http.Response) (LocalUsersClientGetResponse, error) {
-	result := LocalUsersClientGetResponse{RawResponse: resp}
+	result := LocalUsersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LocalUser); err != nil {
 		return LocalUsersClientGetResponse{}, err
 	}
@@ -234,19 +234,13 @@ func (client *LocalUsersClient) getHandleResponse(resp *http.Response) (LocalUse
 // accountName - The name of the storage account within the specified resource group. Storage account names must be between
 // 3 and 24 characters in length and use numbers and lower-case letters only.
 // options - LocalUsersClientListOptions contains the optional parameters for the LocalUsersClient.List method.
-func (client *LocalUsersClient) List(ctx context.Context, resourceGroupName string, accountName string, options *LocalUsersClientListOptions) (LocalUsersClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return LocalUsersClientListResponse{}, err
+func (client *LocalUsersClient) List(resourceGroupName string, accountName string, options *LocalUsersClientListOptions) *LocalUsersClientListPager {
+	return &LocalUsersClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return LocalUsersClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return LocalUsersClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -277,7 +271,7 @@ func (client *LocalUsersClient) listCreateRequest(ctx context.Context, resourceG
 
 // listHandleResponse handles the List response.
 func (client *LocalUsersClient) listHandleResponse(resp *http.Response) (LocalUsersClientListResponse, error) {
-	result := LocalUsersClientListResponse{RawResponse: resp}
+	result := LocalUsersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LocalUsers); err != nil {
 		return LocalUsersClientListResponse{}, err
 	}
@@ -339,7 +333,7 @@ func (client *LocalUsersClient) listKeysCreateRequest(ctx context.Context, resou
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *LocalUsersClient) listKeysHandleResponse(resp *http.Response) (LocalUsersClientListKeysResponse, error) {
-	result := LocalUsersClientListKeysResponse{RawResponse: resp}
+	result := LocalUsersClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LocalUserKeys); err != nil {
 		return LocalUsersClientListKeysResponse{}, err
 	}
@@ -402,7 +396,7 @@ func (client *LocalUsersClient) regeneratePasswordCreateRequest(ctx context.Cont
 
 // regeneratePasswordHandleResponse handles the RegeneratePassword response.
 func (client *LocalUsersClient) regeneratePasswordHandleResponse(resp *http.Response) (LocalUsersClientRegeneratePasswordResponse, error) {
-	result := LocalUsersClientRegeneratePasswordResponse{RawResponse: resp}
+	result := LocalUsersClientRegeneratePasswordResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LocalUserRegeneratePasswordResult); err != nil {
 		return LocalUsersClientRegeneratePasswordResponse{}, err
 	}

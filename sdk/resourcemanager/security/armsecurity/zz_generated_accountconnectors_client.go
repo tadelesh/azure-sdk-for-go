@@ -96,7 +96,7 @@ func (client *AccountConnectorsClient) createOrUpdateCreateRequest(ctx context.C
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *AccountConnectorsClient) createOrUpdateHandleResponse(resp *http.Response) (AccountConnectorsClientCreateOrUpdateResponse, error) {
-	result := AccountConnectorsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := AccountConnectorsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConnectorSetting); err != nil {
 		return AccountConnectorsClientCreateOrUpdateResponse{}, err
 	}
@@ -120,7 +120,7 @@ func (client *AccountConnectorsClient) Delete(ctx context.Context, connectorName
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return AccountConnectorsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return AccountConnectorsClientDeleteResponse{RawResponse: resp}, nil
+	return AccountConnectorsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -188,7 +188,7 @@ func (client *AccountConnectorsClient) getCreateRequest(ctx context.Context, con
 
 // getHandleResponse handles the Get response.
 func (client *AccountConnectorsClient) getHandleResponse(resp *http.Response) (AccountConnectorsClientGetResponse, error) {
-	result := AccountConnectorsClientGetResponse{RawResponse: resp}
+	result := AccountConnectorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConnectorSetting); err != nil {
 		return AccountConnectorsClientGetResponse{}, err
 	}
@@ -230,7 +230,7 @@ func (client *AccountConnectorsClient) listCreateRequest(ctx context.Context, op
 
 // listHandleResponse handles the List response.
 func (client *AccountConnectorsClient) listHandleResponse(resp *http.Response) (AccountConnectorsClientListResponse, error) {
-	result := AccountConnectorsClientListResponse{RawResponse: resp}
+	result := AccountConnectorsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConnectorSettingList); err != nil {
 		return AccountConnectorsClientListResponse{}, err
 	}

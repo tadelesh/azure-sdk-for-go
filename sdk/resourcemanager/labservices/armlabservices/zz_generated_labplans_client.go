@@ -62,9 +62,7 @@ func (client *LabPlansClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return LabPlansClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := LabPlansClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LabPlansClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("LabPlansClient.CreateOrUpdate", "original-uri", resp, client.pl)
 	if err != nil {
 		return LabPlansClientCreateOrUpdatePollerResponse{}, err
@@ -130,9 +128,7 @@ func (client *LabPlansClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return LabPlansClientDeletePollerResponse{}, err
 	}
-	result := LabPlansClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := LabPlansClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("LabPlansClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return LabPlansClientDeletePollerResponse{}, err
@@ -236,7 +232,7 @@ func (client *LabPlansClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *LabPlansClient) getHandleResponse(resp *http.Response) (LabPlansClientGetResponse, error) {
-	result := LabPlansClientGetResponse{RawResponse: resp}
+	result := LabPlansClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LabPlan); err != nil {
 		return LabPlansClientGetResponse{}, err
 	}
@@ -284,7 +280,7 @@ func (client *LabPlansClient) listByResourceGroupCreateRequest(ctx context.Conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *LabPlansClient) listByResourceGroupHandleResponse(resp *http.Response) (LabPlansClientListByResourceGroupResponse, error) {
-	result := LabPlansClientListByResourceGroupResponse{RawResponse: resp}
+	result := LabPlansClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PagedLabPlans); err != nil {
 		return LabPlansClientListByResourceGroupResponse{}, err
 	}
@@ -330,7 +326,7 @@ func (client *LabPlansClient) listBySubscriptionCreateRequest(ctx context.Contex
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *LabPlansClient) listBySubscriptionHandleResponse(resp *http.Response) (LabPlansClientListBySubscriptionResponse, error) {
-	result := LabPlansClientListBySubscriptionResponse{RawResponse: resp}
+	result := LabPlansClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PagedLabPlans); err != nil {
 		return LabPlansClientListBySubscriptionResponse{}, err
 	}
@@ -349,9 +345,7 @@ func (client *LabPlansClient) BeginSaveImage(ctx context.Context, resourceGroupN
 	if err != nil {
 		return LabPlansClientSaveImagePollerResponse{}, err
 	}
-	result := LabPlansClientSaveImagePollerResponse{
-		RawResponse: resp,
-	}
+	result := LabPlansClientSaveImagePollerResponse{}
 	pt, err := armruntime.NewPoller("LabPlansClient.SaveImage", "location", resp, client.pl)
 	if err != nil {
 		return LabPlansClientSaveImagePollerResponse{}, err
@@ -417,9 +411,7 @@ func (client *LabPlansClient) BeginUpdate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return LabPlansClientUpdatePollerResponse{}, err
 	}
-	result := LabPlansClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LabPlansClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("LabPlansClient.Update", "location", resp, client.pl)
 	if err != nil {
 		return LabPlansClientUpdatePollerResponse{}, err

@@ -35,17 +35,17 @@ type LocationClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLocationClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LocationClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LocationClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -91,7 +91,7 @@ func (client *LocationClient) listCachedImagesCreateRequest(ctx context.Context,
 
 // listCachedImagesHandleResponse handles the ListCachedImages response.
 func (client *LocationClient) listCachedImagesHandleResponse(resp *http.Response) (LocationClientListCachedImagesResponse, error) {
-	result := LocationClientListCachedImagesResponse{RawResponse: resp}
+	result := LocationClientListCachedImagesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CachedImagesListResult); err != nil {
 		return LocationClientListCachedImagesResponse{}, err
 	}
@@ -139,7 +139,7 @@ func (client *LocationClient) listCapabilitiesCreateRequest(ctx context.Context,
 
 // listCapabilitiesHandleResponse handles the ListCapabilities response.
 func (client *LocationClient) listCapabilitiesHandleResponse(resp *http.Response) (LocationClientListCapabilitiesResponse, error) {
-	result := LocationClientListCapabilitiesResponse{RawResponse: resp}
+	result := LocationClientListCapabilitiesResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CapabilitiesListResult); err != nil {
 		return LocationClientListCapabilitiesResponse{}, err
 	}
@@ -150,19 +150,13 @@ func (client *LocationClient) listCapabilitiesHandleResponse(resp *http.Response
 // If the operation fails it returns an *azcore.ResponseError type.
 // location - The identifier for the physical azure location.
 // options - LocationClientListUsageOptions contains the optional parameters for the LocationClient.ListUsage method.
-func (client *LocationClient) ListUsage(ctx context.Context, location string, options *LocationClientListUsageOptions) (LocationClientListUsageResponse, error) {
-	req, err := client.listUsageCreateRequest(ctx, location, options)
-	if err != nil {
-		return LocationClientListUsageResponse{}, err
+func (client *LocationClient) ListUsage(location string, options *LocationClientListUsageOptions) *LocationClientListUsagePager {
+	return &LocationClientListUsagePager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listUsageCreateRequest(ctx, location, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return LocationClientListUsageResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return LocationClientListUsageResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listUsageHandleResponse(resp)
 }
 
 // listUsageCreateRequest creates the ListUsage request.
@@ -189,7 +183,7 @@ func (client *LocationClient) listUsageCreateRequest(ctx context.Context, locati
 
 // listUsageHandleResponse handles the ListUsage response.
 func (client *LocationClient) listUsageHandleResponse(resp *http.Response) (LocationClientListUsageResponse, error) {
-	result := LocationClientListUsageResponse{RawResponse: resp}
+	result := LocationClientListUsageResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UsageListResult); err != nil {
 		return LocationClientListUsageResponse{}, err
 	}

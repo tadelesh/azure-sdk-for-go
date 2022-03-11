@@ -32,16 +32,16 @@ type GetClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGetClient(credential azcore.TokenCredential, options *arm.ClientOptions) *GetClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GetClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -85,7 +85,7 @@ func (client *GetClient) tenantOptedInCreateRequest(ctx context.Context, tenantI
 
 // tenantOptedInHandleResponse handles the TenantOptedIn response.
 func (client *GetClient) tenantOptedInHandleResponse(resp *http.Response) (GetClientTenantOptedInResponse, error) {
-	result := GetClientTenantOptedInResponse{RawResponse: resp}
+	result := GetClientTenantOptedInResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TenantOptInResponse); err != nil {
 		return GetClientTenantOptedInResponse{}, err
 	}

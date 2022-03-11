@@ -60,9 +60,7 @@ func (client *ContainerAppsClient) BeginCreateOrUpdate(ctx context.Context, reso
 	if err != nil {
 		return ContainerAppsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ContainerAppsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ContainerAppsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ContainerAppsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ContainerAppsClientCreateOrUpdatePollerResponse{}, err
@@ -127,9 +125,7 @@ func (client *ContainerAppsClient) BeginDelete(ctx context.Context, resourceGrou
 	if err != nil {
 		return ContainerAppsClientDeletePollerResponse{}, err
 	}
-	result := ContainerAppsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ContainerAppsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ContainerAppsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ContainerAppsClientDeletePollerResponse{}, err
@@ -231,7 +227,7 @@ func (client *ContainerAppsClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *ContainerAppsClient) getHandleResponse(resp *http.Response) (ContainerAppsClientGetResponse, error) {
-	result := ContainerAppsClientGetResponse{RawResponse: resp}
+	result := ContainerAppsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContainerApp); err != nil {
 		return ContainerAppsClientGetResponse{}, err
 	}
@@ -279,7 +275,7 @@ func (client *ContainerAppsClient) listByResourceGroupCreateRequest(ctx context.
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ContainerAppsClient) listByResourceGroupHandleResponse(resp *http.Response) (ContainerAppsClientListByResourceGroupResponse, error) {
-	result := ContainerAppsClientListByResourceGroupResponse{RawResponse: resp}
+	result := ContainerAppsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContainerAppCollection); err != nil {
 		return ContainerAppsClientListByResourceGroupResponse{}, err
 	}
@@ -322,7 +318,7 @@ func (client *ContainerAppsClient) listBySubscriptionCreateRequest(ctx context.C
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *ContainerAppsClient) listBySubscriptionHandleResponse(resp *http.Response) (ContainerAppsClientListBySubscriptionResponse, error) {
-	result := ContainerAppsClientListBySubscriptionResponse{RawResponse: resp}
+	result := ContainerAppsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ContainerAppCollection); err != nil {
 		return ContainerAppsClientListBySubscriptionResponse{}, err
 	}
@@ -373,7 +369,7 @@ func (client *ContainerAppsClient) listSecretsCreateRequest(ctx context.Context,
 
 // listSecretsHandleResponse handles the ListSecrets response.
 func (client *ContainerAppsClient) listSecretsHandleResponse(resp *http.Response) (ContainerAppsClientListSecretsResponse, error) {
-	result := ContainerAppsClientListSecretsResponse{RawResponse: resp}
+	result := ContainerAppsClientListSecretsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SecretsCollection); err != nil {
 		return ContainerAppsClientListSecretsResponse{}, err
 	}

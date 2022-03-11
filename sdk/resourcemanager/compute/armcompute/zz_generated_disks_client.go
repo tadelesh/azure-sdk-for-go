@@ -35,17 +35,17 @@ type DisksClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDisksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DisksClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DisksClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -64,9 +64,7 @@ func (client *DisksClient) BeginCreateOrUpdate(ctx context.Context, resourceGrou
 	if err != nil {
 		return DisksClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := DisksClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DisksClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DisksClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return DisksClientCreateOrUpdatePollerResponse{}, err
@@ -132,9 +130,7 @@ func (client *DisksClient) BeginDelete(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return DisksClientDeletePollerResponse{}, err
 	}
-	result := DisksClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := DisksClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("DisksClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return DisksClientDeletePollerResponse{}, err
@@ -237,7 +233,7 @@ func (client *DisksClient) getCreateRequest(ctx context.Context, resourceGroupNa
 
 // getHandleResponse handles the Get response.
 func (client *DisksClient) getHandleResponse(resp *http.Response) (DisksClientGetResponse, error) {
-	result := DisksClientGetResponse{RawResponse: resp}
+	result := DisksClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Disk); err != nil {
 		return DisksClientGetResponse{}, err
 	}
@@ -257,9 +253,7 @@ func (client *DisksClient) BeginGrantAccess(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return DisksClientGrantAccessPollerResponse{}, err
 	}
-	result := DisksClientGrantAccessPollerResponse{
-		RawResponse: resp,
-	}
+	result := DisksClientGrantAccessPollerResponse{}
 	pt, err := armruntime.NewPoller("DisksClient.GrantAccess", "location", resp, client.pl)
 	if err != nil {
 		return DisksClientGrantAccessPollerResponse{}, err
@@ -348,7 +342,7 @@ func (client *DisksClient) listCreateRequest(ctx context.Context, options *Disks
 
 // listHandleResponse handles the List response.
 func (client *DisksClient) listHandleResponse(resp *http.Response) (DisksClientListResponse, error) {
-	result := DisksClientListResponse{RawResponse: resp}
+	result := DisksClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiskList); err != nil {
 		return DisksClientListResponse{}, err
 	}
@@ -396,7 +390,7 @@ func (client *DisksClient) listByResourceGroupCreateRequest(ctx context.Context,
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *DisksClient) listByResourceGroupHandleResponse(resp *http.Response) (DisksClientListByResourceGroupResponse, error) {
-	result := DisksClientListByResourceGroupResponse{RawResponse: resp}
+	result := DisksClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiskList); err != nil {
 		return DisksClientListByResourceGroupResponse{}, err
 	}
@@ -415,9 +409,7 @@ func (client *DisksClient) BeginRevokeAccess(ctx context.Context, resourceGroupN
 	if err != nil {
 		return DisksClientRevokeAccessPollerResponse{}, err
 	}
-	result := DisksClientRevokeAccessPollerResponse{
-		RawResponse: resp,
-	}
+	result := DisksClientRevokeAccessPollerResponse{}
 	pt, err := armruntime.NewPoller("DisksClient.RevokeAccess", "location", resp, client.pl)
 	if err != nil {
 		return DisksClientRevokeAccessPollerResponse{}, err
@@ -483,9 +475,7 @@ func (client *DisksClient) BeginUpdate(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return DisksClientUpdatePollerResponse{}, err
 	}
-	result := DisksClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DisksClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("DisksClient.Update", "", resp, client.pl)
 	if err != nil {
 		return DisksClientUpdatePollerResponse{}, err

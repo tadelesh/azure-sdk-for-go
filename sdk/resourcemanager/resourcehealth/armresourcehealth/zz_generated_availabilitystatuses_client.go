@@ -35,17 +35,17 @@ type AvailabilityStatusesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAvailabilityStatusesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AvailabilityStatusesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AvailabilityStatusesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -97,7 +97,7 @@ func (client *AvailabilityStatusesClient) getByResourceCreateRequest(ctx context
 
 // getByResourceHandleResponse handles the GetByResource response.
 func (client *AvailabilityStatusesClient) getByResourceHandleResponse(resp *http.Response) (AvailabilityStatusesClientGetByResourceResponse, error) {
-	result := AvailabilityStatusesClientGetByResourceResponse{RawResponse: resp}
+	result := AvailabilityStatusesClientGetByResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AvailabilityStatus); err != nil {
 		return AvailabilityStatusesClientGetByResourceResponse{}, err
 	}
@@ -149,7 +149,7 @@ func (client *AvailabilityStatusesClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *AvailabilityStatusesClient) listHandleResponse(resp *http.Response) (AvailabilityStatusesClientListResponse, error) {
-	result := AvailabilityStatusesClientListResponse{RawResponse: resp}
+	result := AvailabilityStatusesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AvailabilityStatusListResult); err != nil {
 		return AvailabilityStatusesClientListResponse{}, err
 	}
@@ -204,7 +204,7 @@ func (client *AvailabilityStatusesClient) listByResourceGroupCreateRequest(ctx c
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *AvailabilityStatusesClient) listByResourceGroupHandleResponse(resp *http.Response) (AvailabilityStatusesClientListByResourceGroupResponse, error) {
-	result := AvailabilityStatusesClientListByResourceGroupResponse{RawResponse: resp}
+	result := AvailabilityStatusesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AvailabilityStatusListResult); err != nil {
 		return AvailabilityStatusesClientListByResourceGroupResponse{}, err
 	}
@@ -254,7 +254,7 @@ func (client *AvailabilityStatusesClient) listBySubscriptionIDCreateRequest(ctx 
 
 // listBySubscriptionIDHandleResponse handles the ListBySubscriptionID response.
 func (client *AvailabilityStatusesClient) listBySubscriptionIDHandleResponse(resp *http.Response) (AvailabilityStatusesClientListBySubscriptionIDResponse, error) {
-	result := AvailabilityStatusesClientListBySubscriptionIDResponse{RawResponse: resp}
+	result := AvailabilityStatusesClientListBySubscriptionIDResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AvailabilityStatusListResult); err != nil {
 		return AvailabilityStatusesClientListBySubscriptionIDResponse{}, err
 	}

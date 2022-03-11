@@ -34,17 +34,17 @@ type DataMaskingRulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDataMaskingRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DataMaskingRulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DataMaskingRulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -111,7 +111,7 @@ func (client *DataMaskingRulesClient) createOrUpdateCreateRequest(ctx context.Co
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *DataMaskingRulesClient) createOrUpdateHandleResponse(resp *http.Response) (DataMaskingRulesClientCreateOrUpdateResponse, error) {
-	result := DataMaskingRulesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := DataMaskingRulesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataMaskingRule); err != nil {
 		return DataMaskingRulesClientCreateOrUpdateResponse{}, err
 	}
@@ -126,19 +126,13 @@ func (client *DataMaskingRulesClient) createOrUpdateHandleResponse(resp *http.Re
 // databaseName - The name of the database.
 // options - DataMaskingRulesClientListByDatabaseOptions contains the optional parameters for the DataMaskingRulesClient.ListByDatabase
 // method.
-func (client *DataMaskingRulesClient) ListByDatabase(ctx context.Context, resourceGroupName string, serverName string, databaseName string, options *DataMaskingRulesClientListByDatabaseOptions) (DataMaskingRulesClientListByDatabaseResponse, error) {
-	req, err := client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
-	if err != nil {
-		return DataMaskingRulesClientListByDatabaseResponse{}, err
+func (client *DataMaskingRulesClient) ListByDatabase(resourceGroupName string, serverName string, databaseName string, options *DataMaskingRulesClientListByDatabaseOptions) *DataMaskingRulesClientListByDatabasePager {
+	return &DataMaskingRulesClientListByDatabasePager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByDatabaseCreateRequest(ctx, resourceGroupName, serverName, databaseName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return DataMaskingRulesClientListByDatabaseResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return DataMaskingRulesClientListByDatabaseResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByDatabaseHandleResponse(resp)
 }
 
 // listByDatabaseCreateRequest creates the ListByDatabase request.
@@ -174,7 +168,7 @@ func (client *DataMaskingRulesClient) listByDatabaseCreateRequest(ctx context.Co
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *DataMaskingRulesClient) listByDatabaseHandleResponse(resp *http.Response) (DataMaskingRulesClientListByDatabaseResponse, error) {
-	result := DataMaskingRulesClientListByDatabaseResponse{RawResponse: resp}
+	result := DataMaskingRulesClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DataMaskingRuleListResult); err != nil {
 		return DataMaskingRulesClientListByDatabaseResponse{}, err
 	}

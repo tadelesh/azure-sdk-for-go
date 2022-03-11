@@ -34,17 +34,17 @@ type LinkedStorageAccountsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLinkedStorageAccountsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LinkedStorageAccountsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LinkedStorageAccountsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -105,7 +105,7 @@ func (client *LinkedStorageAccountsClient) createOrUpdateCreateRequest(ctx conte
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *LinkedStorageAccountsClient) createOrUpdateHandleResponse(resp *http.Response) (LinkedStorageAccountsClientCreateOrUpdateResponse, error) {
-	result := LinkedStorageAccountsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := LinkedStorageAccountsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LinkedStorageAccountsResource); err != nil {
 		return LinkedStorageAccountsClientCreateOrUpdateResponse{}, err
 	}
@@ -131,7 +131,7 @@ func (client *LinkedStorageAccountsClient) Delete(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return LinkedStorageAccountsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return LinkedStorageAccountsClientDeleteResponse{RawResponse: resp}, nil
+	return LinkedStorageAccountsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -217,7 +217,7 @@ func (client *LinkedStorageAccountsClient) getCreateRequest(ctx context.Context,
 
 // getHandleResponse handles the Get response.
 func (client *LinkedStorageAccountsClient) getHandleResponse(resp *http.Response) (LinkedStorageAccountsClientGetResponse, error) {
-	result := LinkedStorageAccountsClientGetResponse{RawResponse: resp}
+	result := LinkedStorageAccountsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LinkedStorageAccountsResource); err != nil {
 		return LinkedStorageAccountsClientGetResponse{}, err
 	}
@@ -231,19 +231,13 @@ func (client *LinkedStorageAccountsClient) getHandleResponse(resp *http.Response
 // workspaceName - The name of the workspace.
 // options - LinkedStorageAccountsClientListByWorkspaceOptions contains the optional parameters for the LinkedStorageAccountsClient.ListByWorkspace
 // method.
-func (client *LinkedStorageAccountsClient) ListByWorkspace(ctx context.Context, resourceGroupName string, workspaceName string, options *LinkedStorageAccountsClientListByWorkspaceOptions) (LinkedStorageAccountsClientListByWorkspaceResponse, error) {
-	req, err := client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
-	if err != nil {
-		return LinkedStorageAccountsClientListByWorkspaceResponse{}, err
+func (client *LinkedStorageAccountsClient) ListByWorkspace(resourceGroupName string, workspaceName string, options *LinkedStorageAccountsClientListByWorkspaceOptions) *LinkedStorageAccountsClientListByWorkspacePager {
+	return &LinkedStorageAccountsClientListByWorkspacePager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByWorkspaceCreateRequest(ctx, resourceGroupName, workspaceName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return LinkedStorageAccountsClientListByWorkspaceResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return LinkedStorageAccountsClientListByWorkspaceResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByWorkspaceHandleResponse(resp)
 }
 
 // listByWorkspaceCreateRequest creates the ListByWorkspace request.
@@ -274,7 +268,7 @@ func (client *LinkedStorageAccountsClient) listByWorkspaceCreateRequest(ctx cont
 
 // listByWorkspaceHandleResponse handles the ListByWorkspace response.
 func (client *LinkedStorageAccountsClient) listByWorkspaceHandleResponse(resp *http.Response) (LinkedStorageAccountsClientListByWorkspaceResponse, error) {
-	result := LinkedStorageAccountsClientListByWorkspaceResponse{RawResponse: resp}
+	result := LinkedStorageAccountsClientListByWorkspaceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LinkedStorageAccountsListResult); err != nil {
 		return LinkedStorageAccountsClientListByWorkspaceResponse{}, err
 	}

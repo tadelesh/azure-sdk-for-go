@@ -34,17 +34,17 @@ type SQLPoolMaintenanceWindowsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSQLPoolMaintenanceWindowsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SQLPoolMaintenanceWindowsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SQLPoolMaintenanceWindowsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -70,7 +70,7 @@ func (client *SQLPoolMaintenanceWindowsClient) CreateOrUpdate(ctx context.Contex
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return SQLPoolMaintenanceWindowsClientCreateOrUpdateResponse{}, runtime.NewResponseError(resp)
 	}
-	return SQLPoolMaintenanceWindowsClientCreateOrUpdateResponse{RawResponse: resp}, nil
+	return SQLPoolMaintenanceWindowsClientCreateOrUpdateResponse{}, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -159,7 +159,7 @@ func (client *SQLPoolMaintenanceWindowsClient) getCreateRequest(ctx context.Cont
 
 // getHandleResponse handles the Get response.
 func (client *SQLPoolMaintenanceWindowsClient) getHandleResponse(resp *http.Response) (SQLPoolMaintenanceWindowsClientGetResponse, error) {
-	result := SQLPoolMaintenanceWindowsClientGetResponse{RawResponse: resp}
+	result := SQLPoolMaintenanceWindowsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MaintenanceWindows); err != nil {
 		return SQLPoolMaintenanceWindowsClientGetResponse{}, err
 	}

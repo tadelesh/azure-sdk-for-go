@@ -38,19 +38,19 @@ type ReplicationProtectionContainersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReplicationProtectionContainersClient(resourceName string, resourceGroupName string, subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReplicationProtectionContainersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReplicationProtectionContainersClient{
 		resourceName:      resourceName,
 		resourceGroupName: resourceGroupName,
 		subscriptionID:    subscriptionID,
-		host:              string(cp.Endpoint),
-		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:              string(ep),
+		pl:                armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -67,9 +67,7 @@ func (client *ReplicationProtectionContainersClient) BeginCreate(ctx context.Con
 	if err != nil {
 		return ReplicationProtectionContainersClientCreatePollerResponse{}, err
 	}
-	result := ReplicationProtectionContainersClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectionContainersClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectionContainersClient.Create", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectionContainersClientCreatePollerResponse{}, err
@@ -125,7 +123,7 @@ func (client *ReplicationProtectionContainersClient) createCreateRequest(ctx con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, creationInput)
@@ -142,9 +140,7 @@ func (client *ReplicationProtectionContainersClient) BeginDelete(ctx context.Con
 	if err != nil {
 		return ReplicationProtectionContainersClientDeletePollerResponse{}, err
 	}
-	result := ReplicationProtectionContainersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectionContainersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectionContainersClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectionContainersClientDeletePollerResponse{}, err
@@ -200,7 +196,7 @@ func (client *ReplicationProtectionContainersClient) deleteCreateRequest(ctx con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	return req, nil
 }
@@ -217,9 +213,7 @@ func (client *ReplicationProtectionContainersClient) BeginDiscoverProtectableIte
 	if err != nil {
 		return ReplicationProtectionContainersClientDiscoverProtectableItemPollerResponse{}, err
 	}
-	result := ReplicationProtectionContainersClientDiscoverProtectableItemPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectionContainersClientDiscoverProtectableItemPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectionContainersClient.DiscoverProtectableItem", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectionContainersClientDiscoverProtectableItemPollerResponse{}, err
@@ -275,7 +269,7 @@ func (client *ReplicationProtectionContainersClient) discoverProtectableItemCrea
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, discoverProtectableItemRequest)
@@ -330,7 +324,7 @@ func (client *ReplicationProtectionContainersClient) getCreateRequest(ctx contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -338,7 +332,7 @@ func (client *ReplicationProtectionContainersClient) getCreateRequest(ctx contex
 
 // getHandleResponse handles the Get response.
 func (client *ReplicationProtectionContainersClient) getHandleResponse(resp *http.Response) (ReplicationProtectionContainersClientGetResponse, error) {
-	result := ReplicationProtectionContainersClientGetResponse{RawResponse: resp}
+	result := ReplicationProtectionContainersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProtectionContainer); err != nil {
 		return ReplicationProtectionContainersClientGetResponse{}, err
 	}
@@ -381,7 +375,7 @@ func (client *ReplicationProtectionContainersClient) listCreateRequest(ctx conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -389,7 +383,7 @@ func (client *ReplicationProtectionContainersClient) listCreateRequest(ctx conte
 
 // listHandleResponse handles the List response.
 func (client *ReplicationProtectionContainersClient) listHandleResponse(resp *http.Response) (ReplicationProtectionContainersClientListResponse, error) {
-	result := ReplicationProtectionContainersClientListResponse{RawResponse: resp}
+	result := ReplicationProtectionContainersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProtectionContainerCollection); err != nil {
 		return ReplicationProtectionContainersClientListResponse{}, err
 	}
@@ -437,7 +431,7 @@ func (client *ReplicationProtectionContainersClient) listByReplicationFabricsCre
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -445,7 +439,7 @@ func (client *ReplicationProtectionContainersClient) listByReplicationFabricsCre
 
 // listByReplicationFabricsHandleResponse handles the ListByReplicationFabrics response.
 func (client *ReplicationProtectionContainersClient) listByReplicationFabricsHandleResponse(resp *http.Response) (ReplicationProtectionContainersClientListByReplicationFabricsResponse, error) {
-	result := ReplicationProtectionContainersClientListByReplicationFabricsResponse{RawResponse: resp}
+	result := ReplicationProtectionContainersClientListByReplicationFabricsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProtectionContainerCollection); err != nil {
 		return ReplicationProtectionContainersClientListByReplicationFabricsResponse{}, err
 	}
@@ -464,9 +458,7 @@ func (client *ReplicationProtectionContainersClient) BeginSwitchProtection(ctx c
 	if err != nil {
 		return ReplicationProtectionContainersClientSwitchProtectionPollerResponse{}, err
 	}
-	result := ReplicationProtectionContainersClientSwitchProtectionPollerResponse{
-		RawResponse: resp,
-	}
+	result := ReplicationProtectionContainersClientSwitchProtectionPollerResponse{}
 	pt, err := armruntime.NewPoller("ReplicationProtectionContainersClient.SwitchProtection", "", resp, client.pl)
 	if err != nil {
 		return ReplicationProtectionContainersClientSwitchProtectionPollerResponse{}, err
@@ -522,7 +514,7 @@ func (client *ReplicationProtectionContainersClient) switchProtectionCreateReque
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2021-11-01")
+	reqQP.Set("api-version", "2021-12-01")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, switchInput)

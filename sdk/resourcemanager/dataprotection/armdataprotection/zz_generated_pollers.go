@@ -43,11 +43,10 @@ func (p *BackupInstancesClientAdhocBackupPoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final BackupInstancesClientAdhocBackupResponse will be returned.
 func (p *BackupInstancesClientAdhocBackupPoller) FinalResponse(ctx context.Context) (BackupInstancesClientAdhocBackupResponse, error) {
 	respType := BackupInstancesClientAdhocBackupResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationJobExtendedInfo)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationJobExtendedInfo)
 	if err != nil {
 		return BackupInstancesClientAdhocBackupResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *BackupInstancesClientCreateOrUpdatePoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final BackupInstancesClientCreateOrUpdateResponse will be returned.
 func (p *BackupInstancesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (BackupInstancesClientCreateOrUpdateResponse, error) {
 	respType := BackupInstancesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.BackupInstanceResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.BackupInstanceResource)
 	if err != nil {
 		return BackupInstancesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *BackupInstancesClientDeletePoller) Poll(ctx context.Context) (*http.Res
 // If the final GET succeeded then the final BackupInstancesClientDeleteResponse will be returned.
 func (p *BackupInstancesClientDeletePoller) FinalResponse(ctx context.Context) (BackupInstancesClientDeleteResponse, error) {
 	respType := BackupInstancesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return BackupInstancesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *BackupInstancesClientTriggerRehydratePoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final BackupInstancesClientTriggerRehydrateResponse will be returned.
 func (p *BackupInstancesClientTriggerRehydratePoller) FinalResponse(ctx context.Context) (BackupInstancesClientTriggerRehydrateResponse, error) {
 	respType := BackupInstancesClientTriggerRehydrateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return BackupInstancesClientTriggerRehydrateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *BackupInstancesClientTriggerRestorePoller) Poll(ctx context.Context) (*
 // If the final GET succeeded then the final BackupInstancesClientTriggerRestoreResponse will be returned.
 func (p *BackupInstancesClientTriggerRestorePoller) FinalResponse(ctx context.Context) (BackupInstancesClientTriggerRestoreResponse, error) {
 	respType := BackupInstancesClientTriggerRestoreResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationJobExtendedInfo)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationJobExtendedInfo)
 	if err != nil {
 		return BackupInstancesClientTriggerRestoreResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *BackupInstancesClientValidateForBackupPoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final BackupInstancesClientValidateForBackupResponse will be returned.
 func (p *BackupInstancesClientValidateForBackupPoller) FinalResponse(ctx context.Context) (BackupInstancesClientValidateForBackupResponse, error) {
 	respType := BackupInstancesClientValidateForBackupResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationJobExtendedInfo)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationJobExtendedInfo)
 	if err != nil {
 		return BackupInstancesClientValidateForBackupResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *BackupInstancesClientValidateForRestorePoller) Poll(ctx context.Context
 // If the final GET succeeded then the final BackupInstancesClientValidateForRestoreResponse will be returned.
 func (p *BackupInstancesClientValidateForRestorePoller) FinalResponse(ctx context.Context) (BackupInstancesClientValidateForRestoreResponse, error) {
 	respType := BackupInstancesClientValidateForRestoreResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.OperationJobExtendedInfo)
+	_, err := p.pt.FinalResponse(ctx, &respType.OperationJobExtendedInfo)
 	if err != nil {
 		return BackupInstancesClientValidateForRestoreResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *BackupVaultsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final BackupVaultsClientCreateOrUpdateResponse will be returned.
 func (p *BackupVaultsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (BackupVaultsClientCreateOrUpdateResponse, error) {
 	respType := BackupVaultsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.BackupVaultResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.BackupVaultResource)
 	if err != nil {
 		return BackupVaultsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *BackupVaultsClientUpdatePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final BackupVaultsClientUpdateResponse will be returned.
 func (p *BackupVaultsClientUpdatePoller) FinalResponse(ctx context.Context) (BackupVaultsClientUpdateResponse, error) {
 	respType := BackupVaultsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.BackupVaultResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.BackupVaultResource)
 	if err != nil {
 		return BackupVaultsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -430,11 +421,10 @@ func (p *ExportJobsClientTriggerPoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final ExportJobsClientTriggerResponse will be returned.
 func (p *ExportJobsClientTriggerPoller) FinalResponse(ctx context.Context) (ExportJobsClientTriggerResponse, error) {
 	respType := ExportJobsClientTriggerResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ExportJobsClientTriggerResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

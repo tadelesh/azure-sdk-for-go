@@ -34,17 +34,17 @@ type AccountsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAccountsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AccountsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AccountsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -68,7 +68,7 @@ func (client *AccountsClient) AddRootCollectionAdmin(ctx context.Context, resour
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return AccountsClientAddRootCollectionAdminResponse{}, runtime.NewResponseError(resp)
 	}
-	return AccountsClientAddRootCollectionAdminResponse{RawResponse: resp}, nil
+	return AccountsClientAddRootCollectionAdminResponse{}, nil
 }
 
 // addRootCollectionAdminCreateRequest creates the AddRootCollectionAdmin request.
@@ -137,7 +137,7 @@ func (client *AccountsClient) checkNameAvailabilityCreateRequest(ctx context.Con
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
 func (client *AccountsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (AccountsClientCheckNameAvailabilityResponse, error) {
-	result := AccountsClientCheckNameAvailabilityResponse{RawResponse: resp}
+	result := AccountsClientCheckNameAvailabilityResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameAvailabilityResult); err != nil {
 		return AccountsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -156,9 +156,7 @@ func (client *AccountsClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return AccountsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := AccountsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AccountsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AccountsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return AccountsClientCreateOrUpdatePollerResponse{}, err
@@ -222,9 +220,7 @@ func (client *AccountsClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return AccountsClientDeletePollerResponse{}, err
 	}
-	result := AccountsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := AccountsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("AccountsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return AccountsClientDeletePollerResponse{}, err
@@ -326,7 +322,7 @@ func (client *AccountsClient) getCreateRequest(ctx context.Context, resourceGrou
 
 // getHandleResponse handles the Get response.
 func (client *AccountsClient) getHandleResponse(resp *http.Response) (AccountsClientGetResponse, error) {
-	result := AccountsClientGetResponse{RawResponse: resp}
+	result := AccountsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Account); err != nil {
 		return AccountsClientGetResponse{}, err
 	}
@@ -377,7 +373,7 @@ func (client *AccountsClient) listByResourceGroupCreateRequest(ctx context.Conte
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *AccountsClient) listByResourceGroupHandleResponse(resp *http.Response) (AccountsClientListByResourceGroupResponse, error) {
-	result := AccountsClientListByResourceGroupResponse{RawResponse: resp}
+	result := AccountsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountList); err != nil {
 		return AccountsClientListByResourceGroupResponse{}, err
 	}
@@ -423,7 +419,7 @@ func (client *AccountsClient) listBySubscriptionCreateRequest(ctx context.Contex
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *AccountsClient) listBySubscriptionHandleResponse(resp *http.Response) (AccountsClientListBySubscriptionResponse, error) {
-	result := AccountsClientListBySubscriptionResponse{RawResponse: resp}
+	result := AccountsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountList); err != nil {
 		return AccountsClientListBySubscriptionResponse{}, err
 	}
@@ -478,7 +474,7 @@ func (client *AccountsClient) listKeysCreateRequest(ctx context.Context, resourc
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *AccountsClient) listKeysHandleResponse(resp *http.Response) (AccountsClientListKeysResponse, error) {
-	result := AccountsClientListKeysResponse{RawResponse: resp}
+	result := AccountsClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccessKeys); err != nil {
 		return AccountsClientListKeysResponse{}, err
 	}
@@ -496,9 +492,7 @@ func (client *AccountsClient) BeginUpdate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return AccountsClientUpdatePollerResponse{}, err
 	}
-	result := AccountsClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := AccountsClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("AccountsClient.Update", "", resp, client.pl)
 	if err != nil {
 		return AccountsClientUpdatePollerResponse{}, err

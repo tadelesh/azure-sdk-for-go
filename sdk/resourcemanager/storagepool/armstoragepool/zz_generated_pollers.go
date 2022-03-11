@@ -43,11 +43,10 @@ func (p *DiskPoolsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final DiskPoolsClientCreateOrUpdateResponse will be returned.
 func (p *DiskPoolsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (DiskPoolsClientCreateOrUpdateResponse, error) {
 	respType := DiskPoolsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DiskPool)
+	_, err := p.pt.FinalResponse(ctx, &respType.DiskPool)
 	if err != nil {
 		return DiskPoolsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *DiskPoolsClientDeallocatePoller) Poll(ctx context.Context) (*http.Respo
 // If the final GET succeeded then the final DiskPoolsClientDeallocateResponse will be returned.
 func (p *DiskPoolsClientDeallocatePoller) FinalResponse(ctx context.Context) (DiskPoolsClientDeallocateResponse, error) {
 	respType := DiskPoolsClientDeallocateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DiskPoolsClientDeallocateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *DiskPoolsClientDeletePoller) Poll(ctx context.Context) (*http.Response,
 // If the final GET succeeded then the final DiskPoolsClientDeleteResponse will be returned.
 func (p *DiskPoolsClientDeletePoller) FinalResponse(ctx context.Context) (DiskPoolsClientDeleteResponse, error) {
 	respType := DiskPoolsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DiskPoolsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *DiskPoolsClientStartPoller) Poll(ctx context.Context) (*http.Response, 
 // If the final GET succeeded then the final DiskPoolsClientStartResponse will be returned.
 func (p *DiskPoolsClientStartPoller) FinalResponse(ctx context.Context) (DiskPoolsClientStartResponse, error) {
 	respType := DiskPoolsClientStartResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DiskPoolsClientStartResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *DiskPoolsClientUpdatePoller) Poll(ctx context.Context) (*http.Response,
 // If the final GET succeeded then the final DiskPoolsClientUpdateResponse will be returned.
 func (p *DiskPoolsClientUpdatePoller) FinalResponse(ctx context.Context) (DiskPoolsClientUpdateResponse, error) {
 	respType := DiskPoolsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.DiskPool)
+	_, err := p.pt.FinalResponse(ctx, &respType.DiskPool)
 	if err != nil {
 		return DiskPoolsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *DiskPoolsClientUpgradePoller) Poll(ctx context.Context) (*http.Response
 // If the final GET succeeded then the final DiskPoolsClientUpgradeResponse will be returned.
 func (p *DiskPoolsClientUpgradePoller) FinalResponse(ctx context.Context) (DiskPoolsClientUpgradeResponse, error) {
 	respType := DiskPoolsClientUpgradeResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return DiskPoolsClientUpgradeResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -301,11 +295,10 @@ func (p *IscsiTargetsClientCreateOrUpdatePoller) Poll(ctx context.Context) (*htt
 // If the final GET succeeded then the final IscsiTargetsClientCreateOrUpdateResponse will be returned.
 func (p *IscsiTargetsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (IscsiTargetsClientCreateOrUpdateResponse, error) {
 	respType := IscsiTargetsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.IscsiTarget)
+	_, err := p.pt.FinalResponse(ctx, &respType.IscsiTarget)
 	if err != nil {
 		return IscsiTargetsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -344,11 +337,10 @@ func (p *IscsiTargetsClientDeletePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final IscsiTargetsClientDeleteResponse will be returned.
 func (p *IscsiTargetsClientDeletePoller) FinalResponse(ctx context.Context) (IscsiTargetsClientDeleteResponse, error) {
 	respType := IscsiTargetsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return IscsiTargetsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -387,11 +379,10 @@ func (p *IscsiTargetsClientUpdatePoller) Poll(ctx context.Context) (*http.Respon
 // If the final GET succeeded then the final IscsiTargetsClientUpdateResponse will be returned.
 func (p *IscsiTargetsClientUpdatePoller) FinalResponse(ctx context.Context) (IscsiTargetsClientUpdateResponse, error) {
 	respType := IscsiTargetsClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.IscsiTarget)
+	_, err := p.pt.FinalResponse(ctx, &respType.IscsiTarget)
 	if err != nil {
 		return IscsiTargetsClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

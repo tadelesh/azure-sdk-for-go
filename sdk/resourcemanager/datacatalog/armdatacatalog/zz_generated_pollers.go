@@ -43,11 +43,10 @@ func (p *ADCCatalogsClientDeletePoller) Poll(ctx context.Context) (*http.Respons
 // If the final GET succeeded then the final ADCCatalogsClientDeleteResponse will be returned.
 func (p *ADCCatalogsClientDeletePoller) FinalResponse(ctx context.Context) (ADCCatalogsClientDeleteResponse, error) {
 	respType := ADCCatalogsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return ADCCatalogsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

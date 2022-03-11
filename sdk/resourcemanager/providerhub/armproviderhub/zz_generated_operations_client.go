@@ -34,17 +34,17 @@ type OperationsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewOperationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *OperationsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &OperationsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -94,7 +94,7 @@ func (client *OperationsClient) createOrUpdateCreateRequest(ctx context.Context,
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *OperationsClient) createOrUpdateHandleResponse(resp *http.Response) (OperationsClientCreateOrUpdateResponse, error) {
-	result := OperationsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := OperationsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OperationsContent); err != nil {
 		return OperationsClientCreateOrUpdateResponse{}, err
 	}
@@ -117,7 +117,7 @@ func (client *OperationsClient) Delete(ctx context.Context, providerNamespace st
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return OperationsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return OperationsClientDeleteResponse{RawResponse: resp}, nil
+	return OperationsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -170,7 +170,7 @@ func (client *OperationsClient) listCreateRequest(ctx context.Context, options *
 
 // listHandleResponse handles the List response.
 func (client *OperationsClient) listHandleResponse(resp *http.Response) (OperationsClientListResponse, error) {
-	result := OperationsClientListResponse{RawResponse: resp}
+	result := OperationsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OperationsDefinitionArrayResponseWithContinuation); err != nil {
 		return OperationsClientListResponse{}, err
 	}
@@ -221,7 +221,7 @@ func (client *OperationsClient) listByProviderRegistrationCreateRequest(ctx cont
 
 // listByProviderRegistrationHandleResponse handles the ListByProviderRegistration response.
 func (client *OperationsClient) listByProviderRegistrationHandleResponse(resp *http.Response) (OperationsClientListByProviderRegistrationResponse, error) {
-	result := OperationsClientListByProviderRegistrationResponse{RawResponse: resp}
+	result := OperationsClientListByProviderRegistrationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OperationsDefinitionArray); err != nil {
 		return OperationsClientListByProviderRegistrationResponse{}, err
 	}

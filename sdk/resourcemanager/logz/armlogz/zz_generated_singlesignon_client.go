@@ -34,17 +34,17 @@ type SingleSignOnClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSingleSignOnClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SingleSignOnClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SingleSignOnClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -60,9 +60,7 @@ func (client *SingleSignOnClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return SingleSignOnClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := SingleSignOnClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := SingleSignOnClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("SingleSignOnClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return SingleSignOnClientCreateOrUpdatePollerResponse{}, err
@@ -175,7 +173,7 @@ func (client *SingleSignOnClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *SingleSignOnClient) getHandleResponse(resp *http.Response) (SingleSignOnClientGetResponse, error) {
-	result := SingleSignOnClientGetResponse{RawResponse: resp}
+	result := SingleSignOnClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SingleSignOnResource); err != nil {
 		return SingleSignOnClientGetResponse{}, err
 	}
@@ -227,7 +225,7 @@ func (client *SingleSignOnClient) listCreateRequest(ctx context.Context, resourc
 
 // listHandleResponse handles the List response.
 func (client *SingleSignOnClient) listHandleResponse(resp *http.Response) (SingleSignOnClientListResponse, error) {
-	result := SingleSignOnClientListResponse{RawResponse: resp}
+	result := SingleSignOnClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SingleSignOnResourceListResponse); err != nil {
 		return SingleSignOnClientListResponse{}, err
 	}

@@ -35,17 +35,17 @@ type ChangesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewChangesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ChangesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ChangesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *ChangesClient) listChangesByResourceGroupCreateRequest(ctx context
 
 // listChangesByResourceGroupHandleResponse handles the ListChangesByResourceGroup response.
 func (client *ChangesClient) listChangesByResourceGroupHandleResponse(resp *http.Response) (ChangesClientListChangesByResourceGroupResponse, error) {
-	result := ChangesClientListChangesByResourceGroupResponse{RawResponse: resp}
+	result := ChangesClientListChangesByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ChangeList); err != nil {
 		return ChangesClientListChangesByResourceGroupResponse{}, err
 	}
@@ -150,7 +150,7 @@ func (client *ChangesClient) listChangesBySubscriptionCreateRequest(ctx context.
 
 // listChangesBySubscriptionHandleResponse handles the ListChangesBySubscription response.
 func (client *ChangesClient) listChangesBySubscriptionHandleResponse(resp *http.Response) (ChangesClientListChangesBySubscriptionResponse, error) {
-	result := ChangesClientListChangesBySubscriptionResponse{RawResponse: resp}
+	result := ChangesClientListChangesBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ChangeList); err != nil {
 		return ChangesClientListChangesBySubscriptionResponse{}, err
 	}

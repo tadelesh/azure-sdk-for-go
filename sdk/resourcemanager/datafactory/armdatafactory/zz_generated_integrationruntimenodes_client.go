@@ -34,17 +34,17 @@ type IntegrationRuntimeNodesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewIntegrationRuntimeNodesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *IntegrationRuntimeNodesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &IntegrationRuntimeNodesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -69,7 +69,7 @@ func (client *IntegrationRuntimeNodesClient) Delete(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return IntegrationRuntimeNodesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return IntegrationRuntimeNodesClientDeleteResponse{RawResponse: resp}, nil
+	return IntegrationRuntimeNodesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -165,7 +165,7 @@ func (client *IntegrationRuntimeNodesClient) getCreateRequest(ctx context.Contex
 
 // getHandleResponse handles the Get response.
 func (client *IntegrationRuntimeNodesClient) getHandleResponse(resp *http.Response) (IntegrationRuntimeNodesClientGetResponse, error) {
-	result := IntegrationRuntimeNodesClientGetResponse{RawResponse: resp}
+	result := IntegrationRuntimeNodesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SelfHostedIntegrationRuntimeNode); err != nil {
 		return IntegrationRuntimeNodesClientGetResponse{}, err
 	}
@@ -231,7 +231,7 @@ func (client *IntegrationRuntimeNodesClient) getIPAddressCreateRequest(ctx conte
 
 // getIPAddressHandleResponse handles the GetIPAddress response.
 func (client *IntegrationRuntimeNodesClient) getIPAddressHandleResponse(resp *http.Response) (IntegrationRuntimeNodesClientGetIPAddressResponse, error) {
-	result := IntegrationRuntimeNodesClientGetIPAddressResponse{RawResponse: resp}
+	result := IntegrationRuntimeNodesClientGetIPAddressResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IntegrationRuntimeNodeIPAddress); err != nil {
 		return IntegrationRuntimeNodesClientGetIPAddressResponse{}, err
 	}
@@ -298,7 +298,7 @@ func (client *IntegrationRuntimeNodesClient) updateCreateRequest(ctx context.Con
 
 // updateHandleResponse handles the Update response.
 func (client *IntegrationRuntimeNodesClient) updateHandleResponse(resp *http.Response) (IntegrationRuntimeNodesClientUpdateResponse, error) {
-	result := IntegrationRuntimeNodesClientUpdateResponse{RawResponse: resp}
+	result := IntegrationRuntimeNodesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SelfHostedIntegrationRuntimeNode); err != nil {
 		return IntegrationRuntimeNodesClientUpdateResponse{}, err
 	}

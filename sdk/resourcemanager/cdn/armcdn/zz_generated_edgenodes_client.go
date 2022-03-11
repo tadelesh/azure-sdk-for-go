@@ -74,7 +74,7 @@ func (client *EdgeNodesClient) listCreateRequest(ctx context.Context, options *E
 
 // listHandleResponse handles the List response.
 func (client *EdgeNodesClient) listHandleResponse(resp *http.Response) (EdgeNodesClientListResponse, error) {
-	result := EdgeNodesClientListResponse{RawResponse: resp}
+	result := EdgeNodesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EdgenodeResult); err != nil {
 		return EdgeNodesClientListResponse{}, err
 	}

@@ -8,12 +8,6 @@
 
 package armsqlvirtualmachine
 
-import (
-	"encoding/json"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
-	"reflect"
-)
-
 // AdditionalFeaturesServerConfigurations - Additional SQL Server feature settings.
 type AdditionalFeaturesServerConfigurations struct {
 	// Enable or disable R services (SQL 2016 onwards).
@@ -98,14 +92,6 @@ type AvailabilityGroupListenerListResult struct {
 	Value []*AvailabilityGroupListener `json:"value,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type AvailabilityGroupListenerListResult.
-func (a AvailabilityGroupListenerListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", a.NextLink)
-	populate(objectMap, "value", a.Value)
-	return json.Marshal(objectMap)
-}
-
 // AvailabilityGroupListenerProperties - The properties of an availability group listener.
 type AvailabilityGroupListenerProperties struct {
 	// Name of the availability group.
@@ -122,17 +108,6 @@ type AvailabilityGroupListenerProperties struct {
 
 	// READ-ONLY; Provisioning state to track the async operation status.
 	ProvisioningState *string `json:"provisioningState,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type AvailabilityGroupListenerProperties.
-func (a AvailabilityGroupListenerProperties) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "availabilityGroupName", a.AvailabilityGroupName)
-	populate(objectMap, "createDefaultAvailabilityGroupIfNotExist", a.CreateDefaultAvailabilityGroupIfNotExist)
-	populate(objectMap, "loadBalancerConfigurations", a.LoadBalancerConfigurations)
-	populate(objectMap, "port", a.Port)
-	populate(objectMap, "provisioningState", a.ProvisioningState)
-	return json.Marshal(objectMap)
 }
 
 // AvailabilityGroupListenersClientBeginCreateOrUpdateOptions contains the optional parameters for the AvailabilityGroupListenersClient.BeginCreateOrUpdate
@@ -180,18 +155,6 @@ type Group struct {
 	Type *string `json:"type,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type Group.
-func (g Group) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", g.ID)
-	populate(objectMap, "location", g.Location)
-	populate(objectMap, "name", g.Name)
-	populate(objectMap, "properties", g.Properties)
-	populate(objectMap, "tags", g.Tags)
-	populate(objectMap, "type", g.Type)
-	return json.Marshal(objectMap)
-}
-
 // GroupListResult - A list of SQL virtual machine groups.
 type GroupListResult struct {
 	// READ-ONLY; Link to retrieve next page of results.
@@ -199,14 +162,6 @@ type GroupListResult struct {
 
 	// READ-ONLY; Array of results.
 	Value []*Group `json:"value,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type GroupListResult.
-func (g GroupListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", g.NextLink)
-	populate(objectMap, "value", g.Value)
-	return json.Marshal(objectMap)
 }
 
 // GroupProperties - The properties of a SQL virtual machine group.
@@ -238,13 +193,6 @@ type GroupProperties struct {
 type GroupUpdate struct {
 	// Resource tags.
 	Tags map[string]*string `json:"tags,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type GroupUpdate.
-func (g GroupUpdate) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "tags", g.Tags)
-	return json.Marshal(objectMap)
 }
 
 // GroupsClientBeginCreateOrUpdateOptions contains the optional parameters for the GroupsClient.BeginCreateOrUpdate method.
@@ -304,14 +252,6 @@ type ListResult struct {
 	Value []*SQLVirtualMachine `json:"value,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type ListResult.
-func (l ListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", l.NextLink)
-	populate(objectMap, "value", l.Value)
-	return json.Marshal(objectMap)
-}
-
 // LoadBalancerConfiguration - A load balancer configuration for an availability group listener.
 type LoadBalancerConfiguration struct {
 	// Resource id of the load balancer.
@@ -330,17 +270,6 @@ type LoadBalancerConfiguration struct {
 	SQLVirtualMachineInstances []*string `json:"sqlVirtualMachineInstances,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type LoadBalancerConfiguration.
-func (l LoadBalancerConfiguration) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "loadBalancerResourceId", l.LoadBalancerResourceID)
-	populate(objectMap, "privateIpAddress", l.PrivateIPAddress)
-	populate(objectMap, "probePort", l.ProbePort)
-	populate(objectMap, "publicIpAddressResourceId", l.PublicIPAddressResourceID)
-	populate(objectMap, "sqlVirtualMachineInstances", l.SQLVirtualMachineInstances)
-	return json.Marshal(objectMap)
-}
-
 // Operation - SQL REST API operation definition.
 type Operation struct {
 	// READ-ONLY; The localized display information for this particular operation / action.
@@ -353,17 +282,7 @@ type Operation struct {
 	Origin *OperationOrigin `json:"origin,omitempty" azure:"ro"`
 
 	// READ-ONLY; Additional descriptions for the operation.
-	Properties map[string]map[string]interface{} `json:"properties,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type Operation.
-func (o Operation) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "display", o.Display)
-	populate(objectMap, "name", o.Name)
-	populate(objectMap, "origin", o.Origin)
-	populate(objectMap, "properties", o.Properties)
-	return json.Marshal(objectMap)
+	Properties map[string]interface{} `json:"properties,omitempty" azure:"ro"`
 }
 
 // OperationDisplay - Display metadata associated with the operation.
@@ -388,14 +307,6 @@ type OperationListResult struct {
 
 	// READ-ONLY; Array of results.
 	Value []*Operation `json:"value,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type OperationListResult.
-func (o OperationListResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "nextLink", o.NextLink)
-	populate(objectMap, "value", o.Value)
-	return json.Marshal(objectMap)
 }
 
 // OperationsClientListOptions contains the optional parameters for the OperationsClient.List method.
@@ -515,14 +426,6 @@ type SQLStorageSettings struct {
 	Luns []*int32 `json:"luns,omitempty"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type SQLStorageSettings.
-func (s SQLStorageSettings) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "defaultFilePath", s.DefaultFilePath)
-	populate(objectMap, "luns", s.Luns)
-	return json.Marshal(objectMap)
-}
-
 // SQLStorageUpdateSettings - Set disk storage settings for SQL Server.
 type SQLStorageUpdateSettings struct {
 	// Disk configuration to apply to SQL Server.
@@ -557,19 +460,6 @@ type SQLVirtualMachine struct {
 
 	// READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty" azure:"ro"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type SQLVirtualMachine.
-func (s SQLVirtualMachine) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", s.ID)
-	populate(objectMap, "identity", s.Identity)
-	populate(objectMap, "location", s.Location)
-	populate(objectMap, "name", s.Name)
-	populate(objectMap, "properties", s.Properties)
-	populate(objectMap, "tags", s.Tags)
-	populate(objectMap, "type", s.Type)
-	return json.Marshal(objectMap)
 }
 
 // SQLVirtualMachinesClientBeginCreateOrUpdateOptions contains the optional parameters for the SQLVirtualMachinesClient.BeginCreateOrUpdate
@@ -670,28 +560,10 @@ type TrackedResource struct {
 	Type *string `json:"type,omitempty" azure:"ro"`
 }
 
-// MarshalJSON implements the json.Marshaller interface for type TrackedResource.
-func (t TrackedResource) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "id", t.ID)
-	populate(objectMap, "location", t.Location)
-	populate(objectMap, "name", t.Name)
-	populate(objectMap, "tags", t.Tags)
-	populate(objectMap, "type", t.Type)
-	return json.Marshal(objectMap)
-}
-
 // Update - An update to a SQL virtual machine.
 type Update struct {
 	// Resource tags.
 	Tags map[string]*string `json:"tags,omitempty"`
-}
-
-// MarshalJSON implements the json.Marshaller interface for type Update.
-func (u Update) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	populate(objectMap, "tags", u.Tags)
-	return json.Marshal(objectMap)
 }
 
 // WsfcDomainCredentials - Domain credentials for setting up Windows Server Failover Cluster for SQL availability group.
@@ -732,14 +604,4 @@ type WsfcDomainProfile struct {
 
 	// Fully qualified ARM resource id of the witness storage account.
 	StorageAccountURL *string `json:"storageAccountUrl,omitempty"`
-}
-
-func populate(m map[string]interface{}, k string, v interface{}) {
-	if v == nil {
-		return
-	} else if azcore.IsNullValue(v) {
-		m[k] = nil
-	} else if !reflect.ValueOf(v).IsNil() {
-		m[k] = v
-	}
 }

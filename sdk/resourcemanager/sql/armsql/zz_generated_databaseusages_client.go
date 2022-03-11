@@ -34,17 +34,17 @@ type DatabaseUsagesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDatabaseUsagesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DatabaseUsagesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DatabaseUsagesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -101,7 +101,7 @@ func (client *DatabaseUsagesClient) listByDatabaseCreateRequest(ctx context.Cont
 
 // listByDatabaseHandleResponse handles the ListByDatabase response.
 func (client *DatabaseUsagesClient) listByDatabaseHandleResponse(resp *http.Response) (DatabaseUsagesClientListByDatabaseResponse, error) {
-	result := DatabaseUsagesClientListByDatabaseResponse{RawResponse: resp}
+	result := DatabaseUsagesClientListByDatabaseResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseUsageListResult); err != nil {
 		return DatabaseUsagesClientListByDatabaseResponse{}, err
 	}

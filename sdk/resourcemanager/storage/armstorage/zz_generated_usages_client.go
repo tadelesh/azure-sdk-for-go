@@ -53,19 +53,13 @@ func NewUsagesClient(subscriptionID string, credential azcore.TokenCredential, o
 // If the operation fails it returns an *azcore.ResponseError type.
 // location - The location of the Azure Storage resource.
 // options - UsagesClientListByLocationOptions contains the optional parameters for the UsagesClient.ListByLocation method.
-func (client *UsagesClient) ListByLocation(ctx context.Context, location string, options *UsagesClientListByLocationOptions) (UsagesClientListByLocationResponse, error) {
-	req, err := client.listByLocationCreateRequest(ctx, location, options)
-	if err != nil {
-		return UsagesClientListByLocationResponse{}, err
+func (client *UsagesClient) ListByLocation(location string, options *UsagesClientListByLocationOptions) *UsagesClientListByLocationPager {
+	return &UsagesClientListByLocationPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByLocationCreateRequest(ctx, location, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return UsagesClientListByLocationResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return UsagesClientListByLocationResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByLocationHandleResponse(resp)
 }
 
 // listByLocationCreateRequest creates the ListByLocation request.
@@ -92,7 +86,7 @@ func (client *UsagesClient) listByLocationCreateRequest(ctx context.Context, loc
 
 // listByLocationHandleResponse handles the ListByLocation response.
 func (client *UsagesClient) listByLocationHandleResponse(resp *http.Response) (UsagesClientListByLocationResponse, error) {
-	result := UsagesClientListByLocationResponse{RawResponse: resp}
+	result := UsagesClientListByLocationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UsageListResult); err != nil {
 		return UsagesClientListByLocationResponse{}, err
 	}

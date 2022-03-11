@@ -1,5 +1,161 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*BotsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(BotsClientListByResourceGroupResponse, error)`
+- Function `*PrivateEndpointConnectionsClient.List` parameter(s) have been changed from `(context.Context, string, string, *PrivateEndpointConnectionsClientListOptions)` to `(string, string, *PrivateEndpointConnectionsClientListOptions)`
+- Function `*PrivateEndpointConnectionsClient.List` return value(s) have been changed from `(PrivateEndpointConnectionsClientListResponse, error)` to `(*PrivateEndpointConnectionsClientListPager)`
+- Function `*BotsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(BotsClientListResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*ChannelsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ChannelsClientListByResourceGroupResponse, error)`
+- Function `*BotConnectionClientListByBotServicePager.NextPage` return value(s) have been changed from `(bool)` to `(BotConnectionClientListByBotServiceResponse, error)`
+- Function `*BotConnectionClientListByBotServicePager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*ChannelsClientListByResourceGroupPager.Err` has been removed
+- Function `*BotsClientListPager.PageResponse` has been removed
+- Function `*ChannelsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*BotsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*BotConnectionClientListByBotServicePager.Err` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*BotsClientListPager.Err` has been removed
+- Function `*BotsClientListByResourceGroupPager.Err` has been removed
+- Struct `BotConnectionClientCreateResult` has been removed
+- Struct `BotConnectionClientGetResult` has been removed
+- Struct `BotConnectionClientListByBotServiceResult` has been removed
+- Struct `BotConnectionClientListServiceProvidersResult` has been removed
+- Struct `BotConnectionClientListWithSecretsResult` has been removed
+- Struct `BotConnectionClientUpdateResult` has been removed
+- Struct `BotsClientCreateResult` has been removed
+- Struct `BotsClientGetCheckNameAvailabilityResult` has been removed
+- Struct `BotsClientGetResult` has been removed
+- Struct `BotsClientListByResourceGroupResult` has been removed
+- Struct `BotsClientListResult` has been removed
+- Struct `BotsClientUpdateResult` has been removed
+- Struct `ChannelsClientCreateResult` has been removed
+- Struct `ChannelsClientGetResult` has been removed
+- Struct `ChannelsClientListByResourceGroupResult` has been removed
+- Struct `ChannelsClientListWithKeysResult` has been removed
+- Struct `ChannelsClientUpdateResult` has been removed
+- Struct `DirectLineClientRegenerateKeysResult` has been removed
+- Struct `HostSettingsClientGetResult` has been removed
+- Struct `OperationResultsClientGetResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Struct `PrivateEndpointConnectionsClientCreateResult` has been removed
+- Struct `PrivateEndpointConnectionsClientGetResult` has been removed
+- Struct `PrivateEndpointConnectionsClientListResult` has been removed
+- Struct `PrivateLinkResourcesClientListByBotResourceResult` has been removed
+- Field `BotConnectionClientCreateResult` of struct `BotConnectionClientCreateResponse` has been removed
+- Field `RawResponse` of struct `BotConnectionClientCreateResponse` has been removed
+- Field `PrivateEndpointConnectionsClientListResult` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientListResponse` has been removed
+- Field `BotsClientCreateResult` of struct `BotsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `BotsClientCreateResponse` has been removed
+- Field `DirectLineClientRegenerateKeysResult` of struct `DirectLineClientRegenerateKeysResponse` has been removed
+- Field `RawResponse` of struct `DirectLineClientRegenerateKeysResponse` has been removed
+- Field `ChannelsClientListByResourceGroupResult` of struct `ChannelsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ChannelsClientListByResourceGroupResponse` has been removed
+- Field `HostSettingsClientGetResult` of struct `HostSettingsClientGetResponse` has been removed
+- Field `RawResponse` of struct `HostSettingsClientGetResponse` has been removed
+- Field `ChannelsClientCreateResult` of struct `ChannelsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ChannelsClientCreateResponse` has been removed
+- Field `OperationResultsClientGetResult` of struct `OperationResultsClientGetResponse` has been removed
+- Field `RawResponse` of struct `OperationResultsClientGetResponse` has been removed
+- Field `PrivateLinkResourcesClientListByBotResourceResult` of struct `PrivateLinkResourcesClientListByBotResourceResponse` has been removed
+- Field `RawResponse` of struct `PrivateLinkResourcesClientListByBotResourceResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientDeleteResponse` has been removed
+- Field `ChannelsClientListWithKeysResult` of struct `ChannelsClientListWithKeysResponse` has been removed
+- Field `RawResponse` of struct `ChannelsClientListWithKeysResponse` has been removed
+- Field `RawResponse` of struct `ChannelsClientDeleteResponse` has been removed
+- Field `BotsClientUpdateResult` of struct `BotsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `BotsClientUpdateResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `BotConnectionClientGetResult` of struct `BotConnectionClientGetResponse` has been removed
+- Field `RawResponse` of struct `BotConnectionClientGetResponse` has been removed
+- Field `ChannelsClientGetResult` of struct `ChannelsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ChannelsClientGetResponse` has been removed
+- Field `BotsClientGetResult` of struct `BotsClientGetResponse` has been removed
+- Field `RawResponse` of struct `BotsClientGetResponse` has been removed
+- Field `RawResponse` of struct `BotsClientDeleteResponse` has been removed
+- Field `RawResponse` of struct `OperationResultsClientGetPollerResponse` has been removed
+- Field `BotsClientGetCheckNameAvailabilityResult` of struct `BotsClientGetCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `BotsClientGetCheckNameAvailabilityResponse` has been removed
+- Field `BotsClientListByResourceGroupResult` of struct `BotsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `BotsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `BotConnectionClientDeleteResponse` has been removed
+- Field `ChannelsClientUpdateResult` of struct `ChannelsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ChannelsClientUpdateResponse` has been removed
+- Field `BotConnectionClientListWithSecretsResult` of struct `BotConnectionClientListWithSecretsResponse` has been removed
+- Field `RawResponse` of struct `BotConnectionClientListWithSecretsResponse` has been removed
+- Field `BotsClientListResult` of struct `BotsClientListResponse` has been removed
+- Field `RawResponse` of struct `BotsClientListResponse` has been removed
+- Field `PrivateEndpointConnectionsClientGetResult` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientGetResponse` has been removed
+- Field `BotConnectionClientListServiceProvidersResult` of struct `BotConnectionClientListServiceProvidersResponse` has been removed
+- Field `RawResponse` of struct `BotConnectionClientListServiceProvidersResponse` has been removed
+- Field `PrivateEndpointConnectionsClientCreateResult` of struct `PrivateEndpointConnectionsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `PrivateEndpointConnectionsClientCreateResponse` has been removed
+- Field `BotConnectionClientUpdateResult` of struct `BotConnectionClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `BotConnectionClientUpdateResponse` has been removed
+- Field `BotConnectionClientListByBotServiceResult` of struct `BotConnectionClientListByBotServiceResponse` has been removed
+- Field `RawResponse` of struct `BotConnectionClientListByBotServiceResponse` has been removed
+
+### Features Added
+
+- New function `*PrivateEndpointConnectionsClientListPager.NextPage(context.Context) (PrivateEndpointConnectionsClientListResponse, error)`
+- New function `*BotConnectionClientListByBotServicePager.More() bool`
+- New function `*ChannelsClientListByResourceGroupPager.More() bool`
+- New function `*BotsClientListByResourceGroupPager.More() bool`
+- New function `*OperationsClientListPager.More() bool`
+- New function `*PrivateEndpointConnectionsClientListPager.More() bool`
+- New function `*BotsClientListPager.More() bool`
+- New struct `ConnectionItemName`
+- New struct `Error`
+- New struct `ErrorBody`
+- New struct `PrivateEndpointConnectionsClientListPager`
+- New anonymous field `CheckNameAvailabilityResponseBody` in struct `BotsClientGetCheckNameAvailabilityResponse`
+- New anonymous field `ListChannelWithKeysResponse` in struct `ChannelsClientListWithKeysResponse`
+- New anonymous field `ChannelResponseList` in struct `ChannelsClientListByResourceGroupResponse`
+- New anonymous field `ConnectionSettingResponseList` in struct `BotConnectionClientListByBotServiceResponse`
+- New anonymous field `ConnectionSetting` in struct `BotConnectionClientCreateResponse`
+- New anonymous field `HostSettingsResponse` in struct `HostSettingsClientGetResponse`
+- New anonymous field `BotChannel` in struct `ChannelsClientUpdateResponse`
+- New anonymous field `PrivateLinkResourceListResult` in struct `PrivateLinkResourcesClientListByBotResourceResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientGetResponse`
+- New anonymous field `Bot` in struct `BotsClientUpdateResponse`
+- New anonymous field `ServiceProviderResponseList` in struct `BotConnectionClientListServiceProvidersResponse`
+- New anonymous field `ConnectionSetting` in struct `BotConnectionClientUpdateResponse`
+- New anonymous field `Bot` in struct `BotsClientGetResponse`
+- New anonymous field `BotResponseList` in struct `BotsClientListResponse`
+- New anonymous field `BotResponseList` in struct `BotsClientListByResourceGroupResponse`
+- New anonymous field `BotChannel` in struct `DirectLineClientRegenerateKeysResponse`
+- New anonymous field `PrivateEndpointConnectionListResult` in struct `PrivateEndpointConnectionsClientListResponse`
+- New anonymous field `BotChannel` in struct `ChannelsClientGetResponse`
+- New anonymous field `ConnectionSetting` in struct `BotConnectionClientGetResponse`
+- New anonymous field `BotChannel` in struct `ChannelsClientCreateResponse`
+- New anonymous field `ConnectionSetting` in struct `BotConnectionClientListWithSecretsResponse`
+- New anonymous field `PrivateEndpointConnection` in struct `PrivateEndpointConnectionsClientCreateResponse`
+- New anonymous field `OperationResultsDescription` in struct `OperationResultsClientGetResponse`
+- New anonymous field `OperationEntityListResult` in struct `OperationsClientListResponse`
+- New anonymous field `Bot` in struct `BotsClientCreateResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `OperationEntity.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Struct `ConnectionItemName` has been removed
+- Struct `Error` has been removed
+- Struct `ErrorBody` has been removed
+
+### Features Added
+
+- New field `ChangedTime` in struct `ListChannelWithKeysResponse`
+- New field `EntityTag` in struct `ListChannelWithKeysResponse`
+- New field `ProvisioningState` in struct `ListChannelWithKeysResponse`
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

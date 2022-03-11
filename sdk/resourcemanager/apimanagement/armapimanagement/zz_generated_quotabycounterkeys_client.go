@@ -35,17 +35,17 @@ type QuotaByCounterKeysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewQuotaByCounterKeysClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *QuotaByCounterKeysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &QuotaByCounterKeysClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -107,7 +107,7 @@ func (client *QuotaByCounterKeysClient) listByServiceCreateRequest(ctx context.C
 
 // listByServiceHandleResponse handles the ListByService response.
 func (client *QuotaByCounterKeysClient) listByServiceHandleResponse(resp *http.Response) (QuotaByCounterKeysClientListByServiceResponse, error) {
-	result := QuotaByCounterKeysClientListByServiceResponse{RawResponse: resp}
+	result := QuotaByCounterKeysClientListByServiceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QuotaCounterCollection); err != nil {
 		return QuotaByCounterKeysClientListByServiceResponse{}, err
 	}
@@ -172,7 +172,7 @@ func (client *QuotaByCounterKeysClient) updateCreateRequest(ctx context.Context,
 
 // updateHandleResponse handles the Update response.
 func (client *QuotaByCounterKeysClient) updateHandleResponse(resp *http.Response) (QuotaByCounterKeysClientUpdateResponse, error) {
-	result := QuotaByCounterKeysClientUpdateResponse{RawResponse: resp}
+	result := QuotaByCounterKeysClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QuotaCounterCollection); err != nil {
 		return QuotaByCounterKeysClientUpdateResponse{}, err
 	}

@@ -99,7 +99,7 @@ func (client *CertificatesClient) createOrUpdateCreateRequest(ctx context.Contex
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *CertificatesClient) createOrUpdateHandleResponse(resp *http.Response) (CertificatesClientCreateOrUpdateResponse, error) {
-	result := CertificatesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := CertificatesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AppCertificate); err != nil {
 		return CertificatesClientCreateOrUpdateResponse{}, err
 	}
@@ -123,7 +123,7 @@ func (client *CertificatesClient) Delete(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return CertificatesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return CertificatesClientDeleteResponse{RawResponse: resp}, nil
+	return CertificatesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -200,7 +200,7 @@ func (client *CertificatesClient) getCreateRequest(ctx context.Context, resource
 
 // getHandleResponse handles the Get response.
 func (client *CertificatesClient) getHandleResponse(resp *http.Response) (CertificatesClientGetResponse, error) {
-	result := CertificatesClientGetResponse{RawResponse: resp}
+	result := CertificatesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AppCertificate); err != nil {
 		return CertificatesClientGetResponse{}, err
 	}
@@ -247,7 +247,7 @@ func (client *CertificatesClient) listCreateRequest(ctx context.Context, options
 
 // listHandleResponse handles the List response.
 func (client *CertificatesClient) listHandleResponse(resp *http.Response) (CertificatesClientListResponse, error) {
-	result := CertificatesClientListResponse{RawResponse: resp}
+	result := CertificatesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AppCertificateCollection); err != nil {
 		return CertificatesClientListResponse{}, err
 	}
@@ -295,7 +295,7 @@ func (client *CertificatesClient) listByResourceGroupCreateRequest(ctx context.C
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *CertificatesClient) listByResourceGroupHandleResponse(resp *http.Response) (CertificatesClientListByResourceGroupResponse, error) {
-	result := CertificatesClientListByResourceGroupResponse{RawResponse: resp}
+	result := CertificatesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AppCertificateCollection); err != nil {
 		return CertificatesClientListByResourceGroupResponse{}, err
 	}
@@ -351,7 +351,7 @@ func (client *CertificatesClient) updateCreateRequest(ctx context.Context, resou
 
 // updateHandleResponse handles the Update response.
 func (client *CertificatesClient) updateHandleResponse(resp *http.Response) (CertificatesClientUpdateResponse, error) {
-	result := CertificatesClientUpdateResponse{RawResponse: resp}
+	result := CertificatesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AppCertificate); err != nil {
 		return CertificatesClientUpdateResponse{}, err
 	}

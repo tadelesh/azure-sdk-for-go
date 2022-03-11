@@ -34,17 +34,17 @@ type AlertRuleIncidentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAlertRuleIncidentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AlertRuleIncidentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AlertRuleIncidentsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -102,7 +102,7 @@ func (client *AlertRuleIncidentsClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *AlertRuleIncidentsClient) getHandleResponse(resp *http.Response) (AlertRuleIncidentsClientGetResponse, error) {
-	result := AlertRuleIncidentsClientGetResponse{RawResponse: resp}
+	result := AlertRuleIncidentsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Incident); err != nil {
 		return AlertRuleIncidentsClientGetResponse{}, err
 	}
@@ -115,19 +115,13 @@ func (client *AlertRuleIncidentsClient) getHandleResponse(resp *http.Response) (
 // ruleName - The name of the rule.
 // options - AlertRuleIncidentsClientListByAlertRuleOptions contains the optional parameters for the AlertRuleIncidentsClient.ListByAlertRule
 // method.
-func (client *AlertRuleIncidentsClient) ListByAlertRule(ctx context.Context, resourceGroupName string, ruleName string, options *AlertRuleIncidentsClientListByAlertRuleOptions) (AlertRuleIncidentsClientListByAlertRuleResponse, error) {
-	req, err := client.listByAlertRuleCreateRequest(ctx, resourceGroupName, ruleName, options)
-	if err != nil {
-		return AlertRuleIncidentsClientListByAlertRuleResponse{}, err
+func (client *AlertRuleIncidentsClient) ListByAlertRule(resourceGroupName string, ruleName string, options *AlertRuleIncidentsClientListByAlertRuleOptions) *AlertRuleIncidentsClientListByAlertRulePager {
+	return &AlertRuleIncidentsClientListByAlertRulePager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByAlertRuleCreateRequest(ctx, resourceGroupName, ruleName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return AlertRuleIncidentsClientListByAlertRuleResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return AlertRuleIncidentsClientListByAlertRuleResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByAlertRuleHandleResponse(resp)
 }
 
 // listByAlertRuleCreateRequest creates the ListByAlertRule request.
@@ -158,7 +152,7 @@ func (client *AlertRuleIncidentsClient) listByAlertRuleCreateRequest(ctx context
 
 // listByAlertRuleHandleResponse handles the ListByAlertRule response.
 func (client *AlertRuleIncidentsClient) listByAlertRuleHandleResponse(resp *http.Response) (AlertRuleIncidentsClientListByAlertRuleResponse, error) {
-	result := AlertRuleIncidentsClientListByAlertRuleResponse{RawResponse: resp}
+	result := AlertRuleIncidentsClientListByAlertRuleResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IncidentListResult); err != nil {
 		return AlertRuleIncidentsClientListByAlertRuleResponse{}, err
 	}

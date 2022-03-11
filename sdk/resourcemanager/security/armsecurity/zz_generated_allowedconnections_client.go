@@ -104,7 +104,7 @@ func (client *AllowedConnectionsClient) getCreateRequest(ctx context.Context, re
 
 // getHandleResponse handles the Get response.
 func (client *AllowedConnectionsClient) getHandleResponse(resp *http.Response) (AllowedConnectionsClientGetResponse, error) {
-	result := AllowedConnectionsClientGetResponse{RawResponse: resp}
+	result := AllowedConnectionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AllowedConnectionsResource); err != nil {
 		return AllowedConnectionsClientGetResponse{}, err
 	}
@@ -146,7 +146,7 @@ func (client *AllowedConnectionsClient) listCreateRequest(ctx context.Context, o
 
 // listHandleResponse handles the List response.
 func (client *AllowedConnectionsClient) listHandleResponse(resp *http.Response) (AllowedConnectionsClientListResponse, error) {
-	result := AllowedConnectionsClientListResponse{RawResponse: resp}
+	result := AllowedConnectionsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AllowedConnectionsList); err != nil {
 		return AllowedConnectionsClientListResponse{}, err
 	}
@@ -193,7 +193,7 @@ func (client *AllowedConnectionsClient) listByHomeRegionCreateRequest(ctx contex
 
 // listByHomeRegionHandleResponse handles the ListByHomeRegion response.
 func (client *AllowedConnectionsClient) listByHomeRegionHandleResponse(resp *http.Response) (AllowedConnectionsClientListByHomeRegionResponse, error) {
-	result := AllowedConnectionsClientListByHomeRegionResponse{RawResponse: resp}
+	result := AllowedConnectionsClientListByHomeRegionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AllowedConnectionsList); err != nil {
 		return AllowedConnectionsClientListByHomeRegionResponse{}, err
 	}

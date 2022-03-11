@@ -32,16 +32,16 @@ type EventsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewEventsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *EventsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &EventsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -87,7 +87,7 @@ func (client *EventsClient) listByBillingAccountCreateRequest(ctx context.Contex
 
 // listByBillingAccountHandleResponse handles the ListByBillingAccount response.
 func (client *EventsClient) listByBillingAccountHandleResponse(resp *http.Response) (EventsClientListByBillingAccountResponse, error) {
-	result := EventsClientListByBillingAccountResponse{RawResponse: resp}
+	result := EventsClientListByBillingAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Events); err != nil {
 		return EventsClientListByBillingAccountResponse{}, err
 	}
@@ -141,7 +141,7 @@ func (client *EventsClient) listByBillingProfileCreateRequest(ctx context.Contex
 
 // listByBillingProfileHandleResponse handles the ListByBillingProfile response.
 func (client *EventsClient) listByBillingProfileHandleResponse(resp *http.Response) (EventsClientListByBillingProfileResponse, error) {
-	result := EventsClientListByBillingProfileResponse{RawResponse: resp}
+	result := EventsClientListByBillingProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Events); err != nil {
 		return EventsClientListByBillingProfileResponse{}, err
 	}

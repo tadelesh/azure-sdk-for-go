@@ -36,17 +36,17 @@ type ReportsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewReportsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ReportsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ReportsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -107,7 +107,7 @@ func (client *ReportsClient) listByAPICreateRequest(ctx context.Context, resourc
 
 // listByAPIHandleResponse handles the ListByAPI response.
 func (client *ReportsClient) listByAPIHandleResponse(resp *http.Response) (ReportsClientListByAPIResponse, error) {
-	result := ReportsClientListByAPIResponse{RawResponse: resp}
+	result := ReportsClientListByAPIResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReportCollection); err != nil {
 		return ReportsClientListByAPIResponse{}, err
 	}
@@ -191,7 +191,7 @@ func (client *ReportsClient) listByGeoCreateRequest(ctx context.Context, resourc
 
 // listByGeoHandleResponse handles the ListByGeo response.
 func (client *ReportsClient) listByGeoHandleResponse(resp *http.Response) (ReportsClientListByGeoResponse, error) {
-	result := ReportsClientListByGeoResponse{RawResponse: resp}
+	result := ReportsClientListByGeoResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReportCollection); err != nil {
 		return ReportsClientListByGeoResponse{}, err
 	}
@@ -277,7 +277,7 @@ func (client *ReportsClient) listByOperationCreateRequest(ctx context.Context, r
 
 // listByOperationHandleResponse handles the ListByOperation response.
 func (client *ReportsClient) listByOperationHandleResponse(resp *http.Response) (ReportsClientListByOperationResponse, error) {
-	result := ReportsClientListByOperationResponse{RawResponse: resp}
+	result := ReportsClientListByOperationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReportCollection); err != nil {
 		return ReportsClientListByOperationResponse{}, err
 	}
@@ -361,7 +361,7 @@ func (client *ReportsClient) listByProductCreateRequest(ctx context.Context, res
 
 // listByProductHandleResponse handles the ListByProduct response.
 func (client *ReportsClient) listByProductHandleResponse(resp *http.Response) (ReportsClientListByProductResponse, error) {
-	result := ReportsClientListByProductResponse{RawResponse: resp}
+	result := ReportsClientListByProductResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReportCollection); err != nil {
 		return ReportsClientListByProductResponse{}, err
 	}
@@ -382,19 +382,13 @@ func (client *ReportsClient) listByProductHandleResponse(resp *http.Response) (R
 // | apiRegion | filter | eq | |
 // | subscriptionId | filter | eq | |
 // options - ReportsClientListByRequestOptions contains the optional parameters for the ReportsClient.ListByRequest method.
-func (client *ReportsClient) ListByRequest(ctx context.Context, resourceGroupName string, serviceName string, filter string, options *ReportsClientListByRequestOptions) (ReportsClientListByRequestResponse, error) {
-	req, err := client.listByRequestCreateRequest(ctx, resourceGroupName, serviceName, filter, options)
-	if err != nil {
-		return ReportsClientListByRequestResponse{}, err
+func (client *ReportsClient) ListByRequest(resourceGroupName string, serviceName string, filter string, options *ReportsClientListByRequestOptions) *ReportsClientListByRequestPager {
+	return &ReportsClientListByRequestPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listByRequestCreateRequest(ctx, resourceGroupName, serviceName, filter, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ReportsClientListByRequestResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ReportsClientListByRequestResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listByRequestHandleResponse(resp)
 }
 
 // listByRequestCreateRequest creates the ListByRequest request.
@@ -432,7 +426,7 @@ func (client *ReportsClient) listByRequestCreateRequest(ctx context.Context, res
 
 // listByRequestHandleResponse handles the ListByRequest response.
 func (client *ReportsClient) listByRequestHandleResponse(resp *http.Response) (ReportsClientListByRequestResponse, error) {
-	result := ReportsClientListByRequestResponse{RawResponse: resp}
+	result := ReportsClientListByRequestResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RequestReportCollection); err != nil {
 		return ReportsClientListByRequestResponse{}, err
 	}
@@ -517,7 +511,7 @@ func (client *ReportsClient) listBySubscriptionCreateRequest(ctx context.Context
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *ReportsClient) listBySubscriptionHandleResponse(resp *http.Response) (ReportsClientListBySubscriptionResponse, error) {
-	result := ReportsClientListBySubscriptionResponse{RawResponse: resp}
+	result := ReportsClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReportCollection); err != nil {
 		return ReportsClientListBySubscriptionResponse{}, err
 	}
@@ -606,7 +600,7 @@ func (client *ReportsClient) listByTimeCreateRequest(ctx context.Context, resour
 
 // listByTimeHandleResponse handles the ListByTime response.
 func (client *ReportsClient) listByTimeHandleResponse(resp *http.Response) (ReportsClientListByTimeResponse, error) {
-	result := ReportsClientListByTimeResponse{RawResponse: resp}
+	result := ReportsClientListByTimeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReportCollection); err != nil {
 		return ReportsClientListByTimeResponse{}, err
 	}
@@ -692,7 +686,7 @@ func (client *ReportsClient) listByUserCreateRequest(ctx context.Context, resour
 
 // listByUserHandleResponse handles the ListByUser response.
 func (client *ReportsClient) listByUserHandleResponse(resp *http.Response) (ReportsClientListByUserResponse, error) {
-	result := ReportsClientListByUserResponse{RawResponse: resp}
+	result := ReportsClientListByUserResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReportCollection); err != nil {
 		return ReportsClientListByUserResponse{}, err
 	}

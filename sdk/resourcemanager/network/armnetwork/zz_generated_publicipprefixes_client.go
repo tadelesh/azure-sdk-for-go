@@ -35,17 +35,17 @@ type PublicIPPrefixesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPublicIPPrefixesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *PublicIPPrefixesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PublicIPPrefixesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *PublicIPPrefixesClient) BeginCreateOrUpdate(ctx context.Context, r
 	if err != nil {
 		return PublicIPPrefixesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := PublicIPPrefixesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := PublicIPPrefixesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("PublicIPPrefixesClient.CreateOrUpdate", "location", resp, client.pl)
 	if err != nil {
 		return PublicIPPrefixesClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *PublicIPPrefixesClient) BeginDelete(ctx context.Context, resourceG
 	if err != nil {
 		return PublicIPPrefixesClientDeletePollerResponse{}, err
 	}
-	result := PublicIPPrefixesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := PublicIPPrefixesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("PublicIPPrefixesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return PublicIPPrefixesClientDeletePollerResponse{}, err
@@ -236,7 +232,7 @@ func (client *PublicIPPrefixesClient) getCreateRequest(ctx context.Context, reso
 
 // getHandleResponse handles the Get response.
 func (client *PublicIPPrefixesClient) getHandleResponse(resp *http.Response) (PublicIPPrefixesClientGetResponse, error) {
-	result := PublicIPPrefixesClientGetResponse{RawResponse: resp}
+	result := PublicIPPrefixesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicIPPrefix); err != nil {
 		return PublicIPPrefixesClientGetResponse{}, err
 	}
@@ -283,7 +279,7 @@ func (client *PublicIPPrefixesClient) listCreateRequest(ctx context.Context, res
 
 // listHandleResponse handles the List response.
 func (client *PublicIPPrefixesClient) listHandleResponse(resp *http.Response) (PublicIPPrefixesClientListResponse, error) {
-	result := PublicIPPrefixesClientListResponse{RawResponse: resp}
+	result := PublicIPPrefixesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicIPPrefixListResult); err != nil {
 		return PublicIPPrefixesClientListResponse{}, err
 	}
@@ -326,7 +322,7 @@ func (client *PublicIPPrefixesClient) listAllCreateRequest(ctx context.Context, 
 
 // listAllHandleResponse handles the ListAll response.
 func (client *PublicIPPrefixesClient) listAllHandleResponse(resp *http.Response) (PublicIPPrefixesClientListAllResponse, error) {
-	result := PublicIPPrefixesClientListAllResponse{RawResponse: resp}
+	result := PublicIPPrefixesClientListAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicIPPrefixListResult); err != nil {
 		return PublicIPPrefixesClientListAllResponse{}, err
 	}
@@ -383,7 +379,7 @@ func (client *PublicIPPrefixesClient) updateTagsCreateRequest(ctx context.Contex
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *PublicIPPrefixesClient) updateTagsHandleResponse(resp *http.Response) (PublicIPPrefixesClientUpdateTagsResponse, error) {
-	result := PublicIPPrefixesClientUpdateTagsResponse{RawResponse: resp}
+	result := PublicIPPrefixesClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PublicIPPrefix); err != nil {
 		return PublicIPPrefixesClientUpdateTagsResponse{}, err
 	}

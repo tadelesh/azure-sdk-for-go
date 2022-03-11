@@ -33,16 +33,16 @@ type ProductsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProductsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ProductsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProductsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -92,7 +92,7 @@ func (client *ProductsClient) getCreateRequest(ctx context.Context, billingAccou
 
 // getHandleResponse handles the Get response.
 func (client *ProductsClient) getHandleResponse(resp *http.Response) (ProductsClientGetResponse, error) {
-	result := ProductsClientGetResponse{RawResponse: resp}
+	result := ProductsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Product); err != nil {
 		return ProductsClientGetResponse{}, err
 	}
@@ -141,7 +141,7 @@ func (client *ProductsClient) listByBillingAccountCreateRequest(ctx context.Cont
 
 // listByBillingAccountHandleResponse handles the ListByBillingAccount response.
 func (client *ProductsClient) listByBillingAccountHandleResponse(resp *http.Response) (ProductsClientListByBillingAccountResponse, error) {
-	result := ProductsClientListByBillingAccountResponse{RawResponse: resp}
+	result := ProductsClientListByBillingAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProductsListResult); err != nil {
 		return ProductsClientListByBillingAccountResponse{}, err
 	}
@@ -195,7 +195,7 @@ func (client *ProductsClient) listByBillingProfileCreateRequest(ctx context.Cont
 
 // listByBillingProfileHandleResponse handles the ListByBillingProfile response.
 func (client *ProductsClient) listByBillingProfileHandleResponse(resp *http.Response) (ProductsClientListByBillingProfileResponse, error) {
-	result := ProductsClientListByBillingProfileResponse{RawResponse: resp}
+	result := ProductsClientListByBillingProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProductsListResult); err != nil {
 		return ProductsClientListByBillingProfileResponse{}, err
 	}
@@ -244,7 +244,7 @@ func (client *ProductsClient) listByCustomerCreateRequest(ctx context.Context, b
 
 // listByCustomerHandleResponse handles the ListByCustomer response.
 func (client *ProductsClient) listByCustomerHandleResponse(resp *http.Response) (ProductsClientListByCustomerResponse, error) {
-	result := ProductsClientListByCustomerResponse{RawResponse: resp}
+	result := ProductsClientListByCustomerResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProductsListResult); err != nil {
 		return ProductsClientListByCustomerResponse{}, err
 	}
@@ -302,7 +302,7 @@ func (client *ProductsClient) listByInvoiceSectionCreateRequest(ctx context.Cont
 
 // listByInvoiceSectionHandleResponse handles the ListByInvoiceSection response.
 func (client *ProductsClient) listByInvoiceSectionHandleResponse(resp *http.Response) (ProductsClientListByInvoiceSectionResponse, error) {
-	result := ProductsClientListByInvoiceSectionResponse{RawResponse: resp}
+	result := ProductsClientListByInvoiceSectionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProductsListResult); err != nil {
 		return ProductsClientListByInvoiceSectionResponse{}, err
 	}
@@ -356,7 +356,7 @@ func (client *ProductsClient) moveCreateRequest(ctx context.Context, billingAcco
 
 // moveHandleResponse handles the Move response.
 func (client *ProductsClient) moveHandleResponse(resp *http.Response) (ProductsClientMoveResponse, error) {
-	result := ProductsClientMoveResponse{RawResponse: resp}
+	result := ProductsClientMoveResponse{}
 	if val := resp.Header.Get("Location"); val != "" {
 		result.Location = &val
 	}
@@ -420,7 +420,7 @@ func (client *ProductsClient) updateCreateRequest(ctx context.Context, billingAc
 
 // updateHandleResponse handles the Update response.
 func (client *ProductsClient) updateHandleResponse(resp *http.Response) (ProductsClientUpdateResponse, error) {
-	result := ProductsClientUpdateResponse{RawResponse: resp}
+	result := ProductsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Product); err != nil {
 		return ProductsClientUpdateResponse{}, err
 	}
@@ -474,7 +474,7 @@ func (client *ProductsClient) validateMoveCreateRequest(ctx context.Context, bil
 
 // validateMoveHandleResponse handles the ValidateMove response.
 func (client *ProductsClient) validateMoveHandleResponse(resp *http.Response) (ProductsClientValidateMoveResponse, error) {
-	result := ProductsClientValidateMoveResponse{RawResponse: resp}
+	result := ProductsClientValidateMoveResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ValidateProductTransferEligibilityResult); err != nil {
 		return ProductsClientValidateMoveResponse{}, err
 	}

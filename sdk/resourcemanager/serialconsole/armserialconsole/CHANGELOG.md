@@ -1,5 +1,55 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Struct `MicrosoftSerialConsoleClientListOperationsResult` has been removed
+- Struct `SerialPortsClientConnectResult` has been removed
+- Struct `SerialPortsClientCreateResult` has been removed
+- Struct `SerialPortsClientGetResult` has been removed
+- Struct `SerialPortsClientListBySubscriptionsResult` has been removed
+- Struct `SerialPortsClientListResult` has been removed
+- Field `RawResponse` of struct `MicrosoftSerialConsoleClientEnableConsoleResponse` has been removed
+- Field `RawResponse` of struct `MicrosoftSerialConsoleClientGetConsoleStatusResponse` has been removed
+- Field `SerialPortsClientListResult` of struct `SerialPortsClientListResponse` has been removed
+- Field `RawResponse` of struct `SerialPortsClientListResponse` has been removed
+- Field `SerialPortsClientGetResult` of struct `SerialPortsClientGetResponse` has been removed
+- Field `RawResponse` of struct `SerialPortsClientGetResponse` has been removed
+- Field `SerialPortsClientConnectResult` of struct `SerialPortsClientConnectResponse` has been removed
+- Field `RawResponse` of struct `SerialPortsClientConnectResponse` has been removed
+- Field `SerialPortsClientCreateResult` of struct `SerialPortsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `SerialPortsClientCreateResponse` has been removed
+- Field `SerialPortsClientListBySubscriptionsResult` of struct `SerialPortsClientListBySubscriptionsResponse` has been removed
+- Field `RawResponse` of struct `SerialPortsClientListBySubscriptionsResponse` has been removed
+- Field `MicrosoftSerialConsoleClientListOperationsResult` of struct `MicrosoftSerialConsoleClientListOperationsResponse` has been removed
+- Field `RawResponse` of struct `MicrosoftSerialConsoleClientListOperationsResponse` has been removed
+- Field `RawResponse` of struct `MicrosoftSerialConsoleClientDisableConsoleResponse` has been removed
+- Field `RawResponse` of struct `SerialPortsClientDeleteResponse` has been removed
+
+### Features Added
+
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New anonymous field `Operations` in struct `MicrosoftSerialConsoleClientListOperationsResponse`
+- New anonymous field `SerialPort` in struct `SerialPortsClientCreateResponse`
+- New anonymous field `SerialPort` in struct `SerialPortsClientGetResponse`
+- New anonymous field `SerialPortListResult` in struct `SerialPortsClientListBySubscriptionsResponse`
+- New anonymous field `SerialPortConnectResult` in struct `SerialPortsClientConnectResponse`
+- New anonymous field `SerialPortListResult` in struct `SerialPortsClientListResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

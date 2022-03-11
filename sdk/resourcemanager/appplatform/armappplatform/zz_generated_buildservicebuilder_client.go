@@ -35,17 +35,17 @@ type BuildServiceBuilderClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBuildServiceBuilderClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BuildServiceBuilderClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BuildServiceBuilderClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -65,9 +65,7 @@ func (client *BuildServiceBuilderClient) BeginCreateOrUpdate(ctx context.Context
 	if err != nil {
 		return BuildServiceBuilderClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := BuildServiceBuilderClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := BuildServiceBuilderClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("BuildServiceBuilderClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return BuildServiceBuilderClientCreateOrUpdatePollerResponse{}, err
@@ -143,9 +141,7 @@ func (client *BuildServiceBuilderClient) BeginDelete(ctx context.Context, resour
 	if err != nil {
 		return BuildServiceBuilderClientDeletePollerResponse{}, err
 	}
-	result := BuildServiceBuilderClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := BuildServiceBuilderClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("BuildServiceBuilderClient.Delete", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return BuildServiceBuilderClientDeletePollerResponse{}, err
@@ -266,7 +262,7 @@ func (client *BuildServiceBuilderClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *BuildServiceBuilderClient) getHandleResponse(resp *http.Response) (BuildServiceBuilderClientGetResponse, error) {
-	result := BuildServiceBuilderClientGetResponse{RawResponse: resp}
+	result := BuildServiceBuilderClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BuilderResource); err != nil {
 		return BuildServiceBuilderClientGetResponse{}, err
 	}
@@ -325,7 +321,7 @@ func (client *BuildServiceBuilderClient) listCreateRequest(ctx context.Context, 
 
 // listHandleResponse handles the List response.
 func (client *BuildServiceBuilderClient) listHandleResponse(resp *http.Response) (BuildServiceBuilderClientListResponse, error) {
-	result := BuildServiceBuilderClientListResponse{RawResponse: resp}
+	result := BuildServiceBuilderClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BuilderResourceCollection); err != nil {
 		return BuildServiceBuilderClientListResponse{}, err
 	}

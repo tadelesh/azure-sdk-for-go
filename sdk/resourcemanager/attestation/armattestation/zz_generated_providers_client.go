@@ -34,17 +34,17 @@ type ProvidersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewProvidersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ProvidersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ProvidersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *ProvidersClient) createCreateRequest(ctx context.Context, resource
 
 // createHandleResponse handles the Create response.
 func (client *ProvidersClient) createHandleResponse(resp *http.Response) (ProvidersClientCreateResponse, error) {
-	result := ProvidersClientCreateResponse{RawResponse: resp}
+	result := ProvidersClientCreateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Provider); err != nil {
 		return ProvidersClientCreateResponse{}, err
 	}
@@ -122,7 +122,7 @@ func (client *ProvidersClient) Delete(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return ProvidersClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ProvidersClientDeleteResponse{RawResponse: resp}, nil
+	return ProvidersClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -199,7 +199,7 @@ func (client *ProvidersClient) getCreateRequest(ctx context.Context, resourceGro
 
 // getHandleResponse handles the Get response.
 func (client *ProvidersClient) getHandleResponse(resp *http.Response) (ProvidersClientGetResponse, error) {
-	result := ProvidersClientGetResponse{RawResponse: resp}
+	result := ProvidersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Provider); err != nil {
 		return ProvidersClientGetResponse{}, err
 	}
@@ -250,7 +250,7 @@ func (client *ProvidersClient) getDefaultByLocationCreateRequest(ctx context.Con
 
 // getDefaultByLocationHandleResponse handles the GetDefaultByLocation response.
 func (client *ProvidersClient) getDefaultByLocationHandleResponse(resp *http.Response) (ProvidersClientGetDefaultByLocationResponse, error) {
-	result := ProvidersClientGetDefaultByLocationResponse{RawResponse: resp}
+	result := ProvidersClientGetDefaultByLocationResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Provider); err != nil {
 		return ProvidersClientGetDefaultByLocationResponse{}, err
 	}
@@ -295,7 +295,7 @@ func (client *ProvidersClient) listCreateRequest(ctx context.Context, options *P
 
 // listHandleResponse handles the List response.
 func (client *ProvidersClient) listHandleResponse(resp *http.Response) (ProvidersClientListResponse, error) {
-	result := ProvidersClientListResponse{RawResponse: resp}
+	result := ProvidersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProviderListResult); err != nil {
 		return ProvidersClientListResponse{}, err
 	}
@@ -346,7 +346,7 @@ func (client *ProvidersClient) listByResourceGroupCreateRequest(ctx context.Cont
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ProvidersClient) listByResourceGroupHandleResponse(resp *http.Response) (ProvidersClientListByResourceGroupResponse, error) {
-	result := ProvidersClientListByResourceGroupResponse{RawResponse: resp}
+	result := ProvidersClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProviderListResult); err != nil {
 		return ProvidersClientListByResourceGroupResponse{}, err
 	}
@@ -391,7 +391,7 @@ func (client *ProvidersClient) listDefaultCreateRequest(ctx context.Context, opt
 
 // listDefaultHandleResponse handles the ListDefault response.
 func (client *ProvidersClient) listDefaultHandleResponse(resp *http.Response) (ProvidersClientListDefaultResponse, error) {
-	result := ProvidersClientListDefaultResponse{RawResponse: resp}
+	result := ProvidersClientListDefaultResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProviderListResult); err != nil {
 		return ProvidersClientListDefaultResponse{}, err
 	}
@@ -447,7 +447,7 @@ func (client *ProvidersClient) updateCreateRequest(ctx context.Context, resource
 
 // updateHandleResponse handles the Update response.
 func (client *ProvidersClient) updateHandleResponse(resp *http.Response) (ProvidersClientUpdateResponse, error) {
-	result := ProvidersClientUpdateResponse{RawResponse: resp}
+	result := ProvidersClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Provider); err != nil {
 		return ProvidersClientUpdateResponse{}, err
 	}

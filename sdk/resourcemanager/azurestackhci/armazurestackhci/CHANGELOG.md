@@ -1,5 +1,106 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*ArcSettingsClientListByClusterPager.NextPage` return value(s) have been changed from `(bool)` to `(ArcSettingsClientListByClusterResponse, error)`
+- Function `*ClustersClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(ClustersClientListBySubscriptionResponse, error)`
+- Function `*ExtensionsClientListByArcSettingPager.NextPage` return value(s) have been changed from `(bool)` to `(ExtensionsClientListByArcSettingResponse, error)`
+- Function `*ClustersClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(ClustersClientListByResourceGroupResponse, error)`
+- Function `*ClustersClientListByResourceGroupPager.Err` has been removed
+- Function `*ArcSettingsClientListByClusterPager.Err` has been removed
+- Function `*ArcSettingsClientListByClusterPager.PageResponse` has been removed
+- Function `*ClustersClientListBySubscriptionPager.Err` has been removed
+- Function `*ExtensionsClientListByArcSettingPager.Err` has been removed
+- Function `*ExtensionsClientListByArcSettingPager.PageResponse` has been removed
+- Function `*ClustersClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*ClustersClientListBySubscriptionPager.PageResponse` has been removed
+- Struct `ArcSettingsClientCreateResult` has been removed
+- Struct `ArcSettingsClientGetResult` has been removed
+- Struct `ArcSettingsClientListByClusterResult` has been removed
+- Struct `ClustersClientCreateResult` has been removed
+- Struct `ClustersClientGetResult` has been removed
+- Struct `ClustersClientListByResourceGroupResult` has been removed
+- Struct `ClustersClientListBySubscriptionResult` has been removed
+- Struct `ClustersClientUpdateResult` has been removed
+- Struct `ExtensionsClientCreateResult` has been removed
+- Struct `ExtensionsClientGetResult` has been removed
+- Struct `ExtensionsClientListByArcSettingResult` has been removed
+- Struct `ExtensionsClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `RawResponse` of struct `ArcSettingsClientDeletePollerResponse` has been removed
+- Field `ArcSettingsClientGetResult` of struct `ArcSettingsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ArcSettingsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientCreatePollerResponse` has been removed
+- Field `ClustersClientListByResourceGroupResult` of struct `ClustersClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListByResourceGroupResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `ClustersClientListBySubscriptionResult` of struct `ClustersClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientDeleteResponse` has been removed
+- Field `ClustersClientUpdateResult` of struct `ClustersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientDeleteResponse` has been removed
+- Field `ClustersClientGetResult` of struct `ClustersClientGetResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientGetResponse` has been removed
+- Field `ExtensionsClientGetResult` of struct `ExtensionsClientGetResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientGetResponse` has been removed
+- Field `ExtensionsClientUpdateResult` of struct `ExtensionsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientUpdateResponse` has been removed
+- Field `ArcSettingsClientCreateResult` of struct `ArcSettingsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ArcSettingsClientCreateResponse` has been removed
+- Field `ClustersClientCreateResult` of struct `ClustersClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ClustersClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientUpdatePollerResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientDeletePollerResponse` has been removed
+- Field `ExtensionsClientListByArcSettingResult` of struct `ExtensionsClientListByArcSettingResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientListByArcSettingResponse` has been removed
+- Field `ExtensionsClientCreateResult` of struct `ExtensionsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ExtensionsClientCreateResponse` has been removed
+- Field `RawResponse` of struct `ArcSettingsClientDeleteResponse` has been removed
+- Field `ArcSettingsClientListByClusterResult` of struct `ArcSettingsClientListByClusterResponse` has been removed
+- Field `RawResponse` of struct `ArcSettingsClientListByClusterResponse` has been removed
+
+### Features Added
+
+- New function `*ClustersClientListBySubscriptionPager.More() bool`
+- New function `*ArcSettingsClientListByClusterPager.More() bool`
+- New function `*ExtensionsClientListByArcSettingPager.More() bool`
+- New function `ErrorDetail.MarshalJSON() ([]byte, error)`
+- New function `*ClustersClientListByResourceGroupPager.More() bool`
+- New struct `ErrorAdditionalInfo`
+- New struct `ErrorDetail`
+- New struct `ErrorResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `Cluster` in struct `ClustersClientUpdateResponse`
+- New anonymous field `ClusterList` in struct `ClustersClientListByResourceGroupResponse`
+- New anonymous field `Cluster` in struct `ClustersClientCreateResponse`
+- New anonymous field `ArcSetting` in struct `ArcSettingsClientGetResponse`
+- New anonymous field `ArcSetting` in struct `ArcSettingsClientCreateResponse`
+- New anonymous field `Extension` in struct `ExtensionsClientCreateResponse`
+- New anonymous field `Cluster` in struct `ClustersClientGetResponse`
+- New anonymous field `ClusterList` in struct `ClustersClientListBySubscriptionResponse`
+- New anonymous field `Extension` in struct `ExtensionsClientGetResponse`
+- New anonymous field `Extension` in struct `ExtensionsClientUpdateResponse`
+- New anonymous field `ExtensionList` in struct `ExtensionsClientListByArcSettingResponse`
+- New anonymous field `ArcSettingList` in struct `ArcSettingsClientListByClusterResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `ExtensionParameters.ProtectedSettings` has been changed from `map[string]interface{}` to `interface{}`
+- Type of `ExtensionParameters.Settings` has been changed from `map[string]interface{}` to `interface{}`
+- Function `ErrorDetail.MarshalJSON` has been removed
+- Struct `ErrorAdditionalInfo` has been removed
+- Struct `ErrorDetail` has been removed
+- Struct `ErrorResponse` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

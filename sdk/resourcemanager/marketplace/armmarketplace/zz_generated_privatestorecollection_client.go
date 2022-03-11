@@ -32,16 +32,16 @@ type PrivateStoreCollectionClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPrivateStoreCollectionClient(credential azcore.TokenCredential, options *arm.ClientOptions) *PrivateStoreCollectionClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PrivateStoreCollectionClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -94,7 +94,7 @@ func (client *PrivateStoreCollectionClient) createOrUpdateCreateRequest(ctx cont
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *PrivateStoreCollectionClient) createOrUpdateHandleResponse(resp *http.Response) (PrivateStoreCollectionClientCreateOrUpdateResponse, error) {
-	result := PrivateStoreCollectionClientCreateOrUpdateResponse{RawResponse: resp}
+	result := PrivateStoreCollectionClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Collection); err != nil {
 		return PrivateStoreCollectionClientCreateOrUpdateResponse{}, err
 	}
@@ -119,7 +119,7 @@ func (client *PrivateStoreCollectionClient) Delete(ctx context.Context, privateS
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return PrivateStoreCollectionClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return PrivateStoreCollectionClientDeleteResponse{RawResponse: resp}, nil
+	return PrivateStoreCollectionClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -189,7 +189,7 @@ func (client *PrivateStoreCollectionClient) getCreateRequest(ctx context.Context
 
 // getHandleResponse handles the Get response.
 func (client *PrivateStoreCollectionClient) getHandleResponse(resp *http.Response) (PrivateStoreCollectionClientGetResponse, error) {
-	result := PrivateStoreCollectionClientGetResponse{RawResponse: resp}
+	result := PrivateStoreCollectionClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Collection); err != nil {
 		return PrivateStoreCollectionClientGetResponse{}, err
 	}
@@ -236,7 +236,7 @@ func (client *PrivateStoreCollectionClient) listCreateRequest(ctx context.Contex
 
 // listHandleResponse handles the List response.
 func (client *PrivateStoreCollectionClient) listHandleResponse(resp *http.Response) (PrivateStoreCollectionClientListResponse, error) {
-	result := PrivateStoreCollectionClientListResponse{RawResponse: resp}
+	result := PrivateStoreCollectionClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CollectionsList); err != nil {
 		return PrivateStoreCollectionClientListResponse{}, err
 	}
@@ -261,7 +261,7 @@ func (client *PrivateStoreCollectionClient) Post(ctx context.Context, privateSto
 	if !runtime.HasStatusCode(resp, http.StatusOK) {
 		return PrivateStoreCollectionClientPostResponse{}, runtime.NewResponseError(resp)
 	}
-	return PrivateStoreCollectionClientPostResponse{RawResponse: resp}, nil
+	return PrivateStoreCollectionClientPostResponse{}, nil
 }
 
 // postCreateRequest creates the Post request.
@@ -337,7 +337,7 @@ func (client *PrivateStoreCollectionClient) transferOffersCreateRequest(ctx cont
 
 // transferOffersHandleResponse handles the TransferOffers response.
 func (client *PrivateStoreCollectionClient) transferOffersHandleResponse(resp *http.Response) (PrivateStoreCollectionClientTransferOffersResponse, error) {
-	result := PrivateStoreCollectionClientTransferOffersResponse{RawResponse: resp}
+	result := PrivateStoreCollectionClientTransferOffersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TransferOffersResponse); err != nil {
 		return PrivateStoreCollectionClientTransferOffersResponse{}, err
 	}

@@ -35,17 +35,17 @@ type GlobalSchedulesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewGlobalSchedulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *GlobalSchedulesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &GlobalSchedulesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -100,7 +100,7 @@ func (client *GlobalSchedulesClient) createOrUpdateCreateRequest(ctx context.Con
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *GlobalSchedulesClient) createOrUpdateHandleResponse(resp *http.Response) (GlobalSchedulesClientCreateOrUpdateResponse, error) {
-	result := GlobalSchedulesClientCreateOrUpdateResponse{RawResponse: resp}
+	result := GlobalSchedulesClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Schedule); err != nil {
 		return GlobalSchedulesClientCreateOrUpdateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *GlobalSchedulesClient) Delete(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return GlobalSchedulesClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return GlobalSchedulesClientDeleteResponse{RawResponse: resp}, nil
+	return GlobalSchedulesClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -164,9 +164,7 @@ func (client *GlobalSchedulesClient) BeginExecute(ctx context.Context, resourceG
 	if err != nil {
 		return GlobalSchedulesClientExecutePollerResponse{}, err
 	}
-	result := GlobalSchedulesClientExecutePollerResponse{
-		RawResponse: resp,
-	}
+	result := GlobalSchedulesClientExecutePollerResponse{}
 	pt, err := armruntime.NewPoller("GlobalSchedulesClient.Execute", "", resp, client.pl)
 	if err != nil {
 		return GlobalSchedulesClientExecutePollerResponse{}, err
@@ -271,7 +269,7 @@ func (client *GlobalSchedulesClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *GlobalSchedulesClient) getHandleResponse(resp *http.Response) (GlobalSchedulesClientGetResponse, error) {
-	result := GlobalSchedulesClientGetResponse{RawResponse: resp}
+	result := GlobalSchedulesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Schedule); err != nil {
 		return GlobalSchedulesClientGetResponse{}, err
 	}
@@ -331,7 +329,7 @@ func (client *GlobalSchedulesClient) listByResourceGroupCreateRequest(ctx contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *GlobalSchedulesClient) listByResourceGroupHandleResponse(resp *http.Response) (GlobalSchedulesClientListByResourceGroupResponse, error) {
-	result := GlobalSchedulesClientListByResourceGroupResponse{RawResponse: resp}
+	result := GlobalSchedulesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScheduleList); err != nil {
 		return GlobalSchedulesClientListByResourceGroupResponse{}, err
 	}
@@ -386,7 +384,7 @@ func (client *GlobalSchedulesClient) listBySubscriptionCreateRequest(ctx context
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *GlobalSchedulesClient) listBySubscriptionHandleResponse(resp *http.Response) (GlobalSchedulesClientListBySubscriptionResponse, error) {
-	result := GlobalSchedulesClientListBySubscriptionResponse{RawResponse: resp}
+	result := GlobalSchedulesClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ScheduleList); err != nil {
 		return GlobalSchedulesClientListBySubscriptionResponse{}, err
 	}
@@ -405,9 +403,7 @@ func (client *GlobalSchedulesClient) BeginRetarget(ctx context.Context, resource
 	if err != nil {
 		return GlobalSchedulesClientRetargetPollerResponse{}, err
 	}
-	result := GlobalSchedulesClientRetargetPollerResponse{
-		RawResponse: resp,
-	}
+	result := GlobalSchedulesClientRetargetPollerResponse{}
 	pt, err := armruntime.NewPoller("GlobalSchedulesClient.Retarget", "", resp, client.pl)
 	if err != nil {
 		return GlobalSchedulesClientRetargetPollerResponse{}, err
@@ -510,7 +506,7 @@ func (client *GlobalSchedulesClient) updateCreateRequest(ctx context.Context, re
 
 // updateHandleResponse handles the Update response.
 func (client *GlobalSchedulesClient) updateHandleResponse(resp *http.Response) (GlobalSchedulesClientUpdateResponse, error) {
-	result := GlobalSchedulesClientUpdateResponse{RawResponse: resp}
+	result := GlobalSchedulesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Schedule); err != nil {
 		return GlobalSchedulesClientUpdateResponse{}, err
 	}

@@ -34,17 +34,17 @@ type TargetsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewTargetsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *TargetsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &TargetsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -113,7 +113,7 @@ func (client *TargetsClient) createOrUpdateCreateRequest(ctx context.Context, re
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *TargetsClient) createOrUpdateHandleResponse(resp *http.Response) (TargetsClientCreateOrUpdateResponse, error) {
-	result := TargetsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := TargetsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Target); err != nil {
 		return TargetsClientCreateOrUpdateResponse{}, err
 	}
@@ -140,7 +140,7 @@ func (client *TargetsClient) Delete(ctx context.Context, resourceGroupName strin
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return TargetsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return TargetsClientDeleteResponse{RawResponse: resp}, nil
+	return TargetsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -244,7 +244,7 @@ func (client *TargetsClient) getCreateRequest(ctx context.Context, resourceGroup
 
 // getHandleResponse handles the Get response.
 func (client *TargetsClient) getHandleResponse(resp *http.Response) (TargetsClientGetResponse, error) {
-	result := TargetsClientGetResponse{RawResponse: resp}
+	result := TargetsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Target); err != nil {
 		return TargetsClientGetResponse{}, err
 	}
@@ -309,7 +309,7 @@ func (client *TargetsClient) listCreateRequest(ctx context.Context, resourceGrou
 
 // listHandleResponse handles the List response.
 func (client *TargetsClient) listHandleResponse(resp *http.Response) (TargetsClientListResponse, error) {
-	result := TargetsClientListResponse{RawResponse: resp}
+	result := TargetsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TargetListResult); err != nil {
 		return TargetsClientListResponse{}, err
 	}

@@ -100,7 +100,7 @@ func (client *ConnectorsClient) createOrUpdateCreateRequest(ctx context.Context,
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *ConnectorsClient) createOrUpdateHandleResponse(resp *http.Response) (ConnectorsClientCreateOrUpdateResponse, error) {
-	result := ConnectorsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := ConnectorsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Connector); err != nil {
 		return ConnectorsClientCreateOrUpdateResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *ConnectorsClient) Delete(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return ConnectorsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return ConnectorsClientDeleteResponse{RawResponse: resp}, nil
+	return ConnectorsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -201,7 +201,7 @@ func (client *ConnectorsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *ConnectorsClient) getHandleResponse(resp *http.Response) (ConnectorsClientGetResponse, error) {
-	result := ConnectorsClientGetResponse{RawResponse: resp}
+	result := ConnectorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Connector); err != nil {
 		return ConnectorsClientGetResponse{}, err
 	}
@@ -244,7 +244,7 @@ func (client *ConnectorsClient) listCreateRequest(ctx context.Context, options *
 
 // listHandleResponse handles the List response.
 func (client *ConnectorsClient) listHandleResponse(resp *http.Response) (ConnectorsClientListResponse, error) {
-	result := ConnectorsClientListResponse{RawResponse: resp}
+	result := ConnectorsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConnectorsList); err != nil {
 		return ConnectorsClientListResponse{}, err
 	}
@@ -293,7 +293,7 @@ func (client *ConnectorsClient) listByResourceGroupCreateRequest(ctx context.Con
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *ConnectorsClient) listByResourceGroupHandleResponse(resp *http.Response) (ConnectorsClientListByResourceGroupResponse, error) {
-	result := ConnectorsClientListByResourceGroupResponse{RawResponse: resp}
+	result := ConnectorsClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConnectorsList); err != nil {
 		return ConnectorsClientListByResourceGroupResponse{}, err
 	}
@@ -349,7 +349,7 @@ func (client *ConnectorsClient) updateCreateRequest(ctx context.Context, resourc
 
 // updateHandleResponse handles the Update response.
 func (client *ConnectorsClient) updateHandleResponse(resp *http.Response) (ConnectorsClientUpdateResponse, error) {
-	result := ConnectorsClientUpdateResponse{RawResponse: resp}
+	result := ConnectorsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Connector); err != nil {
 		return ConnectorsClientUpdateResponse{}, err
 	}

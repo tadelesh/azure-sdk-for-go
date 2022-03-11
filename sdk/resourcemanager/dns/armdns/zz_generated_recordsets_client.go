@@ -35,17 +35,17 @@ type RecordSetsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewRecordSetsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *RecordSetsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &RecordSetsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -114,7 +114,7 @@ func (client *RecordSetsClient) createOrUpdateCreateRequest(ctx context.Context,
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *RecordSetsClient) createOrUpdateHandleResponse(resp *http.Response) (RecordSetsClientCreateOrUpdateResponse, error) {
-	result := RecordSetsClientCreateOrUpdateResponse{RawResponse: resp}
+	result := RecordSetsClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecordSet); err != nil {
 		return RecordSetsClientCreateOrUpdateResponse{}, err
 	}
@@ -141,7 +141,7 @@ func (client *RecordSetsClient) Delete(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusNoContent) {
 		return RecordSetsClientDeleteResponse{}, runtime.NewResponseError(resp)
 	}
-	return RecordSetsClientDeleteResponse{RawResponse: resp}, nil
+	return RecordSetsClientDeleteResponse{}, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -233,7 +233,7 @@ func (client *RecordSetsClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *RecordSetsClient) getHandleResponse(resp *http.Response) (RecordSetsClientGetResponse, error) {
-	result := RecordSetsClientGetResponse{RawResponse: resp}
+	result := RecordSetsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecordSet); err != nil {
 		return RecordSetsClientGetResponse{}, err
 	}
@@ -292,7 +292,7 @@ func (client *RecordSetsClient) listAllByDNSZoneCreateRequest(ctx context.Contex
 
 // listAllByDNSZoneHandleResponse handles the ListAllByDNSZone response.
 func (client *RecordSetsClient) listAllByDNSZoneHandleResponse(resp *http.Response) (RecordSetsClientListAllByDNSZoneResponse, error) {
-	result := RecordSetsClientListAllByDNSZoneResponse{RawResponse: resp}
+	result := RecordSetsClientListAllByDNSZoneResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecordSetListResult); err != nil {
 		return RecordSetsClientListAllByDNSZoneResponse{}, err
 	}
@@ -351,7 +351,7 @@ func (client *RecordSetsClient) listByDNSZoneCreateRequest(ctx context.Context, 
 
 // listByDNSZoneHandleResponse handles the ListByDNSZone response.
 func (client *RecordSetsClient) listByDNSZoneHandleResponse(resp *http.Response) (RecordSetsClientListByDNSZoneResponse, error) {
-	result := RecordSetsClientListByDNSZoneResponse{RawResponse: resp}
+	result := RecordSetsClientListByDNSZoneResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecordSetListResult); err != nil {
 		return RecordSetsClientListByDNSZoneResponse{}, err
 	}
@@ -414,7 +414,7 @@ func (client *RecordSetsClient) listByTypeCreateRequest(ctx context.Context, res
 
 // listByTypeHandleResponse handles the ListByType response.
 func (client *RecordSetsClient) listByTypeHandleResponse(resp *http.Response) (RecordSetsClientListByTypeResponse, error) {
-	result := RecordSetsClientListByTypeResponse{RawResponse: resp}
+	result := RecordSetsClientListByTypeResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecordSetListResult); err != nil {
 		return RecordSetsClientListByTypeResponse{}, err
 	}
@@ -480,7 +480,7 @@ func (client *RecordSetsClient) updateCreateRequest(ctx context.Context, resourc
 
 // updateHandleResponse handles the Update response.
 func (client *RecordSetsClient) updateHandleResponse(resp *http.Response) (RecordSetsClientUpdateResponse, error) {
-	result := RecordSetsClientUpdateResponse{RawResponse: resp}
+	result := RecordSetsClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecordSet); err != nil {
 		return RecordSetsClientUpdateResponse{}, err
 	}

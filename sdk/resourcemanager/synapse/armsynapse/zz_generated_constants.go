@@ -10,7 +10,7 @@ package armsynapse
 
 const (
 	moduleName    = "armsynapse"
-	moduleVersion = "v0.2.0"
+	moduleVersion = "v0.3.0"
 )
 
 type AzureADOnlyAuthenticationName string
@@ -575,24 +575,6 @@ func PossibleEncryptionProtectorNameValues() []EncryptionProtectorName {
 
 // ToPtr returns a *EncryptionProtectorName pointing to the current value.
 func (c EncryptionProtectorName) ToPtr() *EncryptionProtectorName {
-	return &c
-}
-
-type Enum11 string
-
-const (
-	Enum11Default Enum11 = "default"
-)
-
-// PossibleEnum11Values returns the possible values for the Enum11 const type.
-func PossibleEnum11Values() []Enum11 {
-	return []Enum11{
-		Enum11Default,
-	}
-}
-
-// ToPtr returns a *Enum11 pointing to the current value.
-func (c Enum11) ToPtr() *Enum11 {
 	return &c
 }
 

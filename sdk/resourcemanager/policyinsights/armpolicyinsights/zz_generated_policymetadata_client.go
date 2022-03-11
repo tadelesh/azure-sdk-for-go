@@ -31,16 +31,16 @@ type PolicyMetadataClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewPolicyMetadataClient(credential azcore.TokenCredential, options *arm.ClientOptions) *PolicyMetadataClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &PolicyMetadataClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -82,7 +82,7 @@ func (client *PolicyMetadataClient) getResourceCreateRequest(ctx context.Context
 
 // getResourceHandleResponse handles the GetResource response.
 func (client *PolicyMetadataClient) getResourceHandleResponse(resp *http.Response) (PolicyMetadataClientGetResourceResponse, error) {
-	result := PolicyMetadataClientGetResourceResponse{RawResponse: resp}
+	result := PolicyMetadataClientGetResourceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyMetadata); err != nil {
 		return PolicyMetadataClientGetResourceResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (client *PolicyMetadataClient) listCreateRequest(ctx context.Context, optio
 
 // listHandleResponse handles the List response.
 func (client *PolicyMetadataClient) listHandleResponse(resp *http.Response) (PolicyMetadataClientListResponse, error) {
-	result := PolicyMetadataClientListResponse{RawResponse: resp}
+	result := PolicyMetadataClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyMetadataCollection); err != nil {
 		return PolicyMetadataClientListResponse{}, err
 	}

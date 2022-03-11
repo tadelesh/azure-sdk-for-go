@@ -35,17 +35,17 @@ type LoadBalancersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewLoadBalancersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *LoadBalancersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &LoadBalancersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *LoadBalancersClient) BeginCreateOrUpdate(ctx context.Context, reso
 	if err != nil {
 		return LoadBalancersClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := LoadBalancersClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := LoadBalancersClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("LoadBalancersClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return LoadBalancersClientCreateOrUpdatePollerResponse{}, err
@@ -129,9 +127,7 @@ func (client *LoadBalancersClient) BeginDelete(ctx context.Context, resourceGrou
 	if err != nil {
 		return LoadBalancersClientDeletePollerResponse{}, err
 	}
-	result := LoadBalancersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := LoadBalancersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("LoadBalancersClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return LoadBalancersClientDeletePollerResponse{}, err
@@ -236,7 +232,7 @@ func (client *LoadBalancersClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *LoadBalancersClient) getHandleResponse(resp *http.Response) (LoadBalancersClientGetResponse, error) {
-	result := LoadBalancersClientGetResponse{RawResponse: resp}
+	result := LoadBalancersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LoadBalancer); err != nil {
 		return LoadBalancersClientGetResponse{}, err
 	}
@@ -283,7 +279,7 @@ func (client *LoadBalancersClient) listCreateRequest(ctx context.Context, resour
 
 // listHandleResponse handles the List response.
 func (client *LoadBalancersClient) listHandleResponse(resp *http.Response) (LoadBalancersClientListResponse, error) {
-	result := LoadBalancersClientListResponse{RawResponse: resp}
+	result := LoadBalancersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LoadBalancerListResult); err != nil {
 		return LoadBalancersClientListResponse{}, err
 	}
@@ -325,7 +321,7 @@ func (client *LoadBalancersClient) listAllCreateRequest(ctx context.Context, opt
 
 // listAllHandleResponse handles the ListAll response.
 func (client *LoadBalancersClient) listAllHandleResponse(resp *http.Response) (LoadBalancersClientListAllResponse, error) {
-	result := LoadBalancersClientListAllResponse{RawResponse: resp}
+	result := LoadBalancersClientListAllResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LoadBalancerListResult); err != nil {
 		return LoadBalancersClientListAllResponse{}, err
 	}
@@ -345,9 +341,7 @@ func (client *LoadBalancersClient) BeginListInboundNatRulePortMappings(ctx conte
 	if err != nil {
 		return LoadBalancersClientListInboundNatRulePortMappingsPollerResponse{}, err
 	}
-	result := LoadBalancersClientListInboundNatRulePortMappingsPollerResponse{
-		RawResponse: resp,
-	}
+	result := LoadBalancersClientListInboundNatRulePortMappingsPollerResponse{}
 	pt, err := armruntime.NewPoller("LoadBalancersClient.ListInboundNatRulePortMappings", "location", resp, client.pl)
 	if err != nil {
 		return LoadBalancersClientListInboundNatRulePortMappingsPollerResponse{}, err
@@ -416,9 +410,7 @@ func (client *LoadBalancersClient) BeginSwapPublicIPAddresses(ctx context.Contex
 	if err != nil {
 		return LoadBalancersClientSwapPublicIPAddressesPollerResponse{}, err
 	}
-	result := LoadBalancersClientSwapPublicIPAddressesPollerResponse{
-		RawResponse: resp,
-	}
+	result := LoadBalancersClientSwapPublicIPAddressesPollerResponse{}
 	pt, err := armruntime.NewPoller("LoadBalancersClient.SwapPublicIPAddresses", "location", resp, client.pl)
 	if err != nil {
 		return LoadBalancersClientSwapPublicIPAddressesPollerResponse{}, err
@@ -518,7 +510,7 @@ func (client *LoadBalancersClient) updateTagsCreateRequest(ctx context.Context, 
 
 // updateTagsHandleResponse handles the UpdateTags response.
 func (client *LoadBalancersClient) updateTagsHandleResponse(resp *http.Response) (LoadBalancersClientUpdateTagsResponse, error) {
-	result := LoadBalancersClientUpdateTagsResponse{RawResponse: resp}
+	result := LoadBalancersClientUpdateTagsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LoadBalancer); err != nil {
 		return LoadBalancersClientUpdateTagsResponse{}, err
 	}

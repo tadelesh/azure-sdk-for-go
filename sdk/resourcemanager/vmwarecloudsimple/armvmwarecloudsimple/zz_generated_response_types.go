@@ -11,31 +11,16 @@ package armvmwarecloudsimple
 import (
 	"context"
 	armruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
-	"net/http"
 	"time"
 )
 
 // CustomizationPoliciesClientGetResponse contains the response from method CustomizationPoliciesClient.Get.
 type CustomizationPoliciesClientGetResponse struct {
-	CustomizationPoliciesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CustomizationPoliciesClientGetResult contains the result from method CustomizationPoliciesClient.Get.
-type CustomizationPoliciesClientGetResult struct {
 	CustomizationPolicy
 }
 
 // CustomizationPoliciesClientListResponse contains the response from method CustomizationPoliciesClient.List.
 type CustomizationPoliciesClientListResponse struct {
-	CustomizationPoliciesClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// CustomizationPoliciesClientListResult contains the result from method CustomizationPoliciesClient.List.
-type CustomizationPoliciesClientListResult struct {
 	CustomizationPoliciesListResponse
 }
 
@@ -43,9 +28,6 @@ type CustomizationPoliciesClientListResult struct {
 type DedicatedCloudNodesClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *DedicatedCloudNodesClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -53,11 +35,10 @@ type DedicatedCloudNodesClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l DedicatedCloudNodesClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DedicatedCloudNodesClientCreateOrUpdateResponse, error) {
 	respType := DedicatedCloudNodesClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DedicatedCloudNode)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.DedicatedCloudNode)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -70,90 +51,46 @@ func (l *DedicatedCloudNodesClientCreateOrUpdatePollerResponse) Resume(ctx conte
 	poller := &DedicatedCloudNodesClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // DedicatedCloudNodesClientCreateOrUpdateResponse contains the response from method DedicatedCloudNodesClient.CreateOrUpdate.
 type DedicatedCloudNodesClientCreateOrUpdateResponse struct {
-	DedicatedCloudNodesClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DedicatedCloudNodesClientCreateOrUpdateResult contains the result from method DedicatedCloudNodesClient.CreateOrUpdate.
-type DedicatedCloudNodesClientCreateOrUpdateResult struct {
 	DedicatedCloudNode
 }
 
 // DedicatedCloudNodesClientDeleteResponse contains the response from method DedicatedCloudNodesClient.Delete.
 type DedicatedCloudNodesClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // DedicatedCloudNodesClientGetResponse contains the response from method DedicatedCloudNodesClient.Get.
 type DedicatedCloudNodesClientGetResponse struct {
-	DedicatedCloudNodesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DedicatedCloudNodesClientGetResult contains the result from method DedicatedCloudNodesClient.Get.
-type DedicatedCloudNodesClientGetResult struct {
 	DedicatedCloudNode
 }
 
 // DedicatedCloudNodesClientListByResourceGroupResponse contains the response from method DedicatedCloudNodesClient.ListByResourceGroup.
 type DedicatedCloudNodesClientListByResourceGroupResponse struct {
-	DedicatedCloudNodesClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DedicatedCloudNodesClientListByResourceGroupResult contains the result from method DedicatedCloudNodesClient.ListByResourceGroup.
-type DedicatedCloudNodesClientListByResourceGroupResult struct {
 	DedicatedCloudNodeListResponse
 }
 
 // DedicatedCloudNodesClientListBySubscriptionResponse contains the response from method DedicatedCloudNodesClient.ListBySubscription.
 type DedicatedCloudNodesClientListBySubscriptionResponse struct {
-	DedicatedCloudNodesClientListBySubscriptionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DedicatedCloudNodesClientListBySubscriptionResult contains the result from method DedicatedCloudNodesClient.ListBySubscription.
-type DedicatedCloudNodesClientListBySubscriptionResult struct {
 	DedicatedCloudNodeListResponse
 }
 
 // DedicatedCloudNodesClientUpdateResponse contains the response from method DedicatedCloudNodesClient.Update.
 type DedicatedCloudNodesClientUpdateResponse struct {
-	DedicatedCloudNodesClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DedicatedCloudNodesClientUpdateResult contains the result from method DedicatedCloudNodesClient.Update.
-type DedicatedCloudNodesClientUpdateResult struct {
 	DedicatedCloudNode
 }
 
 // DedicatedCloudServicesClientCreateOrUpdateResponse contains the response from method DedicatedCloudServicesClient.CreateOrUpdate.
 type DedicatedCloudServicesClientCreateOrUpdateResponse struct {
-	DedicatedCloudServicesClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DedicatedCloudServicesClientCreateOrUpdateResult contains the result from method DedicatedCloudServicesClient.CreateOrUpdate.
-type DedicatedCloudServicesClientCreateOrUpdateResult struct {
 	DedicatedCloudService
 }
 
@@ -161,9 +98,6 @@ type DedicatedCloudServicesClientCreateOrUpdateResult struct {
 type DedicatedCloudServicesClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *DedicatedCloudServicesClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -171,11 +105,10 @@ type DedicatedCloudServicesClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l DedicatedCloudServicesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (DedicatedCloudServicesClientDeleteResponse, error) {
 	respType := DedicatedCloudServicesClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -188,78 +121,41 @@ func (l *DedicatedCloudServicesClientDeletePollerResponse) Resume(ctx context.Co
 	poller := &DedicatedCloudServicesClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // DedicatedCloudServicesClientDeleteResponse contains the response from method DedicatedCloudServicesClient.Delete.
 type DedicatedCloudServicesClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // DedicatedCloudServicesClientGetResponse contains the response from method DedicatedCloudServicesClient.Get.
 type DedicatedCloudServicesClientGetResponse struct {
-	DedicatedCloudServicesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DedicatedCloudServicesClientGetResult contains the result from method DedicatedCloudServicesClient.Get.
-type DedicatedCloudServicesClientGetResult struct {
 	DedicatedCloudService
 }
 
 // DedicatedCloudServicesClientListByResourceGroupResponse contains the response from method DedicatedCloudServicesClient.ListByResourceGroup.
 type DedicatedCloudServicesClientListByResourceGroupResponse struct {
-	DedicatedCloudServicesClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DedicatedCloudServicesClientListByResourceGroupResult contains the result from method DedicatedCloudServicesClient.ListByResourceGroup.
-type DedicatedCloudServicesClientListByResourceGroupResult struct {
 	DedicatedCloudServiceListResponse
 }
 
 // DedicatedCloudServicesClientListBySubscriptionResponse contains the response from method DedicatedCloudServicesClient.ListBySubscription.
 type DedicatedCloudServicesClientListBySubscriptionResponse struct {
-	DedicatedCloudServicesClientListBySubscriptionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DedicatedCloudServicesClientListBySubscriptionResult contains the result from method DedicatedCloudServicesClient.ListBySubscription.
-type DedicatedCloudServicesClientListBySubscriptionResult struct {
 	DedicatedCloudServiceListResponse
 }
 
 // DedicatedCloudServicesClientUpdateResponse contains the response from method DedicatedCloudServicesClient.Update.
 type DedicatedCloudServicesClientUpdateResponse struct {
-	DedicatedCloudServicesClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// DedicatedCloudServicesClientUpdateResult contains the result from method DedicatedCloudServicesClient.Update.
-type DedicatedCloudServicesClientUpdateResult struct {
 	DedicatedCloudService
 }
 
 // OperationsClientGetResponse contains the response from method OperationsClient.Get.
 type OperationsClientGetResponse struct {
-	OperationsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientGetResult contains the result from method OperationsClient.Get.
-type OperationsClientGetResult struct {
 	OperationResource
 	// Location contains the information returned from the Location header response.
 	Location *string
@@ -270,109 +166,46 @@ type OperationsClientGetResult struct {
 
 // OperationsClientListResponse contains the response from method OperationsClient.List.
 type OperationsClientListResponse struct {
-	OperationsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// OperationsClientListResult contains the result from method OperationsClient.List.
-type OperationsClientListResult struct {
 	AvailableOperationsListResponse
 }
 
 // PrivateCloudsClientGetResponse contains the response from method PrivateCloudsClient.Get.
 type PrivateCloudsClientGetResponse struct {
-	PrivateCloudsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateCloudsClientGetResult contains the result from method PrivateCloudsClient.Get.
-type PrivateCloudsClientGetResult struct {
 	PrivateCloud
 }
 
 // PrivateCloudsClientListResponse contains the response from method PrivateCloudsClient.List.
 type PrivateCloudsClientListResponse struct {
-	PrivateCloudsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// PrivateCloudsClientListResult contains the result from method PrivateCloudsClient.List.
-type PrivateCloudsClientListResult struct {
 	PrivateCloudList
 }
 
 // ResourcePoolsClientGetResponse contains the response from method ResourcePoolsClient.Get.
 type ResourcePoolsClientGetResponse struct {
-	ResourcePoolsClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ResourcePoolsClientGetResult contains the result from method ResourcePoolsClient.Get.
-type ResourcePoolsClientGetResult struct {
 	ResourcePool
 }
 
 // ResourcePoolsClientListResponse contains the response from method ResourcePoolsClient.List.
 type ResourcePoolsClientListResponse struct {
-	ResourcePoolsClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// ResourcePoolsClientListResult contains the result from method ResourcePoolsClient.List.
-type ResourcePoolsClientListResult struct {
 	ResourcePoolsListResponse
 }
 
 // SKUsAvailabilityClientListResponse contains the response from method SKUsAvailabilityClient.List.
 type SKUsAvailabilityClientListResponse struct {
-	SKUsAvailabilityClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// SKUsAvailabilityClientListResult contains the result from method SKUsAvailabilityClient.List.
-type SKUsAvailabilityClientListResult struct {
 	SKUAvailabilityListResponse
 }
 
 // UsagesClientListResponse contains the response from method UsagesClient.List.
 type UsagesClientListResponse struct {
-	UsagesClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// UsagesClientListResult contains the result from method UsagesClient.List.
-type UsagesClientListResult struct {
 	UsageListResponse
 }
 
 // VirtualMachineTemplatesClientGetResponse contains the response from method VirtualMachineTemplatesClient.Get.
 type VirtualMachineTemplatesClientGetResponse struct {
-	VirtualMachineTemplatesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// VirtualMachineTemplatesClientGetResult contains the result from method VirtualMachineTemplatesClient.Get.
-type VirtualMachineTemplatesClientGetResult struct {
 	VirtualMachineTemplate
 }
 
 // VirtualMachineTemplatesClientListResponse contains the response from method VirtualMachineTemplatesClient.List.
 type VirtualMachineTemplatesClientListResponse struct {
-	VirtualMachineTemplatesClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// VirtualMachineTemplatesClientListResult contains the result from method VirtualMachineTemplatesClient.List.
-type VirtualMachineTemplatesClientListResult struct {
 	VirtualMachineTemplateListResponse
 }
 
@@ -380,9 +213,6 @@ type VirtualMachineTemplatesClientListResult struct {
 type VirtualMachinesClientCreateOrUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *VirtualMachinesClientCreateOrUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -390,11 +220,10 @@ type VirtualMachinesClientCreateOrUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l VirtualMachinesClientCreateOrUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualMachinesClientCreateOrUpdateResponse, error) {
 	respType := VirtualMachinesClientCreateOrUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.VirtualMachine)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.VirtualMachine)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -407,24 +236,16 @@ func (l *VirtualMachinesClientCreateOrUpdatePollerResponse) Resume(ctx context.C
 	poller := &VirtualMachinesClientCreateOrUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // VirtualMachinesClientCreateOrUpdateResponse contains the response from method VirtualMachinesClient.CreateOrUpdate.
 type VirtualMachinesClientCreateOrUpdateResponse struct {
-	VirtualMachinesClientCreateOrUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// VirtualMachinesClientCreateOrUpdateResult contains the result from method VirtualMachinesClient.CreateOrUpdate.
-type VirtualMachinesClientCreateOrUpdateResult struct {
 	VirtualMachine
 }
 
@@ -432,9 +253,6 @@ type VirtualMachinesClientCreateOrUpdateResult struct {
 type VirtualMachinesClientDeletePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *VirtualMachinesClientDeletePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -442,11 +260,10 @@ type VirtualMachinesClientDeletePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l VirtualMachinesClientDeletePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualMachinesClientDeleteResponse, error) {
 	respType := VirtualMachinesClientDeleteResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -459,54 +276,31 @@ func (l *VirtualMachinesClientDeletePollerResponse) Resume(ctx context.Context, 
 	poller := &VirtualMachinesClientDeletePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // VirtualMachinesClientDeleteResponse contains the response from method VirtualMachinesClient.Delete.
 type VirtualMachinesClientDeleteResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // VirtualMachinesClientGetResponse contains the response from method VirtualMachinesClient.Get.
 type VirtualMachinesClientGetResponse struct {
-	VirtualMachinesClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// VirtualMachinesClientGetResult contains the result from method VirtualMachinesClient.Get.
-type VirtualMachinesClientGetResult struct {
 	VirtualMachine
 }
 
 // VirtualMachinesClientListByResourceGroupResponse contains the response from method VirtualMachinesClient.ListByResourceGroup.
 type VirtualMachinesClientListByResourceGroupResponse struct {
-	VirtualMachinesClientListByResourceGroupResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// VirtualMachinesClientListByResourceGroupResult contains the result from method VirtualMachinesClient.ListByResourceGroup.
-type VirtualMachinesClientListByResourceGroupResult struct {
 	VirtualMachineListResponse
 }
 
 // VirtualMachinesClientListBySubscriptionResponse contains the response from method VirtualMachinesClient.ListBySubscription.
 type VirtualMachinesClientListBySubscriptionResponse struct {
-	VirtualMachinesClientListBySubscriptionResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// VirtualMachinesClientListBySubscriptionResult contains the result from method VirtualMachinesClient.ListBySubscription.
-type VirtualMachinesClientListBySubscriptionResult struct {
 	VirtualMachineListResponse
 }
 
@@ -514,9 +308,6 @@ type VirtualMachinesClientListBySubscriptionResult struct {
 type VirtualMachinesClientStartPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *VirtualMachinesClientStartPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -524,11 +315,10 @@ type VirtualMachinesClientStartPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l VirtualMachinesClientStartPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualMachinesClientStartResponse, error) {
 	respType := VirtualMachinesClientStartResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -541,28 +331,23 @@ func (l *VirtualMachinesClientStartPollerResponse) Resume(ctx context.Context, c
 	poller := &VirtualMachinesClientStartPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // VirtualMachinesClientStartResponse contains the response from method VirtualMachinesClient.Start.
 type VirtualMachinesClientStartResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // VirtualMachinesClientStopPollerResponse contains the response from method VirtualMachinesClient.Stop.
 type VirtualMachinesClientStopPollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *VirtualMachinesClientStopPoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -570,11 +355,10 @@ type VirtualMachinesClientStopPollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l VirtualMachinesClientStopPollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualMachinesClientStopResponse, error) {
 	respType := VirtualMachinesClientStopResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, nil)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -587,28 +371,23 @@ func (l *VirtualMachinesClientStopPollerResponse) Resume(ctx context.Context, cl
 	poller := &VirtualMachinesClientStopPoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // VirtualMachinesClientStopResponse contains the response from method VirtualMachinesClient.Stop.
 type VirtualMachinesClientStopResponse struct {
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
+	// placeholder for future response values
 }
 
 // VirtualMachinesClientUpdatePollerResponse contains the response from method VirtualMachinesClient.Update.
 type VirtualMachinesClientUpdatePollerResponse struct {
 	// Poller contains an initialized poller.
 	Poller *VirtualMachinesClientUpdatePoller
-
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
 }
 
 // PollUntilDone will poll the service endpoint until a terminal state is reached or an error is received.
@@ -616,11 +395,10 @@ type VirtualMachinesClientUpdatePollerResponse struct {
 // A good starting value is 30 seconds. Note that some resources might benefit from a different value.
 func (l VirtualMachinesClientUpdatePollerResponse) PollUntilDone(ctx context.Context, freq time.Duration) (VirtualMachinesClientUpdateResponse, error) {
 	respType := VirtualMachinesClientUpdateResponse{}
-	resp, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.VirtualMachine)
+	_, err := l.Poller.pt.PollUntilDone(ctx, freq, &respType.VirtualMachine)
 	if err != nil {
 		return respType, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -633,47 +411,25 @@ func (l *VirtualMachinesClientUpdatePollerResponse) Resume(ctx context.Context, 
 	poller := &VirtualMachinesClientUpdatePoller{
 		pt: pt,
 	}
-	resp, err := poller.Poll(ctx)
+	_, err = poller.Poll(ctx)
 	if err != nil {
 		return err
 	}
 	l.Poller = poller
-	l.RawResponse = resp
 	return nil
 }
 
 // VirtualMachinesClientUpdateResponse contains the response from method VirtualMachinesClient.Update.
 type VirtualMachinesClientUpdateResponse struct {
-	VirtualMachinesClientUpdateResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// VirtualMachinesClientUpdateResult contains the result from method VirtualMachinesClient.Update.
-type VirtualMachinesClientUpdateResult struct {
 	VirtualMachine
 }
 
 // VirtualNetworksClientGetResponse contains the response from method VirtualNetworksClient.Get.
 type VirtualNetworksClientGetResponse struct {
-	VirtualNetworksClientGetResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// VirtualNetworksClientGetResult contains the result from method VirtualNetworksClient.Get.
-type VirtualNetworksClientGetResult struct {
 	VirtualNetwork
 }
 
 // VirtualNetworksClientListResponse contains the response from method VirtualNetworksClient.List.
 type VirtualNetworksClientListResponse struct {
-	VirtualNetworksClientListResult
-	// RawResponse contains the underlying HTTP response.
-	RawResponse *http.Response
-}
-
-// VirtualNetworksClientListResult contains the result from method VirtualNetworksClient.List.
-type VirtualNetworksClientListResult struct {
 	VirtualNetworkListResponse
 }

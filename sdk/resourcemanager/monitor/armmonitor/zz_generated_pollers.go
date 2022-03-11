@@ -43,11 +43,10 @@ func (p *ActionGroupsClientPostTestNotificationsPoller) Poll(ctx context.Context
 // If the final GET succeeded then the final ActionGroupsClientPostTestNotificationsResponse will be returned.
 func (p *ActionGroupsClientPostTestNotificationsPoller) FinalResponse(ctx context.Context) (ActionGroupsClientPostTestNotificationsResponse, error) {
 	respType := ActionGroupsClientPostTestNotificationsResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.TestNotificationResponse)
+	_, err := p.pt.FinalResponse(ctx, &respType.TestNotificationResponse)
 	if err != nil {
 		return ActionGroupsClientPostTestNotificationsResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *PrivateEndpointConnectionsClientCreateOrUpdatePoller) Poll(ctx context.
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientCreateOrUpdateResponse will be returned.
 func (p *PrivateEndpointConnectionsClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientCreateOrUpdateResponse, error) {
 	respType := PrivateEndpointConnectionsClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
+	_, err := p.pt.FinalResponse(ctx, &respType.PrivateEndpointConnection)
 	if err != nil {
 		return PrivateEndpointConnectionsClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *PrivateEndpointConnectionsClientDeletePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final PrivateEndpointConnectionsClientDeleteResponse will be returned.
 func (p *PrivateEndpointConnectionsClientDeletePoller) FinalResponse(ctx context.Context) (PrivateEndpointConnectionsClientDeleteResponse, error) {
 	respType := PrivateEndpointConnectionsClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateEndpointConnectionsClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *PrivateLinkScopedResourcesClientCreateOrUpdatePoller) Poll(ctx context.
 // If the final GET succeeded then the final PrivateLinkScopedResourcesClientCreateOrUpdateResponse will be returned.
 func (p *PrivateLinkScopedResourcesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (PrivateLinkScopedResourcesClientCreateOrUpdateResponse, error) {
 	respType := PrivateLinkScopedResourcesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ScopedResource)
+	_, err := p.pt.FinalResponse(ctx, &respType.ScopedResource)
 	if err != nil {
 		return PrivateLinkScopedResourcesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *PrivateLinkScopedResourcesClientDeletePoller) Poll(ctx context.Context)
 // If the final GET succeeded then the final PrivateLinkScopedResourcesClientDeleteResponse will be returned.
 func (p *PrivateLinkScopedResourcesClientDeletePoller) FinalResponse(ctx context.Context) (PrivateLinkScopedResourcesClientDeleteResponse, error) {
 	respType := PrivateLinkScopedResourcesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateLinkScopedResourcesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -258,11 +253,10 @@ func (p *PrivateLinkScopesClientDeletePoller) Poll(ctx context.Context) (*http.R
 // If the final GET succeeded then the final PrivateLinkScopesClientDeleteResponse will be returned.
 func (p *PrivateLinkScopesClientDeletePoller) FinalResponse(ctx context.Context) (PrivateLinkScopesClientDeleteResponse, error) {
 	respType := PrivateLinkScopesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return PrivateLinkScopesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

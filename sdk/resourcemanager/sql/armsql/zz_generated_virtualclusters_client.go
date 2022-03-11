@@ -34,17 +34,17 @@ type VirtualClustersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVirtualClustersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VirtualClustersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VirtualClustersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *VirtualClustersClient) BeginDelete(ctx context.Context, resourceGr
 	if err != nil {
 		return VirtualClustersClientDeletePollerResponse{}, err
 	}
-	result := VirtualClustersClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualClustersClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualClustersClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return VirtualClustersClientDeletePollerResponse{}, err
@@ -165,7 +163,7 @@ func (client *VirtualClustersClient) getCreateRequest(ctx context.Context, resou
 
 // getHandleResponse handles the Get response.
 func (client *VirtualClustersClient) getHandleResponse(resp *http.Response) (VirtualClustersClientGetResponse, error) {
-	result := VirtualClustersClientGetResponse{RawResponse: resp}
+	result := VirtualClustersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualCluster); err != nil {
 		return VirtualClustersClientGetResponse{}, err
 	}
@@ -207,7 +205,7 @@ func (client *VirtualClustersClient) listCreateRequest(ctx context.Context, opti
 
 // listHandleResponse handles the List response.
 func (client *VirtualClustersClient) listHandleResponse(resp *http.Response) (VirtualClustersClientListResponse, error) {
-	result := VirtualClustersClientListResponse{RawResponse: resp}
+	result := VirtualClustersClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualClusterListResult); err != nil {
 		return VirtualClustersClientListResponse{}, err
 	}
@@ -256,7 +254,7 @@ func (client *VirtualClustersClient) listByResourceGroupCreateRequest(ctx contex
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *VirtualClustersClient) listByResourceGroupHandleResponse(resp *http.Response) (VirtualClustersClientListByResourceGroupResponse, error) {
-	result := VirtualClustersClientListByResourceGroupResponse{RawResponse: resp}
+	result := VirtualClustersClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualClusterListResult); err != nil {
 		return VirtualClustersClientListByResourceGroupResponse{}, err
 	}
@@ -276,9 +274,7 @@ func (client *VirtualClustersClient) BeginUpdate(ctx context.Context, resourceGr
 	if err != nil {
 		return VirtualClustersClientUpdatePollerResponse{}, err
 	}
-	result := VirtualClustersClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VirtualClustersClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VirtualClustersClient.Update", "", resp, client.pl)
 	if err != nil {
 		return VirtualClustersClientUpdatePollerResponse{}, err
@@ -382,7 +378,7 @@ func (client *VirtualClustersClient) updateDNSServersCreateRequest(ctx context.C
 
 // updateDNSServersHandleResponse handles the UpdateDNSServers response.
 func (client *VirtualClustersClient) updateDNSServersHandleResponse(resp *http.Response) (VirtualClustersClientUpdateDNSServersResponse, error) {
-	result := VirtualClustersClientUpdateDNSServersResponse{RawResponse: resp}
+	result := VirtualClustersClientUpdateDNSServersResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UpdateManagedInstanceDNSServersOperation); err != nil {
 		return VirtualClustersClientUpdateDNSServersResponse{}, err
 	}

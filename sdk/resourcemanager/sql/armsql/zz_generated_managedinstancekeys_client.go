@@ -34,17 +34,17 @@ type ManagedInstanceKeysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedInstanceKeysClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedInstanceKeysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedInstanceKeysClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *ManagedInstanceKeysClient) BeginCreateOrUpdate(ctx context.Context
 	if err != nil {
 		return ManagedInstanceKeysClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ManagedInstanceKeysClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedInstanceKeysClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedInstanceKeysClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ManagedInstanceKeysClientCreateOrUpdatePollerResponse{}, err
@@ -136,9 +134,7 @@ func (client *ManagedInstanceKeysClient) BeginDelete(ctx context.Context, resour
 	if err != nil {
 		return ManagedInstanceKeysClientDeletePollerResponse{}, err
 	}
-	result := ManagedInstanceKeysClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedInstanceKeysClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedInstanceKeysClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ManagedInstanceKeysClientDeletePollerResponse{}, err
@@ -249,7 +245,7 @@ func (client *ManagedInstanceKeysClient) getCreateRequest(ctx context.Context, r
 
 // getHandleResponse handles the Get response.
 func (client *ManagedInstanceKeysClient) getHandleResponse(resp *http.Response) (ManagedInstanceKeysClientGetResponse, error) {
-	result := ManagedInstanceKeysClientGetResponse{RawResponse: resp}
+	result := ManagedInstanceKeysClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceKey); err != nil {
 		return ManagedInstanceKeysClientGetResponse{}, err
 	}
@@ -306,7 +302,7 @@ func (client *ManagedInstanceKeysClient) listByInstanceCreateRequest(ctx context
 
 // listByInstanceHandleResponse handles the ListByInstance response.
 func (client *ManagedInstanceKeysClient) listByInstanceHandleResponse(resp *http.Response) (ManagedInstanceKeysClientListByInstanceResponse, error) {
-	result := ManagedInstanceKeysClientListByInstanceResponse{RawResponse: resp}
+	result := ManagedInstanceKeysClientListByInstanceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstanceKeyListResult); err != nil {
 		return ManagedInstanceKeysClientListByInstanceResponse{}, err
 	}

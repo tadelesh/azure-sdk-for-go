@@ -34,17 +34,17 @@ type ServerAdministratorsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewServerAdministratorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ServerAdministratorsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ServerAdministratorsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *ServerAdministratorsClient) BeginCreateOrUpdate(ctx context.Contex
 	if err != nil {
 		return ServerAdministratorsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ServerAdministratorsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerAdministratorsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerAdministratorsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ServerAdministratorsClientCreateOrUpdatePollerResponse{}, err
@@ -130,9 +128,7 @@ func (client *ServerAdministratorsClient) BeginDelete(ctx context.Context, resou
 	if err != nil {
 		return ServerAdministratorsClientDeletePollerResponse{}, err
 	}
-	result := ServerAdministratorsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ServerAdministratorsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ServerAdministratorsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ServerAdministratorsClientDeletePollerResponse{}, err
@@ -235,7 +231,7 @@ func (client *ServerAdministratorsClient) getCreateRequest(ctx context.Context, 
 
 // getHandleResponse handles the Get response.
 func (client *ServerAdministratorsClient) getHandleResponse(resp *http.Response) (ServerAdministratorsClientGetResponse, error) {
-	result := ServerAdministratorsClientGetResponse{RawResponse: resp}
+	result := ServerAdministratorsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerAdministratorResource); err != nil {
 		return ServerAdministratorsClientGetResponse{}, err
 	}
@@ -248,19 +244,13 @@ func (client *ServerAdministratorsClient) getHandleResponse(resp *http.Response)
 // serverName - The name of the server.
 // options - ServerAdministratorsClientListOptions contains the optional parameters for the ServerAdministratorsClient.List
 // method.
-func (client *ServerAdministratorsClient) List(ctx context.Context, resourceGroupName string, serverName string, options *ServerAdministratorsClientListOptions) (ServerAdministratorsClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, serverName, options)
-	if err != nil {
-		return ServerAdministratorsClientListResponse{}, err
+func (client *ServerAdministratorsClient) List(resourceGroupName string, serverName string, options *ServerAdministratorsClientListOptions) *ServerAdministratorsClientListPager {
+	return &ServerAdministratorsClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, serverName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return ServerAdministratorsClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return ServerAdministratorsClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -291,7 +281,7 @@ func (client *ServerAdministratorsClient) listCreateRequest(ctx context.Context,
 
 // listHandleResponse handles the List response.
 func (client *ServerAdministratorsClient) listHandleResponse(resp *http.Response) (ServerAdministratorsClientListResponse, error) {
-	result := ServerAdministratorsClientListResponse{RawResponse: resp}
+	result := ServerAdministratorsClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServerAdministratorResourceListResult); err != nil {
 		return ServerAdministratorsClientListResponse{}, err
 	}

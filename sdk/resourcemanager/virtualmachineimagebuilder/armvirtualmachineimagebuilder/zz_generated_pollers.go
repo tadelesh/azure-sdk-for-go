@@ -43,11 +43,10 @@ func (p *VirtualMachineImageTemplatesClientCancelPoller) Poll(ctx context.Contex
 // If the final GET succeeded then the final VirtualMachineImageTemplatesClientCancelResponse will be returned.
 func (p *VirtualMachineImageTemplatesClientCancelPoller) FinalResponse(ctx context.Context) (VirtualMachineImageTemplatesClientCancelResponse, error) {
 	respType := VirtualMachineImageTemplatesClientCancelResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return VirtualMachineImageTemplatesClientCancelResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -86,11 +85,10 @@ func (p *VirtualMachineImageTemplatesClientCreateOrUpdatePoller) Poll(ctx contex
 // If the final GET succeeded then the final VirtualMachineImageTemplatesClientCreateOrUpdateResponse will be returned.
 func (p *VirtualMachineImageTemplatesClientCreateOrUpdatePoller) FinalResponse(ctx context.Context) (VirtualMachineImageTemplatesClientCreateOrUpdateResponse, error) {
 	respType := VirtualMachineImageTemplatesClientCreateOrUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ImageTemplate)
+	_, err := p.pt.FinalResponse(ctx, &respType.ImageTemplate)
 	if err != nil {
 		return VirtualMachineImageTemplatesClientCreateOrUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -129,11 +127,10 @@ func (p *VirtualMachineImageTemplatesClientDeletePoller) Poll(ctx context.Contex
 // If the final GET succeeded then the final VirtualMachineImageTemplatesClientDeleteResponse will be returned.
 func (p *VirtualMachineImageTemplatesClientDeletePoller) FinalResponse(ctx context.Context) (VirtualMachineImageTemplatesClientDeleteResponse, error) {
 	respType := VirtualMachineImageTemplatesClientDeleteResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return VirtualMachineImageTemplatesClientDeleteResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -172,11 +169,10 @@ func (p *VirtualMachineImageTemplatesClientRunPoller) Poll(ctx context.Context) 
 // If the final GET succeeded then the final VirtualMachineImageTemplatesClientRunResponse will be returned.
 func (p *VirtualMachineImageTemplatesClientRunPoller) FinalResponse(ctx context.Context) (VirtualMachineImageTemplatesClientRunResponse, error) {
 	respType := VirtualMachineImageTemplatesClientRunResponse{}
-	resp, err := p.pt.FinalResponse(ctx, nil)
+	_, err := p.pt.FinalResponse(ctx, nil)
 	if err != nil {
 		return VirtualMachineImageTemplatesClientRunResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 
@@ -215,11 +211,10 @@ func (p *VirtualMachineImageTemplatesClientUpdatePoller) Poll(ctx context.Contex
 // If the final GET succeeded then the final VirtualMachineImageTemplatesClientUpdateResponse will be returned.
 func (p *VirtualMachineImageTemplatesClientUpdatePoller) FinalResponse(ctx context.Context) (VirtualMachineImageTemplatesClientUpdateResponse, error) {
 	respType := VirtualMachineImageTemplatesClientUpdateResponse{}
-	resp, err := p.pt.FinalResponse(ctx, &respType.ImageTemplate)
+	_, err := p.pt.FinalResponse(ctx, &respType.ImageTemplate)
 	if err != nil {
 		return VirtualMachineImageTemplatesClientUpdateResponse{}, err
 	}
-	respType.RawResponse = resp
 	return respType, nil
 }
 

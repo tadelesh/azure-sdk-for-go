@@ -34,17 +34,17 @@ type CloudEndpointsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCloudEndpointsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CloudEndpointsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CloudEndpointsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *CloudEndpointsClient) BeginCreate(ctx context.Context, resourceGro
 	if err != nil {
 		return CloudEndpointsClientCreatePollerResponse{}, err
 	}
-	result := CloudEndpointsClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudEndpointsClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("CloudEndpointsClient.Create", "", resp, client.pl)
 	if err != nil {
 		return CloudEndpointsClientCreatePollerResponse{}, err
@@ -140,9 +138,7 @@ func (client *CloudEndpointsClient) BeginDelete(ctx context.Context, resourceGro
 	if err != nil {
 		return CloudEndpointsClientDeletePollerResponse{}, err
 	}
-	result := CloudEndpointsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudEndpointsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("CloudEndpointsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return CloudEndpointsClientDeletePollerResponse{}, err
@@ -262,7 +258,7 @@ func (client *CloudEndpointsClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *CloudEndpointsClient) getHandleResponse(resp *http.Response) (CloudEndpointsClientGetResponse, error) {
-	result := CloudEndpointsClientGetResponse{RawResponse: resp}
+	result := CloudEndpointsClientGetResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -282,19 +278,13 @@ func (client *CloudEndpointsClient) getHandleResponse(resp *http.Response) (Clou
 // syncGroupName - Name of Sync Group resource.
 // options - CloudEndpointsClientListBySyncGroupOptions contains the optional parameters for the CloudEndpointsClient.ListBySyncGroup
 // method.
-func (client *CloudEndpointsClient) ListBySyncGroup(ctx context.Context, resourceGroupName string, storageSyncServiceName string, syncGroupName string, options *CloudEndpointsClientListBySyncGroupOptions) (CloudEndpointsClientListBySyncGroupResponse, error) {
-	req, err := client.listBySyncGroupCreateRequest(ctx, resourceGroupName, storageSyncServiceName, syncGroupName, options)
-	if err != nil {
-		return CloudEndpointsClientListBySyncGroupResponse{}, err
+func (client *CloudEndpointsClient) ListBySyncGroup(resourceGroupName string, storageSyncServiceName string, syncGroupName string, options *CloudEndpointsClientListBySyncGroupOptions) *CloudEndpointsClientListBySyncGroupPager {
+	return &CloudEndpointsClientListBySyncGroupPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listBySyncGroupCreateRequest(ctx, resourceGroupName, storageSyncServiceName, syncGroupName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return CloudEndpointsClientListBySyncGroupResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return CloudEndpointsClientListBySyncGroupResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listBySyncGroupHandleResponse(resp)
 }
 
 // listBySyncGroupCreateRequest creates the ListBySyncGroup request.
@@ -329,7 +319,7 @@ func (client *CloudEndpointsClient) listBySyncGroupCreateRequest(ctx context.Con
 
 // listBySyncGroupHandleResponse handles the ListBySyncGroup response.
 func (client *CloudEndpointsClient) listBySyncGroupHandleResponse(resp *http.Response) (CloudEndpointsClientListBySyncGroupResponse, error) {
-	result := CloudEndpointsClientListBySyncGroupResponse{RawResponse: resp}
+	result := CloudEndpointsClientListBySyncGroupResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -356,9 +346,7 @@ func (client *CloudEndpointsClient) BeginPostBackup(ctx context.Context, resourc
 	if err != nil {
 		return CloudEndpointsClientPostBackupPollerResponse{}, err
 	}
-	result := CloudEndpointsClientPostBackupPollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudEndpointsClientPostBackupPollerResponse{}
 	pt, err := armruntime.NewPoller("CloudEndpointsClient.PostBackup", "", resp, client.pl)
 	if err != nil {
 		return CloudEndpointsClientPostBackupPollerResponse{}, err
@@ -434,9 +422,7 @@ func (client *CloudEndpointsClient) BeginPostRestore(ctx context.Context, resour
 	if err != nil {
 		return CloudEndpointsClientPostRestorePollerResponse{}, err
 	}
-	result := CloudEndpointsClientPostRestorePollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudEndpointsClientPostRestorePollerResponse{}
 	pt, err := armruntime.NewPoller("CloudEndpointsClient.PostRestore", "", resp, client.pl)
 	if err != nil {
 		return CloudEndpointsClientPostRestorePollerResponse{}, err
@@ -512,9 +498,7 @@ func (client *CloudEndpointsClient) BeginPreBackup(ctx context.Context, resource
 	if err != nil {
 		return CloudEndpointsClientPreBackupPollerResponse{}, err
 	}
-	result := CloudEndpointsClientPreBackupPollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudEndpointsClientPreBackupPollerResponse{}
 	pt, err := armruntime.NewPoller("CloudEndpointsClient.PreBackup", "", resp, client.pl)
 	if err != nil {
 		return CloudEndpointsClientPreBackupPollerResponse{}, err
@@ -590,9 +574,7 @@ func (client *CloudEndpointsClient) BeginPreRestore(ctx context.Context, resourc
 	if err != nil {
 		return CloudEndpointsClientPreRestorePollerResponse{}, err
 	}
-	result := CloudEndpointsClientPreRestorePollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudEndpointsClientPreRestorePollerResponse{}
 	pt, err := armruntime.NewPoller("CloudEndpointsClient.PreRestore", "", resp, client.pl)
 	if err != nil {
 		return CloudEndpointsClientPreRestorePollerResponse{}, err
@@ -713,7 +695,7 @@ func (client *CloudEndpointsClient) restoreheartbeatCreateRequest(ctx context.Co
 
 // restoreheartbeatHandleResponse handles the Restoreheartbeat response.
 func (client *CloudEndpointsClient) restoreheartbeatHandleResponse(resp *http.Response) (CloudEndpointsClientRestoreheartbeatResponse, error) {
-	result := CloudEndpointsClientRestoreheartbeatResponse{RawResponse: resp}
+	result := CloudEndpointsClientRestoreheartbeatResponse{}
 	if val := resp.Header.Get("x-ms-request-id"); val != "" {
 		result.XMSRequestID = &val
 	}
@@ -738,9 +720,7 @@ func (client *CloudEndpointsClient) BeginTriggerChangeDetection(ctx context.Cont
 	if err != nil {
 		return CloudEndpointsClientTriggerChangeDetectionPollerResponse{}, err
 	}
-	result := CloudEndpointsClientTriggerChangeDetectionPollerResponse{
-		RawResponse: resp,
-	}
+	result := CloudEndpointsClientTriggerChangeDetectionPollerResponse{}
 	pt, err := armruntime.NewPoller("CloudEndpointsClient.TriggerChangeDetection", "", resp, client.pl)
 	if err != nil {
 		return CloudEndpointsClientTriggerChangeDetectionPollerResponse{}, err

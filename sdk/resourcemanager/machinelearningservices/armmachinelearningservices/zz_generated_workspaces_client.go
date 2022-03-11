@@ -34,17 +34,17 @@ type WorkspacesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewWorkspacesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *WorkspacesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &WorkspacesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *WorkspacesClient) BeginCreateOrUpdate(ctx context.Context, resourc
 	if err != nil {
 		return WorkspacesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := WorkspacesClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkspacesClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkspacesClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return WorkspacesClientCreateOrUpdatePollerResponse{}, err
@@ -127,9 +125,7 @@ func (client *WorkspacesClient) BeginDelete(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return WorkspacesClientDeletePollerResponse{}, err
 	}
-	result := WorkspacesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkspacesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkspacesClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return WorkspacesClientDeletePollerResponse{}, err
@@ -194,9 +190,7 @@ func (client *WorkspacesClient) BeginDiagnose(ctx context.Context, resourceGroup
 	if err != nil {
 		return WorkspacesClientDiagnosePollerResponse{}, err
 	}
-	result := WorkspacesClientDiagnosePollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkspacesClientDiagnosePollerResponse{}
 	pt, err := armruntime.NewPoller("WorkspacesClient.Diagnose", "location", resp, client.pl)
 	if err != nil {
 		return WorkspacesClientDiagnosePollerResponse{}, err
@@ -301,7 +295,7 @@ func (client *WorkspacesClient) getCreateRequest(ctx context.Context, resourceGr
 
 // getHandleResponse handles the Get response.
 func (client *WorkspacesClient) getHandleResponse(resp *http.Response) (WorkspacesClientGetResponse, error) {
-	result := WorkspacesClientGetResponse{RawResponse: resp}
+	result := WorkspacesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Workspace); err != nil {
 		return WorkspacesClientGetResponse{}, err
 	}
@@ -352,7 +346,7 @@ func (client *WorkspacesClient) listByResourceGroupCreateRequest(ctx context.Con
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *WorkspacesClient) listByResourceGroupHandleResponse(resp *http.Response) (WorkspacesClientListByResourceGroupResponse, error) {
-	result := WorkspacesClientListByResourceGroupResponse{RawResponse: resp}
+	result := WorkspacesClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceListResult); err != nil {
 		return WorkspacesClientListByResourceGroupResponse{}, err
 	}
@@ -398,7 +392,7 @@ func (client *WorkspacesClient) listBySubscriptionCreateRequest(ctx context.Cont
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
 func (client *WorkspacesClient) listBySubscriptionHandleResponse(resp *http.Response) (WorkspacesClientListBySubscriptionResponse, error) {
-	result := WorkspacesClientListBySubscriptionResponse{RawResponse: resp}
+	result := WorkspacesClientListBySubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WorkspaceListResult); err != nil {
 		return WorkspacesClientListBySubscriptionResponse{}, err
 	}
@@ -454,7 +448,7 @@ func (client *WorkspacesClient) listKeysCreateRequest(ctx context.Context, resou
 
 // listKeysHandleResponse handles the ListKeys response.
 func (client *WorkspacesClient) listKeysHandleResponse(resp *http.Response) (WorkspacesClientListKeysResponse, error) {
-	result := WorkspacesClientListKeysResponse{RawResponse: resp}
+	result := WorkspacesClientListKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListWorkspaceKeysResult); err != nil {
 		return WorkspacesClientListKeysResponse{}, err
 	}
@@ -510,7 +504,7 @@ func (client *WorkspacesClient) listNotebookAccessTokenCreateRequest(ctx context
 
 // listNotebookAccessTokenHandleResponse handles the ListNotebookAccessToken response.
 func (client *WorkspacesClient) listNotebookAccessTokenHandleResponse(resp *http.Response) (WorkspacesClientListNotebookAccessTokenResponse, error) {
-	result := WorkspacesClientListNotebookAccessTokenResponse{RawResponse: resp}
+	result := WorkspacesClientListNotebookAccessTokenResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotebookAccessTokenResult); err != nil {
 		return WorkspacesClientListNotebookAccessTokenResponse{}, err
 	}
@@ -566,7 +560,7 @@ func (client *WorkspacesClient) listNotebookKeysCreateRequest(ctx context.Contex
 
 // listNotebookKeysHandleResponse handles the ListNotebookKeys response.
 func (client *WorkspacesClient) listNotebookKeysHandleResponse(resp *http.Response) (WorkspacesClientListNotebookKeysResponse, error) {
-	result := WorkspacesClientListNotebookKeysResponse{RawResponse: resp}
+	result := WorkspacesClientListNotebookKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListNotebookKeysResult); err != nil {
 		return WorkspacesClientListNotebookKeysResponse{}, err
 	}
@@ -623,7 +617,7 @@ func (client *WorkspacesClient) listOutboundNetworkDependenciesEndpointsCreateRe
 
 // listOutboundNetworkDependenciesEndpointsHandleResponse handles the ListOutboundNetworkDependenciesEndpoints response.
 func (client *WorkspacesClient) listOutboundNetworkDependenciesEndpointsHandleResponse(resp *http.Response) (WorkspacesClientListOutboundNetworkDependenciesEndpointsResponse, error) {
-	result := WorkspacesClientListOutboundNetworkDependenciesEndpointsResponse{RawResponse: resp}
+	result := WorkspacesClientListOutboundNetworkDependenciesEndpointsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExternalFQDNResponse); err != nil {
 		return WorkspacesClientListOutboundNetworkDependenciesEndpointsResponse{}, err
 	}
@@ -679,7 +673,7 @@ func (client *WorkspacesClient) listStorageAccountKeysCreateRequest(ctx context.
 
 // listStorageAccountKeysHandleResponse handles the ListStorageAccountKeys response.
 func (client *WorkspacesClient) listStorageAccountKeysHandleResponse(resp *http.Response) (WorkspacesClientListStorageAccountKeysResponse, error) {
-	result := WorkspacesClientListStorageAccountKeysResponse{RawResponse: resp}
+	result := WorkspacesClientListStorageAccountKeysResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListStorageAccountKeysResult); err != nil {
 		return WorkspacesClientListStorageAccountKeysResponse{}, err
 	}
@@ -697,9 +691,7 @@ func (client *WorkspacesClient) BeginPrepareNotebook(ctx context.Context, resour
 	if err != nil {
 		return WorkspacesClientPrepareNotebookPollerResponse{}, err
 	}
-	result := WorkspacesClientPrepareNotebookPollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkspacesClientPrepareNotebookPollerResponse{}
 	pt, err := armruntime.NewPoller("WorkspacesClient.PrepareNotebook", "location", resp, client.pl)
 	if err != nil {
 		return WorkspacesClientPrepareNotebookPollerResponse{}, err
@@ -765,9 +757,7 @@ func (client *WorkspacesClient) BeginResyncKeys(ctx context.Context, resourceGro
 	if err != nil {
 		return WorkspacesClientResyncKeysPollerResponse{}, err
 	}
-	result := WorkspacesClientResyncKeysPollerResponse{
-		RawResponse: resp,
-	}
+	result := WorkspacesClientResyncKeysPollerResponse{}
 	pt, err := armruntime.NewPoller("WorkspacesClient.ResyncKeys", "", resp, client.pl)
 	if err != nil {
 		return WorkspacesClientResyncKeysPollerResponse{}, err
@@ -871,7 +861,7 @@ func (client *WorkspacesClient) updateCreateRequest(ctx context.Context, resourc
 
 // updateHandleResponse handles the Update response.
 func (client *WorkspacesClient) updateHandleResponse(resp *http.Response) (WorkspacesClientUpdateResponse, error) {
-	result := WorkspacesClientUpdateResponse{RawResponse: resp}
+	result := WorkspacesClientUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Workspace); err != nil {
 		return WorkspacesClientUpdateResponse{}, err
 	}

@@ -35,17 +35,17 @@ type BackupPoliciesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBackupPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BackupPoliciesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BackupPoliciesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *BackupPoliciesClient) BeginCreate(ctx context.Context, resourceGro
 	if err != nil {
 		return BackupPoliciesClientCreatePollerResponse{}, err
 	}
-	result := BackupPoliciesClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := BackupPoliciesClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("BackupPoliciesClient.Create", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return BackupPoliciesClientCreatePollerResponse{}, err
@@ -135,9 +133,7 @@ func (client *BackupPoliciesClient) BeginDelete(ctx context.Context, resourceGro
 	if err != nil {
 		return BackupPoliciesClientDeletePollerResponse{}, err
 	}
-	result := BackupPoliciesClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := BackupPoliciesClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("BackupPoliciesClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return BackupPoliciesClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *BackupPoliciesClient) getCreateRequest(ctx context.Context, resour
 
 // getHandleResponse handles the Get response.
 func (client *BackupPoliciesClient) getHandleResponse(resp *http.Response) (BackupPoliciesClientGetResponse, error) {
-	result := BackupPoliciesClientGetResponse{RawResponse: resp}
+	result := BackupPoliciesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupPolicy); err != nil {
 		return BackupPoliciesClientGetResponse{}, err
 	}
@@ -259,19 +255,13 @@ func (client *BackupPoliciesClient) getHandleResponse(resp *http.Response) (Back
 // resourceGroupName - The name of the resource group.
 // accountName - The name of the NetApp account
 // options - BackupPoliciesClientListOptions contains the optional parameters for the BackupPoliciesClient.List method.
-func (client *BackupPoliciesClient) List(ctx context.Context, resourceGroupName string, accountName string, options *BackupPoliciesClientListOptions) (BackupPoliciesClientListResponse, error) {
-	req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, options)
-	if err != nil {
-		return BackupPoliciesClientListResponse{}, err
+func (client *BackupPoliciesClient) List(resourceGroupName string, accountName string, options *BackupPoliciesClientListOptions) *BackupPoliciesClientListPager {
+	return &BackupPoliciesClientListPager{
+		client: client,
+		requester: func(ctx context.Context) (*policy.Request, error) {
+			return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
+		},
 	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return BackupPoliciesClientListResponse{}, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK) {
-		return BackupPoliciesClientListResponse{}, runtime.NewResponseError(resp)
-	}
-	return client.listHandleResponse(resp)
 }
 
 // listCreateRequest creates the List request.
@@ -302,7 +292,7 @@ func (client *BackupPoliciesClient) listCreateRequest(ctx context.Context, resou
 
 // listHandleResponse handles the List response.
 func (client *BackupPoliciesClient) listHandleResponse(resp *http.Response) (BackupPoliciesClientListResponse, error) {
-	result := BackupPoliciesClientListResponse{RawResponse: resp}
+	result := BackupPoliciesClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupPoliciesList); err != nil {
 		return BackupPoliciesClientListResponse{}, err
 	}
@@ -322,9 +312,7 @@ func (client *BackupPoliciesClient) BeginUpdate(ctx context.Context, resourceGro
 	if err != nil {
 		return BackupPoliciesClientUpdatePollerResponse{}, err
 	}
-	result := BackupPoliciesClientUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := BackupPoliciesClientUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("BackupPoliciesClient.Update", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return BackupPoliciesClientUpdatePollerResponse{}, err

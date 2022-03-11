@@ -34,17 +34,17 @@ type InvoicesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewInvoicesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *InvoicesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &InvoicesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -60,9 +60,7 @@ func (client *InvoicesClient) BeginDownloadBillingSubscriptionInvoice(ctx contex
 	if err != nil {
 		return InvoicesClientDownloadBillingSubscriptionInvoicePollerResponse{}, err
 	}
-	result := InvoicesClientDownloadBillingSubscriptionInvoicePollerResponse{
-		RawResponse: resp,
-	}
+	result := InvoicesClientDownloadBillingSubscriptionInvoicePollerResponse{}
 	pt, err := armruntime.NewPoller("InvoicesClient.DownloadBillingSubscriptionInvoice", "location", resp, client.pl)
 	if err != nil {
 		return InvoicesClientDownloadBillingSubscriptionInvoicePollerResponse{}, err
@@ -126,9 +124,7 @@ func (client *InvoicesClient) BeginDownloadInvoice(ctx context.Context, billingA
 	if err != nil {
 		return InvoicesClientDownloadInvoicePollerResponse{}, err
 	}
-	result := InvoicesClientDownloadInvoicePollerResponse{
-		RawResponse: resp,
-	}
+	result := InvoicesClientDownloadInvoicePollerResponse{}
 	pt, err := armruntime.NewPoller("InvoicesClient.DownloadInvoice", "location", resp, client.pl)
 	if err != nil {
 		return InvoicesClientDownloadInvoicePollerResponse{}, err
@@ -193,9 +189,7 @@ func (client *InvoicesClient) BeginDownloadMultipleBillingProfileInvoices(ctx co
 	if err != nil {
 		return InvoicesClientDownloadMultipleBillingProfileInvoicesPollerResponse{}, err
 	}
-	result := InvoicesClientDownloadMultipleBillingProfileInvoicesPollerResponse{
-		RawResponse: resp,
-	}
+	result := InvoicesClientDownloadMultipleBillingProfileInvoicesPollerResponse{}
 	pt, err := armruntime.NewPoller("InvoicesClient.DownloadMultipleBillingProfileInvoices", "location", resp, client.pl)
 	if err != nil {
 		return InvoicesClientDownloadMultipleBillingProfileInvoicesPollerResponse{}, err
@@ -254,9 +248,7 @@ func (client *InvoicesClient) BeginDownloadMultipleBillingSubscriptionInvoices(c
 	if err != nil {
 		return InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPollerResponse{}, err
 	}
-	result := InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPollerResponse{
-		RawResponse: resp,
-	}
+	result := InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPollerResponse{}
 	pt, err := armruntime.NewPoller("InvoicesClient.DownloadMultipleBillingSubscriptionInvoices", "location", resp, client.pl)
 	if err != nil {
 		return InvoicesClientDownloadMultipleBillingSubscriptionInvoicesPollerResponse{}, err
@@ -348,7 +340,7 @@ func (client *InvoicesClient) getCreateRequest(ctx context.Context, billingAccou
 
 // getHandleResponse handles the Get response.
 func (client *InvoicesClient) getHandleResponse(resp *http.Response) (InvoicesClientGetResponse, error) {
-	result := InvoicesClientGetResponse{RawResponse: resp}
+	result := InvoicesClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Invoice); err != nil {
 		return InvoicesClientGetResponse{}, err
 	}
@@ -395,7 +387,7 @@ func (client *InvoicesClient) getByIDCreateRequest(ctx context.Context, invoiceN
 
 // getByIDHandleResponse handles the GetByID response.
 func (client *InvoicesClient) getByIDHandleResponse(resp *http.Response) (InvoicesClientGetByIDResponse, error) {
-	result := InvoicesClientGetByIDResponse{RawResponse: resp}
+	result := InvoicesClientGetByIDResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Invoice); err != nil {
 		return InvoicesClientGetByIDResponse{}, err
 	}
@@ -446,7 +438,7 @@ func (client *InvoicesClient) getBySubscriptionAndInvoiceIDCreateRequest(ctx con
 
 // getBySubscriptionAndInvoiceIDHandleResponse handles the GetBySubscriptionAndInvoiceID response.
 func (client *InvoicesClient) getBySubscriptionAndInvoiceIDHandleResponse(resp *http.Response) (InvoicesClientGetBySubscriptionAndInvoiceIDResponse, error) {
-	result := InvoicesClientGetBySubscriptionAndInvoiceIDResponse{RawResponse: resp}
+	result := InvoicesClientGetBySubscriptionAndInvoiceIDResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Invoice); err != nil {
 		return InvoicesClientGetBySubscriptionAndInvoiceIDResponse{}, err
 	}
@@ -496,7 +488,7 @@ func (client *InvoicesClient) listByBillingAccountCreateRequest(ctx context.Cont
 
 // listByBillingAccountHandleResponse handles the ListByBillingAccount response.
 func (client *InvoicesClient) listByBillingAccountHandleResponse(resp *http.Response) (InvoicesClientListByBillingAccountResponse, error) {
-	result := InvoicesClientListByBillingAccountResponse{RawResponse: resp}
+	result := InvoicesClientListByBillingAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InvoiceListResult); err != nil {
 		return InvoicesClientListByBillingAccountResponse{}, err
 	}
@@ -551,7 +543,7 @@ func (client *InvoicesClient) listByBillingProfileCreateRequest(ctx context.Cont
 
 // listByBillingProfileHandleResponse handles the ListByBillingProfile response.
 func (client *InvoicesClient) listByBillingProfileHandleResponse(resp *http.Response) (InvoicesClientListByBillingProfileResponse, error) {
-	result := InvoicesClientListByBillingProfileResponse{RawResponse: resp}
+	result := InvoicesClientListByBillingProfileResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InvoiceListResult); err != nil {
 		return InvoicesClientListByBillingProfileResponse{}, err
 	}
@@ -598,7 +590,7 @@ func (client *InvoicesClient) listByBillingSubscriptionCreateRequest(ctx context
 
 // listByBillingSubscriptionHandleResponse handles the ListByBillingSubscription response.
 func (client *InvoicesClient) listByBillingSubscriptionHandleResponse(resp *http.Response) (InvoicesClientListByBillingSubscriptionResponse, error) {
-	result := InvoicesClientListByBillingSubscriptionResponse{RawResponse: resp}
+	result := InvoicesClientListByBillingSubscriptionResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InvoiceListResult); err != nil {
 		return InvoicesClientListByBillingSubscriptionResponse{}, err
 	}

@@ -29,16 +29,16 @@ type ManagementClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagementClient(credential azcore.TokenCredential, options *arm.ClientOptions) *ManagementClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagementClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -78,7 +78,7 @@ func (client *ManagementClient) getAvailableOperationsCreateRequest(ctx context.
 
 // getAvailableOperationsHandleResponse handles the GetAvailableOperations response.
 func (client *ManagementClient) getAvailableOperationsHandleResponse(resp *http.Response) (ManagementClientGetAvailableOperationsResponse, error) {
-	result := ManagementClientGetAvailableOperationsResponse{RawResponse: resp}
+	result := ManagementClientGetAvailableOperationsResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OperationList); err != nil {
 		return ManagementClientGetAvailableOperationsResponse{}, err
 	}

@@ -10,7 +10,7 @@ package armcompute
 
 const (
 	moduleName    = "armcompute"
-	moduleVersion = "v0.3.0"
+	moduleVersion = "v0.4.0"
 )
 
 type AccessLevel string
@@ -1166,13 +1166,12 @@ func (c NetworkAccessPolicy) ToPtr() *NetworkAccessPolicy {
 	return &c
 }
 
-// OperatingSystemStateTypes - The OS State.
+// OperatingSystemStateTypes - This property allows the user to specify whether the virtual machines created under this image
+// are 'Generalized' or 'Specialized'.
 type OperatingSystemStateTypes string
 
 const (
-	// OperatingSystemStateTypesGeneralized - Generalized image. Needs to be provisioned during deployment time.
 	OperatingSystemStateTypesGeneralized OperatingSystemStateTypes = "Generalized"
-	// OperatingSystemStateTypesSpecialized - Specialized image. Contains already provisioned OS Disk.
 	OperatingSystemStateTypesSpecialized OperatingSystemStateTypes = "Specialized"
 )
 
@@ -1210,7 +1209,10 @@ func (c OperatingSystemType) ToPtr() *OperatingSystemType {
 	return &c
 }
 
-// OperatingSystemTypes - The operating system of the osDiskImage.
+// OperatingSystemTypes - This property allows you to specify the supported type of the OS that application is built for.
+// Possible values are:
+// Windows
+// Linux
 type OperatingSystemTypes string
 
 const (
@@ -1580,6 +1582,30 @@ func (c PublicNetworkAccess) ToPtr() *PublicNetworkAccess {
 	return &c
 }
 
+// RepairAction - Type of repair action (replace, restart, reimage) that will be used for repairing unhealthy virtual machines
+// in the scale set. Default value is replace.
+type RepairAction string
+
+const (
+	RepairActionReimage RepairAction = "Reimage"
+	RepairActionReplace RepairAction = "Replace"
+	RepairActionRestart RepairAction = "Restart"
+)
+
+// PossibleRepairActionValues returns the possible values for the RepairAction const type.
+func PossibleRepairActionValues() []RepairAction {
+	return []RepairAction{
+		RepairActionReimage,
+		RepairActionReplace,
+		RepairActionRestart,
+	}
+}
+
+// ToPtr returns a *RepairAction pointing to the current value.
+func (c RepairAction) ToPtr() *RepairAction {
+	return &c
+}
+
 // ReplicationMode - Optional parameter which specifies the mode to be used for replication. This property is not updatable.
 type ReplicationMode string
 
@@ -1754,6 +1780,24 @@ func (c RestorePointCollectionExpandOptions) ToPtr() *RestorePointCollectionExpa
 	return &c
 }
 
+type RestorePointExpandOptions string
+
+const (
+	RestorePointExpandOptionsInstanceView RestorePointExpandOptions = "instanceView"
+)
+
+// PossibleRestorePointExpandOptionsValues returns the possible values for the RestorePointExpandOptions const type.
+func PossibleRestorePointExpandOptionsValues() []RestorePointExpandOptions {
+	return []RestorePointExpandOptions{
+		RestorePointExpandOptionsInstanceView,
+	}
+}
+
+// ToPtr returns a *RestorePointExpandOptions pointing to the current value.
+func (c RestorePointExpandOptions) ToPtr() *RestorePointExpandOptions {
+	return &c
+}
+
 // RollingUpgradeActionType - The last action performed on the rolling upgrade.
 type RollingUpgradeActionType string
 
@@ -1800,17 +1844,43 @@ func (c RollingUpgradeStatusCode) ToPtr() *RollingUpgradeStatusCode {
 	return &c
 }
 
-// SecurityTypes - Specifies the SecurityType of the virtual machine. It is set as TrustedLaunch to enable UefiSettings.
-// Default: UefiSettings will not be enabled unless this property is set as TrustedLaunch.
+// SecurityEncryptionTypes - Specifies the EncryptionType of the managed disk.
+// It is set to DiskWithVMGuestState for encryption of the managed disk along with VMGuestState blob, and VMGuestStateOnly
+// for encryption of just the VMGuestState blob.
+// NOTE: It can be set for only Confidential VMs.
+type SecurityEncryptionTypes string
+
+const (
+	SecurityEncryptionTypesDiskWithVMGuestState SecurityEncryptionTypes = "DiskWithVMGuestState"
+	SecurityEncryptionTypesVMGuestStateOnly     SecurityEncryptionTypes = "VMGuestStateOnly"
+)
+
+// PossibleSecurityEncryptionTypesValues returns the possible values for the SecurityEncryptionTypes const type.
+func PossibleSecurityEncryptionTypesValues() []SecurityEncryptionTypes {
+	return []SecurityEncryptionTypes{
+		SecurityEncryptionTypesDiskWithVMGuestState,
+		SecurityEncryptionTypesVMGuestStateOnly,
+	}
+}
+
+// ToPtr returns a *SecurityEncryptionTypes pointing to the current value.
+func (c SecurityEncryptionTypes) ToPtr() *SecurityEncryptionTypes {
+	return &c
+}
+
+// SecurityTypes - Specifies the SecurityType of the virtual machine. It has to be set to any specified value to enable UefiSettings.
+// Default: UefiSettings will not be enabled unless this property is set.
 type SecurityTypes string
 
 const (
-	SecurityTypesTrustedLaunch SecurityTypes = "TrustedLaunch"
+	SecurityTypesConfidentialVM SecurityTypes = "ConfidentialVM"
+	SecurityTypesTrustedLaunch  SecurityTypes = "TrustedLaunch"
 )
 
 // PossibleSecurityTypesValues returns the possible values for the SecurityTypes const type.
 func PossibleSecurityTypesValues() []SecurityTypes {
 	return []SecurityTypes{
+		SecurityTypesConfidentialVM,
 		SecurityTypesTrustedLaunch,
 	}
 }

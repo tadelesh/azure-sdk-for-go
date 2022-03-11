@@ -34,17 +34,17 @@ type AgentClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAgentClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AgentClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AgentClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -98,7 +98,7 @@ func (client *AgentClient) createOrUpdateCreateRequest(ctx context.Context, reso
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
 func (client *AgentClient) createOrUpdateHandleResponse(resp *http.Response) (AgentClientCreateOrUpdateResponse, error) {
-	result := AgentClientCreateOrUpdateResponse{RawResponse: resp}
+	result := AgentClientCreateOrUpdateResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AgentConfiguration); err != nil {
 		return AgentClientCreateOrUpdateResponse{}, err
 	}
@@ -154,7 +154,7 @@ func (client *AgentClient) getCreateRequest(ctx context.Context, resourceGroupNa
 
 // getHandleResponse handles the Get response.
 func (client *AgentClient) getHandleResponse(resp *http.Response) (AgentClientGetResponse, error) {
-	result := AgentClientGetResponse{RawResponse: resp}
+	result := AgentClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AgentConfiguration); err != nil {
 		return AgentClientGetResponse{}, err
 	}

@@ -34,17 +34,17 @@ type ManagedInstancePrivateEndpointConnectionsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewManagedInstancePrivateEndpointConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ManagedInstancePrivateEndpointConnectionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ManagedInstancePrivateEndpointConnectionsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -61,9 +61,7 @@ func (client *ManagedInstancePrivateEndpointConnectionsClient) BeginCreateOrUpda
 	if err != nil {
 		return ManagedInstancePrivateEndpointConnectionsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := ManagedInstancePrivateEndpointConnectionsClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedInstancePrivateEndpointConnectionsClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedInstancePrivateEndpointConnectionsClient.CreateOrUpdate", "", resp, client.pl)
 	if err != nil {
 		return ManagedInstancePrivateEndpointConnectionsClientCreateOrUpdatePollerResponse{}, err
@@ -133,9 +131,7 @@ func (client *ManagedInstancePrivateEndpointConnectionsClient) BeginDelete(ctx c
 	if err != nil {
 		return ManagedInstancePrivateEndpointConnectionsClientDeletePollerResponse{}, err
 	}
-	result := ManagedInstancePrivateEndpointConnectionsClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := ManagedInstancePrivateEndpointConnectionsClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("ManagedInstancePrivateEndpointConnectionsClient.Delete", "", resp, client.pl)
 	if err != nil {
 		return ManagedInstancePrivateEndpointConnectionsClientDeletePollerResponse{}, err
@@ -247,7 +243,7 @@ func (client *ManagedInstancePrivateEndpointConnectionsClient) getCreateRequest(
 
 // getHandleResponse handles the Get response.
 func (client *ManagedInstancePrivateEndpointConnectionsClient) getHandleResponse(resp *http.Response) (ManagedInstancePrivateEndpointConnectionsClientGetResponse, error) {
-	result := ManagedInstancePrivateEndpointConnectionsClientGetResponse{RawResponse: resp}
+	result := ManagedInstancePrivateEndpointConnectionsClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstancePrivateEndpointConnection); err != nil {
 		return ManagedInstancePrivateEndpointConnectionsClientGetResponse{}, err
 	}
@@ -301,7 +297,7 @@ func (client *ManagedInstancePrivateEndpointConnectionsClient) listByManagedInst
 
 // listByManagedInstanceHandleResponse handles the ListByManagedInstance response.
 func (client *ManagedInstancePrivateEndpointConnectionsClient) listByManagedInstanceHandleResponse(resp *http.Response) (ManagedInstancePrivateEndpointConnectionsClientListByManagedInstanceResponse, error) {
-	result := ManagedInstancePrivateEndpointConnectionsClientListByManagedInstanceResponse{RawResponse: resp}
+	result := ManagedInstancePrivateEndpointConnectionsClientListByManagedInstanceResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedInstancePrivateEndpointConnectionListResult); err != nil {
 		return ManagedInstancePrivateEndpointConnectionsClientListByManagedInstanceResponse{}, err
 	}

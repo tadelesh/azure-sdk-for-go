@@ -1,5 +1,84 @@
 # Release History
 
+## 0.4.0 (2022-03-10)
+### Breaking Changes
+
+- Function `*AppsClientListBySubscriptionPager.NextPage` return value(s) have been changed from `(bool)` to `(AppsClientListBySubscriptionResponse, error)`
+- Function `*AppsClientListTemplatesPager.NextPage` return value(s) have been changed from `(bool)` to `(AppsClientListTemplatesResponse, error)`
+- Function `*OperationsClientListPager.NextPage` return value(s) have been changed from `(bool)` to `(OperationsClientListResponse, error)`
+- Function `*AppsClientListByResourceGroupPager.NextPage` return value(s) have been changed from `(bool)` to `(AppsClientListByResourceGroupResponse, error)`
+- Function `*AppsClientListTemplatesPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.PageResponse` has been removed
+- Function `*AppsClientListBySubscriptionPager.PageResponse` has been removed
+- Function `*OperationsClientListPager.Err` has been removed
+- Function `*AppsClientListByResourceGroupPager.PageResponse` has been removed
+- Function `*AppsClientListByResourceGroupPager.Err` has been removed
+- Function `*AppsClientListBySubscriptionPager.Err` has been removed
+- Function `*AppsClientListTemplatesPager.Err` has been removed
+- Struct `AppsClientCheckNameAvailabilityResult` has been removed
+- Struct `AppsClientCheckSubdomainAvailabilityResult` has been removed
+- Struct `AppsClientCreateOrUpdateResult` has been removed
+- Struct `AppsClientGetResult` has been removed
+- Struct `AppsClientListByResourceGroupResult` has been removed
+- Struct `AppsClientListBySubscriptionResult` has been removed
+- Struct `AppsClientListTemplatesResult` has been removed
+- Struct `AppsClientUpdateResult` has been removed
+- Struct `OperationsClientListResult` has been removed
+- Field `AppsClientListTemplatesResult` of struct `AppsClientListTemplatesResponse` has been removed
+- Field `RawResponse` of struct `AppsClientListTemplatesResponse` has been removed
+- Field `AppsClientGetResult` of struct `AppsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AppsClientGetResponse` has been removed
+- Field `RawResponse` of struct `AppsClientDeletePollerResponse` has been removed
+- Field `RawResponse` of struct `AppsClientUpdatePollerResponse` has been removed
+- Field `AppsClientCheckNameAvailabilityResult` of struct `AppsClientCheckNameAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `AppsClientCheckNameAvailabilityResponse` has been removed
+- Field `OperationsClientListResult` of struct `OperationsClientListResponse` has been removed
+- Field `RawResponse` of struct `OperationsClientListResponse` has been removed
+- Field `AppsClientCheckSubdomainAvailabilityResult` of struct `AppsClientCheckSubdomainAvailabilityResponse` has been removed
+- Field `RawResponse` of struct `AppsClientCheckSubdomainAvailabilityResponse` has been removed
+- Field `AppsClientListByResourceGroupResult` of struct `AppsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `AppsClientListByResourceGroupResponse` has been removed
+- Field `RawResponse` of struct `AppsClientCreateOrUpdatePollerResponse` has been removed
+- Field `AppsClientCreateOrUpdateResult` of struct `AppsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AppsClientCreateOrUpdateResponse` has been removed
+- Field `RawResponse` of struct `AppsClientDeleteResponse` has been removed
+- Field `AppsClientListBySubscriptionResult` of struct `AppsClientListBySubscriptionResponse` has been removed
+- Field `RawResponse` of struct `AppsClientListBySubscriptionResponse` has been removed
+- Field `AppsClientUpdateResult` of struct `AppsClientUpdateResponse` has been removed
+- Field `RawResponse` of struct `AppsClientUpdateResponse` has been removed
+
+### Features Added
+
+- New function `*OperationsClientListPager.More() bool`
+- New function `CloudErrorBody.MarshalJSON() ([]byte, error)`
+- New function `*AppsClientListTemplatesPager.More() bool`
+- New function `*AppsClientListByResourceGroupPager.More() bool`
+- New function `*AppsClientListBySubscriptionPager.More() bool`
+- New struct `CloudError`
+- New struct `CloudErrorBody`
+- New anonymous field `AppAvailabilityInfo` in struct `AppsClientCheckNameAvailabilityResponse`
+- New anonymous field `App` in struct `AppsClientCreateOrUpdateResponse`
+- New anonymous field `AppListResult` in struct `AppsClientListBySubscriptionResponse`
+- New anonymous field `OperationListResult` in struct `OperationsClientListResponse`
+- New anonymous field `App` in struct `AppsClientUpdateResponse`
+- New anonymous field `App` in struct `AppsClientGetResponse`
+- New anonymous field `AppListResult` in struct `AppsClientListByResourceGroupResponse`
+- New anonymous field `AppTemplatesResult` in struct `AppsClientListTemplatesResponse`
+- New anonymous field `AppAvailabilityInfo` in struct `AppsClientCheckSubdomainAvailabilityResponse`
+
+
+## 0.3.0 (2022-03-10)
+### Breaking Changes
+
+- Type of `Operation.Properties` has been changed from `map[string]interface{}` to `interface{}`
+- Function `CloudErrorBody.MarshalJSON` has been removed
+- Struct `CloudError` has been removed
+- Struct `CloudErrorBody` has been removed
+
+### Features Added
+
+
+
 ## 0.2.0 (2022-01-13)
 ### Breaking Changes
 

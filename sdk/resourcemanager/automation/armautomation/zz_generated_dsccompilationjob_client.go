@@ -35,17 +35,17 @@ type DscCompilationJobClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDscCompilationJobClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DscCompilationJobClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DscCompilationJobClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -63,9 +63,7 @@ func (client *DscCompilationJobClient) BeginCreate(ctx context.Context, resource
 	if err != nil {
 		return DscCompilationJobClientCreatePollerResponse{}, err
 	}
-	result := DscCompilationJobClientCreatePollerResponse{
-		RawResponse: resp,
-	}
+	result := DscCompilationJobClientCreatePollerResponse{}
 	pt, err := armruntime.NewPoller("DscCompilationJobClient.Create", "", resp, client.pl)
 	if err != nil {
 		return DscCompilationJobClientCreatePollerResponse{}, err
@@ -176,7 +174,7 @@ func (client *DscCompilationJobClient) getCreateRequest(ctx context.Context, res
 
 // getHandleResponse handles the Get response.
 func (client *DscCompilationJobClient) getHandleResponse(resp *http.Response) (DscCompilationJobClientGetResponse, error) {
-	result := DscCompilationJobClientGetResponse{RawResponse: resp}
+	result := DscCompilationJobClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DscCompilationJob); err != nil {
 		return DscCompilationJobClientGetResponse{}, err
 	}
@@ -239,7 +237,7 @@ func (client *DscCompilationJobClient) getStreamCreateRequest(ctx context.Contex
 
 // getStreamHandleResponse handles the GetStream response.
 func (client *DscCompilationJobClient) getStreamHandleResponse(resp *http.Response) (DscCompilationJobClientGetStreamResponse, error) {
-	result := DscCompilationJobClientGetStreamResponse{RawResponse: resp}
+	result := DscCompilationJobClientGetStreamResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobStream); err != nil {
 		return DscCompilationJobClientGetStreamResponse{}, err
 	}
@@ -295,7 +293,7 @@ func (client *DscCompilationJobClient) listByAutomationAccountCreateRequest(ctx 
 
 // listByAutomationAccountHandleResponse handles the ListByAutomationAccount response.
 func (client *DscCompilationJobClient) listByAutomationAccountHandleResponse(resp *http.Response) (DscCompilationJobClientListByAutomationAccountResponse, error) {
-	result := DscCompilationJobClientListByAutomationAccountResponse{RawResponse: resp}
+	result := DscCompilationJobClientListByAutomationAccountResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DscCompilationJobListResult); err != nil {
 		return DscCompilationJobClientListByAutomationAccountResponse{}, err
 	}

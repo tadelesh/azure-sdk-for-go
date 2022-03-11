@@ -35,17 +35,17 @@ type ConfigServersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewConfigServersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ConfigServersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ConfigServersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -99,7 +99,7 @@ func (client *ConfigServersClient) getCreateRequest(ctx context.Context, resourc
 
 // getHandleResponse handles the Get response.
 func (client *ConfigServersClient) getHandleResponse(resp *http.Response) (ConfigServersClientGetResponse, error) {
-	result := ConfigServersClientGetResponse{RawResponse: resp}
+	result := ConfigServersClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigServerResource); err != nil {
 		return ConfigServersClientGetResponse{}, err
 	}
@@ -119,9 +119,7 @@ func (client *ConfigServersClient) BeginUpdatePatch(ctx context.Context, resourc
 	if err != nil {
 		return ConfigServersClientUpdatePatchPollerResponse{}, err
 	}
-	result := ConfigServersClientUpdatePatchPollerResponse{
-		RawResponse: resp,
-	}
+	result := ConfigServersClientUpdatePatchPollerResponse{}
 	pt, err := armruntime.NewPoller("ConfigServersClient.UpdatePatch", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ConfigServersClientUpdatePatchPollerResponse{}, err
@@ -188,9 +186,7 @@ func (client *ConfigServersClient) BeginUpdatePut(ctx context.Context, resourceG
 	if err != nil {
 		return ConfigServersClientUpdatePutPollerResponse{}, err
 	}
-	result := ConfigServersClientUpdatePutPollerResponse{
-		RawResponse: resp,
-	}
+	result := ConfigServersClientUpdatePutPollerResponse{}
 	pt, err := armruntime.NewPoller("ConfigServersClient.UpdatePut", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return ConfigServersClientUpdatePutPollerResponse{}, err
@@ -257,9 +253,7 @@ func (client *ConfigServersClient) BeginValidate(ctx context.Context, resourceGr
 	if err != nil {
 		return ConfigServersClientValidatePollerResponse{}, err
 	}
-	result := ConfigServersClientValidatePollerResponse{
-		RawResponse: resp,
-	}
+	result := ConfigServersClientValidatePollerResponse{}
 	pt, err := armruntime.NewPoller("ConfigServersClient.Validate", "location", resp, client.pl)
 	if err != nil {
 		return ConfigServersClientValidatePollerResponse{}, err

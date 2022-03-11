@@ -35,17 +35,17 @@ type VPNGatewaysClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewVPNGatewaysClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *VPNGatewaysClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &VPNGatewaysClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host:           string(ep),
+		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -62,9 +62,7 @@ func (client *VPNGatewaysClient) BeginCreateOrUpdate(ctx context.Context, resour
 	if err != nil {
 		return VPNGatewaysClientCreateOrUpdatePollerResponse{}, err
 	}
-	result := VPNGatewaysClientCreateOrUpdatePollerResponse{
-		RawResponse: resp,
-	}
+	result := VPNGatewaysClientCreateOrUpdatePollerResponse{}
 	pt, err := armruntime.NewPoller("VPNGatewaysClient.CreateOrUpdate", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VPNGatewaysClientCreateOrUpdatePollerResponse{}, err
@@ -128,9 +126,7 @@ func (client *VPNGatewaysClient) BeginDelete(ctx context.Context, resourceGroupN
 	if err != nil {
 		return VPNGatewaysClientDeletePollerResponse{}, err
 	}
-	result := VPNGatewaysClientDeletePollerResponse{
-		RawResponse: resp,
-	}
+	result := VPNGatewaysClientDeletePollerResponse{}
 	pt, err := armruntime.NewPoller("VPNGatewaysClient.Delete", "location", resp, client.pl)
 	if err != nil {
 		return VPNGatewaysClientDeletePollerResponse{}, err
@@ -232,7 +228,7 @@ func (client *VPNGatewaysClient) getCreateRequest(ctx context.Context, resourceG
 
 // getHandleResponse handles the Get response.
 func (client *VPNGatewaysClient) getHandleResponse(resp *http.Response) (VPNGatewaysClientGetResponse, error) {
-	result := VPNGatewaysClientGetResponse{RawResponse: resp}
+	result := VPNGatewaysClientGetResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VPNGateway); err != nil {
 		return VPNGatewaysClientGetResponse{}, err
 	}
@@ -274,7 +270,7 @@ func (client *VPNGatewaysClient) listCreateRequest(ctx context.Context, options 
 
 // listHandleResponse handles the List response.
 func (client *VPNGatewaysClient) listHandleResponse(resp *http.Response) (VPNGatewaysClientListResponse, error) {
-	result := VPNGatewaysClientListResponse{RawResponse: resp}
+	result := VPNGatewaysClientListResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListVPNGatewaysResult); err != nil {
 		return VPNGatewaysClientListResponse{}, err
 	}
@@ -322,7 +318,7 @@ func (client *VPNGatewaysClient) listByResourceGroupCreateRequest(ctx context.Co
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
 func (client *VPNGatewaysClient) listByResourceGroupHandleResponse(resp *http.Response) (VPNGatewaysClientListByResourceGroupResponse, error) {
-	result := VPNGatewaysClientListByResourceGroupResponse{RawResponse: resp}
+	result := VPNGatewaysClientListByResourceGroupResponse{}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListVPNGatewaysResult); err != nil {
 		return VPNGatewaysClientListByResourceGroupResponse{}, err
 	}
@@ -339,9 +335,7 @@ func (client *VPNGatewaysClient) BeginReset(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return VPNGatewaysClientResetPollerResponse{}, err
 	}
-	result := VPNGatewaysClientResetPollerResponse{
-		RawResponse: resp,
-	}
+	result := VPNGatewaysClientResetPollerResponse{}
 	pt, err := armruntime.NewPoller("VPNGatewaysClient.Reset", "location", resp, client.pl)
 	if err != nil {
 		return VPNGatewaysClientResetPollerResponse{}, err
@@ -406,9 +400,7 @@ func (client *VPNGatewaysClient) BeginStartPacketCapture(ctx context.Context, re
 	if err != nil {
 		return VPNGatewaysClientStartPacketCapturePollerResponse{}, err
 	}
-	result := VPNGatewaysClientStartPacketCapturePollerResponse{
-		RawResponse: resp,
-	}
+	result := VPNGatewaysClientStartPacketCapturePollerResponse{}
 	pt, err := armruntime.NewPoller("VPNGatewaysClient.StartPacketCapture", "location", resp, client.pl)
 	if err != nil {
 		return VPNGatewaysClientStartPacketCapturePollerResponse{}, err
@@ -476,9 +468,7 @@ func (client *VPNGatewaysClient) BeginStopPacketCapture(ctx context.Context, res
 	if err != nil {
 		return VPNGatewaysClientStopPacketCapturePollerResponse{}, err
 	}
-	result := VPNGatewaysClientStopPacketCapturePollerResponse{
-		RawResponse: resp,
-	}
+	result := VPNGatewaysClientStopPacketCapturePollerResponse{}
 	pt, err := armruntime.NewPoller("VPNGatewaysClient.StopPacketCapture", "location", resp, client.pl)
 	if err != nil {
 		return VPNGatewaysClientStopPacketCapturePollerResponse{}, err
@@ -547,9 +537,7 @@ func (client *VPNGatewaysClient) BeginUpdateTags(ctx context.Context, resourceGr
 	if err != nil {
 		return VPNGatewaysClientUpdateTagsPollerResponse{}, err
 	}
-	result := VPNGatewaysClientUpdateTagsPollerResponse{
-		RawResponse: resp,
-	}
+	result := VPNGatewaysClientUpdateTagsPollerResponse{}
 	pt, err := armruntime.NewPoller("VPNGatewaysClient.UpdateTags", "azure-async-operation", resp, client.pl)
 	if err != nil {
 		return VPNGatewaysClientUpdateTagsPollerResponse{}, err
