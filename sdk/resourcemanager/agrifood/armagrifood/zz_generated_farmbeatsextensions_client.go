@@ -26,23 +26,23 @@ import (
 // Don't use this type directly, use NewFarmBeatsExtensionsClient() instead.
 type FarmBeatsExtensionsClient struct {
 	host string
-	pl   runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewFarmBeatsExtensionsClient creates a new instance of FarmBeatsExtensionsClient with the specified values.
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFarmBeatsExtensionsClient(credential azcore.TokenCredential, options *arm.ClientOptions) *FarmBeatsExtensionsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FarmBeatsExtensionsClient{
-		host: string(cp.Endpoint),
-		pl:   armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -97,7 +97,7 @@ func (client *FarmBeatsExtensionsClient) getHandleResponse(resp *http.Response) 
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - FarmBeatsExtensionsClientListOptions contains the optional parameters for the FarmBeatsExtensionsClient.List
 // method.
-func (client *FarmBeatsExtensionsClient) List(options *FarmBeatsExtensionsClientListOptions) *FarmBeatsExtensionsClientListPager {
+func (client *FarmBeatsExtensionsClient) List(options *FarmBeatsExtensionsClientListOptions) (*FarmBeatsExtensionsClientListPager) {
 	return &FarmBeatsExtensionsClientListPager{
 		client: client,
 		requester: func(ctx context.Context) (*policy.Request, error) {
@@ -118,24 +118,24 @@ func (client *FarmBeatsExtensionsClient) listCreateRequest(ctx context.Context, 
 	}
 	reqQP := req.Raw().URL.Query()
 	if options != nil && options.FarmBeatsExtensionIDs != nil {
-		for _, qv := range options.FarmBeatsExtensionIDs {
-			reqQP.Add("farmBeatsExtensionIds", qv)
-		}
+			for _, qv := range options.FarmBeatsExtensionIDs {
+		reqQP.Add("farmBeatsExtensionIds", qv)
+	}
 	}
 	if options != nil && options.FarmBeatsExtensionNames != nil {
-		for _, qv := range options.FarmBeatsExtensionNames {
-			reqQP.Add("farmBeatsExtensionNames", qv)
-		}
+			for _, qv := range options.FarmBeatsExtensionNames {
+		reqQP.Add("farmBeatsExtensionNames", qv)
+	}
 	}
 	if options != nil && options.ExtensionCategories != nil {
-		for _, qv := range options.ExtensionCategories {
-			reqQP.Add("extensionCategories", qv)
-		}
+			for _, qv := range options.ExtensionCategories {
+		reqQP.Add("extensionCategories", qv)
+	}
 	}
 	if options != nil && options.PublisherIDs != nil {
-		for _, qv := range options.PublisherIDs {
-			reqQP.Add("publisherIds", qv)
-		}
+			for _, qv := range options.PublisherIDs {
+		reqQP.Add("publisherIds", qv)
+	}
 	}
 	if options != nil && options.MaxPageSize != nil {
 		reqQP.Set("$maxPageSize", strconv.FormatInt(int64(*options.MaxPageSize), 10))
@@ -154,3 +154,4 @@ func (client *FarmBeatsExtensionsClient) listHandleResponse(resp *http.Response)
 	}
 	return result, nil
 }
+

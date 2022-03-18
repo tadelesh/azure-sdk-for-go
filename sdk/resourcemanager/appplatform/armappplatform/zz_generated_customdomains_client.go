@@ -24,9 +24,9 @@ import (
 // CustomDomainsClient contains the methods for the CustomDomains group.
 // Don't use this type directly, use NewCustomDomainsClient() instead.
 type CustomDomainsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewCustomDomainsClient creates a new instance of CustomDomainsClient with the specified values.
@@ -35,17 +35,17 @@ type CustomDomainsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCustomDomainsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CustomDomainsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CustomDomainsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -72,7 +72,7 @@ func (client *CustomDomainsClient) BeginCreateOrUpdate(ctx context.Context, reso
 	if err != nil {
 		return CustomDomainsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result.Poller = &CustomDomainsClientCreateOrUpdatePoller{
+	result.Poller = &CustomDomainsClientCreateOrUpdatePoller {
 		pt: pt,
 	}
 	return result, nil
@@ -92,7 +92,7 @@ func (client *CustomDomainsClient) createOrUpdate(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -123,7 +123,7 @@ func (client *CustomDomainsClient) createOrUpdateCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, domainResource)
@@ -150,7 +150,7 @@ func (client *CustomDomainsClient) BeginDelete(ctx context.Context, resourceGrou
 	if err != nil {
 		return CustomDomainsClientDeletePollerResponse{}, err
 	}
-	result.Poller = &CustomDomainsClientDeletePoller{
+	result.Poller = &CustomDomainsClientDeletePoller {
 		pt: pt,
 	}
 	return result, nil
@@ -170,7 +170,7 @@ func (client *CustomDomainsClient) deleteOperation(ctx context.Context, resource
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -201,7 +201,7 @@ func (client *CustomDomainsClient) deleteCreateRequest(ctx context.Context, reso
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -258,7 +258,7 @@ func (client *CustomDomainsClient) getCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -280,7 +280,7 @@ func (client *CustomDomainsClient) getHandleResponse(resp *http.Response) (Custo
 // serviceName - The name of the Service resource.
 // appName - The name of the App resource.
 // options - CustomDomainsClientListOptions contains the optional parameters for the CustomDomainsClient.List method.
-func (client *CustomDomainsClient) List(resourceGroupName string, serviceName string, appName string, options *CustomDomainsClientListOptions) *CustomDomainsClientListPager {
+func (client *CustomDomainsClient) List(resourceGroupName string, serviceName string, appName string, options *CustomDomainsClientListOptions) (*CustomDomainsClientListPager) {
 	return &CustomDomainsClientListPager{
 		client: client,
 		requester: func(ctx context.Context) (*policy.Request, error) {
@@ -316,7 +316,7 @@ func (client *CustomDomainsClient) listCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -353,7 +353,7 @@ func (client *CustomDomainsClient) BeginUpdate(ctx context.Context, resourceGrou
 	if err != nil {
 		return CustomDomainsClientUpdatePollerResponse{}, err
 	}
-	result.Poller = &CustomDomainsClientUpdatePoller{
+	result.Poller = &CustomDomainsClientUpdatePoller {
 		pt: pt,
 	}
 	return result, nil
@@ -373,7 +373,7 @@ func (client *CustomDomainsClient) update(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -404,8 +404,9 @@ func (client *CustomDomainsClient) updateCreateRequest(ctx context.Context, reso
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, domainResource)
 }
+

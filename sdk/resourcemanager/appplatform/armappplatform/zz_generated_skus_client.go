@@ -24,9 +24,9 @@ import (
 // SKUsClient contains the methods for the SKUs group.
 // Don't use this type directly, use NewSKUsClient() instead.
 type SKUsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewSKUsClient creates a new instance of SKUsClient with the specified values.
@@ -35,17 +35,17 @@ type SKUsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewSKUsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *SKUsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &SKUsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -53,7 +53,7 @@ func NewSKUsClient(subscriptionID string, credential azcore.TokenCredential, opt
 // List - Lists all of the available skus of the Microsoft.AppPlatform provider.
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - SKUsClientListOptions contains the optional parameters for the SKUsClient.List method.
-func (client *SKUsClient) List(options *SKUsClientListOptions) *SKUsClientListPager {
+func (client *SKUsClient) List(options *SKUsClientListOptions) (*SKUsClientListPager) {
 	return &SKUsClientListPager{
 		client: client,
 		requester: func(ctx context.Context) (*policy.Request, error) {
@@ -77,7 +77,7 @@ func (client *SKUsClient) listCreateRequest(ctx context.Context, options *SKUsCl
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -91,3 +91,4 @@ func (client *SKUsClient) listHandleResponse(resp *http.Response) (SKUsClientLis
 	}
 	return result, nil
 }
+

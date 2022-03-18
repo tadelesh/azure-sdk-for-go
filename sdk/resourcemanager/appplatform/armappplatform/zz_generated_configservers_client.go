@@ -24,9 +24,9 @@ import (
 // ConfigServersClient contains the methods for the ConfigServers group.
 // Don't use this type directly, use NewConfigServersClient() instead.
 type ConfigServersClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewConfigServersClient creates a new instance of ConfigServersClient with the specified values.
@@ -35,17 +35,17 @@ type ConfigServersClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewConfigServersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *ConfigServersClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &ConfigServersClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -91,7 +91,7 @@ func (client *ConfigServersClient) getCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -126,7 +126,7 @@ func (client *ConfigServersClient) BeginUpdatePatch(ctx context.Context, resourc
 	if err != nil {
 		return ConfigServersClientUpdatePatchPollerResponse{}, err
 	}
-	result.Poller = &ConfigServersClientUpdatePatchPoller{
+	result.Poller = &ConfigServersClientUpdatePatchPoller {
 		pt: pt,
 	}
 	return result, nil
@@ -146,7 +146,7 @@ func (client *ConfigServersClient) updatePatch(ctx context.Context, resourceGrou
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updatePatchCreateRequest creates the UpdatePatch request.
@@ -169,7 +169,7 @@ func (client *ConfigServersClient) updatePatchCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, configServerResource)
@@ -195,7 +195,7 @@ func (client *ConfigServersClient) BeginUpdatePut(ctx context.Context, resourceG
 	if err != nil {
 		return ConfigServersClientUpdatePutPollerResponse{}, err
 	}
-	result.Poller = &ConfigServersClientUpdatePutPoller{
+	result.Poller = &ConfigServersClientUpdatePutPoller {
 		pt: pt,
 	}
 	return result, nil
@@ -215,7 +215,7 @@ func (client *ConfigServersClient) updatePut(ctx context.Context, resourceGroupN
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updatePutCreateRequest creates the UpdatePut request.
@@ -238,7 +238,7 @@ func (client *ConfigServersClient) updatePutCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, configServerResource)
@@ -264,7 +264,7 @@ func (client *ConfigServersClient) BeginValidate(ctx context.Context, resourceGr
 	if err != nil {
 		return ConfigServersClientValidatePollerResponse{}, err
 	}
-	result.Poller = &ConfigServersClientValidatePoller{
+	result.Poller = &ConfigServersClientValidatePoller {
 		pt: pt,
 	}
 	return result, nil
@@ -284,7 +284,7 @@ func (client *ConfigServersClient) validate(ctx context.Context, resourceGroupNa
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // validateCreateRequest creates the Validate request.
@@ -307,8 +307,9 @@ func (client *ConfigServersClient) validateCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, configServerSettings)
 }
+

@@ -19,12 +19,14 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/appplatform/armappplatform"
 )
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Services_Get.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_Get.json
 func ExampleServicesClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewServicesClient("<subscription-id>", cred, nil)
 	res, err := client.Get(ctx,
@@ -32,17 +34,21 @@ func ExampleServicesClient_Get() {
 		"<service-name>",
 		nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to finish the request: %v", err)
+		return
 	}
-	log.Printf("Response result: %#v\n", res.ServicesClientGetResult)
+	// TODO: use response item
+	_ = res.ServicesClientGetResult
 }
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Services_CreateOrUpdate.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_CreateOrUpdate.json
 func ExampleServicesClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewServicesClient("<subscription-id>", cred, nil)
 	poller, err := client.BeginCreateOrUpdate(ctx,
@@ -61,21 +67,26 @@ func ExampleServicesClient_BeginCreateOrUpdate() {
 		},
 		nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to finish the request: %v", err)
+		return
 	}
 	res, err := poller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to pull the result: %v", err)
+		return
 	}
-	log.Printf("Response result: %#v\n", res.ServicesClientCreateOrUpdateResult)
+	// TODO: use response item
+	_ = res.ServicesClientCreateOrUpdateResult
 }
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Services_Delete.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_Delete.json
 func ExampleServicesClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewServicesClient("<subscription-id>", cred, nil)
 	poller, err := client.BeginDelete(ctx,
@@ -83,20 +94,24 @@ func ExampleServicesClient_BeginDelete() {
 		"<service-name>",
 		nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to finish the request: %v", err)
+		return
 	}
 	_, err = poller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to pull the result: %v", err)
+		return
 	}
 }
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Services_Update.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_Update.json
 func ExampleServicesClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewServicesClient("<subscription-id>", cred, nil)
 	poller, err := client.BeginUpdate(ctx,
@@ -115,21 +130,26 @@ func ExampleServicesClient_BeginUpdate() {
 		},
 		nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to finish the request: %v", err)
+		return
 	}
 	res, err := poller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to pull the result: %v", err)
+		return
 	}
-	log.Printf("Response result: %#v\n", res.ServicesClientUpdateResult)
+	// TODO: use response item
+	_ = res.ServicesClientUpdateResult
 }
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Services_ListTestKeys.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_ListTestKeys.json
 func ExampleServicesClient_ListTestKeys() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewServicesClient("<subscription-id>", cred, nil)
 	res, err := client.ListTestKeys(ctx,
@@ -137,38 +157,46 @@ func ExampleServicesClient_ListTestKeys() {
 		"<service-name>",
 		nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to finish the request: %v", err)
+		return
 	}
-	log.Printf("Response result: %#v\n", res.ServicesClientListTestKeysResult)
+	// TODO: use response item
+	_ = res.ServicesClientListTestKeysResult
 }
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Services_RegenerateTestKey.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_RegenerateTestKey.json
 func ExampleServicesClient_RegenerateTestKey() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewServicesClient("<subscription-id>", cred, nil)
 	res, err := client.RegenerateTestKey(ctx,
 		"<resource-group-name>",
 		"<service-name>",
 		armappplatform.RegenerateTestKeyRequestPayload{
-			KeyType: armappplatform.TestKeyType("Primary").ToPtr(),
+			KeyType: armappplatform.TestKeyTypePrimary.ToPtr(),
 		},
 		nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to finish the request: %v", err)
+		return
 	}
-	log.Printf("Response result: %#v\n", res.ServicesClientRegenerateTestKeyResult)
+	// TODO: use response item
+	_ = res.ServicesClientRegenerateTestKeyResult
 }
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Services_DisableTestEndpoint.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_DisableTestEndpoint.json
 func ExampleServicesClient_DisableTestEndpoint() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewServicesClient("<subscription-id>", cred, nil)
 	_, err = client.DisableTestEndpoint(ctx,
@@ -176,16 +204,19 @@ func ExampleServicesClient_DisableTestEndpoint() {
 		"<service-name>",
 		nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to finish the request: %v", err)
+		return
 	}
 }
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Services_EnableTestEndpoint.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_EnableTestEndpoint.json
 func ExampleServicesClient_EnableTestEndpoint() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewServicesClient("<subscription-id>", cred, nil)
 	res, err := client.EnableTestEndpoint(ctx,
@@ -193,59 +224,21 @@ func ExampleServicesClient_EnableTestEndpoint() {
 		"<service-name>",
 		nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to finish the request: %v", err)
+		return
 	}
-	log.Printf("Response result: %#v\n", res.ServicesClientEnableTestEndpointResult)
+	// TODO: use response item
+	_ = res.ServicesClientEnableTestEndpointResult
 }
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Services_Stop.json
-func ExampleServicesClient_BeginStop() {
-	cred, err := azidentity.NewDefaultAzureCredential(nil)
-	if err != nil {
-		log.Fatalf("failed to obtain a credential: %v", err)
-	}
-	ctx := context.Background()
-	client := armappplatform.NewServicesClient("<subscription-id>", cred, nil)
-	poller, err := client.BeginStop(ctx,
-		"<resource-group-name>",
-		"<service-name>",
-		nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Services_Start.json
-func ExampleServicesClient_BeginStart() {
-	cred, err := azidentity.NewDefaultAzureCredential(nil)
-	if err != nil {
-		log.Fatalf("failed to obtain a credential: %v", err)
-	}
-	ctx := context.Background()
-	client := armappplatform.NewServicesClient("<subscription-id>", cred, nil)
-	poller, err := client.BeginStart(ctx,
-		"<resource-group-name>",
-		"<service-name>",
-		nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-	_, err = poller.PollUntilDone(ctx, 30*time.Second)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Services_CheckNameAvailability.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_CheckNameAvailability.json
 func ExampleServicesClient_CheckNameAvailability() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewServicesClient("<subscription-id>", cred, nil)
 	res, err := client.CheckNameAvailability(ctx,
@@ -256,17 +249,21 @@ func ExampleServicesClient_CheckNameAvailability() {
 		},
 		nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to finish the request: %v", err)
+		return
 	}
-	log.Printf("Response result: %#v\n", res.ServicesClientCheckNameAvailabilityResult)
+	// TODO: use response item
+	_ = res.ServicesClientCheckNameAvailabilityResult
 }
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Services_ListBySubscription.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_ListBySubscription.json
 func ExampleServicesClient_ListBySubscription() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewServicesClient("<subscription-id>", cred, nil)
 	pager := client.ListBySubscription(nil)
@@ -274,22 +271,26 @@ func ExampleServicesClient_ListBySubscription() {
 		nextResult := pager.NextPage(ctx)
 		if err := pager.Err(); err != nil {
 			log.Fatalf("failed to advance page: %v", err)
+			return
 		}
 		if !nextResult {
 			break
 		}
 		for _, v := range pager.PageResponse().Value {
-			log.Printf("Pager result: %#v\n", v)
+			// TODO: use page item
+			_ = v
 		}
 	}
 }
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Services_List.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Services_List.json
 func ExampleServicesClient_List() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewServicesClient("<subscription-id>", cred, nil)
 	pager := client.List("<resource-group-name>",
@@ -298,12 +299,14 @@ func ExampleServicesClient_List() {
 		nextResult := pager.NextPage(ctx)
 		if err := pager.Err(); err != nil {
 			log.Fatalf("failed to advance page: %v", err)
+			return
 		}
 		if !nextResult {
 			break
 		}
 		for _, v := range pager.PageResponse().Value {
-			log.Printf("Pager result: %#v\n", v)
+			// TODO: use page item
+			_ = v
 		}
 	}
 }

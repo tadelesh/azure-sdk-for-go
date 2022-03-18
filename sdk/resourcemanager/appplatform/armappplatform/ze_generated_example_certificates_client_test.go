@@ -19,12 +19,14 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/appplatform/armappplatform"
 )
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Certificates_Get.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Certificates_Get.json
 func ExampleCertificatesClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewCertificatesClient("<subscription-id>", cred, nil)
 	res, err := client.Get(ctx,
@@ -33,17 +35,21 @@ func ExampleCertificatesClient_Get() {
 		"<certificate-name>",
 		nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to finish the request: %v", err)
+		return
 	}
-	log.Printf("Response result: %#v\n", res.CertificatesClientGetResult)
+	// TODO: use response item
+	_ = res.CertificatesClientGetResult
 }
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Certificates_CreateOrUpdate.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Certificates_CreateOrUpdate.json
 func ExampleCertificatesClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewCertificatesClient("<subscription-id>", cred, nil)
 	poller, err := client.BeginCreateOrUpdate(ctx,
@@ -51,8 +57,7 @@ func ExampleCertificatesClient_BeginCreateOrUpdate() {
 		"<service-name>",
 		"<certificate-name>",
 		armappplatform.CertificateResource{
-			Properties: &armappplatform.KeyVaultCertificateProperties{
-				Type:             to.StringPtr("<type>"),
+			Properties: &armappplatform.CertificateProperties{
 				CertVersion:      to.StringPtr("<cert-version>"),
 				KeyVaultCertName: to.StringPtr("<key-vault-cert-name>"),
 				VaultURI:         to.StringPtr("<vault-uri>"),
@@ -60,21 +65,26 @@ func ExampleCertificatesClient_BeginCreateOrUpdate() {
 		},
 		nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to finish the request: %v", err)
+		return
 	}
 	res, err := poller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to pull the result: %v", err)
+		return
 	}
-	log.Printf("Response result: %#v\n", res.CertificatesClientCreateOrUpdateResult)
+	// TODO: use response item
+	_ = res.CertificatesClientCreateOrUpdateResult
 }
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Certificates_Delete.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Certificates_Delete.json
 func ExampleCertificatesClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewCertificatesClient("<subscription-id>", cred, nil)
 	poller, err := client.BeginDelete(ctx,
@@ -83,20 +93,24 @@ func ExampleCertificatesClient_BeginDelete() {
 		"<certificate-name>",
 		nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to finish the request: %v", err)
+		return
 	}
 	_, err = poller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to pull the result: %v", err)
+		return
 	}
 }
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Certificates_List.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Certificates_List.json
 func ExampleCertificatesClient_List() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewCertificatesClient("<subscription-id>", cred, nil)
 	pager := client.List("<resource-group-name>",
@@ -106,12 +120,14 @@ func ExampleCertificatesClient_List() {
 		nextResult := pager.NextPage(ctx)
 		if err := pager.Err(); err != nil {
 			log.Fatalf("failed to advance page: %v", err)
+			return
 		}
 		if !nextResult {
 			break
 		}
 		for _, v := range pager.PageResponse().Value {
-			log.Printf("Pager result: %#v\n", v)
+			// TODO: use page item
+			_ = v
 		}
 	}
 }

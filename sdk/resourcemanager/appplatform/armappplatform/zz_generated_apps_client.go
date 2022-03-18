@@ -24,9 +24,9 @@ import (
 // AppsClient contains the methods for the Apps group.
 // Don't use this type directly, use NewAppsClient() instead.
 type AppsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewAppsClient creates a new instance of AppsClient with the specified values.
@@ -35,17 +35,17 @@ type AppsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewAppsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *AppsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &AppsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -71,7 +71,7 @@ func (client *AppsClient) BeginCreateOrUpdate(ctx context.Context, resourceGroup
 	if err != nil {
 		return AppsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result.Poller = &AppsClientCreateOrUpdatePoller{
+	result.Poller = &AppsClientCreateOrUpdatePoller {
 		pt: pt,
 	}
 	return result, nil
@@ -91,7 +91,7 @@ func (client *AppsClient) createOrUpdate(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -118,7 +118,7 @@ func (client *AppsClient) createOrUpdateCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, appResource)
@@ -143,7 +143,7 @@ func (client *AppsClient) BeginDelete(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return AppsClientDeletePollerResponse{}, err
 	}
-	result.Poller = &AppsClientDeletePoller{
+	result.Poller = &AppsClientDeletePoller {
 		pt: pt,
 	}
 	return result, nil
@@ -163,7 +163,7 @@ func (client *AppsClient) deleteOperation(ctx context.Context, resourceGroupName
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -190,7 +190,7 @@ func (client *AppsClient) deleteCreateRequest(ctx context.Context, resourceGroup
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -242,7 +242,7 @@ func (client *AppsClient) getCreateRequest(ctx context.Context, resourceGroupNam
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	if options != nil && options.SyncStatus != nil {
 		reqQP.Set("syncStatus", *options.SyncStatus)
 	}
@@ -307,7 +307,7 @@ func (client *AppsClient) getResourceUploadURLCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -328,7 +328,7 @@ func (client *AppsClient) getResourceUploadURLHandleResponse(resp *http.Response
 // Resource Manager API or the portal.
 // serviceName - The name of the Service resource.
 // options - AppsClientListOptions contains the optional parameters for the AppsClient.List method.
-func (client *AppsClient) List(resourceGroupName string, serviceName string, options *AppsClientListOptions) *AppsClientListPager {
+func (client *AppsClient) List(resourceGroupName string, serviceName string, options *AppsClientListOptions) (*AppsClientListPager) {
 	return &AppsClientListPager{
 		client: client,
 		requester: func(ctx context.Context) (*policy.Request, error) {
@@ -360,7 +360,7 @@ func (client *AppsClient) listCreateRequest(ctx context.Context, resourceGroupNa
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -373,80 +373,6 @@ func (client *AppsClient) listHandleResponse(resp *http.Response) (AppsClientLis
 		return AppsClientListResponse{}, err
 	}
 	return result, nil
-}
-
-// BeginSetActiveDeployments - Set existing Deployment under the app as active
-// If the operation fails it returns an *azcore.ResponseError type.
-// resourceGroupName - The name of the resource group that contains the resource. You can obtain this value from the Azure
-// Resource Manager API or the portal.
-// serviceName - The name of the Service resource.
-// appName - The name of the App resource.
-// activeDeploymentCollection - A list of Deployment name to be active.
-// options - AppsClientBeginSetActiveDeploymentsOptions contains the optional parameters for the AppsClient.BeginSetActiveDeployments
-// method.
-func (client *AppsClient) BeginSetActiveDeployments(ctx context.Context, resourceGroupName string, serviceName string, appName string, activeDeploymentCollection ActiveDeploymentCollection, options *AppsClientBeginSetActiveDeploymentsOptions) (AppsClientSetActiveDeploymentsPollerResponse, error) {
-	resp, err := client.setActiveDeployments(ctx, resourceGroupName, serviceName, appName, activeDeploymentCollection, options)
-	if err != nil {
-		return AppsClientSetActiveDeploymentsPollerResponse{}, err
-	}
-	result := AppsClientSetActiveDeploymentsPollerResponse{
-		RawResponse: resp,
-	}
-	pt, err := armruntime.NewPoller("AppsClient.SetActiveDeployments", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return AppsClientSetActiveDeploymentsPollerResponse{}, err
-	}
-	result.Poller = &AppsClientSetActiveDeploymentsPoller{
-		pt: pt,
-	}
-	return result, nil
-}
-
-// SetActiveDeployments - Set existing Deployment under the app as active
-// If the operation fails it returns an *azcore.ResponseError type.
-func (client *AppsClient) setActiveDeployments(ctx context.Context, resourceGroupName string, serviceName string, appName string, activeDeploymentCollection ActiveDeploymentCollection, options *AppsClientBeginSetActiveDeploymentsOptions) (*http.Response, error) {
-	req, err := client.setActiveDeploymentsCreateRequest(ctx, resourceGroupName, serviceName, appName, activeDeploymentCollection, options)
-	if err != nil {
-		return nil, err
-	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
-		return nil, runtime.NewResponseError(resp)
-	}
-	return resp, nil
-}
-
-// setActiveDeploymentsCreateRequest creates the SetActiveDeployments request.
-func (client *AppsClient) setActiveDeploymentsCreateRequest(ctx context.Context, resourceGroupName string, serviceName string, appName string, activeDeploymentCollection ActiveDeploymentCollection, options *AppsClientBeginSetActiveDeploymentsOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.AppPlatform/Spring/{serviceName}/apps/{appName}/setActiveDeployments"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if serviceName == "" {
-		return nil, errors.New("parameter serviceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{serviceName}", url.PathEscape(serviceName))
-	if appName == "" {
-		return nil, errors.New("parameter appName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{appName}", url.PathEscape(appName))
-	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.host, urlPath))
-	if err != nil {
-		return nil, err
-	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header.Set("Accept", "application/json")
-	return req, runtime.MarshalAsJSON(req, activeDeploymentCollection)
 }
 
 // BeginUpdate - Operation to update an exiting App.
@@ -469,7 +395,7 @@ func (client *AppsClient) BeginUpdate(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return AppsClientUpdatePollerResponse{}, err
 	}
-	result.Poller = &AppsClientUpdatePoller{
+	result.Poller = &AppsClientUpdatePoller {
 		pt: pt,
 	}
 	return result, nil
@@ -489,7 +415,7 @@ func (client *AppsClient) update(ctx context.Context, resourceGroupName string, 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -516,7 +442,7 @@ func (client *AppsClient) updateCreateRequest(ctx context.Context, resourceGroup
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, appResource)
@@ -569,7 +495,7 @@ func (client *AppsClient) validateDomainCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, validatePayload)
@@ -583,3 +509,4 @@ func (client *AppsClient) validateDomainHandleResponse(resp *http.Response) (App
 	}
 	return result, nil
 }
+

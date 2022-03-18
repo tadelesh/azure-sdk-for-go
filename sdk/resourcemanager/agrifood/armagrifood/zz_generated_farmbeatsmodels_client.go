@@ -25,9 +25,9 @@ import (
 // FarmBeatsModelsClient contains the methods for the FarmBeatsModels group.
 // Don't use this type directly, use NewFarmBeatsModelsClient() instead.
 type FarmBeatsModelsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewFarmBeatsModelsClient creates a new instance of FarmBeatsModelsClient with the specified values.
@@ -35,17 +35,17 @@ type FarmBeatsModelsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewFarmBeatsModelsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *FarmBeatsModelsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &FarmBeatsModelsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -213,7 +213,7 @@ func (client *FarmBeatsModelsClient) getHandleResponse(resp *http.Response) (Far
 // resourceGroupName - The name of the resource group. The name is case insensitive.
 // options - FarmBeatsModelsClientListByResourceGroupOptions contains the optional parameters for the FarmBeatsModelsClient.ListByResourceGroup
 // method.
-func (client *FarmBeatsModelsClient) ListByResourceGroup(resourceGroupName string, options *FarmBeatsModelsClientListByResourceGroupOptions) *FarmBeatsModelsClientListByResourceGroupPager {
+func (client *FarmBeatsModelsClient) ListByResourceGroup(resourceGroupName string, options *FarmBeatsModelsClientListByResourceGroupOptions) (*FarmBeatsModelsClientListByResourceGroupPager) {
 	return &FarmBeatsModelsClientListByResourceGroupPager{
 		client: client,
 		requester: func(ctx context.Context) (*policy.Request, error) {
@@ -266,7 +266,7 @@ func (client *FarmBeatsModelsClient) listByResourceGroupHandleResponse(resp *htt
 // If the operation fails it returns an *azcore.ResponseError type.
 // options - FarmBeatsModelsClientListBySubscriptionOptions contains the optional parameters for the FarmBeatsModelsClient.ListBySubscription
 // method.
-func (client *FarmBeatsModelsClient) ListBySubscription(options *FarmBeatsModelsClientListBySubscriptionOptions) *FarmBeatsModelsClientListBySubscriptionPager {
+func (client *FarmBeatsModelsClient) ListBySubscription(options *FarmBeatsModelsClientListBySubscriptionOptions) (*FarmBeatsModelsClientListBySubscriptionPager) {
 	return &FarmBeatsModelsClientListBySubscriptionPager{
 		client: client,
 		requester: func(ctx context.Context) (*policy.Request, error) {
@@ -366,3 +366,4 @@ func (client *FarmBeatsModelsClient) updateHandleResponse(resp *http.Response) (
 	}
 	return result, nil
 }
+

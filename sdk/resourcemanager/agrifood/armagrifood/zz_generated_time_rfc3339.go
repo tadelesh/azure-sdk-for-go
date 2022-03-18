@@ -8,6 +8,8 @@
 
 package armagrifood
 
+
+
 import (
 	"encoding/json"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
@@ -16,6 +18,8 @@ import (
 	"strings"
 	"time"
 )
+
+
 
 const (
 	utcLayoutJSON = `"2006-01-02T15:04:05.999999999"`
@@ -59,6 +63,7 @@ func (t *timeRFC3339) Parse(layout, value string) error {
 	*t = timeRFC3339(p)
 	return err
 }
+
 
 func populateTimeRFC3339(m map[string]interface{}, k string, t *time.Time) {
 	if t == nil {

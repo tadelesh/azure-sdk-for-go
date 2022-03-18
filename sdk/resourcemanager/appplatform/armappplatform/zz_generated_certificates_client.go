@@ -24,9 +24,9 @@ import (
 // CertificatesClient contains the methods for the Certificates group.
 // Don't use this type directly, use NewCertificatesClient() instead.
 type CertificatesClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewCertificatesClient creates a new instance of CertificatesClient with the specified values.
@@ -35,17 +35,17 @@ type CertificatesClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewCertificatesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *CertificatesClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &CertificatesClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -71,7 +71,7 @@ func (client *CertificatesClient) BeginCreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return CertificatesClientCreateOrUpdatePollerResponse{}, err
 	}
-	result.Poller = &CertificatesClientCreateOrUpdatePoller{
+	result.Poller = &CertificatesClientCreateOrUpdatePoller {
 		pt: pt,
 	}
 	return result, nil
@@ -91,7 +91,7 @@ func (client *CertificatesClient) createOrUpdate(ctx context.Context, resourceGr
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -118,7 +118,7 @@ func (client *CertificatesClient) createOrUpdateCreateRequest(ctx context.Contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, certificateResource)
@@ -144,7 +144,7 @@ func (client *CertificatesClient) BeginDelete(ctx context.Context, resourceGroup
 	if err != nil {
 		return CertificatesClientDeletePollerResponse{}, err
 	}
-	result.Poller = &CertificatesClientDeletePoller{
+	result.Poller = &CertificatesClientDeletePoller {
 		pt: pt,
 	}
 	return result, nil
@@ -164,7 +164,7 @@ func (client *CertificatesClient) deleteOperation(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -191,7 +191,7 @@ func (client *CertificatesClient) deleteCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -243,7 +243,7 @@ func (client *CertificatesClient) getCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -264,7 +264,7 @@ func (client *CertificatesClient) getHandleResponse(resp *http.Response) (Certif
 // Resource Manager API or the portal.
 // serviceName - The name of the Service resource.
 // options - CertificatesClientListOptions contains the optional parameters for the CertificatesClient.List method.
-func (client *CertificatesClient) List(resourceGroupName string, serviceName string, options *CertificatesClientListOptions) *CertificatesClientListPager {
+func (client *CertificatesClient) List(resourceGroupName string, serviceName string, options *CertificatesClientListOptions) (*CertificatesClientListPager) {
 	return &CertificatesClientListPager{
 		client: client,
 		requester: func(ctx context.Context) (*policy.Request, error) {
@@ -296,7 +296,7 @@ func (client *CertificatesClient) listCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -310,3 +310,4 @@ func (client *CertificatesClient) listHandleResponse(resp *http.Response) (Certi
 	}
 	return result, nil
 }
+

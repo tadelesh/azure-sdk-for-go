@@ -24,9 +24,9 @@ import (
 // DeploymentsClient contains the methods for the Deployments group.
 // Don't use this type directly, use NewDeploymentsClient() instead.
 type DeploymentsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewDeploymentsClient creates a new instance of DeploymentsClient with the specified values.
@@ -35,17 +35,17 @@ type DeploymentsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewDeploymentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *DeploymentsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &DeploymentsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -72,7 +72,7 @@ func (client *DeploymentsClient) BeginCreateOrUpdate(ctx context.Context, resour
 	if err != nil {
 		return DeploymentsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result.Poller = &DeploymentsClientCreateOrUpdatePoller{
+	result.Poller = &DeploymentsClientCreateOrUpdatePoller {
 		pt: pt,
 	}
 	return result, nil
@@ -92,7 +92,7 @@ func (client *DeploymentsClient) createOrUpdate(ctx context.Context, resourceGro
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -123,7 +123,7 @@ func (client *DeploymentsClient) createOrUpdateCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, deploymentResource)
@@ -149,7 +149,7 @@ func (client *DeploymentsClient) BeginDelete(ctx context.Context, resourceGroupN
 	if err != nil {
 		return DeploymentsClientDeletePollerResponse{}, err
 	}
-	result.Poller = &DeploymentsClientDeletePoller{
+	result.Poller = &DeploymentsClientDeletePoller {
 		pt: pt,
 	}
 	return result, nil
@@ -169,7 +169,7 @@ func (client *DeploymentsClient) deleteOperation(ctx context.Context, resourceGr
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -200,168 +200,10 @@ func (client *DeploymentsClient) deleteCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
-}
-
-// BeginGenerateHeapDump - Generate Heap Dump
-// If the operation fails it returns an *azcore.ResponseError type.
-// resourceGroupName - The name of the resource group that contains the resource. You can obtain this value from the Azure
-// Resource Manager API or the portal.
-// serviceName - The name of the Service resource.
-// appName - The name of the App resource.
-// deploymentName - The name of the Deployment resource.
-// diagnosticParameters - Parameters for the diagnostic operation
-// options - DeploymentsClientBeginGenerateHeapDumpOptions contains the optional parameters for the DeploymentsClient.BeginGenerateHeapDump
-// method.
-func (client *DeploymentsClient) BeginGenerateHeapDump(ctx context.Context, resourceGroupName string, serviceName string, appName string, deploymentName string, diagnosticParameters DiagnosticParameters, options *DeploymentsClientBeginGenerateHeapDumpOptions) (DeploymentsClientGenerateHeapDumpPollerResponse, error) {
-	resp, err := client.generateHeapDump(ctx, resourceGroupName, serviceName, appName, deploymentName, diagnosticParameters, options)
-	if err != nil {
-		return DeploymentsClientGenerateHeapDumpPollerResponse{}, err
-	}
-	result := DeploymentsClientGenerateHeapDumpPollerResponse{
-		RawResponse: resp,
-	}
-	pt, err := armruntime.NewPoller("DeploymentsClient.GenerateHeapDump", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DeploymentsClientGenerateHeapDumpPollerResponse{}, err
-	}
-	result.Poller = &DeploymentsClientGenerateHeapDumpPoller{
-		pt: pt,
-	}
-	return result, nil
-}
-
-// GenerateHeapDump - Generate Heap Dump
-// If the operation fails it returns an *azcore.ResponseError type.
-func (client *DeploymentsClient) generateHeapDump(ctx context.Context, resourceGroupName string, serviceName string, appName string, deploymentName string, diagnosticParameters DiagnosticParameters, options *DeploymentsClientBeginGenerateHeapDumpOptions) (*http.Response, error) {
-	req, err := client.generateHeapDumpCreateRequest(ctx, resourceGroupName, serviceName, appName, deploymentName, diagnosticParameters, options)
-	if err != nil {
-		return nil, err
-	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
-		return nil, runtime.NewResponseError(resp)
-	}
-	return resp, nil
-}
-
-// generateHeapDumpCreateRequest creates the GenerateHeapDump request.
-func (client *DeploymentsClient) generateHeapDumpCreateRequest(ctx context.Context, resourceGroupName string, serviceName string, appName string, deploymentName string, diagnosticParameters DiagnosticParameters, options *DeploymentsClientBeginGenerateHeapDumpOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.AppPlatform/Spring/{serviceName}/apps/{appName}/deployments/{deploymentName}/generateHeapDump"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if serviceName == "" {
-		return nil, errors.New("parameter serviceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{serviceName}", url.PathEscape(serviceName))
-	if appName == "" {
-		return nil, errors.New("parameter appName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{appName}", url.PathEscape(appName))
-	if deploymentName == "" {
-		return nil, errors.New("parameter deploymentName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{deploymentName}", url.PathEscape(deploymentName))
-	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.host, urlPath))
-	if err != nil {
-		return nil, err
-	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header.Set("Accept", "application/json")
-	return req, runtime.MarshalAsJSON(req, diagnosticParameters)
-}
-
-// BeginGenerateThreadDump - Generate Thread Dump
-// If the operation fails it returns an *azcore.ResponseError type.
-// resourceGroupName - The name of the resource group that contains the resource. You can obtain this value from the Azure
-// Resource Manager API or the portal.
-// serviceName - The name of the Service resource.
-// appName - The name of the App resource.
-// deploymentName - The name of the Deployment resource.
-// diagnosticParameters - Parameters for the diagnostic operation
-// options - DeploymentsClientBeginGenerateThreadDumpOptions contains the optional parameters for the DeploymentsClient.BeginGenerateThreadDump
-// method.
-func (client *DeploymentsClient) BeginGenerateThreadDump(ctx context.Context, resourceGroupName string, serviceName string, appName string, deploymentName string, diagnosticParameters DiagnosticParameters, options *DeploymentsClientBeginGenerateThreadDumpOptions) (DeploymentsClientGenerateThreadDumpPollerResponse, error) {
-	resp, err := client.generateThreadDump(ctx, resourceGroupName, serviceName, appName, deploymentName, diagnosticParameters, options)
-	if err != nil {
-		return DeploymentsClientGenerateThreadDumpPollerResponse{}, err
-	}
-	result := DeploymentsClientGenerateThreadDumpPollerResponse{
-		RawResponse: resp,
-	}
-	pt, err := armruntime.NewPoller("DeploymentsClient.GenerateThreadDump", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DeploymentsClientGenerateThreadDumpPollerResponse{}, err
-	}
-	result.Poller = &DeploymentsClientGenerateThreadDumpPoller{
-		pt: pt,
-	}
-	return result, nil
-}
-
-// GenerateThreadDump - Generate Thread Dump
-// If the operation fails it returns an *azcore.ResponseError type.
-func (client *DeploymentsClient) generateThreadDump(ctx context.Context, resourceGroupName string, serviceName string, appName string, deploymentName string, diagnosticParameters DiagnosticParameters, options *DeploymentsClientBeginGenerateThreadDumpOptions) (*http.Response, error) {
-	req, err := client.generateThreadDumpCreateRequest(ctx, resourceGroupName, serviceName, appName, deploymentName, diagnosticParameters, options)
-	if err != nil {
-		return nil, err
-	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
-		return nil, runtime.NewResponseError(resp)
-	}
-	return resp, nil
-}
-
-// generateThreadDumpCreateRequest creates the GenerateThreadDump request.
-func (client *DeploymentsClient) generateThreadDumpCreateRequest(ctx context.Context, resourceGroupName string, serviceName string, appName string, deploymentName string, diagnosticParameters DiagnosticParameters, options *DeploymentsClientBeginGenerateThreadDumpOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.AppPlatform/Spring/{serviceName}/apps/{appName}/deployments/{deploymentName}/generateThreadDump"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if serviceName == "" {
-		return nil, errors.New("parameter serviceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{serviceName}", url.PathEscape(serviceName))
-	if appName == "" {
-		return nil, errors.New("parameter appName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{appName}", url.PathEscape(appName))
-	if deploymentName == "" {
-		return nil, errors.New("parameter deploymentName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{deploymentName}", url.PathEscape(deploymentName))
-	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.host, urlPath))
-	if err != nil {
-		return nil, err
-	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header.Set("Accept", "application/json")
-	return req, runtime.MarshalAsJSON(req, diagnosticParameters)
 }
 
 // Get - Get a Deployment and its properties.
@@ -415,7 +257,7 @@ func (client *DeploymentsClient) getCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -482,7 +324,7 @@ func (client *DeploymentsClient) getLogFileURLCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -504,7 +346,7 @@ func (client *DeploymentsClient) getLogFileURLHandleResponse(resp *http.Response
 // serviceName - The name of the Service resource.
 // appName - The name of the App resource.
 // options - DeploymentsClientListOptions contains the optional parameters for the DeploymentsClient.List method.
-func (client *DeploymentsClient) List(resourceGroupName string, serviceName string, appName string, options *DeploymentsClientListOptions) *DeploymentsClientListPager {
+func (client *DeploymentsClient) List(resourceGroupName string, serviceName string, appName string, options *DeploymentsClientListOptions) (*DeploymentsClientListPager) {
 	return &DeploymentsClientListPager{
 		client: client,
 		requester: func(ctx context.Context) (*policy.Request, error) {
@@ -540,11 +382,11 @@ func (client *DeploymentsClient) listCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	if options != nil && options.Version != nil {
-		for _, qv := range options.Version {
-			reqQP.Add("version", qv)
-		}
+			for _, qv := range options.Version {
+		reqQP.Add("version", qv)
+	}
 	}
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
@@ -567,7 +409,7 @@ func (client *DeploymentsClient) listHandleResponse(resp *http.Response) (Deploy
 // serviceName - The name of the Service resource.
 // options - DeploymentsClientListForClusterOptions contains the optional parameters for the DeploymentsClient.ListForCluster
 // method.
-func (client *DeploymentsClient) ListForCluster(resourceGroupName string, serviceName string, options *DeploymentsClientListForClusterOptions) *DeploymentsClientListForClusterPager {
+func (client *DeploymentsClient) ListForCluster(resourceGroupName string, serviceName string, options *DeploymentsClientListForClusterOptions) (*DeploymentsClientListForClusterPager) {
 	return &DeploymentsClientListForClusterPager{
 		client: client,
 		requester: func(ctx context.Context) (*policy.Request, error) {
@@ -599,11 +441,11 @@ func (client *DeploymentsClient) listForClusterCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	if options != nil && options.Version != nil {
-		for _, qv := range options.Version {
-			reqQP.Add("version", qv)
-		}
+			for _, qv := range options.Version {
+		reqQP.Add("version", qv)
+	}
 	}
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
@@ -640,7 +482,7 @@ func (client *DeploymentsClient) BeginRestart(ctx context.Context, resourceGroup
 	if err != nil {
 		return DeploymentsClientRestartPollerResponse{}, err
 	}
-	result.Poller = &DeploymentsClientRestartPoller{
+	result.Poller = &DeploymentsClientRestartPoller {
 		pt: pt,
 	}
 	return result, nil
@@ -660,7 +502,7 @@ func (client *DeploymentsClient) restart(ctx context.Context, resourceGroupName 
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // restartCreateRequest creates the Restart request.
@@ -691,7 +533,7 @@ func (client *DeploymentsClient) restartCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -717,7 +559,7 @@ func (client *DeploymentsClient) BeginStart(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return DeploymentsClientStartPollerResponse{}, err
 	}
-	result.Poller = &DeploymentsClientStartPoller{
+	result.Poller = &DeploymentsClientStartPoller {
 		pt: pt,
 	}
 	return result, nil
@@ -737,7 +579,7 @@ func (client *DeploymentsClient) start(ctx context.Context, resourceGroupName st
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // startCreateRequest creates the Start request.
@@ -768,89 +610,10 @@ func (client *DeploymentsClient) startCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
-}
-
-// BeginStartJFR - Start JFR
-// If the operation fails it returns an *azcore.ResponseError type.
-// resourceGroupName - The name of the resource group that contains the resource. You can obtain this value from the Azure
-// Resource Manager API or the portal.
-// serviceName - The name of the Service resource.
-// appName - The name of the App resource.
-// deploymentName - The name of the Deployment resource.
-// diagnosticParameters - Parameters for the diagnostic operation
-// options - DeploymentsClientBeginStartJFROptions contains the optional parameters for the DeploymentsClient.BeginStartJFR
-// method.
-func (client *DeploymentsClient) BeginStartJFR(ctx context.Context, resourceGroupName string, serviceName string, appName string, deploymentName string, diagnosticParameters DiagnosticParameters, options *DeploymentsClientBeginStartJFROptions) (DeploymentsClientStartJFRPollerResponse, error) {
-	resp, err := client.startJFR(ctx, resourceGroupName, serviceName, appName, deploymentName, diagnosticParameters, options)
-	if err != nil {
-		return DeploymentsClientStartJFRPollerResponse{}, err
-	}
-	result := DeploymentsClientStartJFRPollerResponse{
-		RawResponse: resp,
-	}
-	pt, err := armruntime.NewPoller("DeploymentsClient.StartJFR", "azure-async-operation", resp, client.pl)
-	if err != nil {
-		return DeploymentsClientStartJFRPollerResponse{}, err
-	}
-	result.Poller = &DeploymentsClientStartJFRPoller{
-		pt: pt,
-	}
-	return result, nil
-}
-
-// StartJFR - Start JFR
-// If the operation fails it returns an *azcore.ResponseError type.
-func (client *DeploymentsClient) startJFR(ctx context.Context, resourceGroupName string, serviceName string, appName string, deploymentName string, diagnosticParameters DiagnosticParameters, options *DeploymentsClientBeginStartJFROptions) (*http.Response, error) {
-	req, err := client.startJFRCreateRequest(ctx, resourceGroupName, serviceName, appName, deploymentName, diagnosticParameters, options)
-	if err != nil {
-		return nil, err
-	}
-	resp, err := client.pl.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
-		return nil, runtime.NewResponseError(resp)
-	}
-	return resp, nil
-}
-
-// startJFRCreateRequest creates the StartJFR request.
-func (client *DeploymentsClient) startJFRCreateRequest(ctx context.Context, resourceGroupName string, serviceName string, appName string, deploymentName string, diagnosticParameters DiagnosticParameters, options *DeploymentsClientBeginStartJFROptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.AppPlatform/Spring/{serviceName}/apps/{appName}/deployments/{deploymentName}/startJFR"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if serviceName == "" {
-		return nil, errors.New("parameter serviceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{serviceName}", url.PathEscape(serviceName))
-	if appName == "" {
-		return nil, errors.New("parameter appName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{appName}", url.PathEscape(appName))
-	if deploymentName == "" {
-		return nil, errors.New("parameter deploymentName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{deploymentName}", url.PathEscape(deploymentName))
-	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.host, urlPath))
-	if err != nil {
-		return nil, err
-	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header.Set("Accept", "application/json")
-	return req, runtime.MarshalAsJSON(req, diagnosticParameters)
 }
 
 // BeginStop - Stop the deployment.
@@ -873,7 +636,7 @@ func (client *DeploymentsClient) BeginStop(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DeploymentsClientStopPollerResponse{}, err
 	}
-	result.Poller = &DeploymentsClientStopPoller{
+	result.Poller = &DeploymentsClientStopPoller {
 		pt: pt,
 	}
 	return result, nil
@@ -893,7 +656,7 @@ func (client *DeploymentsClient) stop(ctx context.Context, resourceGroupName str
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // stopCreateRequest creates the Stop request.
@@ -924,7 +687,7 @@ func (client *DeploymentsClient) stopCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -951,7 +714,7 @@ func (client *DeploymentsClient) BeginUpdate(ctx context.Context, resourceGroupN
 	if err != nil {
 		return DeploymentsClientUpdatePollerResponse{}, err
 	}
-	result.Poller = &DeploymentsClientUpdatePoller{
+	result.Poller = &DeploymentsClientUpdatePoller {
 		pt: pt,
 	}
 	return result, nil
@@ -971,7 +734,7 @@ func (client *DeploymentsClient) update(ctx context.Context, resourceGroupName s
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -1002,8 +765,9 @@ func (client *DeploymentsClient) updateCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, deploymentResource)
 }
+

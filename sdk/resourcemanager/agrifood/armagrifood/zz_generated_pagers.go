@@ -18,11 +18,11 @@ import (
 
 // ExtensionsClientListByFarmBeatsPager provides operations for iterating over paged responses.
 type ExtensionsClientListByFarmBeatsPager struct {
-	client    *ExtensionsClient
-	current   ExtensionsClientListByFarmBeatsResponse
-	err       error
+	client *ExtensionsClient
+	current ExtensionsClientListByFarmBeatsResponse
+	err error
 	requester func(context.Context) (*policy.Request, error)
-	advancer  func(context.Context, ExtensionsClientListByFarmBeatsResponse) (*policy.Request, error)
+	advancer func(context.Context, ExtensionsClientListByFarmBeatsResponse) (*policy.Request, error)
 }
 
 // Err returns the last error encountered while paging.
@@ -72,11 +72,11 @@ func (p *ExtensionsClientListByFarmBeatsPager) PageResponse() ExtensionsClientLi
 
 // FarmBeatsExtensionsClientListPager provides operations for iterating over paged responses.
 type FarmBeatsExtensionsClientListPager struct {
-	client    *FarmBeatsExtensionsClient
-	current   FarmBeatsExtensionsClientListResponse
-	err       error
+	client *FarmBeatsExtensionsClient
+	current FarmBeatsExtensionsClientListResponse
+	err error
 	requester func(context.Context) (*policy.Request, error)
-	advancer  func(context.Context, FarmBeatsExtensionsClientListResponse) (*policy.Request, error)
+	advancer func(context.Context, FarmBeatsExtensionsClientListResponse) (*policy.Request, error)
 }
 
 // Err returns the last error encountered while paging.
@@ -126,11 +126,11 @@ func (p *FarmBeatsExtensionsClientListPager) PageResponse() FarmBeatsExtensionsC
 
 // FarmBeatsModelsClientListByResourceGroupPager provides operations for iterating over paged responses.
 type FarmBeatsModelsClientListByResourceGroupPager struct {
-	client    *FarmBeatsModelsClient
-	current   FarmBeatsModelsClientListByResourceGroupResponse
-	err       error
+	client *FarmBeatsModelsClient
+	current FarmBeatsModelsClientListByResourceGroupResponse
+	err error
 	requester func(context.Context) (*policy.Request, error)
-	advancer  func(context.Context, FarmBeatsModelsClientListByResourceGroupResponse) (*policy.Request, error)
+	advancer func(context.Context, FarmBeatsModelsClientListByResourceGroupResponse) (*policy.Request, error)
 }
 
 // Err returns the last error encountered while paging.
@@ -180,11 +180,11 @@ func (p *FarmBeatsModelsClientListByResourceGroupPager) PageResponse() FarmBeats
 
 // FarmBeatsModelsClientListBySubscriptionPager provides operations for iterating over paged responses.
 type FarmBeatsModelsClientListBySubscriptionPager struct {
-	client    *FarmBeatsModelsClient
-	current   FarmBeatsModelsClientListBySubscriptionResponse
-	err       error
+	client *FarmBeatsModelsClient
+	current FarmBeatsModelsClientListBySubscriptionResponse
+	err error
 	requester func(context.Context) (*policy.Request, error)
-	advancer  func(context.Context, FarmBeatsModelsClientListBySubscriptionResponse) (*policy.Request, error)
+	advancer func(context.Context, FarmBeatsModelsClientListBySubscriptionResponse) (*policy.Request, error)
 }
 
 // Err returns the last error encountered while paging.
@@ -234,11 +234,11 @@ func (p *FarmBeatsModelsClientListBySubscriptionPager) PageResponse() FarmBeatsM
 
 // OperationsClientListPager provides operations for iterating over paged responses.
 type OperationsClientListPager struct {
-	client    *OperationsClient
-	current   OperationsClientListResponse
-	err       error
+	client *OperationsClient
+	current OperationsClientListResponse
+	err error
 	requester func(context.Context) (*policy.Request, error)
-	advancer  func(context.Context, OperationsClientListResponse) (*policy.Request, error)
+	advancer func(context.Context, OperationsClientListResponse) (*policy.Request, error)
 }
 
 // Err returns the last error encountered while paging.
@@ -285,3 +285,4 @@ func (p *OperationsClientListPager) NextPage(ctx context.Context) bool {
 func (p *OperationsClientListPager) PageResponse() OperationsClientListResponse {
 	return p.current
 }
+

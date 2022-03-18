@@ -19,12 +19,14 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/appplatform/armappplatform"
 )
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/MonitoringSettings_Get.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/MonitoringSettings_Get.json
 func ExampleMonitoringSettingsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewMonitoringSettingsClient("<subscription-id>", cred, nil)
 	res, err := client.Get(ctx,
@@ -32,17 +34,21 @@ func ExampleMonitoringSettingsClient_Get() {
 		"<service-name>",
 		nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to finish the request: %v", err)
+		return
 	}
-	log.Printf("Response result: %#v\n", res.MonitoringSettingsClientGetResult)
+	// TODO: use response item
+	_ = res.MonitoringSettingsClientGetResult
 }
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/MonitoringSettings_UpdatePut.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/MonitoringSettings_UpdatePut.json
 func ExampleMonitoringSettingsClient_BeginUpdatePut() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewMonitoringSettingsClient("<subscription-id>", cred, nil)
 	poller, err := client.BeginUpdatePut(ctx,
@@ -57,21 +63,26 @@ func ExampleMonitoringSettingsClient_BeginUpdatePut() {
 		},
 		nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to finish the request: %v", err)
+		return
 	}
 	res, err := poller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to pull the result: %v", err)
+		return
 	}
-	log.Printf("Response result: %#v\n", res.MonitoringSettingsClientUpdatePutResult)
+	// TODO: use response item
+	_ = res.MonitoringSettingsClientUpdatePutResult
 }
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/MonitoringSettings_UpdatePatch.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/MonitoringSettings_UpdatePatch.json
 func ExampleMonitoringSettingsClient_BeginUpdatePatch() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewMonitoringSettingsClient("<subscription-id>", cred, nil)
 	poller, err := client.BeginUpdatePatch(ctx,
@@ -86,11 +97,14 @@ func ExampleMonitoringSettingsClient_BeginUpdatePatch() {
 		},
 		nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to finish the request: %v", err)
+		return
 	}
 	res, err := poller.PollUntilDone(ctx, 30*time.Second)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to pull the result: %v", err)
+		return
 	}
-	log.Printf("Response result: %#v\n", res.MonitoringSettingsClientUpdatePatchResult)
+	// TODO: use response item
+	_ = res.MonitoringSettingsClientUpdatePatchResult
 }

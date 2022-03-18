@@ -16,12 +16,14 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/appplatform/armappplatform"
 )
 
-// x-ms-original-file: specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2022-01-01-preview/examples/Skus_List.json
+// Generated from example definition: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/appplatform/resource-manager/Microsoft.AppPlatform/preview/2020-11-01-preview/examples/Skus_List.json
 func ExampleSKUsClient_List() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalf("failed to obtain a credential: %v", err)
+		return
 	}
+
 	ctx := context.Background()
 	client := armappplatform.NewSKUsClient("<subscription-id>", cred, nil)
 	pager := client.List(nil)
@@ -29,12 +31,14 @@ func ExampleSKUsClient_List() {
 		nextResult := pager.NextPage(ctx)
 		if err := pager.Err(); err != nil {
 			log.Fatalf("failed to advance page: %v", err)
+			return
 		}
 		if !nextResult {
 			break
 		}
 		for _, v := range pager.PageResponse().Value {
-			log.Printf("Pager result: %#v\n", v)
+			// TODO: use page item
+			_ = v
 		}
 	}
 }

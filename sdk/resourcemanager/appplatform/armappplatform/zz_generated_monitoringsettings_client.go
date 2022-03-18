@@ -24,9 +24,9 @@ import (
 // MonitoringSettingsClient contains the methods for the MonitoringSettings group.
 // Don't use this type directly, use NewMonitoringSettingsClient() instead.
 type MonitoringSettingsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewMonitoringSettingsClient creates a new instance of MonitoringSettingsClient with the specified values.
@@ -35,17 +35,17 @@ type MonitoringSettingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewMonitoringSettingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *MonitoringSettingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &MonitoringSettingsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -91,7 +91,7 @@ func (client *MonitoringSettingsClient) getCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -126,7 +126,7 @@ func (client *MonitoringSettingsClient) BeginUpdatePatch(ctx context.Context, re
 	if err != nil {
 		return MonitoringSettingsClientUpdatePatchPollerResponse{}, err
 	}
-	result.Poller = &MonitoringSettingsClientUpdatePatchPoller{
+	result.Poller = &MonitoringSettingsClientUpdatePatchPoller {
 		pt: pt,
 	}
 	return result, nil
@@ -146,7 +146,7 @@ func (client *MonitoringSettingsClient) updatePatch(ctx context.Context, resourc
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updatePatchCreateRequest creates the UpdatePatch request.
@@ -169,7 +169,7 @@ func (client *MonitoringSettingsClient) updatePatchCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, monitoringSettingResource)
@@ -195,7 +195,7 @@ func (client *MonitoringSettingsClient) BeginUpdatePut(ctx context.Context, reso
 	if err != nil {
 		return MonitoringSettingsClientUpdatePutPollerResponse{}, err
 	}
-	result.Poller = &MonitoringSettingsClientUpdatePutPoller{
+	result.Poller = &MonitoringSettingsClientUpdatePutPoller {
 		pt: pt,
 	}
 	return result, nil
@@ -215,7 +215,7 @@ func (client *MonitoringSettingsClient) updatePut(ctx context.Context, resourceG
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updatePutCreateRequest creates the UpdatePut request.
@@ -238,8 +238,9 @@ func (client *MonitoringSettingsClient) updatePutCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, monitoringSettingResource)
 }
+

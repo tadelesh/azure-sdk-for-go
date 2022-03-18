@@ -177,3 +177,4 @@ type OperationsClientListResponse struct {
 type OperationsClientListResult struct {
 	OperationListResult
 }
+

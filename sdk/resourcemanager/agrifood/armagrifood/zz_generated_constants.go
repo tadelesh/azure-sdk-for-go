@@ -9,7 +9,7 @@
 package armagrifood
 
 const (
-	moduleName    = "armagrifood"
+	moduleName = "armagrifood"
 	moduleVersion = "v0.3.1"
 )
 
@@ -22,7 +22,7 @@ const (
 
 // PossibleActionTypeValues returns the possible values for the ActionType const type.
 func PossibleActionTypeValues() []ActionType {
-	return []ActionType{
+	return []ActionType{	
 		ActionTypeInternal,
 	}
 }
@@ -37,12 +37,12 @@ type CheckNameAvailabilityReason string
 
 const (
 	CheckNameAvailabilityReasonAlreadyExists CheckNameAvailabilityReason = "AlreadyExists"
-	CheckNameAvailabilityReasonInvalid       CheckNameAvailabilityReason = "Invalid"
+	CheckNameAvailabilityReasonInvalid CheckNameAvailabilityReason = "Invalid"
 )
 
 // PossibleCheckNameAvailabilityReasonValues returns the possible values for the CheckNameAvailabilityReason const type.
 func PossibleCheckNameAvailabilityReasonValues() []CheckNameAvailabilityReason {
-	return []CheckNameAvailabilityReason{
+	return []CheckNameAvailabilityReason{	
 		CheckNameAvailabilityReasonAlreadyExists,
 		CheckNameAvailabilityReasonInvalid,
 	}
@@ -57,15 +57,15 @@ func (c CheckNameAvailabilityReason) ToPtr() *CheckNameAvailabilityReason {
 type CreatedByType string
 
 const (
-	CreatedByTypeApplication     CreatedByType = "Application"
-	CreatedByTypeKey             CreatedByType = "Key"
+	CreatedByTypeApplication CreatedByType = "Application"
+	CreatedByTypeKey CreatedByType = "Key"
 	CreatedByTypeManagedIdentity CreatedByType = "ManagedIdentity"
-	CreatedByTypeUser            CreatedByType = "User"
+	CreatedByTypeUser CreatedByType = "User"
 )
 
 // PossibleCreatedByTypeValues returns the possible values for the CreatedByType const type.
 func PossibleCreatedByTypeValues() []CreatedByType {
-	return []CreatedByType{
+	return []CreatedByType{	
 		CreatedByTypeApplication,
 		CreatedByTypeKey,
 		CreatedByTypeManagedIdentity,
@@ -83,14 +83,14 @@ func (c CreatedByType) ToPtr() *CreatedByType {
 type Origin string
 
 const (
-	OriginSystem     Origin = "system"
-	OriginUser       Origin = "user"
+	OriginSystem Origin = "system"
+	OriginUser Origin = "user"
 	OriginUserSystem Origin = "user,system"
 )
 
 // PossibleOriginValues returns the possible values for the Origin const type.
 func PossibleOriginValues() []Origin {
-	return []Origin{
+	return []Origin{	
 		OriginSystem,
 		OriginUser,
 		OriginUserSystem,
@@ -106,13 +106,13 @@ func (c Origin) ToPtr() *Origin {
 type ProvisioningState string
 
 const (
-	ProvisioningStateFailed    ProvisioningState = "Failed"
+	ProvisioningStateFailed ProvisioningState = "Failed"
 	ProvisioningStateSucceeded ProvisioningState = "Succeeded"
 )
 
 // PossibleProvisioningStateValues returns the possible values for the ProvisioningState const type.
 func PossibleProvisioningStateValues() []ProvisioningState {
-	return []ProvisioningState{
+	return []ProvisioningState{	
 		ProvisioningStateFailed,
 		ProvisioningStateSucceeded,
 	}
@@ -122,3 +122,4 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 func (c ProvisioningState) ToPtr() *ProvisioningState {
 	return &c
 }
+

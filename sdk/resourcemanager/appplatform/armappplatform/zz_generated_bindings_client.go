@@ -24,9 +24,9 @@ import (
 // BindingsClient contains the methods for the Bindings group.
 // Don't use this type directly, use NewBindingsClient() instead.
 type BindingsClient struct {
-	host           string
+	host string
 	subscriptionID string
-	pl             runtime.Pipeline
+	pl runtime.Pipeline
 }
 
 // NewBindingsClient creates a new instance of BindingsClient with the specified values.
@@ -35,17 +35,17 @@ type BindingsClient struct {
 // credential - used to authorize requests. Usually a credential from azidentity.
 // options - pass nil to accept the default values.
 func NewBindingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) *BindingsClient {
-	cp := arm.ClientOptions{}
-	if options != nil {
-		cp = *options
+	if options == nil {
+		options = &arm.ClientOptions{}
 	}
-	if len(cp.Endpoint) == 0 {
-		cp.Endpoint = arm.AzurePublicCloud
+	ep := options.Endpoint
+	if len(ep) == 0 {
+		ep = arm.AzurePublicCloud
 	}
 	client := &BindingsClient{
 		subscriptionID: subscriptionID,
-		host:           string(cp.Endpoint),
-		pl:             armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, &cp),
+		host: string(ep),
+		pl: armruntime.NewPipeline(moduleName, moduleVersion, credential, runtime.PipelineOptions{}, options),
 	}
 	return client
 }
@@ -72,7 +72,7 @@ func (client *BindingsClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 	if err != nil {
 		return BindingsClientCreateOrUpdatePollerResponse{}, err
 	}
-	result.Poller = &BindingsClientCreateOrUpdatePoller{
+	result.Poller = &BindingsClientCreateOrUpdatePoller {
 		pt: pt,
 	}
 	return result, nil
@@ -92,7 +92,7 @@ func (client *BindingsClient) createOrUpdate(ctx context.Context, resourceGroupN
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusCreated, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -123,7 +123,7 @@ func (client *BindingsClient) createOrUpdateCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, bindingResource)
@@ -149,7 +149,7 @@ func (client *BindingsClient) BeginDelete(ctx context.Context, resourceGroupName
 	if err != nil {
 		return BindingsClientDeletePollerResponse{}, err
 	}
-	result.Poller = &BindingsClientDeletePoller{
+	result.Poller = &BindingsClientDeletePoller {
 		pt: pt,
 	}
 	return result, nil
@@ -169,7 +169,7 @@ func (client *BindingsClient) deleteOperation(ctx context.Context, resourceGroup
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
@@ -200,7 +200,7 @@ func (client *BindingsClient) deleteCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -257,7 +257,7 @@ func (client *BindingsClient) getCreateRequest(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -279,7 +279,7 @@ func (client *BindingsClient) getHandleResponse(resp *http.Response) (BindingsCl
 // serviceName - The name of the Service resource.
 // appName - The name of the App resource.
 // options - BindingsClientListOptions contains the optional parameters for the BindingsClient.List method.
-func (client *BindingsClient) List(resourceGroupName string, serviceName string, appName string, options *BindingsClientListOptions) *BindingsClientListPager {
+func (client *BindingsClient) List(resourceGroupName string, serviceName string, appName string, options *BindingsClientListOptions) (*BindingsClientListPager) {
 	return &BindingsClientListPager{
 		client: client,
 		requester: func(ctx context.Context) (*policy.Request, error) {
@@ -315,7 +315,7 @@ func (client *BindingsClient) listCreateRequest(ctx context.Context, resourceGro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, nil
@@ -351,7 +351,7 @@ func (client *BindingsClient) BeginUpdate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return BindingsClientUpdatePollerResponse{}, err
 	}
-	result.Poller = &BindingsClientUpdatePoller{
+	result.Poller = &BindingsClientUpdatePoller {
 		pt: pt,
 	}
 	return result, nil
@@ -371,7 +371,7 @@ func (client *BindingsClient) update(ctx context.Context, resourceGroupName stri
 	if !runtime.HasStatusCode(resp, http.StatusOK, http.StatusAccepted) {
 		return nil, runtime.NewResponseError(resp)
 	}
-	return resp, nil
+	 return resp, nil
 }
 
 // updateCreateRequest creates the Update request.
@@ -402,8 +402,9 @@ func (client *BindingsClient) updateCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2022-01-01-preview")
+	reqQP.Set("api-version", "2020-11-01-preview")
 	req.Raw().URL.RawQuery = reqQP.Encode()
 	req.Raw().Header.Set("Accept", "application/json")
 	return req, runtime.MarshalAsJSON(req, bindingResource)
 }
+
